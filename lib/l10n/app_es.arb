@@ -1013,10 +1013,6 @@
   "@reset": {
     "description": "Used for buttons in the playback speed menu and the settings"
   },
-  "showArtistsTopTracks": "Mostrar las pistas más populares en la vista del artista",
-  "@showArtistsTopTracks": {},
-  "showArtistsTopTracksSubtitle": "Muestra las 5 pistas más escuchadas de un artista.",
-  "@showArtistsTopTracksSubtitle": {},
   "playingFrom": "Reproduciendo desde",
   "@playingFrom": {
     "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""

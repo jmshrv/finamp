@@ -644,8 +644,6 @@
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopTracksSubtitle": "Следует ли показывать топ-5 самых прослушиваемых композиций исполнителя.",
-  "@showArtistsTopTracksSubtitle": {},
   "playerScreen": "Экран проигрывателя",
   "@playerScreen": {
     "description": "Name for the expanded player"
@@ -658,8 +656,6 @@
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopTracks": "Показывать лучшие композиции в режиме просмотра исполнителя",
-  "@showArtistsTopTracks": {},
   "fontSizeOptionLarge": "Большой",
   "@fontSizeOptionLarge": {
     "description": "Font size option for things like the lyrics view. Large means a larger font size."

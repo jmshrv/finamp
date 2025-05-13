@@ -614,8 +614,6 @@
   "@speed": {
     "description": "Used as a placeholder in the input of the playback speed menu"
   },
-  "showArtistsTopTracks": "Visa mest lyssnade spåren i artistvy",
-  "@showArtistsTopTracks": {},
   "backToAccountSelection": "Tillbaka till Kontoval",
   "@backToAccountSelection": {
     "description": "Label for the button that takes the user back to the account selection step during the login flow."
@@ -667,8 +665,6 @@
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopTracksSubtitle": "Huruvida de 5 mest lyssnade spåren av en artist ska visas.",
-  "@showArtistsTopTracksSubtitle": {},
   "loginFlowQuickConnectDisabled": "Snabbanslutning är avaktiverad på den här servern.",
   "@loginFlowQuickConnectDisabled": {
     "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."

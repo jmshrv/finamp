@@ -813,10 +813,6 @@
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopTracks": "Mostrar faixas principais na vista do artista",
-  "@showArtistsTopTracks": {},
-  "showArtistsTopTracksSubtitle": "Indica se deve mostrar as 5 faixas mais ouvidas de um artista.",
-  "@showArtistsTopTracksSubtitle": {},
   "playerScreen": "Tela de Reprodução",
   "@playerScreen": {
     "description": "Name for the expanded player"

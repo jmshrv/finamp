@@ -884,10 +884,6 @@
   "@speed": {
     "description": "Used as a placeholder in the input of the playback speed menu"
   },
-  "showArtistsTopTracks": "Mostra i brani top nella visualizzazione artista",
-  "@showArtistsTopTracks": {},
-  "showArtistsTopTracksSubtitle": "Se mostrare o no i 5 brani più ascoltati di un artista.",
-  "@showArtistsTopTracksSubtitle": {},
   "timeFractionTooltip": "{currentTime} di {totalTime}",
   "@timeFractionTooltip": {
     "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."

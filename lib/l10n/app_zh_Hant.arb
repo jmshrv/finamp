@@ -703,8 +703,6 @@
   "@sampleRate": {
     "description": "Label for the feature chips showing the sample rate of a track"
   },
-  "showArtistsTopTracksSubtitle": "是否顯示某位藝人最常收聽的前五首歌曲。",
-  "@showArtistsTopTracksSubtitle": {},
   "hours": "小時",
   "@hours": {},
   "trackCountTooltip": "第 {currentTrackIndex} 首，共 {totalTrackCount} 首",
@@ -924,8 +922,6 @@
   "@clearNextUp": {
     "description": "Label for the action that deletes all tracks added to Next Up"
   },
-  "showArtistsTopTracks": "在藝人介面顯示熱門歌曲",
-  "@showArtistsTopTracks": {},
   "shuffleToNextUp": "隨機加入「即將播放」佇列末端",
   "@shuffleToNextUp": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"

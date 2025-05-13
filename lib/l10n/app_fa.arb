@@ -702,8 +702,6 @@
       }
     }
   },
-  "showArtistsTopTracks": "نشان دادن قطعه‌های برتر در نمایش هنرمند",
-  "@showArtistsTopTracks": {},
   "gridCrossAxisCount": "{value} تعداد محور افقی جدول",
   "@gridCrossAxisCount": {
     "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
@@ -732,8 +730,6 @@
   "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "cancelSleepTimer": "لغو زمان‌سنج خواب؟",
   "@cancelSleepTimer": {},
-  "showArtistsTopTracksSubtitle": "اینکه ۵ قطعه‌ی برتر هنرمند نمایش داده شود یا نه.",
-  "@showArtistsTopTracksSubtitle": {},
   "removeFromPlaylistNamedTooltip": "حذف از فهرست پخش '{playlistName}'",
   "@removeFromPlaylistNamedTooltip": {
     "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",

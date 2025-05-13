@@ -592,10 +592,6 @@
   "@shown": {
     "description": "Used as an option in the playback speed visibility settings"
   },
-  "showArtistsTopTracksSubtitle": "Czy wyświetlać 5 najczęściej słuchanych utworów artysty.",
-  "@showArtistsTopTracksSubtitle": {},
-  "showArtistsTopTracks": "Pokaż najczęściej słuchane utwory w widoku wykonawcy",
-  "@showArtistsTopTracks": {},
   "playerScreen": "Ekran odtwarzacza",
   "@playerScreen": {
     "description": "Name for the expanded player"

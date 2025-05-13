@@ -660,10 +660,6 @@
   "@apply": {
     "description": "Used for a button in the playback speed menu"
   },
-  "showArtistsTopTracks": "En iyi parçaları sanatçı görünümünde göster",
-  "@showArtistsTopTracks": {},
-  "showArtistsTopTracksSubtitle": "Bir sanatçının en çok dinlenen ilk 5 parçasının gösterilip gösterilmeyeceği.",
-  "@showArtistsTopTracksSubtitle": {},
   "playerScreen": "Oynatıcı Ekranı",
   "@playerScreen": {
     "description": "Name for the expanded player"

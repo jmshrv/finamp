@@ -613,8 +613,6 @@
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopTracksSubtitle": "아티스트의 최다 청취곡(5곡 까지) 표시 여부를 설정.",
-  "@showArtistsTopTracksSubtitle": {},
   "hours": "시간",
   "@hours": {},
   "trackCountTooltip": "{currentTrackIndex} / {totalTrackCount} 곡",
@@ -849,8 +847,6 @@
   "@loginFlowAuthenticationHeading": {
     "description": "Heading for the authentication step during the login flow."
   },
-  "showArtistsTopTracks": "아티스트 보기에서 주요 곡들을 보여줍니다",
-  "@showArtistsTopTracks": {},
   "useCoverAsBackgroundSubtitle": "앱 배경화면으로 흐릿한 앨범 커버를 사용할지 여부를 설정.",
   "@useCoverAsBackgroundSubtitle": {},
   "playerScreenMinimumCoverPaddingEditorSubtitle": "재생 화면에서 앨범 커버 가장자리의 최소 여백 값을 설정 (화면 너비 기준 %단위).",

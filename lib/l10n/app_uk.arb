@@ -546,8 +546,6 @@
   "@apply": {
     "description": "Used for a button in the playback speed menu"
   },
-  "showArtistsTopTracksSubtitle": "Чи показувати 5 найбільш прослуховуваних композиції виконавця.",
-  "@showArtistsTopTracksSubtitle": {},
   "trackCountTooltip": "Композиція {currentTrackIndex} з {totalTrackCount}",
   "@trackCountTooltip": {
     "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
@@ -844,8 +842,6 @@
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopTracks": "Показати найкращі композиції в поданні виконавнця",
-  "@showArtistsTopTracks": {},
   "playbackModeDirectPlaying": "Пряме відтворення",
   "@playbackModeDirectPlaying": {
     "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"

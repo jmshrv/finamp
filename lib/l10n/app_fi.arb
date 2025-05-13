@@ -624,10 +624,6 @@
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopTracks": "Näytä suosituimmat kappaleet artistinäkymässä",
-  "@showArtistsTopTracks": {},
-  "showArtistsTopTracksSubtitle": "Näytetäänkö artistin viisi kuunneltuinta kappaletta.",
-  "@showArtistsTopTracksSubtitle": {},
   "playerScreen": "Musiikkisoitin",
   "@playerScreen": {
     "description": "Name for the expanded player"

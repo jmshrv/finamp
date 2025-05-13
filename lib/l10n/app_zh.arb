@@ -1817,10 +1817,6 @@
       }
     }
   },
-  "showArtistsTopTracks": "在艺术家视图中显示最热门歌曲",
-  "@showArtistsTopTracks": {},
-  "showArtistsTopTracksSubtitle": "显示该艺术家收听次数最多的前 5 首歌曲。",
-  "@showArtistsTopTracksSubtitle": {},
   "downloadSizeWarningCutoff": "下载文件大小警告",
   "@downloadSizeWarningCutoff": {
     "description": "Title for the setting controlling when to warn about a large download"

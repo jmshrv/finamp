@@ -561,8 +561,6 @@
   "@apply": {
     "description": "Used for a button in the playback speed menu"
   },
-  "showArtistsTopTracks": "Exibir faixas mais tocadas na tela do artista",
-  "@showArtistsTopTracks": {},
   "hours": "Horas",
   "@hours": {},
   "seconds": "Segundos",
@@ -1261,8 +1259,6 @@
   "@speed": {
     "description": "Used as a placeholder in the input of the playback speed menu"
   },
-  "showArtistsTopTracksSubtitle": "Indica se as 5 faixas mais reproduzidas de um artista devem ser exibidas.",
-  "@showArtistsTopTracksSubtitle": {},
   "trackCountTooltip": "Faixa {currentTrackIndex} de {totalTrackCount}",
   "@trackCountTooltip": {
     "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",

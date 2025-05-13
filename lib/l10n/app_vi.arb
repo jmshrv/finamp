@@ -595,8 +595,6 @@
       }
     }
   },
-  "showArtistsTopTracksSubtitle": "Có hiển thị top 5 bài hát được nghe nhiều nhất của một nghệ sĩ hay không.",
-  "@showArtistsTopTracksSubtitle": {},
   "customizationSettingsTitle": "Tùy chỉnh",
   "@customizationSettingsTitle": {
     "description": "Title for the customization settings screen"
@@ -623,8 +621,6 @@
       }
     }
   },
-  "showArtistsTopTracks": "Hiển thị các bản nhạc hàng đầu trong chế độ xem nghệ sĩ",
-  "@showArtistsTopTracks": {},
   "startMixNoTracksGenre": "Nhấn và giữ một thể loại để thêm hoặc xóa nó khỏi trình tạo hỗn hợp trước khi bắt đầu kết hợp",
   "@startMixNoTracksGenre": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"

@@ -696,8 +696,6 @@
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopTracks": "Laat meest beluisterde nummers zien in artiest scherm",
-  "@showArtistsTopTracks": {},
   "playerScreen": "Speler Scherm",
   "@playerScreen": {
     "description": "Name for the expanded player"
@@ -825,8 +823,6 @@
   "@reset": {
     "description": "Used for buttons in the playback speed menu and the settings"
   },
-  "showArtistsTopTracksSubtitle": "Wel of niet laten zien van top 5 beluisterde nummers van een artiest.",
-  "@showArtistsTopTracksSubtitle": {},
   "kiloBitsPerSecondLabel": "{bitrate} kbps",
   "@kiloBitsPerSecondLabel": {
     "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
