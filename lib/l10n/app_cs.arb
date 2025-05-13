@@ -1503,7 +1503,7 @@
   "@fontSizeOptionLarge": {
     "description": "Font size option for things like the lyrics view. Large means a larger font size."
   },
-  "finampCollectionNames": "{itemType, select, favorites{Oblíbené} allPlaylists{Všechny seznamy skladeb} fiveLatestAlbums{5 posledních alb} allPlaylistsMetadata{Metadata seznamu skladeb} other{{itemType}} }",
+  "finampCollectionNames": "{itemType, select, favorites{Oblíbené} allPlaylists{Všechny seznamy skladeb} fiveLatestAlbums{5 posledních alb} allPlaylistsMetadata{Metadata seznamu skladeb} collectionWithLibraryFilter{Sbírka s filtrem knihovny} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
@@ -2183,5 +2183,129 @@
   "stopAndClearQueue": "Zastavit přehrávání a vymazat frontu",
   "@stopAndClearQueue": {
     "description": "Label for a button that stops playback and removes all tracks from the queue."
+  },
+  "allLibraries": "Všechny knihovny",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
+  "noGenres": "Žádné žánry",
+  "@noGenres": {
+    "description": "Gets shown when there are no genres available for an album or artist"
+  },
+  "onlineMode": "Režim online",
+  "@onlineMode": {},
+  "autoSwitchItemCurationTypeTitle": "Automaticky přepnout typ kurátorství položek",
+  "@autoSwitchItemCurationTypeTitle": {},
+  "showArtistsTracksSection": "Zobrazit sekci skladeb",
+  "@showArtistsTracksSection": {},
+  "showArtistsTracksSectionSubtitle": "Zda zobrazit sekci s až pěti skladbami. Můžete si vybírat mezi nejpřehrávanějšími, oblíbenými,náhodnými, nejnovějšími vydáními a nedávno přidanými skladbami.",
+  "@showArtistsTracksSectionSubtitle": {},
+  "randomAlbums": "Alba (náhodný výběr)",
+  "@randomAlbums": {},
+  "randomArtists": "Umělci (náhodný výběr)",
+  "@randomArtists": {},
+  "mostPlayed": "Nejpřehrávanější",
+  "@mostPlayed": {},
+  "favorites": "Oblíbené",
+  "@favorites": {},
+  "randomFavoritesFirst": "Náhodné (nejdříve oblíbené)",
+  "@randomFavoritesFirst": {},
+  "recentlyAdded": "Nedávno přidané",
+  "@recentlyAdded": {},
+  "latestReleases": "Nejnovější vydání",
+  "@latestReleases": {},
+  "itemSectionsOrder": "Pořadí sekcí položek",
+  "@itemSectionsOrder": {
+    "description": "Label for the setting that controls the order of item sections on the screens."
+  },
+  "genreItemSectionFilterChipOrderSubtitle": "Ovládá pořadí dostupných filtrů u sekcí položek.",
+  "@genreItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections filter chips."
+  },
+  "artistItemSectionFilterChipOrderSubtitle": "Ovládá pořadí dostupných filtrů u sekce skladeb.",
+  "@artistItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of the tracks sections filter chips."
+  },
+  "genreListsInheritSorting": "Kompletní dědění řazení seznamů",
+  "@genreListsInheritSorting": {
+    "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "genreListsInheritSortingSubtitle": "Seznamy „Zobrazit vše“ budou dědit řazení a filtrování z obrazovky Žánry. Pokud je zakázáno, budou místo toho použita nastavení z odpovídající karty knihovny. Klepnutím na Počty v horní části obrazovky Žánry vždy otevřete kompletní seznam s nastavením řazení z karty knihovny.",
+  "@genreListsInheritSortingSubtitle": {
+    "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "curatedItemsFavoritesDisabledTooltip": "Zatím nemáte žádné oblíbené.",
+  "@curatedItemsFavoritesDisabledTooltip": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet."
+  },
+  "seeAll": "Zobrazit vše",
+  "@seeAll": {
+    "description": ""
+  },
+  "artistScreen": "Obrazovka umělce",
+  "@artistScreen": {
+    "description": "Name for the view/screen that shows artists"
+  },
+  "artistGenreChipsApplyFilterTitle": "Použít filtr namísto otevření žánru",
+  "@artistGenreChipsApplyFilterTitle": {},
+  "curatedItemsMostPlayedDisabledTooltip": "Zatím jste neposlouchali žádné skladby.",
+  "@curatedItemsMostPlayedDisabledTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Online Mode when not yet listened to any tracks."
+  },
+  "latestArtists": "Nejnovější umělci",
+  "@latestArtists": {},
+  "artistItemSectionFilterChipOrderTitle": "Pořadí filtrů sekce skladeb",
+  "@artistItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of the tracks sections filter chips."
+  },
+  "curatedItemsMostPlayedOfflineTooltip": "Nedostupné v režimu offline.",
+  "@curatedItemsMostPlayedOfflineTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Offline Mode."
+  },
+  "latestAlbums": "Nejnovější alba",
+  "@latestAlbums": {},
+  "favoriteAlbums": "Oblíbená alba",
+  "@favoriteAlbums": {},
+  "newAlbums": "Nová alba",
+  "@newAlbums": {},
+  "genreItemSectionFilterChipOrderTitle": "Pořadí filtrů sekcí položek",
+  "@genreItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of item sections filter chips."
+  },
+  "topAlbums": "Nejlepší alba",
+  "@topAlbums": {},
+  "newArtists": "Noví umělci",
+  "@newArtists": {},
+  "genreScreen": "Obrazovka žánrů",
+  "@genreScreen": {
+    "description": "Name for the view/screen that shows genres"
+  },
+  "genreFilterArtistScreens": "Filtrovat obrazovky umělců",
+  "@genreFilterArtistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "favoriteArtists": "Oblíbení umělci",
+  "@favoriteArtists": {},
+  "genreFilterArtistScreensSubtitle": "Obrazovky umělců (přistupované přes žánry) zobrazí pouze skladby a alba, která odpovídají žánru, který si aktuálně procházíte. (Vždy je možné ručně odebrat filtr žánrů pro zobrazení všech skladeb a alb.)",
+  "@genreFilterArtistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "artistGenreChipsApplyFilterSubtitle": "Klepnutím na žánr obvykle otevřete jeho vlastní obrazovku. Pokud je tato možnost povolena, bude místo toho filtrován umělec podle zvoleného žánru – zobrazeny budou pouze odpovídající skladby a alba.",
+  "@artistGenreChipsApplyFilterSubtitle": {},
+  "topArtists": "Nejlepší umělci",
+  "@topArtists": {},
+  "autoSwitchItemCurationTypeSubtitle": "Sekce položek na obrazovkách umělců a žánrů se automaticky přepnou na jiný typ kurátorství, pokud nejsou dostupné žádné položky (např. žádné oblíbené u konkrétního umělce).",
+  "@autoSwitchItemCurationTypeSubtitle": {},
+  "newTracks": "Nové skladby",
+  "@newTracks": {},
+  "latestTracks": "Nejnovější skladby",
+  "@latestTracks": {},
+  "randomTracks": "Skladby (náhodný výběr)",
+  "@randomTracks": {},
+  "favoriteTracks": "Oblíbené skladby",
+  "@favoriteTracks": {},
+  "itemSectionsOrderSubtitle": "Ovládá pořadí sekcí položek.",
+  "@itemSectionsOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections on the screens."
   }
 }
