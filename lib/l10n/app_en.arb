@@ -2071,12 +2071,20 @@
     "description": "Name for the view/screen that shows artists"
   },
   "artistGenreChipsApplyFilterTitle": "Apply Filter Instead of Opening Genre",
-  "@showCoversOnAlbumScreenTitle": {
+  "@artistGenreChipsApplyFilterTitle": {
     "description": "Title for the setting that controls if taps on genres should apply a genre filter to the ArtistScreen or should redirect to the GenreScreen."
   },
-  "artistGenreChipsApplyFilterSubtitle": "Normally, tapping a genre opens its dedicated screen. When enabled, this option filters the artist by the tapped genre instead — showing only matching tracks and albums.",
-  "@showCoversOnAlbumScreenSubtitle": {
+  "artistGenreChipsApplyFilterSubtitle": "If enabled, tapping a genre will filter the artist by that genre. You can still long-press to open the genre instead.",
+  "@artistGenreChipsApplyFilterSubtitle": {
     "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the ArtistScreen or should redirect to the GenreScreen."
+  },
+  "artistGenreChipsApplyFilterPrompt": "Applied genre filter",
+  "@artistGenreChipsApplyFilterPrompt": {
+    "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "artistGenreChipsApplyFilterPromptButton": "Open Genre Instead",
+  "@artistGenreChipsApplyFilterPromptButton": {
+    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
   },
   "genreScreen": "Genre Screen",
   "@genreScreen": {

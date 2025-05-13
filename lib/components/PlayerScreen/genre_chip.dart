@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/screens/genre_screen.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -91,39 +95,59 @@ class _GenreChipContent extends ConsumerWidget {
   final Color? color;
   final void Function(BaseItemDto?)? updateGenreFilter;
 
-  void _handleGenreTap(BuildContext context, WidgetRef ref) {
+  Future<void> _handleGenreTap(
+    BuildContext context,
+    WidgetRef ref, {
+    bool alternativeAction = false,
+  }) async {
     final isOffline = ref.watch(finampSettingsProvider.isOffline);
     final artistGenreChipsApplyFilter = ref.watch(finampSettingsProvider.artistGenreChipsApplyFilter);
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final isarDownloader = GetIt.instance<DownloadsService>();
-    
+
+    final applyGenreFilter = alternativeAction
+        ? !artistGenreChipsApplyFilter
+        : artistGenreChipsApplyFilter;
+
+    BaseItemDto? genreItem;
     if (isOffline) {
-      isarDownloader.getCollectionInfo(id: genre.id!).then((genreItem) {
-        if (genreItem?.baseItem != null) {
-          if (artistGenreChipsApplyFilter && updateGenreFilter != null) {
-            return updateGenreFilter!(genreItem!.baseItem!);
-          } else {
-            Navigator.of(context).pushNamed(
-              GenreScreen.routeName,
-              arguments: genreItem!.baseItem!,
-            );
-          }
-        }
-      });
+      genreItem =
+          (await isarDownloader.getCollectionInfo(id: genre.id!))?.baseItem;
     } else {
-      jellyfinApiHelper.getItemById(genre.id!).then((genreItem) {
-        if (artistGenreChipsApplyFilter && updateGenreFilter != null) {
-            return updateGenreFilter!(genreItem);
-          } else {
-            Navigator.of(context).pushNamed(
-              GenreScreen.routeName,
-              arguments: genreItem,
-            );
-          }
-      });
+      genreItem = await jellyfinApiHelper.getItemById(genre.id!);
+    }
+
+    if (genreItem != null) {
+      if (applyGenreFilter && updateGenreFilter != null) {
+        updateGenreFilter!(genreItem);
+        if (!alternativeAction) {
+          GlobalSnackbar.message(
+            (context) =>
+                AppLocalizations.of(context)!.artistGenreChipsApplyFilterPrompt,
+            action: (context) {
+              return SnackBarAction(
+                label: AppLocalizations.of(context)!
+                    .artistGenreChipsApplyFilterPromptButton,
+                onPressed: () {
+                  updateGenreFilter!(null);
+                  unawaited(Navigator.of(context).pushNamed(
+                    GenreScreen.routeName,
+                    arguments: genreItem,
+                  ));
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                },
+              );
+            },
+          );
+        }
+      } else {
+        unawaited(Navigator.of(context).pushNamed(
+          GenreScreen.routeName,
+          arguments: genreItem,
+        ));
+      }
     }
   }
-
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -142,6 +166,8 @@ class _GenreChipContent extends ConsumerWidget {
         child: InkWell(
           borderRadius: _borderRadius,
           onTap: () => _handleGenreTap(context, ref),
+          onLongPress: () =>
+              _handleGenreTap(context, ref, alternativeAction: true),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
             child: Text(

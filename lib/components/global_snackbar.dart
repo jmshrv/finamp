@@ -80,7 +80,8 @@ class GlobalSnackbar {
     materialAppScaffoldKey.currentState!.showSnackBar(
       SnackBar(
         content: Text(text),
-        duration: isConfirmation
+        actionOverflowThreshold: 0.4,
+        duration: (isConfirmation && action == null)
             ? const Duration(milliseconds: 1500)
             : const Duration(seconds: 4),
         action: action?.call(context),
@@ -134,5 +135,4 @@ class GlobalSnackbar {
       ),
     );
   }
-
 }
