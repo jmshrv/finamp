@@ -2208,6 +2208,10 @@
   "@releaseDateFormatSubtitle": {
     "description": "Title for the setting that controls the format release dates throughout the app."
   },
+  "noReleaseDate": "No Release Date",
+  "@noReleaseDate": {
+    "description": "Placeholder text if an album has no release date set."
+  },
   "librarySelectError": "Error loading available libraries for user",
   "@librarySelectError": {
     "description": "Error shown when the library select screen fails to load."

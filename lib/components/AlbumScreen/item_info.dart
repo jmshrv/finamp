@@ -58,11 +58,12 @@ class ItemInfo extends ConsumerWidget {
             textSpan: TextSpan(
               text: trackDurationString,
             )),
-        if (item.type != "Playlist" && item.premiereDate != null)
+        if (item.type != "Playlist")
           IconAndText(
               iconData: Icons.event,
               textSpan: TextSpan(
-                text: ReleaseDateHelper.autoFormat(item),
+                text: ReleaseDateHelper.autoFormat(item) ??
+                    AppLocalizations.of(context)!.noReleaseDate,
               )),
         if (item.type != "Playlist")
           Row(
