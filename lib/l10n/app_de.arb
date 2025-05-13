@@ -2256,7 +2256,7 @@
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
-  "artistGenreChipsApplyFilterSubtitle": "Normalerweise öffnet das Tippen auf ein Genre eine separate Genre Ansicht. Wenn aktiviert, filtert diese Option stattdessen den Künstler — es werden nur Titel und Alben des ausgewählten Genres angezeigt.",
+  "artistGenreChipsApplyFilterSubtitle": "Wenn diese Option aktiviert ist, wird durch Tippen auf ein Genre der Künstler nach diesem Genre gefiltert. Alternativ kann das Genre auch durch langes Drücken geöffnet werden.",
   "@artistGenreChipsApplyFilterSubtitle": {},
   "preferHomeNetworkEnableSwitchTitle": "Heimnetzwerk bevorzugen",
   "@preferHomeNetworkEnableSwitchTitle": {},
@@ -2299,5 +2299,17 @@
   "autoReloadPromptReloadButton": "Neu laden",
   "@autoReloadPromptReloadButton": {
     "description": "Button title for reloading the queue after network settings change"
+  },
+  "noReleaseDate": "Kein Release Datum",
+  "@noReleaseDate": {
+    "description": "Placeholder text if an album has no release date set."
+  },
+  "artistGenreChipsApplyFilterPrompt": "Genre Filter angewendet",
+  "@artistGenreChipsApplyFilterPrompt": {
+    "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "artistGenreChipsApplyFilterPromptButton": "Stattdessen Genre öffnen",
+  "@artistGenreChipsApplyFilterPromptButton": {
+    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
   }
 }
