@@ -342,11 +342,9 @@ class IsarTaskQueue implements TaskQueue {
             });
             continue;
           }
-          // Do not limit enqueued downloads on IOS, it throttles them like crazy on its own.
           while (_activeDownloads.length >=
                       FinampSettingsHelper
-                          .finampSettings.maxConcurrentDownloads &&
-                  !Platform.isIOS ||
+                          .finampSettings.maxConcurrentDownloads ||
               _finampUserHelper.currentUser == null) {
             await Future.delayed(const Duration(milliseconds: 500));
           }
