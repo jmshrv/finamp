@@ -29,7 +29,6 @@ class ArtistScreen extends ConsumerStatefulWidget {
 
 class _ArtistScreenState extends ConsumerState<ArtistScreen> {
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
-  BaseItemDto? currentGenreFilter;
   Key _contentKey = UniqueKey();
 
   Future<void> _refresh() async {
@@ -46,18 +45,6 @@ class _ArtistScreenState extends ConsumerState<ArtistScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize with the provided genre filter or default to null
-    currentGenreFilter = widget.genreFilter;
-  }
-
-  // Function to update the genre filter and refresh the screen
-  // Pass null in order to reset the filter
-  void updateGenreFilter(BaseItemDto? genre) {
-    setState(() {
-      // We also rebuild the content so that the disabledFilters reset
-      _contentKey = UniqueKey();
-      currentGenreFilter = genre;
-    });
   }
 
   @override
@@ -74,8 +61,7 @@ class _ArtistScreenState extends ConsumerState<ArtistScreen> {
             key: _contentKey,
             parent: artist,
             library: _finampUserHelper.currentUser?.currentView,
-            genreFilter: currentGenreFilter,
-            updateGenreFilter: updateGenreFilter,
+            genreFilter: widget.genreFilter,
           ),
         ),
       ),

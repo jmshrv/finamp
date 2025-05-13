@@ -24,13 +24,11 @@ class ArtistScreenContent extends ConsumerStatefulWidget {
     required this.parent,
     this.library,
     this.genreFilter,
-    required this.updateGenreFilter,
   });
 
   final BaseItemDto parent;
   final BaseItemDto? library;
   final BaseItemDto? genreFilter;
-  final void Function(BaseItemDto?) updateGenreFilter;
 
   @override
   ConsumerState<ArtistScreenContent> createState() =>
@@ -41,6 +39,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _downloadsService = GetIt.instance<DownloadsService>();
   final Set<CuratedItemSelectionType> _disabledTrackFilters = {};
+  BaseItemDto? currentGenreFilter;
 
   StreamSubscription<void>? _refreshStream;
 
@@ -49,6 +48,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     _refreshStream = _downloadsService.offlineDeletesStream.listen((event) {
       setState(() {});
     });
+    currentGenreFilter = widget.genreFilter;
     super.initState();
   }
 
@@ -56,6 +56,16 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
   void dispose() {
     _refreshStream?.cancel();
     super.dispose();
+  }
+
+  // Function to update the genre filter
+  // Pass null in order to reset the filter
+  void updateGenreFilter(BaseItemDto? genre) {
+    setState(() {
+      // We also clear the disabledTrackFilters
+      _disabledTrackFilters.clear();
+      currentGenreFilter = genre;
+    });
   }
 
   @override
@@ -69,15 +79,15 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     List<BaseItemDto> allChildren = [];
   
     final (topTracksAsync, artistCuratedItemSelectionType, newDisabledTrackFilters) = ref.watch(
-        getArtistTopTracksProvider(widget.parent, widget.library, widget.genreFilter)).valueOrNull ?? (null, null, null);
+        getArtistTopTracksProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull ?? (null, null, null);
     final albumArtistAlbumsAsync = ref.watch(
-        getArtistAlbumsProvider(widget.parent, widget.library, widget.genreFilter)).valueOrNull;
+        getArtistAlbumsProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull;
     final performingArtistAlbumsAsync = ref.watch(
-        getPerformingArtistAlbumsProvider(widget.parent, widget.library, widget.genreFilter)).valueOrNull;
+        getPerformingArtistAlbumsProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull;
     final allPerformingArtistTracksAsync = ref.watch(
-        getPerformingArtistTracksProvider(widget.parent, widget.library, widget.genreFilter)).valueOrNull;
+        getPerformingArtistTracksProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull;
         final allTracks = ref.watch(
-        getAllTracksProvider(widget.parent, widget.library, widget.genreFilter).future,
+        getAllTracksProvider(widget.parent, widget.library, currentGenreFilter).future,
       );
 
     final isLoading = topTracksAsync == null || albumArtistAlbumsAsync == null || performingArtistAlbumsAsync == null;
@@ -113,12 +123,12 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
           isGenre: false,
           allTracks: allTracks,
           albumCount: albumArtistAlbums.length,
-          genreFilter: widget.genreFilter,
-          updateGenreFilter: widget.updateGenreFilter,
+          genreFilter: currentGenreFilter,
+          updateGenreFilter: updateGenreFilter,
         ),
         actions: [
           FavoriteButton(item: widget.parent),
-          if (!isLoading && widget.genreFilter == null)
+          if (!isLoading && currentGenreFilter == null)
             DownloadButton(
                 item: DownloadStub.fromFinampCollection(
                   FinampCollection(
