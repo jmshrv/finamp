@@ -1869,7 +1869,7 @@
   },
   "oneLineMarqueeTextButton": "自动滚动长标题",
   "@oneLineMarqueeTextButton": {},
-  "oneLineMarqueeTextButtonSubtitle": "自动滚动太长而无法在两行中显示的曲目标题",
+  "oneLineMarqueeTextButtonSubtitle": "自动滚动太长而无法在两行中显示的歌曲标题",
   "@oneLineMarqueeTextButtonSubtitle": {},
   "noItemsDownloaded": "沒有下载任何项目。",
   "@noItemsDownloaded": {
@@ -1955,7 +1955,7 @@
   "@albumArtists": {},
   "swipeLeftToRightAction": "向右轻扫操作",
   "@swipeLeftToRightAction": {},
-  "swipeLeftToRightActionSubtitle": "从左到右滑动列表中的曲目时触发的动作.",
+  "swipeLeftToRightActionSubtitle": "从左到右滑动列表中的歌曲时触发的动作.",
   "@swipeLeftToRightActionSubtitle": {},
   "swipeRightToLeftAction": "向左轻扫操作",
   "@swipeRightToLeftAction": {},
@@ -2100,7 +2100,7 @@
   "@startupErrorTitle": {
     "description": "The title for the error screen that shows when startup fails."
   },
-  "showFavoriteButtonOnMediaNotificationSubtitle": "控制媒体通知是否包含收藏按钮。这样，您无需打开应用即可收藏/取消收藏当前曲目。",
+  "showFavoriteButtonOnMediaNotificationSubtitle": "控制媒体通知是否包含收藏按钮。这样，您无需打开应用即可收藏/取消收藏当前歌曲。",
   "@showFavoriteButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a favorite button."
   },
@@ -2168,5 +2168,97 @@
         "type": "int"
       }
     }
+  },
+  "autoSwitchItemCurationTypeTitle": "自动切换项目管理类型",
+  "@autoSwitchItemCurationTypeTitle": {},
+  "newAlbums": "新专辑",
+  "@newAlbums": {},
+  "latestAlbums": "最新专辑",
+  "@latestAlbums": {},
+  "latestArtists": "最新艺术家",
+  "@latestArtists": {},
+  "favoriteTracks": "收藏的歌曲",
+  "@favoriteTracks": {},
+  "favoriteAlbums": "收藏的专辑",
+  "@favoriteAlbums": {},
+  "favoriteArtists": "收藏的艺术家",
+  "@favoriteArtists": {},
+  "randomArtists": "艺术家（随机选择）",
+  "@randomArtists": {},
+  "mostPlayed": "最常播放",
+  "@mostPlayed": {},
+  "favorites": "收藏",
+  "@favorites": {},
+  "randomFavoritesFirst": "随机（收藏优先）",
+  "@randomFavoritesFirst": {},
+  "recentlyAdded": "最近添加",
+  "@recentlyAdded": {},
+  "latestReleases": "最新发布",
+  "@latestReleases": {},
+  "genreItemSectionFilterChipOrderSubtitle": "控制项目部分筛选器的顺序。",
+  "@genreItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections filter chips."
+  },
+  "artistItemSectionFilterChipOrderSubtitle": "控制歌曲部分可用筛选器的顺序。",
+  "@artistItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of the tracks sections filter chips."
+  },
+  "genreFilterArtistScreens": "筛选艺术家屏幕",
+  "@genreFilterArtistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "autoSwitchItemCurationTypeSubtitle": "启用后，如果没有可用的项目（例如，没有特定艺术家的收藏），艺术家和流派屏幕上的项目部分将自动切换到不同的项目类型。",
+  "@autoSwitchItemCurationTypeSubtitle": {},
+  "randomTracks": "歌曲（随机选择）",
+  "@randomTracks": {},
+  "randomAlbums": "专辑（随机选择）",
+  "@randomAlbums": {},
+  "itemSectionsOrderSubtitle": "控制项目部分的顺序。",
+  "@itemSectionsOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections on the screens."
+  },
+  "showArtistsTracksSection": "显示歌曲部分",
+  "@showArtistsTracksSection": {},
+  "itemSectionsOrder": "项目部分顺序",
+  "@itemSectionsOrder": {
+    "description": "Label for the setting that controls the order of item sections on the screens."
+  },
+  "genreItemSectionFilterChipOrderTitle": "项目部分筛选顺序",
+  "@genreItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of item sections filter chips."
+  },
+  "topAlbums": "热门专辑",
+  "@topAlbums": {},
+  "topArtists": "热门艺术家",
+  "@topArtists": {},
+  "newTracks": "新歌曲",
+  "@newTracks": {},
+  "showArtistsTracksSectionSubtitle": "是否显示最多包含五首歌曲的版块。启用后，您可以在“最常播放”、“收藏”、“随机”、“最新发布”和“最近添加的曲目”之间进行选择。",
+  "@showArtistsTracksSectionSubtitle": {},
+  "latestTracks": "最新歌曲",
+  "@latestTracks": {},
+  "newArtists": "新艺术家",
+  "@newArtists": {},
+  "artistItemSectionFilterChipOrderTitle": "歌曲部分筛选器顺序",
+  "@artistItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of the tracks sections filter chips."
+  },
+  "genreFilterArtistScreensSubtitle": "启用后，艺术家屏幕（通过流派访问）将仅显示与您当前浏览的流派匹配的歌曲和专辑。（您可以随时手动移除流派筛选器以显示所有歌曲和专辑。）",
+  "@genreFilterArtistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "allLibraries": "所有库",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
+  "noGenres": "无流派",
+  "@noGenres": {
+    "description": "Gets shown when there are no genres available for an album or artist"
+  },
+  "onlineMode": "在线模式",
+  "@onlineMode": {},
+  "genreListsInheritSorting": "完整列表排序继承",
+  "@genreListsInheritSorting": {
+    "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   }
 }
