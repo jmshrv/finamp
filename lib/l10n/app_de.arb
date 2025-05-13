@@ -484,7 +484,7 @@
   "@orDivider": {
     "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
   },
-  "loginFlowWelcomeHeading": "Willkommen bei",
+  "loginFlowWelcomeHeading": "Willkommen bei  {styledName}",
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
@@ -1111,7 +1111,7 @@
   "@onlyShowFullyDownloaded": {
     "description": "Tooltip for button that hides all partially downloaded albums"
   },
-  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} transkodiert}}",
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} transkodiert}}{location, select, null{} other{ ({location})}}",
   "@downloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1609,7 +1609,7 @@
   "@preferQuickSyncSwitch": {
     "description": "Title of setting that skips completed albums while syncing."
   },
-  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ als {codec} @ {bitrate}}}",
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ als {codec} @ {bitrate}}}{location, select, null{} other{ ({location})}}",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1670,7 +1670,7 @@
   "@volumeNormalizationIOSBaseGainEditorSubtitle": {
     "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
-  "showStopButtonOnMediaNotificationSubtitle": "Legt fest, ob die Medienbenachrichtung einen Stopp-Button zusätzlich zum Pause-Button hat. Hierdurch kannst du die Wiedergabe stoppen, ohne die App zu öffnen.",
+  "showStopButtonOnMediaNotificationSubtitle": "Legt fest, ob die Medienbenachrichtung einen Stopp-Button hat. Hierdurch kannst du die Wiedergabe stoppen, ohne die App zu öffnen.",
   "@showStopButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
@@ -1785,7 +1785,7 @@
   "@showProgressOnNowPlayingBarSubtitle": {
     "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the bottom of the music screen functions as a progress bar"
   },
-  "showSeekControlsOnMediaNotificationTitle": "Zeige die Suchleiste in der Medienbenachrichtigung an",
+  "showSeekControlsOnMediaNotificationTitle": "Aktiviere die Suchleiste in der Medienbenachrichtigung",
   "@showSeekControlsOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a seekable progress bar."
   },
@@ -1959,7 +1959,7 @@
   "@autoOfflineOptionOff": {
     "description": "This is shown when the autoOffline feature is turned off and has no effects"
   },
-  "autoOfflineOptionNetwork": "Netzwerk",
+  "autoOfflineOptionNetwork": "Lokales Netzwerk",
   "@autoOfflineOptionNetwork": {
     "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
   },
@@ -1983,7 +1983,7 @@
   },
   "swipeLeftToRightActionSubtitle": "Aktion, die ausgeführt wird, wenn ein Titel in der Liste von links nach rechts geswipt wird.",
   "@swipeLeftToRightActionSubtitle": {},
-  "autoOfflineSettingDescription": "Automatisch den Offline Modus aktivieren.\nDeaktiviert: Der Offline Modus wird nicht automatisch aktiviert. Könnte Batterie sparen.\nNetzwerk: Der Offline Modus wird aktiviert, wenn keine Verbindung über WLAN oder Ethernet besteht.\nGetrennt: Der Offline Modus wird aktiviert, wenn keine Internetverbindung besteht.\nDu kannst den Offline Modus jederzeit manuell aktivieren, wodurch die Automation pausiert wird, bis du ihn wieder manuell deaktivierst",
+  "autoOfflineSettingDescription": "Automatisch den Offline Modus aktivieren.\nDeaktiviert: Der Offline Modus wird nicht automatisch aktiviert. Könnte Batterie sparen.\nLokales Netzwerk: Der Offline Modus wird aktiviert, wenn keine Verbindung über WLAN oder Ethernet besteht.\nGetrennt: Der Offline Modus wird aktiviert, wenn keine Internetverbindung besteht.\nDu kannst den Offline Modus jederzeit manuell aktivieren, wodurch die Automation pausiert wird, bis du ihn wieder manuell deaktivierst",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
@@ -2073,5 +2073,231 @@
     "description": "Title for the library downloads section on the downloads screen."
   },
   "exportLogs": "Protokolle speichern",
-  "@exportLogs": {}
+  "@exportLogs": {},
+  "showShuffleButtonOnMediaNotificationTitle": "Zeige Zufällig-Button in der Medienbenachrichtigung",
+  "@showShuffleButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a shuffle button."
+  },
+  "showFavoriteButtonOnMediaNotificationTitle": "Zeige Favorit-Button in der Medienbenachrichtigung",
+  "@showFavoriteButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a favorite button."
+  },
+  "preferHomeNetworkEnableSwitchDescription": "Ob eine andere Adresse verwendet werden soll, wenn du zuhause bist",
+  "@preferHomeNetworkEnableSwitchDescription": {},
+  "preferHomeNetworkPublicAddressSettingTitle": "Öffentliche Adresse",
+  "@preferHomeNetworkPublicAddressSettingTitle": {},
+  "networkSettingsTitle": "Netzwerk",
+  "@networkSettingsTitle": {
+    "description": "Title for the network settings screen"
+  },
+  "missingSchemaError": "Url muss mit http(s):// beginnen",
+  "@missingSchemaError": {
+    "description": "Snackbar message when the user changes their home/public address but it doesn't start with http"
+  },
+  "testConnectionButtonLabel": "Teste beide Verbindungen",
+  "@testConnectionButtonLabel": {
+    "description": "Button to test the public and local url inside the network settings tab"
+  },
+  "autoSwitchItemCurationTypeTitle": "Item-Kuratierungstyp automatisch wechseln",
+  "@autoSwitchItemCurationTypeTitle": {},
+  "showArtistsTracksSection": "Titel Section einblenden",
+  "@showArtistsTracksSection": {},
+  "stopAndClearQueue": "Playback stoppen und Warteschlange leeren",
+  "@stopAndClearQueue": {
+    "description": "Label for a button that stops playback and removes all tracks from the queue."
+  },
+  "topAlbums": "Top Alben",
+  "@topAlbums": {},
+  "topArtists": "Top Künstler",
+  "@topArtists": {},
+  "newTracks": "Neue Titel",
+  "@newTracks": {},
+  "newArtists": "Neue Künstler",
+  "@newArtists": {},
+  "latestTracks": "Kürzlich hinzugefügte Titel",
+  "@latestTracks": {},
+  "latestAlbums": "Kürzlich hinzugefügte Alben",
+  "@latestAlbums": {},
+  "latestArtists": "Kürzlich hinzugefügte Künstler",
+  "@latestArtists": {},
+  "favoriteTracks": "Lieblingstitel",
+  "@favoriteTracks": {},
+  "favoriteAlbums": "Lieblingsalben",
+  "@favoriteAlbums": {},
+  "favoriteArtists": "Lieblingskünstler",
+  "@favoriteArtists": {},
+  "randomTracks": "Titel (zufällig)",
+  "@randomTracks": {},
+  "randomAlbums": "Alben (zufällig)",
+  "@randomAlbums": {},
+  "randomArtists": "Künstler (zufällig)",
+  "@randomArtists": {},
+  "mostPlayed": "Oft gespielt",
+  "@mostPlayed": {},
+  "favorites": "Favoriten",
+  "@favorites": {},
+  "randomFavoritesFirst": "Zufällig (Favoriten zuerst)",
+  "@randomFavoritesFirst": {},
+  "recentlyAdded": "Kürzlich hinzugefügt",
+  "@recentlyAdded": {},
+  "latestReleases": "Neu veröffentlicht",
+  "@latestReleases": {},
+  "itemSectionsOrderSubtitle": "Legt die Reihenfolge der Item Sections fest.",
+  "@itemSectionsOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections on the screens."
+  },
+  "genreItemSectionFilterChipOrderSubtitle": "Legt die Reihenfolge der für Item Sections verfügbaren Filter fest.",
+  "@genreItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections filter chips."
+  },
+  "artistItemSectionFilterChipOrderTitle": "Titel Section Filter Reihenfolge",
+  "@artistItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of the tracks sections filter chips."
+  },
+  "artistItemSectionFilterChipOrderSubtitle": "Legt die Reihenfolge der für die Titel Section zur Verfügung stehenden Filter fest.",
+  "@artistItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of the tracks sections filter chips."
+  },
+  "genreListsInheritSorting": "Sortierung auch auf „Alle anzeigen“ Liste anwenden",
+  "@genreListsInheritSorting": {
+    "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "curatedItemsMostPlayedOfflineTooltip": "Nicht verfügbar im Offline-Modus.",
+  "@curatedItemsMostPlayedOfflineTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Offline Mode."
+  },
+  "curatedItemsMostPlayedDisabledTooltip": "Du hast noch keine Titel gehört.",
+  "@curatedItemsMostPlayedDisabledTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Online Mode when not yet listened to any tracks."
+  },
+  "curatedItemsFavoritesDisabledTooltip": "Du hast noch keine Favoriten.",
+  "@curatedItemsFavoritesDisabledTooltip": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet."
+  },
+  "seeAll": "Alle anzeigen",
+  "@seeAll": {
+    "description": ""
+  },
+  "artistGenreChipsApplyFilterTitle": "Filter anwenden anstatt das Genre zu öffnen",
+  "@artistGenreChipsApplyFilterTitle": {},
+  "genreScreen": "Genre Ansicht",
+  "@genreScreen": {
+    "description": "Name for the view/screen that shows genres"
+  },
+  "preferHomeNetworkActiveAddressInfoText": "Aktive Adresse",
+  "@preferHomeNetworkActiveAddressInfoText": {
+    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+  },
+  "preferHomeNetworkTargetAddressLocalSettingTitle": "Heimnetzwerk Adresse",
+  "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
+  "preferHomeNetworkPublicAddressSettingDescription": "Die primäre Adresse, die für die Verbindung zum Jellyfin Server verwendet wird",
+  "@preferHomeNetworkPublicAddressSettingDescription": {},
+  "preferHomeNetworkInfoBox": "Dieses Feature benötigt eine Ortungsdienst-Freigabe (und Ortungsdienste muss aktiviert sein), um den Netzwerknamen lesen zu können.",
+  "@preferHomeNetworkInfoBox": {
+    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
+  },
+  "downloadPaused": "Downloads wurden pausiert, da das Gerät nicht über WLAN verbunden ist",
+  "@downloadPaused": {
+    "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
+  },
+  "autoReloadQueueTitle": "Warteschlange automatisch neu laden",
+  "@autoReloadQueueTitle": {
+    "description": "Title for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "autoReloadQueueSubtitle": "Die Warteschlange automatisch neu laden wenn sich die Quelle ändert (z.B. wenn der Offline Modus aktiviert wird oder die Server-Adresse wechselt). Wenn deaktiviert, wird Finamp dich stattdessen benachrichtigen.",
+  "@autoReloadQueueSubtitle": {
+    "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "autoSwitchItemCurationTypeSubtitle": "Wenn aktiviert, werden Item Sections in der Künstler und Genre Ansicht automatisch in einen anderen Kurationstyp wechseln, falls keine Items verfügbar sind (z.B. wenn ein spezieller Künstler keine Favoriten hat).",
+  "@autoSwitchItemCurationTypeSubtitle": {},
+  "allLibraries": "Alle Bibliotheken",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
+  "noGenres": "Keine Genres",
+  "@noGenres": {
+    "description": "Gets shown when there are no genres available for an album or artist"
+  },
+  "startupErrorCallToAction": "Bitte erstelle einen Issue auf github.com/jmshrv/finamp mit den Logs(!) (nutze den Button unten) und hänge einen Screenshot dieser Seite an, so dass wir den Fehler so schnell wie möglich beheben können.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "onlineMode": "Online Mode",
+  "@onlineMode": {},
+  "newAlbums": "Neue Alben",
+  "@newAlbums": {},
+  "startupErrorTitle": "Beim Starten der App ist etwas schiefgegangen!\nEs tut uns leid…",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorWorkaround": "Als Workaround könntest du den App-Speicher löschen und die App zurücksetzen. Aber bedenke, dass dann alle Einstellungen und Downloads verloren gehen.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
+  },
+  "showArtistsTracksSectionSubtitle": "Ob eine Section mit bis zu 5 Titel angezeigt werden soll. Wenn aktiviert, kannst du zwischen Oft gespielt, Favoriten, Zufällig, Neu veröffentlicht und Kürzlich hinzugefügt wechseln.",
+  "@showArtistsTracksSectionSubtitle": {},
+  "genreFilterArtistScreensSubtitle": "Wenn aktiviert, werden in der Künstler Ansicht (die durch ein Genre geöffnet wurde) nur Titel und Alben angezeigt, die das entsprechende Genre aufweisen. (Du kannst den Genre Filter jederzeit manuell entfernen, um alle Tracks und Alben anzuzeigen.)",
+  "@genreFilterArtistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "itemSectionsOrder": "Item Sections Reihenfolge",
+  "@itemSectionsOrder": {
+    "description": "Label for the setting that controls the order of item sections on the screens."
+  },
+  "genreItemSectionFilterChipOrderTitle": "Item Sections Filter Reihenfolge",
+  "@genreItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of item sections filter chips."
+  },
+  "genreFilterArtistScreens": "Künstler Ansicht filtern",
+  "@genreFilterArtistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreListsInheritSortingSubtitle": "Wenn aktiviert, werden die „Alle anzeigen“ Listen die Sortierung und den Filter von der Genre Ansicht übernehmen. Wenn deaktiviert, werden die Einstellungen der Bibliothek-Tabs verwendet. Beim Tippen auf die Item-Zahlen ganz oben werden die Listen immer mit den Einstellungen der Bibliothek-Tabs geöffnet.",
+  "@genreListsInheritSortingSubtitle": {
+    "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "artistGenreChipsApplyFilterSubtitle": "Normalerweise öffnet das Tippen auf ein Genre eine separate Genre Ansicht. Wenn aktiviert, filtert diese Option stattdessen den Künstler — es werden nur Titel und Alben des ausgewählten Genres angezeigt.",
+  "@artistGenreChipsApplyFilterSubtitle": {},
+  "preferHomeNetworkEnableSwitchTitle": "Heimnetzwerk bevorzugen",
+  "@preferHomeNetworkEnableSwitchTitle": {},
+  "showShuffleButtonOnMediaNotificationSubtitle": "Legt fest, ob die Medienbenachrichtigung einen Zufällig-Button hat. Dadurch kannst du die Zufallswiedergabe aktivieren oder deaktivieren, ohne die App öffnen zu müssen.",
+  "@showShuffleButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
+  },
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Legt fest, ob die Medienbenachrichtigung einen Favorit-Button hat. Dadurch kannst du den derzeitigen Titel als Favorit markieren oder entfernen, ohne die App öffnen zu müssen.",
+  "@showFavoriteButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a favorite button."
+  },
+  "artistScreen": "Künstler Ansicht",
+  "@artistScreen": {
+    "description": "Name for the view/screen that shows artists"
+  },
+  "preferHomeNetworkTargetAddressLocalSettingDescription": "Zieladresse des Jellyfin Servers innerhalb deines Heimnetzwerks",
+  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
+  "ping": "{status, select, true_true{Beide erreichbar} true_false{Lokale Adresse nicht erreichbar} false_true{Öffentliche Adresse nicht erreichbar} false_false{Beide Adressen nicht erreichbar} other{unbekannt}}",
+  "@ping": {
+    "description": "Gets shown in the Snackbar when using the Test Connection Button inside the Network Settings. true means reachable, false means unreachable. the first value is for the public address, the second value is fot the home address."
+  },
+  "autoReloadPrompt": "Warteschlange neu laden, um {type, select, network{Netzwerkeinstellungen} transcoding{Transkodierungseinstellungen} other{Einstellungen}} anzuwenden",
+  "@autoReloadPrompt": {
+    "description": "Prompt shown when the queue needs to be reloaded after changing network settings",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks} werden von der Warteschlange entfernt, da sie nicht heruntergeladen wurden.",
+  "@autoReloadPromptMissingTracks": {
+    "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
+    "placeholders": {
+      "amountUndownloadedTracks": {
+        "type": "int"
+      }
+    }
+  },
+  "autoReloadPromptReloadButton": "Neu laden",
+  "@autoReloadPromptReloadButton": {
+    "description": "Button title for reloading the queue after network settings change"
+  }
 }
