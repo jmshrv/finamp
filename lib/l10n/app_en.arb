@@ -183,6 +183,10 @@
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
+  "allLibraries": "All Libraries",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
   "unknownName": "Unknown Name",
   "@unknownName": {},
   "tracks": "Tracks",
@@ -195,6 +199,10 @@
   "@artists": {},
   "genres": "Genres",
   "@genres": {},
+  "noGenres": "No Genres",
+  "@noGenres": {
+    "description": "Gets shown when there are no genres available for an album or artist"
+  },
   "playlists": "Playlists",
   "@playlists": {},
   "startMix": "Start Mix",
@@ -225,6 +233,8 @@
   "@settings": {},
   "offlineMode": "Offline Mode",
   "@offlineMode": {},
+  "onlineMode": "Online Mode",
+  "@onlineMode": {},
   "sortOrder": "Sort order",
   "@sortOrder": {},
   "sortBy": "Sort by",
@@ -620,10 +630,14 @@
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Whether to show track artists on the album screen if not differing from album artists.",
   "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "showArtistsTopTracks": "Show top tracks in artist view",
-  "@showArtistsTopTracks": {},
-  "showArtistsTopTracksSubtitle": "Whether to show the top 5 most listened to tracks of an artist.",
-  "@showArtistsTopTracksSubtitle": {},
+  "autoSwitchItemCurationTypeTitle": "Auto-Switch Item Curation Type",
+  "@autoSwitchItemCurationTypeTitle": {},
+  "autoSwitchItemCurationTypeSubtitle": "When enabled, Item Sections on the Artist and Genre Screens automatically switch to a different curation type if no items are available (e.g., no favorites for a specific artist).",
+  "@autoSwitchItemCurationTypeSubtitle": {},
+  "showArtistsTracksSection": "Show Tracks Section",
+  "@showArtistsTracksSection": {},
+  "showArtistsTracksSectionSubtitle": "Whether to show a section with up to five tracks. When enabled, you can choose between Most Played, Favorite, Random, Latest Releases and Recently Added Tracks.",
+  "@showArtistsTracksSectionSubtitle": {},
   "disableGesture": "Disable gestures",
   "@disableGesture": {},
   "disableGestureSubtitle": "Whether to disables gestures.",
@@ -1163,6 +1177,96 @@
   },
   "topTracks": "Top Tracks",
   "@topTracks": {},
+  "topAlbums": "Top Albums",
+  "@topAlbums": {},
+  "topArtists": "Top Artists",
+  "@topArtists": {},
+  "newTracks": "New Tracks",
+  "@newTracks": {},
+  "newAlbums": "New Albums",
+  "@newAlbums": {},
+  "newArtists": "New Artists",
+  "@newArtists": {},
+  "latestTracks": "Latest Tracks",
+  "@latestTracks": {},
+  "latestAlbums": "Latest Albums",
+  "@latestAlbums": {},
+  "latestArtists": "Latest Artists",
+  "@latestArtists": {},
+  "favoriteTracks": "Favorite Tracks",
+  "@favoriteTracks": {},
+  "favoriteAlbums": "Favorite Albums",
+  "@favoriteAlbums": {},
+  "favoriteArtists": "Favorite Artists",
+  "@favoriteArtists": {},
+  "randomTracks": "Tracks (Random Picks)",
+  "@randomTracks": {},
+  "randomAlbums": "Albums (Random Picks)",
+  "@randomAlbums": {},
+  "randomArtists": "Artists (Random Picks)",
+  "@randomArtists": {},
+  "mostPlayed": "Most Played",
+  "@mostPlayed": {},
+  "favorites": "Favorites",
+  "@favorites": {},
+  "randomFavoritesFirst": "Random (Favorites First)",
+  "@randomFavoritesFirst": {},
+  "recentlyAdded": "Recently Added",
+  "@recentlyAdded": {},
+  "latestReleases": "Latest Releases",
+  "@latestReleases": {},
+  "itemSectionsOrder": "Item Sections Order",
+  "@itemSectionsOrder": {
+    "description": "Label for the setting that controls the order of item sections on the screens."
+  },
+  "itemSectionsOrderSubtitle": "Controls the order of Item Sections.",
+  "@itemSectionsOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections on the screens."
+  },
+  "genreItemSectionFilterChipOrderTitle": "Item Sections Filter Order",
+  "@genreItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of item sections filter chips."
+  },
+  "genreItemSectionFilterChipOrderSubtitle": "Controls the order of available filters for item sections.",
+  "@genreItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections filter chips."
+  },
+  "artistItemSectionFilterChipOrderTitle": "Tracks Section Filter Order",
+  "@artistItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of the tracks sections filter chips."
+  },
+  "artistItemSectionFilterChipOrderSubtitle": "Controls the order of available filters for the tracks section.",
+  "@artistItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of the tracks sections filter chips."
+  },
+  "genreFilterArtistScreens": "Filter Artist Screens",
+  "@genreFilterArtistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreFilterArtistScreensSubtitle": "When enabled, Artist Screens (accessed through a genre) will only show tracks and albums that match the genre you're currently browsing. (It is always possible to manually remove the Genre Filter to reveal all tracks and albums.)",
+  "@genreFilterArtistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreListsInheritSorting": "Full Lists Sorting Inheritance",
+  "@genreListsInheritSorting": {
+    "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "genreListsInheritSortingSubtitle": "When enabled, the \"See All\" lists will inherit the sorting and filtering from the Genre Screen. If disabled, settings from the corresponding library tab will be used instead. Tapping on the Counts on the top of the Genre Screen will always open a full list with the sorting settings from the library tab.",
+  "@genreListsInheritSortingSubtitle": {
+    "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "curatedItemsMostPlayedOfflineTooltip": "Not available in Offline Mode.",
+  "@curatedItemsMostPlayedOfflineTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Offline Mode."
+  },
+  "curatedItemsMostPlayedDisabledTooltip": "You've not listened to any tracks yet.",
+  "@curatedItemsMostPlayedDisabledTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Online Mode when not yet listened to any tracks."
+  },
+  "curatedItemsFavoritesDisabledTooltip": "You have no favorites yet.",
+  "@curatedItemsFavoritesDisabledTooltip": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet."
+  },
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
   "@albumCount": {
     "placeholders": {
@@ -1473,7 +1577,7 @@
     },
     "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
   },
-  "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} allPlaylistsMetadata{Playlist Metadata} other{{itemType}} }",
+  "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} allPlaylistsMetadata{Playlist Metadata} collectionWithLibraryFilter{Collection with Library Filter} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
@@ -1946,6 +2050,10 @@
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
+  "seeAll": "See All",
+  "@seeAll": {
+    "description": ""
+  },
   "albumScreen": "Album Screen",
   "@albumScreen": {
     "description": "Name for the view/screen that shows albums"
@@ -1957,6 +2065,22 @@
   "showCoversOnAlbumScreenSubtitle": "Show album covers for each track separately on the album screen.",
   "@showCoversOnAlbumScreenSubtitle": {
     "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "artistScreen": "Artist Screen",
+  "@artistScreen": {
+    "description": "Name for the view/screen that shows artists"
+  },
+  "artistGenreChipsApplyFilterTitle": "Apply Filter Instead of Opening Genre",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if taps on genres should apply a genre filter to the ArtistScreen or should redirect to the GenreScreen."
+  },
+  "artistGenreChipsApplyFilterSubtitle": "Normally, tapping a genre opens its dedicated screen. When enabled, this option filters the artist by the tapped genre instead — showing only matching tracks and albums.",
+  "@showCoversOnAlbumScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the ArtistScreen or should redirect to the GenreScreen."
+  },
+  "genreScreen": "Genre Screen",
+  "@genreScreen": {
+    "description": "Name for the view/screen that shows genres"
   },
   "emptyTopTracksList": "You haven't listened to any track by this artist yet.",
   "@emptyTopTracksList": {

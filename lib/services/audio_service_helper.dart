@@ -19,7 +19,10 @@ class AudioServiceHelper {
   final audioServiceHelperLogger = Logger("AudioServiceHelper");
 
   /// Shuffles every track in the user's current view.
-  Future<void> shuffleAll(bool onlyShowFavourites) async {
+  Future<void> shuffleAll({
+    required bool onlyShowFavourites,
+    BaseItemDto? genreFilter,
+  }) async {
     List<jellyfin_models.BaseItemDto>? items;
 
     if (FinampSettingsHelper.finampSettings.isOffline) {
@@ -29,6 +32,8 @@ class AudioServiceHelper {
       // way.
       items = (await _isarDownloader.getAllTracks(
               viewFilter: _finampUserHelper.currentUser?.currentView?.id,
+              genreFilter: genreFilter,
+              onlyFavorites: onlyShowFavourites,
               nullableViewFilters: FinampSettingsHelper
                   .finampSettings.showDownloadsWithUnknownLibrary))
           .map((e) => e.baseItem!)
@@ -47,13 +52,22 @@ class AudioServiceHelper {
         filters: onlyShowFavourites ? "IsFavorite" : null,
         limit: FinampSettingsHelper.finampSettings.trackShuffleItemCount,
         sortBy: "Random",
+        genreFilter: genreFilter
       );
     }
 
     if (items != null) {
-      await _queueService.startPlayback(
-        items: items,
-        source: QueueItemSource.rawId(
+      QueueItemSource source = (genreFilter != null)
+        ? QueueItemSource(
+          type: QueueItemSourceType.genre,
+          name: QueueItemSourceName(
+              type: QueueItemSourceNameType.preTranslated,
+              pretranslatedName: genreFilter.name
+          ),
+          id: genreFilter.id,
+          item: genreFilter,
+        )
+        : QueueItemSource.rawId(
           type: onlyShowFavourites
               ? QueueItemSourceType.favorites
               : QueueItemSourceType.allTracks,
@@ -63,7 +77,11 @@ class AudioServiceHelper {
                 : QueueItemSourceNameType.shuffleAll,
           ),
           id: "shuffleAll",
-        ),
+        );
+
+      await _queueService.startPlayback(
+        items: items,
+        source: source,
         order: FinampPlaybackOrder.shuffled,
       );
     }

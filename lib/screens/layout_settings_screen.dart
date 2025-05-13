@@ -1,7 +1,8 @@
-import 'package:finamp/components/LayoutSettingsScreen/show_artists_top_tracks.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/screens/album_settings_screen.dart';
+import 'package:finamp/screens/artist_settings_screen.dart';
 import 'package:finamp/screens/customization_settings_screen.dart';
+import 'package:finamp/screens/genre_settings_screen.dart';
 import 'package:finamp/screens/lyrics_settings_screen.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +65,18 @@ class _LayoutSettingsScreenState extends ConsumerState<LayoutSettingsScreen> {
                 Navigator.of(context).pushNamed(AlbumSettingsScreen.routeName),
           ),
           ListTile(
+            leading: const Icon(TablerIcons.user),
+            title: Text(AppLocalizations.of(context)!.artistScreen),
+            onTap: () =>
+                Navigator.of(context).pushNamed(ArtistSettingsScreen.routeName),
+          ),
+          ListTile(
+            leading: const Icon(TablerIcons.color_swatch),
+            title: Text(AppLocalizations.of(context)!.genreScreen),
+            onTap: () =>
+                Navigator.of(context).pushNamed(GenreSettingsScreen.routeName),
+          ),
+          ListTile(
             leading: const Icon(Icons.tab),
             title: Text(AppLocalizations.of(context)!.tabs),
             onTap: () =>
@@ -81,9 +94,9 @@ class _LayoutSettingsScreenState extends ConsumerState<LayoutSettingsScreen> {
           const ShowTextOnGridViewSelector(),
           const UseCoverAsBackgroundToggle(),
           const ShowArtistChipImageToggle(),
-          const ShowArtistsTopTracksSelector(),
           const AllowSplitScreenSwitch(),
           const ShowProgressOnNowPlayingBarToggle(),
+          const AutoSwitchItemCurationTypeToggle(),
         ],
       ),
     );
@@ -153,6 +166,22 @@ class ShowProgressOnNowPlayingBarToggle extends ConsumerWidget {
           AppLocalizations.of(context)!.showProgressOnNowPlayingBarSubtitle),
       value: ref.watch(finampSettingsProvider.showProgressOnNowPlayingBar),
       onChanged: FinampSetters.setShowProgressOnNowPlayingBar,
+    );
+  }
+}
+
+class AutoSwitchItemCurationTypeToggle extends ConsumerWidget {
+  const AutoSwitchItemCurationTypeToggle({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title:
+          Text(AppLocalizations.of(context)!.autoSwitchItemCurationTypeTitle),
+      subtitle: Text(
+          AppLocalizations.of(context)!.autoSwitchItemCurationTypeSubtitle),
+      value: ref.watch(finampSettingsProvider.autoSwitchItemCurationType),
+      onChanged: FinampSetters.setAutoSwitchItemCurationType,
     );
   }
 }

@@ -10,6 +10,7 @@ import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/artist_screen.dart';
+import 'package:finamp/screens/genre_screen.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/metadata_provider.dart';
@@ -476,7 +477,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         visible: widget.canGoToAlbum,
         child: ListTile(
           leading: Icon(
-            Icons.album,
+            TablerIcons.disc,
             color: iconColor,
           ),
           title: Text(AppLocalizations.of(context)!.goToAlbum),
@@ -509,7 +510,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         visible: widget.canGoToArtist,
         child: ListTile(
           leading: Icon(
-            Icons.person,
+            TablerIcons.user,
             color: iconColor,
           ),
           title: Text(AppLocalizations.of(context)!.goToArtist),
@@ -542,7 +543,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         visible: widget.canGoToGenre,
         child: ListTile(
           leading: Icon(
-            Icons.category_outlined,
+            TablerIcons.color_swatch,
             color: iconColor,
           ),
           title: Text(AppLocalizations.of(context)!.goToGenre),
@@ -566,7 +567,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             if (context.mounted) {
               Navigator.pop(context);
               await Navigator.of(context)
-                  .pushNamed(ArtistScreen.routeName, arguments: genre);
+                  .pushNamed(GenreScreen.routeName, arguments: genre);
             }
           },
         ),

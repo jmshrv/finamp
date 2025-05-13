@@ -1,12 +1,11 @@
+import 'package:finamp/components/PlayerScreen/genre_chip.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import '../../models/jellyfin_models.dart';
-import '../../screens/artist_screen.dart';
-import '../../services/jellyfin_api_helper.dart';
 import '../icon_and_text.dart';
 
 class ArtistItemInfo extends ConsumerWidget {
@@ -15,11 +14,15 @@ class ArtistItemInfo extends ConsumerWidget {
     required this.item,
     required this.itemTracks,
     required this.itemAlbums,
+    this.genreFilter,
+    this.updateGenreFilter,
   });
 
   final BaseItemDto item;
   final int itemTracks;
   final int itemAlbums;
+  final BaseItemDto? genreFilter;
+  final void Function(BaseItemDto?)? updateGenreFilter;
 
 // TODO: see if there's a way to expand this column to the row that it's in
   @override
@@ -37,36 +40,93 @@ class ArtistItemInfo extends ConsumerWidget {
                   : AppLocalizations.of(context)!.trackCount(itemTracks),
             )),
         IconAndText(
-            iconData: Icons.book,
+            iconData: TablerIcons.disc,
             textSpan: TextSpan(
               text: AppLocalizations.of(context)!.albumCount(itemAlbums),
             )),
         if (item.type != "MusicGenre" &&
-            item.genreItems != null &&
-            item.genreItems!.isNotEmpty)
-          _GenreIconAndText(genres: item.genreItems!)
+            updateGenreFilter != null &&
+            item.genreItems != null)
+          _GenreIconAndText(
+              genres: item.genreItems!,
+              genreFilter: genreFilter,
+              updateGenreFilter: updateGenreFilter!
+          )
       ],
     );
   }
 }
 
 class _GenreIconAndText extends StatelessWidget {
-  const _GenreIconAndText({required this.genres});
+  const _GenreIconAndText({
+    required this.genres,
+    this.genreFilter,
+    required this.updateGenreFilter
+  });
 
   final List<NameLongIdPair> genres;
+  final BaseItemDto? genreFilter;
+  final void Function(BaseItemDto?) updateGenreFilter;
 
   @override
   Widget build(BuildContext context) {
-    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+    final bool hasFilter = genreFilter != null;
+    final theme = Theme.of(context);
 
-    return GestureDetector(
-      onTap: () => jellyfinApiHelper.getItemById(genres.first.id).then(
-          (artist) => Navigator.of(context)
-              .pushNamed(ArtistScreen.routeName, arguments: artist)),
-      child: IconAndText(
-        iconData: Icons.album,
-        textSpan: TextSpan(
-          text: genres.map((genre) => genre.name).join(", "),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: hasFilter ? 4 : 0),
+      child: Container(
+        decoration: hasFilter
+            ? BoxDecoration(
+                color: theme.colorScheme.primary,
+                borderRadius: BorderRadius.circular(6),
+              )
+            : null,
+        padding: EdgeInsets.symmetric(horizontal: 1),
+        child: Row(
+          children: [
+            Icon(
+              TablerIcons.color_swatch,
+              color: hasFilter
+                  ? theme.colorScheme.onPrimary
+                  : theme.iconTheme.color?.withOpacity(
+                      theme.brightness == Brightness.light ? 0.38 : 0.5,
+                    ),
+            ),
+            const SizedBox(width: 4),
+            Expanded(
+              child: hasFilter
+                  ? Text(
+                      genreFilter?.name ?? "Unknown Genre",
+                      style: TextStyle(color: theme.colorScheme.onPrimary),
+                      overflow: TextOverflow.ellipsis,
+                    )
+                  : (genres.isNotEmpty)
+                      ? GenreChips(
+                        genres: genres,
+                        backgroundColor:
+                          IconTheme.of(context).color!.withOpacity(0.1),
+                        updateGenreFilter: updateGenreFilter,
+                      )
+                    : Text(
+                        AppLocalizations.of(context)!.noGenres
+                      ),
+            ),
+            if (hasFilter)
+              GestureDetector(
+                onTap: () {
+                  updateGenreFilter(null);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 4, right: 2),
+                  child: Icon(
+                    Icons.close,
+                    size: 18,
+                    color: theme.colorScheme.onPrimary,
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );
