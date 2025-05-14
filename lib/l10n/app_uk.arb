@@ -2120,7 +2120,7 @@
   "@downloadPaused": {
     "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
   },
-  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks} будуть видалені з черги, оскільки вони не завантажені.",
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks, plural, =1{1 track} other{{amountUndownloadedTracks} tracks}} будуть видалені з черги, оскільки вони не завантажені.",
   "@autoReloadPromptMissingTracks": {
     "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
     "placeholders": {
@@ -2310,7 +2310,7 @@
   "@curatedItemsFavoritesDisabledTooltip": {
     "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet."
   },
-  "artistGenreChipsApplyFilterPromptButton": "Відкрити жанр замість цього",
+  "artistGenreChipsApplyFilterPromptButton": "Відкритий жанр",
   "@artistGenreChipsApplyFilterPromptButton": {
     "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
   },
