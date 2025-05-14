@@ -235,7 +235,7 @@
   "@shuffleAllTrackCountSubtitle": {},
   "viewType": "Ansichtsart",
   "@viewType": {},
-  "viewTypeSubtitle": "Ansichtsart für den Musik-Bildschirm",
+  "viewTypeSubtitle": "Ansichtsart auf der Musikseite",
   "@viewTypeSubtitle": {},
   "portrait": "Hochformat",
   "@portrait": {},
@@ -255,7 +255,7 @@
   "@showTextOnGridViewSubtitle": {},
   "useCoverAsBackground": "Zeige verschwommene Cover als Player-Hintergrund",
   "@useCoverAsBackground": {},
-  "useCoverAsBackgroundSubtitle": "Ob verschwommene Cover als Hintergrund in der Wiedergabe-Ansicht benutzt werden sollen.",
+  "useCoverAsBackgroundSubtitle": "Ob verschwommene Cover als Hintergrund im Player benutzt werden sollen.",
   "@useCoverAsBackgroundSubtitle": {},
   "hideTrackArtistsIfSameAsAlbumArtists": "Verstecke Interpreten, falls dieser dem Albumkünstler entspricht",
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
@@ -356,7 +356,7 @@
       }
     }
   },
-  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Ob Interpreten in der Albenansicht angezeigt werden sollen, falls sie sich nicht von den Albumkünstlern unterscheiden.",
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Ob Interpreten unterhalb der Titel auf der Albumseite angezeigt werden sollen, falls sie sich nicht von den Albumkünstlern unterscheiden.",
   "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "sleepTimerTooltip": "Schlaf-Timer",
   "@sleepTimerTooltip": {},
@@ -627,7 +627,7 @@
   "@codec": {
     "description": "Label for the feature chips showing the codec of a track"
   },
-  "albumScreen": "Album-Ansicht",
+  "albumScreen": "Albumseite",
   "@albumScreen": {
     "description": "Name for the view/screen that shows albums"
   },
@@ -687,7 +687,7 @@
   "@playbackSpeedControlSetting": {
     "description": "Title of the visibility setting of the playback speed controls"
   },
-  "playbackSpeedControlSettingSubtitle": "Ob die Abspielgeschwindigkeits-Einstellungen in der Wiedergabe-Ansicht angezeigt werden",
+  "playbackSpeedControlSettingSubtitle": "Ob die Abspielgeschwindigkeits-Einstellungen im Player angezeigt werden",
   "@playbackSpeedControlSettingSubtitle": {
     "description": "Subtitle for the playback speed visibility setting"
   },
@@ -707,11 +707,11 @@
   "@apply": {
     "description": "Used for a button in the playback speed menu"
   },
-  "playerScreenMinimumCoverPaddingEditorSubtitle": "Minimaler Abstand um das Album Cover in der Wiedergabe-Ansicht, in % der Bildschirmbreite.",
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "Minimaler Abstand um das Album Cover im Player, in % der Bildschirmbreite.",
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "playerScreen": "Wiedergabe-Ansicht",
+  "playerScreen": "Player",
   "@playerScreen": {
     "description": "Name for the expanded player"
   },
@@ -860,7 +860,7 @@
   "@genericToggleButtonTooltip": {
     "description": "Tooltip for toggle buttons that can be tapped to toggle their state"
   },
-  "nowPlayingBarTooltip": "Öffne die Wiedergabe-Ansicht",
+  "nowPlayingBarTooltip": "Öffne den Player",
   "@nowPlayingBarTooltip": {
     "description": "Tooltip for the now playing bar at the bottom of the screen"
   },
@@ -906,7 +906,7 @@
   "@skipToPreviousTrackButtonTooltip": {
     "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
   },
-  "showFeatureChipsToggleSubtitle": "Zeige erweiterte Track-Informationen wie Codec, Bit Rate und mehr in der Wiedergabe-Ansicht an.",
+  "showFeatureChipsToggleSubtitle": "Zeige erweiterte Track-Informationen (z.B. Codec, Bit Rate und mehr) im Player an.",
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
@@ -1129,7 +1129,7 @@
     },
     "description": "Track info line in downloads screen lists"
   },
-  "showArtistChipImageSubtitle": "Dies betrifft kleine Vorschaubilder von Künstlern, z.B. in der Wiedergabe-Ansicht.",
+  "showArtistChipImageSubtitle": "Dies betrifft kleine Vorschaubilder von Künstlern, z.B. im Player.",
   "@showArtistChipImageSubtitle": {},
   "connectionInterruptedBackground": "Während des Herunterladens im Hintergrund wurde die Verbindung unterbrochen. Dies kann durch Betriebssystem-Einstellungen verursacht werden.",
   "@connectionInterruptedBackground": {
@@ -1546,7 +1546,7 @@
   "@periodicPlaybackSessionUpdateFrequency": {
     "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "runRepairWarning": "Der Server konnte nicht erreicht werden, um die Migration der Downloads abzuschließen. Bitte gehe zur Download-Ansicht und führe \"Downloads reparieren\" aus, sobald du wieder online bist.",
+  "runRepairWarning": "Der Server konnte nicht erreicht werden, um die Migration der Downloads abzuschließen. Bitte gehe zur Downloadseite und führe \"Downloads reparieren\" aus, sobald du wieder online bist.",
   "@runRepairWarning": {
     "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
   },
@@ -1564,7 +1564,7 @@
   },
   "oneLineMarqueeTextButtonSubtitle": "Automatisch Titel scrollen, wenn sie länger als zwei Zeilen sind",
   "@oneLineMarqueeTextButtonSubtitle": {},
-  "hideQueueButtonSubtitle": "Verstecke den Warteschlangen-Button in der Wiedergabe-Ansicht. Swipe nach oben, um auf die Warteschlange zuzugreifen.",
+  "hideQueueButtonSubtitle": "Verstecke den Warteschlange-Button im Player. Swipe nach oben, um auf die Warteschlange zuzugreifen.",
   "@hideQueueButtonSubtitle": {},
   "hideQueueButton": "Warteschlangen-Button verstecken",
   "@hideQueueButton": {},
@@ -1595,7 +1595,7 @@
   "@defaultDownloadLocationButton": {
     "description": "Tooltip for button that sets a download location as the default."
   },
-  "allowSplitScreenSubtitle": "Die Wiedergabe-Ansicht wird auf breiteren Bildschirmen neben anderen Ansichten gezeigt.",
+  "allowSplitScreenSubtitle": "Der Player wird auf breiteren Bildschirmen neben anderen Seiten gezeigt.",
   "@allowSplitScreenSubtitle": {},
   "allowSplitScreenTitle": "SplitScreen-Modus erlauben",
   "@allowSplitScreenTitle": {},
@@ -1715,13 +1715,13 @@
     },
     "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
   },
-  "hidePlayerBottomActionsSubtitle": "Verstecke die Warteschlange- und Lyrics-Buttons in der Wiedergabe-Ansicht. Swipe nach oben, um die Warteschlange anzuzeigen, und swipe nach links (unterhalb des Album Covers), um verfügbare Lyrics anzuzeigen.",
+  "hidePlayerBottomActionsSubtitle": "Verstecke die Warteschlange- und Lyrics-Buttons im Player. Swipe nach oben, um die Warteschlange anzuzeigen, und swipe nach links (unterhalb des Album Covers), um verfügbare Lyrics anzuzeigen.",
   "@hidePlayerBottomActionsSubtitle": {},
-  "prioritizePlayerCoverSubtitle": "Ein größeres Album Cover in der Wiedergabe-Ansicht bevorzugen. Unwichtigere Optionen werden auf kleineren Bildschirmen mit höherer Wahrscheinlichkeit versteckt.",
+  "prioritizePlayerCoverSubtitle": "Ein größeres Album Cover im Player bevorzugen. Unwichtigere Optionen werden auf kleineren Bildschirmen mit höherer Wahrscheinlichkeit versteckt.",
   "@prioritizePlayerCoverSubtitle": {},
   "prioritizePlayerCover": "Album Cover priorisieren",
   "@prioritizePlayerCover": {},
-  "suppressPlayerPaddingSubtitle": "Minimiert den Abstand zwischen Controls in der Wiedergabe-Ansicht, wenn das Album Cover nicht die volle Größe hat.",
+  "suppressPlayerPaddingSubtitle": "Minimiert den Abstand zwischen den Player-Steuerelementen, wenn das Album Cover nicht die volle Größe hat.",
   "@suppressPlayerPaddingSubtitle": {},
   "suppressPlayerPadding": "Abstand um die Player Controls unterdrücken",
   "@suppressPlayerPadding": {},
@@ -1781,7 +1781,7 @@
   "@showProgressOnNowPlayingBarTitle": {
     "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar"
   },
-  "showProgressOnNowPlayingBarSubtitle": "Steuert, ob der In-App-Miniplayer bzw. die aktuelle Wiedergabeleiste unten in der Wiedergabe-Ansicht als Fortschrittsbalken fungiert.",
+  "showProgressOnNowPlayingBarSubtitle": "Steuert, ob der In-App-Miniplayer bzw. die kleine Wiedergabeleiste am unteren Bildschirmrand den Wiedergabefortschritt anzeigt.",
   "@showProgressOnNowPlayingBarSubtitle": {
     "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the bottom of the music screen functions as a progress bar"
   },
@@ -1821,7 +1821,7 @@
   "@sampleRate": {
     "description": "Label for the feature chips showing the sample rate of a track"
   },
-  "showCoversOnAlbumScreenSubtitle": "Zeige Alben Cover in der Album-Ansicht separat für jeden einzelnen Track.",
+  "showCoversOnAlbumScreenSubtitle": "Zeige Alben Cover auf der Albumseite separat für jeden einzelnen Titel.",
   "@showCoversOnAlbumScreenSubtitle": {
     "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
   },
@@ -1871,7 +1871,7 @@
   "@releaseDateFormatISO": {
     "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
   },
-  "showAlbumReleaseDateOnPlayerScreenSubtitle": "Zeigt das Release-Datum des Albums nach dem Albumnamen in der Wiedergabe-Ansicht an.",
+  "showAlbumReleaseDateOnPlayerScreenSubtitle": "Zeigt das Release-Datum des Albums nach dem Albumnamen im Player an.",
   "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
     "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
   },
@@ -1901,7 +1901,7 @@
   "@releaseDateFormatYear": {
     "description": "Date format option for the release date of an album, showing only the year"
   },
-  "showAlbumReleaseDateOnPlayerScreenTitle": "Album Release-Datum in der Wiedergabe-Ansicht anzeigen",
+  "showAlbumReleaseDateOnPlayerScreenTitle": "Album Release-Datum im Player anzeigen",
   "@showAlbumReleaseDateOnPlayerScreenTitle": {
     "description": "Title for the setting that controls if the release date of an album is shown on the player screen"
   },
@@ -2174,13 +2174,13 @@
   "@curatedItemsFavoritesDisabledTooltip": {
     "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet."
   },
-  "seeAll": "Alle anzeigen",
+  "seeAll": "Alle",
   "@seeAll": {
     "description": ""
   },
   "artistGenreChipsApplyFilterTitle": "Filter anwenden anstatt das Genre zu öffnen",
   "@artistGenreChipsApplyFilterTitle": {},
-  "genreScreen": "Genre Ansicht",
+  "genreScreen": "Genreseite",
   "@genreScreen": {
     "description": "Name for the view/screen that shows genres"
   },
@@ -2208,7 +2208,7 @@
   "@autoReloadQueueSubtitle": {
     "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
   },
-  "autoSwitchItemCurationTypeSubtitle": "Wenn aktiviert, werden Item Sections in der Künstler und Genre Ansicht automatisch in einen anderen Kurationstyp wechseln, falls keine Items verfügbar sind (z.B. wenn ein spezieller Künstler keine Favoriten hat).",
+  "autoSwitchItemCurationTypeSubtitle": "Wenn aktiviert, werden Item Sections auf der Künstler- und Genreseite automatisch in einen anderen Kurationstyp wechseln, falls keine Items verfügbar sind (z.B. wenn ein spezieller Künstler keine Favoriten hat).",
   "@autoSwitchItemCurationTypeSubtitle": {},
   "allLibraries": "Alle Bibliotheken",
   "@allLibraries": {
@@ -2236,7 +2236,7 @@
   },
   "showArtistsTracksSectionSubtitle": "Ob eine Section mit bis zu 5 Titel angezeigt werden soll. Wenn aktiviert, kannst du zwischen Oft gespielt, Favoriten, Zufällig, Neu veröffentlicht und Kürzlich hinzugefügt wechseln.",
   "@showArtistsTracksSectionSubtitle": {},
-  "genreFilterArtistScreensSubtitle": "Wenn aktiviert, werden in der Künstler Ansicht (die durch ein Genre geöffnet wurde) nur Titel und Alben angezeigt, die das entsprechende Genre aufweisen. (Du kannst den Genre Filter jederzeit manuell entfernen, um alle Tracks und Alben anzuzeigen.)",
+  "genreFilterArtistScreensSubtitle": "Wenn aktiviert, werden in den Künstlerseiten (die durch ein Genre geöffnet wurden) nur die Titel und Alben angezeigt, die das entsprechende Genre aufweisen. (Der Genre Filter kann jederzeit manuell entfernt werden, um alle Titel und Alben anzuzeigen.)",
   "@genreFilterArtistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
@@ -2248,11 +2248,11 @@
   "@genreItemSectionFilterChipOrderTitle": {
     "description": "Label for the setting that controls the order of item sections filter chips."
   },
-  "genreFilterArtistScreens": "Künstler Ansicht filtern",
+  "genreFilterArtistScreens": "Künstlerseiten filtern",
   "@genreFilterArtistScreens": {
     "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
-  "genreListsInheritSortingSubtitle": "Wenn aktiviert, werden die „Alle anzeigen“ Listen die Sortierung und den Filter von der Genre Ansicht übernehmen. Wenn deaktiviert, werden die Einstellungen der Bibliothek-Tabs verwendet. Beim Tippen auf die Item-Zahlen ganz oben werden die Listen immer mit den Einstellungen der Bibliothek-Tabs geöffnet.",
+  "genreListsInheritSortingSubtitle": "Wenn aktiviert, werden die „Alle“ Listen die Sortierung und den Filter von der Genreseite übernehmen. Wenn deaktiviert, werden die Einstellungen der Bibliothek-Tabs verwendet. Beim Tippen auf die Item-Zahlen ganz oben werden die Listen immer mit den Einstellungen der Bibliothek-Tabs geöffnet.",
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
@@ -2268,7 +2268,7 @@
   "@showFavoriteButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a favorite button."
   },
-  "artistScreen": "Künstler Ansicht",
+  "artistScreen": "Künstlerseite",
   "@artistScreen": {
     "description": "Name for the view/screen that shows artists"
   },
@@ -2287,7 +2287,7 @@
       }
     }
   },
-  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks} werden von der Warteschlange entfernt, da sie nicht heruntergeladen wurden.",
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks, plural, =1{1 Titel wird} other{{amountUndownloadedTracks} Titel werden}} von der Warteschlange entfernt, da {amountUndownloadedTracks, plural, =1{er nicht heruntergeladen wurde.} other{sie nicht heruntergeladen wurden.}}",
   "@autoReloadPromptMissingTracks": {
     "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
     "placeholders": {
@@ -2308,7 +2308,7 @@
   "@artistGenreChipsApplyFilterPrompt": {
     "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
   },
-  "artistGenreChipsApplyFilterPromptButton": "Stattdessen Genre öffnen",
+  "artistGenreChipsApplyFilterPromptButton": "Genre öffnen",
   "@artistGenreChipsApplyFilterPromptButton": {
     "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
   }
