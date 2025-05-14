@@ -2163,7 +2163,7 @@
       }
     }
   },
-  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks} bude odstraněno z fronty, protože nebyly staženy.",
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks, plural, =1{1 skladba} few{{amountUndownloadedTracks} skladby} other{{amountUndownloadedTracks} skladeb}} bude odstraněno z fronty, protože nejsou staženy.",
   "@autoReloadPromptMissingTracks": {
     "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
     "placeholders": {
@@ -2290,7 +2290,7 @@
   "@genreFilterArtistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
-  "artistGenreChipsApplyFilterSubtitle": "Klepnutím na žánr obvykle otevřete jeho vlastní obrazovku. Pokud je tato možnost povolena, bude místo toho filtrován umělec podle zvoleného žánru – zobrazeny budou pouze odpovídající skladby a alba.",
+  "artistGenreChipsApplyFilterSubtitle": "Klepnutím na žánr vyfiltrujete umělce podle daného žánru. Pro otevření žánru můžete stále dlouze podržet na položce.",
   "@artistGenreChipsApplyFilterSubtitle": {},
   "topArtists": "Nejlepší umělci",
   "@topArtists": {},
@@ -2307,5 +2307,17 @@
   "itemSectionsOrderSubtitle": "Ovládá pořadí sekcí položek.",
   "@itemSectionsOrderSubtitle": {
     "description": "Description of the setting that controls the order of item sections on the screens."
+  },
+  "noReleaseDate": "Žádné datum vydání",
+  "@noReleaseDate": {
+    "description": "Placeholder text if an album has no release date set."
+  },
+  "artistGenreChipsApplyFilterPrompt": "Filtr žánru použit",
+  "@artistGenreChipsApplyFilterPrompt": {
+    "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "artistGenreChipsApplyFilterPromptButton": "Otevřít žánr",
+  "@artistGenreChipsApplyFilterPromptButton": {
+    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
   }
 }
