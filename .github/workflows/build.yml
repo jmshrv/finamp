@@ -142,16 +142,16 @@ jobs:
         name: finamp-windows.msix
         path: build/windows/x64/runner/Release/finamp.msix
         compression-level: 0 # no compression
-   build-macos:
-     name: Build for macOS
-     runs-on: macos-latest
-     steps:
-     - uses: actions/checkout@v4
-     - name: Set up Flutter
-       uses: subosito/flutter-action@v2
-       with:
-         channel: 'stable'
-         architecture: x64
-     - run: flutter doctor
-     - run: flutter pub get
-     - run: flutter build macos --debug --no-pub
+  # build-macos:
+  #   name: Build for macOS
+  #   runs-on: macos-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - name: Set up Flutter
+  #     uses: subosito/flutter-action@v2
+  #     with:
+  #       channel: 'stable'
+  #       architecture: x64
+  #   - run: flutter doctor
+  #   - run: flutter pub get
+  #   - run: flutter build macos --release --no-pub
