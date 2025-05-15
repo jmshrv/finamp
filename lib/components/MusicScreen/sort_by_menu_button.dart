@@ -20,9 +20,7 @@ class SortByMenuButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final sortOptions = tabType == TabContentType.tracks
-        ? SortBy.trackSortOptions
-        : SortBy.defaults;
+    final sortOptions = SortBy.defaultsFor(tabType);
 
     return PopupMenuButton<SortBy>(
       icon: const Icon(Icons.sort),

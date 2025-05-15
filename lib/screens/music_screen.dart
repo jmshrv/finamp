@@ -50,7 +50,6 @@ class MusicScreen extends ConsumerStatefulWidget {
 class _MusicScreenState extends ConsumerState<MusicScreen>
     with TickerProviderStateMixin {
   bool isSearching = false;
-  bool _showShuffleFab = false;
   TextEditingController textEditingController = TextEditingController();
   String? searchQuery;
   final Map<TabContentType, MusicRefreshCallback> refreshMap = {};
@@ -73,24 +72,9 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
   }
 
   void _tabIndexCallback() {
-    var tabKey = FinampSettingsHelper.finampSettings.showTabs.entries
-        .where((element) => element.value)
-        .elementAt(_tabController!.index)
-        .key;
-    if (_tabController != null &&
-        (tabKey == TabContentType.tracks ||
-            tabKey == TabContentType.artists ||
-            tabKey == TabContentType.albums)) {
-      setState(() {
-        _showShuffleFab = true;
-      });
-    } else {
-      if (_showShuffleFab) {
-        setState(() {
-          _showShuffleFab = false;
-        });
-      }
-    }
+    // We have to rebuild, otherwise the Action Buttons
+    // in the AppBar might not get the correct current tab
+    setState(() {});
   }
 
   void _buildTabController() {
@@ -232,6 +216,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           "Rebuilding MusicScreen tab controller (${sortedTabs.length} != ${_tabController?.length})");
       _buildTabController();
     }
+    final currentTab = sortedTabs.elementAt(_tabController!.index);
+    debugPrint('Current tab in AppBar: $currentTab');
 
     Timer? debounce;
 

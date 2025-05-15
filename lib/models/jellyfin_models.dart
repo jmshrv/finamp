@@ -3461,22 +3461,51 @@ enum SortBy {
   @HiveField(14)
   runtime;
 
-  /// default SortBy options shown to the user, such as in the sort by menu
-  static List<SortBy> get defaults => [
-        SortBy.sortName,
-        SortBy.albumArtist,
-        SortBy.communityRating,
-        SortBy.criticRating,
-        SortBy.dateCreated,
-        SortBy.premiereDate,
-        SortBy.random,
-      ];
-
-  /// default SortBy options shown to the user, such as in the sort by menu
-  static List<SortBy> get trackSortOptions => [
-        ...defaults,
-        SortBy.playCount,
-      ];
+  static List<SortBy> defaultsFor(TabContentType type) {
+    switch (type) {
+      case TabContentType.tracks:
+        return [
+          SortBy.sortName,
+          SortBy.albumArtist,
+          SortBy.artist,
+          //SortBy.communityRating,
+          //SortBy.criticRating,
+          SortBy.datePlayed,
+          SortBy.dateCreated,
+          SortBy.premiereDate,
+          SortBy.random,
+          SortBy.playCount,
+          SortBy.runtime,
+        ];
+      case TabContentType.albums:
+        return [
+          SortBy.sortName,
+          SortBy.albumArtist,
+          //SortBy.communityRating,
+          //SortBy.criticRating,
+          //SortBy.datePlayed,
+          SortBy.dateCreated,
+          SortBy.premiereDate,
+          SortBy.random,
+          SortBy.runtime,
+        ];
+      case TabContentType.playlists:
+      case TabContentType.artists:
+        return [
+          SortBy.sortName,
+          //SortBy.datePlayed,
+          SortBy.dateCreated,
+          SortBy.random,
+          SortBy.runtime,
+        ];
+      case TabContentType.genres:
+        return [
+          SortBy.sortName,
+          SortBy.dateCreated,
+          SortBy.random,
+        ];
+    }
+  }
 
   /// Human-readable version of the [SortBy]. For example, toString() on
   /// [SortBy.album], toString() would return "SortBy.album". With this
@@ -3507,7 +3536,7 @@ enum SortBy {
       case SortBy.albumArtist:
         return "Album Artist";
       case SortBy.artist:
-        return "Artist";
+        return "Performing Artist";
       case SortBy.budget:
         return "Budget";
       case SortBy.communityRating:
@@ -3542,7 +3571,7 @@ enum SortBy {
       case SortBy.albumArtist:
         return AppLocalizations.of(context)!.albumArtist;
       case SortBy.artist:
-        return AppLocalizations.of(context)!.artist;
+        return AppLocalizations.of(context)!.performingArtist;
       case SortBy.budget:
         return AppLocalizations.of(context)!.budget;
       case SortBy.communityRating:
