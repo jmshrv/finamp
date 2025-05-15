@@ -614,23 +614,38 @@ List<BaseItemDto> sortItems(
           } else {
             return a.criticRating!.compareTo(b.criticRating!);
           }
+        case SortBy.datePlayed:
+          final dateA = a.userData?.lastPlayedDate == null ? null : DateTime.tryParse(a.userData!.lastPlayedDate!.trim());
+          final dateB = b.userData?.lastPlayedDate == null ? null : DateTime.tryParse(b.userData!.lastPlayedDate!.trim());
+          if (dateA == null && dateB == null) return 0;
+          if (dateA == null) return -1;
+          if (dateB == null) return 1;
+          return dateA.compareTo(dateB);
         case SortBy.dateCreated:
-          if (a.dateCreated == null || b.dateCreated == null) {
-            return 0;
-          } else {
-            return a.dateCreated!.compareTo(b.dateCreated!);
-          }
+          final dateA = a.dateCreated == null ? null : DateTime.tryParse(a.dateCreated!.trim());
+          final dateB = b.dateCreated == null ? null : DateTime.tryParse(b.dateCreated!.trim());
+          if (dateA == null && dateB == null) return 0;
+          if (dateA == null) return -1;
+          if (dateB == null) return 1;
+          return dateA.compareTo(dateB);
         case SortBy.premiereDate:
-          if (a.premiereDate == null || b.premiereDate == null) {
-            return 0;
-          } else {
-            return a.premiereDate!.compareTo(b.premiereDate!);
-          }
+          final dateA = a.premiereDate == null ? null : DateTime.tryParse(a.premiereDate!.trim());
+          final dateB = b.premiereDate == null ? null : DateTime.tryParse(b.premiereDate!.trim());
+          if (dateA == null && dateB == null) return 0;
+          if (dateA == null) return -1;
+          if (dateB == null) return 1;
+          return dateA.compareTo(dateB);
         case SortBy.playCount:
           if (a.userData?.playCount == null || b.userData?.playCount == null) {
             return 0;
           } else {
             return a.userData!.playCount.compareTo(b.userData!.playCount);
+          }
+        case SortBy.runtime:
+          if (a.runTimeTicks == null || b.runTimeTicks == null) {
+            return 0;
+          } else {
+            return a.runTimeTicks!.compareTo(b.runTimeTicks!);
           }
         // SortBy.random is handled outside this switch as per-comparison logic does not produce a good shuffle
         default:
