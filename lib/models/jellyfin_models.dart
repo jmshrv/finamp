@@ -3462,9 +3462,11 @@ enum SortBy {
   runtime;
 
   static List<SortBy> defaultsFor(TabContentType type) {
+    List<SortBy> options;
+
     switch (type) {
       case TabContentType.tracks:
-        return [
+        options = [
           SortBy.sortName,
           SortBy.albumArtist,
           SortBy.artist,
@@ -3478,7 +3480,7 @@ enum SortBy {
           SortBy.runtime,
         ];
       case TabContentType.albums:
-        return [
+        options = [
           SortBy.sortName,
           SortBy.albumArtist,
           //SortBy.communityRating,
@@ -3491,7 +3493,7 @@ enum SortBy {
         ];
       case TabContentType.playlists:
       case TabContentType.artists:
-        return [
+        options = [
           SortBy.sortName,
           //SortBy.datePlayed,
           SortBy.dateCreated,
@@ -3499,12 +3501,13 @@ enum SortBy {
           SortBy.runtime,
         ];
       case TabContentType.genres:
-        return [
+        options = [
           SortBy.sortName,
           SortBy.dateCreated,
           SortBy.random,
         ];
     }
+    return options;
   }
 
   /// Human-readable version of the [SortBy]. For example, toString() on

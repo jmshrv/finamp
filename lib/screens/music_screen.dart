@@ -216,8 +216,6 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           "Rebuilding MusicScreen tab controller (${sortedTabs.length} != ${_tabController?.length})");
       _buildTabController();
     }
-    final currentTab = sortedTabs.elementAt(_tabController!.index);
-    debugPrint('Current tab in AppBar: $currentTab');
 
     Timer? debounce;
 
@@ -345,7 +343,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                       sortByOverride = newSortBy;
                     }),
                   ),
-                  if (ref.watch(finampSettingsProvider.isOffline))
+                  if (ref.watch(finampSettingsProvider.isOffline) && 
+                      sortedTabs.elementAt(_tabController!.index) != TabContentType.tracks)
                     IconButton(
                       icon: ref.watch(
                               finampSettingsProvider.onlyShowFullyDownloaded)

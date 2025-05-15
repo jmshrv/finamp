@@ -1,3 +1,4 @@
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +21,14 @@ class SortByMenuButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
     final sortOptions = SortBy.defaultsFor(tabType);
-
+    var selectedSortBy = (sortByOverride ?? ref.watch(finampSettingsProvider.tabSortBy(tabType)));
+    // PlayCount and Last Played are not representative in Offline Mode
+    // so we disable it and overwrite it with the Sort Name if it was selected
+    if (isOffline && (selectedSortBy == SortBy.playCount || selectedSortBy == SortBy.datePlayed)) {
+      selectedSortBy = SortBy.sortName;
+    }
     return PopupMenuButton<SortBy>(
       icon: const Icon(Icons.sort),
       tooltip: AppLocalizations.of(context)!.sortBy,
@@ -32,19 +39,26 @@ class SortByMenuButton extends ConsumerWidget {
             child: Text(
               sortBy.toLocalisedString(context),
               style: TextStyle(
-                color: ((sortByOverride ?? ref.watch(finampSettingsProvider.tabSortBy(tabType))) ==
-                        sortBy)
+                color: (isOffline && ((sortBy == SortBy.playCount || sortBy == SortBy.datePlayed)))
+                ? Theme.of(context).colorScheme.secondary.withOpacity(0.3)
+                : ((selectedSortBy == sortBy)
                     ? Theme.of(context).colorScheme.secondary
-                    : null,
+                    : null),
               ),
             ),
           )
       ],
       onSelected: (value) {
-        if (sortByOverride != null && onOverrideChanged != null) {
-          onOverrideChanged!(value);
+        if (isOffline && ((value == SortBy.playCount || value == SortBy.datePlayed))) {
+          GlobalSnackbar.message((context) =>
+              AppLocalizations.of(context)!
+                      .notAvailableInOfflineMode);
         } else {
-          FinampSetters.setTabSortBy(tabType, value);
+          if (sortByOverride != null && onOverrideChanged != null) {
+            onOverrideChanged!(value);
+          } else {
+            FinampSetters.setTabSortBy(tabType, value);
+          }
         }
       }
     );

@@ -202,7 +202,12 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     }
 
     var items = offlineItems.map((e) => e.baseItem).nonNulls.toList();
-    final sortBy = widget.sortByOverride ?? settings.tabSortBy[widget.tabContentType];
+    var sortBy = widget.sortByOverride ?? settings.tabSortBy[widget.tabContentType];
+    // PlayCount and Last Played are not representative in Offline Mode
+    // so we disable it and overwrite it with the Sort Name if it was selected
+    if (sortBy == SortBy.playCount || sortBy == SortBy.datePlayed) {
+      sortBy = SortBy.sortName;
+    }
     final sortOrder = widget.sortOrderOverride ?? settings.tabSortOrder[widget.tabContentType];
     items = sortItems(items, sortBy, sortOrder);
 
