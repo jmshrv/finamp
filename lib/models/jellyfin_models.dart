@@ -3521,7 +3521,7 @@ enum SortBy {
       case SortBy.playCount:
         return "Play Count";
       case SortBy.premiereDate:
-        return "Premiere Date";
+        return "Release Date";
       case SortBy.productionYear:
         return "Production Year";
       case SortBy.sortName:
