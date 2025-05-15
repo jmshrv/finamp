@@ -13,7 +13,7 @@ import '../../services/finamp_settings_helper.dart';
 import '../padded_custom_scrollview.dart';
 import 'album_screen_content_flexible_space_bar.dart';
 import 'download_button.dart';
-import 'playlist_name_edit_button.dart';
+import 'playlist_edit_button.dart';
 import 'track_list_tile.dart';
 
 typedef BaseItemDtoCallback = void Function(BaseItemDto item);
