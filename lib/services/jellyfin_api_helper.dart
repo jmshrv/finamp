@@ -724,6 +724,13 @@ class JellyfinApiHelper {
     return _getItemByIdBatchedFuture!.then((value) => value[itemId]);
   }
 
+  /// Gets a Playlist
+  Future<dynamic> getPlaylist(BaseItemId playlistId) async {
+    final response =
+        await jellyfinApi.getPlaylist(playlistId: playlistId);
+    return response;
+  }
+
   /// Creates a new playlist.
   Future<NewPlaylistResponse> createNewPlaylist(NewPlaylist newPlaylist) async {
     final response = await jellyfinApi.createNewPlaylist(
@@ -747,7 +754,7 @@ class JellyfinApiHelper {
     );
   }
 
-  /// Remove items to a playlist.
+  /// Remove items from a playlist.
   Future<void> removeItemsFromPlaylist({
     /// The playlist id.
     required BaseItemId playlistId,
@@ -771,17 +778,31 @@ class JellyfinApiHelper {
     }
   }
 
-  /// Updates an item.
+  /// Updates an item. (Not for Playlists: use updatePlaylist for that)
+  /// You should give a BaseItemDto with only
+  /// changed values.
   Future<void> updateItem({
     /// The item id.
     required BaseItemId itemId,
-
-    /// What to update the item with. You should give a BaseItemDto with only
-    /// changed values.
+    /// the new Item.
     required BaseItemDto newItem,
   }) async {
     final response =
         await jellyfinApi.updateItem(itemId: itemId, newItem: newItem);
+    if (response.toString().isNotEmpty) {
+      throw response as Object;
+    }
+  }
+
+  /// Updates playlist.
+  Future<void> updatePlaylist({
+    /// The item id.
+    required BaseItemId itemId,
+    /// The new Item.
+    required NewPlaylist newPlaylist    
+  }) async {
+    final response =
+        await jellyfinApi.updatePlaylist(playlistId: itemId, playlist: newPlaylist);
     if (response.toString().isNotEmpty) {
       throw response as Object;
     }
