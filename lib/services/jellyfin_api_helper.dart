@@ -4,11 +4,13 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:chopper/chopper.dart';
+import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:http/io_client.dart' as http;
 import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
@@ -19,7 +21,6 @@ import 'downloads_service.dart';
 import 'downloads_service_backend.dart';
 import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
-import 'package:http/io_client.dart' as http;
 import 'jellyfin_api.dart' as jellyfin_api;
 
 class JellyfinApiHelper {
@@ -110,6 +111,7 @@ class JellyfinApiHelper {
 
   Future<List<BaseItemDto>?> getItems({
     BaseItemDto? parentItem,
+    BaseItemDto? libraryFilter,
     String? includeItemTypes,
     String? sortBy,
     String? sortOrder,
@@ -119,6 +121,8 @@ class JellyfinApiHelper {
     String? fields,
     bool? recursive,
     ArtistType? artistType,
+    BaseItemDto? genreFilter,
+    bool? isFavorite,
 
     /// The record index to start at. All items with a lower index will be
     /// dropped from the results.
@@ -127,14 +131,103 @@ class JellyfinApiHelper {
     /// The maximum number of records to return.
     int? limit,
   }) async {
+    if ((itemIds?.length ?? 0) > 200) {
+      List<BaseItemDto> output = [];
+      // Limit itemIds per request to 200.  Execute up to 10 requests in parallel.
+      for (final slice in itemIds!.slices(2000)) {
+        final futures = slice
+            .slices(200)
+            .map((subSlice) => _fetchGetItemsResponse(itemIds: subSlice, fields: fields));
+        final results = await Future.wait(futures);
+        for (var subSliceResult in results) {
+          output.addAll(subSliceResult.items ?? []);
+        }
+      }
+      return output;
+    }
+
+    final response = await _fetchGetItemsResponse(
+      parentItem: parentItem,
+      libraryFilter: libraryFilter,
+      includeItemTypes: includeItemTypes,
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      searchTerm: searchTerm,
+      itemIds: itemIds,
+      filters: filters,
+      fields:fields,
+      recursive: recursive,
+      artistType: artistType,
+      genreFilter: genreFilter,
+      isFavorite: isFavorite,
+      startIndex: startIndex,
+      limit: limit,
+    );
+    return response.items;
+  }
+
+  Future<QueryResult_BaseItemDto> getItemsWithTotalRecordCount({
+    BaseItemDto? parentItem,
+    BaseItemDto? libraryFilter,
+    String? includeItemTypes,
+    String? sortBy,
+    String? sortOrder,
+    String? searchTerm,
+    List<BaseItemId>? itemIds,
+    String? filters,
+    String? fields,
+    bool? recursive,
+    ArtistType? artistType,
+    BaseItemDto? genreFilter,
+    bool? isFavorite,
+    int? startIndex,
+    int? limit,
+  }) async {
+    final response = await _fetchGetItemsResponse(
+      parentItem: parentItem,
+      libraryFilter: libraryFilter,
+      includeItemTypes: includeItemTypes,
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      searchTerm: searchTerm,
+      itemIds: itemIds,
+      filters: filters,
+      fields: fields,
+      recursive: recursive,
+      artistType: artistType,
+      genreFilter: genreFilter,
+      isFavorite: isFavorite,
+      startIndex: startIndex,
+      limit: limit,
+    );
+    return response;
+  }
+
+  Future<QueryResult_BaseItemDto> _fetchGetItemsResponse ({
+    BaseItemDto? parentItem,
+    BaseItemDto? libraryFilter,
+    String? includeItemTypes,
+    String? sortBy,
+    String? sortOrder,
+    String? searchTerm,
+    List<BaseItemId>? itemIds,
+    String? filters,
+    String? fields,
+    bool? recursive,
+    ArtistType? artistType,
+    BaseItemDto? genreFilter,
+    bool? isFavorite,
+    int? startIndex,
+    int? limit,
+  }) async {
     final currentUserId = _finampUserHelper.currentUser?.id;
     if (currentUserId == null) {
       // When logging out, this request causes errors since currentUser is
-      // required sometimes. We just return an empty list since this error
-      // usually happens becuase the listeners on MusicScreenTabView update
-      // milliseconds before the page is popped. This shouldn't happen in normal
-      // use.
-      return [];
+      // required sometimes. We just return an fake api response that is empty,
+      // since this error usually happens because the listeners on MusicScreenTabView
+      // update milliseconds before the page is popped.
+      // This shouldn't happen in normal use.
+      return QueryResult_BaseItemDto(totalRecordCount: 0, startIndex: 0, items: []);
     }
     assert(!FinampSettingsHelper.finampSettings.isOffline);
     assert(itemIds == null || parentItem == null);
@@ -177,10 +270,12 @@ class JellyfinApiHelper {
             sortOrder: sortOrder,
             searchTerm: searchTerm,
             filters: filters,
+            genreIds: genreFilter?.id.raw,
             startIndex: startIndex,
             limit: limit,
             userId: currentUserId,
             fields: fields,
+            isFavorite: isFavorite,
           );
         } else {
           //artistType == ArtistType.artist
@@ -191,18 +286,23 @@ class JellyfinApiHelper {
             sortOrder: sortOrder,
             searchTerm: searchTerm,
             filters: filters,
+            genreIds: genreFilter?.id.raw,
             startIndex: startIndex,
             limit: limit,
             fields: fields,
+            isFavorite: isFavorite,
           );
         }
       } else if (parentItem?.type == "MusicArtist") {
         // For getting the children of artists, we need to use
         // artistIDs or albumArtistIds instead of parentId
+        // also, in order to only get the items from within one library
+        // we have to use a separated libraryFilter,
         if (artistType == ArtistType.albumartist || artistType == null) {
           // Albums of Album Artists
           response = await api.getItems(
             userId: currentUserId,
+            parentId: libraryFilter?.id,
             albumArtistIds: parentItem?.id.raw,
             includeItemTypes: includeItemTypes,
             recursive: recursive,
@@ -210,15 +310,18 @@ class JellyfinApiHelper {
             sortOrder: sortOrder,
             searchTerm: searchTerm,
             filters: filters,
+            genreIds: genreFilter?.id.raw,
             startIndex: startIndex,
             limit: limit,
             fields: fields,
+            isFavorite: isFavorite,
           );
         } else {
           //artistType == ArtistType.artist
           // Performing Artists
           response = await api.getItems(
             userId: currentUserId,
+            parentId: libraryFilter?.id,
             artistIds: parentItem?.id.raw,
             includeItemTypes: includeItemTypes,
             recursive: recursive,
@@ -226,15 +329,20 @@ class JellyfinApiHelper {
             sortOrder: sortOrder,
             searchTerm: searchTerm,
             filters: filters,
+            genreIds: genreFilter?.id.raw,
             startIndex: startIndex,
             limit: limit,
             fields: fields,
+            isFavorite: isFavorite,
           );
         }
       } else if (includeItemTypes == "MusicGenre") {
         response = await api.getGenres(
           parentId: parentItem?.id,
           // includeItemTypes: includeItemTypes,
+          sortBy: sortBy,
+          sortOrder: sortOrder,
+          isFavorite: isFavorite,
           searchTerm: searchTerm,
           startIndex: startIndex,
           limit: limit,
@@ -242,6 +350,7 @@ class JellyfinApiHelper {
         );
       } else if (parentItem?.type == "MusicGenre") {
         response = await api.getItems(
+          parentId: libraryFilter?.id,
           userId: currentUserId,
           genreIds: parentItem?.id.raw,
           includeItemTypes: includeItemTypes,
@@ -253,6 +362,7 @@ class JellyfinApiHelper {
           startIndex: startIndex,
           limit: limit,
           fields: fields,
+          isFavorite: isFavorite,
         );
       } else {
         // This will be run when getting albums, tracks in albums, and stuff like
@@ -266,15 +376,15 @@ class JellyfinApiHelper {
           sortOrder: sortOrder,
           searchTerm: searchTerm,
           filters: filters,
+          genreIds: genreFilter?.id.raw,
           startIndex: startIndex,
           limit: limit,
           ids: itemIds?.join(","),
           fields: fields,
+          isFavorite: isFavorite,
         );
       }
-
-      return QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>)
-          .items;
+      return QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>);
     });
   }
 
@@ -606,8 +716,8 @@ class JellyfinApiHelper {
     _getItemByIdBatchedFuture ??=
         Future.delayed(const Duration(milliseconds: 250), () async {
       _getItemByIdBatchedFuture = null;
-      var ids = _getItemByIdBatchedRequests.take(200).toList();
-      _getItemByIdBatchedRequests.removeAll(ids);
+      var ids = _getItemByIdBatchedRequests.toList();
+      _getItemByIdBatchedRequests.clear();
       var items = await getItems(itemIds: ids, fields: fields) ?? [];
       return Map.fromIterable(items, key: (e) => (e as BaseItemDto).id);
     });
@@ -856,18 +966,17 @@ class JellyfinApiHelper {
       _jellyfinApiHelperLogger.warning("User has completed logout.");
     }
   }
+
   Future<bool> _pingSpecificServer(String url) async {
     final client = ChopperClient(
         baseUrl: Uri.tryParse(url),
-        client: http.IOClient(HttpClient()
-              ..connectionTimeout = const Duration(
-                  seconds: 3)),
+        client: http.IOClient(
+            HttpClient()..connectionTimeout = const Duration(seconds: 3)),
         interceptors: [
           jellyfin_api.JellyfinSpecificInterceptor(url),
           HttpAggregateLoggingInterceptor()
         ],
-        converter: JsonConverter()
-    );
+        converter: JsonConverter());
 
     final Request $request = Request(
       'GET',
@@ -876,7 +985,8 @@ class JellyfinApiHelper {
     );
 
     try {
-      Response<dynamic> response = await client.send<dynamic, dynamic>($request);
+      Response<dynamic> response =
+          await client.send<dynamic, dynamic>($request);
       if (response.statusCode != 200) return false;
       final body = response.bodyOrThrow as Map<String, dynamic>;
       // If IsInNetwork doesn't exist -> catch
@@ -893,6 +1003,7 @@ class JellyfinApiHelper {
     if (user == null) return false;
     return await _pingSpecificServer(user.homeAddress);
   }
+
   Future<bool> pingPublicServer() async {
     FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
     if (user == null) return false;

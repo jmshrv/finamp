@@ -8,7 +8,7 @@ part of 'finamp_models.dart';
 
 class FinampUserAdapter extends TypeAdapter<FinampUser> {
   @override
-  final int typeId = 8;
+  final typeId = 8;
 
   @override
   FinampUser read(BinaryReader reader) {
@@ -69,7 +69,7 @@ class FinampUserAdapter extends TypeAdapter<FinampUser> {
 
 class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
-  final int typeId = 28;
+  final typeId = 28;
 
   @override
   FinampSettings read(BinaryReader reader) {
@@ -116,7 +116,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       useCoverAsBackground: fields[16] == null ? true : fields[16] as bool,
       playerScreenCoverMinimumPadding:
           fields[48] == null ? 1.5 : (fields[48] as num).toDouble(),
-      showArtistsTopTracks: fields[54] == null ? true : fields[54] as bool,
+      showArtistsTracksSection: fields[54] == null ? true : fields[54] as bool,
       bufferDisableSizeConstraints:
           fields[78] == null ? false : fields[78] as bool,
       bufferDurationSeconds:
@@ -246,6 +246,59 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       audioFadeInDuration:
           fields[87] == null ? Duration.zero : fields[87] as Duration,
       autoReloadQueue: fields[97] == null ? false : fields[97] as bool,
+      screenSize: fields[100] as ScreenSize?,
+      genreCuratedItemSelectionTypeTracks: fields[101] == null
+          ? CuratedItemSelectionType.mostPlayed
+          : fields[101] as CuratedItemSelectionType,
+      genreCuratedItemSelectionTypeAlbums: fields[102] == null
+          ? CuratedItemSelectionType.latestReleases
+          : fields[102] as CuratedItemSelectionType,
+      genreCuratedItemSelectionTypeArtists: fields[103] == null
+          ? CuratedItemSelectionType.favorites
+          : fields[103] as CuratedItemSelectionType,
+      genreItemSectionsOrder: fields[104] == null
+          ? [
+              GenreItemSections.tracks,
+              GenreItemSections.albums,
+              GenreItemSections.artists
+            ]
+          : (fields[104] as List).cast<GenreItemSections>(),
+      genreFilterArtistScreens:
+          fields[105] == null ? true : fields[105] as bool,
+      genreListsInheritSorting:
+          fields[106] == null ? true : fields[106] as bool,
+      genreItemSectionFilterChipOrder: fields[107] == null
+          ? [
+              CuratedItemSelectionType.mostPlayed,
+              CuratedItemSelectionType.favorites,
+              CuratedItemSelectionType.random,
+              CuratedItemSelectionType.latestReleases,
+              CuratedItemSelectionType.recentlyAdded
+            ]
+          : (fields[107] as List).cast<CuratedItemSelectionType>(),
+      artistGenreChipsApplyFilter:
+          fields[108] == null ? false : fields[108] as bool,
+      artistCuratedItemSelectionType: fields[109] == null
+          ? CuratedItemSelectionType.mostPlayed
+          : fields[109] as CuratedItemSelectionType,
+      artistItemSectionFilterChipOrder: fields[110] == null
+          ? [
+              CuratedItemSelectionType.mostPlayed,
+              CuratedItemSelectionType.favorites,
+              CuratedItemSelectionType.random,
+              CuratedItemSelectionType.latestReleases,
+              CuratedItemSelectionType.recentlyAdded
+            ]
+          : (fields[110] as List).cast<CuratedItemSelectionType>(),
+      artistItemSectionsOrder: fields[111] == null
+          ? [
+              ArtistItemSections.tracks,
+              ArtistItemSections.albums,
+              ArtistItemSections.appearsOn
+            ]
+          : (fields[111] as List).cast<ArtistItemSections>(),
+      autoSwitchItemCurationType:
+          fields[112] == null ? true : fields[112] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -256,7 +309,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(94)
+      ..writeByte(107)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -354,7 +407,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(53)
       ..write(obj.periodicPlaybackSessionUpdateFrequencySeconds)
       ..writeByte(54)
-      ..write(obj.showArtistsTopTracks)
+      ..write(obj.showArtistsTracksSection)
       ..writeByte(55)
       ..write(obj.showArtistChipImage)
       ..writeByte(56)
@@ -444,7 +497,33 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(98)
       ..write(obj.showShuffleButtonOnMediaNotification)
       ..writeByte(99)
-      ..write(obj.showFavoriteButtonOnMediaNotification);
+      ..write(obj.showFavoriteButtonOnMediaNotification)
+      ..writeByte(100)
+      ..write(obj.screenSize)
+      ..writeByte(101)
+      ..write(obj.genreCuratedItemSelectionTypeTracks)
+      ..writeByte(102)
+      ..write(obj.genreCuratedItemSelectionTypeAlbums)
+      ..writeByte(103)
+      ..write(obj.genreCuratedItemSelectionTypeArtists)
+      ..writeByte(104)
+      ..write(obj.genreItemSectionsOrder)
+      ..writeByte(105)
+      ..write(obj.genreFilterArtistScreens)
+      ..writeByte(106)
+      ..write(obj.genreListsInheritSorting)
+      ..writeByte(107)
+      ..write(obj.genreItemSectionFilterChipOrder)
+      ..writeByte(108)
+      ..write(obj.artistGenreChipsApplyFilter)
+      ..writeByte(109)
+      ..write(obj.artistCuratedItemSelectionType)
+      ..writeByte(110)
+      ..write(obj.artistItemSectionFilterChipOrder)
+      ..writeByte(111)
+      ..write(obj.artistItemSectionsOrder)
+      ..writeByte(112)
+      ..write(obj.autoSwitchItemCurationType);
   }
 
   @override
@@ -460,7 +539,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
 
 class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
   @override
-  final int typeId = 31;
+  final typeId = 31;
 
   @override
   DownloadLocation read(BinaryReader reader) {
@@ -511,7 +590,7 @@ class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
 
 class DownloadedTrackAdapter extends TypeAdapter<DownloadedTrack> {
   @override
-  final int typeId = 3;
+  final typeId = 3;
 
   @override
   DownloadedTrack read(BinaryReader reader) {
@@ -569,7 +648,7 @@ class DownloadedTrackAdapter extends TypeAdapter<DownloadedTrack> {
 
 class DownloadedParentAdapter extends TypeAdapter<DownloadedParent> {
   @override
-  final int typeId = 4;
+  final typeId = 4;
 
   @override
   DownloadedParent read(BinaryReader reader) {
@@ -609,7 +688,7 @@ class DownloadedParentAdapter extends TypeAdapter<DownloadedParent> {
 
 class DownloadedImageAdapter extends TypeAdapter<DownloadedImage> {
   @override
-  final int typeId = 40;
+  final typeId = 40;
 
   @override
   DownloadedImage read(BinaryReader reader) {
@@ -655,7 +734,7 @@ class DownloadedImageAdapter extends TypeAdapter<DownloadedImage> {
 
 class OfflineListenAdapter extends TypeAdapter<OfflineListen> {
   @override
-  final int typeId = 43;
+  final typeId = 43;
 
   @override
   OfflineListen read(BinaryReader reader) {
@@ -710,7 +789,7 @@ class OfflineListenAdapter extends TypeAdapter<OfflineListen> {
 
 class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
   @override
-  final int typeId = 54;
+  final typeId = 54;
 
   @override
   QueueItemSource read(BinaryReader reader) {
@@ -756,7 +835,7 @@ class QueueItemSourceAdapter extends TypeAdapter<QueueItemSource> {
 
 class QueueItemSourceNameAdapter extends TypeAdapter<QueueItemSourceName> {
   @override
-  final int typeId = 56;
+  final typeId = 56;
 
   @override
   QueueItemSourceName read(BinaryReader reader) {
@@ -796,7 +875,7 @@ class QueueItemSourceNameAdapter extends TypeAdapter<QueueItemSourceName> {
 
 class FinampQueueItemAdapter extends TypeAdapter<FinampQueueItem> {
   @override
-  final int typeId = 57;
+  final typeId = 57;
 
   @override
   FinampQueueItem read(BinaryReader reader) {
@@ -840,7 +919,7 @@ class FinampQueueItemAdapter extends TypeAdapter<FinampQueueItem> {
 
 class FinampQueueOrderAdapter extends TypeAdapter<FinampQueueOrder> {
   @override
-  final int typeId = 58;
+  final typeId = 58;
 
   @override
   FinampQueueOrder read(BinaryReader reader) {
@@ -885,7 +964,7 @@ class FinampQueueOrderAdapter extends TypeAdapter<FinampQueueOrder> {
 
 class FinampQueueInfoAdapter extends TypeAdapter<FinampQueueInfo> {
   @override
-  final int typeId = 59;
+  final typeId = 59;
 
   @override
   FinampQueueInfo read(BinaryReader reader) {
@@ -937,7 +1016,7 @@ class FinampQueueInfoAdapter extends TypeAdapter<FinampQueueInfo> {
 
 class FinampHistoryItemAdapter extends TypeAdapter<FinampHistoryItem> {
   @override
-  final int typeId = 60;
+  final typeId = 60;
 
   @override
   FinampHistoryItem read(BinaryReader reader) {
@@ -978,7 +1057,7 @@ class FinampHistoryItemAdapter extends TypeAdapter<FinampHistoryItem> {
 class FinampStorableQueueInfoAdapter
     extends TypeAdapter<FinampStorableQueueInfo> {
   @override
-  final int typeId = 61;
+  final typeId = 61;
 
   @override
   FinampStorableQueueInfo read(BinaryReader reader) {
@@ -1030,7 +1109,7 @@ class FinampStorableQueueInfoAdapter
 
 class MediaItemIdAdapter extends TypeAdapter<MediaItemId> {
   @override
-  final int typeId = 69;
+  final typeId = 69;
 
   @override
   MediaItemId read(BinaryReader reader) {
@@ -1074,7 +1153,7 @@ class MediaItemIdAdapter extends TypeAdapter<MediaItemId> {
 class FinampFeatureChipsConfigurationAdapter
     extends TypeAdapter<FinampFeatureChipsConfiguration> {
   @override
-  final int typeId = 75;
+  final typeId = 75;
 
   @override
   FinampFeatureChipsConfiguration read(BinaryReader reader) {
@@ -1111,7 +1190,7 @@ class FinampFeatureChipsConfigurationAdapter
 
 class DeviceInfoAdapter extends TypeAdapter<DeviceInfo> {
   @override
-  final int typeId = 76;
+  final typeId = 76;
 
   @override
   DeviceInfo read(BinaryReader reader) {
@@ -1146,9 +1225,52 @@ class DeviceInfoAdapter extends TypeAdapter<DeviceInfo> {
           typeId == other.typeId;
 }
 
+class ScreenSizeAdapter extends TypeAdapter<ScreenSize> {
+  @override
+  final typeId = 94;
+
+  @override
+  ScreenSize read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return ScreenSize(
+      (fields[1] as num).toDouble(),
+      (fields[2] as num).toDouble(),
+      (fields[3] as num).toDouble(),
+      (fields[4] as num).toDouble(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, ScreenSize obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(1)
+      ..write(obj.sizeX)
+      ..writeByte(2)
+      ..write(obj.sizeY)
+      ..writeByte(3)
+      ..write(obj.locationX)
+      ..writeByte(4)
+      ..write(obj.locationY);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ScreenSizeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
   @override
-  final int typeId = 36;
+  final typeId = 36;
 
   @override
   TabContentType read(BinaryReader reader) {
@@ -1197,7 +1319,7 @@ class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
 
 class ContentViewTypeAdapter extends TypeAdapter<ContentViewType> {
   @override
-  final int typeId = 39;
+  final typeId = 39;
 
   @override
   ContentViewType read(BinaryReader reader) {
@@ -1234,7 +1356,7 @@ class ContentViewTypeAdapter extends TypeAdapter<ContentViewType> {
 
 class FinampPlaybackOrderAdapter extends TypeAdapter<FinampPlaybackOrder> {
   @override
-  final int typeId = 50;
+  final typeId = 50;
 
   @override
   FinampPlaybackOrder read(BinaryReader reader) {
@@ -1271,7 +1393,7 @@ class FinampPlaybackOrderAdapter extends TypeAdapter<FinampPlaybackOrder> {
 
 class FinampLoopModeAdapter extends TypeAdapter<FinampLoopMode> {
   @override
-  final int typeId = 51;
+  final typeId = 51;
 
   @override
   FinampLoopMode read(BinaryReader reader) {
@@ -1312,7 +1434,7 @@ class FinampLoopModeAdapter extends TypeAdapter<FinampLoopMode> {
 
 class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
   @override
-  final int typeId = 52;
+  final typeId = 52;
 
   @override
   QueueItemSourceType read(BinaryReader reader) {
@@ -1425,7 +1547,7 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
 
 class QueueItemQueueTypeAdapter extends TypeAdapter<QueueItemQueueType> {
   @override
-  final int typeId = 53;
+  final typeId = 53;
 
   @override
   QueueItemQueueType read(BinaryReader reader) {
@@ -1471,7 +1593,7 @@ class QueueItemQueueTypeAdapter extends TypeAdapter<QueueItemQueueType> {
 class QueueItemSourceNameTypeAdapter
     extends TypeAdapter<QueueItemSourceNameType> {
   @override
-  final int typeId = 55;
+  final typeId = 55;
 
   @override
   QueueItemSourceNameType read(BinaryReader reader) {
@@ -1540,7 +1662,7 @@ class QueueItemSourceNameTypeAdapter
 
 class SavedQueueStateAdapter extends TypeAdapter<SavedQueueState> {
   @override
-  final int typeId = 62;
+  final typeId = 62;
 
   @override
   SavedQueueState read(BinaryReader reader) {
@@ -1594,7 +1716,7 @@ class SavedQueueStateAdapter extends TypeAdapter<SavedQueueState> {
 class VolumeNormalizationModeAdapter
     extends TypeAdapter<VolumeNormalizationMode> {
   @override
-  final int typeId = 63;
+  final typeId = 63;
 
   @override
   VolumeNormalizationMode read(BinaryReader reader) {
@@ -1635,7 +1757,7 @@ class VolumeNormalizationModeAdapter
 
 class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
   @override
-  final int typeId = 64;
+  final typeId = 64;
 
   @override
   DownloadLocationType read(BinaryReader reader) {
@@ -1693,7 +1815,7 @@ class DownloadLocationTypeAdapter extends TypeAdapter<DownloadLocationType> {
 class FinampTranscodingCodecAdapter
     extends TypeAdapter<FinampTranscodingCodec> {
   @override
-  final int typeId = 65;
+  final typeId = 65;
 
   @override
   FinampTranscodingCodec read(BinaryReader reader) {
@@ -1739,7 +1861,7 @@ class FinampTranscodingCodecAdapter
 class TranscodeDownloadsSettingAdapter
     extends TypeAdapter<TranscodeDownloadsSetting> {
   @override
-  final int typeId = 66;
+  final typeId = 66;
 
   @override
   TranscodeDownloadsSetting read(BinaryReader reader) {
@@ -1781,7 +1903,7 @@ class TranscodeDownloadsSettingAdapter
 class PlaybackSpeedVisibilityAdapter
     extends TypeAdapter<PlaybackSpeedVisibility> {
   @override
-  final int typeId = 67;
+  final typeId = 67;
 
   @override
   PlaybackSpeedVisibility read(BinaryReader reader) {
@@ -1822,7 +1944,7 @@ class PlaybackSpeedVisibilityAdapter
 
 class MediaItemParentTypeAdapter extends TypeAdapter<MediaItemParentType> {
   @override
-  final int typeId = 68;
+  final typeId = 68;
 
   @override
   MediaItemParentType read(BinaryReader reader) {
@@ -1863,7 +1985,7 @@ class MediaItemParentTypeAdapter extends TypeAdapter<MediaItemParentType> {
 
 class LyricsAlignmentAdapter extends TypeAdapter<LyricsAlignment> {
   @override
-  final int typeId = 70;
+  final typeId = 70;
 
   @override
   LyricsAlignment read(BinaryReader reader) {
@@ -1904,7 +2026,7 @@ class LyricsAlignmentAdapter extends TypeAdapter<LyricsAlignment> {
 
 class LyricsFontSizeAdapter extends TypeAdapter<LyricsFontSize> {
   @override
-  final int typeId = 71;
+  final typeId = 71;
 
   @override
   LyricsFontSize read(BinaryReader reader) {
@@ -1945,7 +2067,7 @@ class LyricsFontSizeAdapter extends TypeAdapter<LyricsFontSize> {
 
 class KeepScreenOnOptionAdapter extends TypeAdapter<KeepScreenOnOption> {
   @override
-  final int typeId = 72;
+  final typeId = 72;
 
   @override
   KeepScreenOnOption read(BinaryReader reader) {
@@ -1991,7 +2113,7 @@ class KeepScreenOnOptionAdapter extends TypeAdapter<KeepScreenOnOption> {
 class FinampTranscodingStreamingFormatAdapter
     extends TypeAdapter<FinampTranscodingStreamingFormat> {
   @override
-  final int typeId = 73;
+  final typeId = 73;
 
   @override
   FinampTranscodingStreamingFormat read(BinaryReader reader) {
@@ -2044,7 +2166,7 @@ class FinampTranscodingStreamingFormatAdapter
 
 class FinampFeatureChipTypeAdapter extends TypeAdapter<FinampFeatureChipType> {
   @override
-  final int typeId = 74;
+  final typeId = 74;
 
   @override
   FinampFeatureChipType read(BinaryReader reader) {
@@ -2109,7 +2231,7 @@ class FinampFeatureChipTypeAdapter extends TypeAdapter<FinampFeatureChipType> {
 
 class ReleaseDateFormatAdapter extends TypeAdapter<ReleaseDateFormat> {
   @override
-  final int typeId = 77;
+  final typeId = 77;
 
   @override
   ReleaseDateFormat read(BinaryReader reader) {
@@ -2154,7 +2276,7 @@ class ReleaseDateFormatAdapter extends TypeAdapter<ReleaseDateFormat> {
 
 class AutoOfflineOptionAdapter extends TypeAdapter<AutoOfflineOption> {
   @override
-  final int typeId = 78;
+  final typeId = 78;
 
   @override
   AutoOfflineOption read(BinaryReader reader) {
@@ -2195,7 +2317,7 @@ class AutoOfflineOptionAdapter extends TypeAdapter<AutoOfflineOption> {
 
 class ItemSwipeActionsAdapter extends TypeAdapter<ItemSwipeActions> {
   @override
-  final int typeId = 92;
+  final typeId = 92;
 
   @override
   ItemSwipeActions read(BinaryReader reader) {
@@ -2240,7 +2362,7 @@ class ItemSwipeActionsAdapter extends TypeAdapter<ItemSwipeActions> {
 
 class ArtistTypeAdapter extends TypeAdapter<ArtistType> {
   @override
-  final int typeId = 93;
+  final typeId = 93;
 
   @override
   ArtistType read(BinaryReader reader) {
@@ -2271,6 +2393,138 @@ class ArtistTypeAdapter extends TypeAdapter<ArtistType> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ArtistTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class CuratedItemSelectionTypeAdapter
+    extends TypeAdapter<CuratedItemSelectionType> {
+  @override
+  final typeId = 95;
+
+  @override
+  CuratedItemSelectionType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return CuratedItemSelectionType.mostPlayed;
+      case 1:
+        return CuratedItemSelectionType.favorites;
+      case 2:
+        return CuratedItemSelectionType.random;
+      case 3:
+        return CuratedItemSelectionType.latestReleases;
+      case 4:
+        return CuratedItemSelectionType.recentlyAdded;
+      default:
+        return CuratedItemSelectionType.mostPlayed;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, CuratedItemSelectionType obj) {
+    switch (obj) {
+      case CuratedItemSelectionType.mostPlayed:
+        writer.writeByte(0);
+      case CuratedItemSelectionType.favorites:
+        writer.writeByte(1);
+      case CuratedItemSelectionType.random:
+        writer.writeByte(2);
+      case CuratedItemSelectionType.latestReleases:
+        writer.writeByte(3);
+      case CuratedItemSelectionType.recentlyAdded:
+        writer.writeByte(4);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CuratedItemSelectionTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class GenreItemSectionsAdapter extends TypeAdapter<GenreItemSections> {
+  @override
+  final typeId = 96;
+
+  @override
+  GenreItemSections read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return GenreItemSections.tracks;
+      case 1:
+        return GenreItemSections.albums;
+      case 2:
+        return GenreItemSections.artists;
+      default:
+        return GenreItemSections.tracks;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, GenreItemSections obj) {
+    switch (obj) {
+      case GenreItemSections.tracks:
+        writer.writeByte(0);
+      case GenreItemSections.albums:
+        writer.writeByte(1);
+      case GenreItemSections.artists:
+        writer.writeByte(2);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GenreItemSectionsAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ArtistItemSectionsAdapter extends TypeAdapter<ArtistItemSections> {
+  @override
+  final typeId = 97;
+
+  @override
+  ArtistItemSections read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return ArtistItemSections.tracks;
+      case 1:
+        return ArtistItemSections.albums;
+      case 2:
+        return ArtistItemSections.appearsOn;
+      default:
+        return ArtistItemSections.tracks;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, ArtistItemSections obj) {
+    switch (obj) {
+      case ArtistItemSections.tracks:
+        writer.writeByte(0);
+      case ArtistItemSections.albums:
+        writer.writeByte(1);
+      case ArtistItemSections.appearsOn:
+        writer.writeByte(2);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ArtistItemSectionsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -7792,12 +8046,17 @@ FinampCollection _$FinampCollectionFromJson(Map json) => FinampCollection(
           ? null
           : BaseItemDto.fromJson(
               Map<String, dynamic>.from(json['Library'] as Map)),
+      item: json['Item'] == null
+          ? null
+          : BaseItemDto.fromJson(
+              Map<String, dynamic>.from(json['Item'] as Map)),
     );
 
 Map<String, dynamic> _$FinampCollectionToJson(FinampCollection instance) =>
     <String, dynamic>{
       'Type': _$FinampCollectionTypeEnumMap[instance.type]!,
       if (instance.library?.toJson() case final value?) 'Library': value,
+      if (instance.item?.toJson() case final value?) 'Item': value,
     };
 
 const _$FinampCollectionTypeEnumMap = {
@@ -7806,6 +8065,8 @@ const _$FinampCollectionTypeEnumMap = {
   FinampCollectionType.latest5Albums: 'latest5Albums',
   FinampCollectionType.libraryImages: 'libraryImages',
   FinampCollectionType.allPlaylistsMetadata: 'allPlaylistsMetadata',
+  FinampCollectionType.collectionWithLibraryFilter:
+      'collectionWithLibraryFilter',
 };
 
 MediaItemId _$MediaItemIdFromJson(Map<String, dynamic> json) => MediaItemId(

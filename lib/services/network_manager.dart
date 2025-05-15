@@ -9,54 +9,55 @@ import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/playon_service.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:rxdart/rxdart.dart';
+
 import '../models/finamp_models.dart';
 import 'finamp_settings_helper.dart';
-part 'network_manager.g.dart';
 
-// this is to avoid an infinite loop.
-// `finampCurrentUserProvider` fires for every change on the object
-// including when changing the baseURL. So basically this happens:
-// urlChange -> Update -> reload listener -> urlChange -> Update -> ...
-bool? _lastState;
+part 'network_manager.g.dart';
 
 Logger _networkAutomationLogger = Logger("Network Automation");
 Logger _autoOfflineLogger = Logger("Auto Offline");
 Logger _networKSwitcherLogger = Logger("Network Switcher");
 
-final BehaviorSubject<String> baseUrlChangeStream =
-    BehaviorSubject<String>.seeded(
-        GetIt.instance<FinampUserHelper>().currentUser!.baseURL);
-
 final StreamSubscription<List<ConnectivityResult>> _listener =
     Connectivity().onConnectivityChanged.listen(_onConnectivityChange);
 
-// ignore: unused_element
-final _lifecycle = AppLifecycleListener(
-  onRestart: () {
-    if (_lastState ?? false) {
-      _autoOfflineLogger.finer("Lifecycle restarted automation");
-      _listener.resume();
-    } else {
-      _autoOfflineLogger.finer("Lifecycle kept automation paused");
-    }
-  },
-  onPause: () {
-    _listener.pause();
-    _autoOfflineLogger.finer("Lifecycle paused automation");
-  }
-);
-
-
-
 @riverpod
 class AutoOffline extends _$AutoOffline {
+  static void startWatching() {
+    GetIt.instance<ProviderContainer>().listen(autoOfflineProvider,
+        (_, newState) {
+      if (newState) {
+        _networkAutomationLogger.info("Resumed Automation");
+        _listener.resume();
+        // directly check if offline mode should be on
+        _onConnectivityChange(null);
+      } else {
+        _networkAutomationLogger.info("Paused Automation");
+        _listener.pause();
+      }
+    });
+
+    AppLifecycleListener(onRestart: () {
+      if (GetIt.instance<ProviderContainer>().read(autoOfflineProvider)) {
+        _autoOfflineLogger.finer("Lifecycle restarted automation");
+        _listener.resume();
+      } else {
+        _autoOfflineLogger.finer("Lifecycle kept automation paused");
+      }
+    }, onPause: () {
+      _listener.pause();
+      _autoOfflineLogger.finer("Lifecycle paused automation");
+    });
+  }
+
   @override
-  void build() {
+  bool build() {
     bool autoOfflineEnabled = ref.watch(finampSettingsProvider.autoOffline) !=
         AutoOfflineOption.disabled;
 
@@ -70,22 +71,7 @@ class AutoOffline extends _$AutoOffline {
             ?.preferHomeNetwork ??
         DefaultSettings.preferHomeNetwork;
 
-    bool state = (autoOfflineEnabled && autoOfflineActive) || autoServerSwitch;
-
-    // Avoid infinite loop as described above
-    if (state != _lastState) {
-      if (state) {
-        _networkAutomationLogger.info("Resumed Automation");
-        _listener.resume();
-        // directly check if offline mode should be on
-        _onConnectivityChange(null);
-      } else {
-        _networkAutomationLogger.info("Paused Automation");
-        _listener.pause();
-      }
-    }
-
-    _lastState = state;
+    return (autoOfflineEnabled && autoOfflineActive) || autoServerSwitch;
   }
 }
 
@@ -96,13 +82,11 @@ Future<void> _onConnectivityChange(
   connections ??= await Connectivity().checkConnectivity();
   final [offlineModeActive, baseUrlChanged] = await Future.wait([
     _setOfflineMode(connections),
-    changeTargetUrl()
+    changeTargetUrl(),
   ]);
-  notifyOfPausedDownloads(connections);
-  final activeBaseUrl = GetIt.instance<FinampUserHelper>().currentUser!.baseURL;
+  _notifyOfPausedDownloads(connections);
   if (baseUrlChanged) {
-    baseUrlChangeStream.add(activeBaseUrl);
-    reconnectPlayOnService(connections);
+    _reconnectPlayOnService(connections);
   }
 }
 
@@ -172,7 +156,7 @@ Future<bool> changeTargetUrl({bool? isLocal}) async {
 
   // Disable this feature
   if (!user.preferHomeNetwork) return changeTargetUrl(isLocal: false);
-  
+
   bool reachable = await GetIt.instance<JellyfinApiHelper>().pingLocalServer();
   return await changeTargetUrl(isLocal: reachable);
 }
@@ -192,7 +176,7 @@ int _getDownloads() {
   return activeDownloads;
 }
 
-void notifyOfPausedDownloads(List<ConnectivityResult> connections) async {
+void _notifyOfPausedDownloads(List<ConnectivityResult> connections) async {
   if (connections.contains(ConnectivityResult.none)) {
     if (_getDownloads() == 0) return;
     GlobalSnackbar.message(
@@ -214,11 +198,11 @@ void notifyOfPausedDownloads(List<ConnectivityResult> connections) async {
   }
 }
 
-void reconnectPlayOnService(List<ConnectivityResult> connections) async {
+void _reconnectPlayOnService(List<ConnectivityResult> connections) async {
   final playOnService = GetIt.instance<PlayOnService>();
 
-  await playOnService.closeListener();
+  playOnService.closeListener();
   if (!connections.contains(ConnectivityResult.none)) {
-    await playOnService.startReconnectionLoop();
+    await playOnService.startListener();
   }
 }

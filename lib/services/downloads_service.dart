@@ -6,6 +6,7 @@ import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -154,21 +155,51 @@ class DownloadsService {
 
   /// Provider for user-downloaded items of a specific category.
   /// Used to show and group downloaded items on the downloads screen.
-  late final userDownloadedItemsProvider = StreamProvider.family
-      .autoDispose<List<DownloadStub>, DownloadsScreenCategory>((ref, type) {
-    return _isar.downloadItems
-        .where()
-        .typeEqualTo(type.type)
-        .filter()
-        .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
-        .optional(
-          type.baseItemType != null,
-          (q) => q.baseItemTypeEqualTo(type.baseItemType!),
-        )
-        .sortByName()
-        .build()
-        .watch(fireImmediately: true);
+late final userDownloadedItemsProvider =
+    StreamProvider.family.autoDispose<List<DownloadStub>, DownloadsScreenCategory>((ref, category) {
+  final query = _isar.downloadItems
+      .where()
+      .filter()
+      .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
+      .sortByName()
+      .build()
+      .watch(fireImmediately: true);
+
+  return query.map((allItems) {
+    switch (category) {
+      case DownloadsScreenCategory.special:
+        return allItems.where((item) {
+          return (item.type == category.type) &&
+              item.finampCollection?.type != FinampCollectionType.collectionWithLibraryFilter;
+        }).toList();
+
+      case DownloadsScreenCategory.artists:
+        return allItems.where((item) {
+          return (item.type == category.type &&
+              (category.baseItemType == null ||
+              item.baseItemType == category.baseItemType)) ||
+              (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
+              BaseItemDtoType.fromItem(item.finampCollection!.item!) == BaseItemDtoType.artist);
+        }).toList();
+
+      case DownloadsScreenCategory.genres:
+        return allItems.where((item) {
+          return (item.type == category.type &&
+              (category.baseItemType == null ||
+              item.baseItemType == category.baseItemType)) ||
+              (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
+              BaseItemDtoType.fromItem(item.finampCollection!.item!) == BaseItemDtoType.genre);
+        }).toList();
+
+      default:
+        return allItems.where((item) {
+          return item.type == category.type &&
+              (category.baseItemType == null ||
+              item.baseItemType == category.baseItemType);
+        }).toList();
+    }
   });
+});
 
   /// Constructs the service.  startQueues should also be called to complete initialization.
   DownloadsService() {
@@ -710,7 +741,7 @@ class DownloadsService {
           .findAllSync();
       for (var item in itemsWithChildren) {
         syncItemState(item);
-        syncItemDownloadSettings(item);
+        syncItemDownloadSettings(item, syncImages: true);
       }
     });
     _isar.writeTxnSync(() {
@@ -721,7 +752,7 @@ class DownloadsService {
           .typeEqualTo(DownloadItemType.image)
           .findAllSync();
       for (var item in itemsWithFiles) {
-        syncItemDownloadSettings(item);
+        syncItemDownloadSettings(item, syncImages: true);
       }
     });
     markOutdatedTranscodes();
@@ -970,30 +1001,48 @@ class DownloadsService {
 
   /// Sync the downloadLocationId and transcodingProfile to match those of the items
   /// parent.  If there are multiple required parents with different values, the download
-  /// location and transcode settings with the highest quality are selected.
+  /// location and transcode settings with the highest quality are selected.  If syncImages
+  /// is true, update info along info links to validate download locations for images.
+  /// Otherwise, only update required items.
   /// This should only be called inside an isar write transaction.
-  void syncItemDownloadSettings(DownloadItem item) {
+  void syncItemDownloadSettings(DownloadItem item, {bool syncImages = false}) {
     var transcodeProfiles =
         item.requiredBy.filter().syncTranscodingProfileProperty().findAllSync();
-    if (transcodeProfiles.isEmpty) {
-      _downloadsLogger.severe(
-          "Attempting to sync download settings for non-required item ${item.name}");
-      return;
-    }
+    bool requireProfile = true;
     transcodeProfiles.add(item.userTranscodingProfile);
     if (transcodeProfiles.nonNulls.isEmpty) {
-      _downloadsLogger
-          .severe("No valid download profiles for required item ${item.name}");
-      return;
+      if (syncImages) {
+        transcodeProfiles = item.infoFor
+            .filter()
+            .syncTranscodingProfileProperty()
+            .findAllSync();
+        requireProfile = false;
+      } else {
+        _downloadsLogger.severe(
+            "Attempting to sync download settings for non-required item ${item.name}");
+        return;
+      }
+    }
+    bool? doNullUpdate;
+    if (transcodeProfiles.nonNulls.isEmpty) {
+      if (requireProfile) {
+        _downloadsLogger.severe(
+            "No valid download profiles for required item ${item.name}");
+        return;
+      } else {
+        doNullUpdate = item.syncDownloadLocation != null;
+      }
     }
 
     // Prioritize original quality if allowed, otherwise choose highest quality approximation
-    DownloadProfile bestProfile = transcodeProfiles.nonNulls
+    DownloadProfile? bestProfile = transcodeProfiles.nonNulls
         .sorted((i, j) => ((j.quality - i.quality) * 1000).toInt())
-        .first;
-    if (!transcodeProfiles.nonNulls.contains(item.syncTranscodingProfile) ||
-        (bestProfile.quality > (item.syncTranscodingProfile!.quality + 2000) &&
-            item.type != DownloadItemType.image)) {
+        .firstOrNull;
+    if (doNullUpdate ??
+        (!transcodeProfiles.nonNulls.contains(item.syncTranscodingProfile) ||
+            (bestProfile!.quality >
+                    (item.syncTranscodingProfile!.quality + 2000) &&
+                item.type != DownloadItemType.image))) {
       _downloadsLogger.finest("Updating download settings for ${item.name}");
       item.syncTranscodingProfile = bestProfile;
       if ((item.state == DownloadItemState.enqueued ||
@@ -1012,8 +1061,15 @@ class DownloadsService {
       } else {
         _isar.downloadItems.putSync(item);
       }
-      for (var child in item.requires.filter().findAllSync()) {
-        syncItemDownloadSettings(child);
+      var children = item.requires.filter().findAllSync();
+      if (syncImages) {
+        children = children
+            .toSet()
+            .union(item.info.filter().findAllSync().toSet())
+            .toList();
+      }
+      for (var child in children) {
+        syncItemDownloadSettings(child, syncImages: syncImages);
       }
     }
   }
@@ -1034,7 +1090,11 @@ class DownloadsService {
           .findAllSync();
       for (var item in items) {
         if (item.fileTranscodingProfile != item.syncTranscodingProfile) {
-          updateItemState(item, DownloadItemState.needsRedownload);
+          if (item.state == DownloadItemState.complete) {
+            updateItemState(item, DownloadItemState.needsRedownloadComplete);
+          } else {
+            updateItemState(item, DownloadItemState.needsRedownload);
+          }
         }
       }
     });
@@ -1329,7 +1389,14 @@ class DownloadsService {
   /// album/playlist screen.  Can return all tracks in the album/playlist or
   /// just fully downloaded ones.
   Future<List<BaseItemDto>> getCollectionTracks(BaseItemDto item,
-      {bool playable = true}) async {
+      {bool playable = true,
+        BaseItemDto? genreFilter,
+        bool onlyFavorites = false,
+      }) async {
+    List<int> favoriteIds = [];
+    if (onlyFavorites) {
+      favoriteIds = _getFavoriteIds() ?? [];
+    }
     var stub =
         DownloadStub.fromItem(type: DownloadItemType.collection, item: item);
 
@@ -1344,7 +1411,15 @@ class DownloadsService {
             (q) => q.group((q) => q
                 .stateEqualTo(DownloadItemState.complete)
                 .or()
-                .stateEqualTo(DownloadItemState.needsRedownloadComplete)));
+                .stateEqualTo(DownloadItemState.needsRedownloadComplete)))
+        .optional(onlyFavorites,
+            (q) => q.anyOf(favoriteIds, (q, v) => q.isarIdEqualTo(v)))
+        // Returns items that have a certain genreId assigned
+        .optional(
+            genreFilter != null,
+            (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
+                DownloadStub.getHash(
+                    genreFilter!.id.raw, DownloadItemType.collection)))));
 
     var canonItem = _isar.downloadItems.getSync(stub.isarId);
     if (canonItem?.orderedChildren == null) {
@@ -1370,12 +1445,14 @@ class DownloadsService {
   /// + nameFilter - only return tracks containing nameFilter in their name, case insensitive.
   /// + relatedTo - only return tracks which have relatedTo as their artist, album, or genre.
   /// + viewFilter - only return tracks in the given library.
+  /// + genreFiter - only return tracks that have the provided genreID assigned
   Future<List<DownloadStub>> getAllTracks(
       {String? nameFilter,
       BaseItemDto? relatedTo,
       BaseItemId? viewFilter,
       bool nullableViewFilters = true,
-      bool onlyFavorites = false}) {
+      bool onlyFavorites = false,
+      BaseItemDto? genreFilter}) {
     List<int> favoriteIds = [];
     if (onlyFavorites) {
       favoriteIds = _getFavoriteIds() ?? [];
@@ -1396,11 +1473,35 @@ class DownloadsService {
             relatedTo != null,
             (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(
                 relatedTo!.id.raw, DownloadItemType.collection))))
+        // Returns items that have a certain genreId assigned
+        .optional(
+            genreFilter != null,
+            (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(
+                genreFilter!.id.raw, DownloadItemType.collection))))
         .optional(
             viewFilter != null,
             (q) => q.group((q) => q.isarViewIdEqualTo(viewFilter?.raw).optional(
                 nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null))))
         .findAll();
+  }
+
+  /// Get all user downloaded items in a specific download location.  If checkFiles
+  /// is false, only return user downloaded items, otherwise also include all items
+  /// with files in the location.
+  List<DownloadStub> getDownloadsForLocation(
+      String downloadLocationId, bool checkFiles) {
+    return _isar.downloadItems
+        .filter()
+        .userTranscodingProfile(
+            (q) => q.downloadLocationIdEqualTo(downloadLocationId))
+        .optional(
+            checkFiles,
+            (q) => q.or().group((q) => q
+                .fileTranscodingProfile(
+                    (q) => q.downloadLocationIdEqualTo(downloadLocationId))
+                .not()
+                .stateEqualTo(DownloadItemState.notDownloaded)))
+        .findAllSync();
   }
 
   /// Get all downloaded collections.  Used for non-tracks tabs on music screen and
@@ -1416,6 +1517,7 @@ class DownloadsService {
   /// Useful for artists/genres, which may need to be shown in several libraries.
   /// + onlyFavorites - return only favorite items
   /// + infoForType - only return collections that are info childs for the provided type
+  /// + genreFilter - only return albums that have the provided genre id assigned
   Future<List<DownloadStub>> getAllCollections({
     String? nameFilter,
     BaseItemDtoType? baseTypeFilter,
@@ -1427,10 +1529,31 @@ class DownloadsService {
     bool onlyFavorites = false,
     BaseItemDtoType? infoForType,
     ArtistType? artistType,
+    BaseItemDto? genreFilter,
   }) {
     List<int> favoriteIds = [];
+    List<int> libraryFilteredIds = [];
     if (onlyFavorites && baseTypeFilter != BaseItemDtoType.genre) {
       favoriteIds = _getFavoriteIds() ?? [];
+    }
+    if (fullyDownloaded) {
+      final libraryId =
+          GetIt.instance<FinampUserHelper>().currentUser?.currentViewId;
+      libraryFilteredIds = _isar.downloadItems
+          .where()
+          .typeEqualTo(DownloadItemType.finampCollection)
+          .filter()
+          .not()
+          .stateEqualTo(DownloadItemState.notDownloaded)
+          .findAllSync()
+          .where((collection) =>
+              collection.finampCollection!.type ==
+                  FinampCollectionType.collectionWithLibraryFilter &&
+              collection.finampCollection!.library?.id == libraryId)
+          .map((collection) => DownloadStub.getHash(
+              collection.finampCollection!.item!.id.raw,
+              DownloadItemType.collection))
+          .toList();
     }
 
     return _isar.downloadItems
@@ -1459,8 +1582,14 @@ class DownloadsService {
             (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
                 DownloadStub.getHash(
                     relatedTo!.id.raw, DownloadItemType.collection)))))
+        // Returns items that have a certain genreId assigned
+        .optional(
+            genreFilter != null,
+            (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
+                DownloadStub.getHash(
+                    genreFilter!.id.raw, DownloadItemType.collection)))))
         .optional(fullyDownloaded,
-            (q) => q.not().stateEqualTo(DownloadItemState.notDownloaded))
+            (q) => q.group((q) => q.not().stateEqualTo(DownloadItemState.notDownloaded).or().anyOf(libraryFilteredIds, (q, v) => q.isarIdEqualTo(v))))
         .optional(onlyFavorites,
             (q) => q.anyOf(favoriteIds, (q, v) => q.isarIdEqualTo(v)))
         .optional(

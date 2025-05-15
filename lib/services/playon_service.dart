@@ -1,21 +1,21 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/favorite_provider.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finamp/services/favorite_provider.dart';
+import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import '../../services/music_player_background_task.dart';
-import '../../services/jellyfin_api_helper.dart';
-import '../../services/finamp_settings_helper.dart';
-import 'dart:convert';
-import 'finamp_user_helper.dart';
 
-import 'package:get_it/get_it.dart';
+import '../../services/finamp_settings_helper.dart';
+import '../../services/jellyfin_api_helper.dart';
+import '../../services/music_player_background_task.dart';
+import 'finamp_user_helper.dart';
 
 final _playOnServiceLogger = Logger("PlayOnService");
 final _finampUserHelper = GetIt.instance<FinampUserHelper>();
@@ -23,15 +23,24 @@ final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 final _queueService = GetIt.instance<QueueService>();
 final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 late WebSocketChannel _channel;
-StreamSubscription<int>? _keepaliveSubscription;
-StreamSubscription<int>? _reconnectionSubscription;
+StreamSubscription<void>? _keepaliveSubscription;
 StreamSubscription<int>? _isControlledSubscription;
+
+enum SocketState {
+  disconnected,
+  connecting,
+  connected;
+}
 
 class PlayOnService {
   // If the websocket connection to the server is established
-  bool isConnected = false;
+  SocketState socketState = SocketState.disconnected;
   // If a remote client is controlling the session
   bool isControlled = false;
+  // If pending connections should be cancelled and the socket closed
+  bool abortConnect = false;
+  // If the connection retry loop is currently running
+  bool retryActive = false;
 
   Future<void> initialize() async {
     _playOnServiceLogger.info("Initializing PlayOn service");
@@ -39,16 +48,17 @@ class PlayOnService {
     // Turn on/off when offline mode is toggled
     var settingsListener = FinampSettingsHelper.finampSettingsListener;
     settingsListener.addListener(() async {
-      if (isConnected && FinampSettingsHelper.finampSettings.isOffline) {
+      if (socketState != SocketState.disconnected &&
+          FinampSettingsHelper.finampSettings.isOffline) {
         _playOnServiceLogger
             .info("Offline mode enabled, closing PlayOn listener now");
-        await closeListener();
+        closeListener();
       } else if (!FinampSettingsHelper.finampSettings.enablePlayon) {
-        if (isConnected) {
-          await closeListener();
+        if (socketState != SocketState.disconnected) {
+          closeListener();
         }
-      } else if (!isConnected &&
-          FinampSettingsHelper.finampSettings.enablePlayon) {
+      } else if (FinampSettingsHelper.finampSettings.enablePlayon &&
+          socketState == SocketState.disconnected) {
         await startListener();
       }
     });
@@ -79,11 +89,11 @@ class PlayOnService {
         onRestart: () {},
         onHide: () {},
         onShow: () {
-          if (!isConnected &&
+          if (socketState == SocketState.disconnected &&
               FinampSettingsHelper.finampSettings.enablePlayon) {
             _playOnServiceLogger.info(
                 "App in foreground and visible, attempting to reconnect.");
-            startReconnectionLoop();
+            _startReconnectionLoop();
           }
         },
         onPause: () {});
@@ -92,9 +102,13 @@ class PlayOnService {
   }
 
   Future<void> startListener() async {
+    abortConnect = false;
     try {
       if (!FinampSettingsHelper.finampSettings.isOffline &&
           FinampSettingsHelper.finampSettings.enablePlayon) {
+        assert(socketState == SocketState.disconnected);
+        socketState = SocketState.connecting;
+
         await _jellyfinApiHelper.updateCapabilitiesFull(ClientCapabilities(
           supportsMediaControl: true,
           supportsPersistentIdentifier: true,
@@ -145,42 +159,63 @@ class PlayOnService {
             "SetPlaybackOrder"
           ],
         ));
-        await connectWebsocket();
+        if (abortConnect) {
+          socketState = SocketState.disconnected;
+          return;
+        }
+        await _connectWebsocket();
       }
-      await _reconnectionSubscription?.cancel();
-      _reconnectionSubscription = null;
     } catch (e) {
-      if (_reconnectionSubscription == null) {
-        unawaited(startReconnectionLoop());
-        _playOnServiceLogger.severe("Error starting PlayOn listener: $e");
-      }
+      _playOnServiceLogger.severe("Error starting PlayOn listener: $e");
+      assert(socketState != SocketState.connected);
+      socketState = SocketState.disconnected;
+      unawaited(_startReconnectionLoop());
     }
   }
 
-  Future<void> startReconnectionLoop() async {
-    unawaited(_reconnectionSubscription?.cancel());
-    _reconnectionSubscription = Stream.periodic(
-        Duration(
-            seconds: FinampSettingsHelper
-                .finampSettings.playOnReconnectionDelay), (count) {
-      return count;
-    }).listen((count) {
-      // We try to connect for five minutes before giving up
-      if (count <
-          (Duration(minutes: 5).inSeconds /
-                  FinampSettingsHelper.finampSettings.playOnReconnectionDelay)
-              .round()) {
-        _playOnServiceLogger
-            .warning("Attempt $count to restart playon listener");
-        startListener();
-      } else {
-        _playOnServiceLogger.warning("Stopped attempting to connect playon");
-        _reconnectionSubscription?.cancel();
+  Future<void> _startReconnectionLoop() async {
+    assert(socketState == SocketState.disconnected);
+    if (retryActive) return;
+    try {
+      retryActive = true;
+      final startTime = DateTime.now();
+      while (true) {
+        await Future<void>.delayed(Duration(
+            seconds:
+                FinampSettingsHelper.finampSettings.playOnReconnectionDelay));
+        assert(retryActive);
+        if (abortConnect) {
+          return;
+        }
+        switch (socketState) {
+          case SocketState.disconnected:
+            if (startTime.difference(DateTime.now()) > Duration(minutes: 5)) {
+              // Retry loop has timed out
+              _playOnServiceLogger
+                  .warning("Stopped attempting to connect playon");
+              socketState = SocketState.disconnected;
+              return;
+            } else {
+              // Retry the connection
+              _playOnServiceLogger
+                  .warning("Attempt to restart playon listener");
+              await startListener();
+            }
+          case SocketState.connecting:
+            // Someone else called startListener().  Wait them out and do not exit the loop.
+            break;
+          case SocketState.connected:
+            // The retry loop is no longer needed
+            return;
+        }
       }
-    });
+    } finally {
+      retryActive = false;
+    }
   }
 
-  Future<void> connectWebsocket() async {
+  Future<void> _connectWebsocket() async {
+    assert(socketState == SocketState.connecting);
     final url =
         "${_finampUserHelper.currentUser!.baseURL}/socket?api_key=${_finampUserHelper.currentUser!.accessToken}";
     final parsedUrl = Uri.parse(url);
@@ -190,53 +225,59 @@ class PlayOnService {
 
     await _channel.ready;
     _playOnServiceLogger.info("WebSocket connection to server established");
-    isConnected = true;
+    socketState = SocketState.connected;
+    if (abortConnect) {
+      closeListener();
+      return;
+    }
 
     _channel.sink.add('{"MessageType":"KeepAlive"}');
 
     _channel.stream.listen(
-      (dynamic message) {
-        unawaited(handleMessage(message));
-      },
+      _handleMessage,
       onDone: () {
         _keepaliveSubscription?.cancel();
-        isConnected = false;
+        socketState = SocketState.disconnected;
         if (!FinampSettingsHelper.finampSettings.isOffline &&
             FinampSettingsHelper.finampSettings.enablePlayon) {
           _playOnServiceLogger
               .warning("WebSocket connection closed, attempting to reconnect");
-          isConnected = false;
-          startReconnectionLoop();
+          _startReconnectionLoop();
         }
       },
       onError: (error) {
         _playOnServiceLogger.severe("WebSocket Error: $error");
-        isConnected = false;
+        _keepaliveSubscription?.cancel();
+        socketState = SocketState.disconnected;
       },
     );
 
     _keepaliveSubscription =
-        Stream.periodic(const Duration(seconds: 30), (count) {
-      return count;
-    }).listen((event) {
+        Stream<void>.periodic(const Duration(seconds: 30)).listen((event) {
       _playOnServiceLogger.info("Sent KeepAlive message through websocket");
       _channel.sink.add('{"MessageType":"KeepAlive"}');
     });
   }
 
-  Future<void> closeListener() async {
+  void closeListener() {
+    abortConnect = true;
     _playOnServiceLogger.info("Closing playon session");
-    _channel.sink.add('{"MessageType":"SessionsStop"}');
-    unawaited(_channel.sink.close());
-    unawaited(_keepaliveSubscription?.cancel());
-    isConnected = false;
-
-    // In case offline mod is turned on while attempting to reconnect
-    unawaited(_reconnectionSubscription?.cancel());
-    _reconnectionSubscription = null;
+    switch (socketState) {
+      case SocketState.connected:
+        _channel.sink.add('{"MessageType":"SessionsStop"}');
+        unawaited(_keepaliveSubscription?.cancel());
+        unawaited(_channel.sink.close());
+        socketState = SocketState.disconnected;
+      case SocketState.connecting:
+        // Wait for abortConnection to take, closeListener will be called again if needed
+        break;
+      case SocketState.disconnected:
+        // Nothing to do
+        break;
+    }
   }
 
-  Future<void> handleMessage(dynamic value) async {
+  Future<void> _handleMessage(dynamic value) async {
     try {
       _playOnServiceLogger.finest("Received message: $value");
 
@@ -321,7 +362,6 @@ class PlayOnService {
                                     .round())
                         : Duration.zero;
                 await _audioHandler.seek(seekPosition);
-                final currentItem = _queueService.getCurrentTrack();
                 break;
               case "Rewind":
                 await _audioHandler.rewind();
@@ -344,10 +384,7 @@ class PlayOnService {
                       // sortBy: "IndexNumber", //!!! don't sort, use the sorting provided by the command!
                       includeItemTypes: "Audio",
                       itemIds: List<BaseItemId>.from(
-                              request['Data']['ItemIds'] as List<dynamic>)
-                          // limit amount of requested tracks. Jellyfin sometimes sends more item IDs than the GET request can handle in the query string
-                          .take(200)
-                          .toList(),
+                          request['Data']['ItemIds'] as List<dynamic>),
                     );
                     if (items!.isNotEmpty) {
                       //TODO check if all tracks in the request are in the upcoming queue (peekQueue). If they are, we should try to only reorder the upcoming queue instead of treating it as a new queue, and then skip to the correct index.
@@ -374,10 +411,7 @@ class PlayOnService {
                           "IndexNumber", //!!! don't sort, use the sorting provided by the command!
                       includeItemTypes: "Audio",
                       itemIds: List<BaseItemId>.from(
-                              request['Data']['ItemIds'] as List<dynamic>)
-                          // limit amount of requested tracks. Jellyfin sometimes sends more item IDs than the GET request can handle in the query string
-                          .take(200)
-                          .toList(),
+                          request['Data']['ItemIds'] as List<dynamic>),
                     );
                     unawaited(_queueService.addToNextUp(
                       items: items!,
@@ -389,10 +423,7 @@ class PlayOnService {
                           "IndexNumber", //!!! don't sort, use the sorting provided by the command!
                       includeItemTypes: "Audio",
                       itemIds: List<BaseItemId>.from(
-                              request['Data']['ItemIds'] as List<dynamic>)
-                          // limit amount of requested tracks. Jellyfin sometimes sends more item IDs than the GET request can handle in the query string
-                          .take(200)
-                          .toList(),
+                          request['Data']['ItemIds'] as List<dynamic>),
                     );
                     unawaited(_queueService.addToQueue(
                       items: items!,

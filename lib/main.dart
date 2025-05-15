@@ -12,7 +12,9 @@ import 'package:finamp/hive_registrar.g.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/locale_adapter.dart';
 import 'package:finamp/screens/album_settings_screen.dart';
+import 'package:finamp/screens/artist_settings_screen.dart';
 import 'package:finamp/screens/downloads_settings_screen.dart';
+import 'package:finamp/screens/genre_settings_screen.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/login_screen.dart';
 import 'package:finamp/screens/lyrics_settings_screen.dart';
@@ -23,18 +25,21 @@ import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:finamp/services/android_auto_helper.dart';
 import 'package:finamp/services/audio_service_smtc.dart';
+import 'package:finamp/services/data_source_service.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/downloads_service_backend.dart';
 import 'package:finamp/services/finamp_logs_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/keep_screen_on_helper.dart';
+import 'package:finamp/services/network_manager.dart';
 import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/playon_service.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/ui_overlay_setter_observer.dart';
 import 'package:finamp/services/widget_bindings_observer_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -52,6 +57,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
 
+import 'components/Buttons/simple_button.dart';
 import 'components/LogsScreen/copy_logs_button.dart';
 import 'components/LogsScreen/share_logs_button.dart';
 import 'components/PlayerScreen/player_split_screen_scaffold.dart';
@@ -66,6 +72,7 @@ import 'screens/audio_service_settings_screen.dart';
 import 'screens/customization_settings_screen.dart';
 import 'screens/downloads_location_screen.dart';
 import 'screens/downloads_screen.dart';
+import 'screens/genre_screen.dart';
 import 'screens/language_selection_screen.dart';
 import 'screens/layout_settings_screen.dart';
 import 'screens/logs_screen.dart';
@@ -106,6 +113,8 @@ void main() async {
     _mainLog.info("Setup offline listen tracking");
     await _setupDownloadsHelper();
     _mainLog.info("Setup downloads service");
+    _setupProviders();
+    _mainLog.info("Setup providers");
     await _setupOSIntegration();
     _mainLog.info("Setup os integrations");
     await _setupPlayOnService();
@@ -223,7 +232,7 @@ Future<void> _setupDownloadsHelper() async {
 Future<void> _setupPlayOnService() async {
   final playOnService = PlayOnService();
   GetIt.instance.registerSingleton(playOnService);
-  unawaited(playOnService.initialize());
+  GetIt.instance<FinampUserHelper>().runUserHook(playOnService.initialize);
 }
 
 Future<void> _setupKeepScreenOnHelper() async {
@@ -272,14 +281,24 @@ Future<void> setupHive() async {
   GetIt.instance.registerSingleton(isar);
 }
 
+void _setupProviders() {
+  var container = ProviderContainer();
+  GetIt.instance.registerSingleton<ProviderContainer>(container);
+  container.listen(finampSettingsProvider, (_, __) {});
+
+  DataSourceService.create();
+  AutoOffline.startWatching();
+}
+
 Future<void> _setupOSIntegration() async {
   // set up window manager on desktop, mainly to restrict minimum size
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    final screenSize = FinampSettingsHelper.finampSettings.screenSize;
     WidgetsFlutterBinding.ensureInitialized();
     await windowManager.ensureInitialized();
-    WindowOptions windowOptions = const WindowOptions(
-      size: Size(1200, 800),
-      center: true,
+    WindowOptions windowOptions = WindowOptions(
+      size: screenSize?.size ?? Size(1200, 800),
+      center: screenSize == null,
       backgroundColor: Colors.transparent,
       skipTaskbar: false,
       titleBarStyle: TitleBarStyle.normal,
@@ -287,6 +306,13 @@ Future<void> _setupOSIntegration() async {
     );
     unawaited(
         WindowManager.instance.waitUntilReadyToShow(windowOptions, () async {
+      if (screenSize != null) {
+        await windowManager.setPosition(screenSize.location);
+      }
+      GetIt.instance<ProviderContainer>()
+          .listen(brightnessProvider, fireImmediately: true, (_, brightness) {
+        windowManager.setBrightness(brightness);
+      });
       await windowManager.show();
       await windowManager.focus();
     }));
@@ -329,7 +355,8 @@ Future<void> _setupPlaybackServices() async {
         androidNotificationIcon: "mipmap/white",
         androidNotificationChannelId: "com.unicornsonlsd.finamp.audio",
         // notificationColor: TODO use the theme color for older versions of Android,
-        preloadArtwork: true,
+        // Preloading art does not work on android due to use of content:// scheme.
+        preloadArtwork: !Platform.isAndroid,
         androidBrowsableRootExtras: <String, dynamic>{
           // support showing search button on Android Auto as well as alternative search results on the player screen after voice search
           "android.media.browse.SEARCH_SUPPORTED": true,
@@ -449,7 +476,8 @@ class _FinampState extends State<Finamp> with WindowListener {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
+    return UncontrolledProviderScope(
+      container: GetIt.instance<ProviderContainer>(),
       child: GestureDetector(
         onTap: () {
           // Never rebuild FinampApp context, it breaks ProviderScope
@@ -468,6 +496,17 @@ class _FinampState extends State<Finamp> with WindowListener {
             child: ValueListenableBuilder(
                 valueListenable: LocaleHelper.localeListener,
                 builder: (_, __, ___) {
+                  final transitionBuilder = MediaQuery.of(context)
+                          .disableAnimations
+                      ? PageTransitionsTheme(
+                          // Disable page transitions on all platforms if [disableAnimations] is true, otherwise use default transitions
+                          builders: TargetPlatform.values.fold(
+                              <TargetPlatform, PageTransitionsBuilder>{},
+                              (previousValue, element) => previousValue
+                                ..[element] =
+                                    const NoTransitionPageTransitionsBuilder()))
+                      : null;
+
                   return ValueListenableBuilder<Box<ThemeMode>>(
                       valueListenable: ThemeModeHelper.themeModeListener,
                       builder: (context, box, __) {
@@ -486,6 +525,8 @@ class _FinampState extends State<Finamp> with WindowListener {
                                 const AlbumScreen(),
                             ArtistScreen.routeName: (context) =>
                                 const ArtistScreen(),
+                            GenreScreen.routeName: (context) =>
+                                const GenreScreen(),
                             PlayerScreen.routeName: (context) =>
                                 const PlayerScreen(
                                     key: ValueKey(PlayerScreen.routeName)),
@@ -533,8 +574,12 @@ class _FinampState extends State<Finamp> with WindowListener {
                                 const LanguageSelectionScreen(),
                             AlbumSettingsScreen.routeName: (context) =>
                                 const AlbumSettingsScreen(),
+                            ArtistSettingsScreen.routeName: (context) =>
+                                const ArtistSettingsScreen(),
+                            GenreSettingsScreen.routeName: (context) =>
+                                const GenreSettingsScreen(),
                             NetworkSettingsScreen.routeName: (context) =>
-                                const NetworkSettingsScreen()
+                                const NetworkSettingsScreen(),
                           },
                           initialRoute: SplashScreen.routeName,
                           navigatorObservers: [
@@ -567,6 +612,7 @@ class _FinampState extends State<Finamp> with WindowListener {
                               // ),
                               dismissDirection: DismissDirection.horizontal,
                             ),
+                            pageTransitionsTheme: transitionBuilder,
                           ),
                           darkTheme: ThemeData(
                             brightness: Brightness.dark,
@@ -585,6 +631,7 @@ class _FinampState extends State<Finamp> with WindowListener {
                               // ),
                               dismissDirection: DismissDirection.horizontal,
                             ),
+                            pageTransitionsTheme: transitionBuilder,
                           ),
                           scrollBehavior: FinampScrollBehavior(),
                           themeMode: box.get("ThemeMode"),
@@ -616,9 +663,16 @@ class _FinampState extends State<Finamp> with WindowListener {
   }
 
   @override
-  void onWindowEvent(String eventName) {
+  void onWindowEvent(String eventName) async {
     if (eventName == "move" || eventName == "resize") return;
+
     windowManagerLogger.finer("[WindowManager] onWindowEvent: $eventName");
+
+    if (eventName == "moved" || eventName == "resized") {
+      FinampSetters.setScreenSize(ScreenSize.from(
+          await windowManager.getSize(), await windowManager.getPosition()));
+      windowManagerLogger.finer("Saved window size and position");
+    }
   }
 
   @override
@@ -708,6 +762,23 @@ class ErrorScreen extends StatelessWidget {
                         color: Colors.red,
                       ),
                     ),
+                    if (kDebugMode)
+                      WidgetSpan(
+                          child: Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: SimpleButton(
+                          text: 'Delete FinampSettings',
+                          icon: Icons.delete,
+                          onPressed: () async {
+                            final dir = (Platform.isAndroid || Platform.isIOS)
+                                ? await getApplicationDocumentsDirectory()
+                                : await getApplicationSupportDirectory();
+
+                            await Hive.deleteBoxFromDisk("FinampSettings",
+                                path: dir.path);
+                          },
+                        ),
+                      )),
                     TextSpan(
                       text:
                           "\n\n${AppLocalizations.of(context)!.startupErrorCallToAction}",
@@ -790,5 +861,21 @@ class FinampScrollBehavior extends MaterialScrollBehavior {
           child: child,
         );
     }
+  }
+}
+
+class NoTransitionPageTransitionsBuilder extends PageTransitionsBuilder {
+  /// Constructs a page transition that doesn't animate anything.
+  const NoTransitionPageTransitionsBuilder();
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T>? route,
+    BuildContext? context,
+    Animation<double> animation,
+    Animation<double>? secondaryAnimation,
+    Widget child,
+  ) {
+    return child;
   }
 }

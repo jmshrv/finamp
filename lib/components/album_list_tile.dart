@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/release_date_helper.dart';
 import 'package:flutter/material.dart';
@@ -68,11 +69,29 @@ class AlbumListTile extends ConsumerStatefulWidget {
 
 class _AlbumListTileState extends ConsumerState<AlbumListTile> {
   final _queueService = GetIt.instance<QueueService>();
+  final finampUserHelper = GetIt.instance<FinampUserHelper>();
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+    final library = finampUserHelper.currentUser?.currentView;
+
+    final itemType = BaseItemDtoType.fromItem(widget.item);
+    final isArtistOrGenre = (itemType == BaseItemDtoType.artist ||
+            itemType == BaseItemDtoType.genre);
+    final itemDownloadStub = isArtistOrGenre
+          ? DownloadStub.fromFinampCollection(
+                FinampCollection(
+                  type: FinampCollectionType.collectionWithLibraryFilter,
+                  library: library,
+                  item: widget.item
+                )
+            )
+          : DownloadStub.fromItem(
+                type: DownloadItemType.collection,
+                item: widget.item
+            );
 
     void menuCallback({
       required Offset localPosition,
@@ -405,13 +424,9 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
           }
           break;
         case AlbumListTileMenuItems.download:
-          var item = DownloadStub.fromItem(
-              type: DownloadItemType.collection, item: widget.item);
-          await DownloadDialog.show(context, item, null);
+          await DownloadDialog.show(context, itemDownloadStub, null);
         case AlbumListTileMenuItems.delete:
-          var item = DownloadStub.fromItem(
-              type: DownloadItemType.collection, item: widget.item);
-          await downloadsService.deleteDownload(stub: item);
+          await downloadsService.deleteDownload(stub: itemDownloadStub);
         default:
           break;
       }
@@ -437,8 +452,7 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
               child: Transform.translate(
                 offset: const Offset(-3, 0),
                 child: DownloadedIndicator(
-                  item: DownloadStub.fromItem(
-                      type: DownloadItemType.collection, item: widget.item),
+                  item: itemDownloadStub,
                   size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
                 ),
               ),

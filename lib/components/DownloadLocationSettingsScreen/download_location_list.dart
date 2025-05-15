@@ -9,6 +9,7 @@ class DownloadLocationList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // TODO make this not rebuild on every settings change
     var locations = ref.watch(finampSettingsProvider
         .select((x) => x.requireValue.downloadLocationsMap.values));
     return ListView.builder(

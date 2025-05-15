@@ -334,6 +334,9 @@ class _PlayerScreenContent extends ConsumerWidget {
       settings: routeSettings,
       pageBuilder: (context, animation, secondaryAnimation) => targetWidget,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        if (MediaQuery.of(context).disableAnimations) {
+          return child;
+        }
         const curve = Curves.ease;
         const beginEnter = Offset(1.0, 0.0);
         const endEnter = Offset.zero;

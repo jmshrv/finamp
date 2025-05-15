@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
@@ -15,6 +16,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
+
 import '../builders/annotations.dart';
 import '../services/finamp_settings_helper.dart';
 import 'jellyfin_models.dart';
@@ -121,7 +123,7 @@ class DefaultSettings {
   static const sleepTimerSeconds = 1800; // 30 Minutes
   static const useCoverAsBackground = true;
   static const playerScreenCoverMinimumPadding = 1.5;
-  static const showArtistsTopTracks = true;
+  static const showArtistsTracksSection = true;
   static const disableGesture = false;
   static const showFastScroller = true;
   static const bufferDisableSizeConstraints = false;
@@ -200,6 +202,18 @@ class DefaultSettings {
   static const preferHomeNetwork = false;
   static const homeNetworkAddress = "http://0.0.0.0:8096";
   static const autoReloadQueue = false;
+  static const genreCuratedItemSelectionTypeTracks = CuratedItemSelectionType.mostPlayed;
+  static const genreCuratedItemSelectionTypeAlbums = CuratedItemSelectionType.latestReleases;
+  static const genreCuratedItemSelectionTypeArtists = CuratedItemSelectionType.favorites;
+  static const genreItemSectionsOrder = GenreItemSections.values;
+  static const genreFilterArtistScreens = true;
+  static const genreListsInheritSorting = true;
+  static const genreItemSectionFilterChipOrder = CuratedItemSelectionType.values;
+  static const artistGenreChipsApplyFilter = false;
+  static const artistCuratedItemSelectionType = CuratedItemSelectionType.mostPlayed;
+  static const artistItemSectionFilterChipOrder = CuratedItemSelectionType.values;
+  static const artistItemSectionsOrder = ArtistItemSections.values;
+  static const autoSwitchItemCurationType = true;
 }
 
 @HiveType(typeId: 28)
@@ -235,7 +249,7 @@ class FinampSettings {
     this.useCoverAsBackground = DefaultSettings.useCoverAsBackground,
     this.playerScreenCoverMinimumPadding =
         DefaultSettings.playerScreenCoverMinimumPadding,
-    this.showArtistsTopTracks = DefaultSettings.showArtistsTopTracks,
+    this.showArtistsTracksSection = DefaultSettings.showArtistsTracksSection,
     this.bufferDisableSizeConstraints =
         DefaultSettings.bufferDisableSizeConstraints,
     this.bufferDurationSeconds = DefaultSettings.bufferDurationSeconds,
@@ -322,6 +336,19 @@ class FinampSettings {
     this.audioFadeOutDuration = DefaultSettings.audioFadeOutDuration,
     this.audioFadeInDuration = DefaultSettings.audioFadeInDuration,
     this.autoReloadQueue = DefaultSettings.autoReloadQueue,
+    this.screenSize,
+    this.genreCuratedItemSelectionTypeTracks = DefaultSettings.genreCuratedItemSelectionTypeTracks,
+    this.genreCuratedItemSelectionTypeAlbums = DefaultSettings.genreCuratedItemSelectionTypeAlbums,
+    this.genreCuratedItemSelectionTypeArtists = DefaultSettings.genreCuratedItemSelectionTypeArtists,
+    this.genreItemSectionsOrder = DefaultSettings.genreItemSectionsOrder,
+    this.genreFilterArtistScreens = DefaultSettings.genreFilterArtistScreens,
+    this.genreListsInheritSorting = DefaultSettings.genreListsInheritSorting,
+    this.genreItemSectionFilterChipOrder = DefaultSettings.genreItemSectionFilterChipOrder,
+    this.artistGenreChipsApplyFilter = DefaultSettings.artistGenreChipsApplyFilter,
+    this.artistCuratedItemSelectionType = DefaultSettings.artistCuratedItemSelectionType,
+    this.artistItemSectionFilterChipOrder = DefaultSettings.artistItemSectionFilterChipOrder,
+    this.artistItemSectionsOrder = DefaultSettings.artistItemSectionsOrder,
+    this.autoSwitchItemCurationType = DefaultSettings.autoSwitchItemCurationType,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -337,9 +364,9 @@ class FinampSettings {
 
   @HiveField(4, defaultValue: DefaultSettings.androidStopForegroundOnPause)
   bool androidStopForegroundOnPause;
+
   @HiveField(5)
-  @FinampSetterIgnore(
-      "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
+  @SettingsHelperMap("tabContentType", "value")
   Map<TabContentType, bool> showTabs;
 
   /// Used to remember if the user has set their music screen to favourites
@@ -387,7 +414,7 @@ class FinampSettings {
   int sleepTimerSeconds;
 
   @HiveField(15, defaultValue: <String, DownloadLocation>{})
-  @FinampSetterIgnore(
+  @SettingsHelperIgnore(
       "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
   Map<String, DownloadLocation> downloadLocationsMap;
 
@@ -402,13 +429,11 @@ class FinampSettings {
   bool disableGesture = DefaultSettings.disableGesture;
 
   @HiveField(20, defaultValue: <TabContentType, SortBy>{})
-  @FinampSetterIgnore(
-      "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
+  @SettingsHelperMap("tabContentType", "sortBy")
   Map<TabContentType, SortBy> tabSortBy;
 
   @HiveField(21, defaultValue: <TabContentType, SortOrder>{})
-  @FinampSetterIgnore(
-      "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
+  @SettingsHelperMap("tabContentType", "sortOrder")
   Map<TabContentType, SortOrder> tabSortOrder;
 
   @HiveField(22, defaultValue: DefaultSettings.tabOrder)
@@ -502,8 +527,8 @@ class FinampSettings {
           DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds)
   int periodicPlaybackSessionUpdateFrequencySeconds;
 
-  @HiveField(54, defaultValue: DefaultSettings.showArtistsTopTracks)
-  bool showArtistsTopTracks = DefaultSettings.showArtistsTopTracks;
+  @HiveField(54, defaultValue: DefaultSettings.showArtistsTracksSection)
+  bool showArtistsTracksSection = DefaultSettings.showArtistsTracksSection;
 
   @HiveField(55, defaultValue: DefaultSettings.showArtistChipImage)
   bool showArtistChipImage;
@@ -651,6 +676,45 @@ class FinampSettings {
   @HiveField(99,
       defaultValue: DefaultSettings.showFavoriteButtonOnMediaNotification)
   bool showFavoriteButtonOnMediaNotification;
+
+  @HiveField(100)
+  ScreenSize? screenSize;
+
+  @HiveField(101, defaultValue: DefaultSettings.genreCuratedItemSelectionTypeTracks)
+  CuratedItemSelectionType genreCuratedItemSelectionTypeTracks;
+
+  @HiveField(102, defaultValue: DefaultSettings.genreCuratedItemSelectionTypeAlbums)
+  CuratedItemSelectionType genreCuratedItemSelectionTypeAlbums;
+
+  @HiveField(103, defaultValue: DefaultSettings.genreCuratedItemSelectionTypeArtists)
+  CuratedItemSelectionType genreCuratedItemSelectionTypeArtists;
+
+  @HiveField(104, defaultValue: DefaultSettings.genreItemSectionsOrder)
+  List<GenreItemSections> genreItemSectionsOrder;
+
+  @HiveField(105, defaultValue: DefaultSettings.genreFilterArtistScreens)
+  bool genreFilterArtistScreens;
+
+  @HiveField(106, defaultValue: DefaultSettings.genreListsInheritSorting)
+  bool genreListsInheritSorting;
+
+  @HiveField(107, defaultValue: DefaultSettings.genreItemSectionFilterChipOrder)
+  List<CuratedItemSelectionType> genreItemSectionFilterChipOrder;
+
+  @HiveField(108, defaultValue: DefaultSettings.artistGenreChipsApplyFilter)
+  bool artistGenreChipsApplyFilter;
+
+  @HiveField(109, defaultValue: DefaultSettings.artistCuratedItemSelectionType)
+  CuratedItemSelectionType artistCuratedItemSelectionType;
+
+  @HiveField(110, defaultValue: DefaultSettings.artistItemSectionFilterChipOrder)
+  List<CuratedItemSelectionType> artistItemSectionFilterChipOrder;
+
+  @HiveField(111, defaultValue: DefaultSettings.artistItemSectionsOrder)
+  List<ArtistItemSections> artistItemSectionsOrder;
+
+  @HiveField(112, defaultValue: DefaultSettings.autoSwitchItemCurationType)
+  bool autoSwitchItemCurationType;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -1983,7 +2047,7 @@ class FinampQueueInfo {
   Duration get totalDuration {
     var total = 0;
     for (var item in fullQueue) {
-      total += item?.item.duration?.inMicroseconds ?? 0;
+      total += item.item.duration?.inMicroseconds ?? 0;
     }
     return Duration(microseconds: total);
   }
@@ -2326,7 +2390,8 @@ enum FinampCollectionType {
   allPlaylists(true),
   latest5Albums(true),
   libraryImages(false),
-  allPlaylistsMetadata(false);
+  allPlaylistsMetadata(false),
+  collectionWithLibraryFilter(true);
 
   const FinampCollectionType(this.hasAudio);
 
@@ -2340,13 +2405,20 @@ enum FinampCollectionType {
   includeIfNull: false,
 )
 class FinampCollection {
-  FinampCollection({required this.type, this.library}) {
-    assert(type == FinampCollectionType.libraryImages || library == null);
-    assert(type != FinampCollectionType.libraryImages || library != null);
+  FinampCollection({required this.type, this.library, this.item}) {
+    assert(
+      (type == FinampCollectionType.libraryImages && library != null && item == null) ||
+      (type == FinampCollectionType.collectionWithLibraryFilter && library != null && item != null) ||
+      (type != FinampCollectionType.libraryImages &&
+       type != FinampCollectionType.collectionWithLibraryFilter &&
+       item == null && library == null),
+      'Invalid combination of type, library, and item for FinampCollection.'
+    );
   }
 
   final FinampCollectionType type;
   final BaseItemDto? library;
+  final BaseItemDto? item;
 
   String get id => switch (type) {
         FinampCollectionType.favorites => "Favorites",
@@ -2355,6 +2427,8 @@ class FinampCollection {
         FinampCollectionType.libraryImages =>
           "Cache Library Images:${library!.id}",
         FinampCollectionType.allPlaylistsMetadata => "All Playlists Metadata",
+        FinampCollectionType.collectionWithLibraryFilter =>
+          "Collection with Library Filter:${library!.id}:${item!.id}",
       };
 
   String getName(BuildContext context) => switch (type) {
@@ -2369,6 +2443,8 @@ class FinampCollection {
         FinampCollectionType.allPlaylistsMetadata =>
           AppLocalizations.of(context)!
               .finampCollectionNames("allPlaylistsMetadata"),
+        FinampCollectionType.collectionWithLibraryFilter =>
+          item!.name?? "Unkown Item",
       };
 
   factory FinampCollection.fromJson(Map<String, dynamic> json) =>
@@ -2905,5 +2981,244 @@ class FinampOutputRoute {
   @override
   String toString() {
     return jsonEncode(toJson());
+  }
+}
+
+@HiveType(typeId: 94)
+class ScreenSize {
+  ScreenSize(this.sizeX, this.sizeY, this.locationX, this.locationY);
+
+  ScreenSize.from(Size size, Offset location)
+      : sizeX = size.width,
+        sizeY = size.height,
+        locationX = location.dx,
+        locationY = location.dy;
+
+  Size get size => Size(sizeX, sizeY);
+
+  Offset get location => Offset(locationX, locationY);
+
+  @HiveField(1)
+  double sizeX;
+
+  @HiveField(2)
+  double sizeY;
+
+  @HiveField(3)
+  double locationX;
+
+  @HiveField(4)
+  double locationY;
+}
+
+@HiveType(typeId: 95)
+enum CuratedItemSelectionType {
+  @HiveField(0)
+  mostPlayed,
+  @HiveField(1)
+  favorites,
+  @HiveField(2)
+  random,
+  @HiveField(3)
+  latestReleases,
+  @HiveField(4)
+  recentlyAdded;
+
+  /// Human-readable version of this enum.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String toLocalisedSectionTitle(BuildContext context, BaseItemDtoType baseType) =>
+      _toLocalisedSectionTitle(this, context, baseType);
+
+  String _humanReadableName(
+      CuratedItemSelectionType curatedItemSelectionType) {
+    switch (curatedItemSelectionType) {
+      case CuratedItemSelectionType.mostPlayed:
+        return "Most Played";    
+      case CuratedItemSelectionType.favorites:
+        return "Favorites";
+      case CuratedItemSelectionType.random:
+        return "Random";
+      case CuratedItemSelectionType.latestReleases:
+        return "Latest Releases";
+      case CuratedItemSelectionType.recentlyAdded:
+        return "Recently Added";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      CuratedItemSelectionType curatedItemSelectionType,
+      BuildContext context) {
+    switch (curatedItemSelectionType) {
+      case CuratedItemSelectionType.mostPlayed:
+        return AppLocalizations.of(context)!.mostPlayed;
+      case CuratedItemSelectionType.favorites:
+        return AppLocalizations.of(context)!.favorites;
+      case CuratedItemSelectionType.random:
+        return AppLocalizations.of(context)!.random;
+      case CuratedItemSelectionType.latestReleases:
+        return AppLocalizations.of(context)!.latestReleases;
+      case CuratedItemSelectionType.recentlyAdded:
+        return AppLocalizations.of(context)!.recentlyAdded;
+    }
+  }
+
+  String _toLocalisedSectionTitle(
+      CuratedItemSelectionType curatedItemSelectionType,
+      BuildContext context,
+      BaseItemDtoType baseType) {
+    final loc = AppLocalizations.of(context)!;
+
+    String? getTitle(String track, String album, String artist) {
+      switch (baseType) {
+        case BaseItemDtoType.track:
+          return track;
+        case BaseItemDtoType.album:
+          return album;
+        case BaseItemDtoType.artist:
+          return artist;
+        default:
+          return null;
+      }
+    }
+
+    switch (curatedItemSelectionType) {
+      case CuratedItemSelectionType.mostPlayed:
+        return getTitle(loc.topTracks, loc.topAlbums, loc.topArtists) ?? "Unsupported Type";
+      case CuratedItemSelectionType.favorites:
+        return getTitle(loc.favoriteTracks, loc.favoriteAlbums, loc.favoriteArtists) ?? "Unsupported Type";
+      case CuratedItemSelectionType.random:
+        return getTitle(loc.tracks, loc.albums, loc.artists) ?? "Unsupported Type";
+      case CuratedItemSelectionType.latestReleases:
+        return getTitle(loc.latestTracks, loc.latestAlbums, loc.latestArtists) ?? "Unsupported Type";
+      case CuratedItemSelectionType.recentlyAdded:
+        return getTitle(loc.newTracks, loc.newAlbums, loc.newArtists) ?? "Unsupported Type";
+    }
+  }
+}
+
+
+@HiveType(typeId: 96)
+enum GenreItemSections {
+  @HiveField(0)
+  tracks,
+  @HiveField(1)
+  albums,
+  @HiveField(2)
+  artists;
+
+  /// Human-readable version of this enum.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(GenreItemSections genreItemSection) {
+    switch (genreItemSection) {
+      case GenreItemSections.tracks:
+        return "Tracks";
+      case GenreItemSections.albums:
+        return "Albums";
+      case GenreItemSections.artists:
+        return "Artists";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      GenreItemSections genreItemSection, BuildContext context) {
+    switch (genreItemSection) {
+      case GenreItemSections.tracks:
+        return AppLocalizations.of(context)!.tracks;
+      case GenreItemSections.albums:
+        return AppLocalizations.of(context)!.albums;
+      case GenreItemSections.artists:
+        return AppLocalizations.of(context)!.artists;
+    }
+  }
+}
+
+@HiveType(typeId: 97)
+enum ArtistItemSections {
+  @HiveField(0)
+  tracks,
+  @HiveField(1)
+  albums,
+  @HiveField(2)
+  appearsOn;
+
+/// Human-readable version of this enum.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String toLocalisedSectionTitle(BuildContext context, CuratedItemSelectionType? curatedItemSelectionType) =>
+      _toLocalisedSectionTitle(this, context, curatedItemSelectionType);
+
+  String _humanReadableName(
+      ArtistItemSections artistItemSection) {
+    switch (artistItemSection) {
+      case ArtistItemSections.tracks:
+        return "Tracks";    
+      case ArtistItemSections.albums:
+        return "Albums";
+      case ArtistItemSections.appearsOn:
+        return "Appears On";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      ArtistItemSections artistItemSection,
+      BuildContext context) {
+    switch (artistItemSection) {
+      case ArtistItemSections.tracks:
+        return AppLocalizations.of(context)!.tracks;
+      case ArtistItemSections.albums:
+        return AppLocalizations.of(context)!.albums;
+      case ArtistItemSections.appearsOn:
+        return AppLocalizations.of(context)!.appearsOnAlbums;
+    }
+  }
+
+  String _toLocalisedSectionTitle(
+      ArtistItemSections artistItemSection,
+      BuildContext context,
+      CuratedItemSelectionType? curatedItemSelectionType) {
+    final loc = AppLocalizations.of(context)!;
+
+    String? getTitle(String tracks, String albums, String appearsOn) {
+      switch (artistItemSection) {
+        case ArtistItemSections.tracks:
+          return tracks;
+        case ArtistItemSections.albums:
+          return albums;
+        case ArtistItemSections.appearsOn:
+          return appearsOn;
+      }
+    }
+
+    switch (curatedItemSelectionType) {
+      case CuratedItemSelectionType.mostPlayed:
+        return getTitle(loc.topTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+      case CuratedItemSelectionType.favorites:
+        return getTitle(loc.favoriteTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+      case CuratedItemSelectionType.random:
+        return getTitle(loc.randomTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+      case CuratedItemSelectionType.latestReleases:
+        return getTitle(loc.latestTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+      case CuratedItemSelectionType.recentlyAdded:
+        return getTitle(loc.newTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+      case null:
+        return getTitle(loc.tracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+    }
   }
 }

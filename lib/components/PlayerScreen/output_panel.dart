@@ -97,7 +97,9 @@ Future<void> showOutputMenu({
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 1000),
+                          duration: MediaQuery.of(context).disableAnimations
+                              ? Duration.zero
+                              : const Duration(milliseconds: 1000),
                           switchOutCurve: const Threshold(0.0),
                           child: Consumer(builder: (context, ref, child) {
                             return AirPlayRoutePickerView(

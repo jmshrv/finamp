@@ -7,9 +7,16 @@ import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class SortByMenuButton extends ConsumerWidget {
-  const SortByMenuButton(this.tabType, {super.key});
+  const SortByMenuButton({
+    super.key,
+    required this.tabType,
+    this.sortByOverride,
+    this.onOverrideChanged,
+  });
 
   final TabContentType tabType;
+  final SortBy? sortByOverride;
+  final void Function(SortBy newSortBy)? onOverrideChanged;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,15 +34,21 @@ class SortByMenuButton extends ConsumerWidget {
             child: Text(
               sortBy.toLocalisedString(context),
               style: TextStyle(
-                color: ref.watch(finampSettingsProvider.select(
-                        (x) => x.requireValue.getTabSortBy(tabType) == sortBy))
+                color: ((sortByOverride ?? ref.watch(finampSettingsProvider.tabSortBy(tabType))) ==
+                        sortBy)
                     ? Theme.of(context).colorScheme.secondary
                     : null,
               ),
             ),
           )
       ],
-      onSelected: (value) => FinampSettingsHelper.setSortBy(tabType, value),
+      onSelected: (value) {
+        if (sortByOverride != null && onOverrideChanged != null) {
+          onOverrideChanged!(value);
+        } else {
+          FinampSetters.setTabSortBy(tabType, value);
+        }
+      }
     );
   }
 }

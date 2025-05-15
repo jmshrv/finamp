@@ -20,18 +20,21 @@ class DownloadButton extends ConsumerWidget {
     super.key,
     required this.item,
     this.children,
+    this.childrenCount,
     this.isLibrary = false,
   });
 
   final DownloadStub item;
   final List<BaseItemDto>? children;
+  final int? childrenCount;
   final bool isLibrary;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final childrenLength = childrenCount ?? children?.length;
     final downloadsService = GetIt.instance<DownloadsService>();
     DownloadItemStatus? status = ref
-        .watch(downloadsService.statusProvider((item, children?.length)))
+        .watch(downloadsService.statusProvider((item, childrenLength)))
         .value;
     var isOffline = ref.watch(finampSettingsProvider.isOffline);
     bool canDeleteFromServer = false;
