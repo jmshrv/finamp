@@ -1,4 +1,5 @@
 import 'package:finamp/components/delete_prompts.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
@@ -22,12 +23,16 @@ class DownloadButton extends ConsumerWidget {
     this.children,
     this.childrenCount,
     this.isLibrary = false,
+    this.downloadDisabled = false,
+    this.customTooltip,
   });
 
   final DownloadStub item;
   final List<BaseItemDto>? children;
   final int? childrenCount;
   final bool isLibrary;
+  final bool downloadDisabled;
+  final String? customTooltip;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -63,39 +68,51 @@ class DownloadButton extends ConsumerWidget {
       viewId = finampUserHelper.currentUser!.currentViewId!;
     }
 
-    var downloadButton = IconButton(
-      icon: status == DownloadItemStatus.notNeeded
-          ? const Icon(Icons.file_download)
-          : const Icon(Icons.lock), //TODO get better icon
-      onPressed: () async {
-        if (isLibrary) {
-          await showDialog(
-              context: context,
-              builder: (context) => ConfirmationPromptDialog(
-                    promptText: AppLocalizations.of(context)!
-                        .downloadLibraryPrompt(item.name),
-                    confirmButtonText:
-                        AppLocalizations.of(context)!.addButtonLabel,
-                    abortButtonText:
-                        MaterialLocalizations.of(context).cancelButtonLabel,
-                    onConfirmed: () =>
-                        DownloadDialog.show(context, item, viewId),
-                    onAborted: () {},
-                  ));
-        } else {
-          int? trackCount = switch (item.baseItemType) {
-            BaseItemDtoType.album ||
-            BaseItemDtoType.playlist =>
-              children?.length,
-            BaseItemDtoType.artist || BaseItemDtoType.genre => children
-                ?.fold<int>(0, (count, item) => count + (item.childCount ?? 0)),
-            _ => null
-          };
-          await DownloadDialog.show(context, item, viewId,
-              trackCount: trackCount);
-        }
-      },
-      tooltip: parentTooltip,
+    var downloadButton = Opacity(
+      opacity: downloadDisabled ? 0.4 : 1.0,
+      child: IconButton(
+        icon: status == DownloadItemStatus.notNeeded
+            ? const Icon(Icons.file_download)
+            : const Icon(Icons.lock), //TODO get better icon
+        onPressed: () async {
+          if (downloadDisabled) {
+            if (customTooltip != null) {
+              GlobalSnackbar.message((context) =>
+                  customTooltip ??
+                  AppLocalizations.of(context)!
+                      .notAvailable);
+            }
+            return;
+          }
+          if (isLibrary) {
+            await showDialog(
+                context: context,
+                builder: (context) => ConfirmationPromptDialog(
+                      promptText: AppLocalizations.of(context)!
+                          .downloadLibraryPrompt(item.name),
+                      confirmButtonText:
+                          AppLocalizations.of(context)!.addButtonLabel,
+                      abortButtonText:
+                          MaterialLocalizations.of(context).cancelButtonLabel,
+                      onConfirmed: () =>
+                          DownloadDialog.show(context, item, viewId),
+                      onAborted: () {},
+                    ));
+          } else {
+            int? trackCount = switch (item.baseItemType) {
+              BaseItemDtoType.album ||
+              BaseItemDtoType.playlist =>
+                children?.length,
+              BaseItemDtoType.artist || BaseItemDtoType.genre => children
+                  ?.fold<int>(0, (count, item) => count + (item.childCount ?? 0)),
+              _ => null
+            };
+            await DownloadDialog.show(context, item, viewId,
+                trackCount: trackCount);
+          }
+        },
+        tooltip: customTooltip ?? parentTooltip,
+      ),
     );
     var deleteButton = IconButton(
       icon: const Icon(Icons.delete),

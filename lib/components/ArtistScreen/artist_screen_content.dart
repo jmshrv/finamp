@@ -117,6 +117,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
         // FlexibleSpaceBar. We add the toolbar height since the widget
         // should appear below the appbar.
         expandedHeight: kToolbarHeight + 125 + 96,
+        centerTitle: false,
         pinned: true,
         flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
           parentItem: widget.parent,
@@ -128,17 +129,21 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
         ),
         actions: [
           FavoriteButton(item: widget.parent),
-          if (!isLoading && currentGenreFilter == null)
+          if (!isLoading)
             DownloadButton(
-                item: DownloadStub.fromFinampCollection(
-                  FinampCollection(
-                      type: FinampCollectionType.collectionWithLibraryFilter,
-                      library: library,
-                      item: widget.parent,
-                  )
-                ),
-                children: allChildren
-            )
+              item: DownloadStub.fromFinampCollection(
+                FinampCollection(
+                    type: FinampCollectionType.collectionWithLibraryFilter,
+                    library: library,
+                    item: widget.parent,
+                )
+              ),
+              children: allChildren,
+              downloadDisabled: (currentGenreFilter != null),
+              customTooltip: (currentGenreFilter != null)
+                  ? AppLocalizations.of(context)!.downloadButtonDisabledGenreFilterTooltip
+                  : null,
+            ),
         ],
       ),
       if (!isLoading)

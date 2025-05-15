@@ -136,6 +136,7 @@ void openSeeAll(
         title: Text(widget.parent.name ??
             AppLocalizations.of(context)!.unknownName),
         pinned: true,
+        centerTitle: false,
         actions: [
           FavoriteButton(item: widget.parent),
           if (!isLoading)
