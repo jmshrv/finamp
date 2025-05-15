@@ -2005,7 +2005,7 @@
   "@libraryDownloads": {
     "description": "Title for the library downloads section on the downloads screen."
   },
-  "desktopShuffleWarning": "Shuffle наразі недоступний на комп’ютері.",
+  "desktopShuffleWarning": "Зміна режиму випадкового відтворення наразі недоступна на комп’ютері.",
   "@desktopShuffleWarning": {
     "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
   },
