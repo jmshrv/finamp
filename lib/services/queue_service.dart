@@ -463,6 +463,15 @@ class QueueService {
       return;
     }
 
+    // Native shuffle is not currently implemented on desktop.  Perform manually.
+    if (!(Platform.isAndroid || Platform.isIOS) &&
+        order == FinampPlaybackOrder.shuffled) {
+      List<jellyfin_models.BaseItemDto> clonedItems = List.from(items);
+      clonedItems.shuffle();
+      items = clonedItems;
+      order = FinampPlaybackOrder.linear;
+    }
+
     if (startingIndex == null) {
       if (order == FinampPlaybackOrder.shuffled) {
         startingIndex = Random().nextInt(items.length);

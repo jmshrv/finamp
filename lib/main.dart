@@ -68,11 +68,11 @@ import 'screens/active_downloads_screen.dart';
 import 'screens/add_download_location_screen.dart';
 import 'screens/album_screen.dart';
 import 'screens/artist_screen.dart';
-import 'screens/genre_screen.dart';
 import 'screens/audio_service_settings_screen.dart';
 import 'screens/customization_settings_screen.dart';
 import 'screens/downloads_location_screen.dart';
 import 'screens/downloads_screen.dart';
+import 'screens/genre_screen.dart';
 import 'screens/language_selection_screen.dart';
 import 'screens/layout_settings_screen.dart';
 import 'screens/logs_screen.dart';
@@ -496,17 +496,15 @@ class _FinampState extends State<Finamp> with WindowListener {
             child: ValueListenableBuilder(
                 valueListenable: LocaleHelper.localeListener,
                 builder: (_, __, ___) {
-
                   final transitionBuilder = MediaQuery.of(context)
                           .disableAnimations
                       ? PageTransitionsTheme(
-                      // Disable page transitions on all platforms if [disableAnimations] is true, otherwise use default transitions
+                          // Disable page transitions on all platforms if [disableAnimations] is true, otherwise use default transitions
                           builders: TargetPlatform.values.fold(
                               <TargetPlatform, PageTransitionsBuilder>{},
                               (previousValue, element) => previousValue
                                 ..[element] =
-                                    const NoTransitionPageTransitionsBuilder())
-                            )
+                                    const NoTransitionPageTransitionsBuilder()))
                       : null;
 
                   return ValueListenableBuilder<Box<ThemeMode>>(
@@ -764,7 +762,7 @@ class ErrorScreen extends StatelessWidget {
                         color: Colors.red,
                       ),
                     ),
-                    if (error is HiveError && kDebugMode)
+                    if (kDebugMode)
                       WidgetSpan(
                           child: Padding(
                         padding: const EdgeInsets.only(top: 20),

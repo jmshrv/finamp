@@ -2282,7 +2282,7 @@
     },
     "description": "Label for the type of device in the output menu"
   },
-  "desktopShuffleWarning": "Shuffle is not currently available on desktop.",
+  "desktopShuffleWarning": "Changing shuffle mode is not currently available on desktop.",
   "@desktopShuffleWarning": {
     "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
   },
