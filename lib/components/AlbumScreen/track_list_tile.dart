@@ -261,57 +261,38 @@ class TrackListTile extends ConsumerWidget {
       }
     }
 
-    final dismissBackground = Container(
-      // color: Theme.of(context).colorScheme.secondaryContainer,
-      padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 8.0),
-      alignment: Alignment.centerLeft,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                getSwipeActionIcon(ref
-                    .watch(finampSettingsProvider.itemSwipeActionLeftToRight)),
-                color: Theme.of(context).colorScheme.secondary,
-                size: 40,
-              ),
-              const SizedBox(width: 4.0),
-              Text(
-                ref
-                    .watch(finampSettingsProvider.itemSwipeActionLeftToRight)
-                    .toLocalisedString(context),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                ref
-                    .watch(finampSettingsProvider.itemSwipeActionRightToLeft)
-                    .toLocalisedString(context),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-              ),
-              const SizedBox(width: 4.0),
-              Icon(
-                getSwipeActionIcon(ref
-                    .watch(finampSettingsProvider.itemSwipeActionRightToLeft)),
-                color: Theme.of(context).colorScheme.secondary,
-                size: 40,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+    Widget buildSwipeActionBackground(BuildContext context, DismissDirection direction) {
+      final action = (direction == DismissDirection.startToEnd)
+          ? ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight)
+          : ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft);
+
+      final icon = getSwipeActionIcon(action);
+      final label = action.toLocalisedString(context);
+
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+        alignment: (direction == DismissDirection.startToEnd)
+            ? Alignment.centerLeft
+            : Alignment.centerRight,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: (direction == DismissDirection.startToEnd)
+              ? MainAxisAlignment.start
+              : MainAxisAlignment.end,
+          children: direction == DismissDirection.startToEnd
+              ? [
+                  Icon(icon, color: Theme.of(context).colorScheme.secondary, size: 40),
+                  const SizedBox(width: 4.0),
+                  Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
+                ]
+              : [
+                  Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
+                  const SizedBox(width: 4.0),
+                  Icon(icon, color: Theme.of(context).colorScheme.secondary, size: 40),
+                ],
+        ),
+      );
+    }
 
     return TrackListItem(
       baseItem: item,
@@ -329,7 +310,8 @@ class TrackListTile extends ConsumerWidget {
       onRemoveFromList: onRemoveFromList,
       onTap: trackListTileOnTap,
       confirmDismiss: trackListTileConfirmDismiss,
-      dismissBackground: dismissBackground,
+      leftSwipeBackground: buildSwipeActionBackground(context, DismissDirection.startToEnd),
+      rightSwipeBackground: buildSwipeActionBackground(context, DismissDirection.endToStart),
     );
   }
 }
@@ -405,7 +387,8 @@ class TrackListItem extends ConsumerStatefulWidget {
   final bool allowReorder;
   final bool allowDismiss;
   final bool highlightCurrentTrack;
-  final Widget dismissBackground;
+  final Widget leftSwipeBackground;
+  final Widget rightSwipeBackground;
 
   final void Function(bool playable) onTap;
   final Future<bool> Function(DismissDirection direction) confirmDismiss;
@@ -428,7 +411,9 @@ class TrackListItem extends ConsumerStatefulWidget {
       this.showPlayCount = false,
       this.highlightCurrentTrack = true,
       this.onRemoveFromList,
-      this.dismissBackground = const SizedBox.shrink()});
+      this.leftSwipeBackground = const SizedBox.shrink(),
+      this.rightSwipeBackground = const SizedBox.shrink(),
+  });
 
   @override
   ConsumerState<TrackListItem> createState() => TrackListItemState();
@@ -534,7 +519,8 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                 },
                 // no background, dismissing really dismisses here
                 confirmDismiss: widget.confirmDismiss,
-                background: widget.dismissBackground,
+                background: widget.leftSwipeBackground,
+                secondaryBackground: widget.rightSwipeBackground,
                 child: listItem,
               ),
       );
