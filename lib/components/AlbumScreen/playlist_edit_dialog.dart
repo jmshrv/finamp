@@ -95,8 +95,9 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
     if (_publicVisibility != null) return;
     final resultPlaylist =
         await _jellyfinApiHelper.getPlaylist(widget.playlist.id!);
-    _publicVisibility = resultPlaylist['OpenAccess'] as bool;
-    setState(() {});
+    setState(() {
+      _publicVisibility = resultPlaylist['OpenAccess'] as bool;
+    });
   }
 
   Future<void> _submit() async {
