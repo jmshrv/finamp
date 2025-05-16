@@ -101,29 +101,34 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (_isExpandable)
-                      Transform.rotate(
-                        angle: _showTracks ? 0 : -math.pi / 2,
-                        child: const Icon(Icons.arrow_drop_down, size: 24),
-                      ),
-                    if (_isExpandable)
-                      const SizedBox(width: 4),
-                    Text(
-                      widget.tracksText,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                Expanded(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                          if (_isExpandable)
+                            Transform.rotate(
+                              angle: _showTracks ? 0 : -math.pi / 2,
+                              child: const Icon(Icons.arrow_drop_down, size: 24),
+                            ),
+                          if (_isExpandable)
+                            const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              widget.tracksText,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                  ),
                 ),
                 if (widget.seeAllCallbackFunction != null)
                   GestureDetector(
                     onTap: widget.seeAllCallbackFunction,
                     child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           AppLocalizations.of(context)!.seeAll,
@@ -280,29 +285,35 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (_isExpandable)
-                      Transform.rotate(
-                        angle: _showAlbums ? 0 : -math.pi / 2,
-                        child: const Icon(Icons.arrow_drop_down, size: 24),
+                Expanded(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (_isExpandable)
+                        Transform.rotate(
+                          angle: _showAlbums ? 0 : -math.pi / 2,
+                          child: const Icon(Icons.arrow_drop_down, size: 24),
+                        ),
+                      if (_isExpandable)
+                        const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          widget.albumsText,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    if (_isExpandable)
-                      const SizedBox(width: 4),
-                    Text(
-                      widget.albumsText,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
+                // "See All"
                 if (widget.seeAllCallbackFunction != null)
                   GestureDetector(
                     onTap: widget.seeAllCallbackFunction,
                     child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           AppLocalizations.of(context)!.seeAll,

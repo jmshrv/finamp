@@ -273,7 +273,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
               CuratedItemSelectionType.favorites,
               CuratedItemSelectionType.random,
               CuratedItemSelectionType.latestReleases,
-              CuratedItemSelectionType.recentlyAdded
+              CuratedItemSelectionType.recentlyAdded,
+              CuratedItemSelectionType.recentlyPlayed
             ]
           : (fields[107] as List).cast<CuratedItemSelectionType>(),
       artistGenreChipsApplyFilter:
@@ -287,7 +288,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
               CuratedItemSelectionType.favorites,
               CuratedItemSelectionType.random,
               CuratedItemSelectionType.latestReleases,
-              CuratedItemSelectionType.recentlyAdded
+              CuratedItemSelectionType.recentlyAdded,
+              CuratedItemSelectionType.recentlyPlayed
             ]
           : (fields[110] as List).cast<CuratedItemSelectionType>(),
       artistItemSectionsOrder: fields[111] == null
@@ -2415,6 +2417,8 @@ class CuratedItemSelectionTypeAdapter
         return CuratedItemSelectionType.latestReleases;
       case 4:
         return CuratedItemSelectionType.recentlyAdded;
+      case 5:
+        return CuratedItemSelectionType.recentlyPlayed;
       default:
         return CuratedItemSelectionType.mostPlayed;
     }
@@ -2433,6 +2437,8 @@ class CuratedItemSelectionTypeAdapter
         writer.writeByte(3);
       case CuratedItemSelectionType.recentlyAdded:
         writer.writeByte(4);
+      case CuratedItemSelectionType.recentlyPlayed:
+        writer.writeByte(5);
     }
   }
 

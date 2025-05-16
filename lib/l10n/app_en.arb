@@ -1197,6 +1197,12 @@
   "@latestAlbums": {},
   "latestArtists": "Latest Artists",
   "@latestArtists": {},
+  "recentlyPlayedTracks": "Recently Played Tracks",
+  "@recentlyPlayedTracks": {},
+  "recentlyPlayedAlbums": "Recently Played Albums",
+  "@recentlyPlayedAlbums": {},
+  "recentlyPlayedArtists": "Recently Played Artists",
+  "@recentlyPlayedArtists": {},
   "favoriteTracks": "Favorite Tracks",
   "@favoriteTracks": {},
   "favoriteAlbums": "Favorite Albums",
@@ -1217,6 +1223,8 @@
   "@randomFavoritesFirst": {},
   "recentlyAdded": "Recently Added",
   "@recentlyAdded": {},
+  "recentlyPlayed": "Recently Played",
+  "@recentlyPlayed": {},
   "latestReleases": "Latest Releases",
   "@latestReleases": {},
   "itemSectionsOrder": "Item Sections Order",
@@ -1263,9 +1271,9 @@
   "@curatedItemsMostPlayedOfflineTooltip": {
     "description": "Tooltip for Most Played on Curated Items in Offline Mode."
   },
-  "curatedItemsMostPlayedDisabledTooltip": "You've not listened to any tracks yet.",
-  "@curatedItemsMostPlayedDisabledTooltip": {
-    "description": "Tooltip for Most Played on Curated Items in Online Mode when not yet listened to any tracks."
+  "curatedItemsNotListenedDisabledTooltip": "You've not listened to any tracks yet.",
+  "@curatedItemsNotListenedDisabledTooltip": {
+    "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks."
   },
   "curatedItemsFavoritesDisabledTooltip": "You have no favorites yet.",
   "@curatedItemsFavoritesDisabledTooltip": {

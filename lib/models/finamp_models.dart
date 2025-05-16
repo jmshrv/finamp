@@ -3022,7 +3022,9 @@ enum CuratedItemSelectionType {
   @HiveField(3)
   latestReleases,
   @HiveField(4)
-  recentlyAdded;
+  recentlyAdded,
+  @HiveField(5)
+  recentlyPlayed;
 
   /// Human-readable version of this enum.
   @override
@@ -3034,6 +3036,9 @@ enum CuratedItemSelectionType {
 
   String toLocalisedSectionTitle(BuildContext context, BaseItemDtoType baseType) =>
       _toLocalisedSectionTitle(this, context, baseType);
+
+  SortBy getSortBy() =>
+      _getSortBy(this);
 
   String _humanReadableName(
       CuratedItemSelectionType curatedItemSelectionType) {
@@ -3048,6 +3053,8 @@ enum CuratedItemSelectionType {
         return "Latest Releases";
       case CuratedItemSelectionType.recentlyAdded:
         return "Recently Added";
+      case CuratedItemSelectionType.recentlyPlayed:
+        return "Recently Played";
     }
   }
 
@@ -3065,6 +3072,8 @@ enum CuratedItemSelectionType {
         return AppLocalizations.of(context)!.latestReleases;
       case CuratedItemSelectionType.recentlyAdded:
         return AppLocalizations.of(context)!.recentlyAdded;
+      case CuratedItemSelectionType.recentlyPlayed:
+        return AppLocalizations.of(context)!.recentlyPlayed;
     }
   }
 
@@ -3098,6 +3107,25 @@ enum CuratedItemSelectionType {
         return getTitle(loc.latestTracks, loc.latestAlbums, loc.latestArtists) ?? "Unsupported Type";
       case CuratedItemSelectionType.recentlyAdded:
         return getTitle(loc.newTracks, loc.newAlbums, loc.newArtists) ?? "Unsupported Type";
+      case CuratedItemSelectionType.recentlyPlayed:
+        return getTitle(loc.recentlyPlayedTracks, loc.recentlyPlayedAlbums, loc.recentlyPlayedArtists) ?? "Unsupported Type";
+    }
+  }
+
+  SortBy _getSortBy(CuratedItemSelectionType curatedItemSelectionType) {
+    switch (curatedItemSelectionType) {
+        case CuratedItemSelectionType.mostPlayed:
+          return SortBy.playCount;
+        case CuratedItemSelectionType.favorites:
+          return SortBy.random;
+        case CuratedItemSelectionType.random:
+          return SortBy.random;
+        case CuratedItemSelectionType.latestReleases:
+          return SortBy.premiereDate;
+        case CuratedItemSelectionType.recentlyAdded:
+          return SortBy.dateCreated;
+        case CuratedItemSelectionType.recentlyPlayed:
+          return SortBy.datePlayed;
     }
   }
 }
@@ -3217,6 +3245,8 @@ enum ArtistItemSections {
         return getTitle(loc.latestTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
       case CuratedItemSelectionType.recentlyAdded:
         return getTitle(loc.newTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+      case CuratedItemSelectionType.recentlyPlayed:
+        return getTitle(loc.recentlyPlayedTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
       case null:
         return getTitle(loc.tracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
     }

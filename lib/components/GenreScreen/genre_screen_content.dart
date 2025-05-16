@@ -63,23 +63,27 @@ void openSeeAll(
     if (doOverride && ref.read(finampSettingsProvider.genreListsInheritSorting) && itemSelectionType != null) {
       switch (itemSelectionType) {
         case CuratedItemSelectionType.mostPlayed:
-          sortByOverride = SortBy.playCount;
+          sortByOverride = itemSelectionType.getSortBy();
           sortOrderOverride = SortOrder.descending;
           isFavoriteOverride = false;
         case CuratedItemSelectionType.favorites:
-          sortByOverride = SortBy.sortName;
+          sortByOverride = SortBy.random;
           sortOrderOverride = SortOrder.ascending;
           isFavoriteOverride = true;
         case CuratedItemSelectionType.random:
-          sortByOverride = SortBy.random;
+          sortByOverride = itemSelectionType.getSortBy();
           sortOrderOverride = SortOrder.ascending;
           isFavoriteOverride = false;
         case CuratedItemSelectionType.latestReleases:
-          sortByOverride = SortBy.premiereDate;
+          sortByOverride = itemSelectionType.getSortBy();
           sortOrderOverride = SortOrder.descending;
           isFavoriteOverride = false;
         case CuratedItemSelectionType.recentlyAdded:
-          sortByOverride = SortBy.dateCreated;
+          sortByOverride = itemSelectionType.getSortBy();
+          sortOrderOverride = SortOrder.descending;
+          isFavoriteOverride = false;
+        case CuratedItemSelectionType.recentlyPlayed:
+          sortByOverride = itemSelectionType.getSortBy();
           sortOrderOverride = SortOrder.descending;
           isFavoriteOverride = false;
       }
