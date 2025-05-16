@@ -3472,12 +3472,12 @@ enum SortBy {
           SortBy.artist,
           //SortBy.communityRating,
           //SortBy.criticRating,
-          SortBy.datePlayed,
-          SortBy.dateCreated,
           SortBy.premiereDate,
-          SortBy.random,
+          SortBy.dateCreated,
+          SortBy.datePlayed,
           SortBy.playCount,
           SortBy.runtime,
+          SortBy.random,
         ];
       case TabContentType.albums:
         options = [
@@ -3486,10 +3486,10 @@ enum SortBy {
           //SortBy.communityRating,
           //SortBy.criticRating,
           //SortBy.datePlayed,
-          SortBy.dateCreated,
           SortBy.premiereDate,
-          SortBy.random,
+          SortBy.dateCreated,
           SortBy.runtime,
+          SortBy.random,
         ];
       case TabContentType.playlists:
       case TabContentType.artists:
@@ -3497,8 +3497,8 @@ enum SortBy {
           SortBy.sortName,
           //SortBy.datePlayed,
           SortBy.dateCreated,
-          SortBy.random,
           SortBy.runtime,
+          SortBy.random,
         ];
       case TabContentType.genres:
         options = [

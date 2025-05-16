@@ -36,17 +36,20 @@ class SortByMenuButton extends ConsumerWidget {
         for (SortBy sortBy in sortOptions)
           PopupMenuItem(
             value: sortBy,
-            child: Text(
+            child: Opacity(
+              opacity: (isOffline && 
+              ((sortBy == SortBy.playCount || sortBy == SortBy.datePlayed)))
+                ? 0.3 : 1,
+              child: Text(
               sortBy.toLocalisedString(context),
               style: TextStyle(
-                color: (isOffline && ((sortBy == SortBy.playCount || sortBy == SortBy.datePlayed)))
-                ? Theme.of(context).colorScheme.secondary.withOpacity(0.3)
-                : ((selectedSortBy == sortBy)
-                    ? Theme.of(context).colorScheme.secondary
-                    : null),
+                color: ((selectedSortBy == sortBy)
+                  ? Theme.of(context).colorScheme.secondary
+                  : null),
               ),
             ),
-          )
+          ),
+        )
       ],
       onSelected: (value) {
         if (isOffline && ((value == SortBy.playCount || value == SortBy.datePlayed))) {
