@@ -3369,7 +3369,7 @@ class QueueItem {
 class NewPlaylist {
   NewPlaylist({
     this.name,
-    required this.ids,
+    this.ids,
     this.userId,
     this.mediaType,
     this.isPublic,
@@ -3379,7 +3379,7 @@ class NewPlaylist {
   String? name;
 
   /// Gets or sets item ids to add to the playlist.
-  List<BaseItemId> ids;
+  List<BaseItemId>?ids;
 
   /// Gets or sets the user id. Required when creating playlists, but not adding
   /// to them.
@@ -3553,7 +3553,7 @@ enum SortBy {
       case SortBy.playCount:
         return "Play Count";
       case SortBy.premiereDate:
-        return "Premiere Date";
+        return "Release Date";
       case SortBy.productionYear:
         return "Production Year";
       case SortBy.sortName:
