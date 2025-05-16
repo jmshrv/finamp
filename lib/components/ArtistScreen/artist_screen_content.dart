@@ -14,7 +14,7 @@ import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../AlbumScreen/download_button.dart';
-import '../favourite_button.dart';
+import '../favorite_button.dart';
 import '../padded_custom_scrollview.dart';
 import 'artist_screen_content_flexible_space_bar.dart';
 

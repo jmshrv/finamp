@@ -1,4 +1,4 @@
-import 'package:finamp/components/favourite_button.dart';
+import 'package:finamp/components/favorite_button.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:finamp/services/genre_screen_provider.dart';
 import 'package:finamp/components/curated_item_sections.dart';
 import 'package:finamp/components/GenreScreen/genre_count_column.dart';
-import 'package:finamp/components/favourite_button.dart';
+import 'package:finamp/components/favorite_button.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/screens/music_screen.dart';
 import 'package:finamp/services/finamp_user_helper.dart';

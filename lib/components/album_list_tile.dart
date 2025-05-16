@@ -19,13 +19,13 @@ import '../services/finamp_settings_helper.dart';
 import 'AlbumScreen/download_dialog.dart';
 import 'AlbumScreen/downloaded_indicator.dart';
 import 'album_image.dart';
-import 'favourite_button.dart';
+import 'favorite_button.dart';
 import 'global_snackbar.dart';
 import 'print_duration.dart';
 
 enum AlbumListTileMenuItems {
-  addFavourite,
-  removeFavourite,
+  addFavorite,
+  removeFavorite,
   addToMixList,
   removeFromMixList,
   playNext,
@@ -121,17 +121,17 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
         items: [
           isFav
               ? PopupMenuItem<AlbumListTileMenuItems>(
-                  value: AlbumListTileMenuItems.removeFavourite,
+                  value: AlbumListTileMenuItems.removeFavorite,
                   child: ListTile(
                     leading: const Icon(Icons.favorite_border),
-                    title: Text(AppLocalizations.of(context)!.removeFavourite),
+                    title: Text(AppLocalizations.of(context)!.removeFavorite),
                   ),
                 )
               : PopupMenuItem<AlbumListTileMenuItems>(
-                  value: AlbumListTileMenuItems.addFavourite,
+                  value: AlbumListTileMenuItems.addFavorite,
                   child: ListTile(
                     leading: const Icon(Icons.favorite),
-                    title: Text(AppLocalizations.of(context)!.addFavourite),
+                    title: Text(AppLocalizations.of(context)!.addFavorite),
                   ),
                 ),
           _jellyfinApiHelper.selectedMixAlbums.contains(widget.item)
@@ -234,12 +234,12 @@ class _AlbumListTileState extends ConsumerState<AlbumListTile> {
       );
 
       switch (selection) {
-        case AlbumListTileMenuItems.addFavourite:
+        case AlbumListTileMenuItems.addFavorite:
           ref
               .read(isFavoriteProvider(widget.item).notifier)
               .updateFavorite(true);
           break;
-        case AlbumListTileMenuItems.removeFavourite:
+        case AlbumListTileMenuItems.removeFavorite:
           ref
               .read(isFavoriteProvider(widget.item).notifier)
               .updateFavorite(false);

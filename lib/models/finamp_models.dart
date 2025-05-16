@@ -105,7 +105,7 @@ class DefaultSettings {
   static const shouldTranscode = false;
   static const transcodeBitrate = 320000;
   static const androidStopForegroundOnPause = true;
-  static const onlyShowFavourites = false;
+  static const onlyShowFavorites = false;
   static const trackShuffleItemCount = 250;
   static const volumeNormalizationActive = true;
   // 80% volume in dB. In my testing, most tracks were louder than the default target
@@ -229,7 +229,7 @@ class FinampSettings {
     this.androidStopForegroundOnPause =
         DefaultSettings.androidStopForegroundOnPause,
     required this.showTabs,
-    this.onlyShowFavourites = DefaultSettings.onlyShowFavourites,
+    this.onlyShowFavorites = DefaultSettings.onlyShowFavorites,
     this.sortBy = SortBy.sortName,
     this.sortOrder = SortOrder.ascending,
     this.trackShuffleItemCount = DefaultSettings.trackShuffleItemCount,
@@ -369,10 +369,10 @@ class FinampSettings {
   @SettingsHelperMap("tabContentType", "value")
   Map<TabContentType, bool> showTabs;
 
-  /// Used to remember if the user has set their music screen to favourites
+  /// Used to remember if the user has set their music screen to favorites
   /// mode.
-  @HiveField(6, defaultValue: DefaultSettings.onlyShowFavourites)
-  bool onlyShowFavourites;
+  @HiveField(6, defaultValue: DefaultSettings.onlyShowFavorites)
+  bool onlyShowFavorites;
 
   /// Current sort by setting.
   @Deprecated("Use per-tab sort by instead")

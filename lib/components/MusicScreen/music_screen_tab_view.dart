@@ -120,14 +120,14 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         sortOrder: sortOrder,
         searchTerm: widget.searchTerm?.trim(),
         filters: (widget.isFavoriteOverride == true || 
-          (widget.isFavoriteOverride == null && settings.onlyShowFavourites)) 
+          (widget.isFavoriteOverride == null && settings.onlyShowFavorites)) 
             ? "IsFavorite" : null,
         // "filters" are not implemented in the Jellyfin API Endpoint for Genres
         // but the bool "isFavorite" is, so we use it instead (but don't set it
         // to "false", because then it will actually exclude all favorites)
         isFavorite: (widget.tabContentType.itemType == BaseItemDtoType.genre &&
             (widget.isFavoriteOverride == true || 
-            (widget.isFavoriteOverride == null && settings.onlyShowFavourites)))
+            (widget.isFavoriteOverride == null && settings.onlyShowFavorites)))
             ? true : null,
         startIndex: pageKey,
         limit: _pageSize,
@@ -172,7 +172,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
           onlyFavorites:
               (widget.isFavoriteOverride == true || 
-              (widget.isFavoriteOverride == null && settings.onlyShowFavourites)) && 
+              (widget.isFavoriteOverride == null && settings.onlyShowFavorites)) && 
               settings.trackOfflineFavorites,
           genreFilter: widget.genreFilter
       );
@@ -192,7 +192,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             settings.showDownloadsWithUnknownLibrary,
         onlyFavorites:
             (widget.isFavoriteOverride == true ||
-            (widget.isFavoriteOverride == null && settings.onlyShowFavourites)) && 
+            (widget.isFavoriteOverride == null && settings.onlyShowFavorites)) && 
             settings.trackOfflineFavorites,
         infoForType: (widget.tabContentType == TabContentType.artists)
             ? artistInfoForType
@@ -356,7 +356,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           var settings = box.get("FinampSettings")!;
           var newRefreshHash = Object.hash(
             widget.searchTerm,
-            settings.onlyShowFavourites,
+            settings.onlyShowFavorites,
             widget.isFavoriteOverride,
             settings.tabSortBy[widget.tabContentType],
             widget.sortByOverride,
@@ -401,8 +401,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                   icon: TablerIcons.filter_x,
                   text: AppLocalizations.of(context)!.resetFiltersButton,
                   onPressed: () {
-                    FinampSetters.setOnlyShowFavourites(
-                        DefaultSettings.onlyShowFavourites);
+                    FinampSetters.setOnlyShowFavorites(
+                        DefaultSettings.onlyShowFavorites);
                     FinampSetters.setOnlyShowFullyDownloaded(
                         DefaultSettings.onlyShowFullyDownloaded);
                   },

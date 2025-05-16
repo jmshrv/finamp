@@ -809,9 +809,9 @@ class JellyfinApiHelper {
   }
 
   /// Marks an item as a favorite.
-  Future<UserItemDataDto> addFavourite(BaseItemId itemId) async {
+  Future<UserItemDataDto> addFavorite(BaseItemId itemId) async {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
-    final response = await jellyfinApi.addFavourite(
+    final response = await jellyfinApi.addFavorite(
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
     final downloadsService = GetIt.instance<DownloadsService>();
@@ -824,9 +824,9 @@ class JellyfinApiHelper {
   }
 
   /// Unmarks item as a favorite.
-  Future<UserItemDataDto> removeFavourite(BaseItemId itemId) async {
+  Future<UserItemDataDto> removeFavorite(BaseItemId itemId) async {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
-    final response = await jellyfinApi.removeFavourite(
+    final response = await jellyfinApi.removeFavorite(
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
     final downloadsService = GetIt.instance<DownloadsService>();

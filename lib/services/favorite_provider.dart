@@ -81,9 +81,9 @@ class IsFavorite extends _$IsFavorite {
       try {
         UserItemDataDto newUserData;
         if (isFavorite) {
-          newUserData = await jellyfinApiHelper.addFavourite(item!.id);
+          newUserData = await jellyfinApiHelper.addFavorite(item!.id);
         } else {
-          newUserData = await jellyfinApiHelper.removeFavourite(item!.id);
+          newUserData = await jellyfinApiHelper.removeFavorite(item!.id);
         }
         state = newUserData.isFavorite;
 

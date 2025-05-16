@@ -32,8 +32,8 @@ enum TrackListTileMenuItems {
   removeFromPlaylist,
   instantMix,
   goToAlbum,
-  addFavourite,
-  removeFavourite,
+  addFavorite,
+  removeFavorite,
   download,
   delete,
 }
@@ -138,7 +138,7 @@ class TrackListTile extends ConsumerWidget {
             viewFilter: finampUserHelper.currentUser?.currentView?.id,
             nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
             onlyFavorites:
-                settings.onlyShowFavourites && settings.trackOfflineFavorites,
+                settings.onlyShowFavorites && settings.trackOfflineFavorites,
             genreFilter: genreFilter,
           );
 

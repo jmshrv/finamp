@@ -121,8 +121,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
         onPressed: () async {
           try {
             await _audioServiceHelper.shuffleAll(
-              onlyShowFavourites: (isFavoriteOverride == true || 
-                  (isFavoriteOverride == null && ref.read(finampSettingsProvider.onlyShowFavourites))),
+              onlyShowFavorites: (isFavoriteOverride == true || 
+                  (isFavoriteOverride == null && ref.read(finampSettingsProvider.onlyShowFavorites))),
               genreFilter: widget.genreFilter,
             );
           } catch (e) {
@@ -362,7 +362,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                       ref.watch(finampSettingsProvider.trackOfflineFavorites))
                     IconButton(
                       icon: (isFavoriteOverride == true || 
-                        (isFavoriteOverride == null && ref.watch(finampSettingsProvider.onlyShowFavourites)))
+                        (isFavoriteOverride == null && ref.watch(finampSettingsProvider.onlyShowFavorites)))
                           ? const Icon(Icons.favorite)
                           : const Icon(Icons.favorite_outline),
                       onPressed: () {
@@ -371,12 +371,12 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                             isFavoriteOverride = !isFavoriteOverride!;
                           });
                         } else {
-                          FinampSetters.setOnlyShowFavourites(
-                            !ref.watch(finampSettingsProvider.onlyShowFavourites),
+                          FinampSetters.setOnlyShowFavorites(
+                            !ref.watch(finampSettingsProvider.onlyShowFavorites),
                           );
                         }
                       },
-                      tooltip: AppLocalizations.of(context)!.favourites,
+                      tooltip: AppLocalizations.of(context)!.favorites,
                     ),
                   IconButton(
                     icon: const Icon(Icons.search),

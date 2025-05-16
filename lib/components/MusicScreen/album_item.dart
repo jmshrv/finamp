@@ -27,8 +27,8 @@ import '../global_snackbar.dart';
 import 'album_item_card.dart';
 
 enum _AlbumListTileMenuItems {
-  addFavourite,
-  removeFavourite,
+  addFavorite,
+  removeFavorite,
   addToMixList,
   removeFromMixList,
   download,
@@ -194,20 +194,20 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
           ref.watch(isFavoriteProvider(mutableAlbum))
               ? PopupMenuItem<_AlbumListTileMenuItems>(
                   enabled: !isOffline,
-                  value: _AlbumListTileMenuItems.removeFavourite,
+                  value: _AlbumListTileMenuItems.removeFavorite,
                   child: ListTile(
                     enabled: !isOffline,
                     leading: const Icon(Icons.favorite_border),
-                    title: Text(local.removeFavourite),
+                    title: Text(local.removeFavorite),
                   ),
                 )
               : PopupMenuItem<_AlbumListTileMenuItems>(
                   enabled: !isOffline,
-                  value: _AlbumListTileMenuItems.addFavourite,
+                  value: _AlbumListTileMenuItems.addFavorite,
                   child: ListTile(
                     enabled: !isOffline,
                     leading: const Icon(Icons.favorite),
-                    title: Text(local.addFavourite),
+                    title: Text(local.addFavorite),
                   ),
                 ),
           _jellyfinApiHelper.selectedMixAlbums
@@ -334,12 +334,12 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
       if (!context.mounted) return;
 
       switch (selection) {
-        case _AlbumListTileMenuItems.addFavourite:
+        case _AlbumListTileMenuItems.addFavorite:
           ref
               .read(isFavoriteProvider(mutableAlbum).notifier)
               .updateFavorite(true);
           break;
-        case _AlbumListTileMenuItems.removeFavourite:
+        case _AlbumListTileMenuItems.removeFavorite:
           ref
               .read(isFavoriteProvider(mutableAlbum).notifier)
               .updateFavorite(false);

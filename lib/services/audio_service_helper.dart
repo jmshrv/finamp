@@ -20,7 +20,7 @@ class AudioServiceHelper {
 
   /// Shuffles every track in the user's current view.
   Future<void> shuffleAll({
-    required bool onlyShowFavourites,
+    required bool onlyShowFavorites,
     BaseItemDto? genreFilter,
   }) async {
     List<jellyfin_models.BaseItemDto>? items;
@@ -33,7 +33,7 @@ class AudioServiceHelper {
       items = (await _isarDownloader.getAllTracks(
               viewFilter: _finampUserHelper.currentUser?.currentView?.id,
               genreFilter: genreFilter,
-              onlyFavorites: onlyShowFavourites,
+              onlyFavorites: onlyShowFavorites,
               nullableViewFilters: FinampSettingsHelper
                   .finampSettings.showDownloadsWithUnknownLibrary))
           .map((e) => e.baseItem!)
@@ -49,7 +49,7 @@ class AudioServiceHelper {
       items = await _jellyfinApiHelper.getItems(
         parentItem: _finampUserHelper.currentUser!.currentView,
         includeItemTypes: "Audio",
-        filters: onlyShowFavourites ? "IsFavorite" : null,
+        filters: onlyShowFavorites ? "IsFavorite" : null,
         limit: FinampSettingsHelper.finampSettings.trackShuffleItemCount,
         sortBy: "Random",
         genreFilter: genreFilter
@@ -68,11 +68,11 @@ class AudioServiceHelper {
           item: genreFilter,
         )
         : QueueItemSource.rawId(
-          type: onlyShowFavourites
+          type: onlyShowFavorites
               ? QueueItemSourceType.favorites
               : QueueItemSourceType.allTracks,
           name: QueueItemSourceName(
-            type: onlyShowFavourites
+            type: onlyShowFavorites
                 ? QueueItemSourceNameType.yourLikes
                 : QueueItemSourceNameType.shuffleAll,
           ),

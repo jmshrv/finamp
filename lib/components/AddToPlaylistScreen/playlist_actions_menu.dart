@@ -48,7 +48,7 @@ Future<void> showPlaylistActionsMenu({
             builder: (context, ref, child) {
               bool isFavorite = ref.watch(isFavoriteProvider(item));
               return ToggleableListTile(
-                title: AppLocalizations.of(context)!.favourites,
+                title: AppLocalizations.of(context)!.favorites,
                 leading: AspectRatio(
                   aspectRatio: 1.0,
                   child: DecoratedBox(
