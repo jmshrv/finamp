@@ -58,6 +58,15 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     super.dispose();
   }
 
+  Future<void> _refresh() async {
+    ref.invalidate(getArtistTracksSectionProvider);
+    ref.invalidate(getArtistAlbumsProvider);
+    ref.invalidate(getPerformingArtistAlbumsProvider);
+    ref.invalidate(getPerformingArtistTracksProvider);
+    ref.invalidate(getAllTracksProvider);
+    _disabledTrackFilters.clear();
+  }
+
   // Function to update the genre filter
   // Pass null in order to reset the filter
   void updateGenreFilter(BaseItemDto? genre) {
@@ -79,7 +88,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     List<BaseItemDto> allChildren = [];
   
     final (topTracksAsync, artistCuratedItemSelectionType, newDisabledTrackFilters) = ref.watch(
-        getArtistTopTracksProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull ?? (null, null, null);
+        getArtistTracksSectionProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull ?? (null, null, null);
     final albumArtistAlbumsAsync = ref.watch(
         getArtistAlbumsProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull;
     final performingArtistAlbumsAsync = ref.watch(
@@ -95,6 +104,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     if (newDisabledTrackFilters != null) {
       _disabledTrackFilters.addAll(newDisabledTrackFilters.whereType<CuratedItemSelectionType>());
     }
+    _disabledTrackFilters.remove(artistCuratedItemSelectionType);
 
     final topTracks = topTracksAsync ?? [];
     final albumArtistAlbums = albumArtistAlbumsAsync ?? [];
@@ -109,119 +119,122 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     // for the Download Status Sync Display for Artists
     allChildren = [...albumArtistAlbums, ...allPerformingArtistTracks];
 
-    return PaddedCustomScrollview(slivers: <Widget>[
-      SliverAppBar(
-        title: Text(widget.parent.name ??
-            AppLocalizations.of(context)!.unknownName),
-        // 125 + 116 is the total height of the widget we use as a
-        // FlexibleSpaceBar. We add the toolbar height since the widget
-        // should appear below the appbar.
-        expandedHeight: kToolbarHeight + 125 + 96,
-        centerTitle: false,
-        pinned: true,
-        flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
-          parentItem: widget.parent,
-          isGenre: false,
-          allTracks: allTracks,
-          albumCount: albumArtistAlbums.length,
-          genreFilter: currentGenreFilter,
-          updateGenreFilter: updateGenreFilter,
-        ),
-        actions: [
-          FavoriteButton(item: widget.parent),
-          if (!isLoading)
-            DownloadButton(
-              item: DownloadStub.fromFinampCollection(
-                FinampCollection(
-                    type: FinampCollectionType.collectionWithLibraryFilter,
-                    library: library,
-                    item: widget.parent,
-                )
+    return RefreshIndicator(
+      onRefresh: _refresh,
+      child: PaddedCustomScrollview(slivers: <Widget>[
+        SliverAppBar(
+          title: Text(widget.parent.name ??
+              AppLocalizations.of(context)!.unknownName),
+          // 125 + 116 is the total height of the widget we use as a
+          // FlexibleSpaceBar. We add the toolbar height since the widget
+          // should appear below the appbar.
+          expandedHeight: kToolbarHeight + 125 + 96,
+          centerTitle: false,
+          pinned: true,
+          flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
+            parentItem: widget.parent,
+            isGenre: false,
+            allTracks: allTracks,
+            albumCount: albumArtistAlbums.length,
+            genreFilter: currentGenreFilter,
+            updateGenreFilter: updateGenreFilter,
+          ),
+          actions: [
+            FavoriteButton(item: widget.parent),
+            if (!isLoading)
+              DownloadButton(
+                item: DownloadStub.fromFinampCollection(
+                  FinampCollection(
+                      type: FinampCollectionType.collectionWithLibraryFilter,
+                      library: library,
+                      item: widget.parent,
+                  )
+                ),
+                children: allChildren,
+                downloadDisabled: (currentGenreFilter != null),
+                customTooltip: (currentGenreFilter != null)
+                    ? AppLocalizations.of(context)!.downloadButtonDisabledGenreFilterTooltip
+                    : null,
               ),
-              children: allChildren,
-              downloadDisabled: (currentGenreFilter != null),
-              customTooltip: (currentGenreFilter != null)
-                  ? AppLocalizations.of(context)!.downloadButtonDisabledGenreFilterTooltip
-                  : null,
-            ),
-        ],
-      ),
-      if (!isLoading)
-        ...artistItemSectionsOrder.map((type) {
-          switch (type) {
-            case ArtistItemSections.tracks:
-              if (ref.watch(finampSettingsProvider.showArtistsTracksSection)) {
-                return SliverPadding(
-                  padding: const EdgeInsets.all(0),
-                  sliver: TracksSection(
-                    parent: widget.parent,
-                    tracks: topTracks,
-                    childrenForQueue: Future.value(topTracks),
-                    tracksText: type.toLocalisedSectionTitle(context, artistCuratedItemSelectionType),
-                    includeFilterRow: true,
-                    customFilterOrder: artistCuratedItemSectionFilterOrder,
-                    selectedFilter: artistCuratedItemSelectionType,
-                    disabledFilters: _disabledTrackFilters.toList(),
-                    onFilterSelected: (type) {
-                      FinampSetters.setArtistCuratedItemSelectionType(type);
-                    },
+          ],
+        ),
+        if (!isLoading)
+          ...artistItemSectionsOrder.map((type) {
+            switch (type) {
+              case ArtistItemSections.tracks:
+                if (ref.watch(finampSettingsProvider.showArtistsTracksSection)) {
+                  return SliverPadding(
+                    padding: const EdgeInsets.all(0),
+                    sliver: TracksSection(
+                      parent: widget.parent,
+                      tracks: topTracks,
+                      childrenForQueue: Future.value(topTracks),
+                      tracksText: type.toLocalisedSectionTitle(context, artistCuratedItemSelectionType),
+                      includeFilterRow: true,
+                      customFilterOrder: artistCuratedItemSectionFilterOrder,
+                      selectedFilter: artistCuratedItemSelectionType,
+                      disabledFilters: _disabledTrackFilters.toList(),
+                      onFilterSelected: (type) {
+                        FinampSetters.setArtistCuratedItemSelectionType(type);
+                      },
+                    ),
+                  );
+                }
+                return const SliverToBoxAdapter(child: SizedBox.shrink());
+              case ArtistItemSections.albums:
+                if (albumArtistAlbums.isNotEmpty) {
+                  return SliverPadding(
+                    padding: const EdgeInsets.all(0),
+                    sliver: AlbumSection(
+                      parent: widget.parent,
+                      albumsText: AppLocalizations.of(context)!.albums,
+                      albums: albumArtistAlbums
+                    ),
+                  );
+                }
+                return const SliverToBoxAdapter(child: SizedBox.shrink());
+              case ArtistItemSections.appearsOn:
+                if (appearsOnAlbums.isNotEmpty) {
+                  return SliverPadding(
+                    padding: const EdgeInsets.all(0),
+                    sliver: AlbumSection(
+                      parent: widget.parent,
+                      albumsText: AppLocalizations.of(context)!.appearsOnAlbums,
+                      albums: appearsOnAlbums
+                    ),
+                  );
+                }
+                return const SliverToBoxAdapter(child: SizedBox.shrink());
+            }
+          }),
+        if (!isLoading && (albumArtistAlbums.isEmpty && appearsOnAlbums.isEmpty))
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(6, 12, 6,
+                0),
+            sliver: SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 2, vertical: 12),
+                child: Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.emptyFilteredListTitle,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                );
-              }
-              return const SliverToBoxAdapter(child: SizedBox.shrink());
-            case ArtistItemSections.albums:
-              if (albumArtistAlbums.isNotEmpty) {
-                return SliverPadding(
-                  padding: const EdgeInsets.all(0),
-                  sliver: AlbumSection(
-                    parent: widget.parent,
-                    albumsText: AppLocalizations.of(context)!.albums,
-                    albums: albumArtistAlbums
-                  ),
-                );
-              }
-              return const SliverToBoxAdapter(child: SizedBox.shrink());
-            case ArtistItemSections.appearsOn:
-              if (appearsOnAlbums.isNotEmpty) {
-                return SliverPadding(
-                  padding: const EdgeInsets.all(0),
-                  sliver: AlbumSection(
-                    parent: widget.parent,
-                    albumsText: AppLocalizations.of(context)!.appearsOnAlbums,
-                    albums: appearsOnAlbums
-                  ),
-                );
-              }
-              return const SliverToBoxAdapter(child: SizedBox.shrink());
-          }
-        }),
-      if (!isLoading && (albumArtistAlbums.isEmpty && appearsOnAlbums.isEmpty))
-        SliverPadding(
-          padding: const EdgeInsets.fromLTRB(6, 12, 6,
-              0),
-          sliver: SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 2, vertical: 12),
-              child: Center(
-                child: Text(
-                  AppLocalizations.of(context)!.emptyFilteredListTitle,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
           ),
-        ),
-      if (isLoading)
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-            child: Center(
-              child: CircularProgressIndicator.adaptive(),
+        if (isLoading)
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              child: Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
             ),
-          ),
-        )
-    ]);
+          )
+      ]),
+    );
   }
 }

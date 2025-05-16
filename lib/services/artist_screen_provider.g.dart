@@ -6,8 +6,8 @@ part of 'artist_screen_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getArtistTopTracksHash() =>
-    r'773aef6dc7b523ebf6e9cdd37d7ed880a075c02a';
+String _$getArtistTracksSectionHash() =>
+    r'9cc1ff8e3490dacce062e0653f73a3f7831a7a9c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,28 +30,28 @@ class _SystemHash {
   }
 }
 
-/// See also [getArtistTopTracks].
-@ProviderFor(getArtistTopTracks)
-const getArtistTopTracksProvider = GetArtistTopTracksFamily();
+/// See also [getArtistTracksSection].
+@ProviderFor(getArtistTracksSection)
+const getArtistTracksSectionProvider = GetArtistTracksSectionFamily();
 
-/// See also [getArtistTopTracks].
-class GetArtistTopTracksFamily extends Family<
+/// See also [getArtistTracksSection].
+class GetArtistTracksSectionFamily extends Family<
     AsyncValue<
         (
           List<BaseItemDto>,
           CuratedItemSelectionType,
           Set<CuratedItemSelectionType>?
         )>> {
-  /// See also [getArtistTopTracks].
-  const GetArtistTopTracksFamily();
+  /// See also [getArtistTracksSection].
+  const GetArtistTracksSectionFamily();
 
-  /// See also [getArtistTopTracks].
-  GetArtistTopTracksProvider call(
+  /// See also [getArtistTracksSection].
+  GetArtistTracksSectionProvider call(
     BaseItemDto parent,
     BaseItemDto? library,
     BaseItemDto? genreFilter,
   ) {
-    return GetArtistTopTracksProvider(
+    return GetArtistTracksSectionProvider(
       parent,
       library,
       genreFilter,
@@ -59,8 +59,8 @@ class GetArtistTopTracksFamily extends Family<
   }
 
   @override
-  GetArtistTopTracksProvider getProviderOverride(
-    covariant GetArtistTopTracksProvider provider,
+  GetArtistTracksSectionProvider getProviderOverride(
+    covariant GetArtistTracksSectionProvider provider,
   ) {
     return call(
       provider.parent,
@@ -81,43 +81,43 @@ class GetArtistTopTracksFamily extends Family<
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'getArtistTopTracksProvider';
+  String? get name => r'getArtistTracksSectionProvider';
 }
 
-/// See also [getArtistTopTracks].
-class GetArtistTopTracksProvider extends AutoDisposeFutureProvider<
+/// See also [getArtistTracksSection].
+class GetArtistTracksSectionProvider extends AutoDisposeFutureProvider<
     (
       List<BaseItemDto>,
       CuratedItemSelectionType,
       Set<CuratedItemSelectionType>?
     )> {
-  /// See also [getArtistTopTracks].
-  GetArtistTopTracksProvider(
+  /// See also [getArtistTracksSection].
+  GetArtistTracksSectionProvider(
     BaseItemDto parent,
     BaseItemDto? library,
     BaseItemDto? genreFilter,
   ) : this._internal(
-          (ref) => getArtistTopTracks(
-            ref as GetArtistTopTracksRef,
+          (ref) => getArtistTracksSection(
+            ref as GetArtistTracksSectionRef,
             parent,
             library,
             genreFilter,
           ),
-          from: getArtistTopTracksProvider,
-          name: r'getArtistTopTracksProvider',
+          from: getArtistTracksSectionProvider,
+          name: r'getArtistTracksSectionProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$getArtistTopTracksHash,
-          dependencies: GetArtistTopTracksFamily._dependencies,
+                  : _$getArtistTracksSectionHash,
+          dependencies: GetArtistTracksSectionFamily._dependencies,
           allTransitiveDependencies:
-              GetArtistTopTracksFamily._allTransitiveDependencies,
+              GetArtistTracksSectionFamily._allTransitiveDependencies,
           parent: parent,
           library: library,
           genreFilter: genreFilter,
         );
 
-  GetArtistTopTracksProvider._internal(
+  GetArtistTracksSectionProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -141,13 +141,13 @@ class GetArtistTopTracksProvider extends AutoDisposeFutureProvider<
                   CuratedItemSelectionType,
                   Set<CuratedItemSelectionType>?
                 )>
-            Function(GetArtistTopTracksRef provider)
+            Function(GetArtistTracksSectionRef provider)
         create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: GetArtistTopTracksProvider._internal(
-        (ref) => create(ref as GetArtistTopTracksRef),
+      override: GetArtistTracksSectionProvider._internal(
+        (ref) => create(ref as GetArtistTracksSectionRef),
         from: from,
         name: null,
         dependencies: null,
@@ -167,12 +167,12 @@ class GetArtistTopTracksProvider extends AutoDisposeFutureProvider<
         CuratedItemSelectionType,
         Set<CuratedItemSelectionType>?
       )> createElement() {
-    return _GetArtistTopTracksProviderElement(this);
+    return _GetArtistTracksSectionProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is GetArtistTopTracksProvider &&
+    return other is GetArtistTracksSectionProvider &&
         other.parent == parent &&
         other.library == library &&
         other.genreFilter == genreFilter;
@@ -191,7 +191,7 @@ class GetArtistTopTracksProvider extends AutoDisposeFutureProvider<
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin GetArtistTopTracksRef on AutoDisposeFutureProviderRef<
+mixin GetArtistTracksSectionRef on AutoDisposeFutureProviderRef<
     (
       List<BaseItemDto>,
       CuratedItemSelectionType,
@@ -207,22 +207,23 @@ mixin GetArtistTopTracksRef on AutoDisposeFutureProviderRef<
   BaseItemDto? get genreFilter;
 }
 
-class _GetArtistTopTracksProviderElement
+class _GetArtistTracksSectionProviderElement
     extends AutoDisposeFutureProviderElement<
         (
           List<BaseItemDto>,
           CuratedItemSelectionType,
           Set<CuratedItemSelectionType>?
-        )> with GetArtistTopTracksRef {
-  _GetArtistTopTracksProviderElement(super.provider);
+        )> with GetArtistTracksSectionRef {
+  _GetArtistTracksSectionProviderElement(super.provider);
 
   @override
-  BaseItemDto get parent => (origin as GetArtistTopTracksProvider).parent;
+  BaseItemDto get parent => (origin as GetArtistTracksSectionProvider).parent;
   @override
-  BaseItemDto? get library => (origin as GetArtistTopTracksProvider).library;
+  BaseItemDto? get library =>
+      (origin as GetArtistTracksSectionProvider).library;
   @override
   BaseItemDto? get genreFilter =>
-      (origin as GetArtistTopTracksProvider).genreFilter;
+      (origin as GetArtistTracksSectionProvider).genreFilter;
 }
 
 String _$getArtistAlbumsHash() => r'0224beeee2ebe77aeb7d302ae2b3d063c77017ec';

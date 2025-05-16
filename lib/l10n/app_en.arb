@@ -640,7 +640,7 @@
   "@autoSwitchItemCurationTypeSubtitle": {},
   "showArtistsTracksSection": "Show Tracks Section",
   "@showArtistsTracksSection": {},
-  "showArtistsTracksSectionSubtitle": "Whether to show a section with up to five tracks. When enabled, you can choose between Most Played, Favorite, Random, Latest Releases and Recently Added Tracks.",
+  "showArtistsTracksSectionSubtitle": "Whether to show a section with up to five tracks. When enabled, you can choose between Most Played, Favorite, Random, Latest Releases, Recently Added and Recently Played Tracks.",
   "@showArtistsTracksSectionSubtitle": {},
   "disableGesture": "Disable gestures",
   "@disableGesture": {},

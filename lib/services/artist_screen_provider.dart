@@ -14,9 +14,9 @@ import 'jellyfin_api_helper.dart';
 
 part 'artist_screen_provider.g.dart';
 
-// Get the Top Tracks of an artist
+// Get the Tracks Section content of an artist
 @riverpod
-Future<(List<BaseItemDto>, CuratedItemSelectionType, Set<CuratedItemSelectionType>?)> getArtistTopTracks(
+Future<(List<BaseItemDto>, CuratedItemSelectionType, Set<CuratedItemSelectionType>?)> getArtistTracksSection(
   Ref ref,
   BaseItemDto parent,
   BaseItemDto? library,
@@ -34,7 +34,7 @@ Future<(List<BaseItemDto>, CuratedItemSelectionType, Set<CuratedItemSelectionTyp
       filterListFor: BaseItemDtoType.track,
       customFilterOrder: artistCuratedItemSectionFilterOrder,
   );
-  // If Top Tracks are disabled, we return an empty list
+  // If Tracks Section is disabled, we return an empty list
   if (!ref.watch(finampSettingsProvider.showArtistsTracksSection)) {
     return (<BaseItemDto>[], currentSelectionType, null);
   }
@@ -56,7 +56,6 @@ Future<(List<BaseItemDto>, CuratedItemSelectionType, Set<CuratedItemSelectionTyp
       return items;
     } else {
       // In Online Mode:
-      // Get Top 5 Tracks sorted by Play Count
       final List<BaseItemDto>? topAlbumArtistTracks = 
         await jellyfinApiHelper.getItems(
             libraryFilter: library,
