@@ -68,7 +68,10 @@ class AlbumItemListTile extends StatelessWidget {
                     item.name ?? AppLocalizations.of(context)!.unknownName,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  downloadedIndicator,
+                  Transform.translate(
+                    offset: const Offset(-2, 0),
+                    child: downloadedIndicator,
+                  ),
                 ],
             )
           : Text(
