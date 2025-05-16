@@ -154,6 +154,7 @@ class TracksSliverList extends ConsumerStatefulWidget {
     this.onRemoveFromList,
     this.showPlayCount = false,
     this.isOnArtistScreen = false,
+    this.isOnGenreScreen = false,
   });
 
   final List<BaseItemDto> childrenForList;
@@ -162,6 +163,7 @@ class TracksSliverList extends ConsumerStatefulWidget {
   final BaseItemDtoCallback? onRemoveFromList;
   final bool showPlayCount;
   final bool isOnArtistScreen;
+  final bool isOnGenreScreen;
 
   @override
   ConsumerState<TracksSliverList> createState() => _TracksSliverListState();
@@ -231,6 +233,7 @@ class _TracksSliverListState extends ConsumerState<TracksSliverList> {
             },
             isInPlaylist: widget.parent.type == "Playlist",
             isOnArtistScreen: widget.isOnArtistScreen,
+            isOnGenreScreen: widget.isOnGenreScreen,
             showPlayCount: widget.showPlayCount,
           );
         },

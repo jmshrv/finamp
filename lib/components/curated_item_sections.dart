@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:finamp/components/AlbumScreen/album_screen_content.dart';
 import 'package:finamp/components/curated_item_filter_row.dart';
-import 'package:finamp/components/albums_sliver_list.dart';
+import 'package:finamp/components/collections_sliver_list.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
@@ -23,6 +23,8 @@ class TracksSection extends ConsumerStatefulWidget {
     this.selectedFilter,
     this.disabledFilters,
     this.onFilterSelected,
+    this.isOnArtistScreen = false,
+    this.isOnGenreScreen = false,
   });
 
   final BaseItemDto parent;
@@ -36,6 +38,8 @@ class TracksSection extends ConsumerStatefulWidget {
   final CuratedItemSelectionType? selectedFilter;
   final List<CuratedItemSelectionType>? disabledFilters;
   final void Function(CuratedItemSelectionType type)? onFilterSelected;
+  final bool isOnArtistScreen;
+  final bool isOnGenreScreen;
 
   @override
   ConsumerState<TracksSection> createState() => _TracksSectionState();
@@ -193,8 +197,9 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
                   childrenForList: widget.tracks!,
                   childrenForQueue: widget.childrenForQueue!,
                   showPlayCount: true,
-                  isOnArtistScreen: true,
                   parent: widget.parent,
+                  isOnArtistScreen: widget.isOnArtistScreen,
+                  isOnGenreScreen: widget.isOnGenreScreen,
                 )
               else
                 SliverToBoxAdapter(
@@ -220,11 +225,12 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
   }
 }
 
-class AlbumSection extends ConsumerStatefulWidget {
-  const AlbumSection({super.key, 
+class CollectionsSection extends ConsumerStatefulWidget {
+  const CollectionsSection({super.key, 
     required this.parent,
-    required this.albumsText,
-    this.albums,
+    required this.itemsText,
+    this.items,
+    this.albumsShowYearAndDurationInstead = false,
     this.seeAllCallbackFunction,
     this.genreFilter,
     this.includeFilterRowFor,
@@ -235,8 +241,9 @@ class AlbumSection extends ConsumerStatefulWidget {
   });
 
   final BaseItemDto parent;
-  final String albumsText;
-  final List<BaseItemDto>? albums;
+  final String itemsText;
+  final List<BaseItemDto>? items;
+  final bool albumsShowYearAndDurationInstead;
   final VoidCallback? seeAllCallbackFunction;
   final BaseItemDto? genreFilter;
   final BaseItemDtoType? includeFilterRowFor;
@@ -246,11 +253,11 @@ class AlbumSection extends ConsumerStatefulWidget {
   final void Function(CuratedItemSelectionType type)? onFilterSelected;
 
   @override
-  ConsumerState<AlbumSection> createState() => _AlbumSectionState();
+  ConsumerState<CollectionsSection> createState() => _ItemsSectionState();
 }
 
-class _AlbumSectionState extends ConsumerState<AlbumSection> {
-  bool _showAlbums = true;
+class _ItemsSectionState extends ConsumerState<CollectionsSection> {
+  bool _showItems = true;
   bool _isExpandable = true;
   bool _manuallyClosed = false;
 
@@ -261,27 +268,27 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
   }
 
   @override
-  void didUpdateWidget(covariant AlbumSection oldWidget) {
+  void didUpdateWidget(covariant CollectionsSection oldWidget) {
     super.didUpdateWidget(oldWidget);
     _evaluateAlbumVisibility();
   }
 
   void _evaluateAlbumVisibility() {
-    final hasAlbums = widget.albums != null && widget.albums!.isNotEmpty;
+    final hasItems = widget.items != null && widget.items!.isNotEmpty;
 
-    if (hasAlbums || widget.includeFilterRowFor != null) {
-      if (!_showAlbums || !_isExpandable) {
+    if (hasItems || widget.includeFilterRowFor != null) {
+      if (!_showItems || !_isExpandable) {
         setState(() {
           if (!_manuallyClosed) {
-            _showAlbums = true;
+            _showItems = true;
           }
           _isExpandable = true;
         });
       }
     } else {
-      if (_showAlbums || _isExpandable) {
+      if (_showItems || _isExpandable) {
         setState(() {
-          _showAlbums = false;
+          _showItems = false;
           _isExpandable = false;
         });
       }
@@ -321,8 +328,8 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
           onTap: () {
             if (_isExpandable) {
               setState(() {
-                _manuallyClosed = _showAlbums;
-                _showAlbums = !_showAlbums;
+                _manuallyClosed = _showItems;
+                _showItems = !_showItems;
               });
             }
           },
@@ -338,14 +345,14 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
                     children: [
                       if (_isExpandable)
                         Transform.rotate(
-                          angle: _showAlbums ? 0 : -math.pi / 2,
+                          angle: _showItems ? 0 : -math.pi / 2,
                           child: const Icon(Icons.arrow_drop_down, size: 24),
                         ),
                       if (_isExpandable)
                         const SizedBox(width: 4),
                       Expanded(
                         child: Text(
-                          widget.albumsText,
+                          widget.itemsText,
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -384,7 +391,7 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
           ),
         ),
       ),
-      sliver: _showAlbums
+      sliver: _showItems
           ? SliverMainAxisGroup(
               slivers: [
                 if (widget.includeFilterRowFor != null)
@@ -397,11 +404,12 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
                     disabledFilters: widget.disabledFilters,
                     onFilterSelected: widget.onFilterSelected,
                   ),
-                if (widget.albums != null && widget.albums!.isNotEmpty)
-                  AlbumsSliverList(
-                    childrenForList: widget.albums!,
+                if (widget.items != null && widget.items!.isNotEmpty)
+                  CollectionsSliverList(
+                    childrenForList: widget.items!,
                     parent: widget.parent,
                     genreFilter: widget.genreFilter,
+                    albumShowsYearAndDurationInstead: widget.albumsShowYearAndDurationInstead,
                   )
                 else
                   SliverToBoxAdapter(

@@ -1803,18 +1803,20 @@ enum QueueItemSourceType {
   @HiveField(13)
   nextUpArtist,
   @HiveField(14)
-  formerNextUp,
+  nextUpGenre,
   @HiveField(15)
-  downloads,
+  formerNextUp,
   @HiveField(16)
-  queue,
+  downloads,
   @HiveField(17)
-  unknown,
+  queue,
   @HiveField(18)
-  genreMix,
+  unknown,
   @HiveField(19)
-  track,
+  genreMix,
   @HiveField(20)
+  track,
+  @HiveField(21)
   remoteClient;
 }
 

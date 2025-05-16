@@ -1470,18 +1470,20 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
       case 13:
         return QueueItemSourceType.nextUpArtist;
       case 14:
-        return QueueItemSourceType.formerNextUp;
+        return QueueItemSourceType.nextUpGenre;
       case 15:
-        return QueueItemSourceType.downloads;
+        return QueueItemSourceType.formerNextUp;
       case 16:
-        return QueueItemSourceType.queue;
+        return QueueItemSourceType.downloads;
       case 17:
-        return QueueItemSourceType.unknown;
+        return QueueItemSourceType.queue;
       case 18:
-        return QueueItemSourceType.genreMix;
+        return QueueItemSourceType.unknown;
       case 19:
-        return QueueItemSourceType.track;
+        return QueueItemSourceType.genreMix;
       case 20:
+        return QueueItemSourceType.track;
+      case 21:
         return QueueItemSourceType.remoteClient;
       default:
         return QueueItemSourceType.album;
@@ -1519,20 +1521,22 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
         writer.writeByte(12);
       case QueueItemSourceType.nextUpArtist:
         writer.writeByte(13);
-      case QueueItemSourceType.formerNextUp:
+      case QueueItemSourceType.nextUpGenre:
         writer.writeByte(14);
-      case QueueItemSourceType.downloads:
+      case QueueItemSourceType.formerNextUp:
         writer.writeByte(15);
-      case QueueItemSourceType.queue:
+      case QueueItemSourceType.downloads:
         writer.writeByte(16);
-      case QueueItemSourceType.unknown:
+      case QueueItemSourceType.queue:
         writer.writeByte(17);
-      case QueueItemSourceType.genreMix:
+      case QueueItemSourceType.unknown:
         writer.writeByte(18);
-      case QueueItemSourceType.track:
+      case QueueItemSourceType.genreMix:
         writer.writeByte(19);
-      case QueueItemSourceType.remoteClient:
+      case QueueItemSourceType.track:
         writer.writeByte(20);
+      case QueueItemSourceType.remoteClient:
+        writer.writeByte(21);
     }
   }
 

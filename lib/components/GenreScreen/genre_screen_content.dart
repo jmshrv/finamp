@@ -251,6 +251,7 @@ void openSeeAll(
                       ? genreCuratedItemSelectionTypeTracks
                           .toLocalisedSectionTitle(context, BaseItemDtoType.track)
                       : loc.tracks,
+                  isOnGenreScreen: true,
                   seeAllCallbackFunction: () => openSeeAll(
                     TabContentType.tracks,
                     itemSelectionType: genreCuratedItemSelectionTypeTracks,
@@ -268,13 +269,13 @@ void openSeeAll(
             case GenreItemSections.albums:
               return SliverPadding(
                 padding: const EdgeInsets.only(bottom: 12.0),
-                sliver: AlbumSection(
+                sliver: CollectionsSection(
                   parent: widget.parent,
-                  albumsText: (genreCuratedItemSelectionTypeAlbums != null) 
+                  itemsText: (genreCuratedItemSelectionTypeAlbums != null) 
                       ? genreCuratedItemSelectionTypeAlbums
                           .toLocalisedSectionTitle(context, BaseItemDtoType.album)
                       : loc.albums,
-                  albums: albums,
+                  items: albums,
                   seeAllCallbackFunction: () => openSeeAll(
                     TabContentType.albums, 
                     itemSelectionType: genreCuratedItemSelectionTypeAlbums,
@@ -292,13 +293,13 @@ void openSeeAll(
             case GenreItemSections.artists:
               return SliverPadding(
                 padding: const EdgeInsets.only(bottom: 12.0),
-                sliver: AlbumSection(
+                sliver: CollectionsSection(
                   parent: widget.parent,
-                  albumsText:  (genreCuratedItemSelectionTypeArtists != null) 
+                  itemsText:  (genreCuratedItemSelectionTypeArtists != null) 
                       ? genreCuratedItemSelectionTypeArtists
                           .toLocalisedSectionTitle(context, BaseItemDtoType.artist)
                       : loc.artists,
-                  albums: artists,
+                  items: artists,
                   seeAllCallbackFunction: () => openSeeAll(
                     TabContentType.artists,
                     itemSelectionType: genreCuratedItemSelectionTypeArtists,

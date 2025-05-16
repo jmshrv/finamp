@@ -68,6 +68,7 @@ class TrackListTile extends ConsumerWidget {
     /// the remove from playlist button.
     this.isInPlaylist = false,
     this.isOnArtistScreen = false,
+    this.isOnGenreScreen = false,
     this.isShownInSearch = false,
     this.allowDismiss = true,
     this.highlightCurrentTrack = true,
@@ -85,6 +86,7 @@ class TrackListTile extends ConsumerWidget {
   final bool showPlayCount;
   final bool isInPlaylist;
   final bool isOnArtistScreen;
+  final bool isOnGenreScreen;
   final bool isShownInSearch;
   final bool allowDismiss;
   final bool highlightCurrentTrack;
@@ -108,17 +110,19 @@ class TrackListTile extends ConsumerWidget {
                 ? QueueItemSourceType.playlist
                 : isOnArtistScreen
                     ? QueueItemSourceType.artist
-                    : QueueItemSourceType.album,
+                    : isOnGenreScreen
+                        ? QueueItemSourceType.genre
+                        : QueueItemSourceType.album,
             name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: ((isInPlaylist || isOnArtistScreen)
+                pretranslatedName: ((isInPlaylist || isOnArtistScreen || isOnGenreScreen)
                         ? parentItem?.name
                         : item.album) ??
                     AppLocalizations.of(context)!.placeholderSource),
             id: parentItem?.id.raw ?? "",
             item: parentItem,
             // we're playing from an album, so we should use the album's normalization gain.
-            contextNormalizationGain: (isInPlaylist || isOnArtistScreen)
+            contextNormalizationGain: (isInPlaylist || isOnArtistScreen || isOnGenreScreen)
                 ? null
                 : parentItem?.normalizationGain,
           ),

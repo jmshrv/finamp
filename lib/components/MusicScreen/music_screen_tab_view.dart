@@ -21,7 +21,7 @@ import '../AlbumScreen/track_list_tile.dart';
 import '../first_page_progress_indicator.dart';
 import '../global_snackbar.dart';
 import '../new_page_progress_indicator.dart';
-import 'album_item.dart';
+import 'collection_item.dart';
 import 'alphabet_item_list.dart';
 
 // this is used to allow refreshing the music screen from other parts of the app, e.g. after deleting items from the server
@@ -444,10 +444,12 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                   // we can allow Dismiss gestures in the track list
                                   allowDismiss: widget.tabBarFiltered,
                                   genreFilter: widget.genreFilter,
+                                  isOnGenreScreen: (widget.genreFilter != null) ? true : false,
+                                  parentItem: widget.genreFilter,
                                 )
-                              : AlbumItem(
+                              : CollectionItem(
                                   key: ValueKey(item.id),
-                                  album: item,
+                                  item: item,
                                   isPlaylist: widget.tabContentType ==
                                       TabContentType.playlists,
                                   genreFilter: widget.genreFilter,
@@ -476,9 +478,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                         key: ValueKey(index),
                         controller: controller,
                         index: index,
-                        child: AlbumItem(
+                        child: CollectionItem(
                           key: ValueKey(item.id),
-                          album: item,
+                          item: item,
                           isPlaylist:
                               widget.tabContentType == TabContentType.playlists,
                           isGrid: true,

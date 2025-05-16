@@ -141,7 +141,6 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
           pinned: true,
           flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
             parentItem: widget.parent,
-            isGenre: false,
             allTracks: allTracks,
             albumCount: albumArtistAlbums.length,
             genreFilter: currentGenreFilter,
@@ -178,6 +177,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
                       tracks: topTracks,
                       childrenForQueue: Future.value(topTracks),
                       tracksText: type.toLocalisedSectionTitle(context, artistCuratedItemSelectionType),
+                      isOnArtistScreen: true,
                       genreFilter: currentGenreFilter,
                       includeFilterRow: true,
                       customFilterOrder: artistCuratedItemSectionFilterOrder,
@@ -195,10 +195,11 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
                 if (albumArtistAlbums.isNotEmpty) {
                   return SliverPadding(
                     padding: const EdgeInsets.all(0),
-                    sliver: AlbumSection(
+                    sliver: CollectionsSection(
                       parent: widget.parent,
-                      albumsText: AppLocalizations.of(context)!.albums,
-                      albums: albumArtistAlbums
+                      itemsText: AppLocalizations.of(context)!.albums,
+                      items: albumArtistAlbums,
+                      albumsShowYearAndDurationInstead: true,
                     ),
                   );
                 }
@@ -207,10 +208,11 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
                 if (appearsOnAlbums.isNotEmpty) {
                   return SliverPadding(
                     padding: const EdgeInsets.all(0),
-                    sliver: AlbumSection(
+                    sliver: CollectionsSection(
                       parent: widget.parent,
-                      albumsText: AppLocalizations.of(context)!.appearsOnAlbums,
-                      albums: appearsOnAlbums
+                      itemsText: AppLocalizations.of(context)!.appearsOnAlbums,
+                      items: appearsOnAlbums,
+                      albumsShowYearAndDurationInstead: true,
                     ),
                   );
                 }

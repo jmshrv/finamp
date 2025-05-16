@@ -6,10 +6,10 @@ import '../../services/finamp_settings_helper.dart';
 import '../../services/generate_subtitle.dart';
 import '../album_image.dart';
 
-/// Card content for AlbumItem. You probably shouldn't use this widget directly,
-/// use AlbumItem instead.
-class AlbumItemCard extends ConsumerWidget {
-  const AlbumItemCard({
+/// Card content for CollectionItem. You probably shouldn't use this widget directly,
+/// use CollectionItem instead.
+class CollectionItemCard extends ConsumerWidget {
+  const CollectionItemCard({
     super.key,
     required this.item,
     this.parentType,
@@ -23,7 +23,7 @@ class AlbumItemCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
-      // In AlbumItem, the OpenContainer handles padding.
+      // In CollectionItem, the OpenContainer handles padding.
       margin: EdgeInsets.zero,
       child: ClipRRect(
         borderRadius: AlbumImage.defaultBorderRadius,
@@ -31,7 +31,7 @@ class AlbumItemCard extends ConsumerWidget {
           children: [
             AlbumImage(item: item),
             ref.watch(finampSettingsProvider.showTextOnGridView)
-                ? _AlbumItemCardText(item: item, parentType: parentType)
+                ? _CollectionItemCardText(item: item, parentType: parentType)
                 : const SizedBox.shrink(),
             Positioned.fill(
               child: Material(
@@ -48,8 +48,8 @@ class AlbumItemCard extends ConsumerWidget {
   }
 }
 
-class _AlbumItemCardText extends StatelessWidget {
-  const _AlbumItemCardText({
+class _CollectionItemCardText extends StatelessWidget {
+  const _CollectionItemCardText({
     required this.item,
     required this.parentType,
   });
