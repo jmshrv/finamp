@@ -17,6 +17,7 @@ class TracksSection extends ConsumerStatefulWidget {
     this.childrenForQueue,
     required this.tracksText,
     this.seeAllCallbackFunction,
+    this.genreFilter,
     this.includeFilterRow = false,
     this.customFilterOrder,
     this.selectedFilter,
@@ -29,6 +30,7 @@ class TracksSection extends ConsumerStatefulWidget {
   final Future<List<BaseItemDto>>? childrenForQueue;
   final String tracksText;
   final VoidCallback? seeAllCallbackFunction;
+  final BaseItemDto? genreFilter;
   final bool includeFilterRow;
   final List<CuratedItemSelectionType>? customFilterOrder;
   final CuratedItemSelectionType? selectedFilter;
@@ -81,6 +83,28 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
       
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    String emptyText = loc!.emptyFilteredListTitle;
+    final itemType = BaseItemDtoType.fromItem(widget.parent);
+    final isFavorites = widget.selectedFilter == CuratedItemSelectionType.favorites;
+    final isPlayed = widget.selectedFilter == CuratedItemSelectionType.mostPlayed ||
+                    widget.selectedFilter == CuratedItemSelectionType.recentlyPlayed;
+
+    String itemTypeKey = 'other';
+
+    if (itemType == BaseItemDtoType.artist) {
+      itemTypeKey = (widget.genreFilter != null) ? 'artistGenreFilter' : 'artist';
+    } else if (itemType == BaseItemDtoType.genre) {
+      itemTypeKey = 'genre';
+    }
+    if (isFavorites) {
+      emptyText = loc.curatedItemsNoFavorites(itemTypeKey);
+    } else if (isPlayed) {
+      emptyText = loc.curatedItemsNotListenedYet(itemTypeKey);
+    } else {
+      emptyText = loc.emptyFilteredListTitle;
+    }
+
     return SliverStickyHeader(
       header: Container(
         padding: EdgeInsets.fromLTRB(
@@ -175,10 +199,11 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
               else
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 12),
+                    padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
                     child: Center(
                       child: Text(
-                        AppLocalizations.of(context)!.emptyFilteredListTitle,
+                        emptyText,
+                        textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
@@ -265,6 +290,28 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
         
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    String emptyText = loc!.emptyFilteredListTitle;
+    final itemType = BaseItemDtoType.fromItem(widget.parent);
+    final isFavorites = widget.selectedFilter == CuratedItemSelectionType.favorites;
+    final isPlayed = widget.selectedFilter == CuratedItemSelectionType.mostPlayed ||
+                    widget.selectedFilter == CuratedItemSelectionType.recentlyPlayed;
+
+    String itemTypeKey = 'other';
+
+    if (itemType == BaseItemDtoType.artist) {
+      itemTypeKey = (widget.genreFilter != null) ? 'artistGenreFilter' : 'artist';
+    } else if (itemType == BaseItemDtoType.genre) {
+      itemTypeKey = 'genre';
+    }
+    if (isFavorites) {
+      emptyText = loc.curatedItemsNoFavorites(itemTypeKey);
+    } else if (isPlayed) {
+      emptyText = loc.curatedItemsNotListenedYet(itemTypeKey);
+    } else {
+      emptyText = loc.emptyFilteredListTitle;
+    }
+
     return SliverStickyHeader(
       header: Container(
         padding: EdgeInsets.fromLTRB(
@@ -359,10 +406,11 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
                 else
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 12),
+                      padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
                       child: Center(
                           child: Text(
-                            AppLocalizations.of(context)!.emptyFilteredListTitle,
+                            emptyText,
+                            textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                       ),

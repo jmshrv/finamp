@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:finamp/components/curated_item_filter_row.dart';
 import 'package:finamp/services/genre_screen_provider.dart';
 import 'package:finamp/components/curated_item_sections.dart';
 import 'package:finamp/components/GenreScreen/genre_count_column.dart';
@@ -39,6 +40,9 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
   final Set<CuratedItemSelectionType> _disabledTrackFilters = {};
   final Set<CuratedItemSelectionType> _disabledAlbumFilters = {};
   final Set<CuratedItemSelectionType> _disabledArtistFilters = {};
+  CuratedItemSelectionType? newSelectedCuratedItemSelectionTypeTracks;
+  CuratedItemSelectionType? newSelectedCuratedItemSelectionTypeAlbums;
+  CuratedItemSelectionType? newSelectedCuratedItemSelectionTypeArtists;
 
   @override
   void initState() {
@@ -129,6 +133,24 @@ void openSeeAll(
     if (newDisabledArtistFilters != null) {
       _disabledArtistFilters.addAll(newDisabledArtistFilters.whereType<CuratedItemSelectionType>());
     }
+    _disabledTrackFilters.remove(genreCuratedItemSelectionTypeTracks);
+    _disabledAlbumFilters.remove(genreCuratedItemSelectionTypeAlbums);
+    _disabledArtistFilters.remove(genreCuratedItemSelectionTypeArtists);
+    newSelectedCuratedItemSelectionTypeTracks = sendEmptyItemSelectionTypeMessage(
+      context: context, ref: ref, disabledFilters: _disabledTrackFilters,
+      typeSelected: newSelectedCuratedItemSelectionTypeTracks,
+      messageFor: BaseItemDtoType.genre,
+    );
+    newSelectedCuratedItemSelectionTypeAlbums = sendEmptyItemSelectionTypeMessage(
+      context: context, ref: ref, disabledFilters: _disabledAlbumFilters,
+      typeSelected: newSelectedCuratedItemSelectionTypeAlbums,
+      messageFor: BaseItemDtoType.genre,
+    );
+    newSelectedCuratedItemSelectionTypeArtists = sendEmptyItemSelectionTypeMessage(
+      context: context, ref: ref, disabledFilters: _disabledArtistFilters,
+      typeSelected: newSelectedCuratedItemSelectionTypeArtists,
+      messageFor: BaseItemDtoType.genre,
+    );
     
     final countsTextColor = IconTheme.of(context).color;
     final countsSubtitleColor = IconTheme.of(context).color!.withOpacity(0.6);
@@ -238,7 +260,8 @@ void openSeeAll(
                   selectedFilter: genreCuratedItemSelectionTypeTracks,
                   disabledFilters: _disabledTrackFilters.toList(),
                   onFilterSelected: (type) {
-                     FinampSetters.setGenreCuratedItemSelectionTypeTracks(type);
+                    newSelectedCuratedItemSelectionTypeTracks = type;
+                    FinampSetters.setGenreCuratedItemSelectionTypeTracks(type);
                   },
                 ),
               );
@@ -261,7 +284,8 @@ void openSeeAll(
                   selectedFilter: genreCuratedItemSelectionTypeAlbums,
                   disabledFilters: _disabledAlbumFilters.toList(),
                   onFilterSelected: (type) {
-                     FinampSetters.setGenreCuratedItemSelectionTypeAlbums(type);
+                    newSelectedCuratedItemSelectionTypeAlbums = type;
+                    FinampSetters.setGenreCuratedItemSelectionTypeAlbums(type);
                   },
                 ),
               );
@@ -285,7 +309,8 @@ void openSeeAll(
                   selectedFilter: genreCuratedItemSelectionTypeArtists,
                   disabledFilters: _disabledArtistFilters.toList(),
                   onFilterSelected: (type) {
-                     FinampSetters.setGenreCuratedItemSelectionTypeArtists(type);
+                    newSelectedCuratedItemSelectionTypeArtists = type;
+                    FinampSetters.setGenreCuratedItemSelectionTypeArtists(type);
                   },
                 ),
               );

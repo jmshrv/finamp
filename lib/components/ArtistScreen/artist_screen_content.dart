@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:finamp/components/curated_item_filter_row.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/artist_screen_provider.dart';
 import 'package:finamp/components/curated_item_sections.dart';
 import 'package:finamp/l10n/app_localizations.dart';
@@ -40,6 +42,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
   final _downloadsService = GetIt.instance<DownloadsService>();
   final Set<CuratedItemSelectionType> _disabledTrackFilters = {};
   BaseItemDto? currentGenreFilter;
+  CuratedItemSelectionType? newSelectedCuratedItemSelectionType;
 
   StreamSubscription<void>? _refreshStream;
 
@@ -105,6 +108,11 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
       _disabledTrackFilters.addAll(newDisabledTrackFilters.whereType<CuratedItemSelectionType>());
     }
     _disabledTrackFilters.remove(artistCuratedItemSelectionType);
+    newSelectedCuratedItemSelectionType = sendEmptyItemSelectionTypeMessage(
+      context: context, ref: ref, disabledFilters: _disabledTrackFilters,
+      typeSelected: newSelectedCuratedItemSelectionType,
+      messageFor: BaseItemDtoType.artist, hasGenreFilter: (currentGenreFilter != null)
+    );
 
     final topTracks = topTracksAsync ?? [];
     final albumArtistAlbums = albumArtistAlbumsAsync ?? [];
@@ -170,11 +178,13 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
                       tracks: topTracks,
                       childrenForQueue: Future.value(topTracks),
                       tracksText: type.toLocalisedSectionTitle(context, artistCuratedItemSelectionType),
+                      genreFilter: currentGenreFilter,
                       includeFilterRow: true,
                       customFilterOrder: artistCuratedItemSectionFilterOrder,
                       selectedFilter: artistCuratedItemSelectionType,
                       disabledFilters: _disabledTrackFilters.toList(),
                       onFilterSelected: (type) {
+                        newSelectedCuratedItemSelectionType = type;
                         FinampSetters.setArtistCuratedItemSelectionType(type);
                       },
                     ),

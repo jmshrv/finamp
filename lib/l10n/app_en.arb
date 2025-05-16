@@ -1269,13 +1269,27 @@
   "@curatedItemsMostPlayedOfflineTooltip": {
     "description": "Tooltip for Most Played on Curated Items in Offline Mode."
   },
-  "curatedItemsNotListenedDisabledTooltip": "You've not listened to any tracks yet.",
-  "@curatedItemsNotListenedDisabledTooltip": {
-    "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks."
+  "curatedItemsNotListenedYet": "You haven't listened to any tracks {itemType, select, artistGenreFilter{by this artist in this genre } artist{by this artist } genre{in this genre } other{}}yet.",
+  "@curatedItemsNotListenedYet": {
+    "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
   },
-  "curatedItemsFavoritesDisabledTooltip": "You have no favorites yet.",
-  "@curatedItemsFavoritesDisabledTooltip": {
-    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet."
+  "curatedItemsNoFavorites": "You have no favorites {itemType, select, artistGenreFilter{for this artist in this genre } artist{for this artist } genre{for this genre } other{}}yet.",
+  "@curatedItemsNoFavorites": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
   },
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
   "@albumCount": {
