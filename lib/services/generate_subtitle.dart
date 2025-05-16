@@ -27,7 +27,7 @@ String? generateSubtitle(
       return AppLocalizations.of(context)!.trackCount(item.childCount!);
     // case "MusicGenre":
     // case "MusicArtist":
-    //   return Text("${item.albumCount} Albums");
+    //   return "${item.albumCount} Albums";
     default:
       return null;
   }

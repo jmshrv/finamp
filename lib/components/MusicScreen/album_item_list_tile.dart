@@ -46,35 +46,53 @@ class AlbumItemListTile extends StatelessWidget {
                 type: DownloadItemType.collection,
                 item: item
             );
+    final downloadedIndicator = DownloadedIndicator(
+      item: itemDownloadStub,
+      size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
+    );
 
     return ListTile(
         // This widget is used on the add to playlist screen, so we allow a custom
         // onTap to be passed as an argument.
         onTap: onTap,
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: (subtitle == null) ? 8.0 : 0.0,
+        ),
         leading: AlbumImage(item: item),
-        title: Text(
-          item.name ?? AppLocalizations.of(context)!.unknownName,
-          overflow: TextOverflow.ellipsis,
-        ),
-        subtitle: Text.rich(
-          TextSpan(children: [
-            WidgetSpan(
-              child: Transform.translate(
-                offset: const Offset(-3, 0),
-                child: DownloadedIndicator(
-                  item: itemDownloadStub,
-                  size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
-                ),
-              ),
-              alignment: PlaceholderAlignment.top,
+        title: (subtitle == null)
+          ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.name ?? AppLocalizations.of(context)!.unknownName,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  downloadedIndicator,
+                ],
+            )
+          : Text(
+              item.name ?? AppLocalizations.of(context)!.unknownName,
+              overflow: TextOverflow.ellipsis,
             ),
-            if (subtitle != null)
-              TextSpan(
-                  text: subtitle,
-                  style: TextStyle(color: Theme.of(context).disabledColor))
-          ]),
-          overflow: TextOverflow.ellipsis,
-        ),
+        subtitle: (subtitle != null)
+          ? Text.rich(
+              TextSpan(children: [
+                WidgetSpan(
+                  child: Transform.translate(
+                    offset: const Offset(-3, 0),
+                    child: downloadedIndicator,
+                  ),
+                  alignment: PlaceholderAlignment.top,
+                ),
+                TextSpan(
+                    text: subtitle,
+                    style: TextStyle(color: Theme.of(context).disabledColor)
+                ),
+              ]),
+              overflow: TextOverflow.ellipsis,
+            )
+          : null,
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -89,6 +107,7 @@ class AlbumItemListTile extends StatelessWidget {
               onlyIfFav: true,
             )
           ],
-        ));
+        ),
+    );
   }
 }
