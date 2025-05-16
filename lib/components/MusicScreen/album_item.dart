@@ -5,6 +5,7 @@ import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/artist_screen_provider.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -236,6 +237,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
                 ),
           if (_queueService.getQueue().nextUp.isNotEmpty)
             PopupMenuItem<_AlbumListTileMenuItems>(
+              enabled: (BaseItemDtoType.fromItem(mutableAlbum) != BaseItemDtoType.genre),
               value: _AlbumListTileMenuItems.playNext,
               child: ListTile(
                 leading: const Icon(TablerIcons.corner_right_down),
@@ -243,6 +245,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
               ),
             ),
           PopupMenuItem<_AlbumListTileMenuItems>(
+            enabled: (BaseItemDtoType.fromItem(mutableAlbum) != BaseItemDtoType.genre),
             value: _AlbumListTileMenuItems.addToNextUp,
             child: ListTile(
               leading: const Icon(TablerIcons.corner_right_down_double),
@@ -251,6 +254,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
           ),
           if (_queueService.getQueue().nextUp.isNotEmpty)
             PopupMenuItem<_AlbumListTileMenuItems>(
+              enabled: (BaseItemDtoType.fromItem(mutableAlbum) != BaseItemDtoType.genre),
               value: _AlbumListTileMenuItems.shuffleNext,
               child: ListTile(
                 leading: const Icon(TablerIcons.corner_right_down),
@@ -258,6 +262,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
               ),
             ),
           PopupMenuItem<_AlbumListTileMenuItems>(
+            enabled: (BaseItemDtoType.fromItem(mutableAlbum) != BaseItemDtoType.genre),
             value: _AlbumListTileMenuItems.shuffleToNextUp,
             child: ListTile(
               leading: const Icon(TablerIcons.corner_right_down_double),
@@ -265,6 +270,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
             ),
           ),
           PopupMenuItem<_AlbumListTileMenuItems>(
+            enabled: (BaseItemDtoType.fromItem(mutableAlbum) != BaseItemDtoType.genre),
             value: _AlbumListTileMenuItems.addToQueue,
             child: ListTile(
               leading: const Icon(TablerIcons.playlist),
@@ -272,6 +278,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
             ),
           ),
           PopupMenuItem<_AlbumListTileMenuItems>(
+            enabled: (BaseItemDtoType.fromItem(mutableAlbum) != BaseItemDtoType.genre),
             value: _AlbumListTileMenuItems.shuffleToQueue,
             child: ListTile(
               leading: const Icon(TablerIcons.playlist),
@@ -366,15 +373,22 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         case _AlbumListTileMenuItems.playNext:
           try {
             List<BaseItemDto>? albumTracks;
-            if (isOffline) {
-              albumTracks = await downloadsService
-                  .getCollectionTracks(widget.album, playable: true);
+            if (BaseItemDtoType.fromItem(widget.album) == BaseItemDtoType.artist) {
+              final artistTracks = await ref.read(getAllTracksProvider(
+                widget.album, finampUserHelper.currentUser?.currentView,
+                widget.genreFilter).future);
+              albumTracks = artistTracks;
             } else {
-              albumTracks = await _jellyfinApiHelper.getItems(
-                parentItem: mutableAlbum,
-                sortBy: "ParentIndexNumber,IndexNumber,SortName",
-                includeItemTypes: "Audio",
-              );
+              if (isOffline) {
+                albumTracks = await downloadsService
+                    .getCollectionTracks(widget.album, playable: true);
+              } else {
+                albumTracks = await _jellyfinApiHelper.getItems(
+                  parentItem: mutableAlbum,
+                  sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                  includeItemTypes: "Audio",
+                );
+              }
             }
 
             if (albumTracks == null) {
@@ -412,15 +426,22 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         case _AlbumListTileMenuItems.addToNextUp:
           try {
             List<BaseItemDto>? albumTracks;
-            if (isOffline) {
-              albumTracks = await downloadsService
-                  .getCollectionTracks(widget.album, playable: true);
+            if (BaseItemDtoType.fromItem(widget.album) == BaseItemDtoType.artist) {
+              final artistTracks = await ref.read(getAllTracksProvider(
+                widget.album, finampUserHelper.currentUser?.currentView,
+                widget.genreFilter).future);
+              albumTracks = artistTracks;
             } else {
-              albumTracks = await _jellyfinApiHelper.getItems(
-                parentItem: mutableAlbum,
-                sortBy: "ParentIndexNumber,IndexNumber,SortName",
-                includeItemTypes: "Audio",
-              );
+              if (isOffline) {
+                albumTracks = await downloadsService
+                    .getCollectionTracks(widget.album, playable: true);
+              } else {
+                albumTracks = await _jellyfinApiHelper.getItems(
+                  parentItem: mutableAlbum,
+                  sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                  includeItemTypes: "Audio",
+                );
+              }
             }
 
             if (albumTracks == null) {
@@ -458,16 +479,24 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         case _AlbumListTileMenuItems.shuffleNext:
           try {
             List<BaseItemDto>? albumTracks;
-            if (isOffline) {
-              albumTracks = await downloadsService
-                  .getCollectionTracks(widget.album, playable: true);
+            if (BaseItemDtoType.fromItem(widget.album) == BaseItemDtoType.artist) {
+              final artistTracks = await ref.read(getAllTracksProvider(
+                widget.album, finampUserHelper.currentUser?.currentView,
+                widget.genreFilter).future);
+              albumTracks = artistTracks;
               albumTracks.shuffle();
             } else {
-              albumTracks = await _jellyfinApiHelper.getItems(
-                parentItem: mutableAlbum,
-                sortBy: "Random",
-                includeItemTypes: "Audio",
-              );
+              if (isOffline) {
+                albumTracks = await downloadsService
+                    .getCollectionTracks(widget.album, playable: true);
+                albumTracks.shuffle();
+              } else {
+                albumTracks = await _jellyfinApiHelper.getItems(
+                  parentItem: mutableAlbum,
+                  sortBy: "Random",
+                  includeItemTypes: "Audio",
+                );
+              }
             }
 
             if (albumTracks == null) {
@@ -505,16 +534,24 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         case _AlbumListTileMenuItems.shuffleToNextUp:
           try {
             List<BaseItemDto>? albumTracks;
-            if (isOffline) {
-              albumTracks = await downloadsService
-                  .getCollectionTracks(widget.album, playable: true);
+            if (BaseItemDtoType.fromItem(widget.album) == BaseItemDtoType.artist) {
+              final artistTracks = await ref.read(getAllTracksProvider(
+                widget.album, finampUserHelper.currentUser?.currentView,
+                widget.genreFilter).future);
+              albumTracks = artistTracks;
               albumTracks.shuffle();
             } else {
-              albumTracks = await _jellyfinApiHelper.getItems(
-                parentItem: mutableAlbum,
-                sortBy: "Random",
-                includeItemTypes: "Audio",
-              );
+              if (isOffline) {
+                albumTracks = await downloadsService
+                    .getCollectionTracks(widget.album, playable: true);
+                albumTracks.shuffle();
+              } else {
+                albumTracks = await _jellyfinApiHelper.getItems(
+                  parentItem: mutableAlbum,
+                  sortBy: "Random",
+                  includeItemTypes: "Audio",
+                );
+              }
             }
 
             if (albumTracks == null) {
@@ -552,15 +589,22 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         case _AlbumListTileMenuItems.addToQueue:
           try {
             List<BaseItemDto>? albumTracks;
-            if (isOffline) {
-              albumTracks = await downloadsService
-                  .getCollectionTracks(widget.album, playable: true);
+            if (BaseItemDtoType.fromItem(widget.album) == BaseItemDtoType.artist) {
+              final artistTracks = await ref.read(getAllTracksProvider(
+                widget.album, finampUserHelper.currentUser?.currentView,
+                widget.genreFilter).future);
+              albumTracks = artistTracks;
             } else {
-              albumTracks = await _jellyfinApiHelper.getItems(
-                parentItem: mutableAlbum,
-                sortBy: "ParentIndexNumber,IndexNumber,SortName",
-                includeItemTypes: "Audio",
-              );
+              if (isOffline) {
+                albumTracks = await downloadsService
+                    .getCollectionTracks(widget.album, playable: true);
+              } else {
+                albumTracks = await _jellyfinApiHelper.getItems(
+                  parentItem: mutableAlbum,
+                  sortBy: "ParentIndexNumber,IndexNumber,SortName",
+                  includeItemTypes: "Audio",
+                );
+              }
             }
 
             if (albumTracks == null) {
@@ -598,16 +642,24 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
         case _AlbumListTileMenuItems.shuffleToQueue:
           try {
             List<BaseItemDto>? albumTracks;
-            if (isOffline) {
-              albumTracks = await downloadsService
-                  .getCollectionTracks(widget.album, playable: true);
+            if (BaseItemDtoType.fromItem(widget.album) == BaseItemDtoType.artist) {
+              final artistTracks = await ref.read(getAllTracksProvider(
+                widget.album, finampUserHelper.currentUser?.currentView,
+                widget.genreFilter).future);
+              albumTracks = artistTracks;
               albumTracks.shuffle();
             } else {
-              albumTracks = await _jellyfinApiHelper.getItems(
-                parentItem: mutableAlbum,
-                sortBy: "Random",
-                includeItemTypes: "Audio",
-              );
+              if (isOffline) {
+                albumTracks = await downloadsService
+                    .getCollectionTracks(widget.album, playable: true);
+                albumTracks.shuffle();
+              } else {
+                albumTracks = await _jellyfinApiHelper.getItems(
+                  parentItem: mutableAlbum,
+                  sortBy: "Random",
+                  includeItemTypes: "Audio",
+                );
+              }
             }
 
             if (albumTracks == null) {

@@ -877,6 +877,7 @@ class JellyfinApiHelper {
   Future<List<BaseItemDto>?> getArtistMix(List<BaseItemId> artistIds) async {
     final response = await jellyfinApi.getItems(
         userId: _finampUserHelper.currentUser!.id,
+        parentId: _finampUserHelper.currentUser!.currentView?.id,
         artistIds: artistIds.join(","),
         filters: "IsNotFolder",
         recursive: true,
@@ -905,6 +906,7 @@ class JellyfinApiHelper {
   Future<List<BaseItemDto>?> getGenreMix(List<BaseItemId> genreIds) async {
     final response = await jellyfinApi.getItems(
         userId: _finampUserHelper.currentUser!.id,
+        parentId: _finampUserHelper.currentUser!.currentView?.id,
         genreIds: genreIds.join(","),
         filters: "IsNotFolder",
         recursive: true,

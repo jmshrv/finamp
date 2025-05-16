@@ -95,9 +95,9 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
         getPerformingArtistAlbumsProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull;
     final allPerformingArtistTracksAsync = ref.watch(
         getPerformingArtistTracksProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull;
-        final allTracks = ref.watch(
+    final allTracks = ref.watch(
         getAllTracksProvider(widget.parent, widget.library, currentGenreFilter).future,
-      );
+    );
 
     final isLoading = topTracksAsync == null || albumArtistAlbumsAsync == null || performingArtistAlbumsAsync == null;
 
