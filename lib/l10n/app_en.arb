@@ -1592,7 +1592,7 @@
     },
     "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
   },
-  "downloadButtonDisabledGenreFilterTooltip": "Please remove the genre filter to download this artist.",
+  "downloadButtonDisabledGenreFilterTooltip": "Please remove the genre filter to enable the download actions for this artist.",
     "@downloadButtonDisabledGenreFilterTooltip": {
     "description": "Tooltip shown when a download button is disabled because of an active genre filter on the artist screen."
   },
