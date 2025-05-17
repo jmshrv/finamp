@@ -69,7 +69,7 @@ class CollectionItemListTile extends ConsumerWidget {
     final showSubtitle = (subtitle != null || 
         (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) || 
         downloadedIndicatorIsVisible(status));
-    final releaseDate = ReleaseDateHelper.autoFormat(item);
+    final releaseDate = ReleaseDateHelper.autoFormat(item) ?? AppLocalizations.of(context)!.noReleaseDate;
     final subtitleText = Text.rich(
       TextSpan(
         children: [
@@ -92,9 +92,7 @@ class CollectionItemListTile extends ConsumerWidget {
               ),
             ),
             TextSpan(
-              text: (releaseDate == null) 
-                  ? printDuration(item.runTimeTicksDuration())
-                  : " · ${printDuration(item.runTimeTicksDuration())}",
+              text: " · ${printDuration(item.runTimeTicksDuration())}",
               style: TextStyle(color: Theme.of(context).disabledColor),
             ),
           ] else ...[
