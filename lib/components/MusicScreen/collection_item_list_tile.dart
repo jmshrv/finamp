@@ -1,9 +1,11 @@
 import 'package:finamp/components/favorite_button.dart';
 import 'package:finamp/components/print_duration.dart';
+import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/release_date_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
@@ -15,7 +17,7 @@ import '../album_image.dart';
 
 /// ListTile content for CollectionItem. You probably shouldn't use this widget
 /// directly, use CollectionItem instead.
-class CollectionItemListTile extends StatelessWidget {
+class CollectionItemListTile extends ConsumerWidget {
   const CollectionItemListTile({
     super.key,
     required this.item,
@@ -30,9 +32,10 @@ class CollectionItemListTile extends StatelessWidget {
   final bool albumShowsYearAndDurationInstead;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
+    final downloadsService = GetIt.instance<DownloadsService>();
     final library = finampUserHelper.currentUser?.currentView;
     final itemType = BaseItemDtoType.fromItem(item);
     final isArtistOrGenre = (itemType == BaseItemDtoType.artist ||
@@ -51,93 +54,78 @@ class CollectionItemListTile extends StatelessWidget {
                 type: DownloadItemType.collection,
                 item: item
             );
+    AsyncValue<DownloadItemState?> status = ref.watch(downloadsService.stateProvider(itemDownloadStub));
     final downloadedIndicator = DownloadedIndicator(
       item: itemDownloadStub,
       size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
+      statusOverride: status,
     );
     final titleText = Text(
       item.name ?? AppLocalizations.of(context)!.unknownName,
       overflow: TextOverflow.ellipsis,
     );
-    final subtitleText = (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead)
-      ? RichText(
-          text: TextSpan(
-            children: [
-              WidgetSpan(
-                child: Transform.translate(
-                  offset: const Offset(-3, 0),
-                  child: downloadedIndicator,
-                ),
-                alignment: PlaceholderAlignment.top,
-              ),
-              TextSpan(
-                text: ReleaseDateHelper.autoFormat(item),
-                style: TextStyle(
-                  color: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.color
-                      ?.withOpacity(0.7)),
-              ),
-              TextSpan(
-                text: " · ${printDuration(item.runTimeTicksDuration())}",
-                style: TextStyle(color: Theme.of(context).disabledColor),
-              ),
-            ],
+    final showSubtitle = (subtitle != null || 
+        (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) || 
+        downloadedIndicatorIsVisible(status));
+    final releaseDate = ReleaseDateHelper.autoFormat(item);
+    final subtitleText = Text.rich(
+      TextSpan(
+        children: [
+          WidgetSpan(
+            child: Transform.translate(
+              offset: const Offset(-3, 0),
+              child: downloadedIndicator,
+            ),
+            alignment: PlaceholderAlignment.top,
           ),
-          overflow: TextOverflow.ellipsis,
-        )
-      : ((subtitle != null)
-          ? Text.rich(
-              TextSpan(children: [
-                WidgetSpan(
-                  child: Transform.translate(
-                    offset: const Offset(-3, 0),
-                    child: downloadedIndicator,
-                  ),
-                  alignment: PlaceholderAlignment.top,
-                ),
-                TextSpan(
-                    text: subtitle,
-                    style: TextStyle(color: Theme.of(context).disabledColor)
-                ),
-              ]),
-              overflow: TextOverflow.ellipsis,
-            )
-          : null
-        );
-    final hideSubtitleRow = (subtitle == null && 
-        !(itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead));
+          if (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) ...[
+            TextSpan(
+              text: releaseDate,
+              style: TextStyle(
+                color: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.color
+                    ?.withOpacity(0.7),
+              ),
+            ),
+            TextSpan(
+              text: (releaseDate == null) 
+                  ? printDuration(item.runTimeTicksDuration())
+                  : " · ${printDuration(item.runTimeTicksDuration())}",
+              style: TextStyle(color: Theme.of(context).disabledColor),
+            ),
+          ] else ...[
+            TextSpan(
+              text: subtitle,
+              style: TextStyle(color: Theme.of(context).disabledColor),
+            ),
+          ],
+        ],
+      ),
+      overflow: TextOverflow.ellipsis,
+    );
 
     return ListTile(
         // This widget is used on the add to playlist screen, so we allow a custom
         // onTap to be passed as an argument.
-        onTap: onTap,
         contentPadding: EdgeInsets.symmetric(
           horizontal: 16.0,
-          vertical: (hideSubtitleRow) ? 8.0 : 0.0,
+          vertical: !showSubtitle ? 8.0 : 0.0,
         ),
+        onTap: onTap,
         leading: AlbumImage(item: item),
-        title: hideSubtitleRow
-          ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  titleText,
-                  Transform.translate(
-                    offset: const Offset(-3, 0),
-                    child: downloadedIndicator,
-                  ),
-                ],
-            )
-          : titleText,
-        subtitle: subtitleText,
+        title: titleText,
+        subtitle: (showSubtitle) ? subtitleText : null,
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            if ((item.type == "MusicArtist"
+            if ((itemType == BaseItemDtoType.artist
                     ? jellyfinApiHelper.selectedMixArtists
-                    : jellyfinApiHelper.selectedMixAlbums)
+                    : (itemType == BaseItemDtoType.genre)
+                        ? jellyfinApiHelper.selectedMixGenres
+                        : jellyfinApiHelper.selectedMixAlbums)
                 .contains(item))
               const Icon(Icons.explore),
             FavoriteButton(

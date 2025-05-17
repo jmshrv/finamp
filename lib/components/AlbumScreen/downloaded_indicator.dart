@@ -12,16 +12,18 @@ class DownloadedIndicator extends ConsumerWidget {
     super.key,
     required this.item,
     this.size,
+    this.statusOverride,
   });
 
   final DownloadStub item;
   final double? size;
+  final AsyncValue<DownloadItemState?>? statusOverride;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloadsService = GetIt.instance<DownloadsService>();
     AsyncValue<DownloadItemState?> status =
-        ref.watch(downloadsService.stateProvider(item));
+        statusOverride ?? ref.watch(downloadsService.stateProvider(item));
     if (status.hasValue) {
       switch (status.valueOrNull) {
         case null:
@@ -61,4 +63,27 @@ class DownloadedIndicator extends ConsumerWidget {
       return const SizedBox.shrink();
     }
   }
+}
+
+bool downloadedIndicatorIsVisible(AsyncValue<DownloadItemState?>? status) {
+  if (status == null) {
+    return false;
+  }
+  if (status.hasValue) {
+      switch (status.valueOrNull) {
+        case null:
+        case DownloadItemState.notDownloaded:
+          return false;
+        case DownloadItemState.enqueued:
+        case DownloadItemState.downloading:
+        case DownloadItemState.needsRedownload:
+        case DownloadItemState.failed:
+        case DownloadItemState.syncFailed:
+        case DownloadItemState.complete:
+        case DownloadItemState.needsRedownloadComplete:
+          return true;
+      }
+    } else {
+      return false;
+    }
 }
