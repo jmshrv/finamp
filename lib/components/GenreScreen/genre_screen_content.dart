@@ -40,9 +40,9 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
   final Set<CuratedItemSelectionType> _disabledTrackFilters = {};
   final Set<CuratedItemSelectionType> _disabledAlbumFilters = {};
   final Set<CuratedItemSelectionType> _disabledArtistFilters = {};
-  CuratedItemSelectionType? newSelectedCuratedItemSelectionTypeTracks;
-  CuratedItemSelectionType? newSelectedCuratedItemSelectionTypeAlbums;
-  CuratedItemSelectionType? newSelectedCuratedItemSelectionTypeArtists;
+  CuratedItemSelectionType? clickedCuratedItemSelectionTypeTracks;
+  CuratedItemSelectionType? clickedCuratedItemSelectionTypeAlbums;
+  CuratedItemSelectionType? clickedCuratedItemSelectionTypeArtists;
 
   @override
   void initState() {
@@ -113,7 +113,17 @@ void openSeeAll(
     final genreCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
     final genreItemSectionsOrder =
         ref.watch(finampSettingsProvider.genreItemSectionsOrder);
+    final bool autoSwitchItemCurationTypeEnabled = 
+      ref.watch(finampSettingsProvider.autoSwitchItemCurationType);
 
+    /// There are inidivual fetch methods for each section on the genre screen. They all are handled
+    /// by a single entry point provider "genreCuratedItemsProvider". This provider returns multiple values:
+    /// the items themselves, the total count of all items of that specific type within this genre as well as
+    /// the current ItemCurationType and a disabledFilterList. The genreCuratedItemsProvider uses a method 
+    /// in curated_items_filter_row.dart to get the next available filter as a fallback option in case that
+    /// the current filter would return an empty result and auto-switching is enabled. It then re-tries 
+    /// with that next filter. The filters that would've returned an empty result get returned in the 
+    /// disabledFilters set, so we can pass them on to the UI to show them as disabled.
     final tracksAsync = ref.watch(genreCuratedItemsProvider(widget.parent, BaseItemDtoType.track, widget.library));
     final albumsAsync = ref.watch(genreCuratedItemsProvider(widget.parent, BaseItemDtoType.album, widget.library));
     final artistsAsync = ref.watch(genreCuratedItemsProvider(widget.parent, BaseItemDtoType.artist, widget.library));
@@ -124,33 +134,55 @@ void openSeeAll(
 
     final isLoading = tracks == null || albums == null || artists == null;
 
+    /// We add the new disabled filters to a local set, which we actually use. That's because otherwise, 
+    /// we would re-enable deactivated filters once the user selects a different filter that's available.
+    /// But we want to keep disabled filters disabled until either a pull-refresh happens 
+    /// or the screen gets accessed again freshly.
     if (newDisabledTrackFilters != null) {
-      _disabledTrackFilters.addAll(newDisabledTrackFilters.whereType<CuratedItemSelectionType>());
+      _disabledTrackFilters.addAll(newDisabledTrackFilters);
     }
     if (newDisabledAlbumFilters != null) {
-      _disabledAlbumFilters.addAll(newDisabledAlbumFilters.whereType<CuratedItemSelectionType>());
+      _disabledAlbumFilters.addAll(newDisabledAlbumFilters);
     }
     if (newDisabledArtistFilters != null) {
-      _disabledArtistFilters.addAll(newDisabledArtistFilters.whereType<CuratedItemSelectionType>());
+      _disabledArtistFilters.addAll(newDisabledArtistFilters);
     }
+    /// The currently active filter either has items (now) or the user has disabled auto-switching,
+    /// so we can remove it from our disabled Set in case it was there before and show it as enabled.
     _disabledTrackFilters.remove(genreCuratedItemSelectionTypeTracks);
     _disabledAlbumFilters.remove(genreCuratedItemSelectionTypeAlbums);
     _disabledArtistFilters.remove(genreCuratedItemSelectionTypeArtists);
-    newSelectedCuratedItemSelectionTypeTracks = sendEmptyItemSelectionTypeMessage(
-      context: context, ref: ref, disabledFilters: _disabledTrackFilters,
-      typeSelected: newSelectedCuratedItemSelectionTypeTracks,
-      messageFor: BaseItemDtoType.genre,
-    );
-    newSelectedCuratedItemSelectionTypeAlbums = sendEmptyItemSelectionTypeMessage(
-      context: context, ref: ref, disabledFilters: _disabledAlbumFilters,
-      typeSelected: newSelectedCuratedItemSelectionTypeAlbums,
-      messageFor: BaseItemDtoType.genre,
-    );
-    newSelectedCuratedItemSelectionTypeArtists = sendEmptyItemSelectionTypeMessage(
-      context: context, ref: ref, disabledFilters: _disabledArtistFilters,
-      typeSelected: newSelectedCuratedItemSelectionTypeArtists,
-      messageFor: BaseItemDtoType.genre,
-    );
+    /// In case the user selects an option that has no items and auto-switch is enabled, 
+    /// we want to show a snackbar message in addition to disabling the filter.
+    if (autoSwitchItemCurationTypeEnabled && clickedCuratedItemSelectionTypeTracks != null && 
+        _disabledTrackFilters.contains(clickedCuratedItemSelectionTypeTracks)) {
+      sendEmptyItemSelectionTypeMessage(
+        context: context,
+        typeSelected: clickedCuratedItemSelectionTypeTracks,
+        messageFor: BaseItemDtoType.genre,
+      );
+      // When we've sent the message, we should reset the clicked value 
+      // so that we don't send it again on next state refresh
+      clickedCuratedItemSelectionTypeTracks = null;
+    }
+    if (autoSwitchItemCurationTypeEnabled && clickedCuratedItemSelectionTypeAlbums != null && 
+        _disabledAlbumFilters.contains(clickedCuratedItemSelectionTypeAlbums)) {
+      sendEmptyItemSelectionTypeMessage(
+        context: context,
+        typeSelected: clickedCuratedItemSelectionTypeAlbums,
+        messageFor: BaseItemDtoType.genre,
+      );
+      clickedCuratedItemSelectionTypeAlbums = null;
+    }
+    if (autoSwitchItemCurationTypeEnabled && clickedCuratedItemSelectionTypeArtists != null && 
+        _disabledArtistFilters.contains(clickedCuratedItemSelectionTypeArtists)) {
+      sendEmptyItemSelectionTypeMessage(
+        context: context,
+        typeSelected: clickedCuratedItemSelectionTypeArtists,
+        messageFor: BaseItemDtoType.genre,
+      );
+      clickedCuratedItemSelectionTypeArtists = null;
+    }
     
     final countsTextColor = IconTheme.of(context).color;
     final countsSubtitleColor = IconTheme.of(context).color!.withOpacity(0.6);
@@ -261,7 +293,10 @@ void openSeeAll(
                   selectedFilter: genreCuratedItemSelectionTypeTracks,
                   disabledFilters: _disabledTrackFilters.toList(),
                   onFilterSelected: (type) {
-                    newSelectedCuratedItemSelectionTypeTracks = type;
+                    // We store the clicked type locally in addition to changing the setting,
+                    // because we don't know if the provider might auto-switch to something else
+                    // because of an empty result-list, but we want to show a message in that case.
+                    clickedCuratedItemSelectionTypeTracks = type;
                     FinampSetters.setGenreCuratedItemSelectionTypeTracks(type);
                   },
                 ),
@@ -285,7 +320,7 @@ void openSeeAll(
                   selectedFilter: genreCuratedItemSelectionTypeAlbums,
                   disabledFilters: _disabledAlbumFilters.toList(),
                   onFilterSelected: (type) {
-                    newSelectedCuratedItemSelectionTypeAlbums = type;
+                    clickedCuratedItemSelectionTypeAlbums = type;
                     FinampSetters.setGenreCuratedItemSelectionTypeAlbums(type);
                   },
                 ),
@@ -310,7 +345,7 @@ void openSeeAll(
                   selectedFilter: genreCuratedItemSelectionTypeArtists,
                   disabledFilters: _disabledArtistFilters.toList(),
                   onFilterSelected: (type) {
-                    newSelectedCuratedItemSelectionTypeArtists = type;
+                    clickedCuratedItemSelectionTypeArtists = type;
                     FinampSetters.setGenreCuratedItemSelectionTypeArtists(type);
                   },
                 ),

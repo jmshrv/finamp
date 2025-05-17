@@ -42,14 +42,14 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
   final _downloadsService = GetIt.instance<DownloadsService>();
   final Set<CuratedItemSelectionType> _disabledTrackFilters = {};
   BaseItemDto? currentGenreFilter;
-  CuratedItemSelectionType? newSelectedCuratedItemSelectionType;
+  CuratedItemSelectionType? clickedCuratedItemSelectionType;
 
   StreamSubscription<void>? _refreshStream;
 
   @override
   void initState() {
     _refreshStream = _downloadsService.offlineDeletesStream.listen((event) {
-      setState(() {});
+      _refresh();
     });
     currentGenreFilter = widget.genreFilter;
     super.initState();
@@ -87,9 +87,15 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     final artistItemSectionsOrder =
         ref.watch(finampSettingsProvider.artistItemSectionsOrder);
     final artistCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.artistItemSectionFilterChipOrder);
+    final bool autoSwitchItemCurationTypeEnabled = 
+      ref.watch(finampSettingsProvider.autoSwitchItemCurationType);
 
     List<BaseItemDto> allChildren = [];
-  
+
+    /// Similarly to the sections on the genreScreen, we can let the tracks section auto-switch
+    /// when there are no items to show for the currently selected type. In this case, the provider
+    /// will use the next available filter, fetch its items and return those in addition to a set
+    /// containing the disabled filters that had no items.
     final (topTracksAsync, artistCuratedItemSelectionType, newDisabledTrackFilters) = ref.watch(
         getArtistTracksSectionProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull ?? (null, null, null);
     final albumArtistAlbumsAsync = ref.watch(
@@ -104,15 +110,27 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
 
     final isLoading = topTracksAsync == null || albumArtistAlbumsAsync == null || performingArtistAlbumsAsync == null;
 
+    /// We add the new disabled filters to our local set, so that we don't accidentally re-enable
+    /// previously disabled filters. Only a full refresh of the screen should do that.
     if (newDisabledTrackFilters != null) {
       _disabledTrackFilters.addAll(newDisabledTrackFilters.whereType<CuratedItemSelectionType>());
     }
+    /// The currently active filter either has items (now) or the user has disabled auto-switching,
+    /// so we can remove it from our disabled Set in case it was there before and show it as enabled.
     _disabledTrackFilters.remove(artistCuratedItemSelectionType);
-    newSelectedCuratedItemSelectionType = sendEmptyItemSelectionTypeMessage(
-      context: context, ref: ref, disabledFilters: _disabledTrackFilters,
-      typeSelected: newSelectedCuratedItemSelectionType,
-      messageFor: BaseItemDtoType.artist, hasGenreFilter: (currentGenreFilter != null)
-    );
+    /// In case the user selects an option that has no items and auto-switch is enabled, 
+    /// we want to show a snackbar message in addition to disabling the filter.
+    if (autoSwitchItemCurationTypeEnabled && clickedCuratedItemSelectionType != null && 
+        _disabledTrackFilters.contains(clickedCuratedItemSelectionType)) {
+      sendEmptyItemSelectionTypeMessage(
+        context: context,
+        typeSelected: clickedCuratedItemSelectionType,
+        messageFor: BaseItemDtoType.artist, hasGenreFilter: (currentGenreFilter != null)
+      );
+      // When we've sent the message, we should reset the clicked value 
+      // so that we don't send it again on next state refresh
+      clickedCuratedItemSelectionType = null;
+    }
 
     final topTracks = topTracksAsync ?? [];
     final albumArtistAlbums = albumArtistAlbumsAsync ?? [];
@@ -184,7 +202,10 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
                       selectedFilter: artistCuratedItemSelectionType,
                       disabledFilters: _disabledTrackFilters.toList(),
                       onFilterSelected: (type) {
-                        newSelectedCuratedItemSelectionType = type;
+                        // We store the clicked type locally in addition to changing the setting,
+                        // because we don't know if the provider might auto-switch to something else
+                        // because of an empty result-list, but we want to show a message in that case.
+                        clickedCuratedItemSelectionType = type;
                         FinampSetters.setArtistCuratedItemSelectionType(type);
                       },
                     ),

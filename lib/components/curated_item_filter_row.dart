@@ -58,14 +58,6 @@ Widget buildCuratedItemFilterRow({
                               }
                             },
                           selected: isSelected,
-                          tooltip: (isOffline && 
-                              (type == CuratedItemSelectionType.mostPlayed || type == CuratedItemSelectionType.recentlyPlayed))
-                            ? AppLocalizations.of(context)!.notAvailableInOfflineMode
-                            : ((disabledFiltersList.contains(type)) 
-                                ? ((type == CuratedItemSelectionType.favorites)
-                                  ? AppLocalizations.of(context)!.curatedItemsNoFavorites('other')
-                                  : AppLocalizations.of(context)!.curatedItemsNotListenedYet('other'))
-                                : null),
                           showCheckmark: false,
                           selectedColor: colorScheme.primary,
                           backgroundColor: colorScheme.surface,
@@ -183,44 +175,39 @@ CuratedItemSelectionType handleOfflineFallbackOption({
   return newFilter;
 }
 
-CuratedItemSelectionType? sendEmptyItemSelectionTypeMessage({
+bool sendEmptyItemSelectionTypeMessage({
   required BuildContext context,
-  required WidgetRef ref,
-  required Set<CuratedItemSelectionType> disabledFilters,
   CuratedItemSelectionType? typeSelected,
   BaseItemDtoType? messageFor,
   bool hasGenreFilter = false,
 }){
   String? message;
   String? locMessageFor;
-  final bool autoSwitchItemCurationTypeEnabled = 
-      ref.watch(finampSettingsProvider.autoSwitchItemCurationType);
 
-  if (autoSwitchItemCurationTypeEnabled && typeSelected != null && 
-        disabledFilters.contains(typeSelected)) {
-    if (messageFor == BaseItemDtoType.artist) {
-      locMessageFor = (hasGenreFilter) ? "artistGenreFilter" : "artist";
-    } else if (messageFor == BaseItemDtoType.genre) {
-      locMessageFor = "genre";
-    }
-    
-    switch (typeSelected) {
-      case CuratedItemSelectionType.favorites:
-        message = AppLocalizations.of(context)!.curatedItemsNoFavorites(locMessageFor ?? 'other');
-        break;
-      case CuratedItemSelectionType.mostPlayed:
-      case CuratedItemSelectionType.recentlyPlayed:
-        message = AppLocalizations.of(context)!.curatedItemsNotListenedYet(locMessageFor ?? 'other');
-        break;
-      default:
-        break;
-    }
+  if (typeSelected == null) {
+    return false;
+  }
 
-    if (message != null) {
-      GlobalSnackbar.message((context) => message!);
-    }
-    return null;
+  if (messageFor == BaseItemDtoType.artist) {
+    locMessageFor = (hasGenreFilter) ? "artistGenreFilter" : "artist";
+  } else if (messageFor == BaseItemDtoType.genre) {
+    locMessageFor = "genre";
   }
   
-  return typeSelected;
+  switch (typeSelected) {
+    case CuratedItemSelectionType.favorites:
+      message = AppLocalizations.of(context)!.curatedItemsNoFavorites(locMessageFor ?? 'other');
+      break;
+    case CuratedItemSelectionType.mostPlayed:
+    case CuratedItemSelectionType.recentlyPlayed:
+      message = AppLocalizations.of(context)!.curatedItemsNotListenedYet(locMessageFor ?? 'other');
+      break;
+    default:
+      break;
+  }
+
+  if (message != null) {
+    GlobalSnackbar.message((context) => message!);
+  }
+  return true;
 }

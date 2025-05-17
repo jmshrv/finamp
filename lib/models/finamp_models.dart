@@ -3039,9 +3039,6 @@ enum CuratedItemSelectionType {
   String toLocalisedSectionTitle(BuildContext context, BaseItemDtoType baseType) =>
       _toLocalisedSectionTitle(this, context, baseType);
 
-  SortBy getSortBy() =>
-      _getSortBy(this);
-
   String _humanReadableName(
       CuratedItemSelectionType curatedItemSelectionType) {
     switch (curatedItemSelectionType) {
@@ -3114,8 +3111,8 @@ enum CuratedItemSelectionType {
     }
   }
 
-  SortBy _getSortBy(CuratedItemSelectionType curatedItemSelectionType) {
-    switch (curatedItemSelectionType) {
+  SortBy getSortBy() {
+    switch (this) {
         case CuratedItemSelectionType.mostPlayed:
           return SortBy.playCount;
         case CuratedItemSelectionType.favorites:
