@@ -366,6 +366,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             widget.view?.id,
             settings.isOffline,
             settings.tabOrder.indexOf(widget.tabContentType),
+            settings.tabOrder,
             settings.trackOfflineFavorites,
             widget.genreFilter?.id,
           );
