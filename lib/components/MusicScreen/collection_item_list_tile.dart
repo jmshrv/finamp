@@ -24,12 +24,14 @@ class CollectionItemListTile extends ConsumerWidget {
     this.parentType,
     this.onTap,
     this.albumShowsYearAndDurationInstead = false,
+    this.showFavoriteIconOnlyWhenFilterDisabled = false,
   });
 
   final BaseItemDto item;
   final String? parentType;
   final void Function()? onTap;
   final bool albumShowsYearAndDurationInstead;
+  final bool showFavoriteIconOnlyWhenFilterDisabled;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -131,6 +133,7 @@ class CollectionItemListTile extends ConsumerWidget {
             FavoriteButton(
               item: item,
               onlyIfFav: true,
+              showFavoriteIconOnlyWhenFilterDisabled: showFavoriteIconOnlyWhenFilterDisabled,
             )
           ],
         ),

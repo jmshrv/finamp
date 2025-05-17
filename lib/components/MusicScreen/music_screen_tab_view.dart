@@ -453,6 +453,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                   isPlaylist: widget.tabContentType ==
                                       TabContentType.playlists,
                                   genreFilter: widget.genreFilter,
+                                  showFavoriteIconOnlyWhenFilterDisabled: true
                                 ),
                         ),
                       );

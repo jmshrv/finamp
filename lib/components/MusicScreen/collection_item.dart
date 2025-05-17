@@ -59,6 +59,7 @@ class CollectionItem extends ConsumerStatefulWidget {
     this.isGrid = false,
     this.genreFilter,
     this.albumShowsYearAndDurationInstead = false,
+    this.showFavoriteIconOnlyWhenFilterDisabled = false,
   });
 
   /// The item to show in the widget.
@@ -86,6 +87,12 @@ class CollectionItem extends ConsumerStatefulWidget {
   // If this is true and the item is an album, the release year and album duration
   // will be shown as subtitle instead of the album artists
   final bool albumShowsYearAndDurationInstead;
+
+  // If this is true, the red favorite icon that marks your favorites will
+  // only be shown when the favorite filter on the MusicScreen is disabled
+  // We want to always display the favorite indicator icon on other screens
+  // so this defaults to false.
+  final bool showFavoriteIconOnlyWhenFilterDisabled;
 
   @override
   ConsumerState<CollectionItem> createState() => _CollectionItemState();
@@ -788,6 +795,7 @@ class _CollectionItemState extends ConsumerState<CollectionItem> {
                 onTap: onTap,
                 parentType: widget.parentType,
                 albumShowsYearAndDurationInstead: widget.albumShowsYearAndDurationInstead,
+                showFavoriteIconOnlyWhenFilterDisabled: widget.showFavoriteIconOnlyWhenFilterDisabled,
               ),
       ),
     );
