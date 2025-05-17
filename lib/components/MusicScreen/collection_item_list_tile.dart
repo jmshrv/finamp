@@ -1,6 +1,5 @@
 import 'package:finamp/components/favorite_button.dart';
 import 'package:finamp/components/print_duration.dart';
-import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/release_date_helper.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +36,6 @@ class CollectionItemListTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
-    final downloadsService = GetIt.instance<DownloadsService>();
     final library = finampUserHelper.currentUser?.currentView;
     final itemType = BaseItemDtoType.fromItem(item);
     final isArtistOrGenre = (itemType == BaseItemDtoType.artist ||
@@ -56,11 +54,9 @@ class CollectionItemListTile extends ConsumerWidget {
                 type: DownloadItemType.collection,
                 item: item
             );
-    AsyncValue<DownloadItemState?> status = ref.watch(downloadsService.stateProvider(itemDownloadStub));
     final downloadedIndicator = DownloadedIndicator(
       item: itemDownloadStub,
       size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
-      statusOverride: status,
     );
     final titleText = Text(
       item.name ?? AppLocalizations.of(context)!.unknownName,
@@ -68,7 +64,7 @@ class CollectionItemListTile extends ConsumerWidget {
     );
     final showSubtitle = (subtitle != null || 
         (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) || 
-        downloadedIndicatorIsVisible(status));
+        downloadedIndicator.isVisible(ref));
     final releaseDate = ReleaseDateHelper.autoFormat(item) ?? AppLocalizations.of(context)!.noReleaseDate;
     final subtitleText = Text.rich(
       TextSpan(
