@@ -4,9 +4,11 @@ import 'dart:math';
 import 'package:finamp/components/PlayerScreen/player_split_screen_scaffold.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:octo_image/octo_image.dart';
 
 import '../models/jellyfin_models.dart';
@@ -220,6 +222,104 @@ class _AlbumImageErrorPlaceholder extends StatelessWidget {
     return Container(
       color: Theme.of(context).cardColor,
       child: const Icon(Icons.album),
+    );
+  }
+}
+
+class TapToZoomImage extends StatefulWidget {
+  final AlbumImage albumImage;
+  final bool isDisabled;
+
+  const TapToZoomImage({
+    super.key,
+    required this.albumImage,
+    this.isDisabled = false,
+  });
+
+  @override
+  _TapToZoomImageState createState() => _TapToZoomImageState();
+}
+
+final zoomedImageHeroTag = "zoomed-image";
+
+class _TapToZoomImageState extends State<TapToZoomImage> {
+  @override
+  Widget build(BuildContext context) {
+    if (widget.isDisabled) {
+      return widget.albumImage;
+    }
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () => Navigator.of(context).push(PageRouteBuilder<ZoomedImage>(
+            opaque: false,
+            barrierDismissible: true,
+            transitionDuration: MediaQuery.of(context).disableAnimations
+                ? Duration.zero
+                : const Duration(milliseconds: 500),
+            pageBuilder: (BuildContext context, Animation<double> animation1,
+                Animation<double> animation2) {
+              return ZoomedImage(albumImage: widget.albumImage);
+            })),
+        child: Hero(
+          tag: zoomedImageHeroTag,
+          child: widget.albumImage,
+        ),
+      ),
+    );
+  }
+}
+
+class ZoomedImage extends StatelessWidget {
+  final AlbumImage albumImage;
+
+  const ZoomedImage({
+    super.key,
+    required this.albumImage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: IgnorePointer(
+            child: Container(
+              color: Colors.black.withOpacity(0.5),
+            ),
+          ),
+        ),
+        Center(
+            child: Dismissible(
+          key: const Key("zoomed-image-dismiss"),
+          direction: DismissDirection.vertical,
+          onDismissed: (direction) {
+            Navigator.of(context).pop();
+          },
+          child: InteractiveViewer(
+            constrained: true,
+            panEnabled: true,
+            clipBehavior: Clip.none,
+            child: Hero(
+              tag: zoomedImageHeroTag,
+              child: albumImage,
+            ),
+          ),
+        )),
+        Positioned(
+          top: 8,
+          right: 16,
+          child: IconButton(
+            icon: const Icon(TablerIcons.x),
+            color: Colors.white,
+            iconSize: 32.0,
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+      ],
     );
   }
 }
