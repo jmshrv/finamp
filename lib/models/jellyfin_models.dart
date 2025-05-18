@@ -3598,7 +3598,7 @@ enum SortBy {
       case SortBy.revenue:
         return AppLocalizations.of(context)!.revenue;
       case SortBy.runtime:
-        return AppLocalizations.of(context)!.runtime;
+        return AppLocalizations.of(context)!.duration;
     }
   }
 

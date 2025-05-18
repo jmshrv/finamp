@@ -16,8 +16,8 @@ import '../album_image.dart';
 
 /// ListTile content for CollectionItem. You probably shouldn't use this widget
 /// directly, use CollectionItem instead.
-class CollectionItemListTile extends ConsumerWidget {
-  const CollectionItemListTile({
+class ItemCollectionListTile extends ConsumerWidget {
+  const ItemCollectionListTile({
     super.key,
     required this.item,
     this.parentType,

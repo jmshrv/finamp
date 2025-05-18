@@ -1,4 +1,4 @@
-import 'package:finamp/components/MusicScreen/collection_item.dart';
+import 'package:finamp/components/MusicScreen/item_collection_wrapper.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +43,7 @@ class _ItemsSliverListState extends ConsumerState<CollectionsSliverList> {
         (BuildContext context, int index) {
           final BaseItemDto item = widget.childrenForList[index];
           final itemType = BaseItemDtoType.fromItem(item);
-          return CollectionItem(
+          return ItemCollectionWrapper(
             key: ValueKey(item.id),
             item: item,
             isPlaylist: false,

@@ -6,10 +6,10 @@ import '../../services/finamp_settings_helper.dart';
 import '../../services/generate_subtitle.dart';
 import '../album_image.dart';
 
-/// Card content for CollectionItem. You probably shouldn't use this widget directly,
+/// Card content for ItemCollection. You probably shouldn't use this widget directly,
 /// use CollectionItem instead.
-class CollectionItemCard extends ConsumerWidget {
-  const CollectionItemCard({
+class ItemCollectionCard extends ConsumerWidget {
+  const ItemCollectionCard({
     super.key,
     required this.item,
     this.parentType,
@@ -31,7 +31,7 @@ class CollectionItemCard extends ConsumerWidget {
           children: [
             AlbumImage(item: item),
             ref.watch(finampSettingsProvider.showTextOnGridView)
-                ? _CollectionItemCardText(item: item, parentType: parentType)
+                ? _ItemCollectionCardText(item: item, parentType: parentType)
                 : const SizedBox.shrink(),
             Positioned.fill(
               child: Material(
@@ -48,8 +48,8 @@ class CollectionItemCard extends ConsumerWidget {
   }
 }
 
-class _CollectionItemCardText extends StatelessWidget {
-  const _CollectionItemCardText({
+class _ItemCollectionCardText extends StatelessWidget {
+  const _ItemCollectionCardText({
     required this.item,
     required this.parentType,
   });

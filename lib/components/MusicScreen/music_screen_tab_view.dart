@@ -21,7 +21,7 @@ import '../AlbumScreen/track_list_tile.dart';
 import '../first_page_progress_indicator.dart';
 import '../global_snackbar.dart';
 import '../new_page_progress_indicator.dart';
-import 'collection_item.dart';
+import 'item_collection_wrapper.dart';
 import 'alphabet_item_list.dart';
 
 // this is used to allow refreshing the music screen from other parts of the app, e.g. after deleting items from the server
@@ -453,7 +453,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                   showDateAdded: (sortBy == SortBy.dateCreated),
                                   showDateLastPlayed: (!settings.isOffline && sortBy == SortBy.datePlayed),
                                 )
-                              : CollectionItem(
+                              : ItemCollectionWrapper(
                                   key: ValueKey(item.id),
                                   item: item,
                                   isPlaylist: widget.tabContentType ==
@@ -486,7 +486,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                         key: ValueKey(index),
                         controller: controller,
                         index: index,
-                        child: CollectionItem(
+                        child: ItemCollectionWrapper(
                           key: ValueKey(item.id),
                           item: item,
                           isPlaylist:

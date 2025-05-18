@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:finamp/components/AlbumScreen/album_screen_content.dart';
 import 'package:finamp/components/curated_item_filter_row.dart';
-import 'package:finamp/components/collections_sliver_list.dart';
+import 'package:finamp/components/item_collections_sliver_list.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';

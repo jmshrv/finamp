@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:finamp/components/MusicScreen/collection_item_list_tile.dart';
+import 'package:finamp/components/MusicScreen/item_collection_list_tile.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/l10n/app_localizations.dart';
@@ -24,9 +24,9 @@ import '../../services/jellyfin_api_helper.dart';
 import '../AddToPlaylistScreen/playlist_actions_menu.dart';
 import '../AlbumScreen/download_dialog.dart';
 import '../global_snackbar.dart';
-import 'collection_item_card.dart';
+import 'item_collection_card.dart';
 
-enum _CollectionListTileMenuItems {
+enum _ItemCollectionListTileMenuItems {
   addFavorite,
   removeFavorite,
   addToMixList,
@@ -44,13 +44,13 @@ enum _CollectionListTileMenuItems {
   addToPlaylist,
 }
 
-/// This widget is kind of a shell around CollectionItemCard and CollectionItemListTile.
+/// This widget is kind of a wrapper around ItemCollectionCard and ItemCollectionListTile.
 /// It gets used for albums, artists, genres and playlists.
 /// Depending on the values given, a list tile or a card will be returned. This
 /// widget exists to handle the dropdown stuff and other stuff shared between
 /// the two widgets.
-class CollectionItem extends ConsumerStatefulWidget {
-  const CollectionItem({
+class ItemCollectionWrapper extends ConsumerStatefulWidget {
+  const ItemCollectionWrapper({
     super.key,
     required this.item,
     required this.isPlaylist,
@@ -100,10 +100,10 @@ class CollectionItem extends ConsumerStatefulWidget {
   final bool showFavoriteIconOnlyWhenFilterDisabled;
 
   @override
-  ConsumerState<CollectionItem> createState() => _CollectionItemState();
+  ConsumerState<ItemCollectionWrapper> createState() => _ItemCollectionWrapperState();
 }
 
-class _CollectionItemState extends ConsumerState<CollectionItem> {
+class _ItemCollectionWrapperState extends ConsumerState<ItemCollectionWrapper> {
   late BaseItemDto mutableItem;
 
   QueueService get _queueService => GetIt.instance<QueueService>();
@@ -198,7 +198,7 @@ class _CollectionItemState extends ConsumerState<CollectionItem> {
           itemType = "album";
       }
 
-      final selection = await showMenu<_CollectionListTileMenuItems>(
+      final selection = await showMenu<_ItemCollectionListTileMenuItems>(
         context: context,
         position: RelativeRect.fromLTRB(
           globalPosition.dx,
@@ -208,18 +208,18 @@ class _CollectionItemState extends ConsumerState<CollectionItem> {
         ),
         items: [
           ref.watch(isFavoriteProvider(mutableItem))
-              ? PopupMenuItem<_CollectionListTileMenuItems>(
+              ? PopupMenuItem<_ItemCollectionListTileMenuItems>(
                   enabled: !isOffline,
-                  value: _CollectionListTileMenuItems.removeFavorite,
+                  value: _ItemCollectionListTileMenuItems.removeFavorite,
                   child: ListTile(
                     enabled: !isOffline,
                     leading: const Icon(Icons.favorite_border),
                     title: Text(local.removeFavorite),
                   ),
                 )
-              : PopupMenuItem<_CollectionListTileMenuItems>(
+              : PopupMenuItem<_ItemCollectionListTileMenuItems>(
                   enabled: !isOffline,
-                  value: _CollectionListTileMenuItems.addFavorite,
+                  value: _ItemCollectionListTileMenuItems.addFavorite,
                   child: ListTile(
                     enabled: !isOffline,
                     leading: const Icon(Icons.favorite),
@@ -229,22 +229,22 @@ class _CollectionItemState extends ConsumerState<CollectionItem> {
           _jellyfinApiHelper.selectedMixAlbums
                   .map((e) => e.id)
                   .contains(mutableItem.id)
-              ? PopupMenuItem<_CollectionListTileMenuItems>(
+              ? PopupMenuItem<_ItemCollectionListTileMenuItems>(
                   enabled: !isOffline &&
                       ["MusicAlbum", "MusicArtist", "MusicGenre"]
                           .contains(mutableItem.type),
-                  value: _CollectionListTileMenuItems.removeFromMixList,
+                  value: _ItemCollectionListTileMenuItems.removeFromMixList,
                   child: ListTile(
                     enabled: !isOffline,
                     leading: const Icon(Icons.explore_off),
                     title: Text(local.removeFromMix),
                   ),
                 )
-              : PopupMenuItem<_CollectionListTileMenuItems>(
+              : PopupMenuItem<_ItemCollectionListTileMenuItems>(
                   enabled: !isOffline &&
                       ["MusicAlbum", "MusicArtist", "MusicGenre"]
                           .contains(mutableItem.type),
-                  value: _CollectionListTileMenuItems.addToMixList,
+                  value: _ItemCollectionListTileMenuItems.addToMixList,
                   child: ListTile(
                     enabled: !isOffline,
                     leading: const Icon(Icons.explore),
@@ -252,74 +252,74 @@ class _CollectionItemState extends ConsumerState<CollectionItem> {
                   ),
                 ),
           if (_queueService.getQueue().nextUp.isNotEmpty)
-            PopupMenuItem<_CollectionListTileMenuItems>(
+            PopupMenuItem<_ItemCollectionListTileMenuItems>(
               enabled: (BaseItemDtoType.fromItem(mutableItem) != BaseItemDtoType.genre),
-              value: _CollectionListTileMenuItems.playNext,
+              value: _ItemCollectionListTileMenuItems.playNext,
               child: ListTile(
                 leading: const Icon(TablerIcons.corner_right_down),
                 title: Text(local.playNext),
               ),
             ),
-          PopupMenuItem<_CollectionListTileMenuItems>(
+          PopupMenuItem<_ItemCollectionListTileMenuItems>(
             enabled: (BaseItemDtoType.fromItem(mutableItem) != BaseItemDtoType.genre),
-            value: _CollectionListTileMenuItems.addToNextUp,
+            value: _ItemCollectionListTileMenuItems.addToNextUp,
             child: ListTile(
               leading: const Icon(TablerIcons.corner_right_down_double),
               title: Text(local.addToNextUp),
             ),
           ),
           if (_queueService.getQueue().nextUp.isNotEmpty)
-            PopupMenuItem<_CollectionListTileMenuItems>(
+            PopupMenuItem<_ItemCollectionListTileMenuItems>(
               enabled: (BaseItemDtoType.fromItem(mutableItem) != BaseItemDtoType.genre),
-              value: _CollectionListTileMenuItems.shuffleNext,
+              value: _ItemCollectionListTileMenuItems.shuffleNext,
               child: ListTile(
                 leading: const Icon(TablerIcons.corner_right_down),
                 title: Text(local.shuffleNext),
               ),
             ),
-          PopupMenuItem<_CollectionListTileMenuItems>(
+          PopupMenuItem<_ItemCollectionListTileMenuItems>(
             enabled: (BaseItemDtoType.fromItem(mutableItem) != BaseItemDtoType.genre),
-            value: _CollectionListTileMenuItems.shuffleToNextUp,
+            value: _ItemCollectionListTileMenuItems.shuffleToNextUp,
             child: ListTile(
               leading: const Icon(TablerIcons.corner_right_down_double),
               title: Text(local.shuffleToNextUp),
             ),
           ),
-          PopupMenuItem<_CollectionListTileMenuItems>(
+          PopupMenuItem<_ItemCollectionListTileMenuItems>(
             enabled: (BaseItemDtoType.fromItem(mutableItem) != BaseItemDtoType.genre),
-            value: _CollectionListTileMenuItems.addToQueue,
+            value: _ItemCollectionListTileMenuItems.addToQueue,
             child: ListTile(
               leading: const Icon(TablerIcons.playlist),
               title: Text(local.addToQueue),
             ),
           ),
-          PopupMenuItem<_CollectionListTileMenuItems>(
+          PopupMenuItem<_ItemCollectionListTileMenuItems>(
             enabled: (BaseItemDtoType.fromItem(mutableItem) != BaseItemDtoType.genre),
-            value: _CollectionListTileMenuItems.shuffleToQueue,
+            value: _ItemCollectionListTileMenuItems.shuffleToQueue,
             child: ListTile(
               leading: const Icon(TablerIcons.playlist),
               title: Text(local.shuffleToQueue),
             ),
           ),
-          PopupMenuItem<_CollectionListTileMenuItems>(
-            value: _CollectionListTileMenuItems.addToPlaylist,
+          PopupMenuItem<_ItemCollectionListTileMenuItems>(
+            value: _ItemCollectionListTileMenuItems.addToPlaylist,
             child: ListTile(
               leading: const Icon(Icons.playlist_add),
               title: Text(local.addToPlaylistTitle),
             ),
           ),
           downloadStatus.isRequired
-              ? PopupMenuItem<_CollectionListTileMenuItems>(
-                  value: _CollectionListTileMenuItems.deleteFromDevice,
+              ? PopupMenuItem<_ItemCollectionListTileMenuItems>(
+                  value: _ItemCollectionListTileMenuItems.deleteFromDevice,
                   child: ListTile(
                     leading: const Icon(Icons.delete),
                     title: Text(AppLocalizations.of(context)!
                         .deleteFromTargetConfirmButton("")),
                   ),
                 )
-              : PopupMenuItem<_CollectionListTileMenuItems>(
+              : PopupMenuItem<_ItemCollectionListTileMenuItems>(
                   enabled: !isOffline,
-                  value: _CollectionListTileMenuItems.download,
+                  value: _ItemCollectionListTileMenuItems.download,
                   child: ListTile(
                     leading: const Icon(Icons.file_download),
                     title: Text(AppLocalizations.of(context)!.downloadItem),
@@ -329,16 +329,16 @@ class _CollectionItemState extends ConsumerState<CollectionItem> {
           //TODO handle multiple artists
           // Only show goToArtist on albums, not artists/genres/playlists
           if (widget.item.type == "MusicAlbum" && albumArtistId != null)
-            PopupMenuItem<_CollectionListTileMenuItems>(
-              value: _CollectionListTileMenuItems.goToArtist,
+            PopupMenuItem<_ItemCollectionListTileMenuItems>(
+              value: _ItemCollectionListTileMenuItems.goToArtist,
               child: ListTile(
                 leading: const Icon(TablerIcons.user),
                 title: Text(AppLocalizations.of(context)!.goToArtist),
               ),
             ),
           if (canDeleteFromServer)
-            PopupMenuItem<_CollectionListTileMenuItems>(
-              value: _CollectionListTileMenuItems.deleteFromServer,
+            PopupMenuItem<_ItemCollectionListTileMenuItems>(
+              value: _ItemCollectionListTileMenuItems.deleteFromServer,
               enabled: canDeleteFromServer,
               child: ListTile(
                   leading: const Icon(Icons.delete_forever),
@@ -352,17 +352,17 @@ class _CollectionItemState extends ConsumerState<CollectionItem> {
       final itemDtoType = BaseItemDtoType.fromItem(widget.item);
 
       switch (selection) {
-        case _CollectionListTileMenuItems.addFavorite:
+        case _ItemCollectionListTileMenuItems.addFavorite:
           ref
               .read(isFavoriteProvider(mutableItem).notifier)
               .updateFavorite(true);
           break;
-        case _CollectionListTileMenuItems.removeFavorite:
+        case _ItemCollectionListTileMenuItems.removeFavorite:
           ref
               .read(isFavoriteProvider(mutableItem).notifier)
               .updateFavorite(false);
           break;
-        case _CollectionListTileMenuItems.addToMixList:
+        case _ItemCollectionListTileMenuItems.addToMixList:
           try {
             if (mutableItem.type == "MusicArtist") {
               _jellyfinApiHelper.addArtistToMixBuilderList(mutableItem);
@@ -376,7 +376,7 @@ class _CollectionItemState extends ConsumerState<CollectionItem> {
             GlobalSnackbar.error(e);
           }
           break;
-        case _CollectionListTileMenuItems.removeFromMixList:
+        case _ItemCollectionListTileMenuItems.removeFromMixList:
           try {
             if (mutableItem.type == "MusicArtist") {
               _jellyfinApiHelper.removeArtistFromMixBuilderList(mutableItem);
@@ -390,7 +390,7 @@ class _CollectionItemState extends ConsumerState<CollectionItem> {
             GlobalSnackbar.error(e);
           }
           break;
-        case _CollectionListTileMenuItems.playNext:
+        case _ItemCollectionListTileMenuItems.playNext:
           try {
             List<BaseItemDto>? collectionTracks;
             if (itemDtoType == BaseItemDtoType.artist) {
@@ -447,7 +447,7 @@ class _CollectionItemState extends ConsumerState<CollectionItem> {
             GlobalSnackbar.error(e);
           }
           break;
-        case _CollectionListTileMenuItems.addToNextUp:
+        case _ItemCollectionListTileMenuItems.addToNextUp:
           try {
             List<BaseItemDto>? collectionTracks;
             if (BaseItemDtoType.fromItem(widget.item) == BaseItemDtoType.artist) {
@@ -504,7 +504,7 @@ class _CollectionItemState extends ConsumerState<CollectionItem> {
             GlobalSnackbar.error(e);
           }
           break;
-        case _CollectionListTileMenuItems.shuffleNext:
+        case _ItemCollectionListTileMenuItems.shuffleNext:
           try {
             List<BaseItemDto>? collectionTracks;
             if (BaseItemDtoType.fromItem(widget.item) == BaseItemDtoType.artist) {
@@ -563,7 +563,7 @@ class _CollectionItemState extends ConsumerState<CollectionItem> {
             GlobalSnackbar.error(e);
           }
           break;
-        case _CollectionListTileMenuItems.shuffleToNextUp:
+        case _ItemCollectionListTileMenuItems.shuffleToNextUp:
           try {
             List<BaseItemDto>? collectionTracks;
             if (BaseItemDtoType.fromItem(widget.item) == BaseItemDtoType.artist) {
@@ -622,7 +622,7 @@ class _CollectionItemState extends ConsumerState<CollectionItem> {
             GlobalSnackbar.error(e);
           }
           break;
-        case _CollectionListTileMenuItems.addToQueue:
+        case _ItemCollectionListTileMenuItems.addToQueue:
           try {
             List<BaseItemDto>? collectionTracks;
             if (BaseItemDtoType.fromItem(widget.item) == BaseItemDtoType.artist) {
@@ -679,7 +679,7 @@ class _CollectionItemState extends ConsumerState<CollectionItem> {
             GlobalSnackbar.error(e);
           }
           break;
-        case _CollectionListTileMenuItems.shuffleToQueue:
+        case _ItemCollectionListTileMenuItems.shuffleToQueue:
           try {
             List<BaseItemDto>? collectionTracks;
             if (BaseItemDtoType.fromItem(widget.item) == BaseItemDtoType.artist) {
@@ -738,7 +738,7 @@ class _CollectionItemState extends ConsumerState<CollectionItem> {
             GlobalSnackbar.error(e);
           }
           break;
-        case _CollectionListTileMenuItems.goToArtist:
+        case _ItemCollectionListTileMenuItems.goToArtist:
           late BaseItemDto artist;
           try {
             if (FinampSettingsHelper.finampSettings.isOffline) {
@@ -759,15 +759,15 @@ class _CollectionItemState extends ConsumerState<CollectionItem> {
           }
         case null:
           break;
-        case _CollectionListTileMenuItems.download:
+        case _ItemCollectionListTileMenuItems.download:
           await DownloadDialog.show(context, itemDownloadStub, null);
-        case _CollectionListTileMenuItems.deleteFromDevice:
+        case _ItemCollectionListTileMenuItems.deleteFromDevice:
           await askBeforeDeleteDownloadFromDevice(context, itemDownloadStub);
-        case _CollectionListTileMenuItems.deleteFromServer:
+        case _ItemCollectionListTileMenuItems.deleteFromServer:
           await askBeforeDeleteFromServerAndDevice(context, itemDownloadStub,
               refresh: () => musicScreenRefreshStream
                   .add(null)); // trigger a refresh of the music screen
-        case _CollectionListTileMenuItems.addToPlaylist:
+        case _ItemCollectionListTileMenuItems.addToPlaylist:
           if (context.mounted) {
             await showPlaylistActionsMenu(
               context: context,
@@ -790,12 +790,12 @@ class _CollectionItemState extends ConsumerState<CollectionItem> {
             localPosition: details.localPosition,
             globalPosition: details.globalPosition),
         child: widget.isGrid
-            ? CollectionItemCard(
+            ? ItemCollectionCard(
                 item: mutableItem,
                 onTap: onTap,
                 parentType: widget.parentType,
               )
-            : CollectionItemListTile(
+            : ItemCollectionListTile(
                 item: mutableItem,
                 onTap: onTap,
                 parentType: widget.parentType,

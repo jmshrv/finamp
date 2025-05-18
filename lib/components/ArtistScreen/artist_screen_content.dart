@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:finamp/components/curated_item_filter_row.dart';
-import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/artist_screen_provider.dart';
 import 'package:finamp/components/curated_item_sections.dart';
 import 'package:finamp/l10n/app_localizations.dart';
