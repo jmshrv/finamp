@@ -93,6 +93,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
           expandedHeight: kToolbarHeight + 125 + 80,
           // collapsedHeight: kToolbarHeight + 125 + 80,
           pinned: true,
+          centerTitle: false,
           flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
             parentItem: widget.parent,
             isPlaylist: widget.parent.type == "Playlist",
