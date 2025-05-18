@@ -2238,7 +2238,15 @@
   },
   "noReleaseDate": "No Release Date",
   "@noReleaseDate": {
-    "description": "Placeholder text if an album has no release date set."
+    "description": "Placeholder text if an album or track has no release date set."
+  },
+  "noDateAdded": "No Date Added",
+  "@noDateAdded": {
+    "description": "Placeholder text if an item has no date added set."
+  },
+  "noDateLastPlayed": "Not played yet",
+  "@noDateLastPlayed": {
+    "description": "Placeholder text if an item has no last played date added set."
   },
   "librarySelectError": "Error loading available libraries for user",
   "@librarySelectError": {

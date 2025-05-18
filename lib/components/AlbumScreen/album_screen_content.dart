@@ -152,7 +152,11 @@ class TracksSliverList extends ConsumerStatefulWidget {
     required this.childrenForQueue,
     required this.parent,
     this.onRemoveFromList,
+    this.forceAlbumArtists = false,
     this.showPlayCount = false,
+    this.showDateAdded = false,
+    this.showDateLastPlayed = false,
+    this.showReleaseDate = false,
     this.isOnArtistScreen = false,
     this.isOnGenreScreen = false,
   });
@@ -161,7 +165,11 @@ class TracksSliverList extends ConsumerStatefulWidget {
   final Future<List<BaseItemDto>> childrenForQueue;
   final BaseItemDto parent;
   final BaseItemDtoCallback? onRemoveFromList;
+  final bool forceAlbumArtists;
   final bool showPlayCount;
+  final bool showDateAdded;
+  final bool showDateLastPlayed;
+  final bool showReleaseDate;
   final bool isOnArtistScreen;
   final bool isOnGenreScreen;
 
@@ -234,7 +242,11 @@ class _TracksSliverListState extends ConsumerState<TracksSliverList> {
             isInPlaylist: widget.parent.type == "Playlist",
             isOnArtistScreen: widget.isOnArtistScreen,
             isOnGenreScreen: widget.isOnGenreScreen,
+            forceAlbumArtists: widget.forceAlbumArtists,
             showPlayCount: widget.showPlayCount,
+            showDateAdded: widget.showDateAdded,
+            showDateLastPlayed: widget.showDateLastPlayed,
+            showReleaseDate: widget.showReleaseDate,
           );
         },
         childCount: widget.childrenForList.length,

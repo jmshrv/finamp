@@ -410,7 +410,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               ],
             ),
           );
-
+          var sortBy = widget.sortByOverride ?? 
+                                      settings.tabSortBy[widget.tabContentType];
           var tabContent = box.get("FinampSettings")!.contentViewType ==
                       ContentViewType.list ||
                   widget.tabContentType == TabContentType.tracks
@@ -446,6 +447,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                   genreFilter: widget.genreFilter,
                                   isOnGenreScreen: (widget.genreFilter != null) ? true : false,
                                   parentItem: widget.genreFilter,
+                                  forceAlbumArtists: (sortBy == SortBy.albumArtist),
+                                  showPlayCount: (sortBy == SortBy.playCount),
+                                  showReleaseDate: (sortBy == SortBy.premiereDate),
+                                  showDateAdded: (sortBy == SortBy.dateCreated),
+                                  showDateLastPlayed: (sortBy == SortBy.datePlayed),
                                 )
                               : CollectionItem(
                                   key: ValueKey(item.id),
@@ -453,6 +459,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                   isPlaylist: widget.tabContentType ==
                                       TabContentType.playlists,
                                   genreFilter: widget.genreFilter,
+                                  showAdditionalInfoForSortBy: sortBy,
                                   showFavoriteIconOnlyWhenFilterDisabled: true
                                 ),
                         ),

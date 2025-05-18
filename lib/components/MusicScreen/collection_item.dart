@@ -59,6 +59,7 @@ class CollectionItem extends ConsumerStatefulWidget {
     this.isGrid = false,
     this.genreFilter,
     this.albumShowsYearAndDurationInstead = false,
+    this.showAdditionalInfoForSortBy,
     this.showFavoriteIconOnlyWhenFilterDisabled = false,
   });
 
@@ -87,6 +88,10 @@ class CollectionItem extends ConsumerStatefulWidget {
   // If this is true and the item is an album, the release year and album duration
   // will be shown as subtitle instead of the album artists
   final bool albumShowsYearAndDurationInstead;
+
+  // If a SortBy is passed, the subtitle row in list view will display the matching
+  // info (i.e. runtime or release date) before the actual default subtitle.
+  final SortBy? showAdditionalInfoForSortBy;
 
   // If this is true, the red favorite icon that marks your favorites will
   // only be shown when the favorite filter on the MusicScreen is disabled
@@ -795,6 +800,7 @@ class _CollectionItemState extends ConsumerState<CollectionItem> {
                 onTap: onTap,
                 parentType: widget.parentType,
                 albumShowsYearAndDurationInstead: widget.albumShowsYearAndDurationInstead,
+                showAdditionalInfoForSortBy: widget.showAdditionalInfoForSortBy,
                 showFavoriteIconOnlyWhenFilterDisabled: widget.showFavoriteIconOnlyWhenFilterDisabled,
               ),
       ),

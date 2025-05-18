@@ -23,6 +23,7 @@ class CollectionItemListTile extends ConsumerWidget {
     this.parentType,
     this.onTap,
     this.albumShowsYearAndDurationInstead = false,
+    this.showAdditionalInfoForSortBy,
     this.showFavoriteIconOnlyWhenFilterDisabled = false,
   });
 
@@ -30,6 +31,7 @@ class CollectionItemListTile extends ConsumerWidget {
   final String? parentType;
   final void Function()? onTap;
   final bool albumShowsYearAndDurationInstead;
+  final SortBy? showAdditionalInfoForSortBy;
   final bool showFavoriteIconOnlyWhenFilterDisabled;
 
   @override
@@ -62,10 +64,18 @@ class CollectionItemListTile extends ConsumerWidget {
       item.name ?? AppLocalizations.of(context)!.unknownName,
       overflow: TextOverflow.ellipsis,
     );
+    final additionalInfo = ((itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) || 
+        showAdditionalInfoForSortBy == SortBy.premiereDate)
+      ? (ReleaseDateHelper.autoFormat(item) ?? AppLocalizations.of(context)!.noReleaseDate)
+      : (showAdditionalInfoForSortBy == SortBy.runtime)
+        ? printDuration(item.runTimeTicksDuration())
+        : (showAdditionalInfoForSortBy == SortBy.dateCreated)
+          ? formatDate(context, item.dateCreated) ?? AppLocalizations.of(context)!.noDateAdded
+          : null;
     final showSubtitle = (subtitle != null || 
         (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) || 
+        (additionalInfo != null) ||
         downloadedIndicator.isVisible(ref));
-    final releaseDate = ReleaseDateHelper.autoFormat(item) ?? AppLocalizations.of(context)!.noReleaseDate;
     final subtitleText = Text.rich(
       TextSpan(
         children: [
@@ -76,9 +86,9 @@ class CollectionItemListTile extends ConsumerWidget {
             ),
             alignment: PlaceholderAlignment.top,
           ),
-          if (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) ...[
+          if (additionalInfo != null) ...[
             TextSpan(
-              text: releaseDate,
+              text: additionalInfo,
               style: TextStyle(
                 color: Theme.of(context)
                     .textTheme
@@ -88,7 +98,11 @@ class CollectionItemListTile extends ConsumerWidget {
               ),
             ),
             TextSpan(
-              text: " · ${printDuration(item.runTimeTicksDuration())}",
+              text: (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead)
+                ? " · ${printDuration(item.runTimeTicksDuration())}"
+                : (subtitle != null)
+                  ? " · $subtitle"
+                  : null,
               style: TextStyle(color: Theme.of(context).disabledColor),
             ),
           ] else ...[

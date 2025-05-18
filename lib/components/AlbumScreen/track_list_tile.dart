@@ -11,6 +11,7 @@ import 'package:finamp/services/current_album_image_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/release_date_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -63,6 +64,10 @@ class TrackListTile extends ConsumerWidget {
     this.isTrack = false,
     this.onRemoveFromList,
     this.showPlayCount = false,
+    this.forceAlbumArtists = false,
+    this.showReleaseDate = false,
+    this.showDateAdded = false,
+    this.showDateLastPlayed = false,
 
     /// Whether this widget is being displayed in a playlist. If true, will show
     /// the remove from playlist button.
@@ -83,7 +88,11 @@ class TrackListTile extends ConsumerWidget {
   final bool isTrack;
   final BaseItemDto? parentItem;
   final VoidCallback? onRemoveFromList;
+  final bool forceAlbumArtists;
   final bool showPlayCount;
+  final bool showReleaseDate;
+  final bool showDateAdded;
+  final bool showDateLastPlayed;
   final bool isInPlaylist;
   final bool isOnArtistScreen;
   final bool isOnGenreScreen;
@@ -305,7 +314,11 @@ class TrackListTile extends ConsumerWidget {
       actualIndex: item.indexNumber,
       showIndex: showIndex,
       showCover: showCover,
-      showArtists: parentItem?.isArtist != true,
+      showArtists: (forceAlbumArtists || parentItem?.isArtist != true),
+      forceAlbumArtists: forceAlbumArtists,
+      showReleaseDate: showReleaseDate,
+      showDateAdded: showDateAdded,
+      showDateLastPlayed: showDateLastPlayed,
       showPlayCount: showPlayCount,
       isInPlaylist: isInPlaylist,
       allowReorder: false,
@@ -386,7 +399,11 @@ class TrackListItem extends ConsumerStatefulWidget {
   final bool showIndex;
   final bool showCover;
   final bool showArtists;
+  final bool forceAlbumArtists;
   final bool showPlayCount;
+  final bool showReleaseDate;
+  final bool showDateAdded;
+  final bool showDateLastPlayed;
   final bool isInPlaylist;
   final bool allowReorder;
   final bool allowDismiss;
@@ -412,7 +429,11 @@ class TrackListItem extends ConsumerStatefulWidget {
       this.showIndex = false,
       this.showCover = true,
       this.showArtists = true,
+      this.forceAlbumArtists = false,
       this.showPlayCount = false,
+      this.showReleaseDate = false,
+      this.showDateAdded = false,
+      this.showDateLastPlayed = false,
       this.highlightCurrentTrack = true,
       this.onRemoveFromList,
       this.leftSwipeBackground = const SizedBox.shrink(),
@@ -462,8 +483,12 @@ class TrackListItemState extends ConsumerState<TrackListItem>
             showIndex: widget.showIndex,
             showCover: widget.showCover,
             showArtists: widget.showArtists,
+            forceAlbumArtists: widget.forceAlbumArtists,
             showAlbum: showAlbum,
             showPlayCount: widget.showPlayCount,
+            showReleaseDate: widget.showReleaseDate,
+            showDateAdded: widget.showDateAdded,
+            showDateLastPlayed: widget.showDateLastPlayed,
             isCurrentTrack: isCurrentlyPlaying,
             highlightCurrentTrack: widget.highlightCurrentTrack,
             allowReorder: widget.allowReorder,
@@ -572,8 +597,12 @@ class TrackListItemTile extends StatelessWidget {
     this.showIndex = false,
     this.showCover = true,
     this.showArtists = true,
+    this.forceAlbumArtists = false,
     this.showAlbum = true,
     this.showPlayCount = false,
+    this.showReleaseDate = false,
+    this.showDateAdded = false,
+    this.showDateLastPlayed = false,
     this.highlightCurrentTrack = true,
   });
 
@@ -585,8 +614,12 @@ class TrackListItemTile extends StatelessWidget {
   final bool showIndex;
   final bool showCover;
   final bool showArtists;
+  final bool forceAlbumArtists;
   final bool showAlbum;
   final bool showPlayCount;
+  final bool showReleaseDate;
+  final bool showDateAdded;
+  final bool showDateLastPlayed;
   final bool highlightCurrentTrack;
   final void Function() onTap;
 
@@ -608,9 +641,11 @@ class TrackListItemTile extends StatelessWidget {
     final durationLabelString =
         "${durationLabelFullHours > 0 ? "$durationLabelFullHours ${AppLocalizations.of(context)!.hours} " : ""}${durationLabelFullMinutes > 0 ? "$durationLabelFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$durationLabelSeconds ${AppLocalizations.of(context)!.seconds}";
 
-    final artistsString = (baseItem.artists?.isNotEmpty ?? false)
-        ? baseItem.artists?.join(", ")
-        : baseItem.albumArtist ?? AppLocalizations.of(context)!.unknownArtist;
+    final artistsString = (forceAlbumArtists)
+      ? (baseItem.albumArtists?.map((e) => e.name).join(", ") ?? AppLocalizations.of(context)!.unknownArtist)
+      : (baseItem.artists?.isNotEmpty ?? false)
+          ? baseItem.artists?.join(", ")
+          : (baseItem.albumArtists?.map((e) => e.name).join(", ") ?? AppLocalizations.of(context)!.unknownArtist);
 
     return ListTileTheme(
       tileColor: highlightTrack
@@ -727,6 +762,70 @@ class TrackListItemTile extends StatelessWidget {
                         ),
                         alignment: PlaceholderAlignment.top,
                       ),
+                    if (showPlayCount)
+                      TextSpan(
+                        text: AppLocalizations.of(context)!
+                            .playCountValue(baseItem.userData?.playCount ?? 0),
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .color!
+                              .withOpacity(0.75),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    if (showPlayCount)
+                      TextSpan(text: " · "),
+                    if (showDateLastPlayed)
+                      TextSpan(
+                        text: formatDate(context, baseItem.userData?.lastPlayedDate) ?? 
+                            AppLocalizations.of(context)!.noDateLastPlayed,
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .color!
+                              .withOpacity(0.75),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    if (showDateLastPlayed)
+                      TextSpan(text: " · "),
+                    if (showReleaseDate)
+                      TextSpan(
+                        text: (ReleaseDateHelper.autoFormat(baseItem) ?? 
+                            AppLocalizations.of(context)!.noReleaseDate),
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .color!
+                              .withOpacity(0.75),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    if (showReleaseDate)
+                      TextSpan(text: " · "),
+                    if (showDateAdded)
+                      TextSpan(
+                        text: formatDate(context, baseItem.dateCreated) ?? 
+                            AppLocalizations.of(context)!.noDateAdded,
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .color!
+                              .withOpacity(0.75),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    if (showDateAdded)
+                      TextSpan(text: " · "),
                     if (showArtists)
                       TextSpan(
                         text: artistsString,
@@ -743,15 +842,13 @@ class TrackListItemTile extends StatelessWidget {
                     if (!secondRowNeeded)
                       // show the artist anyway if nothing else is shown
                       TextSpan(
-                        text: baseItem.artists?.join(", ") ??
-                            baseItem.albumArtist ??
-                            AppLocalizations.of(context)!.unknownArtist,
+                        text: artistsString,
                         style: TextStyle(
                           color: Theme.of(context)
                               .textTheme
                               .bodyMedium!
                               .color!
-                              .withOpacity(0.6),
+                              .withOpacity(0.75),
                           fontSize: 13,
                           fontWeight: FontWeight.w300,
                         ),
@@ -761,22 +858,6 @@ class TrackListItemTile extends StatelessWidget {
                     if (showAlbum)
                       TextSpan(
                         text: baseItem.album,
-                        style: TextStyle(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .color!
-                              .withOpacity(0.6),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                    if (showAlbum)
-                      const WidgetSpan(child: SizedBox(width: 10.0)),
-                    if (showPlayCount)
-                      TextSpan(
-                        text: AppLocalizations.of(context)!
-                            .playCountValue(baseItem.userData?.playCount ?? 0),
                         style: TextStyle(
                           color: Theme.of(context)
                               .textTheme

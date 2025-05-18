@@ -1,4 +1,5 @@
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../models/finamp_models.dart';
@@ -28,4 +29,19 @@ class ReleaseDateHelper {
         return premiereDate.toLocal().toString();
     }
   }
+}
+
+String? formatDate(BuildContext context, String? itemDateString) {
+  if (itemDateString == null) {
+    return null;
+  }
+
+  final date = DateTime.tryParse(itemDateString.trim());
+  if (date == null) {
+    return null;
+  }
+
+  final locale = Localizations.localeOf(context).toString();
+  final dateFormat = DateFormat.yMd(locale);
+  return dateFormat.format(date.toLocal());
 }
