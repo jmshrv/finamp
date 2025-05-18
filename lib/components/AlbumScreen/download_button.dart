@@ -123,20 +123,13 @@ class DownloadButton extends ConsumerWidget {
         },
       ),
     );
-    var syncButton = Opacity(
-      opacity: downloadDisabled ? 0.4 : 1.0,
-      child: IconButton(
-        icon: const Icon(Icons.sync),
-        tooltip: AppLocalizations.of(context)!.syncDownloads,
-        onPressed: () {
-          if (downloadDisabled) {
-            sendDisabledDownloadMessageToSnackbar(customTooltip);
-            return;
-          }
-          downloadsService.resync(item, viewId);
-        },
-        color: (status.outdated && !downloadDisabled) ? Colors.orange : null,
-      ),
+    var syncButton = IconButton(
+      icon: const Icon(Icons.sync),
+      tooltip: AppLocalizations.of(context)!.syncDownloads,
+      onPressed: () {
+        downloadsService.resync(item, viewId);
+      },
+      color: (status.outdated && !downloadDisabled) ? Colors.orange : null,
     );
     var serverDeleteButton = Opacity(
       opacity: downloadDisabled ? 0.4 : 1.0,
