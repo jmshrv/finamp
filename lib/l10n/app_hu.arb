@@ -5,16 +5,6 @@
   "@sleepTimerTooltip": {},
   "shuffleAllTrackCount": "Az összes szám véletlenszerű lejátszása",
   "@shuffleAllTrackCount": {},
-  "startupError": "Hiba történt az alkalmazás indításakor! A hiba a következő volt: {error}\n\nKérjük, hozzon létre egyGithub-problémát a github.com/UnicornsOnLSD/finamp oldalon az oldal képernyőképével. Ha a probléma továbbra is fennáll, törölje az alkalmazás adatait az alkalmazás visszaállításához.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "updateButtonLabel": "FRISSÍTÉS",
   "@updateButtonLabel": {},
   "username": "Felhasználónév",
