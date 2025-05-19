@@ -12,6 +12,7 @@ import 'package:collection/collection.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -3704,6 +3705,38 @@ enum SortBy {
         return "Revenue";
       case SortBy.runtime:
         return "Runtime,AlbumArtist,Album,SortName";
+    }
+  }
+
+  IconData? getIcon() {
+    switch (this) {
+      case SortBy.album:
+        return TablerIcons.disc;
+      case SortBy.albumArtist:
+      case SortBy.artist:
+        return TablerIcons.user;
+      case SortBy.communityRating:
+      case SortBy.criticRating:
+        return TablerIcons.chart_bar_popular;
+      case SortBy.dateCreated:
+        return TablerIcons.calendar_plus;
+      case SortBy.datePlayed:
+        return TablerIcons.clock;
+      case SortBy.playCount:
+        return TablerIcons.sum;
+      case SortBy.premiereDate:
+      case SortBy.productionYear:
+        return TablerIcons.calendar;
+      case SortBy.sortName:
+        return TablerIcons.abc;
+      case SortBy.random:
+        return TablerIcons.arrows_shuffle;
+      case SortBy.revenue:
+        return TablerIcons.coins;
+      case SortBy.runtime:
+        return TablerIcons.stopwatch;
+      default:
+        return null;
     }
   }
 }

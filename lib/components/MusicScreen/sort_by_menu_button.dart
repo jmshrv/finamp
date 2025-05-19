@@ -46,16 +46,38 @@ class SortByMenuButton extends ConsumerWidget {
               opacity: (isOffline && 
               ((sortBy == SortBy.playCount || sortBy == SortBy.datePlayed)))
                 ? 0.3 : 1,
-              child: Text(
-              sortBy.toLocalisedString(context),
-              style: TextStyle(
-                color: ((selectedSortBy == sortBy)
-                  ? Theme.of(context).colorScheme.secondary
-                  : null),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 20,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Icon(
+                        sortBy.getIcon(),
+                        size: 18,
+                        color: ((selectedSortBy == sortBy)
+                            ? Theme.of(context).colorScheme.secondary
+                            : null),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                        sortBy.toLocalisedString(context),
+                        style: TextStyle(
+                          color: ((selectedSortBy == sortBy)
+                            ? Theme.of(context).colorScheme.secondary
+                            : null
+                          ),
+                        ),
+                    ),
+                  ),
+                ]
               ),
             ),
-          ),
-        )
+          )
       ],
       onSelected: (value) {
         if (isOffline && ((value == SortBy.playCount || value == SortBy.datePlayed))) {
