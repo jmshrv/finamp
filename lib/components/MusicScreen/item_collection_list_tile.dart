@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:finamp/components/favorite_button.dart';
 import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -75,11 +77,11 @@ class ItemCollectionListTile extends ConsumerWidget {
     final sortIconMeta = {
       SortBy.runtime: (
         icon: TablerIcons.stopwatch,
-        offset: const Offset(-1.5, 0.6),
+        offset: Platform.isWindows ? Offset(-1.5, 1.6) : Offset(-1.5, 0.6),
       ),
       SortBy.dateCreated: (
         icon: TablerIcons.calendar_plus,
-        offset: const Offset(-1.5, 0),
+        offset: Platform.isWindows ? Offset(-1.5, 1) : Offset(-1.5, 0),
       ),
     };
 
@@ -89,7 +91,7 @@ class ItemCollectionListTile extends ConsumerWidget {
       if (meta == null) return null;
 
       final textTheme = Theme.of(context).textTheme.bodyMedium!;
-      final color = textTheme.color!.withOpacity(0.75);
+      final color = textTheme.color!.withOpacity(0.7);
 
       return WidgetSpan(
         alignment: PlaceholderAlignment.top,
@@ -136,9 +138,7 @@ class ItemCollectionListTile extends ConsumerWidget {
               dateString: item.dateCreated,
               fallback: l10n.noDateAdded,
               style: TextStyle(
-                color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.75),
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
+                color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
               ),
             ),
           );
@@ -163,6 +163,8 @@ class ItemCollectionListTile extends ConsumerWidget {
           ),
           if (downloadedIndicator.isVisible(ref))
               WidgetSpan(child: SizedBox(width: (additionalInfo != null) ? 5.0 : 2.0)),
+          if (downloadedIndicator.isVisible(ref) && additionalInfoIcon != null)
+              WidgetSpan(child: SizedBox(width: 2.25)),
           if (additionalInfo != null) ...[
             if (additionalInfoIcon != null)
               additionalInfoIcon,

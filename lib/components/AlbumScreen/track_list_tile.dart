@@ -630,7 +630,7 @@ class TrackListItemTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final highlightTrack = isCurrentTrack && highlightCurrentTrack;
-
+    final isOnDesktop = Platform.isMacOS || Platform.isWindows || Platform.isLinux;
     final bool secondRowNeeded = showArtists || showAlbum || showPlayCount || showReleaseDate || showDateAdded || showDateLastPlayed;
 
     final durationLabelFullHours =
@@ -657,6 +657,8 @@ class TrackListItemTile extends ConsumerWidget {
               .fontSize! +
           1,
     );
+    final addSpaceAfterSpecialIcons = (downloadedIndicator.isVisible(ref) || (baseItem.hasLyrics ?? false)) && 
+            (showDateAdded || showDateLastPlayed);
 
     return ListTileTheme(
       tileColor: highlightTrack
@@ -748,14 +750,14 @@ class TrackListItemTile extends ConsumerWidget {
                       ),
                       alignment: PlaceholderAlignment.top,
                     ),
-                    if (downloadedIndicator.isVisible(ref))
+                    if (downloadedIndicator.isVisible(ref) && (baseItem.hasLyrics == null || baseItem.hasLyrics == false))
                       const WidgetSpan(child: SizedBox(width: 4.5)),
                     if (baseItem.hasLyrics ?? false)
                       WidgetSpan(
                         child: Padding(
                           padding: const EdgeInsets.only(right: 2.0),
                           child: Transform.translate(
-                              offset: (Platform.isMacOS) ? Offset(-1.5, 3.5) : Offset(-1.5, 2.5),
+                              offset: isOnDesktop ? Offset(-1.5, 3.5) : Offset(-1.5, 2.5),
                               child: Icon(
                                 TablerIcons.microphone_2,
                                 size: Theme.of(context)
@@ -768,6 +770,8 @@ class TrackListItemTile extends ConsumerWidget {
                         alignment: PlaceholderAlignment.top,
                       ),
                     if (baseItem.hasLyrics ?? false)
+                      const WidgetSpan(child: SizedBox(width: 5)),
+                    if (addSpaceAfterSpecialIcons)
                       const WidgetSpan(child: SizedBox(width: 5)),
                     if (showPlayCount)
                       TextSpan(
@@ -790,9 +794,9 @@ class TrackListItemTile extends ConsumerWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 2.0),
                           child: Transform.translate(
-                              offset: (Platform.isMacOS) ? Offset(-1.5, 3.2) : Offset(-1.5, 2.2),
+                              offset: isOnDesktop ? Offset(-1.5, 3.3) : Offset(-1.5, 2.3),
                               child: Icon(
-                                TablerIcons.ear,
+                                TablerIcons.clock,
                                 size: Theme.of(context)
                                         .textTheme
                                         .bodyMedium!
@@ -807,7 +811,7 @@ class TrackListItemTile extends ConsumerWidget {
                         alignment: PlaceholderAlignment.baseline,
                         baseline: TextBaseline.alphabetic,
                         child: Transform.translate(
-                          offset: (Platform.isMacOS) ? Offset(0, -1) : Offset(0, 0),
+                          offset: Platform.isMacOS ? Offset(0, -1) : Offset(0, 0),
                           child: RelativeDateTimeTextFromString(
                             dateString: baseItem.userData?.lastPlayedDate,
                             fallback: AppLocalizations.of(context)!.noDateLastPlayed,
@@ -843,7 +847,7 @@ class TrackListItemTile extends ConsumerWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 3),
                           child: Transform.translate(
-                              offset: (Platform.isMacOS) ? Offset(-1.5, 3.0) : Offset(-1.5, 2.0),
+                              offset: isOnDesktop ? Offset(-1.5, 3.0) : Offset(-1.5, 2.0),
                               child: Icon(
                                 TablerIcons.calendar_plus,
                                 size: Theme.of(context)
@@ -863,7 +867,7 @@ class TrackListItemTile extends ConsumerWidget {
                         alignment: PlaceholderAlignment.baseline,
                         baseline: TextBaseline.alphabetic,
                         child: Transform.translate(
-                          offset: (Platform.isMacOS) ? Offset(0, -1) : Offset(0, 0),
+                          offset: Platform.isMacOS ? Offset(0, -1) : Offset(0, 0),
                           child: RelativeDateTimeTextFromString(
                             dateString: baseItem.dateCreated,
                             fallback: AppLocalizations.of(context)!.noDateAdded,
