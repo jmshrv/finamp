@@ -14,7 +14,9 @@ import 'package:finamp/menus/components/menuEntries/toggle_favorite_menu_entry.d
 import 'package:finamp/menus/components/playbackActions/playback_action_row.dart';
 import 'package:finamp/menus/components/playbackActions/playback_actions.dart';
 import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 const Duration playlistMenuDefaultAnimationDuration =
     Duration(milliseconds: 750);
@@ -51,30 +53,6 @@ Future<void> showModalPlaylistMenu({
 
     final pageViewController = PageController();
 
-    Map<String, Widget> playActionPages = {
-      'Play*': Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          PlayPlaybackAction(baseItem: baseItem),
-          PlayNextPlaybackAction(baseItem: baseItem),
-          AddToNextUpPlaybackAction(baseItem: baseItem),
-          AddToQueuePlaybackAction(baseItem: baseItem),
-        ],
-      ),
-      // Shuffle
-      'Shuffle*': Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ShufflePlaybackAction(baseItem: baseItem),
-          ShuffleNextPlaybackAction(baseItem: baseItem),
-          ShuffleToNextUpPlaybackAction(baseItem: baseItem),
-          ShuffleToQueuePlaybackAction(baseItem: baseItem),
-        ],
-      ),
-    };
-
     List<Widget> menu = [
       SliverPersistentHeader(
         delegate: MenuItemInfoHeader(
@@ -87,7 +65,7 @@ Future<void> showModalPlaylistMenu({
         child: SliverToBoxAdapter(
           child: PlaybackActionRow(
             controller: pageViewController,
-            playActionPages: playActionPages,
+            playbackActionPages: getPlaybackActionPages(baseItem),
           ),
         ),
       ),

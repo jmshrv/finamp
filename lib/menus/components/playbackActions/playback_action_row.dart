@@ -8,11 +8,11 @@ class PlaybackActionRow extends ConsumerWidget {
   const PlaybackActionRow({
     super.key,
     required this.controller,
-    required this.playActionPages,
+    required this.playbackActionPages,
   });
 
   final PageController controller;
-  final Map<String, Widget> playActionPages;
+  final Map<String, Widget> playbackActionPages;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,11 +25,11 @@ class PlaybackActionRow extends ConsumerWidget {
             controller: controller,
             allowImplicitScrolling: true,
             scrollDirection: Axis.horizontal,
-            children: playActionPages.values.toList(),
+            children: playbackActionPages.values.toList(),
           ),
         ),
         PlaybackActionPageIndicator(
-          pages: playActionPages,
+          pages: playbackActionPages,
           pageController: controller,
         ),
       ],

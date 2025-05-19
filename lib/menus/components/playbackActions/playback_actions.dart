@@ -10,6 +10,40 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
+Map<String, Widget> getPlaybackActionPages(BaseItemDto baseItem) {
+  final queueService = GetIt.instance<QueueService>();
+  switch (BaseItemDtoType.fromItem(baseItem)) {
+    //TODO add case for custom (artists) options
+    default:
+      return {
+        'Play*': Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            PlayPlaybackAction(baseItem: baseItem),
+            if (queueService.getQueue().nextUp.isNotEmpty)
+              PlayNextPlaybackAction(baseItem: baseItem),
+            AddToNextUpPlaybackAction(baseItem: baseItem),
+            AddToQueuePlaybackAction(baseItem: baseItem),
+          ],
+        ),
+        // Shuffle
+        'Shuffle*': Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ShufflePlaybackAction(baseItem: baseItem),
+            if (queueService.getQueue().nextUp.isNotEmpty)
+              ShuffleNextPlaybackAction(baseItem: baseItem),
+            ShuffleToNextUpPlaybackAction(baseItem: baseItem),
+            ShuffleToQueuePlaybackAction(baseItem: baseItem),
+          ],
+        ),
+      };
+      break;
+  }
+}
+
 class PlayPlaybackAction extends ConsumerWidget {
   const PlayPlaybackAction({
     super.key,
