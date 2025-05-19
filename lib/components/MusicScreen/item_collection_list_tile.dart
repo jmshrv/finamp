@@ -144,6 +144,7 @@ class ItemCollectionListTile extends ConsumerWidget {
               style: TextStyle(
                 color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
               ),
+              disableTextScaling: true,
             ),
           );
         default:

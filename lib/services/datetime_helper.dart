@@ -146,11 +146,13 @@ class RelativeDateTimeText extends StatelessWidget {
   final DateTime dateTime;
   final TextStyle? style;
   final bool includeStaticDateTime;
+  final bool disableTextScaling;
 
   const RelativeDateTimeText({
     required this.dateTime,
     this.style,
     this.includeStaticDateTime = false,
+    this.disableTextScaling = false,
     super.key,
   });
 
@@ -165,7 +167,11 @@ class RelativeDateTimeText extends StatelessWidget {
           dateTime: dateTime,
           includeStaticDateTime: includeStaticDateTime
         );
-        return Text(text, style: style);
+        return Text(
+          text, 
+          style: style,
+          textScaler: disableTextScaling ? TextScaler.noScaling : null,
+        );
       },
     );
   }
@@ -176,12 +182,14 @@ class RelativeDateTimeTextFromString extends StatelessWidget {
   final TextStyle? style;
   final String? fallback;
   final bool includeStaticDateTime;
+  final bool disableTextScaling;
 
   const RelativeDateTimeTextFromString({
     required this.dateString,
     this.style,
     this.fallback,
     this.includeStaticDateTime = false,
+    this.disableTextScaling = false,
     super.key,
   });
 
@@ -197,13 +205,18 @@ class RelativeDateTimeTextFromString extends StatelessWidget {
         fallback ?? AppLocalizations.of(context)!.unknown;
 
     if (parsed == null) {
-      return Text(fallbackText, style: style);
+      return Text(
+        fallbackText, 
+        style: style,
+        textScaler: disableTextScaling ? TextScaler.noScaling : null,
+      );
     }
 
     return RelativeDateTimeText(
       dateTime: parsed, 
       style: style,
       includeStaticDateTime: includeStaticDateTime,
+      disableTextScaling: disableTextScaling,
     );
   }
 }
