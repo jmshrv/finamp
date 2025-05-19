@@ -11,7 +11,7 @@ import 'package:finamp/services/current_album_image_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
-import 'package:finamp/services/release_date_helper.dart';
+import 'package:finamp/services/datetime_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -585,7 +585,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
   }
 }
 
-class TrackListItemTile extends StatelessWidget {
+class TrackListItemTile extends ConsumerWidget {
   const TrackListItemTile({
     super.key,
     required this.baseItem,
@@ -627,10 +627,10 @@ class TrackListItemTile extends StatelessWidget {
   static const double defaultTitleGap = 10.0;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final highlightTrack = isCurrentTrack && highlightCurrentTrack;
 
-    final bool secondRowNeeded = showArtists || showAlbum || showPlayCount;
+    final bool secondRowNeeded = showArtists || showAlbum || showPlayCount || showReleaseDate || showDateAdded || showDateLastPlayed;
 
     final durationLabelFullHours =
         (baseItem.runTimeTicksDuration()?.inHours ?? 0);
@@ -646,6 +646,16 @@ class TrackListItemTile extends StatelessWidget {
       : (baseItem.artists?.isNotEmpty ?? false)
           ? baseItem.artists?.join(", ")
           : (baseItem.albumArtists?.map((e) => e.name).join(", ") ?? AppLocalizations.of(context)!.unknownArtist);
+
+    final downloadedIndicator = DownloadedIndicator(
+      item: DownloadStub.fromItem(
+          item: baseItem, type: DownloadItemType.track),
+      size: Theme.of(context)
+              .textTheme
+              .bodyMedium!
+              .fontSize! +
+          1,
+    );
 
     return ListTileTheme(
       tileColor: highlightTrack
@@ -732,19 +742,13 @@ class TrackListItemTile extends StatelessWidget {
                         padding: const EdgeInsets.only(right: 2.0),
                         child: Transform.translate(
                           offset: const Offset(-1.5, 2.5),
-                          child: DownloadedIndicator(
-                            item: DownloadStub.fromItem(
-                                item: baseItem, type: DownloadItemType.track),
-                            size: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .fontSize! +
-                                1,
-                          ),
+                          child: downloadedIndicator,
                         ),
                       ),
                       alignment: PlaceholderAlignment.top,
                     ),
+                    if (downloadedIndicator.isVisible(ref))
+                      const WidgetSpan(child: SizedBox(width: 4.5)),
                     if (baseItem.hasLyrics ?? false)
                       WidgetSpan(
                         child: Padding(
@@ -762,6 +766,8 @@ class TrackListItemTile extends StatelessWidget {
                         ),
                         alignment: PlaceholderAlignment.top,
                       ),
+                    if (baseItem.hasLyrics ?? false)
+                      const WidgetSpan(child: SizedBox(width: 5)),
                     if (showPlayCount)
                       TextSpan(
                         text: AppLocalizations.of(context)!
@@ -777,23 +783,41 @@ class TrackListItemTile extends StatelessWidget {
                         ),
                       ),
                     if (showPlayCount)
-                      TextSpan(text: " · "),
+                      const WidgetSpan(child: SizedBox(width: 10.0)),
                     if (showDateLastPlayed)
-                      TextSpan(
-                        text: formatDate(context, baseItem.userData?.lastPlayedDate) ?? 
-                            AppLocalizations.of(context)!.noDateLastPlayed,
-                        style: TextStyle(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .color!
-                              .withOpacity(0.75),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
+                      WidgetSpan(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 2.0),
+                          child: Transform.translate(
+                              offset: const Offset(-1.5, 2.2),
+                              child: Icon(
+                                TablerIcons.ear,
+                                size: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize! +
+                                    1,
+                              )),
+                        ),
+                        alignment: PlaceholderAlignment.top,
+                      ),
+                    if (showDateLastPlayed)
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
+                        child: RelativeDateTimeTextFromString(
+                          dateString: baseItem.userData?.lastPlayedDate,
+                          fallback: AppLocalizations.of(context)!.noDateLastPlayed,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.
+                                  bodyMedium!.color!.withOpacity(0.75),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
                     if (showDateLastPlayed)
-                      TextSpan(text: " · "),
+                      const WidgetSpan(child: SizedBox(width: 10.0)),
                     if (showReleaseDate)
                       TextSpan(
                         text: (ReleaseDateHelper.autoFormat(baseItem) ?? 
@@ -809,23 +833,44 @@ class TrackListItemTile extends StatelessWidget {
                         ),
                       ),
                     if (showReleaseDate)
-                      TextSpan(text: " · "),
+                      const WidgetSpan(child: SizedBox(width: 10.0)),
                     if (showDateAdded)
-                      TextSpan(
-                        text: formatDate(context, baseItem.dateCreated) ?? 
-                            AppLocalizations.of(context)!.noDateAdded,
-                        style: TextStyle(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .color!
-                              .withOpacity(0.75),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
+                      WidgetSpan(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 3),
+                          child: Transform.translate(
+                              offset: const Offset(-1.5, 2.0),
+                              child: Icon(
+                                TablerIcons.calendar_plus,
+                                size: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize! +
+                                    1,
+                                color: Theme.of(context).textTheme.
+                                    bodyMedium!.color!.withOpacity(0.75),
+                              )
+                          ),
+                        ),
+                        alignment: PlaceholderAlignment.top,
+                      ),
+                    if (showDateAdded)
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
+                        child: RelativeDateTimeTextFromString(
+                          dateString: baseItem.dateCreated,
+                          fallback: AppLocalizations.of(context)!.noDateAdded,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.
+                                  bodyMedium!.color!.withOpacity(0.75),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
                     if (showDateAdded)
-                      TextSpan(text: " · "),
+                      const WidgetSpan(child: SizedBox(width: 10.0)),
                     if (showArtists)
                       TextSpan(
                         text: artistsString,

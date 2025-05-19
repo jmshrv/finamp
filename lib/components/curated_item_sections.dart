@@ -198,7 +198,7 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
                   childrenForQueue: widget.childrenForQueue!,
                   showPlayCount: (widget.selectedFilter?.getSortBy() == SortBy.playCount),
                   showReleaseDate: (widget.selectedFilter?.getSortBy() == SortBy.premiereDate),
-                  //showDateLastPlayed: (widget.selectedFilter?.getSortBy() == SortBy.datePlayed),
+                  showDateLastPlayed: (widget.selectedFilter?.getSortBy() == SortBy.datePlayed),
                   showDateAdded: (widget.selectedFilter?.getSortBy() == SortBy.dateCreated),
                   parent: widget.parent,
                   isOnArtistScreen: widget.isOnArtistScreen,

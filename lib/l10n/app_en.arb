@@ -279,6 +279,20 @@
   "@revenue": {},
   "duration": "Duration",
   "@duration": {},
+  "formattedRelativeTime": "{type, select, just_now{just now} minutes{{value} min ago} hours{{value} h ago} yesterday{yesterday} days{{value, plural, =1{1 day ago} other{{value} days ago}}} other{value}}",
+  "@formattedRelativeTime": {
+    "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
+    "placeholders": {
+      "type": {
+        "type": "String",
+        "description": "The category of time passed: one of 'just_now', 'minutes', 'hours', 'yesterday', or 'days'."
+      },
+      "value": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
   "syncDownloadedPlaylists": "Sync downloaded playlists",
   "@syncDownloadedPlaylists": {},
   "downloadMissingImages": "Download missing images",
@@ -1229,6 +1243,8 @@
   "@itemSectionsOrder": {
     "description": "Label for the setting that controls the order of item sections on the screens."
   },
+  "unknown": "Unknown",
+  "@unknown": {},
   "itemSectionsOrderSubtitle": "Controls the order of Item Sections.",
   "@itemSectionsOrderSubtitle": {
     "description": "Description of the setting that controls the order of item sections on the screens."
@@ -1269,7 +1285,7 @@
   "@curatedItemsMostPlayedOfflineTooltip": {
     "description": "Tooltip for Most Played on Curated Items in Offline Mode."
   },
-  "curatedItemsNotListenedYet": "You haven't listened to any tracks {itemType, select, artistGenreFilter{by this artist in this genre} artist{by this artist} genre{in this genre} other{}}.",
+  "curatedItemsNotListenedYet": "You haven't listened to any tracks{itemType, select, artistGenreFilter{ by this artist in this genre} artist{ by this artist} genre{ in this genre} other{}}.",
   "@curatedItemsNotListenedYet": {
     "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks.",
     "placeholders": {
@@ -1280,7 +1296,7 @@
       }
     }
   },
-  "curatedItemsNoFavorites": "You don't have any favorites {itemType, select, artistGenreFilter{for this artist in this genre} artist{for this artist} genre{for this genre} other{}}.",
+  "curatedItemsNoFavorites": "You don't have any favorites{itemType, select, artistGenreFilter{ for this artist in this genre} artist{ for this artist} genre{ for this genre} other{}}.",
   "@curatedItemsNoFavorites": {
     "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet.",
     "placeholders": {

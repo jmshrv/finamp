@@ -1,10 +1,11 @@
 import 'package:finamp/components/favorite_button.dart';
 import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
-import 'package:finamp/services/release_date_helper.dart';
+import 'package:finamp/services/datetime_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
@@ -64,14 +65,82 @@ class ItemCollectionListTile extends ConsumerWidget {
       item.name ?? AppLocalizations.of(context)!.unknownName,
       overflow: TextOverflow.ellipsis,
     );
-    final additionalInfo = ((itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) || 
-        showAdditionalInfoForSortBy == SortBy.premiereDate)
-      ? (ReleaseDateHelper.autoFormat(item) ?? AppLocalizations.of(context)!.noReleaseDate)
-      : (showAdditionalInfoForSortBy == SortBy.runtime)
-        ? printDuration(item.runTimeTicksDuration())
-        : (showAdditionalInfoForSortBy == SortBy.dateCreated)
-          ? formatDate(context, item.dateCreated) ?? AppLocalizations.of(context)!.noDateAdded
-          : null;
+
+    final sortIconMeta = {
+      SortBy.runtime: (
+        icon: TablerIcons.stopwatch,
+        offset: const Offset(-1.5, 0.6),
+      ),
+      SortBy.dateCreated: (
+        icon: TablerIcons.calendar_plus,
+        offset: const Offset(-1.5, 0),
+      ),
+    };
+
+    WidgetSpan? buildAdditionalInfoIcon(SortBy? sortBy) {
+      if (sortBy == null) return null;
+      final meta = sortIconMeta[sortBy];
+      if (meta == null) return null;
+
+      final textTheme = Theme.of(context).textTheme.bodyMedium!;
+      final color = textTheme.color!.withOpacity(0.75);
+
+      return WidgetSpan(
+        alignment: PlaceholderAlignment.top,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 3),
+          child: Transform.translate(
+            offset: meta.offset,
+            child: Icon(
+              meta.icon,
+              size: textTheme.fontSize! + 1,
+              color: color,
+            ),
+          ),
+        ),
+      );
+    }
+
+    final additionalInfoIcon = buildAdditionalInfoIcon(showAdditionalInfoForSortBy);
+
+    final additionalInfo = (() {
+      final l10n = AppLocalizations.of(context)!;
+      if ((itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) ||
+          showAdditionalInfoForSortBy == SortBy.premiereDate) {
+        return TextSpan(
+          text: ReleaseDateHelper.autoFormat(item) ?? l10n.noReleaseDate,
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+          ),
+        );
+      }
+      switch (showAdditionalInfoForSortBy) {
+        case SortBy.runtime:
+          return TextSpan(
+            text: printDuration(item.runTimeTicksDuration()),
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+            ),
+          );
+        case SortBy.dateCreated:
+          return WidgetSpan(
+            alignment: PlaceholderAlignment.baseline,
+            baseline: TextBaseline.alphabetic,
+            child: RelativeDateTimeTextFromString(
+              dateString: item.dateCreated,
+              fallback: l10n.noDateAdded,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.75),
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          );
+        default:
+          return null;
+      }
+    })();
+
     final showSubtitle = (subtitle != null || 
         (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) || 
         (additionalInfo != null) ||
@@ -86,17 +155,12 @@ class ItemCollectionListTile extends ConsumerWidget {
             ),
             alignment: PlaceholderAlignment.top,
           ),
+          if (downloadedIndicator.isVisible(ref))
+              WidgetSpan(child: SizedBox(width: (additionalInfo != null) ? 5.0 : 2.0)),
           if (additionalInfo != null) ...[
-            TextSpan(
-              text: additionalInfo,
-              style: TextStyle(
-                color: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.color
-                    ?.withOpacity(0.7),
-              ),
-            ),
+            if (additionalInfoIcon != null)
+              additionalInfoIcon,
+            additionalInfo,
             TextSpan(
               text: (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead)
                 ? " · ${printDuration(item.runTimeTicksDuration())}"
