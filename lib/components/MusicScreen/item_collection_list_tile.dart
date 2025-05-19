@@ -1,5 +1,6 @@
 import 'package:finamp/components/favorite_button.dart';
 import 'package:finamp/components/print_duration.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/datetime_helper.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,12 @@ class ItemCollectionListTile extends ConsumerWidget {
     final isArtistOrGenre = (itemType == BaseItemDtoType.artist ||
             itemType == BaseItemDtoType.genre);
     final subtitle = (itemType != BaseItemDtoType.album || !albumShowsYearAndDurationInstead)
-        ? generateSubtitle(item, parentType, context) : null;
+        ? generateSubtitle(
+            item: item,
+            parentType: parentType,
+            context: context,
+            artistType: ref.watch(finampSettingsProvider.artistListType),
+          ) : null;
     final itemDownloadStub = isArtistOrGenre
           ? DownloadStub.fromFinampCollection(
                 FinampCollection(

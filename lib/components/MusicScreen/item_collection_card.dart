@@ -48,7 +48,7 @@ class ItemCollectionCard extends ConsumerWidget {
   }
 }
 
-class _ItemCollectionCardText extends StatelessWidget {
+class _ItemCollectionCardText extends ConsumerWidget {
   const _ItemCollectionCardText({
     required this.item,
     required this.parentType,
@@ -58,8 +58,13 @@ class _ItemCollectionCardText extends StatelessWidget {
   final String? parentType;
 
   @override
-  Widget build(BuildContext context) {
-    final subtitle = generateSubtitle(item, parentType, context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final subtitle = generateSubtitle(
+      context: context,
+      item: item, 
+      parentType: parentType,
+      artistType: ref.watch(finampSettingsProvider.artistListType),
+    );
 
     return Align(
       alignment: Alignment.bottomCenter,
