@@ -744,7 +744,7 @@ class TrackListItemTile extends ConsumerWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(right: 2.0),
                         child: Transform.translate(
-                          offset: const Offset(-1.5, 2.5),
+                          offset: isOnDesktop ? Offset(-1.5, 3.6) : Offset(-1.5, 2.3),
                           child: downloadedIndicator,
                         ),
                       ),
@@ -757,7 +757,7 @@ class TrackListItemTile extends ConsumerWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 2.0),
                           child: Transform.translate(
-                              offset: isOnDesktop ? Offset(-1.5, 3.5) : Offset(-1.5, 2.5),
+                              offset: isOnDesktop ? Offset(-1.5, 3.6) : Offset(-1.5, 2.5),
                               child: Icon(
                                 TablerIcons.microphone_2,
                                 size: Theme.of(context)
@@ -794,7 +794,7 @@ class TrackListItemTile extends ConsumerWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 2.0),
                           child: Transform.translate(
-                              offset: isOnDesktop ? Offset(-1.5, 3.3) : Offset(-1.5, 2.3),
+                              offset: isOnDesktop ? Offset(-1.5, 3.58) : Offset(-1.5, 2.3),
                               child: Icon(
                                 TablerIcons.clock,
                                 size: Theme.of(context)
@@ -847,7 +847,7 @@ class TrackListItemTile extends ConsumerWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 3),
                           child: Transform.translate(
-                              offset: isOnDesktop ? Offset(-1.5, 3.0) : Offset(-1.5, 2.0),
+                              offset: isOnDesktop ? Offset(-1.5, 2.8) : Offset(-1.5, 1.8),
                               child: Icon(
                                 TablerIcons.calendar_plus,
                                 size: Theme.of(context)

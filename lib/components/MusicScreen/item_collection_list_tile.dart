@@ -46,6 +46,7 @@ class ItemCollectionListTile extends ConsumerWidget {
     final itemType = BaseItemDtoType.fromItem(item);
     final isArtistOrGenre = (itemType == BaseItemDtoType.artist ||
             itemType == BaseItemDtoType.genre);
+    final isOnDesktop = Platform.isMacOS || Platform.isWindows || Platform.isLinux;
     final subtitle = (itemType != BaseItemDtoType.album || !albumShowsYearAndDurationInstead)
         ? generateSubtitle(
             item: item,
@@ -67,7 +68,7 @@ class ItemCollectionListTile extends ConsumerWidget {
             );
     final downloadedIndicator = DownloadedIndicator(
       item: itemDownloadStub,
-      size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 3,
+      size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 1,
     );
     final titleText = Text(
       item.name ?? AppLocalizations.of(context)!.unknownName,
@@ -77,11 +78,11 @@ class ItemCollectionListTile extends ConsumerWidget {
     final sortIconMeta = {
       SortBy.runtime: (
         icon: TablerIcons.stopwatch,
-        offset: Platform.isWindows ? Offset(-1.5, 1.6) : Offset(-1.5, 0.6),
+        offset: isOnDesktop ? Offset(-1.5, 1.5) : Offset(-1.5, 0.5),
       ),
       SortBy.dateCreated: (
         icon: TablerIcons.calendar_plus,
-        offset: Platform.isWindows ? Offset(-1.5, 1) : Offset(-1.5, 0),
+        offset: isOnDesktop ? Offset(-1.5, 1) : Offset(-1.5, -0.2),
       ),
     };
 
@@ -101,7 +102,10 @@ class ItemCollectionListTile extends ConsumerWidget {
             offset: meta.offset,
             child: Icon(
               meta.icon,
-              size: textTheme.fontSize! + 1,
+              size: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .fontSize! + 1,
               color: color,
             ),
           ),
@@ -156,7 +160,7 @@ class ItemCollectionListTile extends ConsumerWidget {
         children: [
           WidgetSpan(
             child: Transform.translate(
-              offset: const Offset(-3, 0),
+              offset: isOnDesktop ? Offset(-3, 1.2) : Offset(-3, 0),
               child: downloadedIndicator,
             ),
             alignment: PlaceholderAlignment.top,
