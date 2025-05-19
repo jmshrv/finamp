@@ -221,8 +221,8 @@
   },
   "editPlaylistNameTooltip": "Uredi ime playliste",
   "@editPlaylistNameTooltip": {},
-  "playlistNameUpdated": "Ime playliste je ažurirano.",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "Ime playliste je ažurirano.",
+  "@playlistUpdated": {},
   "dlEnqueued": "{count} dodano u red",
   "@dlEnqueued": {
     "placeholders": {

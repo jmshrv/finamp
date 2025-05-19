@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 
 import '../../models/jellyfin_models.dart';
-import 'playlist_name_edit_dialog.dart';
+import 'playlist_edit_dialog.dart';
 
 class PlaylistNameEditButton extends StatelessWidget {
   const PlaylistNameEditButton({

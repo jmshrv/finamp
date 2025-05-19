@@ -1134,8 +1134,8 @@
   "@playbackSpeedControlSettingSubtitle": {
     "description": "Subtitle for the playback speed visibility setting"
   },
-  "playlistNameUpdated": "प्लेलिस्ट का नाम बदला गया।",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "प्लेलिस्ट का नाम बदला गया।",
+  "@playlistUpdated": {},
   "savedQueue": "सहेजी गई कतार",
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
