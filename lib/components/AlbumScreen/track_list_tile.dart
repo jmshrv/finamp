@@ -755,7 +755,7 @@ class TrackListItemTile extends ConsumerWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 2.0),
                           child: Transform.translate(
-                              offset: const Offset(-1.5, 2.5),
+                              offset: (Platform.isMacOS) ? Offset(-1.5, 3.5) : Offset(-1.5, 2.5),
                               child: Icon(
                                 TablerIcons.microphone_2,
                                 size: Theme.of(context)

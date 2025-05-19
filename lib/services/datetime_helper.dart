@@ -69,30 +69,44 @@ class DateTimeHelper {
     }
   }
 
-  static String formatRelativeTime(BuildContext context, DateTime dateTime) {
+  static String formatRelativeTime({
+    required BuildContext context, 
+    required DateTime dateTime, 
+    bool includeStaticDateTime = false,
+  }) {
     final now = DateTime.now();
     final diff = now.difference(dateTime);
     final l10n = AppLocalizations.of(context)!;
+    final staticDateTime = includeStaticDateTime ? DateTimeHelper.format(dateTime) : null;
 
-    if (diff.inMinutes < 1) return l10n.formattedRelativeTime('just_now', 0);
-    if (diff.inMinutes < 60) return l10n.formattedRelativeTime('minutes', diff.inMinutes);
+    String wrap(String type, int value) {
+      final base = l10n.formattedRelativeTime(type, value);
+      return includeStaticDateTime ? "$base ($staticDateTime)" : base;
+    }
+
+    if (diff.inMinutes < 1) {
+      return l10n.formattedRelativeTime('just_now', 0);
+    }
+    if (diff.inMinutes < 60) {
+      return wrap('minutes', diff.inMinutes);
+    } 
     if (diff.inHours < 24 &&
         now.day == dateTime.day &&
         now.month == dateTime.month &&
         now.year == dateTime.year) {
-      return l10n.formattedRelativeTime('hours', diff.inHours);
+      return wrap('hours', diff.inHours);
     }
 
     final nowMidnight = DateTime(now.year, now.month, now.day);
     final yesterdayMidnight = nowMidnight.subtract(const Duration(days: 1));
 
     if (dateTime.isAfter(yesterdayMidnight)) {
-      return l10n.formattedRelativeTime('yesterday', 0);
+      return wrap('yesterday', 0);
     } else if (dateTime.isBefore(yesterdayMidnight)) {
       final dateTimeDay = DateTime(dateTime.year, dateTime.month, dateTime.day);
       final daysAgo = nowMidnight.difference(dateTimeDay).inDays;
       if (daysAgo < 7) {
-        return l10n.formattedRelativeTime('days', daysAgo);
+        return wrap('days', daysAgo);
       }
     }
 
@@ -105,12 +119,20 @@ class DateTimeHelper {
     return format.format(dateTime);
   }
 
-  static String? formatRelativeTimeFromString(BuildContext context, String? dateString) {
+  static String? formatRelativeTimeFromString({
+    required BuildContext context, 
+    String? dateString,
+    bool includeStaticDateTime = false,
+  }) {
     if (dateString == null) return null;
 
     try {
       final parsed = DateTime.parse(dateString);
-      return formatRelativeTime(context, parsed);
+      return formatRelativeTime(
+        context: context, 
+        dateTime: parsed,
+        includeStaticDateTime: includeStaticDateTime
+      );
     } catch (e) {
       return null;
     }
@@ -123,10 +145,12 @@ class DateTimeHelper {
 class RelativeDateTimeText extends StatelessWidget {
   final DateTime dateTime;
   final TextStyle? style;
+  final bool includeStaticDateTime;
 
   const RelativeDateTimeText({
     required this.dateTime,
     this.style,
+    this.includeStaticDateTime = false,
     super.key,
   });
 
@@ -136,7 +160,11 @@ class RelativeDateTimeText extends StatelessWidget {
       stream: DateTimeHelper.minuteTicker,
       initialData: DateTime.now(),
       builder: (context, snapshot) {
-        final text = DateTimeHelper.formatRelativeTime(context, dateTime);
+        final text = DateTimeHelper.formatRelativeTime(
+          context: context, 
+          dateTime: dateTime,
+          includeStaticDateTime: includeStaticDateTime
+        );
         return Text(text, style: style);
       },
     );
@@ -147,11 +175,13 @@ class RelativeDateTimeTextFromString extends StatelessWidget {
   final String? dateString;
   final TextStyle? style;
   final String? fallback;
+  final bool includeStaticDateTime;
 
   const RelativeDateTimeTextFromString({
     required this.dateString,
     this.style,
     this.fallback,
+    this.includeStaticDateTime = false,
     super.key,
   });
 
@@ -170,6 +200,10 @@ class RelativeDateTimeTextFromString extends StatelessWidget {
       return Text(fallbackText, style: style);
     }
 
-    return RelativeDateTimeText(dateTime: parsed, style: style);
+    return RelativeDateTimeText(
+      dateTime: parsed, 
+      style: style,
+      includeStaticDateTime: includeStaticDateTime,
+    );
   }
 }
