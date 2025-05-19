@@ -6,7 +6,7 @@ part of 'item_helper.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$loadChildTracksHash() => r'136585400415b2d6a73c0da0bfc523f9ea1ca5a3';
+String _$loadChildTracksHash() => r'b6152f93d59d5b36a87a5d267b7edc7350c15355';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -43,11 +43,15 @@ class LoadChildTracksFamily extends Family<AsyncValue<List<BaseItemDto>?>> {
     required BaseItemDto baseItem,
     SortBy? sortBy,
     SortOrder? sortOrder,
+    String? Function(BaseItemDto)? groupListBy,
+    bool manuallyShuffle = false,
   }) {
     return LoadChildTracksProvider(
       baseItem: baseItem,
       sortBy: sortBy,
       sortOrder: sortOrder,
+      groupListBy: groupListBy,
+      manuallyShuffle: manuallyShuffle,
     );
   }
 
@@ -59,6 +63,8 @@ class LoadChildTracksFamily extends Family<AsyncValue<List<BaseItemDto>?>> {
       baseItem: provider.baseItem,
       sortBy: provider.sortBy,
       sortOrder: provider.sortOrder,
+      groupListBy: provider.groupListBy,
+      manuallyShuffle: provider.manuallyShuffle,
     );
   }
 
@@ -85,12 +91,16 @@ class LoadChildTracksProvider
     required BaseItemDto baseItem,
     SortBy? sortBy,
     SortOrder? sortOrder,
+    String? Function(BaseItemDto)? groupListBy,
+    bool manuallyShuffle = false,
   }) : this._internal(
           (ref) => loadChildTracks(
             ref as LoadChildTracksRef,
             baseItem: baseItem,
             sortBy: sortBy,
             sortOrder: sortOrder,
+            groupListBy: groupListBy,
+            manuallyShuffle: manuallyShuffle,
           ),
           from: loadChildTracksProvider,
           name: r'loadChildTracksProvider',
@@ -104,6 +114,8 @@ class LoadChildTracksProvider
           baseItem: baseItem,
           sortBy: sortBy,
           sortOrder: sortOrder,
+          groupListBy: groupListBy,
+          manuallyShuffle: manuallyShuffle,
         );
 
   LoadChildTracksProvider._internal(
@@ -116,11 +128,15 @@ class LoadChildTracksProvider
     required this.baseItem,
     required this.sortBy,
     required this.sortOrder,
+    required this.groupListBy,
+    required this.manuallyShuffle,
   }) : super.internal();
 
   final BaseItemDto baseItem;
   final SortBy? sortBy;
   final SortOrder? sortOrder;
+  final String? Function(BaseItemDto)? groupListBy;
+  final bool manuallyShuffle;
 
   @override
   Override overrideWith(
@@ -138,6 +154,8 @@ class LoadChildTracksProvider
         baseItem: baseItem,
         sortBy: sortBy,
         sortOrder: sortOrder,
+        groupListBy: groupListBy,
+        manuallyShuffle: manuallyShuffle,
       ),
     );
   }
@@ -152,7 +170,9 @@ class LoadChildTracksProvider
     return other is LoadChildTracksProvider &&
         other.baseItem == baseItem &&
         other.sortBy == sortBy &&
-        other.sortOrder == sortOrder;
+        other.sortOrder == sortOrder &&
+        other.groupListBy == groupListBy &&
+        other.manuallyShuffle == manuallyShuffle;
   }
 
   @override
@@ -161,6 +181,8 @@ class LoadChildTracksProvider
     hash = _SystemHash.combine(hash, baseItem.hashCode);
     hash = _SystemHash.combine(hash, sortBy.hashCode);
     hash = _SystemHash.combine(hash, sortOrder.hashCode);
+    hash = _SystemHash.combine(hash, groupListBy.hashCode);
+    hash = _SystemHash.combine(hash, manuallyShuffle.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -177,6 +199,12 @@ mixin LoadChildTracksRef on AutoDisposeFutureProviderRef<List<BaseItemDto>?> {
 
   /// The parameter `sortOrder` of this provider.
   SortOrder? get sortOrder;
+
+  /// The parameter `groupListBy` of this provider.
+  String? Function(BaseItemDto)? get groupListBy;
+
+  /// The parameter `manuallyShuffle` of this provider.
+  bool get manuallyShuffle;
 }
 
 class _LoadChildTracksProviderElement
@@ -190,6 +218,12 @@ class _LoadChildTracksProviderElement
   SortBy? get sortBy => (origin as LoadChildTracksProvider).sortBy;
   @override
   SortOrder? get sortOrder => (origin as LoadChildTracksProvider).sortOrder;
+  @override
+  String? Function(BaseItemDto)? get groupListBy =>
+      (origin as LoadChildTracksProvider).groupListBy;
+  @override
+  bool get manuallyShuffle =>
+      (origin as LoadChildTracksProvider).manuallyShuffle;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

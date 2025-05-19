@@ -14,6 +14,42 @@ Map<String, Widget> getPlaybackActionPages(BaseItemDto baseItem) {
   final queueService = GetIt.instance<QueueService>();
   switch (BaseItemDtoType.fromItem(baseItem)) {
     //TODO add case for custom (artists) options
+    case BaseItemDtoType.artist:
+      return {
+        'Play*': Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            PlayPlaybackAction(baseItem: baseItem),
+            if (queueService.getQueue().nextUp.isNotEmpty)
+              PlayNextPlaybackAction(baseItem: baseItem),
+            AddToNextUpPlaybackAction(baseItem: baseItem),
+            AddToQueuePlaybackAction(baseItem: baseItem),
+          ],
+        ),
+        'Shuffle*': Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ShufflePlaybackAction(baseItem: baseItem),
+            if (queueService.getQueue().nextUp.isNotEmpty)
+              ShuffleNextPlaybackAction(baseItem: baseItem),
+            ShuffleToNextUpPlaybackAction(baseItem: baseItem),
+            ShuffleToQueuePlaybackAction(baseItem: baseItem),
+          ],
+        ),
+        'Shuffle Albums*': Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ShuffleAlbumsAction(baseItem: baseItem),
+            if (queueService.getQueue().nextUp.isNotEmpty)
+              ShuffleAlbumsNextPlaybackAction(baseItem: baseItem),
+            ShuffleAlbumsToNextUpPlaybackAction(baseItem: baseItem),
+            ShuffleAlbumsToQueuePlaybackAction(baseItem: baseItem),
+          ],
+        ),
+      };
     default:
       return {
         'Play*': Row(
@@ -311,6 +347,149 @@ class ShuffleToQueuePlaybackAction extends ConsumerWidget {
               ).future) ??
               [])
             ..shuffle(),
+          source: QueueItemSource.fromBaseItem(baseItem),
+        );
+
+        GlobalSnackbar.message(
+            (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue,
+            isConfirmation: true);
+        Navigator.pop(context);
+      },
+      iconColor: Theme.of(context).colorScheme.primary,
+    );
+  }
+}
+
+class ShuffleAlbumsAction extends ConsumerWidget {
+  const ShuffleAlbumsAction({
+    super.key,
+    required this.baseItem,
+  });
+
+  final BaseItemDto baseItem;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final queueService = GetIt.instance<QueueService>();
+    return PlaybackAction(
+      icon: TablerIcons.arrows_shuffle,
+      tooltip: AppLocalizations.of(context)!.shuffleAlbums,
+      onPressed: (WidgetRef ref) async {
+        await queueService.startPlayback(
+          items: (await ref.watch(loadChildTracksProvider(
+                baseItem: baseItem,
+                groupListBy: (element) => element.albumId?.toString(),
+                manuallyShuffle: true,
+              ).future) ??
+              []),
+          source: QueueItemSource.fromBaseItem(baseItem,
+              type: QueueItemSourceType.nextUpAlbum),
+        );
+
+        Navigator.pop(context);
+      },
+      iconColor: Theme.of(context).colorScheme.primary,
+    );
+  }
+}
+
+class ShuffleAlbumsNextPlaybackAction extends ConsumerWidget {
+  const ShuffleAlbumsNextPlaybackAction({
+    super.key,
+    required this.baseItem,
+  });
+
+  final BaseItemDto baseItem;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final queueService = GetIt.instance<QueueService>();
+    return Visibility(
+      visible: queueService.getQueue().nextUp.isNotEmpty,
+      child: PlaybackAction(
+        icon: TablerIcons.corner_right_down,
+        tooltip: AppLocalizations.of(context)!.shuffleAlbumsNext,
+        onPressed: (WidgetRef ref) async {
+          await queueService.addNext(
+            items: (await ref.watch(loadChildTracksProvider(
+                  baseItem: baseItem,
+                  groupListBy: (element) => element.albumId?.toString(),
+                  manuallyShuffle: true,
+                ).future) ??
+                []),
+            source: QueueItemSource.fromBaseItem(baseItem,
+                type: QueueItemSourceType.nextUpAlbum),
+          );
+
+          GlobalSnackbar.message(
+              (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext,
+              isConfirmation: true);
+          Navigator.pop(context);
+        },
+        iconColor: Theme.of(context).colorScheme.primary,
+      ),
+    );
+  }
+}
+
+class ShuffleAlbumsToNextUpPlaybackAction extends ConsumerWidget {
+  const ShuffleAlbumsToNextUpPlaybackAction({
+    super.key,
+    required this.baseItem,
+  });
+
+  final BaseItemDto baseItem;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final queueService = GetIt.instance<QueueService>();
+    return PlaybackAction(
+      icon: TablerIcons.corner_right_down_double,
+      tooltip: AppLocalizations.of(context)!.shuffleAlbumsToNextUp,
+      onPressed: (WidgetRef ref) async {
+        await queueService.addToNextUp(
+          items: (await ref.watch(loadChildTracksProvider(
+                baseItem: baseItem,
+                groupListBy: (element) => element.albumId?.toString(),
+                manuallyShuffle: true,
+              ).future) ??
+              []),
+          source: QueueItemSource.fromBaseItem(baseItem,
+              type: QueueItemSourceType.nextUpAlbum),
+        );
+
+        GlobalSnackbar.message(
+            (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
+            isConfirmation: true);
+        Navigator.pop(context);
+      },
+      iconColor: Theme.of(context).colorScheme.primary,
+    );
+  }
+}
+
+class ShuffleAlbumsToQueuePlaybackAction extends ConsumerWidget {
+  const ShuffleAlbumsToQueuePlaybackAction({
+    super.key,
+    required this.baseItem,
+  });
+
+  final BaseItemDto baseItem;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final queueService = GetIt.instance<QueueService>();
+    return PlaybackAction(
+      icon: TablerIcons.playlist,
+      tooltip: AppLocalizations.of(context)!.shuffleAlbumsToQueue,
+      onPressed: (WidgetRef ref) async {
+        await queueService.addToQueue(
+          items: (await ref.watch(loadChildTracksProvider(
+                baseItem: baseItem,
+                groupListBy: (element) => element.albumId?.toString(),
+                manuallyShuffle: true,
+              ).future) ??
+              []),
           source: QueueItemSource.fromBaseItem(baseItem),
         );
 

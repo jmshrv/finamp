@@ -2,7 +2,7 @@ import 'package:finamp/menus/components/playbackActions/playback_action_page_ind
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final double playActionRowHeight = 92.0;
+final double playActionRowHeight = 96.0;
 
 class PlaybackActionRow extends ConsumerWidget {
   const PlaybackActionRow({

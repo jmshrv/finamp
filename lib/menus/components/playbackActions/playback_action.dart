@@ -20,10 +20,8 @@ class PlaybackAction extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: 85,
-      ),
+    return Flexible(
+      flex: 1,
       child: IconButton(
         icon: Column(
           children: [
@@ -35,14 +33,14 @@ class PlaybackAction extends ConsumerWidget {
             ),
             const SizedBox(height: 9),
             SizedBox(
-              height: 2 * 12 * 1.4 + 2,
+              height: 2 * 12 * 1.4 + 6,
               child: Align(
                 alignment: Alignment.topCenter,
                 child: Text(
                   tooltip,
                   textAlign: TextAlign.center,
                   maxLines: 2,
-                  overflow: TextOverflow.fade,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 12,
                     height: 1.4,
@@ -59,7 +57,7 @@ class PlaybackAction extends ConsumerWidget {
         },
         visualDensity: VisualDensity.compact,
         padding: const EdgeInsets.only(
-            top: 12.0, left: 12.0, right: 12.0, bottom: 16.0),
+            top: 10.0, left: 8.0, right: 8.0, bottom: 12.0),
         tooltip: tooltip,
       ),
     );
