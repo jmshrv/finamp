@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/components/AlbumScreen/track_menu.dart';
@@ -789,7 +790,7 @@ class TrackListItemTile extends ConsumerWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 2.0),
                           child: Transform.translate(
-                              offset: const Offset(-1.5, 2.2),
+                              offset: (Platform.isMacOS) ? Offset(-1.5, 3.2) : Offset(-1.5, 2.2),
                               child: Icon(
                                 TablerIcons.ear,
                                 size: Theme.of(context)
@@ -805,14 +806,17 @@ class TrackListItemTile extends ConsumerWidget {
                       WidgetSpan(
                         alignment: PlaceholderAlignment.baseline,
                         baseline: TextBaseline.alphabetic,
-                        child: RelativeDateTimeTextFromString(
-                          dateString: baseItem.userData?.lastPlayedDate,
-                          fallback: AppLocalizations.of(context)!.noDateLastPlayed,
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.
-                                  bodyMedium!.color!.withOpacity(0.75),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
+                        child: Transform.translate(
+                          offset: (Platform.isMacOS) ? Offset(0, -1) : Offset(0, 0),
+                          child: RelativeDateTimeTextFromString(
+                            dateString: baseItem.userData?.lastPlayedDate,
+                            fallback: AppLocalizations.of(context)!.noDateLastPlayed,
+                            style: TextStyle(
+                              color: Theme.of(context).textTheme.
+                                    bodyMedium!.color!.withOpacity(0.75),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
                       ),
@@ -839,7 +843,7 @@ class TrackListItemTile extends ConsumerWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 3),
                           child: Transform.translate(
-                              offset: const Offset(-1.5, 2.0),
+                              offset: (Platform.isMacOS) ? Offset(-1.5, 3.0) : Offset(-1.5, 2.0),
                               child: Icon(
                                 TablerIcons.calendar_plus,
                                 size: Theme.of(context)
@@ -858,14 +862,17 @@ class TrackListItemTile extends ConsumerWidget {
                       WidgetSpan(
                         alignment: PlaceholderAlignment.baseline,
                         baseline: TextBaseline.alphabetic,
-                        child: RelativeDateTimeTextFromString(
-                          dateString: baseItem.dateCreated,
-                          fallback: AppLocalizations.of(context)!.noDateAdded,
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.
-                                  bodyMedium!.color!.withOpacity(0.75),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
+                        child: Transform.translate(
+                          offset: (Platform.isMacOS) ? Offset(0, -1) : Offset(0, 0),
+                          child: RelativeDateTimeTextFromString(
+                            dateString: baseItem.dateCreated,
+                            fallback: AppLocalizations.of(context)!.noDateAdded,
+                            style: TextStyle(
+                              color: Theme.of(context).textTheme.
+                                    bodyMedium!.color!.withOpacity(0.75),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
                       ),
