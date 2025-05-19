@@ -59,9 +59,9 @@
   "@downloadMissingImages": {},
   "failedToGetTrackFromDownloadId": "Nepodařilo se získat skladbu z ID stahování",
   "@failedToGetTrackFromDownloadId": {},
-  "editPlaylistNameTooltip": "Upravit název seznamu skladeb",
+  "editPlaylistNameTooltip": "Upravit seznam skladeb",
   "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Upravit název seznamu skladeb",
+  "editPlaylistNameTitle": "Upravit seznam skladeb",
   "@editPlaylistNameTitle": {},
   "addButtonLabel": "Přidat",
   "@addButtonLabel": {},
@@ -188,7 +188,7 @@
   "@communityRating": {},
   "playCount": "Počet přehrání",
   "@playCount": {},
-  "premiereDate": "Datum premiéry",
+  "premiereDate": "Datum vydání",
   "@premiereDate": {},
   "revenue": "Výnos",
   "@revenue": {},
@@ -2003,7 +2003,7 @@
   "@libraryDownloads": {
     "description": "Title for the library downloads section on the downloads screen."
   },
-  "desktopShuffleWarning": "Náhodné přehrávání není v současné době dostupné na počítačích.",
+  "desktopShuffleWarning": "Změna náhodného přehrávání není na počítačích v současné době k dispozici.",
   "@desktopShuffleWarning": {
     "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
   },
