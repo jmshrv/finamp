@@ -332,16 +332,6 @@
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "showTextOnGridView": "Mostrar texto en vista de cuadrícula",
   "@showTextOnGridView": {},
-  "startupError": "¡Algo ha salido mal en el arranque de la aplicación! El error es: {error}\n\nPor favor crea una incidencia en github.com/UnicornsOnLSD/finamp con una captura de pantalla de esta página. Si el problema persiste, borra los datos de la aplicación para resetearla.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "shuffleAll": "Reproducir aleatoriamente todas las canciones",
   "@shuffleAll": {},
   "premiereDate": "Fecha de lanzamiento",
@@ -1023,10 +1013,6 @@
   "@reset": {
     "description": "Used for buttons in the playback speed menu and the settings"
   },
-  "showArtistsTopTracks": "Mostrar las pistas más populares en la vista del artista",
-  "@showArtistsTopTracks": {},
-  "showArtistsTopTracksSubtitle": "Muestra las 5 pistas más escuchadas de un artista.",
-  "@showArtistsTopTracksSubtitle": {},
   "playingFrom": "Reproduciendo desde",
   "@playingFrom": {
     "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""

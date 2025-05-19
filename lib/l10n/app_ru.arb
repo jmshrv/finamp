@@ -366,7 +366,7 @@
   },
   "enterLowPriorityStateOnPause": "Использовать режим низкого приоритета на паузе",
   "@enterLowPriorityStateOnPause": {},
-  "bitrateSubtitle": "Высокий битрейт обеспечивает лучшее качество звука за счет большего потребления трафика.",
+  "bitrateSubtitle": "Высокий битрейт обеспечивает лучшее качество звука за счет большего потребления трафика. Не распространяется на форматы без потерь, например FLAC",
   "@bitrateSubtitle": {},
   "shuffleAllTrackCount": "Количество композиций случайного проигрывания",
   "@shuffleAllTrackCount": {},
@@ -390,16 +390,6 @@
   "@useCoverAsBackgroundSubtitle": {},
   "hideTrackArtistsIfSameAsAlbumArtists": "Скрывать исполнителей композиций, если они совпадают с исполнителями альбома",
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
-  "startupError": "Что-то пошло не так во время запуска приложения. Возникла ошибка: {error}\n\nПожалуйста, создайте «issue» на github.com/UnicornsOnLSD/finamp и приложите скриншот этой страницы. Если проблема будет повторяться, вы можете очистить данные приложения, чтобы сбросить его настройки.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "minutes": "Минуты",
   "@minutes": {},
   "redownloadedItems": "{count,plural, =0{Не требуется повторная загрузка.} =1{Повторно загружен {count} элемент} few{Повторно загружены {count} элемента} other{Повторно загружено {count} элементов}}",
@@ -544,7 +534,7 @@
   "@loginFlowLocalNetworkServers": {
     "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
   },
-  "loginFlowLocalNetworkServersScanningForServers": "Поиск серверов...",
+  "loginFlowLocalNetworkServersScanningForServers": "Поиск серверов…",
   "@loginFlowLocalNetworkServersScanningForServers": {
     "description": "Text shown while servers are being discovered via UDP broadcasts"
   },
@@ -654,8 +644,6 @@
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopTracksSubtitle": "Следует ли показывать топ-5 самых прослушиваемых композиций исполнителя.",
-  "@showArtistsTopTracksSubtitle": {},
   "playerScreen": "Экран проигрывателя",
   "@playerScreen": {
     "description": "Name for the expanded player"
@@ -668,8 +656,6 @@
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopTracks": "Показывать лучшие композиции в режиме просмотра исполнителя",
-  "@showArtistsTopTracks": {},
   "fontSizeOptionLarge": "Большой",
   "@fontSizeOptionLarge": {
     "description": "Font size option for things like the lyrics view. Large means a larger font size."
@@ -873,7 +859,7 @@
   "@playbackOrderLinearButtonTooltip": {
     "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
   },
-  "playingFromType": "Воспроизведение из {source, select, album{альбома} playlist{плейлиста} trackMix{микса композиций} artistMix{микса исполнителей} albumMix{микса альбомов} genreMix{микса жанров} favorites{избранного} allTracks{всех композиций} filteredList{композиций} genre{жанра} artist{исполнителя} track{композиции} nextUpAlbum{альбома в следующих} nextUpPlaylist{плейлиста в следующих} nextUpArtist{исполнителя в следующих} other{}}",
+  "playingFromType": "Воспроизведение из {source, select, album{альбома} playlist{плейлиста} trackMix{микса композиций} artistMix{микса исполнителей} albumMix{микса альбомов} genreMix{микса жанров} favorites{избранного} allTracks{всех композиций} filteredList{композиций} genre{жанра} artist{исполнителя} track{композиции} nextUpAlbum{альбома в следующих} nextUpPlaylist{плейлиста в следующих} nextUpArtist{исполнителя в следующих} remoteClient{удаленного клиента} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -959,7 +945,7 @@
   },
   "cacheLibraryImagesSettings": "Кэшировать текущие изображения библиотеки",
   "@cacheLibraryImagesSettings": {},
-  "showStopButtonOnMediaNotificationSubtitle": "Управляет тем, будет ли в медиа-уведомлении присутствовать кнопка остановки в дополнение к кнопке паузы. Это позволяет вам останавливать воспроизведение, не открывая приложение.",
+  "showStopButtonOnMediaNotificationSubtitle": "Управляет тем, будет ли в медиа-уведомлении присутствовать кнопка остановки. Это позволяет вам останавливать воспроизведение, не открывая приложение.",
   "@showStopButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
@@ -1180,7 +1166,7 @@
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
   },
-  "reportQueueToServerSubtitle": "Если включено, Finamp будет отправлять текущую очередь на сервер. В настоящее время от этого нет особой пользы и это увеличивает сетевой трафик.",
+  "reportQueueToServerSubtitle": "Если включено, Finamp будет отправлять текущую очередь на сервер. Это может помочь с удаленным управлением и позволит восстанавливать очередь с сервера. Всегда включено, если включена функция «Play on».",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1264,7 +1250,7 @@
       }
     }
   },
-  "missingDownloadSize": "Удаляется...",
+  "missingDownloadSize": "Удаляется…",
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
   },
@@ -1303,7 +1289,7 @@
   "@lyricsScreen": {
     "description": "Name for the view/screen that shows lyrics for the currently playing track"
   },
-  "showStopButtonOnMediaNotificationTitle": "Показывать кнопку остановки в медиа-уведомлении",
+  "showStopButtonOnMediaNotificationTitle": "Показывать Кнопку Остановки в Медиа-Уведомлении",
   "@showStopButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
@@ -1413,7 +1399,7 @@
       }
     }
   },
-  "queueLoadingMessage": "Восстанавливаем очередь...",
+  "queueLoadingMessage": "Восстанавливаем очередь…",
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
   },
@@ -1421,7 +1407,7 @@
   "@reportQueueToServer": {
     "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "periodicPlaybackSessionUpdateFrequency": "Частота обновлений сессии воспроизведения",
+  "periodicPlaybackSessionUpdateFrequency": "Частота Обновлений Сессии Воспроизведения",
   "@periodicPlaybackSessionUpdateFrequency": {
     "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1506,11 +1492,11 @@
   "@connectionInterruptedBackground": {
     "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
   },
-  "activeDownloadSize": "Загружается...",
+  "activeDownloadSize": "Загружается…",
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
-  "syncingDownloadSize": "Синхронизируется...",
+  "syncingDownloadSize": "Синхронизируется…",
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
@@ -1699,7 +1685,7 @@
   "@showLyricsTimestampsSubtitle": {
     "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
   },
-  "showSeekControlsOnMediaNotificationTitle": "Показывать элементы управления перемоткой в медиа-уведомлении",
+  "showSeekControlsOnMediaNotificationTitle": "Разрешить Перемотку в Медиа-Уведомлении",
   "@showSeekControlsOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a seekable progress bar."
   },
@@ -1779,7 +1765,7 @@
   "@resetFiltersButton": {
     "description": "Button to reset filters on a list of items"
   },
-  "showLyricsScreenAlbumPreludeTitle": "Показывать альбом перед текстом песни",
+  "showLyricsScreenAlbumPreludeTitle": "Показывать обложку альбома перед текстом песни",
   "@showLyricsScreenAlbumPreludeTitle": {
     "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   },
@@ -1897,7 +1883,7 @@
   "@releaseDateFormatSubtitle": {
     "description": "Title for the setting that controls the format release dates throughout the app."
   },
-  "marqueeOrTruncateButtonSubtitle": "Показывать «...» в конце длинных заголовков вместо прокрутки текста",
+  "marqueeOrTruncateButtonSubtitle": "Показывать «…» в конце длинных заголовков вместо прокрутки текста",
   "@marqueeOrTruncateButtonSubtitle": {},
   "deleteDownloadsConfirmButtonText": "Удалить",
   "@deleteDownloadsConfirmButtonText": {
@@ -1948,5 +1934,258 @@
   "downloadSizeWarningCutoffSubtitle": "При одновременной загрузке более чем этого количества композиций будет показано предупреждение.",
   "@downloadSizeWarningCutoffSubtitle": {
     "description": "Subtitle for the setting controlling when to warn about a large download"
+  },
+  "playbackReporting": "Отчет о воспроизведении",
+  "@playbackReporting": {},
+  "playbackReportingSettingsTitle": "Отчет о воспроизведении & Play On",
+  "@playbackReportingSettingsTitle": {
+    "description": "Title for the playback reporting settings screen"
+  },
+  "libraryDownloads": "Загрузки библиотек",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "swipeLeftToRightAction": "Действие при смахе вправо",
+  "@swipeLeftToRightAction": {},
+  "transcodingStreamingFormatTitle": "Выберите Формат Транскодирования",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
+  },
+  "startupErrorTitle": "Что-то пошло не так во время запуска приложения!\nИзвините...",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorCallToAction": "Пожалуйста, сообщите о проблеме на github.com/jmshrv/finamp прикреплив логи(!) и скриншот этой страницы, чтобы мы могли исправить её как можно быстрее.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "currentVolumeFeatureText": "громкость {volume}%",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
+      }
+    }
+  },
+  "noItemsDownloaded": "Ничего не скачано.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "specialDownloads": "Особые загрузки",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "exportLogs": "Сохранить логи",
+  "@exportLogs": {},
+  "playOnStaleDelay": "Время Работы Сессии «Play on»",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "playOnStaleDelaySubtitle": "Как долго сессия «Play On» считается активной после получения команды. Когда сессия считается активной, отчеты о воспроизведении отправляются чаще, что может привести к увеличению использования трафика.",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "enablePlayonTitle": "Включить Поддержку «Play On»",
+  "@enablePlayonTitle": {
+    "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "playOnReconnectionDelay": "Интервал попыток переподключения сессии «Play On»",
+  "@playOnReconnectionDelay": {
+    "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "playOnReconnectionDelaySubtitle": "Управляет задержкой между попытками переподключения к websocket PlayOn когда он отключается (в секундах). Низкая задержка использует больше трафика.",
+  "@playOnReconnectionDelaySubtitle": {
+    "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "swipeLeftToRightActionSubtitle": "Действие, выполняемое при смахе трека из списка слева направо.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "albumArtists": "Исполнители альбома",
+  "@albumArtists": {},
+  "swipeRightToLeftActionSubtitle": "Действие, выполняемое при смахе трека из списка справа налево.",
+  "@swipeRightToLeftActionSubtitle": {},
+  "enablePlayonSubtitle": "Включает функцию «Play On» (удаленное управление Finamp с другого клиента). Отключите это если ваш reverse proxy или сервер не поддерживает websockets.",
+  "@enablePlayonSubtitle": {
+    "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "swipeRightToLeftAction": "Действие при смахе влево",
+  "@swipeRightToLeftAction": {},
+  "audioFadeInDurationSettingSubtitle": "Длительность нарастания звука в миллисекундах. Установите на 0 чтобы отключить нарастание звука.",
+  "@audioFadeInDurationSettingSubtitle": {
+    "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
+  },
+  "deviceType": "{type, select, speaker{Колонка} tv{TV} bluetooth{Bluetooth} other{Неизвестный}}",
+  "@deviceType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    },
+    "description": "Label for the type of device in the output menu"
+  },
+  "outputMenuVolumeSectionTitle": "Громкость",
+  "@outputMenuVolumeSectionTitle": {
+    "description": "Title for the volume section in the output menu"
+  },
+  "outputMenuDevicesSectionTitle": "Доступные устройства",
+  "@outputMenuDevicesSectionTitle": {
+    "description": "Title for the available devices section in the output menu"
+  },
+  "outputMenuOpenConnectionSettingsButtonTitle": "Подключиться к устройству",
+  "@outputMenuOpenConnectionSettingsButtonTitle": {
+    "description": "Button title for connecting to a device from the output menu"
+  },
+  "preferHomeNetworkActiveAddressInfoText": "Активный Адрес",
+  "@preferHomeNetworkActiveAddressInfoText": {
+    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+  },
+  "preferHomeNetworkTargetAddressLocalSettingTitle": "Адрес Домашней Сети",
+  "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
+  "preferHomeNetworkTargetAddressLocalSettingDescription": "Целевой адрес сервера Jellyfin в пределах вашей домашней сети",
+  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
+  "preferHomeNetworkEnableSwitchTitle": "Предпочитать Домашнюю Сеть",
+  "@preferHomeNetworkEnableSwitchTitle": {},
+  "preferHomeNetworkEnableSwitchDescription": "Стоит ли использовать другой адрес, когда вы находитесь дома",
+  "@preferHomeNetworkEnableSwitchDescription": {},
+  "preferHomeNetworkPublicAddressSettingTitle": "Публичный Адрес",
+  "@preferHomeNetworkPublicAddressSettingTitle": {},
+  "preferHomeNetworkPublicAddressSettingDescription": "Основной адрес, используемый для подключения к вашему серверу Jellyfin",
+  "@preferHomeNetworkPublicAddressSettingDescription": {},
+  "preferHomeNetworkInfoBox": "Этой функции требуется доступ в местоположению (оно также должно быть включено), чтобы прочитать имя сети.",
+  "@preferHomeNetworkInfoBox": {
+    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
+  },
+  "missingSchemaError": "Адрес должен начинаться с http(s)://",
+  "@missingSchemaError": {
+    "description": "Snackbar message when the user changes their home/public address but it doesn't start with http"
+  },
+  "testConnectionButtonLabel": "Проверить оба подключения",
+  "@testConnectionButtonLabel": {
+    "description": "Button to test the public and local url inside the network settings tab"
+  },
+  "autoReloadQueueTitle": "Автоматически Перезагружать Очередь",
+  "@autoReloadQueueTitle": {
+    "description": "Title for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "autoReloadQueueSubtitle": "Автоматически перезагружать очередь при изменении источника (например, включении автономного режима или смене адреса сервера). Если отключить эту функцию, Finamp спросит вас что делать.",
+  "@autoReloadQueueSubtitle": {
+    "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "autoReloadPrompt": "Перезагрузить очередь чтобы применить новые {type, select, network{настройки сети} transcoding{настройки транскодирования} other{настройки}}",
+  "@autoReloadPrompt": {
+    "description": "Prompt shown when the queue needs to be reloaded after changing network settings",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "autoReloadPromptMissingTracks": "Следующее количество треков будет удалено из очереди, потому что они не скачаны: {amountUndownloadedTracks}.",
+  "@autoReloadPromptMissingTracks": {
+    "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
+    "placeholders": {
+      "amountUndownloadedTracks": {
+        "type": "int"
+      }
+    }
+  },
+  "librarySelectError": "Ошибка при загрузке доступных для пользователя библиотек",
+  "@librarySelectError": {
+    "description": "Error shown when the library select screen fails to load."
+  },
+  "lyricsScreenButtonTitle": "Текст",
+  "@lyricsScreenButtonTitle": {
+    "description": "Label for the button for opening the lyrics screen"
+  },
+  "stopAndClearQueue": "Остановить воспроизведение и очистить очередь",
+  "@stopAndClearQueue": {
+    "description": "Label for a button that stops playback and removes all tracks from the queue."
+  },
+  "autoOfflineSettingDescription": "Автоматически включать автономный режим.\nВыключено: Автономный режим не будет включаться автоматически. Может экономить заряд батареи.\nЛокальная Сеть: Автономный режим будет включаться когда вы не подключены к wifi или интернету.\nОтключение: Автономный режим будет включаться когда вы ни к чему не подключены.\nВы всегда можете вручную включить автономный режим. Это приостановит автоматизацию до тех пор пока вы снова не выключите его",
+  "@autoOfflineSettingDescription": {
+    "description": "Setting description. Make sure the Mode names match the translations."
+  },
+  "outputMenuTitle": "Изменить вывод",
+  "@outputMenuTitle": {
+    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  },
+  "desktopShuffleWarning": "Перемешивание в настоящее время недоступно на компьютере.",
+  "@desktopShuffleWarning": {
+    "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
+  },
+  "ping": "{status, select, true_true{Оба адреса доступны} true_false{Локальный адрес НЕ ДОСТУПЕН} false_true{Публичный адрес НЕ ДОСТУПЕН} false_false{Оба адреса НЕ ДОСТУПНЫ} other{Неизвестно}}",
+  "@ping": {
+    "description": "Gets shown in the Snackbar when using the Test Connection Button inside the Network Settings. true means reachable, false means unreachable. the first value is for the public address, the second value is fot the home address."
+  },
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Управляет тем, будет ли в медиа-уведомлении присутствовать кнопка добавления в избранное. Это позволяет вам добавить/убрать текущий трек из изранных, не открывая приложение.",
+  "@showFavoriteButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a favorite button."
+  },
+  "autoReloadPromptReloadButton": "Перезагрузить",
+  "@autoReloadPromptReloadButton": {
+    "description": "Button title for reloading the queue after network settings change"
+  },
+  "outputMenuButtonTitle": "Вывод",
+  "@outputMenuButtonTitle": {
+    "description": "Button title for opening the output menu/panel"
+  },
+  "audioFadeOutDurationSettingTitle": "Длительность затухания звука",
+  "@audioFadeOutDurationSettingTitle": {
+    "description": "Title for the audio fade-out duration setting."
+  },
+  "audioFadeInDurationSettingTitle": "Длительность нарастания звука",
+  "@audioFadeInDurationSettingTitle": {
+    "description": "Title for the audio fade-in duration setting."
+  },
+  "autoOfflineOptionOff": "Выключено",
+  "@autoOfflineOptionOff": {
+    "description": "This is shown when the autoOffline feature is turned off and has no effects"
+  },
+  "autoOfflineOptionDisconnected": "Отключение",
+  "@autoOfflineOptionDisconnected": {
+    "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
+  },
+  "autoOfflineSettingTitle": "Автоматический Автономный Режим",
+  "@autoOfflineSettingTitle": {},
+  "autoOfflineNotification": "Automatically {state, select, enabled{включать} disabled{выключать} other{установить в квантовую позицию}} Автономный Режим",
+  "@autoOfflineNotification": {
+    "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
+  },
+  "audioFadeOutDurationSettingSubtitle": "Длительность затухания звука в миллисекундах.",
+  "@audioFadeOutDurationSettingSubtitle": {
+    "description": "Subtitle for the audio fade-out duration setting. Set to 0 to disable fade-out."
+  },
+  "appearsOnAlbums": "Исполняет",
+  "@appearsOnAlbums": {},
+  "startupErrorWorkaround": "В качестве запасного варианта вы можете очистить данные приложения, чтобы сбросить его настройки. Имейте в виду, что в этом случае все ваши настройки и загрузки будут удалены.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
+  },
+  "transcodingStreamingFormatSubtitle": "Выберите формат для прослушивания потоковго транскодированного аудио. Треки в очереди не будут затронуты.",
+  "@transcodingStreamingFormatSubtitle": {},
+  "autoOfflineOptionNetwork": "Локальная сеть",
+  "@autoOfflineOptionNetwork": {
+    "description": "This is shown when the autoOffline feature is set to \"local Network\", this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
+  },
+  "networkSettingsTitle": "Сеть",
+  "@networkSettingsTitle": {
+    "description": "Title for the network settings screen"
+  },
+  "downloadPaused": "Загрузка приостановлена из-за того, что устройство не подключено к WiFi",
+  "@downloadPaused": {
+    "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
+  },
+  "showShuffleButtonOnMediaNotificationTitle": "Показывать Кнопку Перемешки в Медиа-Уведомлении",
+  "@showShuffleButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a shuffle button."
+  },
+  "showShuffleButtonOnMediaNotificationSubtitle": "Управляет тем, будет ли в медиа-уведомлении присутствовать кнопка перемешки. Это позволяет вам включить/выключить перемешивание не открывая приложение.",
+  "@showShuffleButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
+  },
+  "showFavoriteButtonOnMediaNotificationTitle": "Показывать Кнопку Добавления в Избранное в Медиа-Уведомлении",
+  "@showFavoriteButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a favorite button."
   }
 }
