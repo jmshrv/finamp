@@ -241,7 +241,9 @@ class TapToZoomImage extends StatefulWidget {
   _TapToZoomImageState createState() => _TapToZoomImageState();
 }
 
-final zoomedImageHeroTag = "zoomed-image";
+final zoomedImageHeroTagPrefix = "zoomed-image";
+String _getHeroTag(AlbumImage albumImage) =>
+    "$zoomedImageHeroTagPrefix-${albumImage.item?.id}";
 
 class _TapToZoomImageState extends State<TapToZoomImage> {
   @override
@@ -264,7 +266,7 @@ class _TapToZoomImageState extends State<TapToZoomImage> {
               return ZoomedImage(albumImage: widget.albumImage);
             })),
         child: Hero(
-          tag: zoomedImageHeroTag,
+          tag: _getHeroTag(widget.albumImage),
           child: widget.albumImage,
           placeholderBuilder: (context, heroSize, child) => widget.albumImage,
         ),
@@ -309,7 +311,7 @@ class ZoomedImage extends StatelessWidget {
               panEnabled: true,
               clipBehavior: Clip.none,
               child: Hero(
-                tag: zoomedImageHeroTag,
+                tag: _getHeroTag(albumImage),
                 child: albumImage,
               ),
             ),
