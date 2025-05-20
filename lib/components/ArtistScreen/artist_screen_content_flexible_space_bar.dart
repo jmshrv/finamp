@@ -301,7 +301,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                   children: [
                     SizedBox(
                       height: 125,
-                      child: AlbumImage(item: parentItem),
+                      child: TapToZoomImage(
+                          albumImage: AlbumImage(item: parentItem)),
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 4),
