@@ -62,8 +62,8 @@ class DownloadButton extends ConsumerWidget {
 
     var downloadButton = IconButton(
       icon: status == DownloadItemStatus.notNeeded
-          ? const Icon(Icons.file_download)
-          : const Icon(Icons.lock), //TODO get better icon
+          ? const Icon(TablerIcons.download)
+          : const Icon(TablerIcons.lock), //TODO get better icon
       onPressed: () async {
         if (isLibrary) {
           await showDialog(
@@ -95,7 +95,7 @@ class DownloadButton extends ConsumerWidget {
       tooltip: parentTooltip,
     );
     var deleteButton = IconButton(
-      icon: const Icon(Icons.delete),
+      icon: const Icon(TablerIcons.trash),
       tooltip: AppLocalizations.of(context)!.deleteFromTargetConfirmButton(""),
       onPressed: () {
         askBeforeDeleteDownloadFromDevice(context, item);
@@ -110,7 +110,7 @@ class DownloadButton extends ConsumerWidget {
       color: status.outdated ? Colors.orange : null,
     );
     var serverDeleteButton = IconButton(
-      icon: const Icon(Icons.delete_forever),
+      icon: const Icon(TablerIcons.trash_x),
       tooltip:
           AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server"),
       onPressed: () {

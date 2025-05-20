@@ -65,7 +65,7 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
     default:
       FeedbackHelper.feedback(FeedbackType.warning);
       GlobalSnackbar.message(
-        (scaffold) => "Not implemented yet.",
+        (scaffold) => AppLocalizations.of(context)!.notImplementedYet,
       );
   }
 }

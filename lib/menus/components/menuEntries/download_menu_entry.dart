@@ -40,7 +40,7 @@ class DownloadMenuEntry extends ConsumerWidget {
         visible: !ref.watch(finampSettingsProvider.isOffline) &&
             downloadStatus == DownloadItemStatus.notNeeded,
         child: MenuEntry(
-            icon: Icons.file_download_outlined,
+            icon: TablerIcons.download,
             title: AppLocalizations.of(context)!.downloadItem,
             onTap: () async {
               var item = DownloadStub.fromItem(

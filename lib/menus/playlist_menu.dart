@@ -6,6 +6,7 @@ import 'package:finamp/menus/components/menuEntries/add_to_playlist_menu_entry.d
 import 'package:finamp/menus/components/menuEntries/delete_from_device_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/delete_from_server_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/download_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/edit_item_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/instant_mix_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/lock_download_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/menu_item_info_header.dart';
@@ -38,6 +39,7 @@ Future<void> showModalPlaylistMenu({
       DownloadMenuEntry(baseItem: baseItem),
       LockDownloadMenuEntry(baseItem: baseItem),
       ToggleFavoriteMenuEntry(baseItem: baseItem),
+      EditItemMenuEntry(baseItem: baseItem),
       DeleteFromServerMenuEntry(baseItem: baseItem),
     ];
   }

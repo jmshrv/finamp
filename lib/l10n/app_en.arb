@@ -417,10 +417,14 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Edit playlist name",
-  "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Edit Playlist Name",
-  "@editPlaylistNameTitle": {},
+  "editItemTitle": "Edit {itemType, select, playlist{Playlist} other{}}",
+  "@editItemTitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
   "required": "Required",
   "@required": {},
   "updateButtonLabel": "Update",
@@ -2231,5 +2235,9 @@
   "autoReloadPromptReloadButton": "Reload",
   "@autoReloadPromptReloadButton": {
     "description": "Button title for reloading the queue after network settings change"
+  },
+  "notImplementedYet": "Not implemented yet.",
+  "@notImplementedYet": {
+    "description": "Message shown when a feature is not implemented yet"
   }
 }

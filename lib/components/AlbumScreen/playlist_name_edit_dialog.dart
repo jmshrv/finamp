@@ -1,3 +1,4 @@
+import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -34,7 +35,8 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(AppLocalizations.of(context)!.editPlaylistNameTitle),
+      title: Text(AppLocalizations.of(context)!
+          .editItemTitle(BaseItemDtoType.fromItem(widget.playlist).name)),
       content: Form(
         key: _formKey,
         child: TextFormField(
