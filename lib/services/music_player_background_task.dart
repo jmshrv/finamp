@@ -950,9 +950,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
             // fallback if we can't find the context
             final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
             if (isFavorite) {
-              await jellyfinApiHelper.removeFavourite(currentItem.id);
+              await jellyfinApiHelper.removeFavorite(currentItem.id);
             } else {
-              await jellyfinApiHelper.addFavourite(currentItem.id);
+              await jellyfinApiHelper.addFavorite(currentItem.id);
             }
             isFavorite = !isFavorite;
             final newUserData = currentItem.userData;
@@ -1097,13 +1097,13 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
                 ? (GlobalSnackbar.materialAppScaffoldKey.currentContext != null
                     ? AppLocalizations.of(GlobalSnackbar
                             .materialAppScaffoldKey.currentContext!)!
-                        .removeFavourite
-                    : "Remove favorite")
+                        .removeFavorite
+                    : "Remove Favorite")
                 : (GlobalSnackbar.materialAppScaffoldKey.currentContext != null
                     ? AppLocalizations.of(GlobalSnackbar
                             .materialAppScaffoldKey.currentContext!)!
-                        .addFavourite
-                    : "Add favorite"),
+                        .addFavorite
+                    : "Add Favorite"),
           ),
         if (FinampSettingsHelper
             .finampSettings.showShuffleButtonOnMediaNotification)

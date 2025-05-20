@@ -174,7 +174,8 @@ class QueueService {
           QueueItemSourceType.nextUp,
           QueueItemSourceType.nextUpAlbum,
           QueueItemSourceType.nextUpPlaylist,
-          QueueItemSourceType.nextUpArtist
+          QueueItemSourceType.nextUpArtist,
+          QueueItemSourceType.nextUpGenre,
         ].contains(_queuePreviousTracks.last.source.type)) {
           _queuePreviousTracks.last.source = QueueItemSource.rawId(
               type: QueueItemSourceType.formerNextUp,
@@ -192,7 +193,8 @@ class QueueService {
               QueueItemSourceType.nextUp,
               QueueItemSourceType.nextUpAlbum,
               QueueItemSourceType.nextUpPlaylist,
-              QueueItemSourceType.nextUpArtist
+              QueueItemSourceType.nextUpArtist,
+              QueueItemSourceType.nextUpGenre,
             ].contains(allTracks[i].source.type)) {
           _queue.add(allTracks[i]);
           _queue.last.type = QueueItemQueueType.queue;

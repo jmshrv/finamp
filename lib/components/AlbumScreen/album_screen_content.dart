@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
-import '../../components/favourite_button.dart';
+import '../favorite_button.dart';
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
@@ -93,6 +93,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
           expandedHeight: kToolbarHeight + 125 + 80,
           // collapsedHeight: kToolbarHeight + 125 + 80,
           pinned: true,
+          centerTitle: false,
           flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
             parentItem: widget.parent,
             isPlaylist: widget.parent.type == "Playlist",
@@ -152,16 +153,26 @@ class TracksSliverList extends ConsumerStatefulWidget {
     required this.childrenForQueue,
     required this.parent,
     this.onRemoveFromList,
+    this.forceAlbumArtists = false,
     this.showPlayCount = false,
+    this.showDateAdded = false,
+    this.showDateLastPlayed = false,
+    this.showReleaseDate = false,
     this.isOnArtistScreen = false,
+    this.isOnGenreScreen = false,
   });
 
   final List<BaseItemDto> childrenForList;
   final Future<List<BaseItemDto>> childrenForQueue;
   final BaseItemDto parent;
   final BaseItemDtoCallback? onRemoveFromList;
+  final bool forceAlbumArtists;
   final bool showPlayCount;
+  final bool showDateAdded;
+  final bool showDateLastPlayed;
+  final bool showReleaseDate;
   final bool isOnArtistScreen;
+  final bool isOnGenreScreen;
 
   @override
   ConsumerState<TracksSliverList> createState() => _TracksSliverListState();
@@ -231,7 +242,12 @@ class _TracksSliverListState extends ConsumerState<TracksSliverList> {
             },
             isInPlaylist: widget.parent.type == "Playlist",
             isOnArtistScreen: widget.isOnArtistScreen,
+            isOnGenreScreen: widget.isOnGenreScreen,
+            forceAlbumArtists: widget.forceAlbumArtists,
             showPlayCount: widget.showPlayCount,
+            showDateAdded: widget.showDateAdded,
+            showDateLastPlayed: widget.showDateLastPlayed,
+            showReleaseDate: widget.showReleaseDate,
           );
         },
         childCount: widget.childrenForList.length,

@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:finamp/components/AlbumScreen/album_screen_content.dart';
 import 'package:finamp/components/curated_item_filter_row.dart';
-import 'package:finamp/components/albums_sliver_list.dart';
+import 'package:finamp/components/item_collections_sliver_list.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
@@ -17,11 +17,14 @@ class TracksSection extends ConsumerStatefulWidget {
     this.childrenForQueue,
     required this.tracksText,
     this.seeAllCallbackFunction,
+    this.genreFilter,
     this.includeFilterRow = false,
     this.customFilterOrder,
     this.selectedFilter,
     this.disabledFilters,
     this.onFilterSelected,
+    this.isOnArtistScreen = false,
+    this.isOnGenreScreen = false,
   });
 
   final BaseItemDto parent;
@@ -29,11 +32,14 @@ class TracksSection extends ConsumerStatefulWidget {
   final Future<List<BaseItemDto>>? childrenForQueue;
   final String tracksText;
   final VoidCallback? seeAllCallbackFunction;
+  final BaseItemDto? genreFilter;
   final bool includeFilterRow;
   final List<CuratedItemSelectionType>? customFilterOrder;
   final CuratedItemSelectionType? selectedFilter;
   final List<CuratedItemSelectionType>? disabledFilters;
   final void Function(CuratedItemSelectionType type)? onFilterSelected;
+  final bool isOnArtistScreen;
+  final bool isOnGenreScreen;
 
   @override
   ConsumerState<TracksSection> createState() => _TracksSectionState();
@@ -81,6 +87,28 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
       
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    String emptyText = loc!.emptyFilteredListTitle;
+    final itemType = BaseItemDtoType.fromItem(widget.parent);
+    final isFavorites = widget.selectedFilter == CuratedItemSelectionType.favorites;
+    final isPlayed = widget.selectedFilter == CuratedItemSelectionType.mostPlayed ||
+                    widget.selectedFilter == CuratedItemSelectionType.recentlyPlayed;
+
+    String itemTypeKey = 'other';
+
+    if (itemType == BaseItemDtoType.artist) {
+      itemTypeKey = (widget.genreFilter != null) ? 'artistGenreFilter' : 'artist';
+    } else if (itemType == BaseItemDtoType.genre) {
+      itemTypeKey = 'genre';
+    }
+    if (isFavorites) {
+      emptyText = loc.curatedItemsNoFavorites(itemTypeKey);
+    } else if (isPlayed) {
+      emptyText = loc.curatedItemsNotListenedYet(itemTypeKey);
+    } else {
+      emptyText = loc.emptyFilteredListTitle;
+    }
+
     return SliverStickyHeader(
       header: Container(
         padding: EdgeInsets.fromLTRB(
@@ -101,29 +129,34 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (_isExpandable)
-                      Transform.rotate(
-                        angle: _showTracks ? 0 : -math.pi / 2,
-                        child: const Icon(Icons.arrow_drop_down, size: 24),
-                      ),
-                    if (_isExpandable)
-                      const SizedBox(width: 4),
-                    Text(
-                      widget.tracksText,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                Expanded(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                          if (_isExpandable)
+                            Transform.rotate(
+                              angle: _showTracks ? 0 : -math.pi / 2,
+                              child: const Icon(Icons.arrow_drop_down, size: 24),
+                            ),
+                          if (_isExpandable)
+                            const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              widget.tracksText,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                  ),
                 ),
                 if (widget.seeAllCallbackFunction != null)
                   GestureDetector(
                     onTap: widget.seeAllCallbackFunction,
                     child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           AppLocalizations.of(context)!.seeAll,
@@ -163,17 +196,22 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
                 TracksSliverList(
                   childrenForList: widget.tracks!,
                   childrenForQueue: widget.childrenForQueue!,
-                  showPlayCount: true,
-                  isOnArtistScreen: true,
+                  showPlayCount: (widget.selectedFilter?.getSortBy() == SortBy.playCount),
+                  showReleaseDate: (widget.selectedFilter?.getSortBy() == SortBy.premiereDate),
+                  showDateLastPlayed: (widget.selectedFilter?.getSortBy() == SortBy.datePlayed),
+                  showDateAdded: (widget.selectedFilter?.getSortBy() == SortBy.dateCreated),
                   parent: widget.parent,
+                  isOnArtistScreen: widget.isOnArtistScreen,
+                  isOnGenreScreen: widget.isOnGenreScreen,
                 )
               else
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 12),
+                    padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
                     child: Center(
                       child: Text(
-                        AppLocalizations.of(context)!.emptyFilteredListTitle,
+                        emptyText,
+                        textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
@@ -190,11 +228,12 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
   }
 }
 
-class AlbumSection extends ConsumerStatefulWidget {
-  const AlbumSection({super.key, 
+class CollectionsSection extends ConsumerStatefulWidget {
+  const CollectionsSection({super.key, 
     required this.parent,
-    required this.albumsText,
-    this.albums,
+    required this.itemsText,
+    this.items,
+    this.albumsShowYearAndDurationInstead = false,
     this.seeAllCallbackFunction,
     this.genreFilter,
     this.includeFilterRowFor,
@@ -205,8 +244,9 @@ class AlbumSection extends ConsumerStatefulWidget {
   });
 
   final BaseItemDto parent;
-  final String albumsText;
-  final List<BaseItemDto>? albums;
+  final String itemsText;
+  final List<BaseItemDto>? items;
+  final bool albumsShowYearAndDurationInstead;
   final VoidCallback? seeAllCallbackFunction;
   final BaseItemDto? genreFilter;
   final BaseItemDtoType? includeFilterRowFor;
@@ -216,11 +256,11 @@ class AlbumSection extends ConsumerStatefulWidget {
   final void Function(CuratedItemSelectionType type)? onFilterSelected;
 
   @override
-  ConsumerState<AlbumSection> createState() => _AlbumSectionState();
+  ConsumerState<CollectionsSection> createState() => _ItemsSectionState();
 }
 
-class _AlbumSectionState extends ConsumerState<AlbumSection> {
-  bool _showAlbums = true;
+class _ItemsSectionState extends ConsumerState<CollectionsSection> {
+  bool _showItems = true;
   bool _isExpandable = true;
   bool _manuallyClosed = false;
 
@@ -231,27 +271,27 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
   }
 
   @override
-  void didUpdateWidget(covariant AlbumSection oldWidget) {
+  void didUpdateWidget(covariant CollectionsSection oldWidget) {
     super.didUpdateWidget(oldWidget);
     _evaluateAlbumVisibility();
   }
 
   void _evaluateAlbumVisibility() {
-    final hasAlbums = widget.albums != null && widget.albums!.isNotEmpty;
+    final hasItems = widget.items != null && widget.items!.isNotEmpty;
 
-    if (hasAlbums || widget.includeFilterRowFor != null) {
-      if (!_showAlbums || !_isExpandable) {
+    if (hasItems || widget.includeFilterRowFor != null) {
+      if (!_showItems || !_isExpandable) {
         setState(() {
           if (!_manuallyClosed) {
-            _showAlbums = true;
+            _showItems = true;
           }
           _isExpandable = true;
         });
       }
     } else {
-      if (_showAlbums || _isExpandable) {
+      if (_showItems || _isExpandable) {
         setState(() {
-          _showAlbums = false;
+          _showItems = false;
           _isExpandable = false;
         });
       }
@@ -260,6 +300,28 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
         
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    String emptyText = loc!.emptyFilteredListTitle;
+    final itemType = BaseItemDtoType.fromItem(widget.parent);
+    final isFavorites = widget.selectedFilter == CuratedItemSelectionType.favorites;
+    final isPlayed = widget.selectedFilter == CuratedItemSelectionType.mostPlayed ||
+                    widget.selectedFilter == CuratedItemSelectionType.recentlyPlayed;
+
+    String itemTypeKey = 'other';
+
+    if (itemType == BaseItemDtoType.artist) {
+      itemTypeKey = (widget.genreFilter != null) ? 'artistGenreFilter' : 'artist';
+    } else if (itemType == BaseItemDtoType.genre) {
+      itemTypeKey = 'genre';
+    }
+    if (isFavorites) {
+      emptyText = loc.curatedItemsNoFavorites(itemTypeKey);
+    } else if (isPlayed) {
+      emptyText = loc.curatedItemsNotListenedYet(itemTypeKey);
+    } else {
+      emptyText = loc.emptyFilteredListTitle;
+    }
+
     return SliverStickyHeader(
       header: Container(
         padding: EdgeInsets.fromLTRB(
@@ -269,8 +331,8 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
           onTap: () {
             if (_isExpandable) {
               setState(() {
-                _manuallyClosed = _showAlbums;
-                _showAlbums = !_showAlbums;
+                _manuallyClosed = _showItems;
+                _showItems = !_showItems;
               });
             }
           },
@@ -280,29 +342,35 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (_isExpandable)
-                      Transform.rotate(
-                        angle: _showAlbums ? 0 : -math.pi / 2,
-                        child: const Icon(Icons.arrow_drop_down, size: 24),
+                Expanded(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (_isExpandable)
+                        Transform.rotate(
+                          angle: _showItems ? 0 : -math.pi / 2,
+                          child: const Icon(Icons.arrow_drop_down, size: 24),
+                        ),
+                      if (_isExpandable)
+                        const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          widget.itemsText,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    if (_isExpandable)
-                      const SizedBox(width: 4),
-                    Text(
-                      widget.albumsText,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
+                // "See All"
                 if (widget.seeAllCallbackFunction != null)
                   GestureDetector(
                     onTap: widget.seeAllCallbackFunction,
                     child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           AppLocalizations.of(context)!.seeAll,
@@ -326,7 +394,7 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
           ),
         ),
       ),
-      sliver: _showAlbums
+      sliver: _showItems
           ? SliverMainAxisGroup(
               slivers: [
                 if (widget.includeFilterRowFor != null)
@@ -339,19 +407,22 @@ class _AlbumSectionState extends ConsumerState<AlbumSection> {
                     disabledFilters: widget.disabledFilters,
                     onFilterSelected: widget.onFilterSelected,
                   ),
-                if (widget.albums != null && widget.albums!.isNotEmpty)
-                  AlbumsSliverList(
-                    childrenForList: widget.albums!,
+                if (widget.items != null && widget.items!.isNotEmpty)
+                  CollectionsSliverList(
+                    childrenForList: widget.items!,
                     parent: widget.parent,
                     genreFilter: widget.genreFilter,
+                    albumShowsYearAndDurationInstead: widget.albumsShowYearAndDurationInstead,
+                    showAdditionalInfoForSortBy: widget.selectedFilter?.getSortBy(),
                   )
                 else
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 12),
+                      padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
                       child: Center(
                           child: Text(
-                            AppLocalizations.of(context)!.emptyFilteredListTitle,
+                            emptyText,
+                            textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                       ),

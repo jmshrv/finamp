@@ -49,9 +49,9 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setOnlyShowFavourites(bool newOnlyShowFavourites) {
+  static void setOnlyShowFavorites(bool newOnlyShowFavorites) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.onlyShowFavourites = newOnlyShowFavourites;
+    finampSettingsTemp.onlyShowFavorites = newOnlyShowFavorites;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -829,8 +829,8 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool?> showTabs(TabContentType tabContentType) =>
       finampSettingsProvider
           .select((value) => value.requireValue.showTabs[tabContentType]);
-  ProviderListenable<bool> get onlyShowFavourites => finampSettingsProvider
-      .select((value) => value.requireValue.onlyShowFavourites);
+  ProviderListenable<bool> get onlyShowFavorites => finampSettingsProvider
+      .select((value) => value.requireValue.onlyShowFavorites);
   ProviderListenable<int> get trackShuffleItemCount => finampSettingsProvider
       .select((value) => value.requireValue.trackShuffleItemCount);
   ProviderListenable<ContentViewType> get contentViewType =>

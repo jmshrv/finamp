@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/components/AlbumScreen/track_menu.dart';
@@ -11,6 +12,7 @@ import 'package:finamp/services/current_album_image_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/datetime_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -32,8 +34,8 @@ enum TrackListTileMenuItems {
   removeFromPlaylist,
   instantMix,
   goToAlbum,
-  addFavourite,
-  removeFavourite,
+  addFavorite,
+  removeFavorite,
   download,
   delete,
 }
@@ -63,11 +65,16 @@ class TrackListTile extends ConsumerWidget {
     this.isTrack = false,
     this.onRemoveFromList,
     this.showPlayCount = false,
+    this.forceAlbumArtists = false,
+    this.showReleaseDate = false,
+    this.showDateAdded = false,
+    this.showDateLastPlayed = false,
 
     /// Whether this widget is being displayed in a playlist. If true, will show
     /// the remove from playlist button.
     this.isInPlaylist = false,
     this.isOnArtistScreen = false,
+    this.isOnGenreScreen = false,
     this.isShownInSearch = false,
     this.allowDismiss = true,
     this.highlightCurrentTrack = true,
@@ -82,9 +89,14 @@ class TrackListTile extends ConsumerWidget {
   final bool isTrack;
   final BaseItemDto? parentItem;
   final VoidCallback? onRemoveFromList;
+  final bool forceAlbumArtists;
   final bool showPlayCount;
+  final bool showReleaseDate;
+  final bool showDateAdded;
+  final bool showDateLastPlayed;
   final bool isInPlaylist;
   final bool isOnArtistScreen;
+  final bool isOnGenreScreen;
   final bool isShownInSearch;
   final bool allowDismiss;
   final bool highlightCurrentTrack;
@@ -108,17 +120,19 @@ class TrackListTile extends ConsumerWidget {
                 ? QueueItemSourceType.playlist
                 : isOnArtistScreen
                     ? QueueItemSourceType.artist
-                    : QueueItemSourceType.album,
+                    : isOnGenreScreen
+                        ? QueueItemSourceType.genre
+                        : QueueItemSourceType.album,
             name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: ((isInPlaylist || isOnArtistScreen)
+                pretranslatedName: ((isInPlaylist || isOnArtistScreen || isOnGenreScreen)
                         ? parentItem?.name
                         : item.album) ??
                     AppLocalizations.of(context)!.placeholderSource),
             id: parentItem?.id.raw ?? "",
             item: parentItem,
             // we're playing from an album, so we should use the album's normalization gain.
-            contextNormalizationGain: (isInPlaylist || isOnArtistScreen)
+            contextNormalizationGain: (isInPlaylist || isOnArtistScreen || isOnGenreScreen)
                 ? null
                 : parentItem?.normalizationGain,
           ),
@@ -138,7 +152,7 @@ class TrackListTile extends ConsumerWidget {
             viewFilter: finampUserHelper.currentUser?.currentView?.id,
             nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
             onlyFavorites:
-                settings.onlyShowFavourites && settings.trackOfflineFavorites,
+                settings.onlyShowFavorites && settings.trackOfflineFavorites,
             genreFilter: genreFilter,
           );
 
@@ -261,57 +275,38 @@ class TrackListTile extends ConsumerWidget {
       }
     }
 
-    final dismissBackground = Container(
-      // color: Theme.of(context).colorScheme.secondaryContainer,
-      padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 8.0),
-      alignment: Alignment.centerLeft,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                getSwipeActionIcon(ref
-                    .watch(finampSettingsProvider.itemSwipeActionLeftToRight)),
-                color: Theme.of(context).colorScheme.secondary,
-                size: 40,
-              ),
-              const SizedBox(width: 4.0),
-              Text(
-                ref
-                    .watch(finampSettingsProvider.itemSwipeActionLeftToRight)
-                    .toLocalisedString(context),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                ref
-                    .watch(finampSettingsProvider.itemSwipeActionRightToLeft)
-                    .toLocalisedString(context),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-              ),
-              const SizedBox(width: 4.0),
-              Icon(
-                getSwipeActionIcon(ref
-                    .watch(finampSettingsProvider.itemSwipeActionRightToLeft)),
-                color: Theme.of(context).colorScheme.secondary,
-                size: 40,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+    Widget buildSwipeActionBackground(BuildContext context, DismissDirection direction) {
+      final action = (direction == DismissDirection.startToEnd)
+          ? ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight)
+          : ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft);
+
+      final icon = getSwipeActionIcon(action);
+      final label = action.toLocalisedString(context);
+
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+        alignment: (direction == DismissDirection.startToEnd)
+            ? Alignment.centerLeft
+            : Alignment.centerRight,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: (direction == DismissDirection.startToEnd)
+              ? MainAxisAlignment.start
+              : MainAxisAlignment.end,
+          children: direction == DismissDirection.startToEnd
+              ? [
+                  Icon(icon, color: Theme.of(context).colorScheme.secondary, size: 40),
+                  const SizedBox(width: 4.0),
+                  Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
+                ]
+              : [
+                  Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
+                  const SizedBox(width: 4.0),
+                  Icon(icon, color: Theme.of(context).colorScheme.secondary, size: 40),
+                ],
+        ),
+      );
+    }
 
     return TrackListItem(
       baseItem: item,
@@ -320,7 +315,11 @@ class TrackListTile extends ConsumerWidget {
       actualIndex: item.indexNumber,
       showIndex: showIndex,
       showCover: showCover,
-      showArtists: parentItem?.isArtist != true,
+      showArtists: (forceAlbumArtists || parentItem?.isArtist != true),
+      forceAlbumArtists: forceAlbumArtists,
+      showReleaseDate: showReleaseDate,
+      showDateAdded: showDateAdded,
+      showDateLastPlayed: showDateLastPlayed,
       showPlayCount: showPlayCount,
       isInPlaylist: isInPlaylist,
       allowReorder: false,
@@ -329,7 +328,8 @@ class TrackListTile extends ConsumerWidget {
       onRemoveFromList: onRemoveFromList,
       onTap: trackListTileOnTap,
       confirmDismiss: trackListTileConfirmDismiss,
-      dismissBackground: dismissBackground,
+      leftSwipeBackground: buildSwipeActionBackground(context, DismissDirection.startToEnd),
+      rightSwipeBackground: buildSwipeActionBackground(context, DismissDirection.endToStart),
     );
   }
 }
@@ -400,12 +400,17 @@ class TrackListItem extends ConsumerStatefulWidget {
   final bool showIndex;
   final bool showCover;
   final bool showArtists;
+  final bool forceAlbumArtists;
   final bool showPlayCount;
+  final bool showReleaseDate;
+  final bool showDateAdded;
+  final bool showDateLastPlayed;
   final bool isInPlaylist;
   final bool allowReorder;
   final bool allowDismiss;
   final bool highlightCurrentTrack;
-  final Widget dismissBackground;
+  final Widget leftSwipeBackground;
+  final Widget rightSwipeBackground;
 
   final void Function(bool playable) onTap;
   final Future<bool> Function(DismissDirection direction) confirmDismiss;
@@ -425,10 +430,16 @@ class TrackListItem extends ConsumerStatefulWidget {
       this.showIndex = false,
       this.showCover = true,
       this.showArtists = true,
+      this.forceAlbumArtists = false,
       this.showPlayCount = false,
+      this.showReleaseDate = false,
+      this.showDateAdded = false,
+      this.showDateLastPlayed = false,
       this.highlightCurrentTrack = true,
       this.onRemoveFromList,
-      this.dismissBackground = const SizedBox.shrink()});
+      this.leftSwipeBackground = const SizedBox.shrink(),
+      this.rightSwipeBackground = const SizedBox.shrink(),
+  });
 
   @override
   ConsumerState<TrackListItem> createState() => TrackListItemState();
@@ -473,8 +484,12 @@ class TrackListItemState extends ConsumerState<TrackListItem>
             showIndex: widget.showIndex,
             showCover: widget.showCover,
             showArtists: widget.showArtists,
+            forceAlbumArtists: widget.forceAlbumArtists,
             showAlbum: showAlbum,
             showPlayCount: widget.showPlayCount,
+            showReleaseDate: widget.showReleaseDate,
+            showDateAdded: widget.showDateAdded,
+            showDateLastPlayed: widget.showDateLastPlayed,
             isCurrentTrack: isCurrentlyPlaying,
             highlightCurrentTrack: widget.highlightCurrentTrack,
             allowReorder: widget.allowReorder,
@@ -534,7 +549,8 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                 },
                 // no background, dismissing really dismisses here
                 confirmDismiss: widget.confirmDismiss,
-                background: widget.dismissBackground,
+                background: widget.leftSwipeBackground,
+                secondaryBackground: widget.rightSwipeBackground,
                 child: listItem,
               ),
       );
@@ -570,7 +586,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
   }
 }
 
-class TrackListItemTile extends StatelessWidget {
+class TrackListItemTile extends ConsumerWidget {
   const TrackListItemTile({
     super.key,
     required this.baseItem,
@@ -582,8 +598,12 @@ class TrackListItemTile extends StatelessWidget {
     this.showIndex = false,
     this.showCover = true,
     this.showArtists = true,
+    this.forceAlbumArtists = false,
     this.showAlbum = true,
     this.showPlayCount = false,
+    this.showReleaseDate = false,
+    this.showDateAdded = false,
+    this.showDateLastPlayed = false,
     this.highlightCurrentTrack = true,
   });
 
@@ -595,8 +615,12 @@ class TrackListItemTile extends StatelessWidget {
   final bool showIndex;
   final bool showCover;
   final bool showArtists;
+  final bool forceAlbumArtists;
   final bool showAlbum;
   final bool showPlayCount;
+  final bool showReleaseDate;
+  final bool showDateAdded;
+  final bool showDateLastPlayed;
   final bool highlightCurrentTrack;
   final void Function() onTap;
 
@@ -604,10 +628,10 @@ class TrackListItemTile extends StatelessWidget {
   static const double defaultTitleGap = 10.0;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final highlightTrack = isCurrentTrack && highlightCurrentTrack;
-
-    final bool secondRowNeeded = showArtists || showAlbum || showPlayCount;
+    final isOnDesktop = Platform.isMacOS || Platform.isWindows || Platform.isLinux;
+    final bool secondRowNeeded = showArtists || showAlbum || showPlayCount || showReleaseDate || showDateAdded || showDateLastPlayed;
 
     final durationLabelFullHours =
         (baseItem.runTimeTicksDuration()?.inHours ?? 0);
@@ -618,9 +642,23 @@ class TrackListItemTile extends StatelessWidget {
     final durationLabelString =
         "${durationLabelFullHours > 0 ? "$durationLabelFullHours ${AppLocalizations.of(context)!.hours} " : ""}${durationLabelFullMinutes > 0 ? "$durationLabelFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$durationLabelSeconds ${AppLocalizations.of(context)!.seconds}";
 
-    final artistsString = (baseItem.artists?.isNotEmpty ?? false)
-        ? baseItem.artists?.join(", ")
-        : baseItem.albumArtist ?? AppLocalizations.of(context)!.unknownArtist;
+    final artistsString = (forceAlbumArtists)
+      ? (baseItem.albumArtists?.map((e) => e.name).join(", ") ?? AppLocalizations.of(context)!.unknownArtist)
+      : (baseItem.artists?.isNotEmpty ?? false)
+          ? baseItem.artists?.join(", ")
+          : (baseItem.albumArtists?.map((e) => e.name).join(", ") ?? AppLocalizations.of(context)!.unknownArtist);
+
+    final downloadedIndicator = DownloadedIndicator(
+      item: DownloadStub.fromItem(
+          item: baseItem, type: DownloadItemType.track),
+      size: Theme.of(context)
+              .textTheme
+              .bodyMedium!
+              .fontSize! +
+          1,
+    );
+    final addSpaceAfterSpecialIcons = (downloadedIndicator.isVisible(ref) || (baseItem.hasLyrics ?? false)) && 
+            (showDateAdded || showDateLastPlayed);
 
     return ListTileTheme(
       tileColor: highlightTrack
@@ -706,26 +744,21 @@ class TrackListItemTile extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(right: 2.0),
                         child: Transform.translate(
-                          offset: const Offset(-1.5, 2.5),
-                          child: DownloadedIndicator(
-                            item: DownloadStub.fromItem(
-                                item: baseItem, type: DownloadItemType.track),
-                            size: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .fontSize! +
-                                1,
-                          ),
+                          offset: isOnDesktop ? Offset(-1.5, 1.7) : Offset(-1.5, 0.4),
+                          child: downloadedIndicator,
                         ),
                       ),
-                      alignment: PlaceholderAlignment.top,
+                      alignment: PlaceholderAlignment.baseline,
+                      baseline: TextBaseline.alphabetic,
                     ),
+                    if (downloadedIndicator.isVisible(ref) && (baseItem.hasLyrics == null || baseItem.hasLyrics == false))
+                      const WidgetSpan(child: SizedBox(width: 4.5)),
                     if (baseItem.hasLyrics ?? false)
                       WidgetSpan(
                         child: Padding(
                           padding: const EdgeInsets.only(right: 2.0),
                           child: Transform.translate(
-                              offset: const Offset(-1.5, 2.5),
+                              offset: isOnDesktop ? Offset(-1.5, 1.7) : Offset(-1.5, 0.4),
                               child: Icon(
                                 TablerIcons.microphone_2,
                                 size: Theme.of(context)
@@ -735,8 +768,120 @@ class TrackListItemTile extends StatelessWidget {
                                     1,
                               )),
                         ),
-                        alignment: PlaceholderAlignment.top,
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
                       ),
+                    if (baseItem.hasLyrics ?? false)
+                      const WidgetSpan(child: SizedBox(width: 5)),
+                    if (addSpaceAfterSpecialIcons)
+                      const WidgetSpan(child: SizedBox(width: 5)),
+                    if (showPlayCount)
+                      TextSpan(
+                        text: AppLocalizations.of(context)!
+                            .playCountValue(baseItem.userData?.playCount ?? 0),
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .color!
+                              .withOpacity(0.75),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    if (showPlayCount)
+                      const WidgetSpan(child: SizedBox(width: 10.0)),
+                    if (showDateLastPlayed)
+                      WidgetSpan(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 2.0),
+                          child: Transform.translate(
+                              offset: isOnDesktop ? Offset(-1.5, 1.8) : Offset(-1.5, 0.3),
+                              child: Icon(
+                                TablerIcons.clock,
+                                size: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize! +
+                                    1,
+                              )),
+                        ),
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
+                      ),
+                    if (showDateLastPlayed)
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
+                        child: RelativeDateTimeTextFromString(
+                          dateString: baseItem.userData?.lastPlayedDate,
+                          fallback: AppLocalizations.of(context)!.noDateLastPlayed,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.
+                                  bodyMedium!.color!.withOpacity(0.75),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          disableTextScaling: true,
+                        ),
+                      ),
+                    if (showDateLastPlayed)
+                      const WidgetSpan(child: SizedBox(width: 10.0)),
+                    if (showReleaseDate)
+                      TextSpan(
+                        text: (ReleaseDateHelper.autoFormat(baseItem) ?? 
+                            AppLocalizations.of(context)!.noReleaseDate),
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .color!
+                              .withOpacity(0.75),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    if (showReleaseDate)
+                      const WidgetSpan(child: SizedBox(width: 10.0)),
+                    if (showDateAdded)
+                      WidgetSpan(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 3),
+                          child: Transform.translate(
+                              offset: isOnDesktop ? Offset(-1.5, 1.28) : Offset(-1.5, 0),
+                              child: Icon(
+                                TablerIcons.calendar_plus,
+                                size: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize! +
+                                    1,
+                                color: Theme.of(context).textTheme.
+                                    bodyMedium!.color!.withOpacity(0.75),
+                              )
+                          ),
+                        ),
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
+                      ),
+                    if (showDateAdded)
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
+                        child: RelativeDateTimeTextFromString(
+                          dateString: baseItem.dateCreated,
+                          fallback: AppLocalizations.of(context)!.noDateAdded,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.
+                                  bodyMedium!.color!.withOpacity(0.75),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          disableTextScaling: true,
+                        ),
+                      ),
+                    if (showDateAdded)
+                      const WidgetSpan(child: SizedBox(width: 10.0)),
                     if (showArtists)
                       TextSpan(
                         text: artistsString,
@@ -753,15 +898,13 @@ class TrackListItemTile extends StatelessWidget {
                     if (!secondRowNeeded)
                       // show the artist anyway if nothing else is shown
                       TextSpan(
-                        text: baseItem.artists?.join(", ") ??
-                            baseItem.albumArtist ??
-                            AppLocalizations.of(context)!.unknownArtist,
+                        text: artistsString,
                         style: TextStyle(
                           color: Theme.of(context)
                               .textTheme
                               .bodyMedium!
                               .color!
-                              .withOpacity(0.6),
+                              .withOpacity(0.75),
                           fontSize: 13,
                           fontWeight: FontWeight.w300,
                         ),
@@ -771,22 +914,6 @@ class TrackListItemTile extends StatelessWidget {
                     if (showAlbum)
                       TextSpan(
                         text: baseItem.album,
-                        style: TextStyle(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .color!
-                              .withOpacity(0.6),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                    if (showAlbum)
-                      const WidgetSpan(child: SizedBox(width: 10.0)),
-                    if (showPlayCount)
-                      TextSpan(
-                        text: AppLocalizations.of(context)!
-                            .playCountValue(baseItem.userData?.playCount ?? 0),
                         style: TextStyle(
                           color: Theme.of(context)
                               .textTheme

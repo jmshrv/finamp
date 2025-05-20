@@ -14,8 +14,8 @@ import '../album_image.dart';
 import 'item_info.dart';
 
 enum AlbumMenuItems {
-  addFavourite,
-  removeFavourite,
+  addFavorite,
+  removeFavorite,
   addToMixList,
   removeFromMixList,
   playNext,

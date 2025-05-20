@@ -1,4 +1,3 @@
-import 'package:finamp/services/artist_screen_provider.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,18 +28,6 @@ class ArtistScreen extends ConsumerStatefulWidget {
 
 class _ArtistScreenState extends ConsumerState<ArtistScreen> {
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
-  Key _contentKey = UniqueKey();
-
-  Future<void> _refresh() async {
-    ref.invalidate(getArtistTopTracksProvider);
-    ref.invalidate(getArtistAlbumsProvider);
-    ref.invalidate(getPerformingArtistAlbumsProvider);
-    ref.invalidate(getPerformingArtistTracksProvider);
-    ref.invalidate(getAllTracksProvider);
-    setState(() {
-      _contentKey = UniqueKey();
-    });
-  }
 
   @override
   void initState() {
@@ -55,14 +42,10 @@ class _ArtistScreenState extends ConsumerState<ArtistScreen> {
     return Scaffold(
       extendBody: true,
       body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: _refresh,
-          child: ArtistScreenContent(
-            key: _contentKey,
-            parent: artist,
-            library: _finampUserHelper.currentUser?.currentView,
-            genreFilter: widget.genreFilter,
-          ),
+        child: ArtistScreenContent(
+          parent: artist,
+          library: _finampUserHelper.currentUser?.currentView,
+          genreFilter: widget.genreFilter,
         ),
       ),
       bottomNavigationBar: const NowPlayingBar(),

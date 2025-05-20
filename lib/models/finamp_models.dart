@@ -105,7 +105,7 @@ class DefaultSettings {
   static const shouldTranscode = false;
   static const transcodeBitrate = 320000;
   static const androidStopForegroundOnPause = true;
-  static const onlyShowFavourites = false;
+  static const onlyShowFavorites = false;
   static const trackShuffleItemCount = 250;
   static const volumeNormalizationActive = true;
   // 80% volume in dB. In my testing, most tracks were louder than the default target
@@ -229,7 +229,7 @@ class FinampSettings {
     this.androidStopForegroundOnPause =
         DefaultSettings.androidStopForegroundOnPause,
     required this.showTabs,
-    this.onlyShowFavourites = DefaultSettings.onlyShowFavourites,
+    this.onlyShowFavorites = DefaultSettings.onlyShowFavorites,
     this.sortBy = SortBy.sortName,
     this.sortOrder = SortOrder.ascending,
     this.trackShuffleItemCount = DefaultSettings.trackShuffleItemCount,
@@ -369,10 +369,10 @@ class FinampSettings {
   @SettingsHelperMap("tabContentType", "value")
   Map<TabContentType, bool> showTabs;
 
-  /// Used to remember if the user has set their music screen to favourites
+  /// Used to remember if the user has set their music screen to favorites
   /// mode.
-  @HiveField(6, defaultValue: DefaultSettings.onlyShowFavourites)
-  bool onlyShowFavourites;
+  @HiveField(6, defaultValue: DefaultSettings.onlyShowFavorites)
+  bool onlyShowFavorites;
 
   /// Current sort by setting.
   @Deprecated("Use per-tab sort by instead")
@@ -1803,18 +1803,20 @@ enum QueueItemSourceType {
   @HiveField(13)
   nextUpArtist,
   @HiveField(14)
-  formerNextUp,
+  nextUpGenre,
   @HiveField(15)
-  downloads,
+  formerNextUp,
   @HiveField(16)
-  queue,
+  downloads,
   @HiveField(17)
-  unknown,
+  queue,
   @HiveField(18)
-  genreMix,
+  unknown,
   @HiveField(19)
-  track,
+  genreMix,
   @HiveField(20)
+  track,
+  @HiveField(21)
   remoteClient;
 }
 
@@ -3022,7 +3024,9 @@ enum CuratedItemSelectionType {
   @HiveField(3)
   latestReleases,
   @HiveField(4)
-  recentlyAdded;
+  recentlyAdded,
+  @HiveField(5)
+  recentlyPlayed;
 
   /// Human-readable version of this enum.
   @override
@@ -3048,6 +3052,8 @@ enum CuratedItemSelectionType {
         return "Latest Releases";
       case CuratedItemSelectionType.recentlyAdded:
         return "Recently Added";
+      case CuratedItemSelectionType.recentlyPlayed:
+        return "Recently Played";
     }
   }
 
@@ -3065,6 +3071,8 @@ enum CuratedItemSelectionType {
         return AppLocalizations.of(context)!.latestReleases;
       case CuratedItemSelectionType.recentlyAdded:
         return AppLocalizations.of(context)!.recentlyAdded;
+      case CuratedItemSelectionType.recentlyPlayed:
+        return AppLocalizations.of(context)!.recentlyPlayed;
     }
   }
 
@@ -3098,6 +3106,25 @@ enum CuratedItemSelectionType {
         return getTitle(loc.latestTracks, loc.latestAlbums, loc.latestArtists) ?? "Unsupported Type";
       case CuratedItemSelectionType.recentlyAdded:
         return getTitle(loc.newTracks, loc.newAlbums, loc.newArtists) ?? "Unsupported Type";
+      case CuratedItemSelectionType.recentlyPlayed:
+        return getTitle(loc.recentlyPlayedTracks, loc.recentlyPlayedAlbums, loc.recentlyPlayedArtists) ?? "Unsupported Type";
+    }
+  }
+
+  SortBy getSortBy() {
+    switch (this) {
+        case CuratedItemSelectionType.mostPlayed:
+          return SortBy.playCount;
+        case CuratedItemSelectionType.favorites:
+          return SortBy.random;
+        case CuratedItemSelectionType.random:
+          return SortBy.random;
+        case CuratedItemSelectionType.latestReleases:
+          return SortBy.premiereDate;
+        case CuratedItemSelectionType.recentlyAdded:
+          return SortBy.dateCreated;
+        case CuratedItemSelectionType.recentlyPlayed:
+          return SortBy.datePlayed;
     }
   }
 }
@@ -3217,6 +3244,8 @@ enum ArtistItemSections {
         return getTitle(loc.latestTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
       case CuratedItemSelectionType.recentlyAdded:
         return getTitle(loc.newTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+      case CuratedItemSelectionType.recentlyPlayed:
+        return getTitle(loc.recentlyPlayedTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
       case null:
         return getTitle(loc.tracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
     }

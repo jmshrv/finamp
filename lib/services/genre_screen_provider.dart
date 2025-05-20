@@ -27,7 +27,7 @@ Future<(List<BaseItemDto>, int, CuratedItemSelectionType, Set<CuratedItemSelecti
   final Set<CuratedItemSelectionType> disabledFilters = {};
   final genreCuratedItemSectionFilterOrder = 
       ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
-  CuratedItemSelectionType currentSelectionType = handleMostPlayedFallbackOption(
+  CuratedItemSelectionType currentSelectionType = handleOfflineFallbackOption(
       isOffline: isOffline,
       currentFilter: (baseItemType == BaseItemDtoType.artist)
             ? ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeArtists)
@@ -75,7 +75,13 @@ Future<(List<BaseItemDto>, int, CuratedItemSelectionType, Set<CuratedItemSelecti
   List<BaseItemDto> filterResult(
     List<BaseItemDto> result, CuratedItemSelectionType curatedItemType) {
     if (curatedItemType == CuratedItemSelectionType.mostPlayed) {
-        return result.takeWhile((s) => (s.userData?.playCount ?? 0) > 0)
+        return result
+          .where((s) => (s.userData?.playCount ?? 0) > 0)
+          .take(5)
+          .toList();
+    } else if (curatedItemType == CuratedItemSelectionType.recentlyPlayed) {
+        return result
+          .where((s) => s.userData?.lastPlayedDate != null)
           .take(5)
           .toList();
     } else {
@@ -91,7 +97,8 @@ Future<(List<BaseItemDto>, int, CuratedItemSelectionType, Set<CuratedItemSelecti
   while (
     autoSwitchItemCurationTypeEnabled && filteredResult.isEmpty &&
     (currentSelectionType == CuratedItemSelectionType.favorites ||
-    currentSelectionType == CuratedItemSelectionType.mostPlayed)
+    currentSelectionType == CuratedItemSelectionType.mostPlayed ||
+    currentSelectionType == CuratedItemSelectionType.recentlyPlayed)
   ) {
     // Add the currentSelectionType to a Set of disabled types
     disabledFilters.add(currentSelectionType);
@@ -123,21 +130,18 @@ Future<(List<BaseItemDto>,int)> getCuratedItemsOnline({
   ArtistType? artistListType,
 }) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final sortByMain = switch (genreCuratedItemSelectionType) {
-    CuratedItemSelectionType.mostPlayed => "PlayCount",
-    CuratedItemSelectionType.recentlyAdded => "DateCreated",
-    CuratedItemSelectionType.latestReleases => "PremiereDate",
-    _ => "Random", // for Favorites and Random
+  final sortBy = genreCuratedItemSelectionType.getSortBy();
+  TabContentType tabType = switch (baseItemType) {
+    BaseItemDtoType.album => TabContentType.albums,
+    BaseItemDtoType.artist => TabContentType.artists,
+    _ => TabContentType.tracks,
   };
-  final sortBy = 
-    [sortByMain, if (sortBySecondary != null && sortBySecondary.isNotEmpty) sortBySecondary]
-    .join(',');
   int itemCount;
     
   final fetchedItems = await jellyfinApiHelper.getItemsWithTotalRecordCount(
     parentItem: library,
     genreFilter: parent, 
-    sortBy: sortBy,
+    sortBy: sortBy.jellyfinName(tabType),
     sortOrder: "Descending",
     isFavorite: (genreCuratedItemSelectionType == CuratedItemSelectionType.favorites) 
         ? true : null,
@@ -177,12 +181,7 @@ Future<(List<BaseItemDto>,int)> getCuratedItemsOffline({
   // how we can integrate it properly. But as in the current implementation it might return
   // outdated data, getCuratedItemsOffline currently never gets called with mostPlayed
   final downloadsService = GetIt.instance<DownloadsService>();
-  final sortBy = switch (genreCuratedItemSelectionType) {
-    CuratedItemSelectionType.mostPlayed => SortBy.playCount,
-    CuratedItemSelectionType.recentlyAdded => SortBy.dateCreated,
-    CuratedItemSelectionType.latestReleases => SortBy.premiereDate,
-    _ => SortBy.random, // for Favorites and Random
-  };
+  final sortBy = genreCuratedItemSelectionType.getSortBy();
 
   final listener = GetIt.instance<DownloadsService>()
         .offlineDeletesStream

@@ -3,7 +3,7 @@ import 'package:finamp/components/PlayerScreen/genre_chip.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
-import 'package:finamp/services/release_date_helper.dart';
+import 'package:finamp/services/datetime_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';

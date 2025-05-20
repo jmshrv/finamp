@@ -809,9 +809,9 @@ class JellyfinApiHelper {
   }
 
   /// Marks an item as a favorite.
-  Future<UserItemDataDto> addFavourite(BaseItemId itemId) async {
+  Future<UserItemDataDto> addFavorite(BaseItemId itemId) async {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
-    final response = await jellyfinApi.addFavourite(
+    final response = await jellyfinApi.addFavorite(
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
     final downloadsService = GetIt.instance<DownloadsService>();
@@ -824,9 +824,9 @@ class JellyfinApiHelper {
   }
 
   /// Unmarks item as a favorite.
-  Future<UserItemDataDto> removeFavourite(BaseItemId itemId) async {
+  Future<UserItemDataDto> removeFavorite(BaseItemId itemId) async {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
-    final response = await jellyfinApi.removeFavourite(
+    final response = await jellyfinApi.removeFavorite(
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
     final downloadsService = GetIt.instance<DownloadsService>();
@@ -877,6 +877,7 @@ class JellyfinApiHelper {
   Future<List<BaseItemDto>?> getArtistMix(List<BaseItemId> artistIds) async {
     final response = await jellyfinApi.getItems(
         userId: _finampUserHelper.currentUser!.id,
+        parentId: _finampUserHelper.currentUser!.currentView?.id,
         artistIds: artistIds.join(","),
         filters: "IsNotFolder",
         recursive: true,
@@ -905,6 +906,7 @@ class JellyfinApiHelper {
   Future<List<BaseItemDto>?> getGenreMix(List<BaseItemId> genreIds) async {
     final response = await jellyfinApi.getItems(
         userId: _finampUserHelper.currentUser!.id,
+        parentId: _finampUserHelper.currentUser!.currentView?.id,
         genreIds: genreIds.join(","),
         filters: "IsNotFolder",
         recursive: true,

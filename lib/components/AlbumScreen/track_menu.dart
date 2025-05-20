@@ -462,8 +462,8 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                         : iconColor,
                   ),
             title: Text(isFav
-                ? AppLocalizations.of(context)!.removeFavourite
-                : AppLocalizations.of(context)!.addFavourite),
+                ? AppLocalizations.of(context)!.removeFavorite
+                : AppLocalizations.of(context)!.addFavorite),
             onTap: () async {
               ref
                   .read(isFavoriteProvider(widget.item).notifier)

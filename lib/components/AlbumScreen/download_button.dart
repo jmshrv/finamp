@@ -1,4 +1,5 @@
 import 'package:finamp/components/delete_prompts.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
@@ -22,12 +23,16 @@ class DownloadButton extends ConsumerWidget {
     this.children,
     this.childrenCount,
     this.isLibrary = false,
+    this.downloadDisabled = false,
+    this.customTooltip,
   });
 
   final DownloadStub item;
   final List<BaseItemDto>? children;
   final int? childrenCount;
   final bool isLibrary;
+  final bool downloadDisabled;
+  final String? customTooltip;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -63,46 +68,60 @@ class DownloadButton extends ConsumerWidget {
       viewId = finampUserHelper.currentUser!.currentViewId!;
     }
 
-    var downloadButton = IconButton(
-      icon: status == DownloadItemStatus.notNeeded
-          ? const Icon(Icons.file_download)
-          : const Icon(Icons.lock), //TODO get better icon
-      onPressed: () async {
-        if (isLibrary) {
-          await showDialog(
-              context: context,
-              builder: (context) => ConfirmationPromptDialog(
-                    promptText: AppLocalizations.of(context)!
-                        .downloadLibraryPrompt(item.name),
-                    confirmButtonText:
-                        AppLocalizations.of(context)!.addButtonLabel,
-                    abortButtonText:
-                        MaterialLocalizations.of(context).cancelButtonLabel,
-                    onConfirmed: () =>
-                        DownloadDialog.show(context, item, viewId),
-                    onAborted: () {},
-                  ));
-        } else {
-          int? trackCount = switch (item.baseItemType) {
-            BaseItemDtoType.album ||
-            BaseItemDtoType.playlist =>
-              children?.length,
-            BaseItemDtoType.artist || BaseItemDtoType.genre => children
-                ?.fold<int>(0, (count, item) => count + (item.childCount ?? 0)),
-            _ => null
-          };
-          await DownloadDialog.show(context, item, viewId,
-              trackCount: trackCount);
-        }
-      },
-      tooltip: parentTooltip,
+    var downloadButton = Opacity(
+      opacity: downloadDisabled ? 0.4 : 1.0,
+      child: IconButton(
+        icon: status == DownloadItemStatus.notNeeded
+            ? const Icon(Icons.file_download)
+            : const Icon(Icons.lock), //TODO get better icon
+        onPressed: () async {
+          if (downloadDisabled) {
+            sendDisabledDownloadMessageToSnackbar(customTooltip);
+            return;
+          }
+          if (isLibrary) {
+            await showDialog(
+                context: context,
+                builder: (context) => ConfirmationPromptDialog(
+                      promptText: AppLocalizations.of(context)!
+                          .downloadLibraryPrompt(item.name),
+                      confirmButtonText:
+                          AppLocalizations.of(context)!.addButtonLabel,
+                      abortButtonText:
+                          MaterialLocalizations.of(context).cancelButtonLabel,
+                      onConfirmed: () =>
+                          DownloadDialog.show(context, item, viewId),
+                      onAborted: () {},
+                    ));
+          } else {
+            int? trackCount = switch (item.baseItemType) {
+              BaseItemDtoType.album ||
+              BaseItemDtoType.playlist =>
+                children?.length,
+              BaseItemDtoType.artist || BaseItemDtoType.genre => children
+                  ?.fold<int>(0, (count, item) => count + (item.childCount ?? 0)),
+              _ => null
+            };
+            await DownloadDialog.show(context, item, viewId,
+                trackCount: trackCount);
+          }
+        },
+        tooltip: customTooltip ?? parentTooltip,
+      ),
     );
-    var deleteButton = IconButton(
-      icon: const Icon(Icons.delete),
-      tooltip: AppLocalizations.of(context)!.deleteFromTargetConfirmButton(""),
-      onPressed: () {
-        askBeforeDeleteDownloadFromDevice(context, item);
-      },
+    var deleteButton = Opacity(
+      opacity: downloadDisabled ? 0.4 : 1.0,
+        child: IconButton(
+        icon: const Icon(Icons.delete),
+        tooltip: AppLocalizations.of(context)!.deleteFromTargetConfirmButton(""),
+        onPressed: () {
+          if (downloadDisabled) {
+            sendDisabledDownloadMessageToSnackbar(customTooltip);
+            return;
+          }
+          askBeforeDeleteDownloadFromDevice(context, item);
+        },
+      ),
     );
     var syncButton = IconButton(
       icon: const Icon(Icons.sync),
@@ -110,18 +129,25 @@ class DownloadButton extends ConsumerWidget {
       onPressed: () {
         downloadsService.resync(item, viewId);
       },
-      color: status.outdated ? Colors.orange : null,
+      color: (status.outdated && !downloadDisabled) ? Colors.orange : null,
     );
-    var serverDeleteButton = IconButton(
-      icon: const Icon(Icons.delete_forever),
-      tooltip:
-          AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server"),
-      onPressed: () {
-        askBeforeDeleteFromServerAndDevice(context, item,
-            popIt: true,
-            refresh: () => musicScreenRefreshStream
-                .add(null)); // trigger a refresh of the music screen
-      },
+    var serverDeleteButton = Opacity(
+      opacity: downloadDisabled ? 0.4 : 1.0,
+      child: IconButton(
+        icon: const Icon(Icons.delete_forever),
+        tooltip:
+            AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server"),
+        onPressed: () {
+          if (downloadDisabled) {
+            sendDisabledDownloadMessageToSnackbar(customTooltip);
+            return;
+          }
+          askBeforeDeleteFromServerAndDevice(context, item,
+              popIt: true,
+              refresh: () => musicScreenRefreshStream
+                  .add(null)); // trigger a refresh of the music screen
+        },
+      ),
     );
 
     var deleteFromServerCombo = PopupMenuButton<Null>(
@@ -132,27 +158,39 @@ class DownloadButton extends ConsumerWidget {
         return [
           PopupMenuItem(
               value: null,
-              child: ListTile(
+              child: Opacity(
+                opacity: downloadDisabled ? 0.4 : 1.0,
+                child: ListTile(
                   leading: Icon(Icons.delete_outline),
                   title: Text(AppLocalizations.of(context)!
                       .deleteFromTargetConfirmButton("")),
                   enabled: true,
                   onTap: () {
+                    if (downloadDisabled) {
+                      sendDisabledDownloadMessageToSnackbar(customTooltip);
+                      return;
+                    }
                     askBeforeDeleteDownloadFromDevice(context, item);
-                  })),
+                  }))),
           PopupMenuItem(
               value: null,
-              child: ListTile(
+              child: Opacity(
+                opacity: downloadDisabled ? 0.4 : 1.0,
+                child: ListTile(
                   leading: Icon(Icons.delete_forever),
                   title: Text(AppLocalizations.of(context)!
                       .deleteFromTargetConfirmButton("server")),
                   enabled: true,
                   onTap: () {
+                    if (downloadDisabled) {
+                      sendDisabledDownloadMessageToSnackbar(customTooltip);
+                      return;
+                    }
                     askBeforeDeleteFromServerAndDevice(context, item,
                         popIt: true,
                         refresh: () => musicScreenRefreshStream.add(
                             null)); // trigger a refresh of the music screen
-                  }))
+                  })))
         ];
       },
     );
@@ -194,4 +232,11 @@ class DownloadButton extends ConsumerWidget {
       return Row(mainAxisSize: MainAxisSize.min, children: buttons);
     }
   }
+}
+
+void sendDisabledDownloadMessageToSnackbar(String? customTooltip){
+  GlobalSnackbar.message((context) =>
+                            customTooltip ??
+                            AppLocalizations.of(context)!
+                                .notAvailable);
 }

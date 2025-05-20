@@ -12,6 +12,7 @@ import 'package:collection/collection.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -3461,22 +3462,54 @@ enum SortBy {
   @HiveField(14)
   runtime;
 
-  /// default SortBy options shown to the user, such as in the sort by menu
-  static List<SortBy> get defaults => [
-        SortBy.sortName,
-        SortBy.albumArtist,
-        SortBy.communityRating,
-        SortBy.criticRating,
-        SortBy.dateCreated,
-        SortBy.premiereDate,
-        SortBy.random,
-      ];
+  static List<SortBy> defaultsFor(TabContentType type) {
+    List<SortBy> options;
 
-  /// default SortBy options shown to the user, such as in the sort by menu
-  static List<SortBy> get trackSortOptions => [
-        ...defaults,
-        SortBy.playCount,
-      ];
+    switch (type) {
+      case TabContentType.tracks:
+        options = [
+          SortBy.sortName,
+          SortBy.albumArtist,
+          SortBy.artist,
+          //SortBy.communityRating,
+          //SortBy.criticRating,
+          SortBy.premiereDate,
+          SortBy.dateCreated,
+          SortBy.datePlayed,
+          SortBy.playCount,
+          SortBy.runtime,
+          SortBy.random,
+        ];
+      case TabContentType.albums:
+        options = [
+          SortBy.sortName,
+          SortBy.albumArtist,
+          //SortBy.communityRating,
+          //SortBy.criticRating,
+          //SortBy.datePlayed,
+          SortBy.premiereDate,
+          SortBy.dateCreated,
+          SortBy.runtime,
+          SortBy.random,
+        ];
+      case TabContentType.playlists:
+      case TabContentType.artists:
+        options = [
+          SortBy.sortName,
+          //SortBy.datePlayed,
+          SortBy.dateCreated,
+          SortBy.runtime,
+          SortBy.random,
+        ];
+      case TabContentType.genres:
+        options = [
+          SortBy.sortName,
+          SortBy.dateCreated,
+          SortBy.random,
+        ];
+    }
+    return options;
+  }
 
   /// Human-readable version of the [SortBy]. For example, toString() on
   /// [SortBy.album], toString() would return "SortBy.album". With this
@@ -3507,7 +3540,7 @@ enum SortBy {
       case SortBy.albumArtist:
         return "Album Artist";
       case SortBy.artist:
-        return "Artist";
+        return "Performing Artist";
       case SortBy.budget:
         return "Budget";
       case SortBy.communityRating:
@@ -3542,7 +3575,7 @@ enum SortBy {
       case SortBy.albumArtist:
         return AppLocalizations.of(context)!.albumArtist;
       case SortBy.artist:
-        return AppLocalizations.of(context)!.artist;
+        return AppLocalizations.of(context)!.performingArtist;
       case SortBy.budget:
         return AppLocalizations.of(context)!.budget;
       case SortBy.communityRating:
@@ -3566,7 +3599,7 @@ enum SortBy {
       case SortBy.revenue:
         return AppLocalizations.of(context)!.revenue;
       case SortBy.runtime:
-        return AppLocalizations.of(context)!.runtime;
+        return AppLocalizations.of(context)!.duration;
     }
   }
 
@@ -3672,6 +3705,38 @@ enum SortBy {
         return "Revenue";
       case SortBy.runtime:
         return "Runtime,AlbumArtist,Album,SortName";
+    }
+  }
+
+  IconData? getIcon() {
+    switch (this) {
+      case SortBy.album:
+        return TablerIcons.disc;
+      case SortBy.albumArtist:
+      case SortBy.artist:
+        return TablerIcons.user;
+      case SortBy.communityRating:
+      case SortBy.criticRating:
+        return TablerIcons.chart_bar_popular;
+      case SortBy.dateCreated:
+        return TablerIcons.calendar_plus;
+      case SortBy.datePlayed:
+        return TablerIcons.clock;
+      case SortBy.playCount:
+        return TablerIcons.sum;
+      case SortBy.premiereDate:
+      case SortBy.productionYear:
+        return TablerIcons.calendar;
+      case SortBy.sortName:
+        return TablerIcons.abc;
+      case SortBy.random:
+        return TablerIcons.arrows_shuffle;
+      case SortBy.revenue:
+        return TablerIcons.coins;
+      case SortBy.runtime:
+        return TablerIcons.stopwatch;
+      default:
+        return null;
     }
   }
 }

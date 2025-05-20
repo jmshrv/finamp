@@ -14,9 +14,9 @@ import 'jellyfin_api_helper.dart';
 
 part 'artist_screen_provider.g.dart';
 
-// Get the Top Tracks of an artist
+// Get the Tracks Section content of an artist
 @riverpod
-Future<(List<BaseItemDto>, CuratedItemSelectionType, Set<CuratedItemSelectionType>?)> getArtistTopTracks(
+Future<(List<BaseItemDto>, CuratedItemSelectionType, Set<CuratedItemSelectionType>?)> getArtistTracksSection(
   Ref ref,
   BaseItemDto parent,
   BaseItemDto? library,
@@ -28,31 +28,25 @@ Future<(List<BaseItemDto>, CuratedItemSelectionType, Set<CuratedItemSelectionTyp
       ref.watch(finampSettingsProvider.autoSwitchItemCurationType);
   final Set<CuratedItemSelectionType> disabledFilters = {};
   final artistCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.artistItemSectionFilterChipOrder);
-  CuratedItemSelectionType currentSelectionType = handleMostPlayedFallbackOption(
+  CuratedItemSelectionType currentSelectionType = handleOfflineFallbackOption(
       isOffline: isOffline,
       currentFilter: ref.watch(finampSettingsProvider.artistCuratedItemSelectionType),
       filterListFor: BaseItemDtoType.track,
       customFilterOrder: artistCuratedItemSectionFilterOrder,
   );
-  // If Top Tracks are disabled, we return an empty list
+  // If Tracks Section is disabled, we return an empty list
   if (!ref.watch(finampSettingsProvider.showArtistsTracksSection)) {
     return (<BaseItemDto>[], currentSelectionType, null);
   }
 
   // Get Items
   Future<List<BaseItemDto>> fetchItems(CuratedItemSelectionType selectionType) async {
-    final sortByMain = switch (selectionType) {
-        CuratedItemSelectionType.mostPlayed => SortBy.playCount,
-        CuratedItemSelectionType.recentlyAdded => SortBy.dateCreated,
-        CuratedItemSelectionType.latestReleases => SortBy.premiereDate,
-        _ => SortBy.random, // for Favorites and Random
-      };
+    final sortBy = selectionType.getSortBy();
     if (isOffline) {
       // In Offline Mode:
       // We already fetch all tracks for the playback, 
       // and as in offline mode this is much faster, 
       // we just sort them and only return the first 5 items.
-      final sortBy = (sortByMain == SortBy.playCount) ? SortBy.random : sortByMain;
       final onlyFavorites = (selectionType == CuratedItemSelectionType.favorites);
       final List<BaseItemDto> allArtistTracks = await ref.watch(
         getAllTracksProvider(parent, library, genreFilter, onlyFavorites: onlyFavorites).future,
@@ -62,15 +56,13 @@ Future<(List<BaseItemDto>, CuratedItemSelectionType, Set<CuratedItemSelectionTyp
       return items;
     } else {
       // In Online Mode:
-      // Get Top 5 Tracks sorted by Play Count
-      final sortBy = sortByMain.jellyfinName(TabContentType.tracks);
       final List<BaseItemDto>? topAlbumArtistTracks = 
         await jellyfinApiHelper.getItems(
             libraryFilter: library,
             parentItem: parent,
             genreFilter: genreFilter,
             artistType: ArtistType.albumartist,
-            sortBy: sortBy,
+            sortBy: sortBy.jellyfinName(TabContentType.tracks),
             sortOrder: "Descending",
             isFavorite: (selectionType == CuratedItemSelectionType.favorites) 
                 ? true : null,
@@ -89,7 +81,7 @@ Future<(List<BaseItemDto>, CuratedItemSelectionType, Set<CuratedItemSelectionTyp
             parentItem: parent,
             genreFilter: genreFilter,
             artistType: ArtistType.artist,
-            sortBy: sortBy,
+            sortBy: sortBy.jellyfinName(TabContentType.tracks),
             sortOrder: "Descending",
             isFavorite: true,
             limit: 5,
@@ -102,7 +94,7 @@ Future<(List<BaseItemDto>, CuratedItemSelectionType, Set<CuratedItemSelectionTyp
       };
 
       final List<BaseItemDto> distinctTracks = distinctMap.values.toList();
-      var items = sortItems(distinctTracks, sortByMain, SortOrder.descending);
+      var items = sortItems(distinctTracks, sortBy, SortOrder.descending);
       items = items.take(5).toList();
       return items;
     }
@@ -111,7 +103,13 @@ Future<(List<BaseItemDto>, CuratedItemSelectionType, Set<CuratedItemSelectionTyp
   List<BaseItemDto> filterResult(
     List<BaseItemDto> result, CuratedItemSelectionType curatedItemType) {
     if (curatedItemType == CuratedItemSelectionType.mostPlayed) {
-        return result.takeWhile((s) => (s.userData?.playCount ?? 0) > 0)
+        return result
+          .where((s) => (s.userData?.playCount ?? 0) > 0)
+          .take(5)
+          .toList();
+    } else if (curatedItemType == CuratedItemSelectionType.recentlyPlayed) {
+        return result
+          .where((s) => s.userData?.lastPlayedDate != null)
           .take(5)
           .toList();
     } else {
@@ -127,7 +125,8 @@ Future<(List<BaseItemDto>, CuratedItemSelectionType, Set<CuratedItemSelectionTyp
   while (
     autoSwitchItemCurationTypeEnabled && filteredResult.isEmpty &&
     (currentSelectionType == CuratedItemSelectionType.favorites ||
-    currentSelectionType == CuratedItemSelectionType.mostPlayed)
+    currentSelectionType == CuratedItemSelectionType.mostPlayed ||
+    currentSelectionType == CuratedItemSelectionType.recentlyPlayed)
   ) {
     // Add the currentSelectionType to a Set of disabled types
     disabledFilters.add(currentSelectionType);

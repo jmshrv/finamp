@@ -283,49 +283,51 @@ class ZoomedImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: IgnorePointer(
-            child: Container(
-              color: Colors.black.withOpacity(0.5),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-                child: Container(),
+    return SafeArea( 
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: IgnorePointer(
+              child: Container(
+                color: Colors.black.withOpacity(0.5),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                  child: Container(),
+                ),
               ),
             ),
           ),
-        ),
-        Center(
-            child: Dismissible(
-          key: const Key("zoomed-image-dismiss"),
-          direction: DismissDirection.vertical,
-          onDismissed: (direction) {
-            Navigator.of(context).pop();
-          },
-          child: InteractiveViewer(
-            constrained: true,
-            panEnabled: true,
-            clipBehavior: Clip.none,
-            child: Hero(
-              tag: zoomedImageHeroTag,
-              child: albumImage,
-            ),
-          ),
-        )),
-        Positioned(
-          top: 8,
-          right: 16,
-          child: IconButton(
-            icon: const Icon(TablerIcons.x),
-            color: Colors.white,
-            iconSize: 32.0,
-            onPressed: () {
+          Center(
+              child: Dismissible(
+            key: const Key("zoomed-image-dismiss"),
+            direction: DismissDirection.vertical,
+            onDismissed: (direction) {
               Navigator.of(context).pop();
             },
+            child: InteractiveViewer(
+              constrained: true,
+              panEnabled: true,
+              clipBehavior: Clip.none,
+              child: Hero(
+                tag: zoomedImageHeroTag,
+                child: albumImage,
+              ),
+            ),
+          )),
+          Positioned(
+            top: 4,
+            right: 8,
+            child: IconButton(
+              icon: const Icon(TablerIcons.x),
+              color: Colors.white,
+              iconSize: 32.0,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

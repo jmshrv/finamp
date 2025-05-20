@@ -720,7 +720,7 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> addFavourite({
+  Future<dynamic> addFavorite({
     required String userId,
     required BaseItemId itemId,
   }) async {
@@ -739,7 +739,7 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> removeFavourite({
+  Future<dynamic> removeFavorite({
     required String userId,
     required BaseItemId itemId,
   }) async {

@@ -478,7 +478,7 @@ abstract class JellyfinApi extends ChopperService {
     @Query("Limit") int? limit,
 
     /// User id. Technically nullable in the Jellyfin API docs, but getting
-    /// favourited artists will break if this is not given.
+    /// favorited artists will break if this is not given.
     @Query("UserId") required String userId,
 
     /// Optional filter by items that are marked as favorite, or not.
@@ -546,7 +546,7 @@ abstract class JellyfinApi extends ChopperService {
     response: JsonConverter.responseFactory,
   )
   @Post(path: "/Users/{userId}/FavoriteItems/{itemId}", optionalBody: true)
-  Future<dynamic> addFavourite({
+  Future<dynamic> addFavorite({
     /// User id.
     @Path() required String userId,
 
@@ -560,7 +560,7 @@ abstract class JellyfinApi extends ChopperService {
     response: JsonConverter.responseFactory,
   )
   @Delete(path: "/Users/{userId}/FavoriteItems/{itemId}")
-  Future<dynamic> removeFavourite({
+  Future<dynamic> removeFavorite({
     /// User id.
     @Path() required String userId,
 
