@@ -155,34 +155,30 @@ class _AlbumImageState extends ConsumerState<AlbumImage> {
             tapToZoom: false,
             onZoomRoute: true,
           );
+          // Show album as clickable on desktop
           return MouseRegion(
             cursor: SystemMouseCursors.click,
             child: GestureDetector(
-              onTap: () => Navigator.of(context).push(
-                  PageRouteBuilder<_ZoomedImage>(
-                      opaque: false,
-                      barrierDismissible: true,
-                      transitionDuration:
-                          MediaQuery.of(context).disableAnimations
-                              ? Duration.zero
-                              : const Duration(milliseconds: 500),
-                      pageBuilder: (BuildContext context,
-                          Animation<double> animation1,
-                          Animation<double> animation2) {
-                        return _ZoomedImage(albumImage: largeImage, id: zoomID);
-                      })),
-              child: LayoutBuilder(builder: (context, constraints) {
-                return Hero(
+                onTap: () => Navigator.of(context).push(PageRouteBuilder<
+                        _ZoomedImage>(
+                    opaque: false,
+                    barrierDismissible: true,
+                    transitionDuration: MediaQuery.of(context).disableAnimations
+                        ? Duration.zero
+                        : const Duration(milliseconds: 500),
+                    pageBuilder: (BuildContext context,
+                        Animation<double> animation1,
+                        Animation<double> animation2) {
+                      return _ZoomedImage(albumImage: largeImage, id: zoomID);
+                    })),
+                child: Hero(
                     tag: zoomID,
                     createRectTween: (begin, end) =>
                         RectTween(begin: begin, end: end),
                     child: image,
                     placeholderBuilder: (context, heroSize, child) => image,
-                    flightShuttleBuilder:
-                        (overlayContext, _, __, fromContext, ____) =>
-                            largeImage);
-              }),
-            ),
+                    flightShuttleBuilder: (_, __, ___, ____, _____) =>
+                        largeImage)),
           );
         }
 
@@ -294,7 +290,6 @@ class _ZoomedImage extends StatelessWidget {
   final String id;
 
   const _ZoomedImage({
-    super.key,
     required this.albumImage,
     required this.id,
   });
@@ -309,7 +304,7 @@ class _ZoomedImage extends StatelessWidget {
               color: Colors.black.withOpacity(0.5),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-                child: Container(),
+                child: SizedBox.expand(),
               ),
             ),
           ),
