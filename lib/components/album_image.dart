@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:finamp/components/PlayerScreen/player_split_screen_scaffold.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -265,6 +266,7 @@ class _TapToZoomImageState extends State<TapToZoomImage> {
         child: Hero(
           tag: zoomedImageHeroTag,
           child: widget.albumImage,
+          placeholderBuilder: (context, heroSize, child) => widget.albumImage,
         ),
       ),
     );
@@ -287,6 +289,10 @@ class ZoomedImage extends StatelessWidget {
           child: IgnorePointer(
             child: Container(
               color: Colors.black.withOpacity(0.5),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                child: Container(),
+              ),
             ),
           ),
         ),
