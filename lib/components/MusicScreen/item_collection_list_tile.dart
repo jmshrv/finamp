@@ -78,11 +78,11 @@ class ItemCollectionListTile extends ConsumerWidget {
     final sortIconMeta = {
       SortBy.runtime: (
         icon: TablerIcons.stopwatch,
-        offset: isOnDesktop ? Offset(-1.5, 1.5) : Offset(-1.5, 0.5),
+        offset: isOnDesktop ? Offset(-1.5, 1.2) : Offset(-1.5, 0.5),
       ),
       SortBy.dateCreated: (
         icon: TablerIcons.calendar_plus,
-        offset: isOnDesktop ? Offset(-1.5, 1) : Offset(-1.5, -0.2),
+        offset: isOnDesktop ? Offset(-1.5, 1.0) : Offset(-1.5, 0.2),
       ),
     };
 
@@ -95,7 +95,8 @@ class ItemCollectionListTile extends ConsumerWidget {
       final color = textTheme.color!.withOpacity(0.7);
 
       return WidgetSpan(
-        alignment: PlaceholderAlignment.top,
+        alignment: PlaceholderAlignment.baseline,
+        baseline: TextBaseline.alphabetic,
         child: Padding(
           padding: const EdgeInsets.only(right: 3),
           child: Transform.translate(
@@ -161,10 +162,11 @@ class ItemCollectionListTile extends ConsumerWidget {
         children: [
           WidgetSpan(
             child: Transform.translate(
-              offset: isOnDesktop ? Offset(-3, 1.2) : Offset(-3, 0),
+              offset: isOnDesktop ? Offset(-3, 1.3) : Offset(-3, 0.4),
               child: downloadedIndicator,
             ),
-            alignment: PlaceholderAlignment.top,
+            alignment: PlaceholderAlignment.baseline,
+            baseline: TextBaseline.alphabetic,
           ),
           if (downloadedIndicator.isVisible(ref))
               WidgetSpan(child: SizedBox(width: (additionalInfo != null) ? 5.0 : 2.0)),

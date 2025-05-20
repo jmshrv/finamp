@@ -744,11 +744,12 @@ class TrackListItemTile extends ConsumerWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(right: 2.0),
                         child: Transform.translate(
-                          offset: isOnDesktop ? Offset(-1.5, 3.6) : Offset(-1.5, 2.3),
+                          offset: isOnDesktop ? Offset(-1.5, 1.7) : Offset(-1.5, 0.4),
                           child: downloadedIndicator,
                         ),
                       ),
-                      alignment: PlaceholderAlignment.top,
+                      alignment: PlaceholderAlignment.baseline,
+                      baseline: TextBaseline.alphabetic,
                     ),
                     if (downloadedIndicator.isVisible(ref) && (baseItem.hasLyrics == null || baseItem.hasLyrics == false))
                       const WidgetSpan(child: SizedBox(width: 4.5)),
@@ -757,7 +758,7 @@ class TrackListItemTile extends ConsumerWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 2.0),
                           child: Transform.translate(
-                              offset: isOnDesktop ? Offset(-1.5, 3.6) : Offset(-1.5, 2.5),
+                              offset: isOnDesktop ? Offset(-1.5, 1.7) : Offset(-1.5, 0.4),
                               child: Icon(
                                 TablerIcons.microphone_2,
                                 size: Theme.of(context)
@@ -767,7 +768,8 @@ class TrackListItemTile extends ConsumerWidget {
                                     1,
                               )),
                         ),
-                        alignment: PlaceholderAlignment.top,
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
                       ),
                     if (baseItem.hasLyrics ?? false)
                       const WidgetSpan(child: SizedBox(width: 5)),
@@ -794,7 +796,7 @@ class TrackListItemTile extends ConsumerWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 2.0),
                           child: Transform.translate(
-                              offset: isOnDesktop ? Offset(-1.5, 3.58) : Offset(-1.5, 2.3),
+                              offset: isOnDesktop ? Offset(-1.5, 1.8) : Offset(-1.5, 0.3),
                               child: Icon(
                                 TablerIcons.clock,
                                 size: Theme.of(context)
@@ -804,25 +806,23 @@ class TrackListItemTile extends ConsumerWidget {
                                     1,
                               )),
                         ),
-                        alignment: PlaceholderAlignment.top,
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
                       ),
                     if (showDateLastPlayed)
                       WidgetSpan(
                         alignment: PlaceholderAlignment.baseline,
                         baseline: TextBaseline.alphabetic,
-                        child: Transform.translate(
-                          offset: Platform.isMacOS ? Offset(0, -1) : Offset(0, 0),
-                          child: RelativeDateTimeTextFromString(
-                            dateString: baseItem.userData?.lastPlayedDate,
-                            fallback: AppLocalizations.of(context)!.noDateLastPlayed,
-                            style: TextStyle(
-                              color: Theme.of(context).textTheme.
-                                    bodyMedium!.color!.withOpacity(0.75),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            disableTextScaling: true,
+                        child: RelativeDateTimeTextFromString(
+                          dateString: baseItem.userData?.lastPlayedDate,
+                          fallback: AppLocalizations.of(context)!.noDateLastPlayed,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.
+                                  bodyMedium!.color!.withOpacity(0.75),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
                           ),
+                          disableTextScaling: true,
                         ),
                       ),
                     if (showDateLastPlayed)
@@ -848,7 +848,7 @@ class TrackListItemTile extends ConsumerWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 3),
                           child: Transform.translate(
-                              offset: isOnDesktop ? Offset(-1.5, 2.8) : Offset(-1.5, 1.8),
+                              offset: isOnDesktop ? Offset(-1.5, 1.28) : Offset(-1.5, 0),
                               child: Icon(
                                 TablerIcons.calendar_plus,
                                 size: Theme.of(context)
@@ -861,25 +861,23 @@ class TrackListItemTile extends ConsumerWidget {
                               )
                           ),
                         ),
-                        alignment: PlaceholderAlignment.top,
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
                       ),
                     if (showDateAdded)
                       WidgetSpan(
                         alignment: PlaceholderAlignment.baseline,
                         baseline: TextBaseline.alphabetic,
-                        child: Transform.translate(
-                          offset: Platform.isMacOS ? Offset(0, -1) : Offset(0, 0),
-                          child: RelativeDateTimeTextFromString(
-                            dateString: baseItem.dateCreated,
-                            fallback: AppLocalizations.of(context)!.noDateAdded,
-                            style: TextStyle(
-                              color: Theme.of(context).textTheme.
-                                    bodyMedium!.color!.withOpacity(0.75),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            disableTextScaling: true,
+                        child: RelativeDateTimeTextFromString(
+                          dateString: baseItem.dateCreated,
+                          fallback: AppLocalizations.of(context)!.noDateAdded,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.
+                                  bodyMedium!.color!.withOpacity(0.75),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
                           ),
+                          disableTextScaling: true,
                         ),
                       ),
                     if (showDateAdded)
