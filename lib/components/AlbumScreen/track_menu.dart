@@ -849,11 +849,11 @@ class _TrackInfoState extends ConsumerState<TrackInfo> {
             children: [
               AspectRatio(
                 aspectRatio: 1.0,
-                child: TapToZoomImage(
-                    albumImage: AlbumImage(
+                child: AlbumImage(
                   item: widget.item,
                   borderRadius: BorderRadius.zero,
-                )),
+                  tapToZoom: true,
+                ),
               ),
               Expanded(
                 child: Container(
