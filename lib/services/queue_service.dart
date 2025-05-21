@@ -336,6 +336,8 @@ class QueueService {
     if (_savedQueueState == SavedQueueState.loading) {
       return Future.error("A saved queue is currently loading");
     }
+    _queueServiceLogger.finest("Loading stored queue: $info");
+
     // After loading queue, do not begin overwriting latest until the user modifies
     // the queue or begins playback.  This prevents saving unused queues that
     // had loading errors or were immediately overwritten.
@@ -509,6 +511,8 @@ class QueueService {
         return Future.error(
             "initialIndex is bigger than the itemList! ($initialIndex > ${itemList.length})");
       }
+      _queueServiceLogger
+          .finest("Replacing whole queue with ${itemList.length} items.");
 
       _queue.clear(); // empty queue
       _queuePreviousTracks.clear();
