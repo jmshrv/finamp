@@ -6,7 +6,6 @@ import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import '../../services/finamp_settings_helper.dart';
 
 class HomeNetworkAddressSelector extends ConsumerStatefulWidget {
   const HomeNetworkAddressSelector({super.key});
@@ -45,9 +44,10 @@ class _HomeNetworkAddressSelector extends ConsumerState<HomeNetworkAddressSelect
           textAlign: TextAlign.center,
           keyboardType: TextInputType.url,
           onSubmitted: (value) async {
-            if (!value.startsWith("http"))
+            if (!value.startsWith("http")) {
               return GlobalSnackbar.message((context) =>
                   AppLocalizations.of(context)!.missingSchemaError);
+            }
             GetIt.instance<FinampUserHelper>().currentUser?.update(newHomeAddress: value);
             await changeTargetUrl();
           },

@@ -166,7 +166,7 @@ class _DownloadedChildrenListState
     }
     
     return Container(
-      color: Theme.of(context).colorScheme.surfaceVariant,
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
       child: Column(children: [
         // TODO use a list builder here
         for (final stub in items)

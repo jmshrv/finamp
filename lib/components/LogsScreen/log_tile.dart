@@ -17,7 +17,7 @@ class LogTile extends StatefulWidget {
 }
 
 class _LogTileState extends State<LogTile> {
-  final _controller = ExpansionTileController();
+  final _controller = ExpansibleController();
 
   /// Whether the user has confirmed. This is used to stop onExpansionChanged
   /// from infinitely asking the user to confirm.
