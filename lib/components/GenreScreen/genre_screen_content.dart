@@ -351,7 +351,7 @@ void openSeeAll(
                 ),
               );
           }
-        }).toList(),
+        }),
       if (isLoading)
         SliverToBoxAdapter(
           child: Padding(

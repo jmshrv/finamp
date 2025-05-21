@@ -80,7 +80,7 @@ class FinampLogsHelper {
   }
 
   Future<void> copyLogs() async =>
-      await FlutterClipboard.copy(await getSanitisedLogs());
+      await FlutterClipboard.copy(getSanitisedLogs());
 
   /// Write logs to a file and share the file
   Future<void> shareLogs() async {

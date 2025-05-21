@@ -211,7 +211,7 @@ class ServerState {
     this.baseUrl,
   }) : clientDiscoveryHandler = JellyfinServerClientDiscovery();
 
-  onBaseUrlChanged(String baseUrl) {
+  void onBaseUrlChanged(String baseUrl) {
     if (connectionTestDebounceTimer?.isActive ?? false) {
       connectionTestDebounceTimer?.cancel();
     }
