@@ -32,7 +32,7 @@ class InstantMixMenuEntry extends ConsumerWidget {
     return Visibility(
         visible: !ref.watch(finampSettingsProvider.isOffline),
         child: MenuEntry(
-          icon: TablerIcons.corner_right_down,
+          icon: TablerIcons.compass,
           title: AppLocalizations.of(context)!.instantMix,
           onTap: () async {
             await audioServiceHelper.startInstantMixForItem(baseItem);
