@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <include domain="sharedpref" path="./"/>
+    <include domain="root" path="app_flutter/"/>
+    <exclude domain="root" path="app_flutter/songs/"/>
+    <exclude domain="root" path="app_flutter/flutter_assets/"/>
+    <exclude domain="root" path="app_flutter/finamp-logs.txt"/>
+    <exclude domain="root" path="app_flutter/finamp-logs-old.txt"/>
+</full-backup-content>
