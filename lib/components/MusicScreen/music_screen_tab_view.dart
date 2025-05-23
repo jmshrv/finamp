@@ -611,11 +611,23 @@ List<BaseItemDto> sortItems(
           } else {
             return a.nameForSorting!.compareTo(b.nameForSorting!);
           }
+        case SortBy.album:
+          if (a.album == null || b.album == null) {
+            return 0;
+          } else {
+            return a.album!.compareTo(b.album!);
+          }
         case SortBy.albumArtist:
           if (a.albumArtist == null || b.albumArtist == null) {
             return 0;
           } else {
             return a.albumArtist!.compareTo(b.albumArtist!);
+          }
+        case SortBy.artist:
+          if (a.artists == null || b.artists == null) {
+            return 0;
+          } else {
+            return a.artists!.join(', ').compareTo(b.artists!.join(', '));
           }
         case SortBy.communityRating:
           if (a.communityRating == null || b.communityRating == null) {

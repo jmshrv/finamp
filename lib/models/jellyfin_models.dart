@@ -3469,6 +3469,7 @@ enum SortBy {
       case TabContentType.tracks:
         options = [
           SortBy.sortName,
+          SortBy.album,
           SortBy.albumArtist,
           SortBy.artist,
           //SortBy.communityRating,
