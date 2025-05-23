@@ -324,7 +324,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.only(top: 16),
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -597,8 +597,6 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                                       unawaited(allTracks.then((items) =>
                                           shuffleAlbumsFromArtistToQueue(
                                               items ?? [])));
-                                      break;
-                                    default:
                                       break;
                                   }
                                 },

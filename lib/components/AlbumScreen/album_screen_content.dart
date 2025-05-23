@@ -8,10 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
-import '../favorite_button.dart';
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
+import '../Buttons/cta_medium.dart';
+import '../favorite_button.dart';
 import '../padded_custom_scrollview.dart';
 import 'album_screen_content_flexible_space_bar.dart';
 import 'download_button.dart';
@@ -45,6 +46,14 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
     super.dispose();
     _listener?.cancel();
     _listener = null;
+  }
+
+  double? textWidth;
+
+  @override
+  void didUpdateWidget(covariant AlbumScreenContent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    textWidth = null;
   }
 
   @override
@@ -87,26 +96,20 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
 
     return PaddedCustomScrollview(
       slivers: [
-        SliverAppBar(
-          title: (widget.parent.type != "Playlist")
-            ? Text(
-                widget.parent.name ?? AppLocalizations.of(context)!.unknownName
-              )
-            : null,
-          // 125 + 64 is the total height of the widget we use as a
-          // FlexibleSpaceBar. We add the toolbar height since the widget
-          // should appear below the appbar.
-          // TODO: This height is affected by platform density.
-          expandedHeight: kToolbarHeight + 125 + 80,
-          // collapsedHeight: kToolbarHeight + 125 + 80,
-          pinned: true,
-          centerTitle: false,
-          flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
-            parentItem: widget.parent,
-            isPlaylist: widget.parent.type == "Playlist",
-            items: widget.queueChildren,
-          ),
-          actions: [
+        SliverLayoutBuilder(builder: (context, constraints) {
+          double textSize(String text, TextStyle? style) {
+            final TextPainter textPainter = TextPainter(
+                text: TextSpan(text: text, style: style),
+                maxLines: 1,
+                textDirection: TextDirection.ltr,
+                textScaler: MediaQuery.textScalerOf(context))
+              ..layout(minWidth: 0, maxWidth: double.infinity);
+            final size = textPainter.width;
+            textPainter.dispose();
+            return size;
+          }
+
+          final actions = [
             if (widget.parent.type == "Playlist" &&
                 !ref.watch(finampSettingsProvider.isOffline))
               PlaylistNameEditButton(playlist: widget.parent),
@@ -120,13 +123,49 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                 tabType: TabContentType.tracks,
                 forPlaylistTracks: true,
               ),
-            FavoriteButton(item: widget.parent),
+            FavoriteButton(
+              item: widget.parent,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
             DownloadButton(
               item: downloadStub,
               children: widget.displayChildren,
             ),
-          ],
-        ),
+          ];
+
+          textWidth ??= textSize(
+              widget.parent.name ?? AppLocalizations.of(context)!.unknownName,
+              Theme.of(context).textTheme.titleLarge);
+          final iconSize = kMinInteractiveDimension +
+              VisualDensity.adaptivePlatformDensity.baseSizeAdjustment.dy;
+          final wrapActions = constraints.crossAxisExtent <
+              textWidth! +
+                  iconSize * actions.length +
+                  56 +
+                  (ref.watch(finampSettingsProvider.allowDeleteFromServer)
+                      ? iconSize
+                      : 0);
+          return SliverAppBar(
+            title: Text(
+              widget.parent.name ?? AppLocalizations.of(context)!.unknownName,
+            ),
+            expandedHeight: kToolbarHeight +
+                125 +
+                8 +
+                CTAMedium.predictedHeight(context) +
+                (wrapActions ? iconSize : 0),
+            // collapsedHeight: kToolbarHeight + 125 + 80,
+            pinned: true,
+            centerTitle: false,
+            titleSpacing: 0,
+            flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
+                parentItem: widget.parent,
+                isPlaylist: widget.parent.type == "Playlist",
+                items: widget.queueChildren,
+                actions: wrapActions ? actions : null),
+            actions: wrapActions ? null : actions,
+          );
+        }),
         if (widget.displayChildren.length > 1 &&
             childrenPerDisc.length >
                 1) // show headers only for multi disc albums
@@ -149,15 +188,15 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                 childrenForQueue: Future.value(widget.queueChildren),
                 parent: widget.parent,
                 onRemoveFromList: onDelete,
-                showDateAdded: (widget.parent.type == "Playlist" && 
+                showDateAdded: (widget.parent.type == "Playlist" &&
                     widget.playlistSortBy == SortBy.dateCreated),
-                showPlayCount: (widget.parent.type == "Playlist" && 
+                showPlayCount: (widget.parent.type == "Playlist" &&
                     widget.playlistSortBy == SortBy.playCount),
-                showDateLastPlayed: (widget.parent.type == "Playlist" && 
+                showDateLastPlayed: (widget.parent.type == "Playlist" &&
                     widget.playlistSortBy == SortBy.datePlayed),
-                showReleaseDate: (widget.parent.type == "Playlist" && 
+                showReleaseDate: (widget.parent.type == "Playlist" &&
                     widget.playlistSortBy == SortBy.premiereDate),
-                forceAlbumArtists: (widget.parent.type == "Playlist" && 
+                forceAlbumArtists: (widget.parent.type == "Playlist" &&
                     widget.playlistSortBy == SortBy.albumArtist),
               ),
             )
@@ -167,15 +206,15 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             childrenForQueue: Future.value(widget.queueChildren),
             parent: widget.parent,
             onRemoveFromList: onDelete,
-            showDateAdded: (widget.parent.type == "Playlist" && 
+            showDateAdded: (widget.parent.type == "Playlist" &&
                 widget.playlistSortBy == SortBy.dateCreated),
-            showPlayCount: (widget.parent.type == "Playlist" && 
+            showPlayCount: (widget.parent.type == "Playlist" &&
                 widget.playlistSortBy == SortBy.playCount),
-            showDateLastPlayed: (widget.parent.type == "Playlist" && 
+            showDateLastPlayed: (widget.parent.type == "Playlist" &&
                 widget.playlistSortBy == SortBy.datePlayed),
-            showReleaseDate: (widget.parent.type == "Playlist" && 
+            showReleaseDate: (widget.parent.type == "Playlist" &&
                 widget.playlistSortBy == SortBy.premiereDate),
-            forceAlbumArtists: (widget.parent.type == "Playlist" && 
+            forceAlbumArtists: (widget.parent.type == "Playlist" &&
                 widget.playlistSortBy == SortBy.albumArtist),
           )
       ],

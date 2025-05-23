@@ -32,11 +32,13 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
     required this.parentItem,
     required this.isPlaylist,
     required this.items,
+    this.actions,
   });
 
   final BaseItemDto parentItem;
   final bool isPlaylist;
   final List<BaseItemDto> items;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
@@ -224,10 +226,14 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
         child: Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                if (actions != null)
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: actions!),
                 Row(
                   children: [
                     SizedBox(
@@ -247,7 +253,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.only(top: 16.0),
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(

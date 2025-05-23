@@ -155,7 +155,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
                   physics: const NeverScrollableScrollPhysics(),
                   slivers: [
                     SliverAppBar(
-                      centerTitle: (parent.type == "Playlist"),
+                      titleSpacing: 0,
                       title: Text(parent.name ??
                           AppLocalizations.of(context)!.unknownName),
                     ),
