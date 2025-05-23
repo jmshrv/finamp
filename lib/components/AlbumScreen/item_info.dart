@@ -48,6 +48,18 @@ class ItemInfo extends ConsumerWidget {
         //     ),
         //   ),
         // ),
+        // We display the title of a playlist here, because we have
+        // too many actions in the AppBar:
+        if (item.type == "Playlist")
+          Padding(
+            padding: EdgeInsets.only(left: 6, right: 6, top: 0, bottom: 6),
+            child: Text(
+              item.name ?? "Unknown Playlist",
+              style: Theme.of(context).textTheme.titleMedium,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis, 
+            ),
+          ),
         if (item.type != "Playlist")
           ArtistChips(
             baseItem: item,

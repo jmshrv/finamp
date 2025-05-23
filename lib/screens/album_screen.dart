@@ -1,3 +1,4 @@
+import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,6 +32,13 @@ class _AlbumScreenState extends State<AlbumScreen> {
   Future<List<List<BaseItemDto>?>>? albumScreenContentFuture;
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+  SortBy? playlistSortBy;
+  SortBy? currentPlaylistSortBy;
+  SortOrder? currentPlaylistSortOrder;
+  List<BaseItemDto>? _sortedItems;
+  List<BaseItemDto>? _sortedPlayableItems;
+  List<BaseItemDto>? playlistOriginalOrderItems;
+  List<BaseItemDto>? playlistOriginalOrderPlayableItems;
 
   @override
   Widget build(BuildContext context) {
@@ -71,10 +79,53 @@ class _AlbumScreenState extends State<AlbumScreen> {
                     List<BaseItemDto> items,
                     List<BaseItemDto> playableItems
                   ]) {
+                // Custom Playlist Sorting
+                if (parent.type == "Playlist") {
+                  playlistOriginalOrderItems ??= List.from(items);
+                  playlistOriginalOrderPlayableItems ??= List.from(playableItems);
+                  SortBy playlistSortBySetting = ref.watch(finampSettingsProvider.playlistTracksSortBy);
+                  SortOrder playlistSortOrder = ref.watch(finampSettingsProvider.playlistTracksSortOrder);
+                  playlistSortBy = (isOffline && (playlistSortBySetting == SortBy.datePlayed || playlistSortBySetting == SortBy.playCount))
+                      ? playlistSortBy = SortBy.serverOrder
+                      : playlistSortBySetting;
+                  final hasChanged = playlistSortBy != currentPlaylistSortBy || playlistSortOrder != currentPlaylistSortOrder;
+
+                  if (hasChanged) {
+                    currentPlaylistSortBy = playlistSortBy;
+                    currentPlaylistSortOrder = playlistSortOrder;
+                    if (playlistSortBy == SortBy.serverOrder) {
+                      items = playlistOriginalOrderItems ?? items;
+                      playableItems = playlistOriginalOrderPlayableItems ?? playableItems;
+                      if (playlistSortOrder == SortOrder.descending) {
+                        items = items.reversed.toList();
+                        playableItems = playableItems.reversed.toList();
+                      }
+                    } else {
+                      items = sortItems(items, playlistSortBy, playlistSortOrder);
+                      // We now have to re-create playableItems from items, because if we
+                      // would sort both lists separately, the order would diverge for Shuffle 
+                      final originalPlayableItems = List<BaseItemDto>.from(playableItems);
+                      playableItems = [];
+                      for (final item in items) {
+                        final index = originalPlayableItems.indexWhere((p) => p.id == item.id);
+                        if (index != -1) {
+                          playableItems.add(item);
+                          originalPlayableItems.removeAt(index);
+                        }
+                      }
+                    }
+                    _sortedItems = items;
+                    _sortedPlayableItems = playableItems;
+                  } else {
+                    items = _sortedItems ?? items;
+                    playableItems = _sortedPlayableItems ?? playableItems;
+                  }
+                }
                 return AlbumScreenContent(
                     parent: parent,
                     displayChildren: items,
-                    queueChildren: playableItems);
+                    queueChildren: playableItems,
+                    playlistSortBy: playlistSortBy);
               } else if (snapshot.hasError) {
                 return PaddedCustomScrollview(
                   physics: const NeverScrollableScrollPhysics(),

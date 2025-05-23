@@ -13,27 +13,31 @@ class SortByMenuButton extends ConsumerWidget {
     required this.tabType,
     this.sortByOverride,
     this.onOverrideChanged,
+    this.forPlaylistTracks = false,
   });
 
   final TabContentType tabType;
   final SortBy? sortByOverride;
   final void Function(SortBy newSortBy)? onOverrideChanged;
+  final bool forPlaylistTracks;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
-    final rawSortOptions = SortBy.defaultsFor(tabType);
+    final rawSortOptions = SortBy.defaultsFor(type: tabType, includeServerOrder: forPlaylistTracks);
     final sortOptions = isOffline
       ? [
           ...rawSortOptions.where((s) => s != SortBy.playCount && s != SortBy.datePlayed),
           ...rawSortOptions.where((s) => s == SortBy.playCount || s == SortBy.datePlayed),
         ]
       : rawSortOptions;
-    var selectedSortBy = (sortByOverride ?? ref.watch(finampSettingsProvider.tabSortBy(tabType)));
+    var selectedSortBy = (sortByOverride ?? (forPlaylistTracks
+          ? ref.watch(finampSettingsProvider.playlistTracksSortBy)
+          : ref.watch(finampSettingsProvider.tabSortBy(tabType))));
     // PlayCount and Last Played are not representative in Offline Mode
     // so we disable it and overwrite it with the Sort Name if it was selected
     if (isOffline && (selectedSortBy == SortBy.playCount || selectedSortBy == SortBy.datePlayed)) {
-      selectedSortBy = SortBy.sortName;
+      selectedSortBy = forPlaylistTracks ? SortBy.serverOrder : SortBy.sortName;
     }
     return PopupMenuButton<SortBy>(
       icon: const Icon(Icons.sort),
@@ -87,6 +91,8 @@ class SortByMenuButton extends ConsumerWidget {
         } else {
           if (sortByOverride != null && onOverrideChanged != null) {
             onOverrideChanged!(value);
+          } else if (forPlaylistTracks) {
+            FinampSetters.setPlaylistTracksSortBy(value);
           } else {
             FinampSetters.setTabSortBy(tabType, value);
           }

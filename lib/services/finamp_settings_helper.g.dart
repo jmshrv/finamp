@@ -807,6 +807,20 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setPlaylistTracksSortBy(SortBy newPlaylistTracksSortBy) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.playlistTracksSortBy = newPlaylistTracksSortBy;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setPlaylistTracksSortOrder(SortOrder newPlaylistTracksSortOrder) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.playlistTracksSortOrder = newPlaylistTracksSortOrder;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -1083,6 +1097,11 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool> get autoSwitchItemCurationType =>
       finampSettingsProvider
           .select((value) => value.requireValue.autoSwitchItemCurationType);
+  ProviderListenable<SortBy> get playlistTracksSortBy => finampSettingsProvider
+      .select((value) => value.requireValue.playlistTracksSortBy);
+  ProviderListenable<SortOrder> get playlistTracksSortOrder =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.playlistTracksSortOrder);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);

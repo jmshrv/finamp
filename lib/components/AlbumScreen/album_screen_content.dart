@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
+import 'package:finamp/components/MusicScreen/sort_by_menu_button.dart';
+import 'package:finamp/components/MusicScreen/sort_order_button.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,11 +25,13 @@ class AlbumScreenContent extends ConsumerStatefulWidget {
       {super.key,
       required this.parent,
       required this.displayChildren,
-      required this.queueChildren});
+      required this.queueChildren,
+      this.playlistSortBy});
 
   final BaseItemDto parent;
   final List<BaseItemDto> displayChildren;
   final List<BaseItemDto> queueChildren;
+  final SortBy? playlistSortBy;
 
   @override
   ConsumerState<AlbumScreenContent> createState() => _AlbumScreenContentState();
@@ -84,8 +88,11 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
     return PaddedCustomScrollview(
       slivers: [
         SliverAppBar(
-          title: Text(
-              widget.parent.name ?? AppLocalizations.of(context)!.unknownName),
+          title: (widget.parent.type != "Playlist")
+            ? Text(
+                widget.parent.name ?? AppLocalizations.of(context)!.unknownName
+              )
+            : null,
           // 125 + 64 is the total height of the widget we use as a
           // FlexibleSpaceBar. We add the toolbar height since the widget
           // should appear below the appbar.
@@ -103,6 +110,16 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             if (widget.parent.type == "Playlist" &&
                 !ref.watch(finampSettingsProvider.isOffline))
               PlaylistNameEditButton(playlist: widget.parent),
+            if (widget.parent.type == "Playlist")
+              SortOrderButton(
+                tabType: TabContentType.tracks,
+                forPlaylistTracks: true,
+              ),
+            if (widget.parent.type == "Playlist")
+              SortByMenuButton(
+                tabType: TabContentType.tracks,
+                forPlaylistTracks: true,
+              ),
             FavoriteButton(item: widget.parent),
             DownloadButton(
               item: downloadStub,
@@ -132,6 +149,14 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                 childrenForQueue: Future.value(widget.queueChildren),
                 parent: widget.parent,
                 onRemoveFromList: onDelete,
+                showDateAdded: (widget.parent.type == "Playlist" && 
+                    widget.playlistSortBy == SortBy.dateCreated),
+                showPlayCount: (widget.parent.type == "Playlist" && 
+                    widget.playlistSortBy == SortBy.playCount),
+                showDateLastPlayed: (widget.parent.type == "Playlist" && 
+                    widget.playlistSortBy == SortBy.datePlayed),
+                showReleaseDate: (widget.parent.type == "Playlist" && 
+                    widget.playlistSortBy == SortBy.premiereDate),
               ),
             )
         else if (widget.displayChildren.isNotEmpty)
@@ -140,6 +165,14 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             childrenForQueue: Future.value(widget.queueChildren),
             parent: widget.parent,
             onRemoveFromList: onDelete,
+            showDateAdded: (widget.parent.type == "Playlist" && 
+                widget.playlistSortBy == SortBy.dateCreated),
+            showPlayCount: (widget.parent.type == "Playlist" && 
+                widget.playlistSortBy == SortBy.playCount),
+            showDateLastPlayed: (widget.parent.type == "Playlist" && 
+                widget.playlistSortBy == SortBy.datePlayed),
+            showReleaseDate: (widget.parent.type == "Playlist" && 
+                widget.playlistSortBy == SortBy.premiereDate),
           )
       ],
     );

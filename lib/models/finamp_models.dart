@@ -214,6 +214,8 @@ class DefaultSettings {
   static const artistItemSectionFilterChipOrder = CuratedItemSelectionType.values;
   static const artistItemSectionsOrder = ArtistItemSections.values;
   static const autoSwitchItemCurationType = true;
+  static const playlistTracksSortBy = SortBy.serverOrder;
+  static const playlistTracksSortOrder = SortOrder.ascending;
 }
 
 @HiveType(typeId: 28)
@@ -349,6 +351,8 @@ class FinampSettings {
     this.artistItemSectionFilterChipOrder = DefaultSettings.artistItemSectionFilterChipOrder,
     this.artistItemSectionsOrder = DefaultSettings.artistItemSectionsOrder,
     this.autoSwitchItemCurationType = DefaultSettings.autoSwitchItemCurationType,
+    this.playlistTracksSortBy = DefaultSettings.playlistTracksSortBy,
+    this.playlistTracksSortOrder = DefaultSettings.playlistTracksSortOrder,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -715,6 +719,12 @@ class FinampSettings {
 
   @HiveField(112, defaultValue: DefaultSettings.autoSwitchItemCurationType)
   bool autoSwitchItemCurationType;
+
+  @HiveField(113, defaultValue: DefaultSettings.playlistTracksSortBy)
+  SortBy playlistTracksSortBy;
+
+  @HiveField(114, defaultValue: DefaultSettings.playlistTracksSortOrder)
+  SortOrder playlistTracksSortOrder;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

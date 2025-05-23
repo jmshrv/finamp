@@ -3460,9 +3460,15 @@ enum SortBy {
   revenue,
 
   @HiveField(14)
-  runtime;
+  runtime,
 
-  static List<SortBy> defaultsFor(TabContentType type) {
+  @HiveField(15)
+  serverOrder;
+
+  static List<SortBy> defaultsFor({
+    required TabContentType type, 
+    bool includeServerOrder = false
+  }) {
     List<SortBy> options;
 
     switch (type) {
@@ -3508,6 +3514,9 @@ enum SortBy {
           SortBy.dateCreated,
           SortBy.random,
         ];
+    }
+    if (includeServerOrder) {
+      options.insert(0, SortBy.serverOrder);
     }
     return options;
   }
@@ -3566,6 +3575,8 @@ enum SortBy {
         return "Revenue";
       case SortBy.runtime:
         return "Runtime";
+      case SortBy.serverOrder:
+        return "Server Order";
     }
   }
 
@@ -3601,6 +3612,8 @@ enum SortBy {
         return AppLocalizations.of(context)!.revenue;
       case SortBy.runtime:
         return AppLocalizations.of(context)!.duration;
+      case SortBy.serverOrder:
+        return AppLocalizations.of(context)!.serverOrder;
     }
   }
 
@@ -3636,6 +3649,8 @@ enum SortBy {
         return "Revenue";
       case SortBy.runtime:
         return "Runtime";
+      case SortBy.serverOrder:
+        return "";
     }
   }
 
@@ -3671,6 +3686,8 @@ enum SortBy {
         return "Revenue";
       case SortBy.runtime:
         return "Runtime";
+      case SortBy.serverOrder:
+        return "";
     }
   }
 
@@ -3706,6 +3723,8 @@ enum SortBy {
         return "Revenue";
       case SortBy.runtime:
         return "Runtime,AlbumArtist,Album,SortName";
+      case SortBy.serverOrder:
+        return "";
     }
   }
 
@@ -3736,6 +3755,8 @@ enum SortBy {
         return TablerIcons.coins;
       case SortBy.runtime:
         return TablerIcons.stopwatch;
+      case SortBy.serverOrder:
+        return TablerIcons.server;
       default:
         return null;
     }
