@@ -157,6 +157,8 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                     widget.playlistSortBy == SortBy.datePlayed),
                 showReleaseDate: (widget.parent.type == "Playlist" && 
                     widget.playlistSortBy == SortBy.premiereDate),
+                forceAlbumArtists: (widget.parent.type == "Playlist" && 
+                    widget.playlistSortBy == SortBy.albumArtist),
               ),
             )
         else if (widget.displayChildren.isNotEmpty)
@@ -173,6 +175,8 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                 widget.playlistSortBy == SortBy.datePlayed),
             showReleaseDate: (widget.parent.type == "Playlist" && 
                 widget.playlistSortBy == SortBy.premiereDate),
+            forceAlbumArtists: (widget.parent.type == "Playlist" && 
+                widget.playlistSortBy == SortBy.albumArtist),
           )
       ],
     );
