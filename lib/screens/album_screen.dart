@@ -35,8 +35,8 @@ class _AlbumScreenState extends State<AlbumScreen> {
   SortBy? playlistSortBy;
   SortBy? currentPlaylistSortBy;
   SortOrder? currentPlaylistSortOrder;
-  List<BaseItemDto>? _sortedItems;
-  List<BaseItemDto>? _sortedPlayableItems;
+  List<BaseItemDto>? sortedItems;
+  List<BaseItemDto>? sortedPlayableItems;
   List<BaseItemDto>? playlistOriginalOrderItems;
   List<BaseItemDto>? playlistOriginalOrderPlayableItems;
 
@@ -81,19 +81,24 @@ class _AlbumScreenState extends State<AlbumScreen> {
                   ]) {
                 // Custom Playlist Sorting
                 if (parent.type == "Playlist") {
+                  // We cache the original order, so that we can restore it 
+                  // without having to re-fetch the items
                   playlistOriginalOrderItems ??= List.from(items);
                   playlistOriginalOrderPlayableItems ??= List.from(playableItems);
+                  // Get the currently active playlist sorting
                   SortBy playlistSortBySetting = ref.watch(finampSettingsProvider.playlistTracksSortBy);
                   SortOrder playlistSortOrder = ref.watch(finampSettingsProvider.playlistTracksSortOrder);
-                  playlistSortBy = (isOffline && (playlistSortBySetting == SortBy.datePlayed || playlistSortBySetting == SortBy.playCount))
-                      ? playlistSortBy = SortBy.serverOrder
-                      : playlistSortBySetting;
-                  final hasChanged = playlistSortBy != currentPlaylistSortBy || playlistSortOrder != currentPlaylistSortOrder;
-
-                  if (hasChanged) {
+                  playlistSortBy = (isOffline && 
+                      (playlistSortBySetting == SortBy.datePlayed || playlistSortBySetting == SortBy.playCount))
+                    ? playlistSortBy = SortBy.serverOrder
+                    : playlistSortBySetting;
+                  // We only sort items at the beginning or when the setting has changed
+                  if (playlistSortBy != currentPlaylistSortBy || 
+                      playlistSortOrder != currentPlaylistSortOrder) {
                     currentPlaylistSortBy = playlistSortBy;
                     currentPlaylistSortOrder = playlistSortOrder;
                     if (playlistSortBy == SortBy.serverOrder) {
+                      // Restore original server order
                       items = playlistOriginalOrderItems ?? items;
                       playableItems = playlistOriginalOrderPlayableItems ?? playableItems;
                       if (playlistSortOrder == SortOrder.descending) {
@@ -101,9 +106,12 @@ class _AlbumScreenState extends State<AlbumScreen> {
                         playableItems = playableItems.reversed.toList();
                       }
                     } else {
+                      // Unfortunately, the Jellyfin API does not support "sortBy"
+                      // for the "/Playlists/{playlistId}/Items" endpoint, so we 
+                      // use our own sortItems function for both online and offline
                       items = sortItems(items, playlistSortBy, playlistSortOrder);
-                      // We now have to re-create playableItems from items, because if we
-                      // would sort both lists separately, the order would diverge for Shuffle 
+                      // We now have to re-create playableItems from the new items order, because
+                      // if we would sort both separately, they would diverge for SortBy.random
                       final originalPlayableItems = List<BaseItemDto>.from(playableItems);
                       playableItems = [];
                       for (final item in items) {
@@ -114,11 +122,13 @@ class _AlbumScreenState extends State<AlbumScreen> {
                         }
                       }
                     }
-                    _sortedItems = items;
-                    _sortedPlayableItems = playableItems;
+                    // We cache the new order so that we can use it on rebuild
+                    sortedItems = items;
+                    sortedPlayableItems = playableItems;
                   } else {
-                    items = _sortedItems ?? items;
-                    playableItems = _sortedPlayableItems ?? playableItems;
+                    // Use cached order
+                    items = sortedItems ?? items;
+                    playableItems = sortedPlayableItems ?? playableItems;
                   }
                 }
                 return AlbumScreenContent(
