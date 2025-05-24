@@ -252,7 +252,7 @@ class _GenreChipContent extends ConsumerWidget {
     } else {
       GlobalSnackbar.message(
             (context) =>
-                AppLocalizations.of(context)!.genreNotFound,
+                AppLocalizations.of(context)!.genreNotFound((isOffline) ? "offline" : "other"),
       );
     }
   }

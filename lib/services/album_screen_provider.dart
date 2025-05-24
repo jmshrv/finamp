@@ -17,9 +17,8 @@ part 'album_screen_provider.g.dart';
 @riverpod
 Future<(List<BaseItemDto>, List<BaseItemDto>)> getAlbumOrPlaylistTracks(
   Ref ref,
-  BaseItemDto parent, {
-  BaseItemDto? genreFilter,
-}) async {
+  BaseItemDto parent,
+) async {
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
   List<BaseItemDto> allTracks;
@@ -30,35 +29,20 @@ Future<(List<BaseItemDto>, List<BaseItemDto>)> getAlbumOrPlaylistTracks(
     allTracks = await downloadsService.getCollectionTracks(
       parent,
       playable: false,
-      genreFilter: (BaseItemDtoType.fromItem(parent) != BaseItemDtoType.playlist)
-            ? genreFilter : null,
     );
     playableTracks = await downloadsService.getCollectionTracks(
       parent,
       playable: true,
-      genreFilter: (BaseItemDtoType.fromItem(parent) != BaseItemDtoType.playlist)
-            ? genreFilter : null,
     );
   } else {
     allTracks = await jellyfinApiHelper.getItems(
         parentItem: parent,
         sortBy: "ParentIndexNumber,IndexNumber,SortName",
         includeItemTypes: "Audio",
-        genreFilter: (BaseItemDtoType.fromItem(parent) != BaseItemDtoType.playlist)
-            ? genreFilter : null,
     ) ?? [];
     playableTracks = allTracks;
   }
-  // The playlist api endpoint and fully downloaded playlists do not allow 
-  // to filter by genre, so we have to do that manually on device
-  if (genreFilter != null && BaseItemDtoType.fromItem(parent) == BaseItemDtoType.playlist) {
-    allTracks = allTracks.where((track) {
-      return track.genreItems?.any((g) => g.id == genreFilter.id) ?? false;
-    }).toList();
-    playableTracks = playableTracks.where((track) {
-      return track.genreItems?.any((g) => g.id == genreFilter.id) ?? false;
-    }).toList();
-  }
+  
   return (allTracks, playableTracks);
 }
 
@@ -81,10 +65,7 @@ Future<(List<BaseItemDto>, List<BaseItemDto>)> getSortedPlaylistTracks(
     : playlistSortBySetting;
 
    // Get Playlist Items
-  final result = await ref.watch(getAlbumOrPlaylistTracksProvider(
-    parent, 
-    genreFilter: genreFilter
-  ).future);
+  final result = await ref.watch(getAlbumOrPlaylistTracksProvider(parent).future);
   final playlistAllTracks = result.$1;
   final playlistPlayableTracks = result.$2;
 
@@ -98,6 +79,14 @@ Future<(List<BaseItemDto>, List<BaseItemDto>)> getSortedPlaylistTracks(
     // use our own sortItems function for both online and offline
     final playlistAllTracksCopy = List<BaseItemDto>.from(playlistAllTracks);
     playlistAllTracksSorted = sortItems(playlistAllTracksCopy, playlistSortBy, playlistSortOrder);
+  }
+
+  // The playlist api endpoint and fully downloaded playlists do not allow 
+  // to filter by genre, so we have to do that manually on device
+  if (genreFilter != null && BaseItemDtoType.fromItem(parent) == BaseItemDtoType.playlist) {
+    playlistAllTracksSorted = playlistAllTracksSorted.where((track) {
+      return track.genreItems?.any((g) => g.id == genreFilter.id) ?? false;
+    }).toList();
   }
      
   // We now have to re-create a sorted playableItems from the new items order, 

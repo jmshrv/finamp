@@ -7,7 +7,7 @@ part of 'album_screen_provider.dart';
 // **************************************************************************
 
 String _$getAlbumOrPlaylistTracksHash() =>
-    r'cd019c82553cd5b7f4a9a07f827365ce11601b12';
+    r'682b95290e0c4a38835f7e441dca88174b73d695';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -42,12 +42,10 @@ class GetAlbumOrPlaylistTracksFamily
 
   /// See also [getAlbumOrPlaylistTracks].
   GetAlbumOrPlaylistTracksProvider call(
-    BaseItemDto parent, {
-    BaseItemDto? genreFilter,
-  }) {
+    BaseItemDto parent,
+  ) {
     return GetAlbumOrPlaylistTracksProvider(
       parent,
-      genreFilter: genreFilter,
     );
   }
 
@@ -57,7 +55,6 @@ class GetAlbumOrPlaylistTracksFamily
   ) {
     return call(
       provider.parent,
-      genreFilter: provider.genreFilter,
     );
   }
 
@@ -81,13 +78,11 @@ class GetAlbumOrPlaylistTracksProvider
     extends AutoDisposeFutureProvider<(List<BaseItemDto>, List<BaseItemDto>)> {
   /// See also [getAlbumOrPlaylistTracks].
   GetAlbumOrPlaylistTracksProvider(
-    BaseItemDto parent, {
-    BaseItemDto? genreFilter,
-  }) : this._internal(
+    BaseItemDto parent,
+  ) : this._internal(
           (ref) => getAlbumOrPlaylistTracks(
             ref as GetAlbumOrPlaylistTracksRef,
             parent,
-            genreFilter: genreFilter,
           ),
           from: getAlbumOrPlaylistTracksProvider,
           name: r'getAlbumOrPlaylistTracksProvider',
@@ -99,7 +94,6 @@ class GetAlbumOrPlaylistTracksProvider
           allTransitiveDependencies:
               GetAlbumOrPlaylistTracksFamily._allTransitiveDependencies,
           parent: parent,
-          genreFilter: genreFilter,
         );
 
   GetAlbumOrPlaylistTracksProvider._internal(
@@ -110,11 +104,9 @@ class GetAlbumOrPlaylistTracksProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.parent,
-    required this.genreFilter,
   }) : super.internal();
 
   final BaseItemDto parent;
-  final BaseItemDto? genreFilter;
 
   @override
   Override overrideWith(
@@ -132,7 +124,6 @@ class GetAlbumOrPlaylistTracksProvider
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         parent: parent,
-        genreFilter: genreFilter,
       ),
     );
   }
@@ -145,16 +136,13 @@ class GetAlbumOrPlaylistTracksProvider
 
   @override
   bool operator ==(Object other) {
-    return other is GetAlbumOrPlaylistTracksProvider &&
-        other.parent == parent &&
-        other.genreFilter == genreFilter;
+    return other is GetAlbumOrPlaylistTracksProvider && other.parent == parent;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, parent.hashCode);
-    hash = _SystemHash.combine(hash, genreFilter.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -166,9 +154,6 @@ mixin GetAlbumOrPlaylistTracksRef
     on AutoDisposeFutureProviderRef<(List<BaseItemDto>, List<BaseItemDto>)> {
   /// The parameter `parent` of this provider.
   BaseItemDto get parent;
-
-  /// The parameter `genreFilter` of this provider.
-  BaseItemDto? get genreFilter;
 }
 
 class _GetAlbumOrPlaylistTracksProviderElement
@@ -179,13 +164,10 @@ class _GetAlbumOrPlaylistTracksProviderElement
 
   @override
   BaseItemDto get parent => (origin as GetAlbumOrPlaylistTracksProvider).parent;
-  @override
-  BaseItemDto? get genreFilter =>
-      (origin as GetAlbumOrPlaylistTracksProvider).genreFilter;
 }
 
 String _$getSortedPlaylistTracksHash() =>
-    r'b753fca4f9d1baa6e920748502890933072ab2ac';
+    r'f00fc9de58585ce33c58fe95db92ef96163157da';
 
 /// See also [getSortedPlaylistTracks].
 @ProviderFor(getSortedPlaylistTracks)
