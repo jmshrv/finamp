@@ -99,11 +99,11 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
         SliverLayoutBuilder(builder: (context, constraints) {
           double textSize(String text, TextStyle? style) {
             final TextPainter textPainter = TextPainter(
-                text: TextSpan(text: text, style: style),
-                maxLines: 1,
-                textDirection: TextDirection.ltr,
-                textScaler: MediaQuery.textScalerOf(context))
-              ..layout(minWidth: 0, maxWidth: double.infinity);
+              text: TextSpan(text: text, style: style),
+              maxLines: 1,
+              textDirection: TextDirection.ltr,
+              textScaler: MediaQuery.textScalerOf(context),
+            )..layout(minWidth: 0, maxWidth: double.infinity);
             final size = textPainter.width;
             textPainter.dispose();
             return size;
@@ -135,14 +135,16 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
 
           textWidth ??= textSize(
               widget.parent.name ?? AppLocalizations.of(context)!.unknownName,
-              Theme.of(context).textTheme.titleLarge);
+              AppBarTheme.of(context).titleTextStyle ??
+                  Theme.of(context).textTheme.titleLarge);
           final iconSize = kMinInteractiveDimension +
               VisualDensity.adaptivePlatformDensity.baseSizeAdjustment.dy;
           final wrapActions = constraints.crossAxisExtent <
               textWidth! +
                   iconSize * actions.length +
                   56 +
-                  (ref.watch(finampSettingsProvider.allowDeleteFromServer)
+                  (ref.watch(finampSettingsProvider.allowDeleteFromServer) ||
+                          widget.parent.type == "Playlist"
                       ? iconSize
                       : 0);
           return SliverAppBar(
