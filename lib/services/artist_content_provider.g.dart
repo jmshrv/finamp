@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'artist_screen_provider.dart';
+part of 'artist_content_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
 String _$getArtistTracksSectionHash() =>
-    r'9cc1ff8e3490dacce062e0653f73a3f7831a7a9c';
+    r'e27704d47a640692852025446faa55735b278b22';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -753,25 +753,25 @@ class _GetPerformingArtistTracksProviderElement
       (origin as GetPerformingArtistTracksProvider).onlyFavorites;
 }
 
-String _$getAllTracksHash() => r'e2aad275ffbec7c1a92369a2306213f7005dd4eb';
+String _$getArtistTracksHash() => r'a5adb99fc855be57a8d8b53dd32879fb345fea77';
 
-/// See also [getAllTracks].
-@ProviderFor(getAllTracks)
-const getAllTracksProvider = GetAllTracksFamily();
+/// See also [getArtistTracks].
+@ProviderFor(getArtistTracks)
+const getArtistTracksProvider = GetArtistTracksFamily();
 
-/// See also [getAllTracks].
-class GetAllTracksFamily extends Family<AsyncValue<List<BaseItemDto>>> {
-  /// See also [getAllTracks].
-  const GetAllTracksFamily();
+/// See also [getArtistTracks].
+class GetArtistTracksFamily extends Family<AsyncValue<List<BaseItemDto>>> {
+  /// See also [getArtistTracks].
+  const GetArtistTracksFamily();
 
-  /// See also [getAllTracks].
-  GetAllTracksProvider call(
+  /// See also [getArtistTracks].
+  GetArtistTracksProvider call(
     BaseItemDto parent,
     BaseItemDto? library,
     BaseItemDto? genreFilter, {
     bool onlyFavorites = false,
   }) {
-    return GetAllTracksProvider(
+    return GetArtistTracksProvider(
       parent,
       library,
       genreFilter,
@@ -780,8 +780,8 @@ class GetAllTracksFamily extends Family<AsyncValue<List<BaseItemDto>>> {
   }
 
   @override
-  GetAllTracksProvider getProviderOverride(
-    covariant GetAllTracksProvider provider,
+  GetArtistTracksProvider getProviderOverride(
+    covariant GetArtistTracksProvider provider,
   ) {
     return call(
       provider.parent,
@@ -803,42 +803,42 @@ class GetAllTracksFamily extends Family<AsyncValue<List<BaseItemDto>>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'getAllTracksProvider';
+  String? get name => r'getArtistTracksProvider';
 }
 
-/// See also [getAllTracks].
-class GetAllTracksProvider
+/// See also [getArtistTracks].
+class GetArtistTracksProvider
     extends AutoDisposeFutureProvider<List<BaseItemDto>> {
-  /// See also [getAllTracks].
-  GetAllTracksProvider(
+  /// See also [getArtistTracks].
+  GetArtistTracksProvider(
     BaseItemDto parent,
     BaseItemDto? library,
     BaseItemDto? genreFilter, {
     bool onlyFavorites = false,
   }) : this._internal(
-          (ref) => getAllTracks(
-            ref as GetAllTracksRef,
+          (ref) => getArtistTracks(
+            ref as GetArtistTracksRef,
             parent,
             library,
             genreFilter,
             onlyFavorites: onlyFavorites,
           ),
-          from: getAllTracksProvider,
-          name: r'getAllTracksProvider',
+          from: getArtistTracksProvider,
+          name: r'getArtistTracksProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$getAllTracksHash,
-          dependencies: GetAllTracksFamily._dependencies,
+                  : _$getArtistTracksHash,
+          dependencies: GetArtistTracksFamily._dependencies,
           allTransitiveDependencies:
-              GetAllTracksFamily._allTransitiveDependencies,
+              GetArtistTracksFamily._allTransitiveDependencies,
           parent: parent,
           library: library,
           genreFilter: genreFilter,
           onlyFavorites: onlyFavorites,
         );
 
-  GetAllTracksProvider._internal(
+  GetArtistTracksProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -858,12 +858,12 @@ class GetAllTracksProvider
 
   @override
   Override overrideWith(
-    FutureOr<List<BaseItemDto>> Function(GetAllTracksRef provider) create,
+    FutureOr<List<BaseItemDto>> Function(GetArtistTracksRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: GetAllTracksProvider._internal(
-        (ref) => create(ref as GetAllTracksRef),
+      override: GetArtistTracksProvider._internal(
+        (ref) => create(ref as GetArtistTracksRef),
         from: from,
         name: null,
         dependencies: null,
@@ -879,12 +879,12 @@ class GetAllTracksProvider
 
   @override
   AutoDisposeFutureProviderElement<List<BaseItemDto>> createElement() {
-    return _GetAllTracksProviderElement(this);
+    return _GetArtistTracksProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is GetAllTracksProvider &&
+    return other is GetArtistTracksProvider &&
         other.parent == parent &&
         other.library == library &&
         other.genreFilter == genreFilter &&
@@ -905,7 +905,7 @@ class GetAllTracksProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin GetAllTracksRef on AutoDisposeFutureProviderRef<List<BaseItemDto>> {
+mixin GetArtistTracksRef on AutoDisposeFutureProviderRef<List<BaseItemDto>> {
   /// The parameter `parent` of this provider.
   BaseItemDto get parent;
 
@@ -919,19 +919,20 @@ mixin GetAllTracksRef on AutoDisposeFutureProviderRef<List<BaseItemDto>> {
   bool get onlyFavorites;
 }
 
-class _GetAllTracksProviderElement
+class _GetArtistTracksProviderElement
     extends AutoDisposeFutureProviderElement<List<BaseItemDto>>
-    with GetAllTracksRef {
-  _GetAllTracksProviderElement(super.provider);
+    with GetArtistTracksRef {
+  _GetArtistTracksProviderElement(super.provider);
 
   @override
-  BaseItemDto get parent => (origin as GetAllTracksProvider).parent;
+  BaseItemDto get parent => (origin as GetArtistTracksProvider).parent;
   @override
-  BaseItemDto? get library => (origin as GetAllTracksProvider).library;
+  BaseItemDto? get library => (origin as GetArtistTracksProvider).library;
   @override
-  BaseItemDto? get genreFilter => (origin as GetAllTracksProvider).genreFilter;
+  BaseItemDto? get genreFilter =>
+      (origin as GetArtistTracksProvider).genreFilter;
   @override
-  bool get onlyFavorites => (origin as GetAllTracksProvider).onlyFavorites;
+  bool get onlyFavorites => (origin as GetArtistTracksProvider).onlyFavorites;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

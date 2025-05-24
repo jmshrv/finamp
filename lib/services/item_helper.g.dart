@@ -6,7 +6,7 @@ part of 'item_helper.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$loadChildTracksHash() => r'b6152f93d59d5b36a87a5d267b7edc7350c15355';
+String _$loadChildTracksHash() => r'df14f407da4591662fd189358acc71aa1faee19a';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -44,6 +44,7 @@ class LoadChildTracksFamily extends Family<AsyncValue<List<BaseItemDto>?>> {
     SortBy? sortBy,
     SortOrder? sortOrder,
     String? Function(BaseItemDto)? groupListBy,
+    BaseItemDto? genreFilter,
     bool manuallyShuffle = false,
   }) {
     return LoadChildTracksProvider(
@@ -51,6 +52,7 @@ class LoadChildTracksFamily extends Family<AsyncValue<List<BaseItemDto>?>> {
       sortBy: sortBy,
       sortOrder: sortOrder,
       groupListBy: groupListBy,
+      genreFilter: genreFilter,
       manuallyShuffle: manuallyShuffle,
     );
   }
@@ -64,6 +66,7 @@ class LoadChildTracksFamily extends Family<AsyncValue<List<BaseItemDto>?>> {
       sortBy: provider.sortBy,
       sortOrder: provider.sortOrder,
       groupListBy: provider.groupListBy,
+      genreFilter: provider.genreFilter,
       manuallyShuffle: provider.manuallyShuffle,
     );
   }
@@ -92,6 +95,7 @@ class LoadChildTracksProvider
     SortBy? sortBy,
     SortOrder? sortOrder,
     String? Function(BaseItemDto)? groupListBy,
+    BaseItemDto? genreFilter,
     bool manuallyShuffle = false,
   }) : this._internal(
           (ref) => loadChildTracks(
@@ -100,6 +104,7 @@ class LoadChildTracksProvider
             sortBy: sortBy,
             sortOrder: sortOrder,
             groupListBy: groupListBy,
+            genreFilter: genreFilter,
             manuallyShuffle: manuallyShuffle,
           ),
           from: loadChildTracksProvider,
@@ -115,6 +120,7 @@ class LoadChildTracksProvider
           sortBy: sortBy,
           sortOrder: sortOrder,
           groupListBy: groupListBy,
+          genreFilter: genreFilter,
           manuallyShuffle: manuallyShuffle,
         );
 
@@ -129,6 +135,7 @@ class LoadChildTracksProvider
     required this.sortBy,
     required this.sortOrder,
     required this.groupListBy,
+    required this.genreFilter,
     required this.manuallyShuffle,
   }) : super.internal();
 
@@ -136,6 +143,7 @@ class LoadChildTracksProvider
   final SortBy? sortBy;
   final SortOrder? sortOrder;
   final String? Function(BaseItemDto)? groupListBy;
+  final BaseItemDto? genreFilter;
   final bool manuallyShuffle;
 
   @override
@@ -155,6 +163,7 @@ class LoadChildTracksProvider
         sortBy: sortBy,
         sortOrder: sortOrder,
         groupListBy: groupListBy,
+        genreFilter: genreFilter,
         manuallyShuffle: manuallyShuffle,
       ),
     );
@@ -172,6 +181,7 @@ class LoadChildTracksProvider
         other.sortBy == sortBy &&
         other.sortOrder == sortOrder &&
         other.groupListBy == groupListBy &&
+        other.genreFilter == genreFilter &&
         other.manuallyShuffle == manuallyShuffle;
   }
 
@@ -182,6 +192,7 @@ class LoadChildTracksProvider
     hash = _SystemHash.combine(hash, sortBy.hashCode);
     hash = _SystemHash.combine(hash, sortOrder.hashCode);
     hash = _SystemHash.combine(hash, groupListBy.hashCode);
+    hash = _SystemHash.combine(hash, genreFilter.hashCode);
     hash = _SystemHash.combine(hash, manuallyShuffle.hashCode);
 
     return _SystemHash.finish(hash);
@@ -203,6 +214,9 @@ mixin LoadChildTracksRef on AutoDisposeFutureProviderRef<List<BaseItemDto>?> {
   /// The parameter `groupListBy` of this provider.
   String? Function(BaseItemDto)? get groupListBy;
 
+  /// The parameter `genreFilter` of this provider.
+  BaseItemDto? get genreFilter;
+
   /// The parameter `manuallyShuffle` of this provider.
   bool get manuallyShuffle;
 }
@@ -222,8 +236,182 @@ class _LoadChildTracksProviderElement
   String? Function(BaseItemDto)? get groupListBy =>
       (origin as LoadChildTracksProvider).groupListBy;
   @override
+  BaseItemDto? get genreFilter =>
+      (origin as LoadChildTracksProvider).genreFilter;
+  @override
   bool get manuallyShuffle =>
       (origin as LoadChildTracksProvider).manuallyShuffle;
+}
+
+String _$loadChildTracksOfflineHash() =>
+    r'3b8d6d4e10d8106bd066438bfb82a288db3da9ae';
+
+/// See also [loadChildTracksOffline].
+@ProviderFor(loadChildTracksOffline)
+const loadChildTracksOfflineProvider = LoadChildTracksOfflineFamily();
+
+/// See also [loadChildTracksOffline].
+class LoadChildTracksOfflineFamily
+    extends Family<AsyncValue<List<BaseItemDto>?>> {
+  /// See also [loadChildTracksOffline].
+  const LoadChildTracksOfflineFamily();
+
+  /// See also [loadChildTracksOffline].
+  LoadChildTracksOfflineProvider call({
+    required BaseItemDto baseItem,
+    int? limit,
+    BaseItemDto? genreFilter,
+  }) {
+    return LoadChildTracksOfflineProvider(
+      baseItem: baseItem,
+      limit: limit,
+      genreFilter: genreFilter,
+    );
+  }
+
+  @override
+  LoadChildTracksOfflineProvider getProviderOverride(
+    covariant LoadChildTracksOfflineProvider provider,
+  ) {
+    return call(
+      baseItem: provider.baseItem,
+      limit: provider.limit,
+      genreFilter: provider.genreFilter,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'loadChildTracksOfflineProvider';
+}
+
+/// See also [loadChildTracksOffline].
+class LoadChildTracksOfflineProvider
+    extends AutoDisposeFutureProvider<List<BaseItemDto>?> {
+  /// See also [loadChildTracksOffline].
+  LoadChildTracksOfflineProvider({
+    required BaseItemDto baseItem,
+    int? limit,
+    BaseItemDto? genreFilter,
+  }) : this._internal(
+          (ref) => loadChildTracksOffline(
+            ref as LoadChildTracksOfflineRef,
+            baseItem: baseItem,
+            limit: limit,
+            genreFilter: genreFilter,
+          ),
+          from: loadChildTracksOfflineProvider,
+          name: r'loadChildTracksOfflineProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$loadChildTracksOfflineHash,
+          dependencies: LoadChildTracksOfflineFamily._dependencies,
+          allTransitiveDependencies:
+              LoadChildTracksOfflineFamily._allTransitiveDependencies,
+          baseItem: baseItem,
+          limit: limit,
+          genreFilter: genreFilter,
+        );
+
+  LoadChildTracksOfflineProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.baseItem,
+    required this.limit,
+    required this.genreFilter,
+  }) : super.internal();
+
+  final BaseItemDto baseItem;
+  final int? limit;
+  final BaseItemDto? genreFilter;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<BaseItemDto>?> Function(LoadChildTracksOfflineRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: LoadChildTracksOfflineProvider._internal(
+        (ref) => create(ref as LoadChildTracksOfflineRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        baseItem: baseItem,
+        limit: limit,
+        genreFilter: genreFilter,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<BaseItemDto>?> createElement() {
+    return _LoadChildTracksOfflineProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is LoadChildTracksOfflineProvider &&
+        other.baseItem == baseItem &&
+        other.limit == limit &&
+        other.genreFilter == genreFilter;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, baseItem.hashCode);
+    hash = _SystemHash.combine(hash, limit.hashCode);
+    hash = _SystemHash.combine(hash, genreFilter.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin LoadChildTracksOfflineRef
+    on AutoDisposeFutureProviderRef<List<BaseItemDto>?> {
+  /// The parameter `baseItem` of this provider.
+  BaseItemDto get baseItem;
+
+  /// The parameter `limit` of this provider.
+  int? get limit;
+
+  /// The parameter `genreFilter` of this provider.
+  BaseItemDto? get genreFilter;
+}
+
+class _LoadChildTracksOfflineProviderElement
+    extends AutoDisposeFutureProviderElement<List<BaseItemDto>?>
+    with LoadChildTracksOfflineRef {
+  _LoadChildTracksOfflineProviderElement(super.provider);
+
+  @override
+  BaseItemDto get baseItem =>
+      (origin as LoadChildTracksOfflineProvider).baseItem;
+  @override
+  int? get limit => (origin as LoadChildTracksOfflineProvider).limit;
+  @override
+  BaseItemDto? get genreFilter =>
+      (origin as LoadChildTracksOfflineProvider).genreFilter;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

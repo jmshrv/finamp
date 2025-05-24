@@ -3,6 +3,7 @@ import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/artist_content_provider.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
@@ -20,18 +21,20 @@ Future<List<BaseItemDto>?> loadChildTracks(
   SortBy? sortBy,
   SortOrder? sortOrder,
   String? Function(BaseItemDto)? groupListBy,
+  BaseItemDto? genreFilter,
   bool manuallyShuffle = false,
 }) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final finampUserHelper = GetIt.instance<FinampUserHelper>();
   final settings = FinampSettingsHelper.finampSettings;
 
   final Future<List<BaseItemDto>?> newItemsFuture;
   List<BaseItemDto>? newItems;
 
   if (settings.isOffline) {
-    newItemsFuture = loadChildTracksOffline(
+    newItemsFuture = ref.read(loadChildTracksOfflineProvider(
       baseItem: baseItem,
-    );
+    ).future);
   } else {
     switch (BaseItemDtoType.fromItem(baseItem)) {
       case BaseItemDtoType.album:
@@ -48,15 +51,19 @@ Future<List<BaseItemDto>?> loadChildTracks(
         );
         break;
       case BaseItemDtoType.artist:
+        newItemsFuture = ref.read(getArtistTracksProvider(baseItem,
+                finampUserHelper.currentUser?.currentView, genreFilter)
+            .future);
+        break;
       case BaseItemDtoType.genre:
         newItemsFuture = jellyfinApiHelper.getItems(
-          parentItem: baseItem,
+          parentItem: finampUserHelper.currentUser?.currentView,
           includeItemTypes: [
             BaseItemDtoType.track.idString,
           ].join(","),
           sortBy: sortBy?.jellyfinName(null) ?? SortBy.album.jellyfinName(null),
           sortOrder: sortOrder?.toString(),
-          // filters: settings.onlyShowFavorites ? "IsFavorite" : null,
+          genreFilter: baseItem,
         );
         break;
       default:
@@ -92,15 +99,35 @@ Future<List<BaseItemDto>?> loadChildTracks(
   return newItems;
 }
 
-Future<List<BaseItemDto>?> loadChildTracksOffline({
+@riverpod
+Future<List<BaseItemDto>?> loadChildTracksOffline(
+  WidgetRef ref, {
   required BaseItemDto baseItem,
   int? limit,
+  BaseItemDto? genreFilter,
 }) async {
   final downloadsService = GetIt.instance<DownloadsService>();
+  final finampUserHelper = GetIt.instance<FinampUserHelper>();
+  final settings = FinampSettingsHelper.finampSettings;
 
   List<BaseItemDto> items;
 
   switch (BaseItemDtoType.fromItem(baseItem)) {
+    case BaseItemDtoType.genre:
+      items = (await downloadsService.getAllTracks(
+        viewFilter: finampUserHelper.currentUser?.currentViewId,
+        nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
+        genreFilter: baseItem,
+      ))
+          .map((e) => e.baseItem)
+          .nonNulls
+          .toList();
+      break;
+    case BaseItemDtoType.artist:
+      items = await ref.read(getArtistTracksProvider(
+              baseItem, finampUserHelper.currentUser?.currentView, genreFilter)
+          .future);
+      break;
     default:
       items = await downloadsService.getCollectionTracks(
         baseItem,
