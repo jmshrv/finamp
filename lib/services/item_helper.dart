@@ -101,7 +101,7 @@ Future<List<BaseItemDto>?> loadChildTracks(
 
 @riverpod
 Future<List<BaseItemDto>?> loadChildTracksOffline(
-  WidgetRef ref, {
+  Ref ref, {
   required BaseItemDto baseItem,
   int? limit,
   BaseItemDto? genreFilter,
