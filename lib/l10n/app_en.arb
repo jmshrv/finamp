@@ -765,6 +765,10 @@
   "@playlistActionsMenuButtonTooltip": {
     "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
   },
+  "browsePlaylists": "Browse Playlists",
+  "@browsePlaylists": {
+    "description": "Label for a button on the genre screen that brings you to a list of genre-filtered playlists."
+  },
   "noAlbum": "No Album",
   "@noAlbum": {},
   "noItem": "No Item",
@@ -1267,19 +1271,35 @@
   "@artistItemSectionFilterChipOrderSubtitle": {
     "description": "Description of the setting that controls the order of the tracks sections filter chips."
   },
-  "genreFilterArtistScreens": "Filter Artist Screens",
+  "genreShowBrowsePlaylistsButton": "Show \"Browse Playlists\" Button",
+  "@genreShowBrowsePlaylistsButton": {
+    "description": "Label for the setting that controls if a button to all genre-playlists should get displayed on the GenreScreen."
+  },
+  "genreShowBrowsePlaylistsButtonSubtitle": "When enabled, a button appears at the bottom of the Genre Screen. Tapping it shows a list of playlists that contain tracks from the currently viewed genre.",
+  "@genreShowBrowsePlaylistsButtonSubtitle": {
+    "description": "Description of the setting that controls if a button to all genre-playlists should get displayed on the GenreScreen."
+  },
+  "genreFilterArtistScreens": "Filter Artists",
   "@genreFilterArtistScreens": {
     "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
-  "genreFilterArtistScreensSubtitle": "When enabled, Artist Screens (accessed through a genre) will only show tracks and albums that match the genre you're currently browsing. (It is always possible to manually remove the Genre Filter to reveal all tracks and albums.)",
+  "genreFilterArtistScreensSubtitle": "When enabled, Artists (accessed through a genre) will only show tracks and albums that match the genre you're currently browsing. (It is always possible to manually remove the Genre Filter to reveal all tracks and albums.)",
   "@genreFilterArtistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreFilterPlaylistScreens": "Filter Playlists",
+  "@genreFilterPlaylistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "genreFilterPlaylistScreensSubtitle": "When enabled, Playlists (accessed through a genre) will only show tracks that match the genre you're currently browsing. (It is always possible to manually remove the Genre Filter to reveal all tracks.)",
+  "@genreFilterPlaylistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
   },
   "genreListsInheritSorting": "Full Lists Sorting Inheritance",
   "@genreListsInheritSorting": {
     "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
-  "genreListsInheritSortingSubtitle": "When enabled, the \"See All\" lists will inherit the sorting and filtering from the Genre Screen. If disabled, settings from the corresponding library tab will be used instead. Tapping on the Counts on the top of the Genre Screen will always open a full list with the sorting settings from the library tab.",
+  "genreListsInheritSortingSubtitle": "When enabled, the \"See All\" lists will inherit the sorting and filtering from the Genre Screen. If disabled, settings from the corresponding library tab will be used instead. Tapping on the Counts on the top of the Genre Screen or the \"Browse Playlists\" button will always open a full list with the sorting settings from the library tab.",
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },

@@ -143,12 +143,16 @@ class FinampSettingsHelper {
     
     finampSettingsTemp.genreItemSectionsOrder =
         DefaultSettings.genreItemSectionsOrder;
-    finampSettingsTemp.genreFilterArtistScreens =
-        DefaultSettings.genreFilterArtistScreens;
-    finampSettingsTemp.genreListsInheritSorting =
-        DefaultSettings.genreListsInheritSorting;
     finampSettingsTemp.genreItemSectionFilterChipOrder =
         DefaultSettings.genreItemSectionFilterChipOrder;
+    finampSettingsTemp.genreShowBrowsePlaylistsButton =
+        DefaultSettings.genreShowBrowsePlaylistsButton;
+    finampSettingsTemp.genreFilterArtistScreens =
+        DefaultSettings.genreFilterArtistScreens;
+    finampSettingsTemp.genreFilterPlaylists =
+        DefaultSettings.genreFilterPlaylists;
+    finampSettingsTemp.genreListsInheritSorting =
+        DefaultSettings.genreListsInheritSorting;
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);

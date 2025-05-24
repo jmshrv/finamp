@@ -132,6 +132,15 @@ class _ItemCollectionWrapperState extends ConsumerState<ItemCollectionWrapper> {
           } else if (mutableItem.type == "MusicGenre") {
             Navigator.of(context)
                 .pushNamed(GenreScreen.routeName, arguments: mutableItem);
+          } else if (mutableItem.type == "Playlist") {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => AlbumScreen(
+                  parent: mutableItem,
+                  genreFilter: (ref.watch(finampSettingsProvider.genreFilterPlaylists)) ? widget.genreFilter : null,
+                ),
+              ),
+            );
           } else {
             Navigator.of(context)
                 .pushNamed(AlbumScreen.routeName, arguments: mutableItem);

@@ -305,6 +305,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           fields[113] == null ? SortBy.serverOrder : fields[113] as SortBy,
       playlistTracksSortOrder:
           fields[114] == null ? SortOrder.ascending : fields[114] as SortOrder,
+      genreFilterPlaylists: fields[115] == null ? false : fields[115] as bool,
+      genreShowBrowsePlaylistsButton:
+          fields[116] == null ? true : fields[116] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -315,7 +318,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(109)
+      ..writeByte(111)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -533,7 +536,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(113)
       ..write(obj.playlistTracksSortBy)
       ..writeByte(114)
-      ..write(obj.playlistTracksSortOrder);
+      ..write(obj.playlistTracksSortOrder)
+      ..writeByte(115)
+      ..write(obj.genreFilterPlaylists)
+      ..writeByte(116)
+      ..write(obj.genreShowBrowsePlaylistsButton);
   }
 
   @override
