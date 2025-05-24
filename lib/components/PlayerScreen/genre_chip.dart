@@ -249,6 +249,11 @@ class _GenreChipContent extends ConsumerWidget {
           arguments: genreItem,
         ));
       }
+    } else {
+      GlobalSnackbar.message(
+            (context) =>
+                AppLocalizations.of(context)!.genreNotFound,
+      );
     }
   }
 

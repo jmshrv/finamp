@@ -1618,6 +1618,10 @@
   "@genreFilterNotAvailableForAlbums": {
     "description": "Message shown when the user tries to apply a genre filter to an album."
   },
+  "genreNotFound": "The genre could not be found. It might be from a different library.",
+  "@genreNotFound": {
+    "description": "Message shown when a genre filter or open-genre action fails because the genre item could not be found."
+  },
   "incidentalDownloadTooltip": "This item is required to be downloaded by {parentName}.",
   "@incidentalDownloadTooltip": {
     "placeholders": {
