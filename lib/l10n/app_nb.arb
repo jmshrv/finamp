@@ -96,8 +96,8 @@
   "@removeFromMix": {},
   "addButtonLabel": "Legg til",
   "@addButtonLabel": {},
-  "playlistNameUpdated": "Spillelistenavn oppdatert.",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "Spillelistenavn oppdatert.",
+  "@playlistUpdated": {},
   "criticRating": "Kritikervurdering",
   "@criticRating": {},
   "artist": "Artist",
@@ -230,16 +230,6 @@
     "placeholders": {
       "count": {
         "type": "int"
-      }
-    }
-  },
-  "startupError": "Noe gikk galt under oppstart av programmet. Feilen var:\n {error}\n\nOpprett en feilrapport på github.com/UnicornsOnLSD/finamp med en skjermavbildning av denne siden. Hvis problemet vedvarer kan du tømme programdata for å tilbakestille programmet.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
       }
     }
   },

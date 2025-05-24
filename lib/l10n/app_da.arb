@@ -125,8 +125,8 @@
   "@required": {},
   "updateButtonLabel": "OPDATÉR",
   "@updateButtonLabel": {},
-  "playlistNameUpdated": "Afspilningslistens navn er opdateret.",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "Afspilningslistens navn er opdateret.",
+  "@playlistUpdated": {},
   "favourite": "Favorit",
   "@favourite": {},
   "addDownloads": "Tilføj overførelser",
@@ -293,16 +293,6 @@
   "@bufferDuration": {},
   "bufferDurationSubtitle": "Hvor meget afspilleren skal forudindlæse i sekunder. En genstart er nødvendig.",
   "@bufferDurationSubtitle": {},
-  "startupError": "Noget gik galt under app opstarten. Fejlen er {error}\n\nVenligst opret en sag på github.com/UnicornsOnLSD/finamp med et skærmbillede af denne side. Hvis dette problem forbliver, så kan du fjerne dine app data for at nulstille appen.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "internalExternalIpExplanation": "Hvis du vil være i stand til at tilgå din Jellyfin server udefra, skal du bruge din eksterne IP.\n\nHvis din server er på HTTP porten (80/443), behøver du ikke angive en port. Dette er som regel tilfældet, hvis din server er bag en reverse proxy.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."

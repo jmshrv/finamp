@@ -254,16 +254,6 @@
   },
   "keepScreenOnAlwaysOn": "எப்போதும் இயக்கவும்",
   "@keepScreenOnAlwaysOn": {},
-  "startupError": "பயன்பாட்டு தொடக்கத்தின் போது ஏதோ தவறு ஏற்பட்டது. பிழை: {error}\n\n இந்த பக்கத்தின் திரை சாட்டுடன் github.com/unicornsonlsd/finamp இல் ஒரு சிக்கலை உருவாக்கவும். இந்த சிக்கல் தொடர்ந்தால், பயன்பாட்டை மீட்டமைக்க உங்கள் பயன்பாட்டு தரவை அழிக்கலாம்.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "aboutReleaseNotes": "அண்மைக் கால வெளியீட்டுக் குறிப்புகளைப் படியுங்கள்:",
   "@aboutReleaseNotes": {
     "description": "Link to the release notes, shown in the about screen."
@@ -552,8 +542,8 @@
   "@editPlaylistNameTitle": {},
   "updateButtonLabel": "புதுப்பிப்பு",
   "@updateButtonLabel": {},
-  "playlistNameUpdated": "பிளேலிச்ட் பெயர் புதுப்பிக்கப்பட்டது.",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "பிளேலிச்ட் பெயர் புதுப்பிக்கப்பட்டது.",
+  "@playlistUpdated": {},
   "favourite": "பிடித்த",
   "@favourite": {},
   "downloadsDeleted": "பதிவிறக்கங்கள் நீக்கப்பட்டன.",
@@ -717,10 +707,6 @@
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "ஆல்பம் கலைஞர்களிடமிருந்து வேறுபடாவிட்டால் ஆல்பம் திரையில் டிராக் கலைஞர்களைக் காண்பிக்கலாமா?",
   "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "showArtistsTopTracks": "கலைஞர் பார்வையில் சிறந்த தடங்களைக் காட்டு",
-  "@showArtistsTopTracks": {},
-  "showArtistsTopTracksSubtitle": "ஒரு கலைஞரின் தடங்களை அதிகம் கேட்கும் முதல் 5 இடங்களைக் காட்ட வேண்டுமா.",
-  "@showArtistsTopTracksSubtitle": {},
   "theme": "கருப்பொருள்",
   "@theme": {},
   "system": "மண்டலம்",

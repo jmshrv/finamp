@@ -10,7 +10,6 @@ import 'package:flutter/semantics.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:progress_border/progress_border.dart';
 
 import '../../services/media_state_stream.dart';
 import '../../services/music_player_background_task.dart';

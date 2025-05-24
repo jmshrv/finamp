@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:finamp/menus/components/menuEntries/menu_item_info_header.dart';
+import 'package:finamp/menus/components/menu_item_info_header.dart';
 import 'package:finamp/menus/components/playbackActions/playback_action.dart';
 import 'package:finamp/menus/components/speed_menu.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
@@ -12,6 +12,7 @@ import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/artist_screen.dart';
+import 'package:finamp/screens/genre_screen.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/metadata_provider.dart';
@@ -181,11 +182,17 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
     var currentSize = scrollController.size;
     if ((percentage != null && currentSize < percentage) ||
         scrollController.size == inputStep) {
-      scrollController.animateTo(
-        percentage ?? oldExtent,
-        duration: trackMenuDefaultAnimationDuration,
-        curve: trackMenuDefaultInCurve,
-      );
+      if (MediaQuery.of(context).disableAnimations) {
+        scrollController.jumpTo(
+          percentage ?? oldExtent,
+        );
+      } else {
+        scrollController.animateTo(
+          percentage ?? oldExtent,
+          duration: trackMenuDefaultAnimationDuration,
+          curve: trackMenuDefaultInCurve,
+        );
+      }
     }
     oldExtent = currentSize;
   }
@@ -457,8 +464,8 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                         : iconColor,
                   ),
             title: Text(isFav
-                ? AppLocalizations.of(context)!.removeFavourite
-                : AppLocalizations.of(context)!.addFavourite),
+                ? AppLocalizations.of(context)!.removeFavorite
+                : AppLocalizations.of(context)!.addFavorite),
             onTap: () async {
               ref
                   .read(isFavoriteProvider(widget.item).notifier)
@@ -472,7 +479,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         visible: widget.canGoToAlbum,
         child: ListTile(
           leading: Icon(
-            Icons.album,
+            TablerIcons.disc,
             color: iconColor,
           ),
           title: Text(AppLocalizations.of(context)!.goToAlbum),
@@ -505,7 +512,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         visible: widget.canGoToArtist,
         child: ListTile(
           leading: Icon(
-            Icons.person,
+            TablerIcons.user,
             color: iconColor,
           ),
           title: Text(AppLocalizations.of(context)!.goToArtist),
@@ -538,7 +545,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         visible: widget.canGoToGenre,
         child: ListTile(
           leading: Icon(
-            Icons.category_outlined,
+            TablerIcons.color_swatch,
             color: iconColor,
           ),
           title: Text(AppLocalizations.of(context)!.goToGenre),
@@ -562,7 +569,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             if (context.mounted) {
               Navigator.pop(context);
               await Navigator.of(context)
-                  .pushNamed(ArtistScreen.routeName, arguments: genre);
+                  .pushNamed(GenreScreen.routeName, arguments: genre);
             }
           },
         ),
@@ -763,6 +770,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
           switchInCurve: trackMenuDefaultInCurve,
           switchOutCurve: trackMenuDefaultOutCurve,
           transitionBuilder: (child, animation) {
+            if (MediaQuery.of(context).disableAnimations) {
+              return child;
+            }
             return SizeTransition(sizeFactor: animation, child: child);
           },
           child: showSpeedMenu ? SpeedMenu(iconColor: iconColor) : null,

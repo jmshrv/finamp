@@ -109,28 +109,9 @@ class JellyfinApiHelper {
     throw output as Object;
   }
 
-  // Keeping this code in the main getItems function causes unsendable items to be captured by the background lambda
-  // due to a limitation of dart's context analysis
-  Future<List<BaseItemDto>> _getItemsSliced(
-      List<BaseItemId> itemIds, String fields) async {
-    List<BaseItemDto> output = [];
-    // Limit itemIds per request to 200.  Execute up to 10 requests in parallel.
-    for (final slice in itemIds.slices(2000)) {
-      final futures = slice
-          .slices(200)
-          .map((subSlice) => getItems(itemIds: subSlice, fields: fields));
-      final results = await Future.wait(futures);
-      for (var subSliceResult in results) {
-        if (subSliceResult != null) {
-          output.addAll(subSliceResult);
-        }
-      }
-    }
-    return output;
-  }
-
   Future<List<BaseItemDto>?> getItems({
     BaseItemDto? parentItem,
+    BaseItemDto? libraryFilter,
     String? includeItemTypes,
     String? sortBy,
     String? sortOrder,
@@ -140,6 +121,8 @@ class JellyfinApiHelper {
     String? fields,
     bool? recursive,
     ArtistType? artistType,
+    BaseItemDto? genreFilter,
+    bool? isFavorite,
 
     /// The record index to start at. All items with a lower index will be
     /// dropped from the results.
@@ -148,24 +131,109 @@ class JellyfinApiHelper {
     /// The maximum number of records to return.
     int? limit,
   }) async {
+    if ((itemIds?.length ?? 0) > 200) {
+      List<BaseItemDto> output = [];
+      // Limit itemIds per request to 200.  Execute up to 10 requests in parallel.
+      for (final slice in itemIds!.slices(2000)) {
+        final futures = slice
+            .slices(200)
+            .map((subSlice) => _fetchGetItemsResponse(itemIds: subSlice, fields: fields));
+        final results = await Future.wait(futures);
+        for (var subSliceResult in results) {
+          output.addAll(subSliceResult.items ?? []);
+        }
+      }
+      return output;
+    }
+
+    final response = await _fetchGetItemsResponse(
+      parentItem: parentItem,
+      libraryFilter: libraryFilter,
+      includeItemTypes: includeItemTypes,
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      searchTerm: searchTerm,
+      itemIds: itemIds,
+      filters: filters,
+      fields:fields,
+      recursive: recursive,
+      artistType: artistType,
+      genreFilter: genreFilter,
+      isFavorite: isFavorite,
+      startIndex: startIndex,
+      limit: limit,
+    );
+    return response.items;
+  }
+
+  Future<QueryResult_BaseItemDto> getItemsWithTotalRecordCount({
+    BaseItemDto? parentItem,
+    BaseItemDto? libraryFilter,
+    String? includeItemTypes,
+    String? sortBy,
+    String? sortOrder,
+    String? searchTerm,
+    List<BaseItemId>? itemIds,
+    String? filters,
+    String? fields,
+    bool? recursive,
+    ArtistType? artistType,
+    BaseItemDto? genreFilter,
+    bool? isFavorite,
+    int? startIndex,
+    int? limit,
+  }) async {
+    final response = await _fetchGetItemsResponse(
+      parentItem: parentItem,
+      libraryFilter: libraryFilter,
+      includeItemTypes: includeItemTypes,
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      searchTerm: searchTerm,
+      itemIds: itemIds,
+      filters: filters,
+      fields: fields,
+      recursive: recursive,
+      artistType: artistType,
+      genreFilter: genreFilter,
+      isFavorite: isFavorite,
+      startIndex: startIndex,
+      limit: limit,
+    );
+    return response;
+  }
+
+  Future<QueryResult_BaseItemDto> _fetchGetItemsResponse ({
+    BaseItemDto? parentItem,
+    BaseItemDto? libraryFilter,
+    String? includeItemTypes,
+    String? sortBy,
+    String? sortOrder,
+    String? searchTerm,
+    List<BaseItemId>? itemIds,
+    String? filters,
+    String? fields,
+    bool? recursive,
+    ArtistType? artistType,
+    BaseItemDto? genreFilter,
+    bool? isFavorite,
+    int? startIndex,
+    int? limit,
+  }) async {
     final currentUserId = _finampUserHelper.currentUser?.id;
     if (currentUserId == null) {
       // When logging out, this request causes errors since currentUser is
-      // required sometimes. We just return an empty list since this error
-      // usually happens becuase the listeners on MusicScreenTabView update
-      // milliseconds before the page is popped. This shouldn't happen in normal
-      // use.
-      return [];
+      // required sometimes. We just return an fake api response that is empty,
+      // since this error usually happens because the listeners on MusicScreenTabView
+      // update milliseconds before the page is popped.
+      // This shouldn't happen in normal use.
+      return QueryResult_BaseItemDto(totalRecordCount: 0, startIndex: 0, items: []);
     }
     assert(!FinampSettingsHelper.finampSettings.isOffline);
     assert(itemIds == null || parentItem == null);
     fields ??=
         defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
     recursive ??= true;
-
-    if ((itemIds?.length ?? 0) > 200) {
-      return _getItemsSliced(itemIds!, fields);
-    }
 
     if (parentItem != null) {
       _jellyfinApiHelperLogger.fine("Getting children of ${parentItem.name}");
@@ -202,10 +270,12 @@ class JellyfinApiHelper {
             sortOrder: sortOrder,
             searchTerm: searchTerm,
             filters: filters,
+            genreIds: genreFilter?.id.raw,
             startIndex: startIndex,
             limit: limit,
             userId: currentUserId,
             fields: fields,
+            isFavorite: isFavorite,
           );
         } else {
           //artistType == ArtistType.artist
@@ -216,18 +286,23 @@ class JellyfinApiHelper {
             sortOrder: sortOrder,
             searchTerm: searchTerm,
             filters: filters,
+            genreIds: genreFilter?.id.raw,
             startIndex: startIndex,
             limit: limit,
             fields: fields,
+            isFavorite: isFavorite,
           );
         }
       } else if (parentItem?.type == "MusicArtist") {
         // For getting the children of artists, we need to use
         // artistIDs or albumArtistIds instead of parentId
+        // also, in order to only get the items from within one library
+        // we have to use a separated libraryFilter,
         if (artistType == ArtistType.albumartist || artistType == null) {
           // Albums of Album Artists
           response = await api.getItems(
             userId: currentUserId,
+            parentId: libraryFilter?.id,
             albumArtistIds: parentItem?.id.raw,
             includeItemTypes: includeItemTypes,
             recursive: recursive,
@@ -235,15 +310,18 @@ class JellyfinApiHelper {
             sortOrder: sortOrder,
             searchTerm: searchTerm,
             filters: filters,
+            genreIds: genreFilter?.id.raw,
             startIndex: startIndex,
             limit: limit,
             fields: fields,
+            isFavorite: isFavorite,
           );
         } else {
           //artistType == ArtistType.artist
           // Performing Artists
           response = await api.getItems(
             userId: currentUserId,
+            parentId: libraryFilter?.id,
             artistIds: parentItem?.id.raw,
             includeItemTypes: includeItemTypes,
             recursive: recursive,
@@ -251,15 +329,20 @@ class JellyfinApiHelper {
             sortOrder: sortOrder,
             searchTerm: searchTerm,
             filters: filters,
+            genreIds: genreFilter?.id.raw,
             startIndex: startIndex,
             limit: limit,
             fields: fields,
+            isFavorite: isFavorite,
           );
         }
       } else if (includeItemTypes == "MusicGenre") {
         response = await api.getGenres(
           parentId: parentItem?.id,
           // includeItemTypes: includeItemTypes,
+          sortBy: sortBy,
+          sortOrder: sortOrder,
+          isFavorite: isFavorite,
           searchTerm: searchTerm,
           startIndex: startIndex,
           limit: limit,
@@ -267,6 +350,7 @@ class JellyfinApiHelper {
         );
       } else if (parentItem?.type == "MusicGenre") {
         response = await api.getItems(
+          parentId: libraryFilter?.id,
           userId: currentUserId,
           genreIds: parentItem?.id.raw,
           includeItemTypes: includeItemTypes,
@@ -278,6 +362,7 @@ class JellyfinApiHelper {
           startIndex: startIndex,
           limit: limit,
           fields: fields,
+          isFavorite: isFavorite,
         );
       } else {
         // This will be run when getting albums, tracks in albums, and stuff like
@@ -291,15 +376,15 @@ class JellyfinApiHelper {
           sortOrder: sortOrder,
           searchTerm: searchTerm,
           filters: filters,
+          genreIds: genreFilter?.id.raw,
           startIndex: startIndex,
           limit: limit,
           ids: itemIds?.join(","),
           fields: fields,
+          isFavorite: isFavorite,
         );
       }
-
-      return QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>)
-          .items;
+      return QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>);
     });
   }
 
@@ -639,6 +724,13 @@ class JellyfinApiHelper {
     return _getItemByIdBatchedFuture!.then((value) => value[itemId]);
   }
 
+  /// Gets a Playlist
+  Future<dynamic> getPlaylist(BaseItemId playlistId) async {
+    final response =
+        await jellyfinApi.getPlaylist(playlistId: playlistId);
+    return response;
+  }
+
   /// Creates a new playlist.
   Future<NewPlaylistResponse> createNewPlaylist(NewPlaylist newPlaylist) async {
     final response = await jellyfinApi.createNewPlaylist(
@@ -662,7 +754,7 @@ class JellyfinApiHelper {
     );
   }
 
-  /// Remove items to a playlist.
+  /// Remove items from a playlist.
   Future<void> removeItemsFromPlaylist({
     /// The playlist id.
     required BaseItemId playlistId,
@@ -686,13 +778,13 @@ class JellyfinApiHelper {
     }
   }
 
-  /// Updates an item.
+  /// Updates an item. (Not for Playlists: use updatePlaylist for that)
+  /// You should give a BaseItemDto with only
+  /// changed values.
   Future<void> updateItem({
     /// The item id.
     required BaseItemId itemId,
-
-    /// What to update the item with. You should give a BaseItemDto with only
-    /// changed values.
+    /// the new Item.
     required BaseItemDto newItem,
   }) async {
     final response =
@@ -702,10 +794,24 @@ class JellyfinApiHelper {
     }
   }
 
+  /// Updates playlist.
+  Future<void> updatePlaylist({
+    /// The item id.
+    required BaseItemId itemId,
+    /// The new Item.
+    required NewPlaylist newPlaylist    
+  }) async {
+    final response =
+        await jellyfinApi.updatePlaylist(playlistId: itemId, playlist: newPlaylist);
+    if (response.toString().isNotEmpty) {
+      throw response as Object;
+    }
+  }
+
   /// Marks an item as a favorite.
-  Future<UserItemDataDto> addFavourite(BaseItemId itemId) async {
+  Future<UserItemDataDto> addFavorite(BaseItemId itemId) async {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
-    final response = await jellyfinApi.addFavourite(
+    final response = await jellyfinApi.addFavorite(
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
     final downloadsService = GetIt.instance<DownloadsService>();
@@ -718,9 +824,9 @@ class JellyfinApiHelper {
   }
 
   /// Unmarks item as a favorite.
-  Future<UserItemDataDto> removeFavourite(BaseItemId itemId) async {
+  Future<UserItemDataDto> removeFavorite(BaseItemId itemId) async {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
-    final response = await jellyfinApi.removeFavourite(
+    final response = await jellyfinApi.removeFavorite(
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
     final downloadsService = GetIt.instance<DownloadsService>();
@@ -771,6 +877,7 @@ class JellyfinApiHelper {
   Future<List<BaseItemDto>?> getArtistMix(List<BaseItemId> artistIds) async {
     final response = await jellyfinApi.getItems(
         userId: _finampUserHelper.currentUser!.id,
+        parentId: _finampUserHelper.currentUser!.currentView?.id,
         artistIds: artistIds.join(","),
         filters: "IsNotFolder",
         recursive: true,
@@ -799,6 +906,7 @@ class JellyfinApiHelper {
   Future<List<BaseItemDto>?> getGenreMix(List<BaseItemId> genreIds) async {
     final response = await jellyfinApi.getItems(
         userId: _finampUserHelper.currentUser!.id,
+        parentId: _finampUserHelper.currentUser!.currentView?.id,
         genreIds: genreIds.join(","),
         filters: "IsNotFolder",
         recursive: true,

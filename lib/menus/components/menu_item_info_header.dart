@@ -163,6 +163,7 @@ class _ItemInfoState extends ConsumerState<ItemInfo> {
                 child: AlbumImage(
                   item: widget.item,
                   borderRadius: BorderRadius.zero,
+                  tapToZoom: true,
                 ),
               ),
               Expanded(
@@ -262,6 +263,7 @@ class _ArtistInfoState extends ConsumerState<ArtistInfo> {
                 child: AlbumImage(
                   item: widget.item,
                   borderRadius: BorderRadius.circular(9999),
+                  tapToZoom: true,
                 ),
               ),
               Expanded(

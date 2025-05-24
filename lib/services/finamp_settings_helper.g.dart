@@ -49,9 +49,9 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setOnlyShowFavourites(bool newOnlyShowFavourites) {
+  static void setOnlyShowFavorites(bool newOnlyShowFavorites) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.onlyShowFavourites = newOnlyShowFavourites;
+    finampSettingsTemp.onlyShowFavorites = newOnlyShowFavorites;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -346,9 +346,9 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setShowArtistsTopTracks(bool newShowArtistsTopTracks) {
+  static void setShowArtistsTracksSection(bool newShowArtistsTracksSection) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.showArtistsTopTracks = newShowArtistsTopTracks;
+    finampSettingsTemp.showArtistsTracksSection = newShowArtistsTracksSection;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -705,6 +705,108 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setGenreCuratedItemSelectionTypeTracks(
+      CuratedItemSelectionType newGenreCuratedItemSelectionTypeTracks) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.genreCuratedItemSelectionTypeTracks =
+        newGenreCuratedItemSelectionTypeTracks;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setGenreCuratedItemSelectionTypeAlbums(
+      CuratedItemSelectionType newGenreCuratedItemSelectionTypeAlbums) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.genreCuratedItemSelectionTypeAlbums =
+        newGenreCuratedItemSelectionTypeAlbums;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setGenreCuratedItemSelectionTypeArtists(
+      CuratedItemSelectionType newGenreCuratedItemSelectionTypeArtists) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.genreCuratedItemSelectionTypeArtists =
+        newGenreCuratedItemSelectionTypeArtists;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setGenreItemSectionsOrder(
+      List<GenreItemSections> newGenreItemSectionsOrder) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.genreItemSectionsOrder = newGenreItemSectionsOrder;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setGenreFilterArtistScreens(bool newGenreFilterArtistScreens) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.genreFilterArtistScreens = newGenreFilterArtistScreens;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setGenreListsInheritSorting(bool newGenreListsInheritSorting) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.genreListsInheritSorting = newGenreListsInheritSorting;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setGenreItemSectionFilterChipOrder(
+      List<CuratedItemSelectionType> newGenreItemSectionFilterChipOrder) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.genreItemSectionFilterChipOrder =
+        newGenreItemSectionFilterChipOrder;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setArtistGenreChipsApplyFilter(
+      bool newArtistGenreChipsApplyFilter) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.artistGenreChipsApplyFilter =
+        newArtistGenreChipsApplyFilter;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setArtistCuratedItemSelectionType(
+      CuratedItemSelectionType newArtistCuratedItemSelectionType) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.artistCuratedItemSelectionType =
+        newArtistCuratedItemSelectionType;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setArtistItemSectionFilterChipOrder(
+      List<CuratedItemSelectionType> newArtistItemSectionFilterChipOrder) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.artistItemSectionFilterChipOrder =
+        newArtistItemSectionFilterChipOrder;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setArtistItemSectionsOrder(
+      List<ArtistItemSections> newArtistItemSectionsOrder) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.artistItemSectionsOrder = newArtistItemSectionsOrder;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setAutoSwitchItemCurationType(
+      bool newAutoSwitchItemCurationType) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.autoSwitchItemCurationType =
+        newAutoSwitchItemCurationType;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -727,8 +829,8 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool?> showTabs(TabContentType tabContentType) =>
       finampSettingsProvider
           .select((value) => value.requireValue.showTabs[tabContentType]);
-  ProviderListenable<bool> get onlyShowFavourites => finampSettingsProvider
-      .select((value) => value.requireValue.onlyShowFavourites);
+  ProviderListenable<bool> get onlyShowFavorites => finampSettingsProvider
+      .select((value) => value.requireValue.onlyShowFavorites);
   ProviderListenable<int> get trackShuffleItemCount => finampSettingsProvider
       .select((value) => value.requireValue.trackShuffleItemCount);
   ProviderListenable<ContentViewType> get contentViewType =>
@@ -823,8 +925,9 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<int> get periodicPlaybackSessionUpdateFrequencySeconds =>
       finampSettingsProvider.select((value) =>
           value.requireValue.periodicPlaybackSessionUpdateFrequencySeconds);
-  ProviderListenable<bool> get showArtistsTopTracks => finampSettingsProvider
-      .select((value) => value.requireValue.showArtistsTopTracks);
+  ProviderListenable<bool> get showArtistsTracksSection =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.showArtistsTracksSection);
   ProviderListenable<bool> get showArtistChipImage => finampSettingsProvider
       .select((value) => value.requireValue.showArtistChipImage);
   ProviderListenable<double> get playbackSpeed => finampSettingsProvider
@@ -944,6 +1047,42 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
           (value) => value.requireValue.showFavoriteButtonOnMediaNotification);
   ProviderListenable<ScreenSize?> get screenSize =>
       finampSettingsProvider.select((value) => value.requireValue.screenSize);
+  ProviderListenable<CuratedItemSelectionType>
+      get genreCuratedItemSelectionTypeTracks => finampSettingsProvider.select(
+          (value) => value.requireValue.genreCuratedItemSelectionTypeTracks);
+  ProviderListenable<CuratedItemSelectionType>
+      get genreCuratedItemSelectionTypeAlbums => finampSettingsProvider.select(
+          (value) => value.requireValue.genreCuratedItemSelectionTypeAlbums);
+  ProviderListenable<CuratedItemSelectionType>
+      get genreCuratedItemSelectionTypeArtists => finampSettingsProvider.select(
+          (value) => value.requireValue.genreCuratedItemSelectionTypeArtists);
+  ProviderListenable<List<GenreItemSections>> get genreItemSectionsOrder =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.genreItemSectionsOrder);
+  ProviderListenable<bool> get genreFilterArtistScreens =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.genreFilterArtistScreens);
+  ProviderListenable<bool> get genreListsInheritSorting =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.genreListsInheritSorting);
+  ProviderListenable<List<CuratedItemSelectionType>>
+      get genreItemSectionFilterChipOrder => finampSettingsProvider.select(
+          (value) => value.requireValue.genreItemSectionFilterChipOrder);
+  ProviderListenable<bool> get artistGenreChipsApplyFilter =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.artistGenreChipsApplyFilter);
+  ProviderListenable<CuratedItemSelectionType>
+      get artistCuratedItemSelectionType => finampSettingsProvider
+          .select((value) => value.requireValue.artistCuratedItemSelectionType);
+  ProviderListenable<List<CuratedItemSelectionType>>
+      get artistItemSectionFilterChipOrder => finampSettingsProvider.select(
+          (value) => value.requireValue.artistItemSectionFilterChipOrder);
+  ProviderListenable<List<ArtistItemSections>> get artistItemSectionsOrder =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.artistItemSectionsOrder);
+  ProviderListenable<bool> get autoSwitchItemCurationType =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.autoSwitchItemCurationType);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);

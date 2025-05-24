@@ -6,6 +6,7 @@ import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -154,21 +155,51 @@ class DownloadsService {
 
   /// Provider for user-downloaded items of a specific category.
   /// Used to show and group downloaded items on the downloads screen.
-  late final userDownloadedItemsProvider = StreamProvider.family
-      .autoDispose<List<DownloadStub>, DownloadsScreenCategory>((ref, type) {
-    return _isar.downloadItems
-        .where()
-        .typeEqualTo(type.type)
-        .filter()
-        .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
-        .optional(
-          type.baseItemType != null,
-          (q) => q.baseItemTypeEqualTo(type.baseItemType!),
-        )
-        .sortByName()
-        .build()
-        .watch(fireImmediately: true);
+late final userDownloadedItemsProvider =
+    StreamProvider.family.autoDispose<List<DownloadStub>, DownloadsScreenCategory>((ref, category) {
+  final query = _isar.downloadItems
+      .where()
+      .filter()
+      .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
+      .sortByName()
+      .build()
+      .watch(fireImmediately: true);
+
+  return query.map((allItems) {
+    switch (category) {
+      case DownloadsScreenCategory.special:
+        return allItems.where((item) {
+          return (item.type == category.type) &&
+              item.finampCollection?.type != FinampCollectionType.collectionWithLibraryFilter;
+        }).toList();
+
+      case DownloadsScreenCategory.artists:
+        return allItems.where((item) {
+          return (item.type == category.type &&
+              (category.baseItemType == null ||
+              item.baseItemType == category.baseItemType)) ||
+              (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
+              BaseItemDtoType.fromItem(item.finampCollection!.item!) == BaseItemDtoType.artist);
+        }).toList();
+
+      case DownloadsScreenCategory.genres:
+        return allItems.where((item) {
+          return (item.type == category.type &&
+              (category.baseItemType == null ||
+              item.baseItemType == category.baseItemType)) ||
+              (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
+              BaseItemDtoType.fromItem(item.finampCollection!.item!) == BaseItemDtoType.genre);
+        }).toList();
+
+      default:
+        return allItems.where((item) {
+          return item.type == category.type &&
+              (category.baseItemType == null ||
+              item.baseItemType == category.baseItemType);
+        }).toList();
+    }
   });
+});
 
   /// Constructs the service.  startQueues should also be called to complete initialization.
   DownloadsService() {
@@ -1358,7 +1389,14 @@ class DownloadsService {
   /// album/playlist screen.  Can return all tracks in the album/playlist or
   /// just fully downloaded ones.
   Future<List<BaseItemDto>> getCollectionTracks(BaseItemDto item,
-      {bool playable = true}) async {
+      {bool playable = true,
+        BaseItemDto? genreFilter,
+        bool onlyFavorites = false,
+      }) async {
+    List<int> favoriteIds = [];
+    if (onlyFavorites) {
+      favoriteIds = _getFavoriteIds() ?? [];
+    }
     var stub =
         DownloadStub.fromItem(type: DownloadItemType.collection, item: item);
 
@@ -1373,7 +1411,15 @@ class DownloadsService {
             (q) => q.group((q) => q
                 .stateEqualTo(DownloadItemState.complete)
                 .or()
-                .stateEqualTo(DownloadItemState.needsRedownloadComplete)));
+                .stateEqualTo(DownloadItemState.needsRedownloadComplete)))
+        .optional(onlyFavorites,
+            (q) => q.anyOf(favoriteIds, (q, v) => q.isarIdEqualTo(v)))
+        // Returns items that have a certain genreId assigned
+        .optional(
+            genreFilter != null,
+            (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
+                DownloadStub.getHash(
+                    genreFilter!.id.raw, DownloadItemType.collection)))));
 
     var canonItem = _isar.downloadItems.getSync(stub.isarId);
     if (canonItem?.orderedChildren == null) {
@@ -1399,12 +1445,14 @@ class DownloadsService {
   /// + nameFilter - only return tracks containing nameFilter in their name, case insensitive.
   /// + relatedTo - only return tracks which have relatedTo as their artist, album, or genre.
   /// + viewFilter - only return tracks in the given library.
+  /// + genreFiter - only return tracks that have the provided genreID assigned
   Future<List<DownloadStub>> getAllTracks(
       {String? nameFilter,
       BaseItemDto? relatedTo,
       BaseItemId? viewFilter,
       bool nullableViewFilters = true,
-      bool onlyFavorites = false}) {
+      bool onlyFavorites = false,
+      BaseItemDto? genreFilter}) {
     List<int> favoriteIds = [];
     if (onlyFavorites) {
       favoriteIds = _getFavoriteIds() ?? [];
@@ -1425,6 +1473,11 @@ class DownloadsService {
             relatedTo != null,
             (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(
                 relatedTo!.id.raw, DownloadItemType.collection))))
+        // Returns items that have a certain genreId assigned
+        .optional(
+            genreFilter != null,
+            (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(
+                genreFilter!.id.raw, DownloadItemType.collection))))
         .optional(
             viewFilter != null,
             (q) => q.group((q) => q.isarViewIdEqualTo(viewFilter?.raw).optional(
@@ -1464,6 +1517,7 @@ class DownloadsService {
   /// Useful for artists/genres, which may need to be shown in several libraries.
   /// + onlyFavorites - return only favorite items
   /// + infoForType - only return collections that are info childs for the provided type
+  /// + genreFilter - only return albums that have the provided genre id assigned
   Future<List<DownloadStub>> getAllCollections({
     String? nameFilter,
     BaseItemDtoType? baseTypeFilter,
@@ -1475,10 +1529,31 @@ class DownloadsService {
     bool onlyFavorites = false,
     BaseItemDtoType? infoForType,
     ArtistType? artistType,
+    BaseItemDto? genreFilter,
   }) {
     List<int> favoriteIds = [];
+    List<int> libraryFilteredIds = [];
     if (onlyFavorites && baseTypeFilter != BaseItemDtoType.genre) {
       favoriteIds = _getFavoriteIds() ?? [];
+    }
+    if (fullyDownloaded) {
+      final libraryId =
+          GetIt.instance<FinampUserHelper>().currentUser?.currentViewId;
+      libraryFilteredIds = _isar.downloadItems
+          .where()
+          .typeEqualTo(DownloadItemType.finampCollection)
+          .filter()
+          .not()
+          .stateEqualTo(DownloadItemState.notDownloaded)
+          .findAllSync()
+          .where((collection) =>
+              collection.finampCollection!.type ==
+                  FinampCollectionType.collectionWithLibraryFilter &&
+              collection.finampCollection!.library?.id == libraryId)
+          .map((collection) => DownloadStub.getHash(
+              collection.finampCollection!.item!.id.raw,
+              DownloadItemType.collection))
+          .toList();
     }
 
     return _isar.downloadItems
@@ -1507,8 +1582,14 @@ class DownloadsService {
             (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
                 DownloadStub.getHash(
                     relatedTo!.id.raw, DownloadItemType.collection)))))
+        // Returns items that have a certain genreId assigned
+        .optional(
+            genreFilter != null,
+            (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
+                DownloadStub.getHash(
+                    genreFilter!.id.raw, DownloadItemType.collection)))))
         .optional(fullyDownloaded,
-            (q) => q.not().stateEqualTo(DownloadItemState.notDownloaded))
+            (q) => q.group((q) => q.not().stateEqualTo(DownloadItemState.notDownloaded).or().anyOf(libraryFilteredIds, (q, v) => q.isarIdEqualTo(v))))
         .optional(onlyFavorites,
             (q) => q.anyOf(favoriteIds, (q, v) => q.isarIdEqualTo(v)))
         .optional(

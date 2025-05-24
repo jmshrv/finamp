@@ -178,8 +178,8 @@
   "@required": {},
   "updateButtonLabel": "UUENDA",
   "@updateButtonLabel": {},
-  "playlistNameUpdated": "Esitusloendi nimi uuendatud.",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "Esitusloendi nimi uuendatud.",
+  "@playlistUpdated": {},
   "favourite": "Lemmik",
   "@favourite": {},
   "downloadsDeleted": "Allalaadimised kustutati.",
@@ -398,16 +398,6 @@
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "light": "Hele",
   "@light": {},
-  "startupError": "Rakenduse käivitamisel läks midagi valesti. Viga oli: {error}\n\nPalun loo probleem github.com/UnicornsOnLSD/finamp koos ekraanipildiga sellest leheküljest. Kui see probleem püsib, võiks rakenduse lähtestamiseks kustutada rakenduse andmed.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "disableGesture": "Keela žestid",
   "@disableGesture": {},
   "bufferDuration": "Puhvri kestus",

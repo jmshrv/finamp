@@ -311,14 +311,18 @@ class _LyricsViewState extends ConsumerState<LyricsView>
               await autoScrollController.scrollToIndex(
                 -1,
                 preferPosition: AutoScrollPosition.middle,
-                duration: const Duration(milliseconds: 500),
+                duration: MediaQuery.of(context).disableAnimations
+                    ? Duration.zero
+                    : const Duration(milliseconds: 500),
               );
             } else {
               unawaited(autoScrollController.scrollToIndex(
                 clampedIndex.clamp(
                     0, metadata.value!.lyrics!.lyrics!.length - 1),
                 preferPosition: AutoScrollPosition.middle,
-                duration: const Duration(milliseconds: 500),
+                duration: MediaQuery.of(context).disableAnimations
+                    ? Duration.zero
+                    : const Duration(milliseconds: 500),
               ));
             }
           }
@@ -389,7 +393,10 @@ class _LyricsViewState extends ConsumerState<LyricsView>
                                   unawaited(autoScrollController.scrollToIndex(
                                     previousLineIndex!,
                                     preferPosition: AutoScrollPosition.middle,
-                                    duration: const Duration(milliseconds: 500),
+                                    duration:
+                                        MediaQuery.of(context).disableAnimations
+                                            ? Duration.zero
+                                            : const Duration(milliseconds: 500),
                                   ));
                                 }
                               }),
@@ -415,7 +422,9 @@ class _LyricsViewState extends ConsumerState<LyricsView>
                           unawaited(autoScrollController.scrollToIndex(
                             previousLineIndex!,
                             preferPosition: AutoScrollPosition.middle,
-                            duration: const Duration(milliseconds: 500),
+                            duration: MediaQuery.of(context).disableAnimations
+                                ? Duration.zero
+                                : const Duration(milliseconds: 500),
                           ));
                         }
                         FeedbackHelper.feedback(FeedbackType.heavy);

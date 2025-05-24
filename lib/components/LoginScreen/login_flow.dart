@@ -58,6 +58,9 @@ class _LoginFlowState extends State<LoginFlow> {
                 pageBuilder: (context, animation, secondaryAnimation) => page,
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
+                  if (MediaQuery.of(context).disableAnimations) {
+                    return child;
+                  }
                   final pushingNext =
                       secondaryAnimation.status == AnimationStatus.forward;
                   final poppingNext =
@@ -127,7 +130,51 @@ class _LoginFlowState extends State<LoginFlow> {
                     supportsMediaControl: true,
                     supportsPersistentIdentifier: true,
                     playableMediaTypes: ["Audio"],
-                    supportedCommands: ["MoveUp", "MoveDown", "MoveLeft", "MoveRight", "PageUp", "PageDown", "PreviousLetter", "NextLetter", "ToggleOsd", "ToggleContextMenu", "Select", "Back", "TakeScreenshot", "SendKey", "SendString", "GoHome", "GoToSettings", "VolumeUp", "VolumeDown", "Mute", "Unmute", "ToggleMute", "SetVolume", "SetAudioStreamIndex", "SetSubtitleStreamIndex", "ToggleFullscreen", "DisplayContent", "GoToSearch", "DisplayMessage", "SetRepeatMode", "ChannelUp", "ChannelDown", "Guide", "ToggleStats", "PlayMediaSource", "PlayTrailers", "SetShuffleQueue", "PlayState", "PlayNext", "ToggleOsdMenu", "Play", "SetMaxStreamingBitrate", "SetPlaybackOrder"],
+                    supportedCommands: [
+                      "MoveUp",
+                      "MoveDown",
+                      "MoveLeft",
+                      "MoveRight",
+                      "PageUp",
+                      "PageDown",
+                      "PreviousLetter",
+                      "NextLetter",
+                      "ToggleOsd",
+                      "ToggleContextMenu",
+                      "Select",
+                      "Back",
+                      "TakeScreenshot",
+                      "SendKey",
+                      "SendString",
+                      "GoHome",
+                      "GoToSettings",
+                      "VolumeUp",
+                      "VolumeDown",
+                      "Mute",
+                      "Unmute",
+                      "ToggleMute",
+                      "SetVolume",
+                      "SetAudioStreamIndex",
+                      "SetSubtitleStreamIndex",
+                      "ToggleFullscreen",
+                      "DisplayContent",
+                      "GoToSearch",
+                      "DisplayMessage",
+                      "SetRepeatMode",
+                      "ChannelUp",
+                      "ChannelDown",
+                      "Guide",
+                      "ToggleStats",
+                      "PlayMediaSource",
+                      "PlayTrailers",
+                      "SetShuffleQueue",
+                      "PlayState",
+                      "PlayNext",
+                      "ToggleOsdMenu",
+                      "Play",
+                      "SetMaxStreamingBitrate",
+                      "SetPlaybackOrder"
+                    ],
                   ));
                 },
               ));
@@ -164,7 +211,7 @@ class ServerState {
     this.baseUrl,
   }) : clientDiscoveryHandler = JellyfinServerClientDiscovery();
 
-  onBaseUrlChanged(String baseUrl) {
+  void onBaseUrlChanged(String baseUrl) {
     if (connectionTestDebounceTimer?.isActive ?? false) {
       connectionTestDebounceTimer?.cancel();
     }

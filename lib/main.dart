@@ -12,7 +12,9 @@ import 'package:finamp/hive_registrar.g.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/locale_adapter.dart';
 import 'package:finamp/screens/album_settings_screen.dart';
+import 'package:finamp/screens/artist_settings_screen.dart';
 import 'package:finamp/screens/downloads_settings_screen.dart';
+import 'package:finamp/screens/genre_settings_screen.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/login_screen.dart';
 import 'package:finamp/screens/lyrics_settings_screen.dart';
@@ -70,6 +72,7 @@ import 'screens/audio_service_settings_screen.dart';
 import 'screens/customization_settings_screen.dart';
 import 'screens/downloads_location_screen.dart';
 import 'screens/downloads_screen.dart';
+import 'screens/genre_screen.dart';
 import 'screens/language_selection_screen.dart';
 import 'screens/layout_settings_screen.dart';
 import 'screens/logs_screen.dart';
@@ -493,6 +496,17 @@ class _FinampState extends State<Finamp> with WindowListener {
             child: ValueListenableBuilder(
                 valueListenable: LocaleHelper.localeListener,
                 builder: (_, __, ___) {
+                  final transitionBuilder = MediaQuery.of(context)
+                          .disableAnimations
+                      ? PageTransitionsTheme(
+                          // Disable page transitions on all platforms if [disableAnimations] is true, otherwise use default transitions
+                          builders: TargetPlatform.values.fold(
+                              <TargetPlatform, PageTransitionsBuilder>{},
+                              (previousValue, element) => previousValue
+                                ..[element] =
+                                    const NoTransitionPageTransitionsBuilder()))
+                      : null;
+
                   return ValueListenableBuilder<Box<ThemeMode>>(
                       valueListenable: ThemeModeHelper.themeModeListener,
                       builder: (context, box, __) {
@@ -511,6 +525,8 @@ class _FinampState extends State<Finamp> with WindowListener {
                                 const AlbumScreen(),
                             ArtistScreen.routeName: (context) =>
                                 const ArtistScreen(),
+                            GenreScreen.routeName: (context) =>
+                                const GenreScreen(),
                             PlayerScreen.routeName: (context) =>
                                 const PlayerScreen(
                                     key: ValueKey(PlayerScreen.routeName)),
@@ -558,8 +574,12 @@ class _FinampState extends State<Finamp> with WindowListener {
                                 const LanguageSelectionScreen(),
                             AlbumSettingsScreen.routeName: (context) =>
                                 const AlbumSettingsScreen(),
+                            ArtistSettingsScreen.routeName: (context) =>
+                                const ArtistSettingsScreen(),
+                            GenreSettingsScreen.routeName: (context) =>
+                                const GenreSettingsScreen(),
                             NetworkSettingsScreen.routeName: (context) =>
-                                const NetworkSettingsScreen()
+                                const NetworkSettingsScreen(),
                           },
                           initialRoute: SplashScreen.routeName,
                           navigatorObservers: [
@@ -592,6 +612,7 @@ class _FinampState extends State<Finamp> with WindowListener {
                               // ),
                               dismissDirection: DismissDirection.horizontal,
                             ),
+                            pageTransitionsTheme: transitionBuilder,
                           ),
                           darkTheme: ThemeData(
                             brightness: Brightness.dark,
@@ -610,6 +631,7 @@ class _FinampState extends State<Finamp> with WindowListener {
                               // ),
                               dismissDirection: DismissDirection.horizontal,
                             ),
+                            pageTransitionsTheme: transitionBuilder,
                           ),
                           scrollBehavior: FinampScrollBehavior(),
                           themeMode: box.get("ThemeMode"),
@@ -740,7 +762,7 @@ class ErrorScreen extends StatelessWidget {
                         color: Colors.red,
                       ),
                     ),
-                    if (error is HiveError && kDebugMode)
+                    if (kDebugMode)
                       WidgetSpan(
                           child: Padding(
                         padding: const EdgeInsets.only(top: 20),
@@ -839,5 +861,21 @@ class FinampScrollBehavior extends MaterialScrollBehavior {
           child: child,
         );
     }
+  }
+}
+
+class NoTransitionPageTransitionsBuilder extends PageTransitionsBuilder {
+  /// Constructs a page transition that doesn't animate anything.
+  const NoTransitionPageTransitionsBuilder();
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T>? route,
+    BuildContext? context,
+    Animation<double> animation,
+    Animation<double>? secondaryAnimation,
+    Widget child,
+  ) {
+    return child;
   }
 }

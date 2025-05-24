@@ -108,16 +108,6 @@
   "@bufferDurationSubtitle": {},
   "language": "Мова",
   "@language": {},
-  "startupError": "Щось пішло не так під час запуску програми. помилка: {error}\n\nБудь ласка, створіть проблему на github.com/UnicornsOnLSD/finamp із знімком екрана цієї сторінки. Якщо проблема не зникне, ви можете очистити дані програми, щоб скинути налаштування програми.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "serverUrl": "URL серверу",
   "@serverUrl": {},
   "couldNotFindLibraries": "Не вдається знайти жодної бібліотеки.",
@@ -410,8 +400,8 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Перемішати",
   "@shuffleButtonLabel": {},
-  "playlistNameUpdated": "Ім'я плейлисту змінено.",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "Ім'я плейлисту змінено.",
+  "@playlistUpdated": {},
   "favourite": "Улюблене",
   "@favourite": {},
   "downloadsDeleted": "Завантаження видалено.",
@@ -556,8 +546,6 @@
   "@apply": {
     "description": "Used for a button in the playback speed menu"
   },
-  "showArtistsTopTracksSubtitle": "Чи показувати 5 найбільш прослуховуваних композиції виконавця.",
-  "@showArtistsTopTracksSubtitle": {},
   "trackCountTooltip": "Композиція {currentTrackIndex} з {totalTrackCount}",
   "@trackCountTooltip": {
     "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
@@ -776,7 +764,7 @@
   "@aboutContributionLink": {
     "description": "Link to the Finamp GitHub repository, shown in the about screen."
   },
-  "loginFlowWelcomeHeading": "Вітаємо у",
+  "loginFlowWelcomeHeading": "Ласкаво просимо до {styledName}",
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
@@ -854,8 +842,6 @@
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopTracks": "Показати найкращі композиції в поданні виконавнця",
-  "@showArtistsTopTracks": {},
   "playbackModeDirectPlaying": "Пряме відтворення",
   "@playbackModeDirectPlaying": {
     "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
@@ -1014,7 +1000,7 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "finampCollectionNames": "{itemType, select, favorites{Обране} allPlaylists{Усі списки відтворення} fiveLatestAlbums{5 Останніх альбомів} allPlaylistsMetadata{Метадані списку відтворення} other{{itemType}} }",
+  "finampCollectionNames": "{itemType, select, favorites{Улюблені} allPlaylists{Усі списки відтворення} fiveLatestAlbums{5 Найновіші альбоми} allPlaylistsMetadata{Метадані списку відтворення} collectionWithLibraryFilter{Колекція з фільтром бібліотеки} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
@@ -1029,7 +1015,7 @@
   "@downloadTranscodeCodecTitle": {
     "description": "Title for Select Download Codec dropdown"
   },
-  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Транскодовано}}",
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Перекодовано}}{location, select, null{} other{ ({location})}}",
   "@downloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1148,7 +1134,7 @@
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
   },
-  "reportQueueToServerSubtitle": "Коли увімкнено, Finamp надсилатиме поточну чергу до серверу. Наразі здається, що від цього мало користі, і це збільшує мережевий трафік.",
+  "reportQueueToServerSubtitle": "Якщо ввімкнено, Finamp надішле поточну чергу на сервер. Це може покращити дистанційне керування та дозволити відновлення черги на стороні сервера. Завжди ввімкнено, якщо ввімкнено функцію «Відтворити».",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1160,7 +1146,7 @@
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "periodicPlaybackSessionUpdateFrequency": "Частота оновлення сесії відтворення",
+  "periodicPlaybackSessionUpdateFrequency": "Частота оновлення сеансу відтворення",
   "@periodicPlaybackSessionUpdateFrequency": {
     "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1301,7 +1287,7 @@
   "@redownloadTitle": {
     "description": "Title for download transcode setting which redownloads tracks with higher allowed qualities"
   },
-  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ як {codec} @ {bitrate}}}",
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ as {codec} @ {bitrate}}}{location, select, null{} other{ ({location})}}",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1629,11 +1615,11 @@
   "@showLyricsTimestampsSubtitle": {
     "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
   },
-  "showStopButtonOnMediaNotificationTitle": "Показувати кнопку зупинення у медіа сповіщеннях",
+  "showStopButtonOnMediaNotificationTitle": "Показувати кнопку «Зупинити» у сповіщенні про медіа",
   "@showStopButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
-  "showSeekControlsOnMediaNotificationTitle": "Показати індикатор керування прогресом в медіа сповіщенні",
+  "showSeekControlsOnMediaNotificationTitle": "Дозволити пошук у сповіщенні про медіа",
   "@showSeekControlsOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a seekable progress bar."
   },
@@ -1657,7 +1643,7 @@
   "@showLyricsTimestampsTitle": {
     "description": "Title for the setting that controls if timestamps are shown for lyrics"
   },
-  "showStopButtonOnMediaNotificationSubtitle": "Керує тим, чи показувати кнопку зупинки разом із кнопкою павзи. Це дозволить зупинити відтворення без потреби відкривати застосунок.",
+  "showStopButtonOnMediaNotificationSubtitle": "Контролює, чи має медіасповіщення кнопку зупинки. Це дозволяє зупинити відтворення, не відкриваючи програму.",
   "@showStopButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
@@ -1999,11 +1985,11 @@
   "@autoOfflineOptionOff": {
     "description": "This is shown when the autoOffline feature is turned off and has no effects"
   },
-  "autoOfflineOptionNetwork": "Мережа",
+  "autoOfflineOptionNetwork": "Локальна мережа",
   "@autoOfflineOptionNetwork": {
     "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
   },
-  "autoOfflineSettingDescription": "Автоматично перемикатись у режим офлайн.\nДеактивовано: Не перемикатиме автоматично у режим офлайн. Може зберігати заряд батареї.\nМережа: Вмикати режим офлайн при відсутності зʼєднання до Інтернету.\nВідʼєднано: Вмикати режим офлайн при відсутності зʼєднання з будь-чим.\nВи завжди можете вручну увімкнути режим офлайн, що призупинить автоматичне увімкнення до моменту поки ви не вийдете з режиму офлайн",
+  "autoOfflineSettingDescription": "Автоматично перемикатись у режим офлайн.\nДеактивовано: Не перемикатиме автоматично у режим офлайн. Може зберігати заряд батареї.\nЛокальні Мережа: Вмикати режим офлайн при відсутності зʼєднання до Інтернету.\nВідʼєднано: Вмикати режим офлайн при відсутності зʼєднання з будь-чим.\nВи завжди можете вручну увімкнути режим офлайн, що призупинить автоматичне увімкнення до моменту поки ви не вийдете з режиму офлайн",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
@@ -2019,8 +2005,321 @@
   "@libraryDownloads": {
     "description": "Title for the library downloads section on the downloads screen."
   },
-  "desktopShuffleWarning": "Shuffle наразі недоступний на комп’ютері.",
+  "desktopShuffleWarning": "Зміна режиму випадкового відтворення наразі недоступна на комп’ютері.",
   "@desktopShuffleWarning": {
     "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
+  },
+  "playbackReporting": "Звіт про відтворення",
+  "@playbackReporting": {},
+  "playOnStaleDelay": "'Час очікування сеансу відтворення",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "enablePlayonTitle": "Увімкніть підтримку «Відтворення»",
+  "@enablePlayonTitle": {
+    "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "enablePlayonSubtitle": "Вмикає функцію Jellyfin «Play On» (дистанційне керування Finamp з іншого клієнта). Вимкніть це, якщо ваш зворотний проксі або сервер не підтримує веб-сокети.",
+  "@enablePlayonSubtitle": {
+    "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "playbackReportingSettingsTitle": "Звіт про відтворення та відтворення",
+  "@playbackReportingSettingsTitle": {
+    "description": "Title for the playback reporting settings screen"
+  },
+  "lyricsScreenButtonTitle": "Тексти пісень",
+  "@lyricsScreenButtonTitle": {
+    "description": "Label for the button for opening the lyrics screen"
+  },
+  "outputMenuButtonTitle": "Вихід",
+  "@outputMenuButtonTitle": {
+    "description": "Button title for opening the output menu/panel"
+  },
+  "outputMenuVolumeSectionTitle": "Обсяг",
+  "@outputMenuVolumeSectionTitle": {
+    "description": "Title for the volume section in the output menu"
+  },
+  "currentVolumeFeatureText": "{volume}% обсягу",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
+      }
+    }
+  },
+  "playOnStaleDelaySubtitle": "Скільки часу віддалений сеанс «Відтворення» вважається активним після отримання команди. Коли відтворення вважається активним, повідомляється частіше, що може призвести до збільшення використання пропускної здатності.",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "playOnReconnectionDelay": "Затримка повторного підключення сеансу «Відтворення»",
+  "@playOnReconnectionDelay": {
+    "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "outputMenuDevicesSectionTitle": "Доступні пристрої",
+  "@outputMenuDevicesSectionTitle": {
+    "description": "Title for the available devices section in the output menu"
+  },
+  "playOnReconnectionDelaySubtitle": "Контролює затримку між спробами повторного підключення до веб-сокета PlayOn після його відключення (у секундах). Менша затримка збільшує використання пропускної здатності.",
+  "@playOnReconnectionDelaySubtitle": {
+    "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "outputMenuTitle": "Змінити вихід",
+  "@outputMenuTitle": {
+    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  },
+  "outputMenuOpenConnectionSettingsButtonTitle": "Підключіться до пристрою",
+  "@outputMenuOpenConnectionSettingsButtonTitle": {
+    "description": "Button title for connecting to a device from the output menu"
+  },
+  "deviceType": "{type, select, speaker{Динамік пристрою} tv{TV} bluetooth{Bluetooth} other{Unknown}}",
+  "@deviceType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    },
+    "description": "Label for the type of device in the output menu"
+  },
+  "startupErrorTitle": "Щось пішло не так під час запуску програми!\nВибачте за це...",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorCallToAction": "Будь ласка, створіть проблему на github.com/jmshrv/finamp із журналами (!) (скористайтеся кнопкою нижче) і знімком екрана цієї сторінки, щоб ми могли якнайшвидше її виправити.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "startupErrorWorkaround": "Як обхідний шлях ви можете очистити дані програми, щоб скинути налаштування програми. Майте на увазі, що в цьому випадку всі ваші налаштування та завантаження будуть видалені.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
+  },
+  "exportLogs": "Зберегти журнали",
+  "@exportLogs": {},
+  "showShuffleButtonOnMediaNotificationTitle": "Показувати кнопку випадкового відтворення в сповіщенні про медіафайли",
+  "@showShuffleButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a shuffle button."
+  },
+  "showShuffleButtonOnMediaNotificationSubtitle": "Контролює, чи має медіасповіщення кнопку перемішування. Це дозволяє перемішувати/відтворювати без відкривання програми.",
+  "@showShuffleButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
+  },
+  "showFavoriteButtonOnMediaNotificationTitle": "Показувати кнопку «Улюблене» у сповіщенні про медіа",
+  "@showFavoriteButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a favorite button."
+  },
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Контролює, чи має медіасповіщення кнопку обраного. Це дозволяє додавати/вилучати поточну композицію з обраного, не відкриваючи програму.",
+  "@showFavoriteButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a favorite button."
+  },
+  "autoReloadQueueSubtitle": "Автоматично перезавантажувати чергу, коли змінюється джерело (наприклад, увімкнено автономний режим або змінено адресу сервера). Якщо вимкнено, Finamp натомість запитуватиме вас.",
+  "@autoReloadQueueSubtitle": {
+    "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "downloadPaused": "Завантаження призупинено, оскільки пристрій не підключено до Wi-Fi",
+  "@downloadPaused": {
+    "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
+  },
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks, plural, =1{1 track} other{{amountUndownloadedTracks} tracks}} будуть видалені з черги, оскільки вони не завантажені.",
+  "@autoReloadPromptMissingTracks": {
+    "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
+    "placeholders": {
+      "amountUndownloadedTracks": {
+        "type": "int"
+      }
+    }
+  },
+  "preferHomeNetworkActiveAddressInfoText": "Активна адреса",
+  "@preferHomeNetworkActiveAddressInfoText": {
+    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+  },
+  "preferHomeNetworkTargetAddressLocalSettingTitle": "Адреса домашньої мережі",
+  "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
+  "preferHomeNetworkTargetAddressLocalSettingDescription": "Цільова адреса сервера Jellyfin у вашій домашній мережі",
+  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
+  "preferHomeNetworkEnableSwitchTitle": "Віддати перевагу домашній мережі",
+  "@preferHomeNetworkEnableSwitchTitle": {},
+  "preferHomeNetworkEnableSwitchDescription": "Чи використовувати іншу адресу, коли ви вдома",
+  "@preferHomeNetworkEnableSwitchDescription": {},
+  "preferHomeNetworkPublicAddressSettingTitle": "Публічна адреса",
+  "@preferHomeNetworkPublicAddressSettingTitle": {},
+  "preferHomeNetworkPublicAddressSettingDescription": "Основна адреса, яка використовується для підключення до вашого сервера Jellyfin",
+  "@preferHomeNetworkPublicAddressSettingDescription": {},
+  "preferHomeNetworkInfoBox": "Ця функція вимагає дозволів на доступ до геоданих (і геодані мають бути ввімкнені), щоб зчитувати назву мережі.",
+  "@preferHomeNetworkInfoBox": {
+    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
+  },
+  "networkSettingsTitle": "Мережа",
+  "@networkSettingsTitle": {
+    "description": "Title for the network settings screen"
+  },
+  "missingSchemaError": "URL-адреса має починатися з http(s)://",
+  "@missingSchemaError": {
+    "description": "Snackbar message when the user changes their home/public address but it doesn't start with http"
+  },
+  "testConnectionButtonLabel": "Перевірте обидва з'єднання",
+  "@testConnectionButtonLabel": {
+    "description": "Button to test the public and local url inside the network settings tab"
+  },
+  "autoReloadQueueTitle": "Автоматичне перезавантаження черги",
+  "@autoReloadQueueTitle": {
+    "description": "Title for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "autoReloadPrompt": "Перезавантажте чергу, щоб застосувати нове {type, select, network{network settings} transcoding{transcoding settings} other{settings}}",
+  "@autoReloadPrompt": {
+    "description": "Prompt shown when the queue needs to be reloaded after changing network settings",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "autoReloadPromptReloadButton": "Перезавантажити",
+  "@autoReloadPromptReloadButton": {
+    "description": "Button title for reloading the queue after network settings change"
+  },
+  "ping": "{status, select, true_true{Обидва доступні} true_false{НЕ ВДАЛОСЯ ЗВ’ЯЗАТИСЯ З МЕСТОВОЮ АДРЕСОЮ} false_true{НЕ ВДАЛОСЯ ДОСТУПИТИ ДО ОБЩОЇ АДРЕСИ} false_false{НЕ ВІДБУЛОСЯ зв'язатися з обома} other{невідомий}}",
+  "@ping": {
+    "description": "Gets shown in the Snackbar when using the Test Connection Button inside the Network Settings. true means reachable, false means unreachable. the first value is for the public address, the second value is fot the home address."
+  },
+  "stopAndClearQueue": "Зупинити відтворення та очистити чергу",
+  "@stopAndClearQueue": {
+    "description": "Label for a button that stops playback and removes all tracks from the queue."
+  },
+  "itemSectionsOrderSubtitle": "Контролює порядок розділів елементів.",
+  "@itemSectionsOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections on the screens."
+  },
+  "allLibraries": "Усі бібліотеки",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
+  "latestArtists": "Найновіші виконавці",
+  "@latestArtists": {},
+  "favoriteAlbums": "Улюблені альбоми",
+  "@favoriteAlbums": {},
+  "favorites": "Улюблені",
+  "@favorites": {},
+  "genreItemSectionFilterChipOrderSubtitle": "Керує порядком доступних фільтрів для розділів елементів.",
+  "@genreItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections filter chips."
+  },
+  "randomAlbums": "Альбоми (випадковий вибір)",
+  "@randomAlbums": {},
+  "randomFavoritesFirst": "Випадково (спочатку уподобання)",
+  "@randomFavoritesFirst": {},
+  "showArtistsTracksSectionSubtitle": "Чи показувати розділ із максимум п’ятьма треками. Якщо цю опцію ввімкнено, можна вибрати між Найчастіше відтворюваними, Улюбленими, Випадковими, Найновішими релізами та Нещодавно доданими треками.",
+  "@showArtistsTracksSectionSubtitle": {},
+  "latestAlbums": "Найновіші альбоми",
+  "@latestAlbums": {},
+  "curatedItemsMostPlayedDisabledTooltip": "Ви ще не прослухали жодної композиції.",
+  "@curatedItemsMostPlayedDisabledTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Online Mode when not yet listened to any tracks."
+  },
+  "recentlyAdded": "Нещодавно додані",
+  "@recentlyAdded": {},
+  "genreListsInheritSortingSubtitle": "Якщо цю опцію ввімкнено, списки «Переглянути всі» успадкують сортування та фільтрацію з екрана жанрів. Якщо вимкнено, замість цього будуть використані налаштування з відповідної вкладки бібліотеки. Натискання на кількість у верхній частині екрана жанру завжди відкриватиме повний список із налаштуваннями сортування з вкладки бібліотеки.",
+  "@genreListsInheritSortingSubtitle": {
+    "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "noGenres": "Без жанрів",
+  "@noGenres": {
+    "description": "Gets shown when there are no genres available for an album or artist"
+  },
+  "autoSwitchItemCurationTypeTitle": "Тип кураторства товарів з автоматичним перемиканням",
+  "@autoSwitchItemCurationTypeTitle": {},
+  "autoSwitchItemCurationTypeSubtitle": "Якщо цю функцію ввімкнено, розділи елементів на екранах виконавців і жанрів автоматично перемикаються на інший тип кураторства, якщо елементи недоступні (наприклад, немає обраного для певного виконавця).",
+  "@autoSwitchItemCurationTypeSubtitle": {},
+  "showArtistsTracksSection": "Розділ «Показати треки»",
+  "@showArtistsTracksSection": {},
+  "genreItemSectionFilterChipOrderTitle": "Розділи елементів Порядок фільтра",
+  "@genreItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of item sections filter chips."
+  },
+  "artistGenreChipsApplyFilterSubtitle": "Якщо цю функцію ввімкнено, натискання на жанр фільтруватиме виконавця за цим жанром. Ви все ще можете відкрити жанр довгим натисканням.",
+  "@artistGenreChipsApplyFilterSubtitle": {},
+  "randomTracks": "Треки (випадковий вибір)",
+  "@randomTracks": {},
+  "mostPlayed": "Найпопулярніші",
+  "@mostPlayed": {},
+  "artistScreen": "Екран виконавця",
+  "@artistScreen": {
+    "description": "Name for the view/screen that shows artists"
+  },
+  "itemSectionsOrder": "Порядок розділів елемента",
+  "@itemSectionsOrder": {
+    "description": "Label for the setting that controls the order of item sections on the screens."
+  },
+  "artistItemSectionFilterChipOrderTitle": "Порядок фільтрів розділів треків",
+  "@artistItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of the tracks sections filter chips."
+  },
+  "artistGenreChipsApplyFilterTitle": "Застосувати фільтр замість відкриття жанру",
+  "@artistGenreChipsApplyFilterTitle": {},
+  "seeAll": "Дивитися все",
+  "@seeAll": {
+    "description": ""
+  },
+  "newAlbums": "Нові альбоми",
+  "@newAlbums": {},
+  "genreFilterArtistScreensSubtitle": "Якщо цю функцію ввімкнено, на екранах виконавців (доступних через жанр) відображатимуться лише треки та альбоми, що відповідають жанру, який ви зараз переглядаєте. (Завжди можна вручну видалити фільтр жанрів, щоб відобразити всі треки та альбоми.)",
+  "@genreFilterArtistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreScreen": "Екран жанру",
+  "@genreScreen": {
+    "description": "Name for the view/screen that shows genres"
+  },
+  "favoriteTracks": "Улюблені треки",
+  "@favoriteTracks": {},
+  "favoriteArtists": "Улюблені виконавці",
+  "@favoriteArtists": {},
+  "curatedItemsMostPlayedOfflineTooltip": "Недоступно в автономному режимі.",
+  "@curatedItemsMostPlayedOfflineTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Offline Mode."
+  },
+  "newTracks": "Нові треки",
+  "@newTracks": {},
+  "randomArtists": "Виконавці (випадковий вибір)",
+  "@randomArtists": {},
+  "onlineMode": "Онлайн-режим",
+  "@onlineMode": {},
+  "topAlbums": "Найкращі альбоми",
+  "@topAlbums": {},
+  "topArtists": "Найкращі виконавці",
+  "@topArtists": {},
+  "newArtists": "Нові виконавці",
+  "@newArtists": {},
+  "latestTracks": "Найновіші треки",
+  "@latestTracks": {},
+  "latestReleases": "Останні релізи",
+  "@latestReleases": {},
+  "artistItemSectionFilterChipOrderSubtitle": "Керує порядком доступних фільтрів для розділу треків.",
+  "@artistItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of the tracks sections filter chips."
+  },
+  "genreFilterArtistScreens": "Фільтрувати екрани виконавців",
+  "@genreFilterArtistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreListsInheritSorting": "Повні списки Сортування Успадкування",
+  "@genreListsInheritSorting": {
+    "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "curatedItemsFavoritesDisabledTooltip": "У вас ще немає улюблених.",
+  "@curatedItemsFavoritesDisabledTooltip": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet."
+  },
+  "artistGenreChipsApplyFilterPromptButton": "Відкритий жанр",
+  "@artistGenreChipsApplyFilterPromptButton": {
+    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "artistGenreChipsApplyFilterPrompt": "Застосовано жанровий фільтр",
+  "@artistGenreChipsApplyFilterPrompt": {
+    "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "noReleaseDate": "Без дати випуску",
+  "@noReleaseDate": {
+    "description": "Placeholder text if an album has no release date set."
   }
 }

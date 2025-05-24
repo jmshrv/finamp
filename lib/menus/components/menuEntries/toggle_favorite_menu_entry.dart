@@ -39,8 +39,8 @@ class ToggleFavoriteMenuEntry extends ConsumerWidget {
         child: MenuEntry(
             icon: isFav ? TablerIcons.heart_filled : TablerIcons.heart,
             title: isFav
-                ? AppLocalizations.of(context)!.removeFavourite
-                : AppLocalizations.of(context)!.addFavourite,
+                ? AppLocalizations.of(context)!.removeFavorite
+                : AppLocalizations.of(context)!.addFavorite,
             onTap: () async {
               ref
                   .read(isFavoriteProvider(baseItem).notifier)

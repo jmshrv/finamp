@@ -174,7 +174,8 @@ class QueueService {
           QueueItemSourceType.nextUp,
           QueueItemSourceType.nextUpAlbum,
           QueueItemSourceType.nextUpPlaylist,
-          QueueItemSourceType.nextUpArtist
+          QueueItemSourceType.nextUpArtist,
+          QueueItemSourceType.nextUpGenre,
         ].contains(_queuePreviousTracks.last.source.type)) {
           _queuePreviousTracks.last.source = QueueItemSource.rawId(
               type: QueueItemSourceType.formerNextUp,
@@ -192,7 +193,8 @@ class QueueService {
               QueueItemSourceType.nextUp,
               QueueItemSourceType.nextUpAlbum,
               QueueItemSourceType.nextUpPlaylist,
-              QueueItemSourceType.nextUpArtist
+              QueueItemSourceType.nextUpArtist,
+              QueueItemSourceType.nextUpGenre,
             ].contains(allTracks[i].source.type)) {
           _queue.add(allTracks[i]);
           _queue.last.type = QueueItemQueueType.queue;
@@ -334,6 +336,8 @@ class QueueService {
     if (_savedQueueState == SavedQueueState.loading) {
       return Future.error("A saved queue is currently loading");
     }
+    _queueServiceLogger.finest("Loading stored queue: $info");
+
     // After loading queue, do not begin overwriting latest until the user modifies
     // the queue or begins playback.  This prevents saving unused queues that
     // had loading errors or were immediately overwritten.
@@ -463,6 +467,15 @@ class QueueService {
       return;
     }
 
+    // Native shuffle is not currently implemented on desktop.  Perform manually.
+    if (!(Platform.isAndroid || Platform.isIOS) &&
+        order == FinampPlaybackOrder.shuffled) {
+      List<jellyfin_models.BaseItemDto> clonedItems = List.from(items);
+      clonedItems.shuffle();
+      items = clonedItems;
+      order = FinampPlaybackOrder.linear;
+    }
+
     if (startingIndex == null) {
       if (order == FinampPlaybackOrder.shuffled) {
         startingIndex = Random().nextInt(items.length);
@@ -498,6 +511,8 @@ class QueueService {
         return Future.error(
             "initialIndex is bigger than the itemList! ($initialIndex > ${itemList.length})");
       }
+      _queueServiceLogger
+          .finest("Replacing whole queue with ${itemList.length} items.");
 
       _queue.clear(); // empty queue
       _queuePreviousTracks.clear();
@@ -526,6 +541,10 @@ class QueueService {
         }
       }
 
+      if (Platform.isIOS) {
+        // iOS will start playing the first queue index if we don't stop first
+        await _audioHandler.stopPlayback();
+      }
       await _queueAudioSource.clear();
 
       List<AudioSource> audioSources = [];

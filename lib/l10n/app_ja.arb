@@ -318,8 +318,8 @@
   "@shuffleButtonLabel": {},
   "editPlaylistNameTitle": "プレイリスト名を編集",
   "@editPlaylistNameTitle": {},
-  "playlistNameUpdated": "プレイリスト名を更新しました。",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "プレイリスト名を更新しました。",
+  "@playlistUpdated": {},
   "addDownloads": "ダウンロードを追加",
   "@addDownloads": {},
   "logsCopied": "ログをコピーしました。",
@@ -341,16 +341,6 @@
   "@goToAlbum": {},
   "errorScreenError": "エラーリスト取得時にエラーが発生しました！この時点では、GitHub で issue を作成し、アプリデータを削除することをお勧めします",
   "@errorScreenError": {},
-  "startupError": "起動時に問題が起こりました。エラー内容: {error}\n\ngithub.com/UnicornsOnLSD/finamp でイシューを作成し、このページのスクリーンショットを付けてください。問題が継続した場合はアプリデータをクリアしてアプリを初期化して下さい。",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "曲のアーティストがアルバムのアーティストと一致した場合、アルバム画面に表示させるか。",
   "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "enterLowPriorityStateOnPauseSubtitle": "一時停止時に通知をスワイプで除去できます。また Android では一時停止時にサービスを停止できます。",
@@ -662,5 +652,31 @@
     "description": "Option to download item in long-press menu."
   },
   "downloadSettings": "ダウンロード",
-  "@downloadSettings": {}
+  "@downloadSettings": {},
+  "deleteDownloadsPrompt": "この装置から、{itemType, select, album{アルバム} playlist{playlist} artist{アーティスト} genre{ジャンル} track{曲} library{ライブラリ} other{アイテム}} 「{itemName}」を削除してもよろしいですか?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "albumArtists": "アルバムアーティスト",
+  "@albumArtists": {},
+  "loginFlowWelcomeHeading": "{styledName}へようこそ",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen.",
+    "placeholders": {
+      "styledName": {
+        "type": "String",
+        "example": "Finamp"
+      }
+    }
+  }
 }

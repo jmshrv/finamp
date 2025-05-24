@@ -9,6 +9,7 @@ import 'package:finamp/models/jellyfin_models.dart';
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
     registerAdapter(AccessScheduleAdapter());
+    registerAdapter(ArtistItemSectionsAdapter());
     registerAdapter(ArtistTypeAdapter());
     registerAdapter(AuthenticationResultAdapter());
     registerAdapter(AutoOfflineOptionAdapter());
@@ -19,6 +20,7 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(CodecProfileAdapter());
     registerAdapter(ContainerProfileAdapter());
     registerAdapter(ContentViewTypeAdapter());
+    registerAdapter(CuratedItemSelectionTypeAdapter());
     registerAdapter(DeviceIdentificationAdapter());
     registerAdapter(DeviceInfoAdapter());
     registerAdapter(DeviceProfileAdapter());
@@ -42,6 +44,7 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(FinampTranscodingCodecAdapter());
     registerAdapter(FinampTranscodingStreamingFormatAdapter());
     registerAdapter(FinampUserAdapter());
+    registerAdapter(GenreItemSectionsAdapter());
     registerAdapter(HttpHeaderInfoAdapter());
     registerAdapter(ImageBlurHashesAdapter());
     registerAdapter(ItemSwipeActionsAdapter());
@@ -93,6 +96,7 @@ extension HiveRegistrar on HiveInterface {
 extension IsolatedHiveRegistrar on IsolatedHiveInterface {
   void registerAdapters() {
     registerAdapter(AccessScheduleAdapter());
+    registerAdapter(ArtistItemSectionsAdapter());
     registerAdapter(ArtistTypeAdapter());
     registerAdapter(AuthenticationResultAdapter());
     registerAdapter(AutoOfflineOptionAdapter());
@@ -103,6 +107,7 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
     registerAdapter(CodecProfileAdapter());
     registerAdapter(ContainerProfileAdapter());
     registerAdapter(ContentViewTypeAdapter());
+    registerAdapter(CuratedItemSelectionTypeAdapter());
     registerAdapter(DeviceIdentificationAdapter());
     registerAdapter(DeviceInfoAdapter());
     registerAdapter(DeviceProfileAdapter());
@@ -126,6 +131,7 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
     registerAdapter(FinampTranscodingCodecAdapter());
     registerAdapter(FinampTranscodingStreamingFormatAdapter());
     registerAdapter(FinampUserAdapter());
+    registerAdapter(GenreItemSectionsAdapter());
     registerAdapter(HttpHeaderInfoAdapter());
     registerAdapter(ImageBlurHashesAdapter());
     registerAdapter(ItemSwipeActionsAdapter());

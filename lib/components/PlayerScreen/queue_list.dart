@@ -66,18 +66,12 @@ class QueueList extends StatefulWidget {
   @override
   State<QueueList> createState() => _QueueListState();
 
-  void scrollDown() {
-    scrollController.animateTo(
-      scrollController.position.maxScrollExtent,
-      duration: const Duration(seconds: 2),
-      curve: Curves.fastOutSlowIn,
-    );
-  }
 }
 
 void scrollToKey({
   required GlobalKey key,
   required Duration duration,
+    required BuildContext context
 }) {
   var queueList =
       key.currentContext?.findAncestorStateOfType<_QueueListState>();
@@ -88,7 +82,8 @@ void scrollToKey({
   }
   Scrollable.ensureVisible(
     key.currentContext!,
-    duration: duration,
+    duration:
+        MediaQuery.of(context).disableAnimations ? Duration.zero : duration,
     curve: Curves.easeInOutCubic,
   );
 }
@@ -275,7 +270,9 @@ Future<dynamic> showQueueBottomSheet(BuildContext context, WidgetRef ref) {
 
             return DraggableScrollableSheet(
               snap: false,
-              snapAnimationDuration: const Duration(milliseconds: 200),
+              snapAnimationDuration: MediaQuery.of(context).disableAnimations
+                  ? Duration.zero
+                  : const Duration(milliseconds: 200),
               // Cover the whole sub screen when in half opened mode
               initialChildSize: halfOpened ? 1.0 : 0.92,
               minChildSize: halfOpened ? 1.0 : 0.25,
@@ -369,6 +366,7 @@ class JumpToCurrentButtonState extends State<JumpToCurrentButton> {
             onPressed: () {
               FeedbackHelper.feedback(FeedbackType.heavy);
               scrollToKey(
+                  context: context,
                   key: widget.previousTracksHeaderKey,
                   duration: const Duration(milliseconds: 500));
             },
@@ -469,6 +467,7 @@ class _PreviousTracksListState extends State<PreviousTracksList>
                   FeedbackHelper.feedback(FeedbackType.selection);
                   await _queueService.skipByOffset(indexOffset);
                   scrollToKey(
+                      context: context,
                       key: widget.previousTracksHeaderKey,
                       duration: const Duration(milliseconds: 500));
                 },
@@ -561,6 +560,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                         FeedbackHelper.feedback(FeedbackType.selection);
                         await _queueService.skipByOffset(indexOffset);
                         scrollToKey(
+                            context: context,
                             key: widget.previousTracksHeaderKey,
                             duration: const Duration(milliseconds: 500));
                       },
@@ -655,6 +655,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
                     FeedbackHelper.feedback(FeedbackType.selection);
                     await _queueService.skipByOffset(indexOffset);
                     scrollToKey(
+                        context: context,
                         key: widget.previousTracksHeaderKey,
                         duration: const Duration(milliseconds: 500));
                   },
@@ -1114,6 +1115,7 @@ class QueueSectionHeader extends StatelessWidget {
                           Future.delayed(
                               const Duration(milliseconds: 200),
                               () => scrollToKey(
+                                  context: context,
                                   key: nextUpHeaderKey,
                                   duration: const Duration(milliseconds: 500)));
                           // scrollToKey(key: nextUpHeaderKey, duration: const Duration(milliseconds: 1000));

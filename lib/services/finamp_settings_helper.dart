@@ -124,6 +124,38 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void resetArtistSettings() {
+    FinampSettings finampSettingsTemp = finampSettings;
+    
+    finampSettingsTemp.artistGenreChipsApplyFilter =
+        DefaultSettings.artistGenreChipsApplyFilter;
+    finampSettingsTemp.artistItemSectionsOrder =
+        DefaultSettings.artistItemSectionsOrder;
+    finampSettingsTemp.showArtistsTracksSection =
+        DefaultSettings.showArtistsTracksSection;
+    finampSettingsTemp.artistItemSectionFilterChipOrder =
+        DefaultSettings.artistItemSectionFilterChipOrder;
+
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void resetGenreSettings() {
+    FinampSettings finampSettingsTemp = finampSettings;
+    
+    finampSettingsTemp.genreItemSectionsOrder =
+        DefaultSettings.genreItemSectionsOrder;
+    finampSettingsTemp.genreFilterArtistScreens =
+        DefaultSettings.genreFilterArtistScreens;
+    finampSettingsTemp.genreListsInheritSorting =
+        DefaultSettings.genreListsInheritSorting;
+    finampSettingsTemp.genreItemSectionFilterChipOrder =
+        DefaultSettings.genreItemSectionFilterChipOrder;
+
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void resetLayoutSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
@@ -140,11 +172,12 @@ class FinampSettingsHelper {
     FinampSetters.setUseCoverAsBackground(DefaultSettings.useCoverAsBackground);
     finampSettingsTemp.showArtistChipImage =
         DefaultSettings.showArtistChipImage;
-    finampSettingsTemp.showArtistsTopTracks =
-        DefaultSettings.showArtistsTopTracks;
     finampSettingsTemp.allowSplitScreen = DefaultSettings.allowSplitScreen;
     finampSettingsTemp.showProgressOnNowPlayingBar =
         DefaultSettings.showProgressOnNowPlayingBar;
+    finampSettingsTemp.autoSwitchItemCurationType = 
+        DefaultSettings.autoSwitchItemCurationType;
+
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
@@ -270,6 +303,8 @@ class FinampSettingsHelper {
     resetPlayerScreenSettings();
     resetLyricsSettings();
     resetAlbumSettings();
+    resetArtistSettings();
+    resetGenreSettings();
     resetTabsSettings();
     resetNetworkSettings();
 

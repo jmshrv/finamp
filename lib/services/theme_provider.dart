@@ -367,11 +367,11 @@ class _ThemeTransitionCalculator {
   bool _skipAllTransitions = false;
 
   Duration getThemeTransitionDuration(BuildContext context) {
-    if (_skipAllTransitions) {
-      return const Duration(milliseconds: 0);
+    if (_skipAllTransitions || MediaQuery.of(context).disableAnimations) {
+      return Duration.zero;
     }
     return context.mounted
         ? const Duration(milliseconds: 1000)
-        : const Duration(milliseconds: 0);
+        : Duration.zero;
   }
 }

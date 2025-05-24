@@ -1,4 +1,4 @@
-import 'package:finamp/components/AlbumScreen/playlist_name_edit_dialog.dart';
+import 'package:finamp/components/AlbumScreen/playlist_edit_dialog.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/components/menuEntries/menu_entry.dart';
@@ -32,10 +32,10 @@ class EditItemMenuEntry extends ConsumerWidget {
             Navigator.pop(context); // close menu
             switch (BaseItemDtoType.fromItem(baseItem)) {
               case BaseItemDtoType.playlist:
-                showDialog<PlaylistNameEditDialog>(
+                showDialog<PlaylistEditDialog>(
                   context: context,
                   builder: (context) =>
-                      PlaylistNameEditDialog(playlist: baseItem),
+                      PlaylistEditDialog(playlist: baseItem),
                 );
                 break;
               default:

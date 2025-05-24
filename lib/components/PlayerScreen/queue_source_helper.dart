@@ -4,6 +4,7 @@ import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/album_screen.dart';
 import 'package:finamp/screens/artist_screen.dart';
+import 'package:finamp/screens/genre_screen.dart';
 import 'package:finamp/screens/music_screen.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -34,7 +35,7 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
     case QueueItemSourceType.nextUpGenre:
     case QueueItemSourceType.genreMix:
       Navigator.of(context)
-          .pushNamed(ArtistScreen.routeName, arguments: source.item);
+          .pushNamed(GenreScreen.routeName, arguments: source.item);
       break;
     case QueueItemSourceType.playlist:
     case QueueItemSourceType.nextUpPlaylist:

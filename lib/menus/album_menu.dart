@@ -9,7 +9,7 @@ import 'package:finamp/menus/components/menuEntries/go_to_artist_menu_entry.dart
 import 'package:finamp/menus/components/menuEntries/go_to_genre_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/instant_mix_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/lock_download_menu_entry.dart';
-import 'package:finamp/menus/components/menuEntries/menu_item_info_header.dart';
+import 'package:finamp/menus/components/menu_item_info_header.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/menus/components/menuEntries/toggle_favorite_menu_entry.dart';
 import 'package:finamp/menus/components/playbackActions/playback_action_row.dart';

@@ -894,14 +894,10 @@
   },
   "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "एल्बम स्क्रीन पर ट्रैक कलाकारों को दिखाएं या नहीं, यदि वे एल्बम कलाकारों से भिन्न न हों।",
   "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "showArtistsTopTracksSubtitle": "किसी कलाकार के सर्वाधिक सुने गए शीर्ष 5 ट्रैक दिखाए जाएं या नहीं।",
-  "@showArtistsTopTracksSubtitle": {},
   "disableGesture": "जेस्चर को बंद करना",
   "@disableGesture": {},
   "hideTrackArtistsIfSameAsAlbumArtists": "यदि एल्बम कलाकारों के समान हो तो ट्रैक के कलाकारों को छिपाएं",
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
-  "showArtistsTopTracks": "कलाकार दृश्य में शीर्ष ट्रैक दिखाएं",
-  "@showArtistsTopTracks": {},
   "disableGestureSubtitle": "जेस्चर को बंद करें या नहीं।",
   "@disableGestureSubtitle": {},
   "showFastScroller": "फास्ट स्क्रॉलर दिखाएं",
@@ -1056,16 +1052,6 @@
   "@viewLogs": {
     "description": "Label for button shown during the login process that allows the user to view the app logs"
   },
-  "startupError": "शुरुआत के दौरान कुछ गड़बड़ी हुई। गड़बड़ थी: {error}\n\nकृपया स्क्रीनशॉट के साथ github.com/UnicornsOnLSD/finamp पर यह मुद्दा बनाएं। अगर यह समस्या बनी रहती है तो अपना ऐप डाटा साफ़ कर ऐप को रीसेट करें।",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "serverUrlInfoButtonTooltip": "सर्वर URL मदद",
   "@serverUrlInfoButtonTooltip": {
     "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
@@ -1148,8 +1134,8 @@
   "@playbackSpeedControlSettingSubtitle": {
     "description": "Subtitle for the playback speed visibility setting"
   },
-  "playlistNameUpdated": "प्लेलिस्ट का नाम बदला गया।",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "प्लेलिस्ट का नाम बदला गया।",
+  "@playlistUpdated": {},
   "savedQueue": "सहेजी गई कतार",
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"

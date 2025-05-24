@@ -183,6 +183,10 @@
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
+  "allLibraries": "All Libraries",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
   "unknownName": "Unknown Name",
   "@unknownName": {},
   "tracks": "Tracks",
@@ -195,6 +199,10 @@
   "@artists": {},
   "genres": "Genres",
   "@genres": {},
+  "noGenres": "No Genres",
+  "@noGenres": {
+    "description": "Gets shown when there are no genres available for an album or artist"
+  },
   "playlists": "Playlists",
   "@playlists": {},
   "startMix": "Start Mix",
@@ -215,8 +223,10 @@
   "@music": {},
   "clear": "Clear",
   "@clear": {},
-  "favourites": "Favourites",
-  "@favourites": {},
+  "favorite": "Favorite",
+  "@favorite": {},
+  "favorites": "Favorites",
+  "@favorites": {},
   "shuffleAll": "Shuffle all",
   "@shuffleAll": {},
   "downloads": "Downloads",
@@ -225,6 +235,8 @@
   "@settings": {},
   "offlineMode": "Offline Mode",
   "@offlineMode": {},
+  "onlineMode": "Online Mode",
+  "@onlineMode": {},
   "sortOrder": "Sort order",
   "@sortOrder": {},
   "sortBy": "Sort by",
@@ -241,6 +253,8 @@
   "@performingArtists": {},
   "artist": "Artist",
   "@artist": {},
+  "performingArtist": "Performing Artist",
+  "@performingArtist": {},
   "budget": "Budget",
   "@budget": {},
   "communityRating": "Community Rating",
@@ -249,11 +263,11 @@
   "@criticRating": {},
   "dateAdded": "Date Added",
   "@dateAdded": {},
-  "datePlayed": "Date Played",
+  "datePlayed": "Date Last Played",
   "@datePlayed": {},
   "playCount": "Play Count",
   "@playCount": {},
-  "premiereDate": "Premiere Date",
+  "premiereDate": "Release Date",
   "@premiereDate": {},
   "productionYear": "Production Year",
   "@productionYear": {},
@@ -263,8 +277,22 @@
   "@random": {},
   "revenue": "Revenue",
   "@revenue": {},
-  "runtime": "Runtime",
-  "@runtime": {},
+  "duration": "Duration",
+  "@duration": {},
+  "formattedRelativeTime": "{type, select, just_now{just now} minutes{{value} min ago} hours{{value} h ago} yesterday{yesterday} days{{value, plural, =1{1 day ago} other{{value} days ago}}} other{value}}",
+  "@formattedRelativeTime": {
+    "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
+    "placeholders": {
+      "type": {
+        "type": "String",
+        "description": "The category of time passed: one of 'just_now', 'minutes', 'hours', 'yesterday', or 'days'."
+      },
+      "value": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
   "syncDownloadedPlaylists": "Sync downloaded playlists",
   "@syncDownloadedPlaylists": {},
   "downloadMissingImages": "Download missing images",
@@ -429,10 +457,8 @@
   "@required": {},
   "updateButtonLabel": "Update",
   "@updateButtonLabel": {},
-  "playlistNameUpdated": "Playlist name updated.",
-  "@playlistNameUpdated": {},
-  "favourite": "Favourite",
-  "@favourite": {},
+  "playlistUpdated": "Playlist updated.",
+  "@playlistUpdated": {},
   "downloadsDeleted": "Downloads deleted.",
   "@downloadsDeleted": {},
   "addDownloads": "Add Downloads",
@@ -478,6 +504,8 @@
   "@interactions": {},
   "layoutAndTheme": "Layout & Theme",
   "@layoutAndTheme": {},
+  "notAvailable": "Not available",
+  "@notAvailable": {},
   "notAvailableInOfflineMode": "Not available in offline mode",
   "@notAvailableInOfflineMode": {},
   "logOut": "Log Out",
@@ -624,10 +652,14 @@
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Whether to show track artists on the album screen if not differing from album artists.",
   "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "showArtistsTopTracks": "Show top tracks in artist view",
-  "@showArtistsTopTracks": {},
-  "showArtistsTopTracksSubtitle": "Whether to show the top 5 most listened to tracks of an artist.",
-  "@showArtistsTopTracksSubtitle": {},
+  "autoSwitchItemCurationTypeTitle": "Auto-Switch Item Curation Type",
+  "@autoSwitchItemCurationTypeTitle": {},
+  "autoSwitchItemCurationTypeSubtitle": "When enabled, Item Sections on the Artist and Genre Screens automatically switch to a different curation type if no items are available (e.g., no favorites for a specific artist).",
+  "@autoSwitchItemCurationTypeSubtitle": {},
+  "showArtistsTracksSection": "Show Tracks Section",
+  "@showArtistsTracksSection": {},
+  "showArtistsTracksSectionSubtitle": "Whether to show a section with up to five tracks. When enabled, you can choose between Most Played, Favorite, Random, Latest Releases, Recently Added and Recently Played Tracks.",
+  "@showArtistsTracksSectionSubtitle": {},
   "disableGesture": "Disable gestures",
   "@disableGesture": {},
   "disableGestureSubtitle": "Whether to disables gestures.",
@@ -783,10 +815,10 @@
   "@goToArtist": {},
   "goToGenre": "Go to Genre",
   "@goToGenre": {},
-  "removeFavourite": "Remove Favourite",
-  "@removeFavourite": {},
-  "addFavourite": "Add Favourite",
-  "@addFavourite": {},
+  "removeFavorite": "Remove Favorite",
+  "@removeFavorite": {},
+  "addFavorite": "Add Favorite",
+  "@addFavorite": {},
   "confirmFavoriteAdded": "Added Favorite",
   "@confirmFavoriteAdded": {},
   "confirmFavoriteRemoved": "Removed Favorite",
@@ -1167,6 +1199,118 @@
   },
   "topTracks": "Top Tracks",
   "@topTracks": {},
+  "topAlbums": "Top Albums",
+  "@topAlbums": {},
+  "topArtists": "Top Artists",
+  "@topArtists": {},
+  "newTracks": "New Tracks",
+  "@newTracks": {},
+  "newAlbums": "New Albums",
+  "@newAlbums": {},
+  "newArtists": "New Artists",
+  "@newArtists": {},
+  "latestTracks": "Latest Tracks",
+  "@latestTracks": {},
+  "latestAlbums": "Latest Albums",
+  "@latestAlbums": {},
+  "latestArtists": "Latest Artists",
+  "@latestArtists": {},
+  "recentlyPlayedTracks": "Recently Played Tracks",
+  "@recentlyPlayedTracks": {},
+  "recentlyPlayedAlbums": "Recently Played Albums",
+  "@recentlyPlayedAlbums": {},
+  "recentlyPlayedArtists": "Recently Played Artists",
+  "@recentlyPlayedArtists": {},
+  "favoriteTracks": "Favorite Tracks",
+  "@favoriteTracks": {},
+  "favoriteAlbums": "Favorite Albums",
+  "@favoriteAlbums": {},
+  "favoriteArtists": "Favorite Artists",
+  "@favoriteArtists": {},
+  "randomTracks": "Tracks (Random Picks)",
+  "@randomTracks": {},
+  "randomAlbums": "Albums (Random Picks)",
+  "@randomAlbums": {},
+  "randomArtists": "Artists (Random Picks)",
+  "@randomArtists": {},
+  "mostPlayed": "Most Played",
+  "@mostPlayed": {},
+  "randomFavoritesFirst": "Random (Favorites First)",
+  "@randomFavoritesFirst": {},
+  "recentlyAdded": "Recently Added",
+  "@recentlyAdded": {},
+  "recentlyPlayed": "Recently Played",
+  "@recentlyPlayed": {},
+  "latestReleases": "Latest Releases",
+  "@latestReleases": {},
+  "itemSectionsOrder": "Item Sections Order",
+  "@itemSectionsOrder": {
+    "description": "Label for the setting that controls the order of item sections on the screens."
+  },
+  "unknown": "Unknown",
+  "@unknown": {},
+  "itemSectionsOrderSubtitle": "Controls the order of Item Sections.",
+  "@itemSectionsOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections on the screens."
+  },
+  "genreItemSectionFilterChipOrderTitle": "Item Sections Filter Order",
+  "@genreItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of item sections filter chips."
+  },
+  "genreItemSectionFilterChipOrderSubtitle": "Controls the order of available filters for item sections.",
+  "@genreItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections filter chips."
+  },
+  "artistItemSectionFilterChipOrderTitle": "Tracks Section Filter Order",
+  "@artistItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of the tracks sections filter chips."
+  },
+  "artistItemSectionFilterChipOrderSubtitle": "Controls the order of available filters for the tracks section.",
+  "@artistItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of the tracks sections filter chips."
+  },
+  "genreFilterArtistScreens": "Filter Artist Screens",
+  "@genreFilterArtistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreFilterArtistScreensSubtitle": "When enabled, Artist Screens (accessed through a genre) will only show tracks and albums that match the genre you're currently browsing. (It is always possible to manually remove the Genre Filter to reveal all tracks and albums.)",
+  "@genreFilterArtistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreListsInheritSorting": "Full Lists Sorting Inheritance",
+  "@genreListsInheritSorting": {
+    "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "genreListsInheritSortingSubtitle": "When enabled, the \"See All\" lists will inherit the sorting and filtering from the Genre Screen. If disabled, settings from the corresponding library tab will be used instead. Tapping on the Counts on the top of the Genre Screen will always open a full list with the sorting settings from the library tab.",
+  "@genreListsInheritSortingSubtitle": {
+    "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "curatedItemsMostPlayedOfflineTooltip": "Not available in Offline Mode.",
+  "@curatedItemsMostPlayedOfflineTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Offline Mode."
+  },
+  "curatedItemsNotListenedYet": "You haven't listened to any tracks{itemType, select, artistGenreFilter{ by this artist in this genre} artist{ by this artist} genre{ in this genre} other{}}.",
+  "@curatedItemsNotListenedYet": {
+    "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "curatedItemsNoFavorites": "You don't have any favorites{itemType, select, artistGenreFilter{ for this artist in this genre} artist{ for this artist} genre{ for this genre} other{}}.",
+  "@curatedItemsNoFavorites": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
   "@albumCount": {
     "placeholders": {
@@ -1468,6 +1612,10 @@
     },
     "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
   },
+  "downloadButtonDisabledGenreFilterTooltip": "Please remove the genre filter to enable the download actions for this artist.",
+    "@downloadButtonDisabledGenreFilterTooltip": {
+    "description": "Tooltip shown when a download button is disabled because of an active genre filter on the artist screen."
+  },
   "incidentalDownloadTooltip": "This item is required to be downloaded by {parentName}.",
   "@incidentalDownloadTooltip": {
     "placeholders": {
@@ -1477,7 +1625,7 @@
     },
     "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
   },
-  "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} allPlaylistsMetadata{Playlist Metadata} other{{itemType}} }",
+  "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} allPlaylistsMetadata{Playlist Metadata} collectionWithLibraryFilter{Collection with Library Filter} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
@@ -1950,6 +2098,10 @@
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
+  "seeAll": "See All",
+  "@seeAll": {
+    "description": ""
+  },
   "albumScreen": "Album Screen",
   "@albumScreen": {
     "description": "Name for the view/screen that shows albums"
@@ -1961,6 +2113,30 @@
   "showCoversOnAlbumScreenSubtitle": "Show album covers for each track separately on the album screen.",
   "@showCoversOnAlbumScreenSubtitle": {
     "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "artistScreen": "Artist Screen",
+  "@artistScreen": {
+    "description": "Name for the view/screen that shows artists"
+  },
+  "artistGenreChipsApplyFilterTitle": "Apply Filter Instead of Opening Genre",
+  "@artistGenreChipsApplyFilterTitle": {
+    "description": "Title for the setting that controls if taps on genres should apply a genre filter to the ArtistScreen or should redirect to the GenreScreen."
+  },
+  "artistGenreChipsApplyFilterSubtitle": "If enabled, tapping a genre will filter the artist by that genre. You can still long-press to open the genre instead.",
+  "@artistGenreChipsApplyFilterSubtitle": {
+    "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the ArtistScreen or should redirect to the GenreScreen."
+  },
+  "artistGenreChipsApplyFilterPrompt": "Applied genre filter",
+  "@artistGenreChipsApplyFilterPrompt": {
+    "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "artistGenreChipsApplyFilterPromptButton": "Open Genre",
+  "@artistGenreChipsApplyFilterPromptButton": {
+    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "genreScreen": "Genre Screen",
+  "@genreScreen": {
+    "description": "Name for the view/screen that shows genres"
   },
   "emptyTopTracksList": "You haven't listened to any track by this artist yet.",
   "@emptyTopTracksList": {
@@ -2080,6 +2256,18 @@
   "@releaseDateFormatSubtitle": {
     "description": "Title for the setting that controls the format release dates throughout the app."
   },
+  "noReleaseDate": "No Release Date",
+  "@noReleaseDate": {
+    "description": "Placeholder text if an item has no release date set."
+  },
+  "noDateAdded": "No Date Added",
+  "@noDateAdded": {
+    "description": "Placeholder text if an item has no dateAdded set."
+  },
+  "noDateLastPlayed": "Not played yet",
+  "@noDateLastPlayed": {
+    "description": "Placeholder text if an item has no lastPlayedDate set."
+  },
   "librarySelectError": "Error loading available libraries for user",
   "@librarySelectError": {
     "description": "Error shown when the library select screen fails to load."
@@ -2150,7 +2338,7 @@
     },
     "description": "Label for the type of device in the output menu"
   },
-  "desktopShuffleWarning": "Shuffle is not currently available on desktop.",
+  "desktopShuffleWarning": "Changing shuffle mode is not currently available on desktop.",
   "@desktopShuffleWarning": {
     "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
   },
@@ -2219,7 +2407,7 @@
       }
     }
   },
-  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks} will be removed from the queue because they aren't downloaded.",
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks, plural, =1{1 track} other{{amountUndownloadedTracks} tracks}} will be removed from the queue because they aren't downloaded.",
   "@autoReloadPromptMissingTracks": {
     "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
     "placeholders": {

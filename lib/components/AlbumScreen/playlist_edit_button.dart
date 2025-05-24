@@ -4,7 +4,7 @@ import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import '../../models/jellyfin_models.dart';
-import 'playlist_name_edit_dialog.dart';
+import 'playlist_edit_dialog.dart';
 
 class PlaylistNameEditButton extends StatelessWidget {
   const PlaylistNameEditButton({
@@ -22,7 +22,7 @@ class PlaylistNameEditButton extends StatelessWidget {
           .editItemTitle(BaseItemDtoType.fromItem(playlist).name),
       onPressed: () => showDialog(
         context: context,
-        builder: (context) => PlaylistNameEditDialog(playlist: playlist),
+        builder: (context) => PlaylistEditDialog(playlist: playlist),
       ),
     );
   }

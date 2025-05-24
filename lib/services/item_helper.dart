@@ -44,7 +44,7 @@ Future<List<BaseItemDto>?> loadChildTracks(
           sortBy: sortBy?.jellyfinName(null) ??
               "ParentIndexNumber,IndexNumber,SortName",
           sortOrder: sortOrder?.toString(),
-          // filters: settings.onlyShowFavourites ? "IsFavorite" : null,
+          // filters: settings.onlyShowFavorites ? "IsFavorite" : null,
         );
         break;
       case BaseItemDtoType.artist:
@@ -56,7 +56,7 @@ Future<List<BaseItemDto>?> loadChildTracks(
           ].join(","),
           sortBy: sortBy?.jellyfinName(null) ?? SortBy.album.jellyfinName(null),
           sortOrder: sortOrder?.toString(),
-          // filters: settings.onlyShowFavourites ? "IsFavorite" : null,
+          // filters: settings.onlyShowFavorites ? "IsFavorite" : null,
         );
         break;
       default:
@@ -68,7 +68,7 @@ Future<List<BaseItemDto>?> loadChildTracks(
           sortBy: sortBy?.jellyfinName(null) ??
               "ParentIndexNumber,IndexNumber,SortName",
           sortOrder: sortOrder?.toString(),
-          // filters: settings.onlyShowFavourites ? "IsFavorite" : null,
+          // filters: settings.onlyShowFavorites ? "IsFavorite" : null,
         );
     }
   }

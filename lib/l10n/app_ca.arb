@@ -9,16 +9,6 @@
   "@addedToQueue": {},
   "addToMix": "Afegir a la barreja",
   "@addToMix": {},
-  "startupError": "S'ha produït un error durant l'inici de l'aplicació. L'error es: {error}\n\nCreeu un problema a github.com/UnicornsOnLSD/finamp amb una captura de pantalla d'aquesta pàgina. Si aquest problema persisteix, podeu esborrar les dades de l'aplicació per restablir-la.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "queue": "Cua",
   "@queue": {},
   "replaceQueue": "Substitueix la cua",
@@ -447,10 +437,6 @@
   },
   "hideTrackArtistsIfSameAsAlbumArtists": "Amaga els artistes de la cançó si són els mateixos que els de l'àlbum",
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
-  "showArtistsTopTracks": "Mostra les cançons que estan al top en la vista d'artistes",
-  "@showArtistsTopTracks": {},
-  "showArtistsTopTracksSubtitle": "Mostrar el top 5 més sentit en les cançons d'un artista.",
-  "@showArtistsTopTracksSubtitle": {},
   "showFastScroller": "Mostrar el desplaçament ràpid",
   "@showFastScroller": {},
   "theme": "Tema",
@@ -535,8 +521,8 @@
   },
   "editPlaylistNameTitle": "Edita el nom de la llista de reproducció",
   "@editPlaylistNameTitle": {},
-  "playlistNameUpdated": "Nom de la llista de reproducció actualitzat.",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "Nom de la llista de reproducció actualitzat.",
+  "@playlistUpdated": {},
   "favourite": "Preferit",
   "@favourite": {},
   "location": "Localització",

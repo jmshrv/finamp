@@ -3,11 +3,10 @@ import 'package:finamp/menus/playlist_menu.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/menus/components/overflow_menu_button.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
@@ -17,8 +16,8 @@ import '../album_image.dart';
 import 'item_info.dart';
 
 enum AlbumMenuItems {
-  addFavourite,
-  removeFavourite,
+  addFavorite,
+  removeFavorite,
   addToMixList,
   removeFromMixList,
   playNext,
@@ -235,7 +234,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   children: [
                     SizedBox(
                       height: 125,
-                      child: AlbumImage(item: parentItem),
+                      child: AlbumImage(item: parentItem, tapToZoom: true),
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 4),

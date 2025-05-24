@@ -129,8 +129,8 @@
   "@editPlaylistNameTitle": {},
   "editPlaylistNameTooltip": "Muokkaa soittolistan nimeä",
   "@editPlaylistNameTooltip": {},
-  "playlistNameUpdated": "Soittolistan nimi päivitetty.",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "Soittolistan nimi päivitetty.",
+  "@playlistUpdated": {},
   "favourite": "Suosikki",
   "@favourite": {},
   "addDownloads": "Lisää lataukset",
@@ -366,16 +366,6 @@
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPauseSubtitle": "Sallii ilmoituksen pyyhkäisemisen pois, kun toisto on pysäytetty. Antaa myös Androidin lopettaa palvelun, kun toisto on keskeytetty.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "startupError": "Jokin meni pieleen sovelluksen käynnistyksen aikana. Virhe oli: {error}\n\nOle hyvä ja luo virheilmoitus osoitteessa github.com/UnicornsOnLSD/finamp. Liitä oheen kuvakaappaus tästä sivusta. Mikäli ongelma jatkuu, voit tyhjentää sovelluksen datan nollataksesi sovelluksen.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "internalExternalIpExplanation": "Jos haluat saada etäyhteyden Jellyfin-palvelimellesi, sinun on käytettävä ulkoista IP-osoitettasi.\n\nJos palvelimesi on HTTP-oletusportissa (80 tai 443) tai Jellyfinin oletusportissa (8096), sinun ei tarvitse määrittää porttia.\n\nJos URL-osoite on syötetty oikein, syöttökentän alla pitäisi näkyä tietoja palvelimestasi.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
@@ -634,10 +624,6 @@
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopTracks": "Näytä suosituimmat kappaleet artistinäkymässä",
-  "@showArtistsTopTracks": {},
-  "showArtistsTopTracksSubtitle": "Näytetäänkö artistin viisi kuunneltuinta kappaletta.",
-  "@showArtistsTopTracksSubtitle": {},
   "playerScreen": "Musiikkisoitin",
   "@playerScreen": {
     "description": "Name for the expanded player"
@@ -748,7 +734,7 @@
   "@yourLikes": {
     "description": "Title for the queue source when the user is playing their liked tracks"
   },
-  "playingFromType": "Toistetaan lähteestä {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "playingFromType": "Toistetaan lähteestä {source, select, album{Albumi} playlist{Soittolista} trackMix{Kappalemix} artistMix{Artistimix} albumMix{Albumimix} genreMix{Genre Mix} favorites{Suosikit} allTracks{Kaikki raidat} filteredList{Kappaleet} genre{Genre} artist{Artisti} track{Raita} nextUpAlbum{Seuraavaksi-Albumi} nextUpPlaylist{ Seuraavaksi-Soittolista} nextUpArtist{Seuraavaksi-Artisti} remoteClient{Etäohjauslaite} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1172,7 +1158,7 @@
   "@sampleRate": {
     "description": "Label for the feature chips showing the sample rate of a track"
   },
-  "keepScreenOnWhilePluggedInSubtitle": "Ohita Pidä Näyttö Päällä asetus jos laite on irroitettu latauksesta",
+  "keepScreenOnWhilePluggedInSubtitle": "Ohita pidä näyttö päällä-asetus, jos laite on irroitettu latauksesta",
   "@keepScreenOnWhilePluggedInSubtitle": {},
   "resetSettingsPromptGlobalConfirm": "Nollaa KAIKKI asetukset",
   "@resetSettingsPromptGlobalConfirm": {
@@ -1437,7 +1423,7 @@
   "@reportQueueToServer": {
     "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "reportQueueToServerSubtitle": "Kun valittu, Finamp lähettää nykyisen jonon palvelimelle. Tällä hetkellä asetukselle on vähän käyttöä ja se nostaa verkon käyttöä.",
+  "reportQueueToServerSubtitle": "Kun valittu, Finamp lähettää nykyisen jonon palvelimelle. Tämä voi parantaa kauko-ohjausta ja sallii jonon palauttamisen palvelimen puolella. Aina päällä, kun 'Toista laitteella'-ominaisuus on käytössä.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1679,7 +1665,7 @@
   "@downloadBitrate": {
     "description": "Title for Download Bitrate settings slider"
   },
-  "downloadBitrateSubtitle": "Korkeampi bittinopeus tarjoaa paremman laadun ääntä suuremman tiedostokoon kustannuksella.",
+  "downloadBitrateSubtitle": "Korkeampi bittinopeus tarjoaa paremman äänenlaadun, mutta vie enemmän tallennustilaa.",
   "@downloadBitrateSubtitle": {
     "description": "subtitle for Download Bitrate settings slider"
   },
@@ -2026,5 +2012,92 @@
   "desktopShuffleWarning": "Sekoitus ei ole tällä hetkellä saatavilla sovelluksen työpöytäversiossa.",
   "@desktopShuffleWarning": {
     "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
+  },
+  "playbackReporting": "Toiston raportointi",
+  "@playbackReporting": {},
+  "currentVolumeFeatureText": "{volume}% äänenvoimakkuus",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
+      }
+    }
+  },
+  "enablePlayonTitle": "Kytke 'Toista laitteella'-tuki päälle",
+  "@enablePlayonTitle": {
+    "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "enablePlayonSubtitle": "Kytkee Jellyfinin 'Toista laitteella'-ominaisuuden päälle. (Finampin etäohjaus toisella laitteella). Poista käytöstä, jos käänteinen välityspalvelin tai palvelin ei tue WebSocketteja.",
+  "@enablePlayonSubtitle": {
+    "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "playOnReconnectionDelay": "'Toista laitteella'-istunnon uudelleenyhdistämisen viive",
+  "@playOnReconnectionDelay": {
+    "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "playbackReportingSettingsTitle": "Toiston raportointi & Toista laitteella",
+  "@playbackReportingSettingsTitle": {
+    "description": "Title for the playback reporting settings screen"
+  },
+  "lyricsScreenButtonTitle": "Lyriikat",
+  "@lyricsScreenButtonTitle": {
+    "description": "Label for the button for opening the lyrics screen"
+  },
+  "outputMenuDevicesSectionTitle": "Saatavilla olevat laitteet",
+  "@outputMenuDevicesSectionTitle": {
+    "description": "Title for the available devices section in the output menu"
+  },
+  "outputMenuOpenConnectionSettingsButtonTitle": "Yhdistä laitteeseen",
+  "@outputMenuOpenConnectionSettingsButtonTitle": {
+    "description": "Button title for connecting to a device from the output menu"
+  },
+  "deviceType": "{type, select, speaker{Laitteen kaiutin} tv{TV} bluetooth{Bluetooth} other{Tuntematon}}",
+  "@deviceType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    },
+    "description": "Label for the type of device in the output menu"
+  },
+  "outputMenuVolumeSectionTitle": "Äänenvoimakkuus",
+  "@outputMenuVolumeSectionTitle": {
+    "description": "Title for the volume section in the output menu"
+  },
+  "outputMenuTitle": "Vaihda äänen ulostuloa",
+  "@outputMenuTitle": {
+    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  },
+  "playOnStaleDelay": "'Toista laitteella'-istunnon aikakatkaisu",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "playOnStaleDelaySubtitle": "Kuinka kauan 'Toista laitteella'-istunto katsotaan aktiiviseksi komennon vastaanottamisen jälkeen. Aktiivisessa tilassa toisto raportoidaan useammin, mikä voi johtaa suurempaan kaistan käyttöön.",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "playOnReconnectionDelaySubtitle": "Säätää uudelleenyhdistämisyritysten välistä viivettä (sekunneissa), kun yhteys 'Toista laitteella'- websocketiin katkeaa. Matalampi viive lisää kaistan käyttöä.",
+  "@playOnReconnectionDelaySubtitle": {
+    "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "outputMenuButtonTitle": "Ulostulo",
+  "@outputMenuButtonTitle": {
+    "description": "Button title for opening the output menu/panel"
+  },
+  "startupErrorTitle": "Jokin meni pieleen sovelluksen käynnistyksessä!\nPahoittelut siitä..",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "exportLogs": "Tallenna lokit",
+  "@exportLogs": {},
+  "startupErrorCallToAction": "Ole hyvä ja luo tiketti osoitteessa github.com/jmshrv/finamp , ja liitä mukaan lokitiedot(!) (Käytä nappia alla) Liitä myös näyttökuva tästä sivusta, jotta voimme korjata vian mahdollisimman nopeasti.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "startupErrorWorkaround": "Tilapäiskorjauksena voit yrittää tyhjentää sovelluksen datan nollataksesi sovelluksen. Ota huomioon, että tämä poistaa kaikki asetukset ja ladatut tiedostot.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
   }
 }

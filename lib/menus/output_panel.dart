@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:collection/collection.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_list.dart';
 import 'package:finamp/menus/playlist_actions_menu.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
-import 'package:finamp/components/album_image.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -42,7 +40,7 @@ Future<void> showOutputMenu({
 
   await showThemedBottomSheet(
       context: context,
-      item: (await queueService.getCurrentTrack()?.baseItem)!, //TODO fix this
+      item: (queueService.getCurrentTrack()?.baseItem)!, //TODO fix this
       routeName: outputMenuRouteName,
       minDraggableHeight: 0.2,
       buildSlivers: (context) {
@@ -95,7 +93,9 @@ Future<void> showOutputMenu({
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 1000),
+                          duration: MediaQuery.of(context).disableAnimations
+                              ? Duration.zero
+                              : const Duration(milliseconds: 1000),
                           switchOutCurve: const Threshold(0.0),
                           child: Consumer(builder: (context, ref, child) {
                             return AirPlayRoutePickerView(

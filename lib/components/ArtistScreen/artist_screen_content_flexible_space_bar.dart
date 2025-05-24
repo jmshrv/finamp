@@ -1,14 +1,16 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:finamp/menus/artist_menu.dart';
 import 'package:finamp/menus/components/overflow_menu_button.dart';
 import 'package:finamp/menus/genre_menu.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
@@ -34,15 +36,17 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
   const ArtistScreenContentFlexibleSpaceBar({
     super.key,
     required this.parentItem,
-    required this.isGenre,
     required this.allTracks,
     required this.albumCount,
+    this.genreFilter,
+    this.updateGenreFilter,
   });
 
   final BaseItemDto parentItem;
-  final bool isGenre;
   final Future<List<BaseItemDto>?> allTracks;
   final int albumCount;
+  final BaseItemDto? genreFilter;
+  final void Function(BaseItemDto?)? updateGenreFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +57,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.startPlayback(
         items: items,
         source: QueueItemSource(
-          type:
-              isGenre ? QueueItemSourceType.genre : QueueItemSourceType.artist,
+          type: QueueItemSourceType.artist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
               pretranslatedName: parentItem.name ??
@@ -70,8 +73,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.startPlayback(
         items: items,
         source: QueueItemSource(
-          type:
-              isGenre ? QueueItemSourceType.genre : QueueItemSourceType.artist,
+          type: QueueItemSourceType.artist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
               pretranslatedName: parentItem.name ??
@@ -88,9 +90,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.addNext(
         items: shuffled,
         source: QueueItemSource(
-          type: isGenre
-              ? QueueItemSourceType.genre
-              : QueueItemSourceType.nextUpArtist,
+          type: QueueItemSourceType.nextUpArtist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
               pretranslatedName: parentItem.name ??
@@ -109,9 +109,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.addNext(
         items: shuffled,
         source: QueueItemSource(
-          type: isGenre
-              ? QueueItemSourceType.genre
-              : QueueItemSourceType.nextUpArtist,
+          type: QueueItemSourceType.nextUpArtist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
               pretranslatedName: parentItem.name ??
@@ -130,8 +128,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.addNext(
         items: shuffled,
         source: QueueItemSource(
-          type:
-              isGenre ? QueueItemSourceType.genre : QueueItemSourceType.artist,
+          type: QueueItemSourceType.artist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
               pretranslatedName: parentItem.name ??
@@ -149,9 +146,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.addNext(
           items: items,
           source: QueueItemSource(
-            type: isGenre
-                ? QueueItemSourceType.nextUpPlaylist
-                : QueueItemSourceType.nextUpArtist,
+            type: QueueItemSourceType.nextUpArtist,
             name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
                 pretranslatedName: parentItem.name ??
@@ -160,8 +155,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
             item: parentItem,
           ));
       GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!
-              .confirmPlayNext(isGenre ? "genre" : "artist"),
+          (scaffold) =>
+              AppLocalizations.of(scaffold)!.confirmPlayNext("artist"),
           isConfirmation: true);
     }
 
@@ -169,9 +164,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.addToNextUp(
           items: items,
           source: QueueItemSource(
-            type: isGenre
-                ? QueueItemSourceType.nextUpPlaylist
-                : QueueItemSourceType.nextUpArtist,
+            type: QueueItemSourceType.nextUpArtist,
             name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
                 pretranslatedName: parentItem.name ??
@@ -180,8 +173,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
             item: parentItem,
           ));
       GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!
-              .confirmAddToNextUp(isGenre ? "genre" : "artist"),
+          (scaffold) =>
+              AppLocalizations.of(scaffold)!.confirmAddToNextUp("artist"),
           isConfirmation: true);
     }
 
@@ -189,9 +182,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.addToQueue(
           items: items,
           source: QueueItemSource(
-            type: isGenre
-                ? QueueItemSourceType.nextUpPlaylist
-                : QueueItemSourceType.artist,
+            type: QueueItemSourceType.artist,
             name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
                 pretranslatedName: parentItem.name ??
@@ -200,8 +191,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
             item: parentItem,
           ));
       GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!
-              .confirmAddToQueue(isGenre ? "genre" : "artist"),
+          (scaffold) =>
+              AppLocalizations.of(scaffold)!.confirmAddToQueue("artist"),
           isConfirmation: true);
     }
 
@@ -215,8 +206,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.startPlayback(
         items: tracks,
         source: QueueItemSource(
-          type:
-              isGenre ? QueueItemSourceType.genre : QueueItemSourceType.artist,
+          type: QueueItemSourceType.artist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
               pretranslatedName: parentItem.name ??
@@ -238,9 +228,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.addNext(
         items: tracks,
         source: QueueItemSource(
-          type: isGenre
-              ? QueueItemSourceType.genre
-              : QueueItemSourceType.nextUpArtist,
+          type: QueueItemSourceType.nextUpArtist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
               pretranslatedName: parentItem.name ??
@@ -264,9 +252,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.addToNextUp(
         items: tracks,
         source: QueueItemSource(
-          type: isGenre
-              ? QueueItemSourceType.genre
-              : QueueItemSourceType.nextUpArtist,
+          type: QueueItemSourceType.nextUpArtist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
               pretranslatedName: parentItem.name ??
@@ -290,8 +276,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
       queueService.addToQueue(
         items: tracks,
         source: QueueItemSource(
-          type:
-              isGenre ? QueueItemSourceType.genre : QueueItemSourceType.artist,
+          type: QueueItemSourceType.artist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
               pretranslatedName: parentItem.name ??
@@ -318,7 +303,10 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                   children: [
                     SizedBox(
                       height: 125,
-                      child: AlbumImage(item: parentItem),
+                      child: AlbumImage(
+                        item: parentItem,
+                        tapToZoom: true,
+                      ),
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 4),
@@ -331,49 +319,47 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                           item: parentItem,
                           itemTracks: snapshot.data?.length ?? 0,
                           itemAlbums: albumCount,
+                          genreFilter: genreFilter,
+                          updateGenreFilter: updateGenreFilter,
                         ),
                       ),
                     )
                   ],
                 ),
-                // We don't want to add a whole genre to the queue
-                if (!isGenre)
-                  SingleChildScrollView(
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: Wrap(
-                        spacing: 8.0,
-                        alignment: WrapAlignment.spaceEvenly,
-                        children: [
-                          CTAMedium(
-                            text: AppLocalizations.of(context)!.playButtonLabel,
-                            icon: TablerIcons.player_play,
-                            onPressed: () => allTracks.then(
-                                (items) => playAllFromArtist(items ?? [])),
-                            // set the minimum width as 25% of the screen width,
-                            minWidth: MediaQuery.of(context).size.width * 0.25,
-                          ),
-                          CTAMedium(
-                            text: AppLocalizations.of(context)!
-                                .shuffleButtonLabel,
-                            icon: TablerIcons.arrows_shuffle,
-                            onPressed: () => allTracks.then(
-                                (items) => shuffleAllFromArtist(items ?? [])),
-                            // set the minimum width as 25% of the screen width,
-                            minWidth: MediaQuery.of(context).size.width * 0.25,
-                          ),
-                          OverflowMenuButton(
-                            onPressed: () => isGenre
-                                ? showModalGenreMenu(
-                                    context: context, baseItem: parentItem)
-                                : showModalArtistMenu(
-                                    context: context, baseItem: parentItem),
-                            label:
-                                AppLocalizations.of(context)!.menuButtonLabel,
-                          ),
-                        ]),
-                  )
+                      spacing: 8.0,
+                      alignment: WrapAlignment.spaceEvenly,
+                      children: [
+                        CTAMedium(
+                          text: AppLocalizations.of(context)!.playButtonLabel,
+                          icon: TablerIcons.player_play,
+                          onPressed: () => allTracks
+                              .then((items) => playAllFromArtist(items ?? [])),
+                          // set the minimum width as 25% of the screen width,
+                          minWidth: MediaQuery.of(context).size.width * 0.25,
+                        ),
+                        CTAMedium(
+                          text:
+                              AppLocalizations.of(context)!.shuffleButtonLabel,
+                          icon: TablerIcons.arrows_shuffle,
+                          onPressed: () => allTracks.then(
+                              (items) => shuffleAllFromArtist(items ?? [])),
+                          // set the minimum width as 25% of the screen width,
+                          minWidth: MediaQuery.of(context).size.width * 0.25,
+                        ),
+                        OverflowMenuButton(
+                          onPressed: () => showModalArtistMenu(
+                              context: context, baseItem: parentItem),
+                          label: AppLocalizations.of(context)!.menuButtonLabel,
+                        ),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
           ),

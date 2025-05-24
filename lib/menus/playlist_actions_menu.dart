@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:finamp/menus/components/menuEntries/menu_item_info_header.dart';
+import 'package:finamp/menus/components/menu_item_info_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -48,7 +48,7 @@ Future<void> showPlaylistActionsMenu({
             builder: (context, ref, child) {
               bool isFavorite = ref.watch(isFavoriteProvider(item));
               return ToggleableListTile(
-                title: AppLocalizations.of(context)!.favourites,
+                title: AppLocalizations.of(context)!.favorites,
                 leading: AspectRatio(
                   aspectRatio: 1.0,
                   child: DecoratedBox(

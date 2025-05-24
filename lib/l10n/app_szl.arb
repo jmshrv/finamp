@@ -50,8 +50,8 @@
   "@required": {},
   "updateButtonLabel": "SPAMIYNTEJ",
   "@updateButtonLabel": {},
-  "playlistNameUpdated": "Miano ôd playlisty spamiyntane.",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "Miano ôd playlisty spamiyntane.",
+  "@playlistUpdated": {},
   "favourite": "Ôblubiōny",
   "@favourite": {},
   "downloadsDeleted": "Pobrane skasowane.",
@@ -360,16 +360,6 @@
   "@newPlaylist": {},
   "replaceQueue": "Zastōmp raja",
   "@replaceQueue": {},
-  "startupError": "Coś poszło źle przi ôtwiyraniu aplikacyje. Feler to: {error}\n\nZgłoś to na github.com/UnicornsOnLSD/finamp ze zopisym ekranu tyj strōny. Jeźli ta strōna niy przestowo sie pokazować, to wymaż dane aplikacyje, żeby ja zresetować.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "addToQueue": "Dodej do raje",
   "@addToQueue": {},
   "goToAlbum": "Idź do albumu",

@@ -216,8 +216,8 @@
   "@required": {},
   "updateButtonLabel": "Atualizar",
   "@updateButtonLabel": {},
-  "playlistNameUpdated": "Nome da lista de reprodução atualizado.",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "Nome da lista de reprodução atualizado.",
+  "@playlistUpdated": {},
   "favourite": "Favorito",
   "@favourite": {},
   "downloadsDeleted": "Transferências eliminadas.",
@@ -430,16 +430,6 @@
   "@disableGesture": {},
   "disableGestureSubtitle": "Se deseja desativar gestos.",
   "@disableGestureSubtitle": {},
-  "startupError": "Ocorreu um erro durante o arranque da aplicação. O erro foi:{error}\n\nPor favor, abra um \"Issue\" em github.com/UnicornsOnLSD/finamp que contenha uma captura deste ecrã. Caso o problema persista, tente limpar os dados da aplicação para a repor para o estado original.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "refresh": "Atualizar",
   "@refresh": {},
   "noMusicLibrariesBody": "O Finamp não encontrou nenhuma biblioteca de musica. Certifica-te que o teu servidor Jellyfin tem pelo menos uma biblioteca com o tipo de conteúdo definido como “Música”.",
@@ -823,10 +813,6 @@
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopTracks": "Mostrar faixas principais na vista do artista",
-  "@showArtistsTopTracks": {},
-  "showArtistsTopTracksSubtitle": "Indica se deve mostrar as 5 faixas mais ouvidas de um artista.",
-  "@showArtistsTopTracksSubtitle": {},
   "playerScreen": "Tela de Reprodução",
   "@playerScreen": {
     "description": "Name for the expanded player"
