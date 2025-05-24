@@ -60,6 +60,12 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
   Widget build(BuildContext context) {
     final downloadStub = DownloadStub.fromItem(
         type: DownloadItemType.collection, item: widget.parent);
+    final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
+    SortBy playlistSortBySetting = ref.watch(finampSettingsProvider.playlistTracksSortBy);
+    final playlistSortBy = (isOffline && 
+        (playlistSortBySetting == SortBy.datePlayed || playlistSortBySetting == SortBy.playCount))
+      ? SortBy.serverOrder
+      : playlistSortBySetting;
 
     void onDelete(BaseItemDto item) {
       // This is pretty inefficient (has to search through whole list) but
@@ -189,15 +195,15 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                 parent: widget.parent,
                 onRemoveFromList: onDelete,
                 showDateAdded: (widget.parent.type == "Playlist" &&
-                    widget.playlistSortBy == SortBy.dateCreated),
+                    playlistSortBy == SortBy.dateCreated),
                 showPlayCount: (widget.parent.type == "Playlist" &&
-                    widget.playlistSortBy == SortBy.playCount),
+                    playlistSortBy == SortBy.playCount),
                 showDateLastPlayed: (widget.parent.type == "Playlist" &&
-                    widget.playlistSortBy == SortBy.datePlayed),
+                    playlistSortBy == SortBy.datePlayed),
                 showReleaseDate: (widget.parent.type == "Playlist" &&
-                    widget.playlistSortBy == SortBy.premiereDate),
+                    playlistSortBy == SortBy.premiereDate),
                 forceAlbumArtists: (widget.parent.type == "Playlist" &&
-                    widget.playlistSortBy == SortBy.albumArtist),
+                    playlistSortBy == SortBy.albumArtist),
               ),
             )
         else if (widget.displayChildren.isNotEmpty)
@@ -207,15 +213,15 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             parent: widget.parent,
             onRemoveFromList: onDelete,
             showDateAdded: (widget.parent.type == "Playlist" &&
-                widget.playlistSortBy == SortBy.dateCreated),
+                playlistSortBy == SortBy.dateCreated),
             showPlayCount: (widget.parent.type == "Playlist" &&
-                widget.playlistSortBy == SortBy.playCount),
+                playlistSortBy == SortBy.playCount),
             showDateLastPlayed: (widget.parent.type == "Playlist" &&
-                widget.playlistSortBy == SortBy.datePlayed),
+                playlistSortBy == SortBy.datePlayed),
             showReleaseDate: (widget.parent.type == "Playlist" &&
-                widget.playlistSortBy == SortBy.premiereDate),
+                playlistSortBy == SortBy.premiereDate),
             forceAlbumArtists: (widget.parent.type == "Playlist" &&
-                widget.playlistSortBy == SortBy.albumArtist),
+                playlistSortBy == SortBy.albumArtist),
           )
       ],
     );
