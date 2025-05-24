@@ -209,7 +209,7 @@ class DefaultSettings {
   static const genreFilterArtistScreens = true;
   static const genreListsInheritSorting = true;
   static const genreItemSectionFilterChipOrder = CuratedItemSelectionType.values;
-  static const artistGenreChipsApplyFilter = false;
+  static const applyFilterOnGenreChipTap = false;
   static const artistCuratedItemSelectionType = CuratedItemSelectionType.mostPlayed;
   static const artistItemSectionFilterChipOrder = CuratedItemSelectionType.values;
   static const artistItemSectionsOrder = ArtistItemSections.values;
@@ -346,7 +346,7 @@ class FinampSettings {
     this.genreFilterArtistScreens = DefaultSettings.genreFilterArtistScreens,
     this.genreListsInheritSorting = DefaultSettings.genreListsInheritSorting,
     this.genreItemSectionFilterChipOrder = DefaultSettings.genreItemSectionFilterChipOrder,
-    this.artistGenreChipsApplyFilter = DefaultSettings.artistGenreChipsApplyFilter,
+    this.applyFilterOnGenreChipTap = DefaultSettings.applyFilterOnGenreChipTap,
     this.artistCuratedItemSelectionType = DefaultSettings.artistCuratedItemSelectionType,
     this.artistItemSectionFilterChipOrder = DefaultSettings.artistItemSectionFilterChipOrder,
     this.artistItemSectionsOrder = DefaultSettings.artistItemSectionsOrder,
@@ -705,8 +705,8 @@ class FinampSettings {
   @HiveField(107, defaultValue: DefaultSettings.genreItemSectionFilterChipOrder)
   List<CuratedItemSelectionType> genreItemSectionFilterChipOrder;
 
-  @HiveField(108, defaultValue: DefaultSettings.artistGenreChipsApplyFilter)
-  bool artistGenreChipsApplyFilter;
+  @HiveField(108, defaultValue: DefaultSettings.applyFilterOnGenreChipTap)
+  bool applyFilterOnGenreChipTap;
 
   @HiveField(109, defaultValue: DefaultSettings.artistCuratedItemSelectionType)
   CuratedItemSelectionType artistCuratedItemSelectionType;

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -26,15 +27,37 @@ Future<(List<BaseItemDto>, List<BaseItemDto>)> getAlbumOrPlaylistTracks(
 
   if (isOffline) {
     final downloadsService = GetIt.instance<DownloadsService>();
-    allTracks = await downloadsService.getCollectionTracks(parent, playable: false);
-    playableTracks = await downloadsService.getCollectionTracks(parent, playable: true);
+    allTracks = await downloadsService.getCollectionTracks(
+      parent,
+      playable: false,
+      genreFilter: (BaseItemDtoType.fromItem(parent) != BaseItemDtoType.playlist)
+            ? genreFilter : null,
+    );
+    playableTracks = await downloadsService.getCollectionTracks(
+      parent,
+      playable: true,
+      genreFilter: (BaseItemDtoType.fromItem(parent) != BaseItemDtoType.playlist)
+            ? genreFilter : null,
+    );
   } else {
     allTracks = await jellyfinApiHelper.getItems(
         parentItem: parent,
         sortBy: "ParentIndexNumber,IndexNumber,SortName",
         includeItemTypes: "Audio",
+        genreFilter: (BaseItemDtoType.fromItem(parent) != BaseItemDtoType.playlist)
+            ? genreFilter : null,
     ) ?? [];
     playableTracks = allTracks;
+  }
+  // The playlist api endpoint and fully downloaded playlists do not allow 
+  // to filter by genre, so we have to do that manually on device
+  if (genreFilter != null && BaseItemDtoType.fromItem(parent) == BaseItemDtoType.playlist) {
+    allTracks = allTracks.where((track) {
+      return track.genreItems?.any((g) => g.id == genreFilter.id) ?? false;
+    }).toList();
+    playableTracks = playableTracks.where((track) {
+      return track.genreItems?.any((g) => g.id == genreFilter.id) ?? false;
+    }).toList();
   }
   return (allTracks, playableTracks);
 }
@@ -66,8 +89,6 @@ Future<(List<BaseItemDto>, List<BaseItemDto>)> getSortedPlaylistTracks(
   final playlistPlayableTracks = result.$2;
 
   if (playlistSortBy == SortBy.serverOrder) {
-    print ("Are we here?");
-
     playlistAllTracksSorted = (playlistSortOrder == SortOrder.descending)
         ? playlistAllTracks.reversed.toList()
         : playlistAllTracks;

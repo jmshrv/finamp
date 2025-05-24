@@ -4,6 +4,7 @@ import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/MusicScreen/sort_by_menu_button.dart';
 import 'package:finamp/components/MusicScreen/sort_order_button.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/album_screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -25,14 +26,10 @@ class AlbumScreenContent extends ConsumerStatefulWidget {
   const AlbumScreenContent(
       {super.key,
       required this.parent,
-      required this.displayChildren,
-      required this.queueChildren,
-      this.playlistSortBy});
+      this.genreFilter});
 
   final BaseItemDto parent;
-  final List<BaseItemDto> displayChildren;
-  final List<BaseItemDto> queueChildren;
-  final SortBy? playlistSortBy;
+  final BaseItemDto? genreFilter;
 
   @override
   ConsumerState<AlbumScreenContent> createState() => _AlbumScreenContentState();
@@ -41,6 +38,22 @@ class AlbumScreenContent extends ConsumerStatefulWidget {
 StreamSubscription<void>? _listener;
 
 class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
+  BaseItemDto? currentGenreFilter;
+
+  @override
+  void initState() {
+    currentGenreFilter = widget.genreFilter;
+    super.initState();
+  }
+
+  // Function to update the genre filter
+  // Pass null in order to reset the filter
+  void updateGenreFilter(BaseItemDto? genre) {
+    setState(() {
+      currentGenreFilter = genre;
+    });
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -67,14 +80,23 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
       ? SortBy.serverOrder
       : playlistSortBySetting;
 
+    final tracksAsync = (widget.parent.type == "Playlist")
+      ? ref.watch(getSortedPlaylistTracksProvider(widget.parent, genreFilter: currentGenreFilter))
+      : ref.watch(getAlbumOrPlaylistTracksProvider(widget.parent));
+    final (allTracks, playableTracks) = tracksAsync.valueOrNull ?? (null, null);
+    final isLoading = allTracks == null;
+
+    final displayChildren = allTracks ?? [];
+    final queueChildren = playableTracks ?? [];
+
     void onDelete(BaseItemDto item) {
       // This is pretty inefficient (has to search through whole list) but
       // TracksSliverList gets passed some weird split version of children to
       // handle multi-disc albums and it's 00:35 so I can't be bothered to get
       // it to return an index
       setState(() {
-        widget.queueChildren.removeWhere((element) => element.id == item.id);
-        widget.displayChildren.removeWhere((element) => element.id == item.id);
+        queueChildren.removeWhere((element) => element.id == item.id);
+        displayChildren.removeWhere((element) => element.id == item.id);
       });
     }
 
@@ -87,10 +109,10 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
     // if not in playlist, try splitting up tracks by disc numbers
     // if first track has a disc number, let's assume the rest has it too
     if (widget.parent.type != "Playlist" &&
-        widget.displayChildren.isNotEmpty &&
-        widget.displayChildren[0].parentIndexNumber != null) {
+        displayChildren.isNotEmpty &&
+        displayChildren[0].parentIndexNumber != null) {
       int? lastDiscNumber;
-      for (var child in widget.displayChildren) {
+      for (var child in displayChildren) {
         if (child.parentIndexNumber != null &&
             child.parentIndexNumber != lastDiscNumber) {
           lastDiscNumber = child.parentIndexNumber;
@@ -133,10 +155,15 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
               item: widget.parent,
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
-            DownloadButton(
-              item: downloadStub,
-              children: widget.displayChildren,
-            ),
+            if (!isLoading)
+              DownloadButton(
+                item: downloadStub,
+                children: displayChildren,
+                downloadDisabled: (currentGenreFilter != null),
+                customTooltip: (currentGenreFilter != null)
+                      ? AppLocalizations.of(context)!.downloadButtonDisabledGenreFilterTooltip
+                      : null,
+              ),
           ];
 
           textWidth ??= textSize(
@@ -145,21 +172,23 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                   Theme.of(context).textTheme.titleLarge);
           final iconSize = kMinInteractiveDimension +
               VisualDensity.adaptivePlatformDensity.baseSizeAdjustment.dy;
-          final wrapActions = constraints.crossAxisExtent <
+          /*final wrapActions = constraints.crossAxisExtent <
               textWidth! +
                   iconSize * actions.length +
                   56 +
                   (ref.watch(finampSettingsProvider.allowDeleteFromServer) ||
                           widget.parent.type == "Playlist"
                       ? iconSize
-                      : 0);
+                      : 0);*/
+          final wrapActions = false;
+
           return SliverAppBar(
             title: Text(
               widget.parent.name ?? AppLocalizations.of(context)!.unknownName,
             ),
             expandedHeight: kToolbarHeight +
                 125 +
-                8 +
+                18 +
                 CTAMedium.predictedHeight(context) +
                 (wrapActions ? iconSize : 0),
             // collapsedHeight: kToolbarHeight + 125 + 80,
@@ -169,12 +198,15 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
                 parentItem: widget.parent,
                 isPlaylist: widget.parent.type == "Playlist",
-                items: widget.queueChildren,
-                actions: wrapActions ? actions : null),
+                items: queueChildren,
+                actions: wrapActions ? actions : null,
+                genreFilter: currentGenreFilter,
+                updateGenreFilter: updateGenreFilter,
+            ),
             actions: wrapActions ? null : actions,
           );
         }),
-        if (widget.displayChildren.length > 1 &&
+        if (!isLoading && displayChildren.length > 1 &&
             childrenPerDisc.length >
                 1) // show headers only for multi disc albums
           for (var childrenOfThisDisc in childrenPerDisc)
@@ -193,7 +225,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
               ),
               sliver: TracksSliverList(
                 childrenForList: childrenOfThisDisc,
-                childrenForQueue: Future.value(widget.queueChildren),
+                childrenForQueue: Future.value(queueChildren),
                 parent: widget.parent,
                 onRemoveFromList: onDelete,
                 showDateAdded: (widget.parent.type == "Playlist" &&
@@ -208,10 +240,10 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                     playlistSortBy == SortBy.albumArtist),
               ),
             )
-        else if (widget.displayChildren.isNotEmpty)
+        else if (!isLoading && displayChildren.isNotEmpty)
           TracksSliverList(
-            childrenForList: widget.displayChildren,
-            childrenForQueue: Future.value(widget.queueChildren),
+            childrenForList: displayChildren,
+            childrenForQueue: Future.value(queueChildren),
             parent: widget.parent,
             onRemoveFromList: onDelete,
             showDateAdded: (widget.parent.type == "Playlist" &&
@@ -224,6 +256,12 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                 playlistSortBy == SortBy.premiereDate),
             forceAlbumArtists: (widget.parent.type == "Playlist" &&
                 playlistSortBy == SortBy.albumArtist),
+          )
+        else 
+          SliverFillRemaining(
+            child: Center(
+              child: CircularProgressIndicator.adaptive(),
+            ),
           )
       ],
     );

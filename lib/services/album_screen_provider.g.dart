@@ -7,7 +7,7 @@ part of 'album_screen_provider.dart';
 // **************************************************************************
 
 String _$getAlbumOrPlaylistTracksHash() =>
-    r'52ce8759a6954d8253a3e16d31dcc4c1e0ed11a9';
+    r'cd019c82553cd5b7f4a9a07f827365ce11601b12';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -185,7 +185,7 @@ class _GetAlbumOrPlaylistTracksProviderElement
 }
 
 String _$getSortedPlaylistTracksHash() =>
-    r'104d7b849f919bb29003867fa6d6db4418e84bda';
+    r'b753fca4f9d1baa6e920748502890933072ab2ac';
 
 /// See also [getSortedPlaylistTracks].
 @ProviderFor(getSortedPlaylistTracks)

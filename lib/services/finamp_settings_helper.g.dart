@@ -763,11 +763,9 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setArtistGenreChipsApplyFilter(
-      bool newArtistGenreChipsApplyFilter) {
+  static void setApplyFilterOnGenreChipTap(bool newApplyFilterOnGenreChipTap) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.artistGenreChipsApplyFilter =
-        newArtistGenreChipsApplyFilter;
+    finampSettingsTemp.applyFilterOnGenreChipTap = newApplyFilterOnGenreChipTap;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -1082,9 +1080,9 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<List<CuratedItemSelectionType>>
       get genreItemSectionFilterChipOrder => finampSettingsProvider.select(
           (value) => value.requireValue.genreItemSectionFilterChipOrder);
-  ProviderListenable<bool> get artistGenreChipsApplyFilter =>
+  ProviderListenable<bool> get applyFilterOnGenreChipTap =>
       finampSettingsProvider
-          .select((value) => value.requireValue.artistGenreChipsApplyFilter);
+          .select((value) => value.requireValue.applyFilterOnGenreChipTap);
   ProviderListenable<CuratedItemSelectionType>
       get artistCuratedItemSelectionType => finampSettingsProvider
           .select((value) => value.requireValue.artistCuratedItemSelectionType);

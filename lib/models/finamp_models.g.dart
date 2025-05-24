@@ -277,7 +277,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
               CuratedItemSelectionType.recentlyPlayed
             ]
           : (fields[107] as List).cast<CuratedItemSelectionType>(),
-      artistGenreChipsApplyFilter:
+      applyFilterOnGenreChipTap:
           fields[108] == null ? false : fields[108] as bool,
       artistCuratedItemSelectionType: fields[109] == null
           ? CuratedItemSelectionType.mostPlayed
@@ -521,7 +521,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(107)
       ..write(obj.genreItemSectionFilterChipOrder)
       ..writeByte(108)
-      ..write(obj.artistGenreChipsApplyFilter)
+      ..write(obj.applyFilterOnGenreChipTap)
       ..writeByte(109)
       ..write(obj.artistCuratedItemSelectionType)
       ..writeByte(110)

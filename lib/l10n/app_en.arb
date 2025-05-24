@@ -1610,9 +1610,13 @@
     },
     "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
   },
-  "downloadButtonDisabledGenreFilterTooltip": "Please remove the genre filter to enable the download actions for this artist.",
-    "@downloadButtonDisabledGenreFilterTooltip": {
-    "description": "Tooltip shown when a download button is disabled because of an active genre filter on the artist screen."
+  "downloadButtonDisabledGenreFilterTooltip": "Please remove the genre filter to enable the download actions.",
+  "@downloadButtonDisabledGenreFilterTooltip": {
+    "description": "Tooltip shown when a download button is disabled because of an active genre filter."
+  },
+  "genreFilterNotAvailableForAlbums": "Genre Filter are not available for Albums.",
+  "@genreFilterNotAvailableForAlbums": {
+    "description": "Message shown when the user tries to apply a genre filter to an album."
   },
   "incidentalDownloadTooltip": "This item is required to be downloaded by {parentName}.",
   "@incidentalDownloadTooltip": {
@@ -2116,20 +2120,20 @@
   "@artistScreen": {
     "description": "Name for the view/screen that shows artists"
   },
-  "artistGenreChipsApplyFilterTitle": "Apply Filter Instead of Opening Genre",
-  "@artistGenreChipsApplyFilterTitle": {
-    "description": "Title for the setting that controls if taps on genres should apply a genre filter to the ArtistScreen or should redirect to the GenreScreen."
+  "applyFilterOnGenreChipTapTitle": "Apply Filter On Genre Tap",
+  "@applyFilterOnGenreChipTapTitle": {
+    "description": "Title for the setting that controls if taps on genre chips should apply a genre filter to the current screen or should redirect to the GenreScreen."
   },
-  "artistGenreChipsApplyFilterSubtitle": "If enabled, tapping a genre will filter the artist by that genre. You can still long-press to open the genre instead.",
-  "@artistGenreChipsApplyFilterSubtitle": {
-    "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the ArtistScreen or should redirect to the GenreScreen."
+  "applyFilterOnGenreChipTapSubtitle": "By default, tapping a genre opens it, while long-pressing filters the artist or playlist by that genre. When enabled, this behavior is inverted.",
+  "@applyFilterOnGenreChipTapSubtitle": {
+    "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
   },
-  "artistGenreChipsApplyFilterPrompt": "Applied genre filter",
-  "@artistGenreChipsApplyFilterPrompt": {
+  "applyFilterOnGenreChipTapPrompt": "Applied genre filter",
+  "@applyFilterOnGenreChipTapPrompt": {
     "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
   },
-  "artistGenreChipsApplyFilterPromptButton": "Open Genre",
-  "@artistGenreChipsApplyFilterPromptButton": {
+  "applyFilterOnGenreChipTapPromptButton": "Open Genre",
+  "@applyFilterOnGenreChipTapPromptButton": {
     "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
   },
   "genreScreen": "Genre Screen",

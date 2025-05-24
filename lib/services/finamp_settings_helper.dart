@@ -127,8 +127,6 @@ class FinampSettingsHelper {
   static void resetArtistSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
     
-    finampSettingsTemp.artistGenreChipsApplyFilter =
-        DefaultSettings.artistGenreChipsApplyFilter;
     finampSettingsTemp.artistItemSectionsOrder =
         DefaultSettings.artistItemSectionsOrder;
     finampSettingsTemp.showArtistsTracksSection =
@@ -271,6 +269,8 @@ class FinampSettingsHelper {
         DefaultSettings.itemSwipeActionRightToLeft;
     finampSettingsTemp.startInstantMixForIndividualTracks =
         DefaultSettings.startInstantMixForIndividualTracks;
+    finampSettingsTemp.applyFilterOnGenreChipTap =
+        DefaultSettings.applyFilterOnGenreChipTap;
     FinampSetters.setShowFastScroller(DefaultSettings.showFastScroller);
     FinampSetters.setDisableGesture(DefaultSettings.disableGesture);
     FinampSetters.setEnableVibration(DefaultSettings.enableVibration);

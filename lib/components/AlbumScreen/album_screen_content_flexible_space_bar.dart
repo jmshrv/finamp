@@ -33,12 +33,16 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
     required this.isPlaylist,
     required this.items,
     this.actions,
+    this.genreFilter,
+    this.updateGenreFilter,
   });
 
   final BaseItemDto parentItem;
   final bool isPlaylist;
   final List<BaseItemDto> items;
   final List<Widget>? actions;
+  final BaseItemDto? genreFilter;
+  final void Function(BaseItemDto?)? updateGenreFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -247,7 +251,9 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                       flex: 2,
                       child: ItemInfo(
                         item: parentItem,
-                        itemTracks: items.length,
+                        itemTracks: items,
+                        genreFilter: genreFilter,
+                        updateGenreFilter: updateGenreFilter,
                       ),
                     )
                   ],
