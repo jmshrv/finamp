@@ -28,13 +28,15 @@ class ItemInfo extends ConsumerWidget {
 // TODO: see if there's a way to expand this column to the row that it's in
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isOffline = ref.watch(finampSettingsProvider.isOffline);
     final itemTracksCount = itemTracks.length;
-    final trackCountString = (itemTracks == (item.childCount ?? itemTracks) ||
-            !ref.watch(finampSettingsProvider.isOffline))
+    final trackCountString = (itemTracks.length == item.childCount ||
+            !isOffline)
         ? AppLocalizations.of(context)!.trackCount(itemTracksCount)
         : AppLocalizations.of(context)!
             .offlineTrackCount(item.childCount!, itemTracksCount);
-    final trackDurationString = (genreFilter == null)
+    final trackDurationString = (genreFilter == null && 
+            (itemTracks.length == item.childCount))
         ? "$trackCountString (${printDuration(item.runTimeTicksDuration())})"
         : "$trackCountString (${printDuration(
             itemTracks
@@ -42,7 +44,6 @@ class ItemInfo extends ConsumerWidget {
               .whereType<Duration>()
               .fold<Duration>(Duration.zero, (sum, dur) => sum + dur)
           )})";
-
 
 
     return Column(
