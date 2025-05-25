@@ -3,6 +3,18 @@ import 'dart:async';
 import 'package:finamp/components/AlbumScreen/download_dialog.dart';
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/menus/components/menuEntries/clear_queue_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/go_to_album_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/instant_mix_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/add_to_playlist_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/delete_from_device_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/delete_from_server_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/download_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/go_to_artist_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/go_to_genre_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/lock_download_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/remove_from_current_playlist_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/toggle_favorite_menu_entry.dart';
 import 'package:finamp/menus/components/menu_item_info_header.dart';
 import 'package:finamp/menus/components/playbackActions/playback_action.dart';
 import 'package:finamp/menus/components/playbackActions/playback_action_row.dart';
@@ -47,7 +59,7 @@ Future<void> showModalTrackMenu({
   bool showPlaybackControls = false,
   bool isInPlaylist = false,
   BaseItemDto? parentItem,
-  Function? onRemoveFromList,
+  VoidCallback? onRemoveFromList,
   bool confirmPlaylistRemoval = true,
   bool showClearQueue = false,
 }) async {
@@ -108,7 +120,7 @@ class TrackMenu extends ConsumerStatefulWidget {
   final bool canGoToAlbum;
   final bool canGoToArtist;
   final bool canGoToGenre;
-  final Function? onRemoveFromList;
+  final VoidCallback? onRemoveFromList;
   final bool confirmPlaylistRemoval;
   final bool showClearQueue;
   final ScrollBuilder childBuilder;
@@ -197,7 +209,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
 
   @override
   Widget build(BuildContext context) {
-    final menuEntries = _menuEntries(context);
+    final menuEntries = _getMenuEntries(context);
     var stackHeight = widget.showPlaybackControls ? 255.0 : 155.0;
     stackHeight += menuEntries
             .where((element) =>
@@ -213,15 +225,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
   }
 
   // Normal track menu entries, excluding headers
-  List<Widget> _menuEntries(BuildContext context) {
-    final downloadsService = GetIt.instance<DownloadsService>();
-    final downloadStatus = downloadsService.getStatus(
-        DownloadStub.fromItem(type: DownloadItemType.track, item: widget.item),
-        null);
-    var iconColor = Theme.of(context).colorScheme.primary;
-
-    final isInCurrentPlaylist =
-        widget.isInPlaylist && widget.parentItem != null;
+  List<Widget> _getMenuEntries(BuildContext context) {
 
     final currentTrack = _queueService.getCurrentTrack();
     FinampQueueItem? queueItem;
@@ -229,385 +233,27 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
       queueItem = currentTrack;
     }
 
-    String? parentTooltip;
-    if (downloadStatus.isIncidental) {
-      var parent = downloadsService.getFirstRequiringItem(DownloadStub.fromItem(
-          type: DownloadItemType.track, item: widget.item));
-      if (parent != null) {
-        var parentName = AppLocalizations.of(context)!
-            .itemTypeSubtitle(parent.baseItemType.name, parent.name);
-        parentTooltip =
-            AppLocalizations.of(context)!.incidentalDownloadTooltip(parentName);
-      }
-    }
-
     return [
-      Visibility(
-        visible: !widget.isOffline,
-        child: ListTile(
-          leading: Icon(
-            TablerIcons.playlist_add,
-            color: iconColor,
-          ),
-          title: Text(isInCurrentPlaylist
-              ? AppLocalizations.of(context)!.addToMorePlaylistsTitle
-              : AppLocalizations.of(context)!.addToPlaylistTitle),
-          enabled: !widget.isOffline,
-          onTap: () {
-            Navigator.pop(context); // close menu
-            bool inPlaylist = queueItemInPlaylist(queueItem);
-            showPlaylistActionsMenu(
-              context: context,
-              item: widget.item,
-              parentPlaylist: inPlaylist ? queueItem!.source.item : null,
-            );
-          },
-        ),
+      AddToPlaylistMenuEntry(
+        baseItem: widget.item,
+        queueItem: queueItem,
       ),
-      Visibility(
-        visible: _queueService.getQueue().nextUp.isNotEmpty,
-        child: ListTile(
-          leading: Icon(
-            TablerIcons.corner_right_down,
-            color: iconColor,
-          ),
-          title: Text(AppLocalizations.of(context)!.playNext),
-          onTap: () async {
-            await _queueService.addNext(
-                items: [widget.item],
-                source: QueueItemSource(
-                    type: QueueItemSourceType.nextUp,
-                    name: const QueueItemSourceName(
-                        type: QueueItemSourceNameType.nextUp),
-                    id: widget.item.id));
-
-            if (!context.mounted) return;
-
-            GlobalSnackbar.message(
-                (context) =>
-                    AppLocalizations.of(context)!.confirmPlayNext("track"),
-                isConfirmation: true);
-            Navigator.pop(context);
-          },
-        ),
+      RemoveFromCurrentPlaylistMenuEntry(
+        baseItem: widget.item,
+        parentItem: widget.parentItem,
+        confirmRemoval: widget.confirmPlaylistRemoval,
+        onRemove: widget.onRemoveFromList,
       ),
-      ListTile(
-        leading: Icon(
-          TablerIcons.corner_right_down_double,
-          color: iconColor,
-        ),
-        title: Text(AppLocalizations.of(context)!.addToNextUp),
-        onTap: () async {
-          await _queueService.addToNextUp(
-              items: [widget.item],
-              source: QueueItemSource(
-                  type: QueueItemSourceType.nextUp,
-                  name: const QueueItemSourceName(
-                      type: QueueItemSourceNameType.nextUp),
-                  id: widget.item.id));
-
-          if (!context.mounted) return;
-
-          GlobalSnackbar.message(
-              (context) =>
-                  AppLocalizations.of(context)!.confirmAddToNextUp("track"),
-              isConfirmation: true);
-          Navigator.pop(context);
-        },
-      ),
-      ListTile(
-        leading: Icon(
-          TablerIcons.playlist,
-          color: iconColor,
-        ),
-        title: Text(AppLocalizations.of(context)!.addToQueue),
-        onTap: () async {
-          await _queueService.addToQueue(
-              items: [widget.item],
-              source: QueueItemSource(
-                  type: QueueItemSourceType.queue,
-                  name: QueueItemSourceName(
-                      type: QueueItemSourceNameType.preTranslated,
-                      pretranslatedName: AppLocalizations.of(context)!.queue),
-                  id: widget.item.id));
-
-          if (!context.mounted) return;
-
-          GlobalSnackbar.message(
-              (context) => AppLocalizations.of(context)!.addedToQueue,
-              isConfirmation: true);
-          Navigator.pop(context);
-        },
-      ),
-      Visibility(
-        visible: isInCurrentPlaylist,
-        child: ListTile(
-          leading: Icon(
-            Icons.playlist_remove,
-            color: widget.isOffline ? iconColor.withOpacity(0.3) : iconColor,
-          ),
-          title: Text(AppLocalizations.of(context)!.removeFromPlaylistTitle),
-          enabled: widget.isInPlaylist &&
-              widget.parentItem != null &&
-              !widget.isOffline,
-          onTap: () async {
-            var removed = await removeFromPlaylist(context, widget.item,
-                widget.parentItem!, widget.item.playlistItemId!,
-                confirm: widget.confirmPlaylistRemoval);
-            if (removed) {
-              if (widget.onRemoveFromList != null) {
-                widget.onRemoveFromList!();
-              }
-              if (context.mounted) {
-                Navigator.pop(context);
-              }
-            }
-          },
-        ),
-      ),
-      Visibility(
-        visible: !widget.isOffline,
-        child: ListTile(
-          leading: Icon(
-            Icons.explore,
-            color: iconColor,
-          ),
-          title: Text(AppLocalizations.of(context)!.instantMix),
-          enabled: !widget.isOffline,
-          onTap: () async {
-            await _audioServiceHelper.startInstantMixForItem(widget.item);
-
-            if (!context.mounted) return;
-
-            GlobalSnackbar.message(
-                (context) => AppLocalizations.of(context)!.startingInstantMix,
-                isConfirmation: true);
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      Visibility(
-          visible: downloadStatus.isRequired,
-          child: ListTile(
-              leading: Icon(
-                Icons.delete_outlined,
-                color: iconColor,
-              ),
-              title: Text(AppLocalizations.of(context)!
-                  .deleteFromTargetConfirmButton("")),
-              enabled: downloadStatus.isRequired,
-              onTap: () async {
-                var item = DownloadStub.fromItem(
-                    type: DownloadItemType.track, item: widget.item);
-                await askBeforeDeleteDownloadFromDevice(context, item);
-              })),
-      Visibility(
-        visible: downloadStatus == DownloadItemStatus.notNeeded,
-        child: ListTile(
-          leading: Icon(
-            Icons.file_download_outlined,
-            color: iconColor,
-          ),
-          title: Text(AppLocalizations.of(context)!.downloadItem),
-          enabled: !widget.isOffline &&
-              downloadStatus == DownloadItemStatus.notNeeded,
-          onTap: () async {
-            var item = DownloadStub.fromItem(
-                type: DownloadItemType.track, item: widget.item);
-            await DownloadDialog.show(context, item, null);
-            if (context.mounted) {
-              Navigator.pop(context);
-            }
-          },
-        ),
-      ),
-      Visibility(
-        visible: downloadStatus.isIncidental,
-        child: Tooltip(
-          message: parentTooltip ?? "Widget shouldn't be visible",
-          child: ListTile(
-            leading: Icon(
-              Icons.lock_outlined,
-              color: widget.isOffline ? iconColor.withOpacity(0.3) : iconColor,
-            ),
-            title: Text(AppLocalizations.of(context)!.lockDownload),
-            enabled: !widget.isOffline && downloadStatus.isIncidental,
-            onTap: () async {
-              var item = DownloadStub.fromItem(
-                  type: DownloadItemType.track, item: widget.item);
-              await DownloadDialog.show(context, item, null);
-              if (context.mounted) {
-                Navigator.pop(context);
-              }
-            },
-          ),
-        ),
-      ),
-      Consumer(
-        builder: (context, ref, child) {
-          bool isFav = ref.watch(isFavoriteProvider(widget.item));
-          return ListTile(
-            enabled: !widget.isOffline,
-            leading: isFav
-                ? Icon(
-                    Icons.favorite,
-                    color: widget.isOffline
-                        ? iconColor.withOpacity(0.3)
-                        : iconColor,
-                  )
-                : Icon(
-                    Icons.favorite_border,
-                    color: widget.isOffline
-                        ? iconColor.withOpacity(0.3)
-                        : iconColor,
-                  ),
-            title: Text(isFav
-                ? AppLocalizations.of(context)!.removeFavorite
-                : AppLocalizations.of(context)!.addFavorite),
-            onTap: () async {
-              ref
-                  .read(isFavoriteProvider(widget.item).notifier)
-                  .updateFavorite(!isFav);
-              if (context.mounted) Navigator.pop(context);
-            },
-          );
-        },
-      ),
-      Visibility(
-        visible: widget.canGoToAlbum,
-        child: ListTile(
-          leading: Icon(
-            TablerIcons.disc,
-            color: iconColor,
-          ),
-          title: Text(AppLocalizations.of(context)!.goToAlbum),
-          enabled: widget.canGoToAlbum,
-          onTap: () async {
-            late BaseItemDto album;
-            try {
-              if (FinampSettingsHelper.finampSettings.isOffline) {
-                final downloadsService = GetIt.instance<DownloadsService>();
-                album = (await downloadsService.getCollectionInfo(
-                        id: widget.item.albumId!))!
-                    .baseItem!;
-              } else {
-                album =
-                    await _jellyfinApiHelper.getItemById(widget.item.albumId!);
-              }
-            } catch (e) {
-              GlobalSnackbar.error(e);
-              return;
-            }
-            if (context.mounted) {
-              Navigator.pop(context);
-              await Navigator.of(context)
-                  .pushNamed(AlbumScreen.routeName, arguments: album);
-            }
-          },
-        ),
-      ),
-      Visibility(
-        visible: widget.canGoToArtist,
-        child: ListTile(
-          leading: Icon(
-            TablerIcons.user,
-            color: iconColor,
-          ),
-          title: Text(AppLocalizations.of(context)!.goToArtist),
-          enabled: widget.canGoToArtist,
-          onTap: () async {
-            late BaseItemDto artist;
-            try {
-              if (FinampSettingsHelper.finampSettings.isOffline) {
-                final downloadsService = GetIt.instance<DownloadsService>();
-                artist = (await downloadsService.getCollectionInfo(
-                        id: widget.item.artistItems!.first.id))!
-                    .baseItem!;
-              } else {
-                artist = await _jellyfinApiHelper
-                    .getItemById(widget.item.artistItems!.first.id);
-              }
-            } catch (e) {
-              GlobalSnackbar.error(e);
-              return;
-            }
-            if (context.mounted) {
-              Navigator.pop(context);
-              await Navigator.of(context)
-                  .pushNamed(ArtistScreen.routeName, arguments: artist);
-            }
-          },
-        ),
-      ),
-      Visibility(
-        visible: widget.canGoToGenre,
-        child: ListTile(
-          leading: Icon(
-            TablerIcons.color_swatch,
-            color: iconColor,
-          ),
-          title: Text(AppLocalizations.of(context)!.goToGenre),
-          enabled: widget.canGoToGenre,
-          onTap: () async {
-            late BaseItemDto genre;
-            try {
-              if (FinampSettingsHelper.finampSettings.isOffline) {
-                final downloadsService = GetIt.instance<DownloadsService>();
-                genre = (await downloadsService.getCollectionInfo(
-                        id: widget.item.genreItems!.first.id))!
-                    .baseItem!;
-              } else {
-                genre = await _jellyfinApiHelper
-                    .getItemById(widget.item.genreItems!.first.id);
-              }
-            } catch (e) {
-              GlobalSnackbar.error(e);
-              return;
-            }
-            if (context.mounted) {
-              Navigator.pop(context);
-              await Navigator.of(context)
-                  .pushNamed(GenreScreen.routeName, arguments: genre);
-            }
-          },
-        ),
-      ),
-      Consumer(builder: (context, ref, _) {
-        var canDelete = ref
-            .watch(_jellyfinApiHelper.canDeleteFromServerProvider(widget.item));
-        return Visibility(
-            visible: canDelete,
-            child: ListTile(
-              leading: Icon(
-                Icons.delete_forever,
-                color: iconColor,
-              ),
-              title: Text(AppLocalizations.of(context)!
-                  .deleteFromTargetConfirmButton("server")),
-              enabled: canDelete,
-              onTap: () async {
-                var item = DownloadStub.fromItem(
-                    type: DownloadItemType.track, item: widget.item);
-                await askBeforeDeleteFromServerAndDevice(context, item);
-                Navigator.pop(context); // close popup
-                musicScreenRefreshStream.add(null);
-              },
-            ));
-      }),
-      Visibility(
-        visible: widget.showClearQueue,
-        child: ListTile(
-          leading: Icon(
-            TablerIcons.clear_all,
-            color: iconColor,
-          ),
-          title: Text(AppLocalizations.of(context)!.stopAndClearQueue),
-          onTap: () async {
-            if (context.mounted) Navigator.pop(context);
-            await _queueService.stopPlayback();
-          },
-        ),
-      ),
+      InstantMixMenuEntry(baseItem: widget.item),
+      DeleteFromDeviceMenuEntry(baseItem: widget.item),
+      DownloadMenuEntry(baseItem: widget.item),
+      LockDownloadMenuEntry(baseItem: widget.item),
+      ToggleFavoriteMenuEntry(baseItem: widget.item),
+      GoToAlbumMenuEntry(baseItem: widget.item),
+      GoToArtistMenuEntry(baseItem: widget.item),
+      GoToGenreMenuEntry(baseItem: widget.item),
+      DeleteFromServerMenuEntry(baseItem: widget.item),
+      if (widget.showClearQueue) ClearQueueMenuEntry(baseItem: widget.item),
     ];
   }
 
@@ -618,12 +264,6 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
     final pageViewController = PageController();
 
     return [
-      // SliverPersistentHeader(
-      //   delegate: MenuItemInfoHeader(
-      //     item: widget.item,
-      //   ),
-      //   pinned: true,
-      // ),
       if (widget.showPlaybackControls)
         StreamBuilder<PlaybackBehaviorInfo>(
           stream: Rx.combineLatest3(
@@ -765,9 +405,16 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
       MenuMask(
         height: playActionRowHeight + 8.0,
         child: SliverToBoxAdapter(
-          child: PlaybackActionRow(
-            controller: pageViewController,
-            playbackActionPages: getPlaybackActionPages(widget.item),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              PlayPlaybackAction(baseItem: widget.item),
+              if (_queueService.getQueue().nextUp.isNotEmpty)
+                PlayNextPlaybackAction(baseItem: widget.item),
+              AddToNextUpPlaybackAction(baseItem: widget.item),
+              AddToQueuePlaybackAction(baseItem: widget.item),
+            ],
           ),
         ),
       ),

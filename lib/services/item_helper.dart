@@ -37,6 +37,9 @@ Future<List<BaseItemDto>?> loadChildTracks(
     ).future);
   } else {
     switch (BaseItemDtoType.fromItem(baseItem)) {
+      case BaseItemDtoType.track:
+        newItemsFuture = Future.value([baseItem]);
+        break;
       case BaseItemDtoType.album:
       case BaseItemDtoType.playlist:
         newItemsFuture = jellyfinApiHelper.getItems(
@@ -113,6 +116,9 @@ Future<List<BaseItemDto>?> loadChildTracksOffline(
   List<BaseItemDto> items;
 
   switch (BaseItemDtoType.fromItem(baseItem)) {
+    case BaseItemDtoType.track:
+      items = [baseItem];
+      break;
     case BaseItemDtoType.genre:
       items = (await downloadsService.getAllTracks(
         viewFilter: finampUserHelper.currentUser?.currentViewId,

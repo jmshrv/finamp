@@ -32,7 +32,10 @@ class DeleteFromDeviceMenuEntry extends ConsumerWidget {
 
     final downloadStatus = downloadsService.getStatus(
         DownloadStub.fromItem(
-            type: DownloadItemType.collection, item: baseItem),
+            type: BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.track
+                ? DownloadItemType.track
+                : DownloadItemType.collection,
+            item: baseItem),
         null);
 
     return Visibility(
@@ -43,7 +46,11 @@ class DeleteFromDeviceMenuEntry extends ConsumerWidget {
                 .deleteFromTargetConfirmButton("device"),
             onTap: () async {
               var item = DownloadStub.fromItem(
-                  type: DownloadItemType.collection, item: baseItem);
+                  type: BaseItemDtoType.fromItem(baseItem) ==
+                          BaseItemDtoType.track
+                      ? DownloadItemType.track
+                      : DownloadItemType.collection,
+                  item: baseItem);
               await askBeforeDeleteDownloadFromDevice(context, item);
             }));
   }

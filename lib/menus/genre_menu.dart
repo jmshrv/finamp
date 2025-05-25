@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:finamp/menus/components/menuEntries/add_to_mix_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/instant_mix_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/add_to_playlist_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/delete_from_device_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/delete_from_server_menu_entry.dart';
@@ -32,7 +32,7 @@ Future<void> showModalGenreMenu({
   List<Widget> getMenuEntries(BuildContext context) {
     return [
       AddToPlaylistMenuEntry(baseItem: baseItem),
-      AddToMixMenuEntry(baseItem: baseItem),
+      InstantMixMenuEntry(baseItem: baseItem),
       DeleteFromDeviceMenuEntry(baseItem: baseItem),
       DownloadMenuEntry(baseItem: baseItem),
       LockDownloadMenuEntry(baseItem: baseItem),

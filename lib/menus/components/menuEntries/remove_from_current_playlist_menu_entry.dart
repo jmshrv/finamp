@@ -9,33 +9,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
-class AddToPlaylistMenuEntry extends ConsumerWidget {
+class RemoveFromCurrentPlaylistMenuEntry extends ConsumerWidget {
   final BaseItemDto baseItem;
-  final FinampQueueItem? queueItem;
+  final BaseItemDto? parentItem;
+  final VoidCallback? onRemove;
+  final bool confirmRemoval;
 
-  const AddToPlaylistMenuEntry({
+  const RemoveFromCurrentPlaylistMenuEntry({
     super.key,
     required this.baseItem,
-    this.queueItem,
+    required this.parentItem,
+    this.onRemove,
+    this.confirmRemoval = false,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Visibility(
-        visible: !ref.watch(finampSettingsProvider.isOffline),
+        visible:
+            parentItem != null && !ref.watch(finampSettingsProvider.isOffline),
         child: MenuEntry(
           icon: TablerIcons.playlist_add,
-          title: queueItemInPlaylist(queueItem)
-              ? AppLocalizations.of(context)!.addToMorePlaylistsTitle
-              : AppLocalizations.of(context)!.addToPlaylistTitle,
-          onTap: () {
+          title: AppLocalizations.of(context)!.removeFromPlaylistTitle,
+          enabled: parentItem != null,
+          onTap: () async {
             Navigator.pop(context); // close menu
-            bool inPlaylist = queueItemInPlaylist(queueItem);
-            showPlaylistActionsMenu(
-              context: context,
-              item: baseItem,
-              parentPlaylist: inPlaylist ? queueItem!.source.item : null,
-            );
+            var removed = await removeFromPlaylist(
+                context, baseItem, parentItem!, baseItem.playlistItemId!,
+                confirm: true);
+            if (removed) {
+              onRemove?.call();
+              if (context.mounted) {
+                Navigator.pop(context);
+              }
+            }
           },
         ));
   }

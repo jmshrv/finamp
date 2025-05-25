@@ -33,13 +33,19 @@ class LockDownloadMenuEntry extends ConsumerWidget {
 
     final downloadStatus = downloadsService.getStatus(
         DownloadStub.fromItem(
-            type: DownloadItemType.collection, item: baseItem),
+            type: BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.track
+                ? DownloadItemType.track
+                : DownloadItemType.collection,
+            item: baseItem),
         null);
 
     String? parentTooltip;
     if (downloadStatus.isIncidental) {
       var parent = downloadsService.getFirstRequiringItem(DownloadStub.fromItem(
-          type: DownloadItemType.collection, item: baseItem));
+          type: BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.track
+              ? DownloadItemType.track
+              : DownloadItemType.collection,
+          item: baseItem));
       if (parent != null) {
         var parentName = AppLocalizations.of(context)!
             .itemTypeSubtitle(parent.baseItemType.name, parent.name);
@@ -58,7 +64,11 @@ class LockDownloadMenuEntry extends ConsumerWidget {
               title: AppLocalizations.of(context)!.lockDownload,
               onTap: () async {
                 var item = DownloadStub.fromItem(
-                    type: DownloadItemType.collection, item: baseItem);
+                    type: BaseItemDtoType.fromItem(baseItem) ==
+                            BaseItemDtoType.track
+                        ? DownloadItemType.track
+                        : DownloadItemType.collection,
+                    item: baseItem);
                 await DownloadDialog.show(context, item, null);
                 if (context.mounted) {
                   Navigator.pop(context);

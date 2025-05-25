@@ -5,12 +5,14 @@ class MenuEntry extends ConsumerWidget {
   final String title;
   final IconData icon;
   final VoidCallback onTap;
+  final bool enabled;
 
   const MenuEntry({
     super.key,
     required this.title,
     required this.icon,
     required this.onTap,
+    this.enabled = true,
   });
 
   @override
@@ -18,6 +20,7 @@ class MenuEntry extends ConsumerWidget {
     var iconColor = Theme.of(context).colorScheme.primary;
 
     return ListTile(
+      enabled: enabled,
       leading: Icon(
         icon,
         color: iconColor,

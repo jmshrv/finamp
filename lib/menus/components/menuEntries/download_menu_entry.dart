@@ -33,7 +33,10 @@ class DownloadMenuEntry extends ConsumerWidget {
 
     final downloadStatus = downloadsService.getStatus(
         DownloadStub.fromItem(
-            type: DownloadItemType.collection, item: baseItem),
+            type: BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.track
+                ? DownloadItemType.track
+                : DownloadItemType.collection,
+            item: baseItem),
         null);
 
     return Visibility(
@@ -44,7 +47,11 @@ class DownloadMenuEntry extends ConsumerWidget {
             title: AppLocalizations.of(context)!.downloadItem,
             onTap: () async {
               var item = DownloadStub.fromItem(
-                  type: DownloadItemType.collection, item: baseItem);
+                  type: BaseItemDtoType.fromItem(baseItem) ==
+                          BaseItemDtoType.track
+                      ? DownloadItemType.track
+                      : DownloadItemType.collection,
+                  item: baseItem);
               await DownloadDialog.show(context, item, null);
               if (context.mounted) {
                 Navigator.pop(context);
