@@ -3125,7 +3125,7 @@ enum CuratedItemSelectionType {
       case CuratedItemSelectionType.latestReleases:
         return getTitle(loc.latestTracks, loc.latestAlbums, loc.latestArtists) ?? "Unsupported Type";
       case CuratedItemSelectionType.recentlyAdded:
-        return getTitle(loc.newTracks, loc.newAlbums, loc.newArtists) ?? "Unsupported Type";
+        return getTitle(loc.recentlyAddedTracks, loc.recentlyAddedAlbums, loc.recentlyAddedArtists) ?? "Unsupported Type";
       case CuratedItemSelectionType.recentlyPlayed:
         return getTitle(loc.recentlyPlayedTracks, loc.recentlyPlayedAlbums, loc.recentlyPlayedArtists) ?? "Unsupported Type";
     }
@@ -3263,7 +3263,7 @@ enum ArtistItemSections {
       case CuratedItemSelectionType.latestReleases:
         return getTitle(loc.latestTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
       case CuratedItemSelectionType.recentlyAdded:
-        return getTitle(loc.newTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+        return getTitle(loc.recentlyAddedTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
       case CuratedItemSelectionType.recentlyPlayed:
         return getTitle(loc.recentlyPlayedTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
       case null:

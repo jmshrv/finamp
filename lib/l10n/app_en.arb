@@ -1205,12 +1205,18 @@
   "@topAlbums": {},
   "topArtists": "Top Artists",
   "@topArtists": {},
-  "newTracks": "New Tracks",
-  "@newTracks": {},
-  "newAlbums": "New Albums",
-  "@newAlbums": {},
-  "newArtists": "New Artists",
-  "@newArtists": {},
+  "recentlyAddedTracks": "Recently Added Tracks",
+  "@recentlyAddedTracks": {
+    "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedAlbums": "Recently Added Albums",
+  "@recentlyAddedAlbums": {
+    "description": "Label for the genre section that shows albums that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedArtists": "Recently Added Artists",
+  "@recentlyAddedArtists": {
+    "description": "Label for the genre section that shows artists that were recently added to the library, sorted by the date they were added."
+  },
   "latestTracks": "Latest Tracks",
   "@latestTracks": {},
   "latestAlbums": "Latest Albums",
