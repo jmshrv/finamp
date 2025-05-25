@@ -2,12 +2,16 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:finamp/color_schemes.g.dart';
-import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_list.dart';
+import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/menus/playlist_actions_menu.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,15 +20,6 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
-
-import '../models/jellyfin_models.dart';
-import '../services/favorite_provider.dart';
-import '../services/feedback_helper.dart';
-import '../services/finamp_settings_helper.dart';
-import '../services/jellyfin_api_helper.dart';
-import '../services/theme_provider.dart';
-import '../components/global_snackbar.dart';
-import '../components/themed_bottom_sheet.dart';
 
 const outputMenuRouteName = "/output-menu";
 
@@ -264,7 +259,7 @@ class OutputSelectorTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ToggleableListTile(
       forceLoading: isLoading,
-      title: routeInfo.name ?? AppLocalizations.of(context)!.unknownName,
+      title: routeInfo.name,
       subtitle: (routeInfo.isDeviceSpeaker
           ? AppLocalizations.of(context)!.deviceType("speaker")
           : switch (routeInfo.deviceType) {
@@ -288,7 +283,8 @@ class OutputSelectorTile extends StatelessWidget {
       onToggle: (bool currentState) async {
         final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
         await audioHandler.setOutputToRoute(routeInfo);
-        unawaited(Future.delayed(const Duration(milliseconds: 1250)).then((_) {
+        unawaited(Future<Duration>.delayed(const Duration(milliseconds: 1250))
+            .then((_) {
           onSelect?.call();
         }));
         return true;

@@ -1,15 +1,11 @@
 import 'dart:async';
 
-import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/components/menuEntries/instant_mix_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/add_to_playlist_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/delete_from_device_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/delete_from_server_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/download_menu_entry.dart';
-import 'package:finamp/menus/components/menuEntries/go_to_artist_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/go_to_genre_menu_entry.dart';
-import 'package:finamp/menus/components/menuEntries/instant_mix_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/lock_download_menu_entry.dart';
 import 'package:finamp/menus/components/menu_item_info_header.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
@@ -18,8 +14,6 @@ import 'package:finamp/menus/components/playbackActions/playback_action_row.dart
 import 'package:finamp/menus/components/playbackActions/playback_actions.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/services/queue_service.dart';
-import 'package:get_it/get_it.dart';
 
 const Duration artistMenuDefaultAnimationDuration = Duration(milliseconds: 750);
 const Curve artistMenuDefaultInCurve = Curves.easeOutCubic;

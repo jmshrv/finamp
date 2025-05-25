@@ -1,8 +1,6 @@
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/components/menuEntries/menu_entry.dart';
-import 'package:finamp/menus/playlist_actions_menu.dart';
-import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';

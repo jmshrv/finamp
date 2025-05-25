@@ -1,8 +1,5 @@
 import 'dart:async';
 
-import 'package:finamp/components/AlbumScreen/download_dialog.dart';
-import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
-import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/menus/components/menuEntries/clear_queue_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/go_to_album_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/instant_mix_menu_entry.dart';
@@ -20,26 +17,16 @@ import 'package:finamp/menus/components/playbackActions/playback_action.dart';
 import 'package:finamp/menus/components/playbackActions/playback_action_row.dart';
 import 'package:finamp/menus/components/playbackActions/playback_actions.dart';
 import 'package:finamp/menus/components/speed_menu.dart';
-import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_dialog.dart';
-import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:finamp/menus/playlist_actions_menu.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/screens/album_screen.dart';
-import 'package:finamp/screens/artist_screen.dart';
-import 'package:finamp/screens/genre_screen.dart';
-import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
-import 'package:finamp/services/downloads_service.dart';
-import 'package:finamp/services/favorite_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
-import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -131,8 +118,6 @@ class TrackMenu extends ConsumerStatefulWidget {
 }
 
 class _TrackMenuState extends ConsumerState<TrackMenu> {
-  final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _queueService = GetIt.instance<QueueService>();
 
@@ -261,7 +246,6 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
   List<Widget> menu(BuildContext context, List<Widget> menuEntries,
       MetadataProvider? metadata) {
     var iconColor = Theme.of(context).colorScheme.primary;
-    final pageViewController = PageController();
 
     return [
       if (widget.showPlaybackControls)
@@ -282,12 +266,10 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
               FinampPlaybackOrder.shuffled: TablerIcons.arrows_shuffle,
             };
             final playbackOrderTooltips = {
-              FinampPlaybackOrder.linear: AppLocalizations.of(context)
-                      ?.playbackOrderLinearButtonLabel ??
-                  "Playing in order",
-              FinampPlaybackOrder.shuffled: AppLocalizations.of(context)
-                      ?.playbackOrderShuffledButtonLabel ??
-                  "Shuffling",
+              FinampPlaybackOrder.linear:
+                  AppLocalizations.of(context)!.playbackOrderLinearButtonLabel,
+              FinampPlaybackOrder.shuffled: AppLocalizations.of(context)!
+                  .playbackOrderShuffledButtonLabel,
             };
             const loopModeIcons = {
               FinampLoopMode.none: TablerIcons.repeat,
@@ -296,14 +278,11 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             };
             final loopModeTooltips = {
               FinampLoopMode.none:
-                  AppLocalizations.of(context)?.loopModeNoneButtonLabel ??
-                      "Not looping",
+                  AppLocalizations.of(context)!.loopModeNoneButtonLabel,
               FinampLoopMode.one:
-                  AppLocalizations.of(context)?.loopModeOneButtonLabel ??
-                      "Looping this track",
+                  AppLocalizations.of(context)!.loopModeOneButtonLabel,
               FinampLoopMode.all:
-                  AppLocalizations.of(context)?.loopModeAllButtonLabel ??
-                      "Looping all",
+                  AppLocalizations.of(context)!.loopModeAllButtonLabel,
             };
         
             var playbackActionsArray = [
@@ -331,12 +310,12 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                         : TablerIcons.hourglass_empty,
                     onPressed: (ref) async {
                       if (timerValue != null) {
-                        await showDialog(
+                        await showDialog<SleepTimerCancelDialog>(
                           context: context,
                           builder: (context) => const SleepTimerCancelDialog(),
                         );
                       } else {
-                        await showDialog(
+                        await showDialog<SleepTimerDialog>(
                           context: context,
                           builder: (context) => const SleepTimerDialog(),
                         );
