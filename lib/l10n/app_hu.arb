@@ -47,8 +47,6 @@
   "@datePlayed": {},
   "downloadMissingImages": "Töltse le a hiányzó képeket",
   "@downloadMissingImages": {},
-  "favourites": "Kedvencek",
-  "@favourites": {},
   "finamp": "Finamp",
   "@finamp": {},
   "genres": "Műfajok",
@@ -85,8 +83,6 @@
   "@random": {},
   "revenue": "Bevétel",
   "@revenue": {},
-  "runtime": "Futásidő",
-  "@runtime": {},
   "selectMusicLibraries": "Zenei könyvtárak kiválasztása",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
@@ -167,8 +163,6 @@
   "@error": {},
   "failedToGetTrackFromDownloadId": "Nem sikerült letölteni a dalt, a letöltési azonosítóból",
   "@failedToGetTrackFromDownloadId": {},
-  "favourite": "Kedvenc",
-  "@favourite": {},
   "enableTranscodingSubtitle": "Transzkódolja a zenestreameket a szerver oldalon.",
   "@enableTranscodingSubtitle": {},
   "layoutAndTheme": "Elrendezés & Téma",
@@ -255,8 +249,6 @@
   "@unknownError": {},
   "addedToQueue": "Hozzáadva a sorhoz.",
   "@addedToQueue": {},
-  "addFavourite": "Hozzáadás a kedvencekhez",
-  "@addFavourite": {},
   "responseError": "{error} Állapotkód {statusCode}.",
   "@responseError": {
     "placeholders": {
@@ -325,8 +317,6 @@
   "@queue": {},
   "queueReplaced": "Sor cserélve.",
   "@queueReplaced": {},
-  "removeFavourite": "Kedvenc eltávolítása",
-  "@removeFavourite": {},
   "removeFromMix": "Kivétel a Mixből",
   "@removeFromMix": {},
   "replaceQueue": "Sor kicserélése",

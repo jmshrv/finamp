@@ -75,8 +75,6 @@
   "@random": {},
   "revenue": "수익",
   "@revenue": {},
-  "runtime": "런타임(상영 시간)",
-  "@runtime": {},
   "syncDownloadedPlaylists": "다운로드한 플레이리스트 동기화",
   "@syncDownloadedPlaylists": {},
   "downloadMissingImages": "누락된 이미지 다운로드",
@@ -141,8 +139,6 @@
   "@required": {},
   "updateButtonLabel": "업데이트",
   "@updateButtonLabel": {},
-  "favourite": "즐겨찾기",
-  "@favourite": {},
   "addDownloads": "다운로드 추가",
   "@addDownloads": {},
   "location": "위치",
@@ -265,8 +261,6 @@
   "@instantMix": {},
   "goToAlbum": "앨범으로 이동",
   "@goToAlbum": {},
-  "addFavourite": "즐겨찾기 추가",
-  "@addFavourite": {},
   "insertedIntoQueue": "대기열 사이에 추가됨.",
   "@insertedIntoQueue": {
     "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
@@ -346,8 +340,6 @@
       }
     }
   },
-  "favourites": "즐겨찾기",
-  "@favourites": {},
   "album": "앨범",
   "@album": {},
   "downloads": "다운로드",
@@ -438,8 +430,6 @@
   "@playNext": {
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
   },
-  "removeFavourite": "즐겨찾기 삭제",
-  "@removeFavourite": {},
   "confirm": "확인",
   "@confirm": {},
   "swipeInsertQueueNext": "스와이프한 곡 다음 재생",

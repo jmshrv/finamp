@@ -3,8 +3,6 @@
   "@unknownError": {},
   "removedFromPlaylist": "Poistettu soittolistalta.",
   "@removedFromPlaylist": {},
-  "addFavourite": "Lisää suosikiksi",
-  "@addFavourite": {},
   "goToAlbum": "Mene albumiin",
   "@goToAlbum": {},
   "downloads": "Lataukset",
@@ -13,8 +11,6 @@
   "@settings": {},
   "shareLogs": "Jaa lokit",
   "@shareLogs": {},
-  "removeFavourite": "Poista suosikeista",
-  "@removeFavourite": {},
   "playNext": "Toista seuraavaksi",
   "@playNext": {
     "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
@@ -63,8 +59,6 @@
   "@music": {},
   "clear": "Tyhjennä",
   "@clear": {},
-  "favourites": "Suosikit",
-  "@favourites": {},
   "offlineMode": "Offline-tila",
   "@offlineMode": {},
   "finamp": "Finamp",
@@ -131,8 +125,6 @@
   "@editPlaylistNameTooltip": {},
   "playlistUpdated": "Soittolistan nimi päivitetty.",
   "@playlistUpdated": {},
-  "favourite": "Suosikki",
-  "@favourite": {},
   "addDownloads": "Lisää lataukset",
   "@addDownloads": {},
   "updateButtonLabel": "Päivitä",
@@ -179,8 +171,6 @@
   "@productionYear": {},
   "revenue": "Tulot",
   "@revenue": {},
-  "runtime": "Kesto",
-  "@runtime": {},
   "dlEnqueued": "{count} jonossa",
   "@dlEnqueued": {
     "placeholders": {

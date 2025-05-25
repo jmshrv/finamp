@@ -33,8 +33,6 @@
   "@music": {},
   "clear": "Ryd",
   "@clear": {},
-  "favourites": "Favoritter",
-  "@favourites": {},
   "shuffleAll": "Bland alle",
   "@shuffleAll": {},
   "finamp": "Finamp",
@@ -127,8 +125,6 @@
   "@updateButtonLabel": {},
   "playlistUpdated": "Afspilningslistens navn er opdateret.",
   "@playlistUpdated": {},
-  "favourite": "Favorit",
-  "@favourite": {},
   "addDownloads": "Tilføj overførelser",
   "@addDownloads": {},
   "location": "Placering",
@@ -257,10 +253,6 @@
   "@replaceQueue": {},
   "instantMix": "Hurtig blanding",
   "@instantMix": {},
-  "removeFavourite": "Fjern favorit",
-  "@removeFavourite": {},
-  "addFavourite": "Tilføj favorit",
-  "@addFavourite": {},
   "addedToQueue": "Tilføjet til kø.",
   "@addedToQueue": {},
   "queueReplaced": "Køen er udskiftet.",
@@ -311,8 +303,6 @@
   "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
-  "runtime": "Spilletid",
-  "@runtime": {},
   "downloadedMissingImages": "{count,plural, =0{Ingen manglende billeder blev fundet} =1{Overførte {count} manglende billeder} other{Overførte {count} manglende billeder}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",

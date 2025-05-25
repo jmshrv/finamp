@@ -77,8 +77,6 @@
   "@instantMix": {},
   "goToAlbum": "До альбому",
   "@goToAlbum": {},
-  "removeFavourite": "Видалити з Обраного",
-  "@removeFavourite": {},
   "addedToQueue": "Додано в чергу.",
   "@addedToQueue": {},
   "queueReplaced": "Черга змінена.",
@@ -311,8 +309,6 @@
   "@newPlaylist": {},
   "addToQueue": "Додати до черги",
   "@addToQueue": {},
-  "addFavourite": "Додати в Обране",
-  "@addFavourite": {},
   "responseError401": "{error} Код статусу {statusCode}. Можливо, це означає, що ви використали неправильне ім’я користувача/пароль або ваш клієнт не ввійшов в систему.",
   "@responseError401": {
     "placeholders": {
@@ -372,8 +368,6 @@
   "@music": {},
   "clear": "Очистити",
   "@clear": {},
-  "favourites": "Обране",
-  "@favourites": {},
   "shuffleAll": "Перемішати все",
   "@shuffleAll": {},
   "finamp": "Finamp",
@@ -392,8 +386,6 @@
   "@random": {},
   "revenue": "Доходом",
   "@revenue": {},
-  "runtime": "Тривалістю",
-  "@runtime": {},
   "downloadMissingImages": "Завантажити відсутні зображення",
   "@downloadMissingImages": {},
   "playButtonLabel": "Відтворити",
@@ -402,8 +394,6 @@
   "@shuffleButtonLabel": {},
   "playlistUpdated": "Ім'я плейлисту змінено.",
   "@playlistUpdated": {},
-  "favourite": "Улюблене",
-  "@favourite": {},
   "downloadsDeleted": "Завантаження видалено.",
   "@downloadsDeleted": {},
   "addDownloads": "Додати завантаження",
@@ -2212,10 +2202,6 @@
   "@showArtistsTracksSectionSubtitle": {},
   "latestAlbums": "Найновіші альбоми",
   "@latestAlbums": {},
-  "curatedItemsMostPlayedDisabledTooltip": "Ви ще не прослухали жодної композиції.",
-  "@curatedItemsMostPlayedDisabledTooltip": {
-    "description": "Tooltip for Most Played on Curated Items in Online Mode when not yet listened to any tracks."
-  },
   "recentlyAdded": "Нещодавно додані",
   "@recentlyAdded": {},
   "genreListsInheritSortingSubtitle": "Якщо цю опцію ввімкнено, списки «Переглянути всі» успадкують сортування та фільтрацію з екрана жанрів. Якщо вимкнено, замість цього будуть використані налаштування з відповідної вкладки бібліотеки. Натискання на кількість у верхній частині екрана жанру завжди відкриватиме повний список із налаштуваннями сортування з вкладки бібліотеки.",
@@ -2236,8 +2222,6 @@
   "@genreItemSectionFilterChipOrderTitle": {
     "description": "Label for the setting that controls the order of item sections filter chips."
   },
-  "artistGenreChipsApplyFilterSubtitle": "Якщо цю функцію ввімкнено, натискання на жанр фільтруватиме виконавця за цим жанром. Ви все ще можете відкрити жанр довгим натисканням.",
-  "@artistGenreChipsApplyFilterSubtitle": {},
   "randomTracks": "Треки (випадковий вибір)",
   "@randomTracks": {},
   "mostPlayed": "Найпопулярніші",
@@ -2254,14 +2238,10 @@
   "@artistItemSectionFilterChipOrderTitle": {
     "description": "Label for the setting that controls the order of the tracks sections filter chips."
   },
-  "artistGenreChipsApplyFilterTitle": "Застосувати фільтр замість відкриття жанру",
-  "@artistGenreChipsApplyFilterTitle": {},
   "seeAll": "Дивитися все",
   "@seeAll": {
     "description": ""
   },
-  "newAlbums": "Нові альбоми",
-  "@newAlbums": {},
   "genreFilterArtistScreensSubtitle": "Якщо цю функцію ввімкнено, на екранах виконавців (доступних через жанр) відображатимуться лише треки та альбоми, що відповідають жанру, який ви зараз переглядаєте. (Завжди можна вручну видалити фільтр жанрів, щоб відобразити всі треки та альбоми.)",
   "@genreFilterArtistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
@@ -2278,8 +2258,6 @@
   "@curatedItemsMostPlayedOfflineTooltip": {
     "description": "Tooltip for Most Played on Curated Items in Offline Mode."
   },
-  "newTracks": "Нові треки",
-  "@newTracks": {},
   "randomArtists": "Виконавці (випадковий вибір)",
   "@randomArtists": {},
   "onlineMode": "Онлайн-режим",
@@ -2288,8 +2266,6 @@
   "@topAlbums": {},
   "topArtists": "Найкращі виконавці",
   "@topArtists": {},
-  "newArtists": "Нові виконавці",
-  "@newArtists": {},
   "latestTracks": "Найновіші треки",
   "@latestTracks": {},
   "latestReleases": "Останні релізи",
@@ -2305,18 +2281,6 @@
   "genreListsInheritSorting": "Повні списки Сортування Успадкування",
   "@genreListsInheritSorting": {
     "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
-  },
-  "curatedItemsFavoritesDisabledTooltip": "У вас ще немає улюблених.",
-  "@curatedItemsFavoritesDisabledTooltip": {
-    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet."
-  },
-  "artistGenreChipsApplyFilterPromptButton": "Відкритий жанр",
-  "@artistGenreChipsApplyFilterPromptButton": {
-    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
-  },
-  "artistGenreChipsApplyFilterPrompt": "Застосовано жанровий фільтр",
-  "@artistGenreChipsApplyFilterPrompt": {
-    "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
   },
   "noReleaseDate": "Без дати випуску",
   "@noReleaseDate": {

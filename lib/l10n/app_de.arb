@@ -53,8 +53,6 @@
   "@playlists": {},
   "tracks": "Tracks",
   "@tracks": {},
-  "favourites": "Favoriten",
-  "@favourites": {},
   "finamp": "Finamp",
   "@finamp": {},
   "settings": "Einstellungen",
@@ -103,14 +101,10 @@
   "@newPlaylist": {},
   "playlistCreated": "Playlist erstellt.",
   "@playlistCreated": {},
-  "removeFavourite": "Favorit entfernen",
-  "@removeFavourite": {},
   "unknownArtist": "Unbekannter Künstler",
   "@unknownArtist": {},
   "downloadedTracksWillNotBeDeleted": "Heruntergeladene Titel werden nicht gelöscht",
   "@downloadedTracksWillNotBeDeleted": {},
-  "favourite": "Favorit",
-  "@favourite": {},
   "name": "Name",
   "@name": {},
   "password": "Passwort",
@@ -139,8 +133,6 @@
   "@playCount": {},
   "revenue": "Einspielergebnis",
   "@revenue": {},
-  "runtime": "Dauer",
-  "@runtime": {},
   "downloadMissingImages": "Fehlende Bilder herunterladen",
   "@downloadMissingImages": {},
   "downloadCount": "{count,plural, =1{{count} Download} other{{count} Downloads}}",
@@ -293,8 +285,6 @@
   "@instantMix": {},
   "goToAlbum": "Gehe zu Album",
   "@goToAlbum": {},
-  "addFavourite": "Favorit hinzufügen",
-  "@addFavourite": {},
   "addedToQueue": "Zur Warteschlange hinzugefügt.",
   "@addedToQueue": {},
   "queueReplaced": "Warteschlange ausgetauscht.",
@@ -2110,10 +2100,6 @@
   "@topAlbums": {},
   "topArtists": "Top Künstler",
   "@topArtists": {},
-  "newTracks": "Neue Titel",
-  "@newTracks": {},
-  "newArtists": "Neue Künstler",
-  "@newArtists": {},
   "latestTracks": "Kürzlich hinzugefügte Titel",
   "@latestTracks": {},
   "latestAlbums": "Kürzlich hinzugefügte Alben",
@@ -2166,20 +2152,10 @@
   "@curatedItemsMostPlayedOfflineTooltip": {
     "description": "Tooltip for Most Played on Curated Items in Offline Mode."
   },
-  "curatedItemsMostPlayedDisabledTooltip": "Du hast noch keine Titel gehört.",
-  "@curatedItemsMostPlayedDisabledTooltip": {
-    "description": "Tooltip for Most Played on Curated Items in Online Mode when not yet listened to any tracks."
-  },
-  "curatedItemsFavoritesDisabledTooltip": "Du hast noch keine Favoriten.",
-  "@curatedItemsFavoritesDisabledTooltip": {
-    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet."
-  },
   "seeAll": "Alle",
   "@seeAll": {
     "description": ""
   },
-  "artistGenreChipsApplyFilterTitle": "Filter anwenden anstatt das Genre zu öffnen",
-  "@artistGenreChipsApplyFilterTitle": {},
   "genreScreen": "Genreseite",
   "@genreScreen": {
     "description": "Name for the view/screen that shows genres"
@@ -2224,8 +2200,6 @@
   },
   "onlineMode": "Online Mode",
   "@onlineMode": {},
-  "newAlbums": "Neue Alben",
-  "@newAlbums": {},
   "startupErrorTitle": "Beim Starten der App ist etwas schiefgegangen!\nEs tut uns leid…",
   "@startupErrorTitle": {
     "description": "The title for the error screen that shows when startup fails."
@@ -2256,8 +2230,6 @@
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
-  "artistGenreChipsApplyFilterSubtitle": "Wenn diese Option aktiviert ist, wird durch Tippen auf ein Genre der Künstler nach diesem Genre gefiltert. Alternativ kann das Genre auch durch langes Drücken geöffnet werden.",
-  "@artistGenreChipsApplyFilterSubtitle": {},
   "preferHomeNetworkEnableSwitchTitle": "Heimnetzwerk bevorzugen",
   "@preferHomeNetworkEnableSwitchTitle": {},
   "showShuffleButtonOnMediaNotificationSubtitle": "Legt fest, ob die Medienbenachrichtigung einen Zufällig-Button hat. Dadurch kannst du die Zufallswiedergabe aktivieren oder deaktivieren, ohne die App öffnen zu müssen.",
@@ -2303,13 +2275,5 @@
   "noReleaseDate": "Kein Release Datum",
   "@noReleaseDate": {
     "description": "Placeholder text if an album has no release date set."
-  },
-  "artistGenreChipsApplyFilterPrompt": "Genre Filter angewendet",
-  "@artistGenreChipsApplyFilterPrompt": {
-    "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
-  },
-  "artistGenreChipsApplyFilterPromptButton": "Genre öffnen",
-  "@artistGenreChipsApplyFilterPromptButton": {
-    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
   }
 }

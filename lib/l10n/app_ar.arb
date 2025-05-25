@@ -37,8 +37,6 @@
   "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
   },
-  "favourites": "مفضلات",
-  "@favourites": {},
   "finamp": "Finamp",
   "@finamp": {},
   "clear": "إمسح",
@@ -87,8 +85,6 @@
   "@downloadMissingImages": {},
   "revenue": "إيرادات",
   "@revenue": {},
-  "runtime": "وقت تشغيل",
-  "@runtime": {},
   "downloadCount": "{count,plural, =1{{count} تنزيل} other{{count} تنزيلات}}",
   "@downloadCount": {
     "placeholders": {
@@ -155,8 +151,6 @@
   "@updateButtonLabel": {},
   "editPlaylistNameTooltip": "غير اسم قائمة الأغاني",
   "@editPlaylistNameTooltip": {},
-  "favourite": "المفضل",
-  "@favourite": {},
   "playlistUpdated": "تم تحديث إسم قائمة الأغاني.",
   "@playlistUpdated": {},
   "required": "ملزوم",
@@ -281,8 +275,6 @@
   "@queue": {},
   "instantMix": "خلط فوري",
   "@instantMix": {},
-  "addFavourite": "إضافة إلى المفضلات",
-  "@addFavourite": {},
   "addedToQueue": "تم إضافة إالى قائمة الانتظار",
   "@addedToQueue": {},
   "queueReplaced": "تم تبديل قائمة الإنتظار.",
@@ -331,8 +323,6 @@
   "@dateAdded": {},
   "productionYear": "سنة الإنتاج",
   "@productionYear": {},
-  "removeFavourite": "إزالة من المفضلات",
-  "@removeFavourite": {},
   "replaceQueue": "تبديل قائمة الإنتظار",
   "@replaceQueue": {},
   "system": "نظام",

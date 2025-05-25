@@ -7,8 +7,6 @@
   "@clear": {},
   "downloads": "Stažené",
   "@downloads": {},
-  "favourites": "Oblíbené",
-  "@favourites": {},
   "finamp": "Finamp",
   "@finamp": {},
   "album": "Album",
@@ -79,8 +77,6 @@
   "@directoryMustBeEmpty": {},
   "downloadedTracksWillNotBeDeleted": "Stažené skladby nebudou odstraněny",
   "@downloadedTracksWillNotBeDeleted": {},
-  "favourite": "Oblíbené",
-  "@favourite": {},
   "gridCrossAxisCountSubtitle": "Počet položek mřížky na řádek {value}.",
   "@gridCrossAxisCountSubtitle": {
     "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
@@ -118,8 +114,6 @@
   },
   "addedToQueue": "Přidáno do fronty.",
   "@addedToQueue": {},
-  "addFavourite": "Přidat do oblíbených",
-  "@addFavourite": {},
   "addToMix": "Přidat do mixu",
   "@addToMix": {},
   "addToQueue": "Přidat do fronty",
@@ -192,8 +186,6 @@
   "@premiereDate": {},
   "revenue": "Výnos",
   "@revenue": {},
-  "runtime": "Doba běhu",
-  "@runtime": {},
   "shuffleButtonLabel": "Náhodně",
   "@shuffleButtonLabel": {},
   "removedFromPlaylist": "Odebráno ze seznamu skladeb.",
@@ -272,8 +264,6 @@
   "@queue": {},
   "instantMix": "Okamžitý mix",
   "@instantMix": {},
-  "removeFavourite": "Odebrat z oblíbených",
-  "@removeFavourite": {},
   "queueReplaced": "Fronta nahrazena.",
   "@queueReplaced": {},
   "removeFromMix": "Odebrat z mixu",
@@ -2234,10 +2224,6 @@
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
-  "curatedItemsFavoritesDisabledTooltip": "Zatím nemáte žádné oblíbené.",
-  "@curatedItemsFavoritesDisabledTooltip": {
-    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet."
-  },
   "seeAll": "Zobrazit vše",
   "@seeAll": {
     "description": ""
@@ -2245,12 +2231,6 @@
   "artistScreen": "Obrazovka umělce",
   "@artistScreen": {
     "description": "Name for the view/screen that shows artists"
-  },
-  "artistGenreChipsApplyFilterTitle": "Použít filtr namísto otevření žánru",
-  "@artistGenreChipsApplyFilterTitle": {},
-  "curatedItemsMostPlayedDisabledTooltip": "Zatím jste neposlouchali žádné skladby.",
-  "@curatedItemsMostPlayedDisabledTooltip": {
-    "description": "Tooltip for Most Played on Curated Items in Online Mode when not yet listened to any tracks."
   },
   "latestArtists": "Nejnovější umělci",
   "@latestArtists": {},
@@ -2266,16 +2246,12 @@
   "@latestAlbums": {},
   "favoriteAlbums": "Oblíbená alba",
   "@favoriteAlbums": {},
-  "newAlbums": "Nová alba",
-  "@newAlbums": {},
   "genreItemSectionFilterChipOrderTitle": "Pořadí filtrů sekcí položek",
   "@genreItemSectionFilterChipOrderTitle": {
     "description": "Label for the setting that controls the order of item sections filter chips."
   },
   "topAlbums": "Nejlepší alba",
   "@topAlbums": {},
-  "newArtists": "Noví umělci",
-  "@newArtists": {},
   "genreScreen": "Obrazovka žánrů",
   "@genreScreen": {
     "description": "Name for the view/screen that shows genres"
@@ -2290,14 +2266,10 @@
   "@genreFilterArtistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
-  "artistGenreChipsApplyFilterSubtitle": "Klepnutím na žánr vyfiltrujete umělce podle daného žánru. Pro otevření žánru můžete stále dlouze podržet na položce.",
-  "@artistGenreChipsApplyFilterSubtitle": {},
   "topArtists": "Nejlepší umělci",
   "@topArtists": {},
   "autoSwitchItemCurationTypeSubtitle": "Sekce položek na obrazovkách umělců a žánrů se automaticky přepnou na jiný typ kurátorství, pokud nejsou dostupné žádné položky (např. žádné oblíbené u konkrétního umělce).",
   "@autoSwitchItemCurationTypeSubtitle": {},
-  "newTracks": "Nové skladby",
-  "@newTracks": {},
   "latestTracks": "Nejnovější skladby",
   "@latestTracks": {},
   "randomTracks": "Skladby (náhodný výběr)",
@@ -2311,13 +2283,5 @@
   "noReleaseDate": "Žádné datum vydání",
   "@noReleaseDate": {
     "description": "Placeholder text if an album has no release date set."
-  },
-  "artistGenreChipsApplyFilterPrompt": "Filtr žánru použit",
-  "@artistGenreChipsApplyFilterPrompt": {
-    "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
-  },
-  "artistGenreChipsApplyFilterPromptButton": "Otevřít žánr",
-  "@artistGenreChipsApplyFilterPromptButton": {
-    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
   }
 }
