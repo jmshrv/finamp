@@ -41,9 +41,9 @@ class _AlbumScreenState extends ConsumerState<AlbumScreen> {
       extendBody: true,
       body: SafeArea(
         child: AlbumScreenContent(
-              parent: parent,
-              genreFilter: widget.genreFilter,
-            )
+          parent: parent,
+          genreFilter: widget.genreFilter,
+        ),
       ),
       bottomNavigationBar: const NowPlayingBar(),
     );

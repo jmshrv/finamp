@@ -23,10 +23,7 @@ import 'track_list_tile.dart';
 typedef BaseItemDtoCallback = void Function(BaseItemDto item);
 
 class AlbumScreenContent extends ConsumerStatefulWidget {
-  const AlbumScreenContent(
-      {super.key,
-      required this.parent,
-      this.genreFilter});
+  const AlbumScreenContent({super.key, required this.parent, this.genreFilter});
 
   final BaseItemDto parent;
   final BaseItemDto? genreFilter;
@@ -66,15 +63,18 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
     final downloadStub = DownloadStub.fromItem(
         type: DownloadItemType.collection, item: widget.parent);
     final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
-    SortBy playlistSortBySetting = ref.watch(finampSettingsProvider.playlistTracksSortBy);
-    final playlistSortBy = (isOffline && 
-        (playlistSortBySetting == SortBy.datePlayed || playlistSortBySetting == SortBy.playCount))
-      ? SortBy.serverOrder
-      : playlistSortBySetting;
+    SortBy playlistSortBySetting =
+        ref.watch(finampSettingsProvider.playlistTracksSortBy);
+    final playlistSortBy = (isOffline &&
+            (playlistSortBySetting == SortBy.datePlayed ||
+                playlistSortBySetting == SortBy.playCount))
+        ? SortBy.serverOrder
+        : playlistSortBySetting;
 
     final tracksAsync = (widget.parent.type == "Playlist")
-      ? ref.watch(getSortedPlaylistTracksProvider(widget.parent, genreFilter: currentGenreFilter))
-      : ref.watch(getAlbumOrPlaylistTracksProvider(widget.parent));
+        ? ref.watch(getSortedPlaylistTracksProvider(widget.parent,
+            genreFilter: currentGenreFilter))
+        : ref.watch(getAlbumOrPlaylistTracksProvider(widget.parent));
     final (allTracks, playableTracks) = tracksAsync.valueOrNull ?? (null, null);
     final isLoading = allTracks == null;
 
@@ -140,36 +140,37 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                 children: displayChildren,
                 downloadDisabled: (currentGenreFilter != null),
                 customTooltip: (currentGenreFilter != null)
-                      ? AppLocalizations.of(context)!.downloadButtonDisabledGenreFilterTooltip
-                      : null,
+                    ? AppLocalizations.of(context)!
+                        .downloadButtonDisabledGenreFilterTooltip
+                    : null,
               ),
           ];
 
           return SliverAppBar(
             title: (widget.parent.type != "Playlist")
                 ? Text(
-                    widget.parent.name ?? AppLocalizations.of(context)!.unknownName,
+                    widget.parent.name ??
+                        AppLocalizations.of(context)!.unknownName,
                   )
                 : null,
-            expandedHeight: kToolbarHeight +
-                125 +
-                18 +
-                CTAMedium.predictedHeight(context),
+            expandedHeight:
+                kToolbarHeight + 125 + 18 + CTAMedium.predictedHeight(context),
             // collapsedHeight: kToolbarHeight + 125 + 80,
             pinned: true,
             centerTitle: false,
             titleSpacing: 0,
             flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
-                parentItem: widget.parent,
-                isPlaylist: widget.parent.type == "Playlist",
-                items: queueChildren,
-                genreFilter: currentGenreFilter,
-                updateGenreFilter: updateGenreFilter,
+              parentItem: widget.parent,
+              isPlaylist: widget.parent.type == "Playlist",
+              items: queueChildren,
+              genreFilter: currentGenreFilter,
+              updateGenreFilter: updateGenreFilter,
             ),
             actions: actions,
           );
         }),
-        if (!isLoading && displayChildren.length > 1 &&
+        if (!isLoading &&
+            displayChildren.length > 1 &&
             childrenPerDisc.length >
                 1) // show headers only for multi disc albums
           for (var childrenOfThisDisc in childrenPerDisc)
@@ -220,7 +221,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             forceAlbumArtists: (widget.parent.type == "Playlist" &&
                 playlistSortBy == SortBy.albumArtist),
           )
-        else 
+        else
           SliverFillRemaining(
             child: Center(
               child: CircularProgressIndicator.adaptive(),
