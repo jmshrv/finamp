@@ -34,6 +34,7 @@ class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
           ItemSwipeLeftToRightActionDropdownListTile(),
           ItemSwipeRightToLeftActionDropdownListTile(),
           StartInstantMixForIndividualTracksSwitch(),
+          ApplyFilterOnGenreChipTapSwitch(),
           FastScrollSelector(),
           ShowDeleteFromServerOptionToggle(),
           DisableGestureSelector(),
@@ -59,6 +60,20 @@ class StartInstantMixForIndividualTracksSwitch extends ConsumerWidget {
       value:
           ref.watch(finampSettingsProvider.startInstantMixForIndividualTracks),
       onChanged: FinampSetters.setStartInstantMixForIndividualTracks,
+    );
+  }
+}
+
+class ApplyFilterOnGenreChipTapSwitch extends ConsumerWidget {
+  const ApplyFilterOnGenreChipTapSwitch({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.applyFilterOnGenreChipTapTitle),
+      subtitle: Text(AppLocalizations.of(context)!.applyFilterOnGenreChipTapSubtitle),
+      value: ref.watch(finampSettingsProvider.applyFilterOnGenreChipTap),
+      onChanged: FinampSetters.setApplyFilterOnGenreChipTap,
     );
   }
 }

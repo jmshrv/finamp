@@ -198,7 +198,6 @@ class FinampThemeFromImage extends _$FinampThemeFromImage {
 
     listener = ImageStreamListener((listenerImage, synchronousCall) async {
       stream.removeListener(listener!);
-
       completer.complete(listenerImage);
     }, onError: (e, stack) {
       stream.removeListener(listener!);
@@ -207,7 +206,9 @@ class FinampThemeFromImage extends _$FinampThemeFromImage {
     });
 
     ref.onDispose(() {
-      stream.removeListener(listener!);
+      if (!completer.isCompleted) {
+        stream.removeListener(listener!);
+      }
     });
 
     stream.addListener(listener);
@@ -370,8 +371,6 @@ class _ThemeTransitionCalculator {
     if (_skipAllTransitions || MediaQuery.of(context).disableAnimations) {
       return Duration.zero;
     }
-    return context.mounted
-        ? const Duration(milliseconds: 1000)
-        : Duration.zero;
+    return context.mounted ? const Duration(milliseconds: 1000) : Duration.zero;
   }
 }

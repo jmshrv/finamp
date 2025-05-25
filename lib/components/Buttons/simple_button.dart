@@ -14,6 +14,8 @@ class SimpleButton extends StatelessWidget {
   final IconPosition? iconPosition;
   final double iconSize;
   final Color? iconColor;
+  final Color? textColor;
+  final FontWeight? fontWeight;
   final void Function() onPressed;
   final bool disabled;
 
@@ -26,6 +28,8 @@ class SimpleButton extends StatelessWidget {
       required this.text,
       required this.icon,
       required this.onPressed,
+      this.textColor,
+      this.fontWeight,
       this.iconPosition = IconPosition.start,
       this.iconSize = 20.0,
       this.iconColor,
@@ -46,9 +50,11 @@ class SimpleButton extends StatelessWidget {
         style: TextStyle(
           color: (disabled || inactive)
               ? Theme.of(context).disabledColor
-              : Theme.of(context).textTheme.bodyMedium!.color!,
+              : (textColor != null) 
+                  ? textColor 
+                  : Theme.of(context).textTheme.bodyMedium!.color!,
           fontSize: 14,
-          fontWeight: FontWeight.normal,
+          fontWeight: (fontWeight != null) ? fontWeight : FontWeight.normal,
         ),
         textAlign: TextAlign.center,
       ),

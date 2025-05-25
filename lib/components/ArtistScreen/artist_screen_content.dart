@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/curated_item_filter_row.dart';
 import 'package:finamp/services/artist_screen_provider.dart';
 import 'package:finamp/components/curated_item_sections.dart';
@@ -153,7 +154,8 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
           // 125 + 116 is the total height of the widget we use as a
           // FlexibleSpaceBar. We add the toolbar height since the widget
           // should appear below the appbar.
-          expandedHeight: kToolbarHeight + 125 + 96,
+          expandedHeight:
+              kToolbarHeight + 125 + 24 + CTAMedium.predictedHeight(context),
           centerTitle: false,
           pinned: true,
           flexibleSpace: ArtistScreenContentFlexibleSpaceBar(

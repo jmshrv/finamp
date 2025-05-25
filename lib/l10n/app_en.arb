@@ -279,6 +279,8 @@
   "@revenue": {},
   "duration": "Duration",
   "@duration": {},
+  "serverOrder": "Server Order",
+  "@serverOrder": {},
   "formattedRelativeTime": "{type, select, just_now{just now} minutes{{value} min ago} hours{{value} h ago} yesterday{yesterday} days{{value, plural, =1{1 day ago} other{{value} days ago}}} other{value}}",
   "@formattedRelativeTime": {
     "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
@@ -762,6 +764,10 @@
   "playlistActionsMenuButtonTooltip": "Tap to add to playlist. Long press to toggle favorite.",
   "@playlistActionsMenuButtonTooltip": {
     "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+  },
+  "browsePlaylists": "Browse Playlists",
+  "@browsePlaylists": {
+    "description": "Label for a button on the genre screen that brings you to a list of genre-filtered playlists."
   },
   "noAlbum": "No Album",
   "@noAlbum": {},
@@ -1265,19 +1271,35 @@
   "@artistItemSectionFilterChipOrderSubtitle": {
     "description": "Description of the setting that controls the order of the tracks sections filter chips."
   },
-  "genreFilterArtistScreens": "Filter Artist Screens",
+  "genreShowBrowsePlaylistsButton": "Show \"Browse Playlists\" Button",
+  "@genreShowBrowsePlaylistsButton": {
+    "description": "Label for the setting that controls if a button to all genre-playlists should get displayed on the GenreScreen."
+  },
+  "genreShowBrowsePlaylistsButtonSubtitle": "When enabled, a button appears at the bottom of the Genre Screen. Tapping it shows a list of playlists that contain tracks from the currently viewed genre.",
+  "@genreShowBrowsePlaylistsButtonSubtitle": {
+    "description": "Description of the setting that controls if a button to all genre-playlists should get displayed on the GenreScreen."
+  },
+  "genreFilterArtistScreens": "Filter Artists",
   "@genreFilterArtistScreens": {
     "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
-  "genreFilterArtistScreensSubtitle": "When enabled, Artist Screens (accessed through a genre) will only show tracks and albums that match the genre you're currently browsing. (It is always possible to manually remove the Genre Filter to reveal all tracks and albums.)",
+  "genreFilterArtistScreensSubtitle": "When enabled, Artists (accessed through a genre) will only show tracks and albums that match the genre you're currently browsing. (It is always possible to manually remove the Genre Filter to reveal all tracks and albums.)",
   "@genreFilterArtistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreFilterPlaylistScreens": "Filter Playlists",
+  "@genreFilterPlaylistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "genreFilterPlaylistScreensSubtitle": "When enabled, Playlists (accessed through a genre) will only show tracks that match the genre you're currently browsing. (It is always possible to manually remove the Genre Filter to reveal all tracks.)",
+  "@genreFilterPlaylistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
   },
   "genreListsInheritSorting": "Full Lists Sorting Inheritance",
   "@genreListsInheritSorting": {
     "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
-  "genreListsInheritSortingSubtitle": "When enabled, the \"See All\" lists will inherit the sorting and filtering from the Genre Screen. If disabled, settings from the corresponding library tab will be used instead. Tapping on the Counts on the top of the Genre Screen will always open a full list with the sorting settings from the library tab.",
+  "genreListsInheritSortingSubtitle": "When enabled, the \"See All\" lists will inherit the sorting and filtering from the Genre Screen. If disabled, settings from the corresponding library tab will be used instead. Tapping on the Counts on the top of the Genre Screen or the \"Browse Playlists\" button will always open a full list with the sorting settings from the library tab.",
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
@@ -1304,6 +1326,15 @@
         "type": "String",
         "optional": true,
         "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "genreNoItems": "You don't have any {itemType, select, playlists{playlists} artists{artists} albums{albums} tracks{tracks} other{items}} for this genre.",
+  "@genreNoItems": {
+    "description": "Message for empty See All lists for a genre.",
+    "placeholders": {
+      "itemType": {
+        "type": "String"
       }
     }
   },
@@ -1608,9 +1639,22 @@
     },
     "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
   },
-  "downloadButtonDisabledGenreFilterTooltip": "Please remove the genre filter to enable the download actions for this artist.",
-    "@downloadButtonDisabledGenreFilterTooltip": {
-    "description": "Tooltip shown when a download button is disabled because of an active genre filter on the artist screen."
+  "downloadButtonDisabledGenreFilterTooltip": "Please remove the genre filter to enable the download actions.",
+  "@downloadButtonDisabledGenreFilterTooltip": {
+    "description": "Tooltip shown when a download button is disabled because of an active genre filter."
+  },
+  "genreFilterNotAvailableForAlbums": "Genre Filters are not available for Albums.",
+  "@genreFilterNotAvailableForAlbums": {
+    "description": "Message shown when the user tries to apply a genre filter to an album."
+  },
+  "genreNotFound": "The genre could not be found.{additionalInfo, select, offline{ It might not be downloaded or may belong to a different library.} other{ It may belong to a different library.}}",
+  "@genreNotFound": {
+    "placeholders": {
+      "additionalInfo": {
+        "type": "String"
+      }
+    },
+    "description": "Message shown when a genre filter or open-genre action fails because the genre item could not be found."
   },
   "incidentalDownloadTooltip": "This item is required to be downloaded by {parentName}.",
   "@incidentalDownloadTooltip": {
@@ -2114,20 +2158,20 @@
   "@artistScreen": {
     "description": "Name for the view/screen that shows artists"
   },
-  "artistGenreChipsApplyFilterTitle": "Apply Filter Instead of Opening Genre",
-  "@artistGenreChipsApplyFilterTitle": {
-    "description": "Title for the setting that controls if taps on genres should apply a genre filter to the ArtistScreen or should redirect to the GenreScreen."
+  "applyFilterOnGenreChipTapTitle": "Apply Filter On Genre Tap",
+  "@applyFilterOnGenreChipTapTitle": {
+    "description": "Title for the setting that controls if taps on genre chips should apply a genre filter to the current screen or should redirect to the GenreScreen."
   },
-  "artistGenreChipsApplyFilterSubtitle": "If enabled, tapping a genre will filter the artist by that genre. You can still long-press to open the genre instead.",
-  "@artistGenreChipsApplyFilterSubtitle": {
-    "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the ArtistScreen or should redirect to the GenreScreen."
+  "applyFilterOnGenreChipTapSubtitle": "By default, tapping a genre opens it, while long-pressing filters the artist or playlist by that genre. When enabled, this behavior is inverted.",
+  "@applyFilterOnGenreChipTapSubtitle": {
+    "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
   },
-  "artistGenreChipsApplyFilterPrompt": "Applied genre filter",
-  "@artistGenreChipsApplyFilterPrompt": {
+  "applyFilterOnGenreChipTapPrompt": "Applied genre filter",
+  "@applyFilterOnGenreChipTapPrompt": {
     "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
   },
-  "artistGenreChipsApplyFilterPromptButton": "Open Genre",
-  "@artistGenreChipsApplyFilterPromptButton": {
+  "applyFilterOnGenreChipTapPromptButton": "Open Genre",
+  "@applyFilterOnGenreChipTapPromptButton": {
     "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
   },
   "genreScreen": "Genre Screen",
