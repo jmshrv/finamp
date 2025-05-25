@@ -49,19 +49,20 @@ class ItemInfo extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // if (item.type != "Playlist") IconAndText(
-        //   iconData: TablerIcons.user,
-        //   textSpan: TextSpan(
-        //     children: getArtistsTextSpans(
-        //       item,
-        //       context,
-        //       false,
-        //     ),
-        //   ),
-        // ),
-        // We display the title of a playlist here, because we have
-        // too many actions in the AppBar:
-
+        // We display the title of a playlist here, 
+        // because we have too many actions in the AppBar
+        if (item.type == "Playlist")
+          Padding(
+            padding: EdgeInsets.only(left: 6, right: 6, top: 0, bottom: 6),
+            child: Text(
+              item.name ?? "Unknown Playlist",
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontSize: Theme.of(context).textTheme.titleMedium!.fontSize! + 1,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis, 
+            ),
+          ),
         if (item.type != "Playlist")
           ArtistChips(
             baseItem: item,

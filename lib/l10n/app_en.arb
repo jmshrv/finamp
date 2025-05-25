@@ -1329,6 +1329,15 @@
       }
     }
   },
+  "genreNoItems": "You don't have any {itemType, select, playlists{playlists} artists{artists} albums{albums} tracks{tracks} other{items}} for this genre.",
+  "@genreNoItems": {
+    "description": "Message for empty See All lists for a genre.",
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
   "@albumCount": {
     "placeholders": {

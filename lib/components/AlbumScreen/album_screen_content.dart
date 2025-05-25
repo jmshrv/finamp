@@ -61,14 +61,6 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
     _listener = null;
   }
 
-  double? textWidth;
-
-  @override
-  void didUpdateWidget(covariant AlbumScreenContent oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    textWidth = null;
-  }
-
   @override
   Widget build(BuildContext context) {
     final downloadStub = DownloadStub.fromItem(
@@ -125,18 +117,6 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
     return PaddedCustomScrollview(
       slivers: [
         SliverLayoutBuilder(builder: (context, constraints) {
-          double textSize(String text, TextStyle? style) {
-            final TextPainter textPainter = TextPainter(
-              text: TextSpan(text: text, style: style),
-              maxLines: 1,
-              textDirection: TextDirection.ltr,
-              textScaler: MediaQuery.textScalerOf(context),
-            )..layout(minWidth: 0, maxWidth: double.infinity);
-            final size = textPainter.width;
-            textPainter.dispose();
-            return size;
-          }
-
           final actions = [
             if (widget.parent.type == "Playlist" &&
                 !ref.watch(finampSettingsProvider.isOffline))
@@ -153,7 +133,6 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
               ),
             FavoriteButton(
               item: widget.parent,
-              visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
             if (!isLoading)
               DownloadButton(
@@ -166,31 +145,16 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
               ),
           ];
 
-          textWidth ??= textSize(
-              widget.parent.name ?? AppLocalizations.of(context)!.unknownName,
-              AppBarTheme.of(context).titleTextStyle ??
-                  Theme.of(context).textTheme.titleLarge);
-          final iconSize = kMinInteractiveDimension +
-              VisualDensity.adaptivePlatformDensity.baseSizeAdjustment.dy;
-          /*final wrapActions = constraints.crossAxisExtent <
-              textWidth! +
-                  iconSize * actions.length +
-                  56 +
-                  (ref.watch(finampSettingsProvider.allowDeleteFromServer) ||
-                          widget.parent.type == "Playlist"
-                      ? iconSize
-                      : 0);*/
-          final wrapActions = false;
-
           return SliverAppBar(
-            title: Text(
-              widget.parent.name ?? AppLocalizations.of(context)!.unknownName,
-            ),
+            title: (widget.parent.type != "Playlist")
+                ? Text(
+                    widget.parent.name ?? AppLocalizations.of(context)!.unknownName,
+                  )
+                : null,
             expandedHeight: kToolbarHeight +
                 125 +
                 18 +
-                CTAMedium.predictedHeight(context) +
-                (wrapActions ? iconSize : 0),
+                CTAMedium.predictedHeight(context),
             // collapsedHeight: kToolbarHeight + 125 + 80,
             pinned: true,
             centerTitle: false,
@@ -199,11 +163,10 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                 parentItem: widget.parent,
                 isPlaylist: widget.parent.type == "Playlist",
                 items: queueChildren,
-                actions: wrapActions ? actions : null,
                 genreFilter: currentGenreFilter,
                 updateGenreFilter: updateGenreFilter,
             ),
-            actions: wrapActions ? null : actions,
+            actions: actions,
           );
         }),
         if (!isLoading && displayChildren.length > 1 &&

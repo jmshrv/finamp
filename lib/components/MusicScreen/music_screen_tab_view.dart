@@ -389,24 +389,34 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  AppLocalizations.of(context)!.emptyFilteredListSubtitle,
-                  style: TextStyle(
-                    fontSize: 16,
+                if (widget.genreFilter != null && widget.tabContentType != TabContentType.genres)
+                  Text(
+                    AppLocalizations.of(context)!.genreNoItems(widget.tabContentType.name),
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
+                  )
+                else ...[
+                  Text(
+                    AppLocalizations.of(context)!.emptyFilteredListSubtitle,
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                CTAMedium(
-                  icon: TablerIcons.filter_x,
-                  text: AppLocalizations.of(context)!.resetFiltersButton,
-                  onPressed: () {
-                    FinampSetters.setOnlyShowFavorites(
-                        DefaultSettings.onlyShowFavorites);
-                    FinampSetters.setOnlyShowFullyDownloaded(
-                        DefaultSettings.onlyShowFullyDownloaded);
-                  },
-                )
+                  const SizedBox(height: 8),
+                  CTAMedium(
+                    icon: TablerIcons.filter_x,
+                    text: AppLocalizations.of(context)!.resetFiltersButton,
+                    onPressed: () {
+                      FinampSetters.setOnlyShowFavorites(
+                          DefaultSettings.onlyShowFavorites);
+                      FinampSetters.setOnlyShowFullyDownloaded(
+                          DefaultSettings.onlyShowFullyDownloaded);
+                    },
+                  )
+                ],
               ],
             ),
           );
