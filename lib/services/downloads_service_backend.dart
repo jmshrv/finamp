@@ -678,7 +678,7 @@ class DownloadsDeleteService {
     if (item.file != null && item.file!.existsSync()) {
       try {
         await item.file!.delete();
-        _deleteLogger.finer("Deleted files for ${item.name}");
+        _deleteLogger.finer("Deleted file for ${item.name}");
       } on PathNotFoundException {
         _deleteLogger.finer(
             "File ${item.file!.path} for ${item.name} missing during delete.");
