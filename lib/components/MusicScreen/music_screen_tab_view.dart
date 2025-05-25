@@ -389,24 +389,34 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  AppLocalizations.of(context)!.emptyFilteredListSubtitle,
-                  style: TextStyle(
-                    fontSize: 16,
+                if (widget.genreFilter != null && widget.tabContentType != TabContentType.genres)
+                  Text(
+                    AppLocalizations.of(context)!.genreNoItems(widget.tabContentType.name),
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
+                  )
+                else ...[
+                  Text(
+                    AppLocalizations.of(context)!.emptyFilteredListSubtitle,
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                CTAMedium(
-                  icon: TablerIcons.filter_x,
-                  text: AppLocalizations.of(context)!.resetFiltersButton,
-                  onPressed: () {
-                    FinampSetters.setOnlyShowFavorites(
-                        DefaultSettings.onlyShowFavorites);
-                    FinampSetters.setOnlyShowFullyDownloaded(
-                        DefaultSettings.onlyShowFullyDownloaded);
-                  },
-                )
+                  const SizedBox(height: 8),
+                  CTAMedium(
+                    icon: TablerIcons.filter_x,
+                    text: AppLocalizations.of(context)!.resetFiltersButton,
+                    onPressed: () {
+                      FinampSetters.setOnlyShowFavorites(
+                          DefaultSettings.onlyShowFavorites);
+                      FinampSetters.setOnlyShowFullyDownloaded(
+                          DefaultSettings.onlyShowFullyDownloaded);
+                    },
+                  )
+                ],
               ],
             ),
           );
@@ -611,11 +621,23 @@ List<BaseItemDto> sortItems(
           } else {
             return a.nameForSorting!.compareTo(b.nameForSorting!);
           }
+        case SortBy.album:
+          if (a.album == null || b.album == null) {
+            return 0;
+          } else {
+            return a.album!.compareTo(b.album!);
+          }
         case SortBy.albumArtist:
           if (a.albumArtist == null || b.albumArtist == null) {
             return 0;
           } else {
             return a.albumArtist!.compareTo(b.albumArtist!);
+          }
+        case SortBy.artist:
+          if (a.artists == null || b.artists == null) {
+            return 0;
+          } else {
+            return a.artists!.join(', ').compareTo(b.artists!.join(', '));
           }
         case SortBy.communityRating:
           if (a.communityRating == null || b.communityRating == null) {

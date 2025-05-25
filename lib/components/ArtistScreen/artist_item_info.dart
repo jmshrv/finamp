@@ -47,88 +47,12 @@ class ArtistItemInfo extends ConsumerWidget {
         if (item.type != "MusicGenre" &&
             updateGenreFilter != null &&
             item.genreItems != null)
-          _GenreIconAndText(
-              genres: item.genreItems!,
+          GenreIconAndText(
+              parent: item,
               genreFilter: genreFilter,
               updateGenreFilter: updateGenreFilter!
           )
       ],
-    );
-  }
-}
-
-class _GenreIconAndText extends StatelessWidget {
-  const _GenreIconAndText({
-    required this.genres,
-    this.genreFilter,
-    required this.updateGenreFilter
-  });
-
-  final List<NameLongIdPair> genres;
-  final BaseItemDto? genreFilter;
-  final void Function(BaseItemDto?) updateGenreFilter;
-
-  @override
-  Widget build(BuildContext context) {
-    final bool hasFilter = genreFilter != null;
-    final theme = Theme.of(context);
-
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: hasFilter ? 4 : 0),
-      child: Container(
-        decoration: hasFilter
-            ? BoxDecoration(
-                color: theme.colorScheme.primary,
-                borderRadius: BorderRadius.circular(6),
-              )
-            : null,
-        padding: EdgeInsets.symmetric(horizontal: 1),
-        child: Row(
-          children: [
-            Icon(
-              TablerIcons.color_swatch,
-              color: hasFilter
-                  ? theme.colorScheme.onPrimary
-                  : theme.iconTheme.color?.withOpacity(
-                      theme.brightness == Brightness.light ? 0.38 : 0.5,
-                    ),
-            ),
-            const SizedBox(width: 4),
-            Expanded(
-              child: hasFilter
-                  ? Text(
-                      genreFilter?.name ?? "Unknown Genre",
-                      style: TextStyle(color: theme.colorScheme.onPrimary),
-                      overflow: TextOverflow.ellipsis,
-                    )
-                  : (genres.isNotEmpty)
-                      ? GenreChips(
-                        genres: genres,
-                        backgroundColor:
-                          IconTheme.of(context).color!.withOpacity(0.1),
-                        updateGenreFilter: updateGenreFilter,
-                      )
-                    : Text(
-                        AppLocalizations.of(context)!.noGenres
-                      ),
-            ),
-            if (hasFilter)
-              GestureDetector(
-                onTap: () {
-                  updateGenreFilter(null);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 4, right: 2),
-                  child: Icon(
-                    Icons.close,
-                    size: 18,
-                    color: theme.colorScheme.onPrimary,
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
     );
   }
 }

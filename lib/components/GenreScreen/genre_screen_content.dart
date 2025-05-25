@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/curated_item_filter_row.dart';
 import 'package:finamp/services/genre_screen_provider.dart';
 import 'package:finamp/components/curated_item_sections.dart';
@@ -269,6 +270,9 @@ void openSeeAll(
           ),
         ),
       ),
+      // TODO: 
+      // Once we have a better handling of large queues (maybe with lazy-loading/adding?)
+      // and once we redesigned the play/shuffle buttons, they should get added here
       if (!isLoading)
         ...genreItemSectionsOrder.map((type) {
           switch (type) {
@@ -352,6 +356,25 @@ void openSeeAll(
               );
           }
         }),
+      if (!isLoading && ref.watch(finampSettingsProvider.genreShowBrowsePlaylistsButton))
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.only(top: 32),
+            child: SimpleButton(
+              text: AppLocalizations.of(context)!
+                  .browsePlaylists
+                  .toUpperCase(),
+              textColor: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.w500,
+              icon: Icons.chevron_right,
+              iconPosition: IconPosition.end,
+              onPressed: () => openSeeAll(
+                TabContentType.playlists, 
+                doOverride: false,
+              ),
+            ),
+          ),
+        ),
       if (isLoading)
         SliverToBoxAdapter(
           child: Padding(

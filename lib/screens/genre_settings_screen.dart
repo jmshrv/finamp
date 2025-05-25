@@ -14,6 +14,8 @@ class GenreSettingsScreen extends ConsumerStatefulWidget {
 class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    final showBrowsePlaylistsButton = ref.watch(finampSettingsProvider.genreShowBrowsePlaylistsButton);
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.genreScreen),
@@ -62,17 +64,28 @@ class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
             ),
             SizedBox(height: 12),
             SwitchListTile.adaptive(
+              title: Text(AppLocalizations.of(context)!.genreShowBrowsePlaylistsButton),
+              subtitle: Text(AppLocalizations.of(context)!.genreShowBrowsePlaylistsButtonSubtitle),
+              value: showBrowsePlaylistsButton,
+              onChanged: FinampSetters.setGenreShowBrowsePlaylistsButton,
+            ),
+            SizedBox(height: 8),
+            SwitchListTile.adaptive(
               title: Text(AppLocalizations.of(context)!.genreFilterArtistScreens),
               subtitle: Text(AppLocalizations.of(context)!.genreFilterArtistScreensSubtitle),
               value: ref.watch(finampSettingsProvider.genreFilterArtistScreens),
               onChanged: FinampSetters.setGenreFilterArtistScreens,
             ),
             SizedBox(height: 8),
-            SwitchListTile.adaptive(
-              title: Text(AppLocalizations.of(context)!.genreListsInheritSorting),
-              subtitle: Text(AppLocalizations.of(context)!.genreListsInheritSortingSubtitle),
-              value: ref.watch(finampSettingsProvider.genreListsInheritSorting),
-              onChanged: FinampSetters.setGenreListsInheritSorting,
+            Opacity(
+              opacity: !showBrowsePlaylistsButton ? 0.4 : 1.0,
+              child: SwitchListTile.adaptive(
+                title: Text(AppLocalizations.of(context)!.genreFilterPlaylistScreens),
+                subtitle: Text(AppLocalizations.of(context)!.genreFilterPlaylistScreensSubtitle),
+                value: ref.watch(finampSettingsProvider.genreFilterPlaylists),
+                onChanged: showBrowsePlaylistsButton 
+                    ? FinampSetters.setGenreFilterPlaylists : null,
+              ),
             ),
             SizedBox(height: 8),
             Column(
@@ -108,7 +121,14 @@ class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
                 ),
               ]
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 12),
+            SwitchListTile.adaptive(
+              title: Text(AppLocalizations.of(context)!.genreListsInheritSorting),
+              subtitle: Text(AppLocalizations.of(context)!.genreListsInheritSortingSubtitle),
+              value: ref.watch(finampSettingsProvider.genreListsInheritSorting),
+              onChanged: FinampSetters.setGenreListsInheritSorting,
+            ),
+            SizedBox(height: 40),
           ]
         ),
       ),

@@ -127,8 +127,6 @@ class FinampSettingsHelper {
   static void resetArtistSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
     
-    finampSettingsTemp.artistGenreChipsApplyFilter =
-        DefaultSettings.artistGenreChipsApplyFilter;
     finampSettingsTemp.artistItemSectionsOrder =
         DefaultSettings.artistItemSectionsOrder;
     finampSettingsTemp.showArtistsTracksSection =
@@ -145,12 +143,16 @@ class FinampSettingsHelper {
     
     finampSettingsTemp.genreItemSectionsOrder =
         DefaultSettings.genreItemSectionsOrder;
-    finampSettingsTemp.genreFilterArtistScreens =
-        DefaultSettings.genreFilterArtistScreens;
-    finampSettingsTemp.genreListsInheritSorting =
-        DefaultSettings.genreListsInheritSorting;
     finampSettingsTemp.genreItemSectionFilterChipOrder =
         DefaultSettings.genreItemSectionFilterChipOrder;
+    finampSettingsTemp.genreShowBrowsePlaylistsButton =
+        DefaultSettings.genreShowBrowsePlaylistsButton;
+    finampSettingsTemp.genreFilterArtistScreens =
+        DefaultSettings.genreFilterArtistScreens;
+    finampSettingsTemp.genreFilterPlaylists =
+        DefaultSettings.genreFilterPlaylists;
+    finampSettingsTemp.genreListsInheritSorting =
+        DefaultSettings.genreListsInheritSorting;
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
@@ -271,6 +273,8 @@ class FinampSettingsHelper {
         DefaultSettings.itemSwipeActionRightToLeft;
     finampSettingsTemp.startInstantMixForIndividualTracks =
         DefaultSettings.startInstantMixForIndividualTracks;
+    finampSettingsTemp.applyFilterOnGenreChipTap =
+        DefaultSettings.applyFilterOnGenreChipTap;
     FinampSetters.setShowFastScroller(DefaultSettings.showFastScroller);
     FinampSetters.setDisableGesture(DefaultSettings.disableGesture);
     FinampSetters.setEnableVibration(DefaultSettings.enableVibration);

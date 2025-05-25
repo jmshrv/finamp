@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +18,7 @@ class CTAMedium extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
+    final screenSize = MediaQuery.sizeOf(context);
     final minWidth = this.minWidth ?? screenSize.width * 0.25;
     final paddingHorizontal = screenSize.width * 0.015;
     final paddingVertical = screenSize.height * 0.015;
@@ -78,5 +80,13 @@ class CTAMedium extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  static double predictedHeight(BuildContext context) {
+    final densityAdj =
+        VisualDensity.adaptivePlatformDensity.baseSizeAdjustment.dy;
+    return max(
+        MediaQuery.sizeOf(context).height * 0.03 + 24 + densityAdj + densityAdj,
+        kMinInteractiveDimension + densityAdj);
   }
 }
