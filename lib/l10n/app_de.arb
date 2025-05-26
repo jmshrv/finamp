@@ -2100,11 +2100,11 @@
   "@topAlbums": {},
   "topArtists": "Top Künstler",
   "@topArtists": {},
-  "latestTracks": "Kürzlich hinzugefügte Titel",
+  "latestTracks": "Neu veröffentlichte Titel",
   "@latestTracks": {},
-  "latestAlbums": "Kürzlich hinzugefügte Alben",
+  "latestAlbums": "Neu veröffentlichte Alben",
   "@latestAlbums": {},
-  "latestArtists": "Kürzlich hinzugefügte Künstler",
+  "latestArtists": "Neue Künstler",
   "@latestArtists": {},
   "favoriteTracks": "Lieblingstitel",
   "@favoriteTracks": {},
@@ -2128,7 +2128,7 @@
   "@recentlyAdded": {},
   "latestReleases": "Neu veröffentlicht",
   "@latestReleases": {},
-  "itemSectionsOrderSubtitle": "Legt die Reihenfolge der Item Sections fest.",
+  "itemSectionsOrderSubtitle": "Legt die Reihenfolge der Abschnitte fest.",
   "@itemSectionsOrderSubtitle": {
     "description": "Description of the setting that controls the order of item sections on the screens."
   },
@@ -2218,7 +2218,7 @@
   "@itemSectionsOrder": {
     "description": "Label for the setting that controls the order of item sections on the screens."
   },
-  "genreItemSectionFilterChipOrderTitle": "Item Sections Filter Reihenfolge",
+  "genreItemSectionFilterChipOrderTitle": "Abschnitt Filter Reihenfolge",
   "@genreItemSectionFilterChipOrderTitle": {
     "description": "Label for the setting that controls the order of item sections filter chips."
   },
@@ -2275,5 +2275,27 @@
   "noReleaseDate": "Kein Release Datum",
   "@noReleaseDate": {
     "description": "Placeholder text if an album has no release date set."
-  }
+  },
+  "recentlyPlayed": "Zuletzt abgespielt",
+  "@recentlyPlayed": {},
+  "recentlyAddedTracks": "Kürzlich hinzugefügte Titel",
+  "@recentlyAddedTracks": {
+    "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyPlayedArtists": "Zuletzt gespielte Künstler",
+  "@recentlyPlayedArtists": {},
+  "recentlyAddedAlbums": "Kürzlich hinzugefügte Alben",
+  "@recentlyAddedAlbums": {
+    "description": "Label for the genre section that shows albums that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedArtists": "Kürzlich hinzugefügte Künstler",
+  "@recentlyAddedArtists": {
+    "description": "Label for the genre section that shows artists that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyPlayedTracks": "Zuletzt gespielte Titel",
+  "@recentlyPlayedTracks": {},
+  "recentlyPlayedAlbums": "Zuletzt gespielte Alben",
+  "@recentlyPlayedAlbums": {},
+  "unknown": "Unbekannt",
+  "@unknown": {}
 }
