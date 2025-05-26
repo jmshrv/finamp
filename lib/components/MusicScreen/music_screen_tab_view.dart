@@ -137,28 +137,16 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         startIndex: pageKey,
         limit: _pageSize,
         artistType: settings.artistListType,
-        genreFilter: widget.tabContentType == TabContentType.playlists
-            ? null
-            : widget.genreFilter,
+        genreFilter: widget.genreFilter,
       );
-
-      // Playlists use different genreIds due to their cross-library functionality
-      // So we can't apply the genreFilter the same way we do with other items
-      // We have to load all playlists and then manually filter by genreName
-      final newItemsSorted = (newItems != null &&
-              widget.genreFilter != null &&
-              widget.tabContentType == TabContentType.playlists)
-          ? filterItemsByGenreName(newItems, widget.genreFilter!)
-          : newItems;
 
       // Skip appending page if a refresh triggered while processing
       if (localRefreshCount == refreshCount && mounted) {
-        if (newItemsSorted!.length < _pageSize) {
-          _pagingController.appendLastPage(newItemsSorted);
+        if (newItems!.length < _pageSize) {
+          _pagingController.appendLastPage(newItems);
           fullyLoadedRefresh = localRefreshCount;
         } else {
-          _pagingController.appendPage(
-              newItemsSorted, pageKey + newItemsSorted.length);
+          _pagingController.appendPage(newItems, pageKey + newItems.length);
         }
         if (letterToSearch != null) {
           scrollToLetter(letterToSearch);
@@ -230,9 +218,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         settings.tabSortOrder[widget.tabContentType];
     items = sortItems(items, sortBy, sortOrder);
 
-    // Playlists use different genreIds due to their cross-library functionality
-    // So we can't apply the genreFilter the same way we do with other items
-    // We have to load all playlists and then manually filter by genreName
+    // Playlists use different genreIds due to their cross-library functionality.
+    // In Online Mode, the api still returns correct data, but in Offline Mode,
+    // we only have genres with their "libraryId" but playlists with their
+    // "cross-library-genreIds", so we won't get any results. Therefore,
+    // we have to load all playlists and manually filter by genreName.
     if (items.isNotEmpty &&
         widget.genreFilter != null &&
         widget.tabContentType == TabContentType.playlists) {
