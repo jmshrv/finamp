@@ -217,7 +217,6 @@ class DefaultSettings {
   static const playlistTracksSortBy = SortBy.serverOrder;
   static const playlistTracksSortOrder = SortOrder.ascending;
   static const genreFilterPlaylists = false;
-  static const genreShowBrowsePlaylistsButton = true;
 }
 
 @HiveType(typeId: 28)
@@ -356,7 +355,6 @@ class FinampSettings {
     this.playlistTracksSortBy = DefaultSettings.playlistTracksSortBy,
     this.playlistTracksSortOrder = DefaultSettings.playlistTracksSortOrder,
     this.genreFilterPlaylists = DefaultSettings.genreFilterPlaylists,
-    this.genreShowBrowsePlaylistsButton = DefaultSettings.genreShowBrowsePlaylistsButton,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -732,9 +730,6 @@ class FinampSettings {
 
   @HiveField(115, defaultValue: DefaultSettings.genreFilterPlaylists)
   bool genreFilterPlaylists;
-
-  @HiveField(116, defaultValue: DefaultSettings.genreShowBrowsePlaylistsButton)
-  bool genreShowBrowsePlaylistsButton;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

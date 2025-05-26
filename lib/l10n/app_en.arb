@@ -1277,14 +1277,6 @@
   "@artistItemSectionFilterChipOrderSubtitle": {
     "description": "Description of the setting that controls the order of the tracks sections filter chips."
   },
-  "genreShowBrowsePlaylistsButton": "Show \"Browse Playlists\" Button",
-  "@genreShowBrowsePlaylistsButton": {
-    "description": "Label for the setting that controls if a button to all genre-playlists should get displayed on the GenreScreen."
-  },
-  "genreShowBrowsePlaylistsButtonSubtitle": "When enabled, a button appears at the bottom of the Genre Screen. Tapping it shows a list of playlists that contain tracks from the currently viewed genre.",
-  "@genreShowBrowsePlaylistsButtonSubtitle": {
-    "description": "Description of the setting that controls if a button to all genre-playlists should get displayed on the GenreScreen."
-  },
   "genreFilterArtistScreens": "Filter Artists",
   "@genreFilterArtistScreens": {
     "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."

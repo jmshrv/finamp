@@ -197,7 +197,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         infoForType: (widget.tabContentType == TabContentType.artists)
             ? artistInfoForType
             : null,
-         genreFilter: widget.genreFilter
+          genreFilter: widget.tabContentType == TabContentType.playlists
+              ? null
+              : widget.genreFilter
       );
     }
 

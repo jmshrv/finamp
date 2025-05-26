@@ -356,7 +356,7 @@ void openSeeAll(
               );
           }
         }),
-      if (!isLoading && ref.watch(finampSettingsProvider.genreShowBrowsePlaylistsButton))
+      if (!isLoading)
         SliverToBoxAdapter(
           child: Padding(
             padding: EdgeInsets.only(top: 32),

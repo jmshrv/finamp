@@ -145,8 +145,6 @@ class FinampSettingsHelper {
         DefaultSettings.genreItemSectionsOrder;
     finampSettingsTemp.genreItemSectionFilterChipOrder =
         DefaultSettings.genreItemSectionFilterChipOrder;
-    finampSettingsTemp.genreShowBrowsePlaylistsButton =
-        DefaultSettings.genreShowBrowsePlaylistsButton;
     finampSettingsTemp.genreFilterArtistScreens =
         DefaultSettings.genreFilterArtistScreens;
     finampSettingsTemp.genreFilterPlaylists =
