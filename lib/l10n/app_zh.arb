@@ -2261,10 +2261,6 @@
   "@addFavorite": {},
   "recentlyPlayed": "最近播放",
   "@recentlyPlayed": {},
-  "genreShowBrowsePlaylistsButton": "显示“浏览播放列表”按钮",
-  "@genreShowBrowsePlaylistsButton": {
-    "description": "Label for the setting that controls if a button to all genre-playlists should get displayed on the GenreScreen."
-  },
   "downloadButtonDisabledGenreFilterTooltip": "请删除类型筛选器以启用下载操作。",
   "@downloadButtonDisabledGenreFilterTooltip": {
     "description": "Tooltip shown when a download button is disabled because of an active genre filter."
@@ -2305,10 +2301,6 @@
   },
   "recentlyPlayedArtists": "最近播放的艺术家",
   "@recentlyPlayedArtists": {},
-  "genreShowBrowsePlaylistsButtonSubtitle": "启用后，类型屏幕底部会出现一个按钮。点击该按钮将显示包含当前所查看类型歌曲的播放列表。",
-  "@genreShowBrowsePlaylistsButtonSubtitle": {
-    "description": "Description of the setting that controls if a button to all genre-playlists should get displayed on the GenreScreen."
-  },
   "genreFilterPlaylistScreensSubtitle": "启用后，播放列表（通过类型访问）将仅显示与您当前浏览的类型匹配的歌曲。（您也可以手动移除类型筛选器以显示所有歌曲。）",
   "@genreFilterPlaylistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."

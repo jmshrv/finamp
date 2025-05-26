@@ -2410,10 +2410,6 @@
   "@applyFilterOnGenreChipTapPromptButton": {
     "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
   },
-  "genreShowBrowsePlaylistsButton": "Показати кнопку «Переглянути списки відтворення»",
-  "@genreShowBrowsePlaylistsButton": {
-    "description": "Label for the setting that controls if a button to all genre-playlists should get displayed on the GenreScreen."
-  },
   "browsePlaylists": "Переглянути списки відтворення",
   "@browsePlaylists": {
     "description": "Label for a button on the genre screen that brings you to a list of genre-filtered playlists."
@@ -2423,9 +2419,5 @@
     "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
   },
   "recentlyPlayedAlbums": "Нещодавно відтворені альбоми",
-  "@recentlyPlayedAlbums": {},
-  "genreShowBrowsePlaylistsButtonSubtitle": "Коли ця кнопка ввімкнена, внизу екрана жанру з’являється кнопка. Натискання на неї відображає список списків відтворення, які містять треки з поточного жанру.",
-  "@genreShowBrowsePlaylistsButtonSubtitle": {
-    "description": "Description of the setting that controls if a button to all genre-playlists should get displayed on the GenreScreen."
-  }
+  "@recentlyPlayedAlbums": {}
 }
