@@ -184,6 +184,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
               ),
           ],
         ),
+        const SliverToBoxAdapter(child: SizedBox(height: 10)),
         if (!isLoading)
           ...artistItemSectionsOrder.map((type) {
             switch (type) {
