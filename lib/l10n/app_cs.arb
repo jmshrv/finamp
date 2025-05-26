@@ -43,7 +43,7 @@
   },
   "dateAdded": "Datum přidání",
   "@dateAdded": {},
-  "datePlayed": "Datum přehrání",
+  "datePlayed": "Datum posledního přehrání",
   "@datePlayed": {},
   "discNumber": "Disk {number}",
   "@discNumber": {
@@ -2188,7 +2188,7 @@
   "@autoSwitchItemCurationTypeTitle": {},
   "showArtistsTracksSection": "Zobrazit sekci skladeb",
   "@showArtistsTracksSection": {},
-  "showArtistsTracksSectionSubtitle": "Zda zobrazit sekci s až pěti skladbami. Můžete si vybírat mezi nejpřehrávanějšími, oblíbenými,náhodnými, nejnovějšími vydáními a nedávno přidanými skladbami.",
+  "showArtistsTracksSectionSubtitle": "Zda zobrazit sekci s až pěti skladbami. Pokud je tato možnost povolena, můžete si vybrat mezi Nejpřehrávanější, Oblíbené, Náhodné, Nejnovější vydání, Nedávno přidané a Nedávno přehrané skladby.",
   "@showArtistsTracksSectionSubtitle": {},
   "randomAlbums": "Alba (náhodný výběr)",
   "@randomAlbums": {},
@@ -2283,5 +2283,17 @@
   "noReleaseDate": "Žádné datum vydání",
   "@noReleaseDate": {
     "description": "Placeholder text if an album has no release date set."
-  }
+  },
+  "removeFavorite": "Odebrat oblíbené",
+  "@removeFavorite": {},
+  "recentlyAddedTracks": "Nedávno přidané skladby",
+  "@recentlyAddedTracks": {
+    "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
+  },
+  "duration": "Délka",
+  "@duration": {},
+  "notAvailable": "Nedostupné",
+  "@notAvailable": {},
+  "addFavorite": "Přidat oblíbené",
+  "@addFavorite": {}
 }
