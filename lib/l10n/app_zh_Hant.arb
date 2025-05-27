@@ -35,7 +35,7 @@
   "@albums": {},
   "artists": "藝人",
   "@artists": {},
-  "genres": "風格",
+  "genres": "曲風",
   "@genres": {},
   "playlists": "播放清單",
   "@playlists": {},
@@ -884,7 +884,7 @@
   "@previousTracks": {
     "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
   },
-  "nextUp": "即將播放",
+  "nextUp": "下一首",
   "@nextUp": {
     "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
   },
@@ -908,11 +908,11 @@
   "@confirmAddedToPlaylist": {
     "description": "Snackbar message that shows when the user successfully adds items to a playlist."
   },
-  "clearNextUp": "取消播放下一首",
+  "clearNextUp": "清空下一首",
   "@clearNextUp": {
     "description": "Label for the action that deletes all tracks added to Next Up"
   },
-  "shuffleToNextUp": "隨機加入「即將播放」佇列末端",
+  "shuffleToNextUp": "隨機加入下一首佇列",
   "@shuffleToNextUp": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
   },
@@ -930,7 +930,7 @@
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
-  "confirmAddToNextUp": "已將 {type, select, track{歌曲} album{專輯} artist{藝人} playlist{播放清單} genre{曲風} other{項目}} 新增至「即將播放」",
+  "confirmAddToNextUp": "已將 {type, select, track{歌曲} album{專輯} artist{藝人} playlist{播放清單} genre{曲風} other{項目}} 新增至下一首",
   "@confirmAddToNextUp": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
     "placeholders": {
@@ -952,7 +952,7 @@
   "@confirmShuffleNext": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
   },
-  "confirmShuffleToNextUp": "已隨機排列至即將播放",
+  "confirmShuffleToNextUp": "已隨機排列至下一首播放",
   "@confirmShuffleToNextUp": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
   },
@@ -982,7 +982,7 @@
       }
     }
   },
-  "tracksFormerNextUp": "已加入過即將播放佇列的歌曲",
+  "tracksFormerNextUp": "歌曲已加入過下一首佇列",
   "@tracksFormerNextUp": {
     "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
   },
@@ -990,7 +990,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "playingFromType": "播放自 {source, select, album{專輯} playlist{播放清單} trackMix{單曲組合} artistMix{藝人組合} albumMix{專輯組合} genreMix{類型組合} favorites{我的最愛} allTracks{所有歌曲} filteredList{篩選歌曲} genre{曲風} artist{藝人} track{單曲} nextUpAlbum{即將播放的專輯} nextUpPlaylist{即將播放的播放清單} nextUpArtist{即將播放的藝人} remoteClient{其他用戶端} other{}}",
+  "playingFromType": "播放自 {source, select, album{專輯} playlist{播放清單} trackMix{單曲組合} artistMix{藝人組合} albumMix{專輯組合} genreMix{類型組合} favorites{我的最愛} allTracks{所有歌曲} filteredList{篩選歌曲} genre{曲風} artist{藝人} track{單曲} nextUpAlbum{下一首的專輯} nextUpPlaylist{下一首的播放清單} nextUpArtist{下一首的藝人} remoteClient{其他用戶端} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1045,7 +1045,7 @@
   },
   "resetToDefaults": "恢復預設值",
   "@resetToDefaults": {},
-  "couldNotLoad": "無法載入 {source, select, album{專輯} playlist{播放清單} trackMix{歌曲組合} artistMix{藝人組合} albumMix{專輯組合} genreMix{類型組合} favorites{我的最愛} allTracks{所有歌曲} filteredList{篩選後的歌曲} genre{曲風} artist{藝人} track{歌曲} nextUpAlbum{即將播放的專輯} nextUpPlaylist{即將播放的播放清單} nextUpArtist{即將播放的藝人} other{}}",
+  "couldNotLoad": "無法載入 {source, select, album{專輯} playlist{播放清單} trackMix{歌曲組合} artistMix{藝人組合} albumMix{專輯組合} genreMix{類型組合} favorites{我的最愛} allTracks{所有歌曲} filteredList{篩選後的歌曲} genre{曲風} artist{藝人} track{歌曲} nextUpAlbum{下一首的專輯} nextUpPlaylist{下一首的播放清單} nextUpArtist{下一首的藝人} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -1153,7 +1153,7 @@
   "@shuffleAlbumsNext": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
   },
-  "shuffleAlbumsToNextUp": "隨機選擇專輯加入即將播放清單",
+  "shuffleAlbumsToNextUp": "隨機選擇所有專輯至下一首佇列",
   "@shuffleAlbumsToNextUp": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
   },
