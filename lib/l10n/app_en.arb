@@ -1205,12 +1205,18 @@
   "@topAlbums": {},
   "topArtists": "Top Artists",
   "@topArtists": {},
-  "newTracks": "New Tracks",
-  "@newTracks": {},
-  "newAlbums": "New Albums",
-  "@newAlbums": {},
-  "newArtists": "New Artists",
-  "@newArtists": {},
+  "recentlyAddedTracks": "Recently Added Tracks",
+  "@recentlyAddedTracks": {
+    "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedAlbums": "Recently Added Albums",
+  "@recentlyAddedAlbums": {
+    "description": "Label for the genre section that shows albums that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedArtists": "Recently Added Artists",
+  "@recentlyAddedArtists": {
+    "description": "Label for the genre section that shows artists that were recently added to the library, sorted by the date they were added."
+  },
   "latestTracks": "Latest Tracks",
   "@latestTracks": {},
   "latestAlbums": "Latest Albums",
@@ -1270,14 +1276,6 @@
   "artistItemSectionFilterChipOrderSubtitle": "Controls the order of available filters for the tracks section.",
   "@artistItemSectionFilterChipOrderSubtitle": {
     "description": "Description of the setting that controls the order of the tracks sections filter chips."
-  },
-  "genreShowBrowsePlaylistsButton": "Show \"Browse Playlists\" Button",
-  "@genreShowBrowsePlaylistsButton": {
-    "description": "Label for the setting that controls if a button to all genre-playlists should get displayed on the GenreScreen."
-  },
-  "genreShowBrowsePlaylistsButtonSubtitle": "When enabled, a button appears at the bottom of the Genre Screen. Tapping it shows a list of playlists that contain tracks from the currently viewed genre.",
-  "@genreShowBrowsePlaylistsButtonSubtitle": {
-    "description": "Description of the setting that controls if a button to all genre-playlists should get displayed on the GenreScreen."
   },
   "genreFilterArtistScreens": "Filter Artists",
   "@genreFilterArtistScreens": {

@@ -14,7 +14,6 @@ class GenreSettingsScreen extends ConsumerStatefulWidget {
 class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    final showBrowsePlaylistsButton = ref.watch(finampSettingsProvider.genreShowBrowsePlaylistsButton);
     
     return Scaffold(
       appBar: AppBar(
@@ -62,13 +61,7 @@ class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
                 ),
               ]
             ),
-            SizedBox(height: 12),
-            SwitchListTile.adaptive(
-              title: Text(AppLocalizations.of(context)!.genreShowBrowsePlaylistsButton),
-              subtitle: Text(AppLocalizations.of(context)!.genreShowBrowsePlaylistsButtonSubtitle),
-              value: showBrowsePlaylistsButton,
-              onChanged: FinampSetters.setGenreShowBrowsePlaylistsButton,
-            ),
+          SizedBox(height: 12),
             SizedBox(height: 8),
             SwitchListTile.adaptive(
               title: Text(AppLocalizations.of(context)!.genreFilterArtistScreens),
@@ -77,15 +70,13 @@ class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
               onChanged: FinampSetters.setGenreFilterArtistScreens,
             ),
             SizedBox(height: 8),
-            Opacity(
-              opacity: !showBrowsePlaylistsButton ? 0.4 : 1.0,
-              child: SwitchListTile.adaptive(
-                title: Text(AppLocalizations.of(context)!.genreFilterPlaylistScreens),
-                subtitle: Text(AppLocalizations.of(context)!.genreFilterPlaylistScreensSubtitle),
-                value: ref.watch(finampSettingsProvider.genreFilterPlaylists),
-                onChanged: showBrowsePlaylistsButton 
-                    ? FinampSetters.setGenreFilterPlaylists : null,
-              ),
+          SwitchListTile.adaptive(
+            title:
+                Text(AppLocalizations.of(context)!.genreFilterPlaylistScreens),
+            subtitle: Text(AppLocalizations.of(context)!
+                .genreFilterPlaylistScreensSubtitle),
+            value: ref.watch(finampSettingsProvider.genreFilterPlaylists),
+            onChanged: FinampSetters.setGenreFilterPlaylists,
             ),
             SizedBox(height: 8),
             Column(

@@ -217,7 +217,6 @@ class DefaultSettings {
   static const playlistTracksSortBy = SortBy.serverOrder;
   static const playlistTracksSortOrder = SortOrder.ascending;
   static const genreFilterPlaylists = false;
-  static const genreShowBrowsePlaylistsButton = true;
 }
 
 @HiveType(typeId: 28)
@@ -356,7 +355,6 @@ class FinampSettings {
     this.playlistTracksSortBy = DefaultSettings.playlistTracksSortBy,
     this.playlistTracksSortOrder = DefaultSettings.playlistTracksSortOrder,
     this.genreFilterPlaylists = DefaultSettings.genreFilterPlaylists,
-    this.genreShowBrowsePlaylistsButton = DefaultSettings.genreShowBrowsePlaylistsButton,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -732,9 +730,6 @@ class FinampSettings {
 
   @HiveField(115, defaultValue: DefaultSettings.genreFilterPlaylists)
   bool genreFilterPlaylists;
-
-  @HiveField(116, defaultValue: DefaultSettings.genreShowBrowsePlaylistsButton)
-  bool genreShowBrowsePlaylistsButton;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -3125,7 +3120,7 @@ enum CuratedItemSelectionType {
       case CuratedItemSelectionType.latestReleases:
         return getTitle(loc.latestTracks, loc.latestAlbums, loc.latestArtists) ?? "Unsupported Type";
       case CuratedItemSelectionType.recentlyAdded:
-        return getTitle(loc.newTracks, loc.newAlbums, loc.newArtists) ?? "Unsupported Type";
+        return getTitle(loc.recentlyAddedTracks, loc.recentlyAddedAlbums, loc.recentlyAddedArtists) ?? "Unsupported Type";
       case CuratedItemSelectionType.recentlyPlayed:
         return getTitle(loc.recentlyPlayedTracks, loc.recentlyPlayedAlbums, loc.recentlyPlayedArtists) ?? "Unsupported Type";
     }
@@ -3263,7 +3258,7 @@ enum ArtistItemSections {
       case CuratedItemSelectionType.latestReleases:
         return getTitle(loc.latestTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
       case CuratedItemSelectionType.recentlyAdded:
-        return getTitle(loc.newTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+        return getTitle(loc.recentlyAddedTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
       case CuratedItemSelectionType.recentlyPlayed:
         return getTitle(loc.recentlyPlayedTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
       case null:
