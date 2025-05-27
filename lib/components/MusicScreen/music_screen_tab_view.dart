@@ -317,6 +317,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
   Duration _getAnimationDurationForOffsetToIndex(int index) {
     final renderedIndices = controller.tagMap.keys;
+    if (renderedIndices.isEmpty) return Duration(milliseconds: 200);
     final medianIndex = renderedIndices.elementAt(renderedIndices.length ~/ 2);
 
     final duration = Duration(

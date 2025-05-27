@@ -94,15 +94,12 @@ Future<void> _onConnectivityChange(
 Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
   // skip when feature not enabled
   if (FinampSettingsHelper.finampSettings.autoOffline ==
-      AutoOfflineOption.disabled) {
+          AutoOfflineOption.disabled ||
+      !FinampSettingsHelper.finampSettings.autoOfflineListenerActive) {
     return FinampSettingsHelper.finampSettings.isOffline;
   }
-  // skip when user overwrote offline mode
-  if (!FinampSettingsHelper.finampSettings.autoOfflineListenerActive) {
-    return true;
-  }
 
-  bool state = _shouldBeOffline(connections);
+  bool state1 = _shouldBeOffline(connections);
 
   // this prevents an issue on ios (and mac?) where the
   // listener gets called even though it shouldnt.
@@ -110,19 +107,29 @@ Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
   // likely to engage when it doesnt need to and this helps
   // with queue reloading
   await Future.delayed(Duration(seconds: 7), () => {});
-  state = _shouldBeOffline(await Connectivity().checkConnectivity());
+  bool state2 = _shouldBeOffline(await Connectivity().checkConnectivity());
 
-  // skip if nothing changed
-  if (FinampSettingsHelper.finampSettings.isOffline == state) return state;
+  // skip if we are already in the target offline state, or the auto switch was disabled
+  // while we waited out intermittent changes.  Also skip if the connection status changed
+  // during the waiting period, because we aren't sure which is better to use.  There should be
+  // another copy of this function triggered by the mid-wait switch which will handle
+  // if the final state is stable.
+  if (state1 != state2 ||
+      FinampSettingsHelper.finampSettings.isOffline == state2 ||
+      FinampSettingsHelper.finampSettings.autoOffline ==
+          AutoOfflineOption.disabled ||
+      !FinampSettingsHelper.finampSettings.autoOfflineListenerActive) {
+    return FinampSettingsHelper.finampSettings.isOffline;
+  }
 
   GlobalSnackbar.message((context) => AppLocalizations.of(context)!
-      .autoOfflineNotification(state ? "enabled" : "disabled"));
+      .autoOfflineNotification(state2 ? "enabled" : "disabled"));
 
   _autoOfflineLogger
-      .info("Automatically ${state ? "Enabled" : "Disabled"} Offline Mode");
+      .info("Automatically ${state2 ? "Enabled" : "Disabled"} Offline Mode");
 
-  FinampSetters.setIsOffline(state);
-  return state;
+  FinampSetters.setIsOffline(state2);
+  return state2;
 }
 
 bool _shouldBeOffline(List<ConnectivityResult> connections) {

@@ -20,8 +20,9 @@
     android:usesCleartextTraffic="true"
     android:requestLegacyExternalStorage="true"
     android:supportsRtl="true"
-    android:allowBackup="false"
-    android:fullBackupContent="false"
+    android:allowBackup="true"
+    android:fullBackupContent="@xml/backup_rules_legacy"
+    android:dataExtractionRules="@xml/backup_rules"
   >
     <activity android:name=".MainActivity" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize" android:exported="true">
       <!-- Specifies an Android theme to apply to this Activity as soon as
