@@ -5,7 +5,7 @@
   "@artists": {},
   "clear": "Vymazat",
   "@clear": {},
-  "downloads": "Stažené",
+  "downloads": "Stahování",
   "@downloads": {},
   "finamp": "Finamp",
   "@finamp": {},
@@ -118,7 +118,7 @@
   "@addToMix": {},
   "addToQueue": "Přidat do fronty",
   "@addToQueue": {},
-  "anErrorHasOccured": "Vyskytla se chyba.",
+  "anErrorHasOccured": "Došlo k chybě.",
   "@anErrorHasOccured": {},
   "goToAlbum": "Přejít na album",
   "@goToAlbum": {},
@@ -154,7 +154,7 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "selectMusicLibraries": "Vyberte hudební knihovny",
+  "selectMusicLibraries": "Vybrat hudební knihovny",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
@@ -927,7 +927,7 @@
   "@repairDownloads": {
     "description": "Tooltip for downloads repair button."
   },
-  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Probíhající} failed{Selhané} syncFailed{Opakovaně nesynchronizované} enqueued{Do fronty zařazené} other{}} {itemCount, plural, =1{stahování} other{stahování}}",
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Probíhající} failed{Selhaná} syncFailed{Opakovaně nesynchronizovaná} enqueued{Do fronty zařazená} other{}} {itemCount, plural, =1{stahování} other{stahování}}",
   "@activeDownloadsListHeader": {
     "description": "Header text for lists of active downloads of a particular state.",
     "placeholders": {
@@ -1493,7 +1493,7 @@
   "@fontSizeOptionLarge": {
     "description": "Font size option for things like the lyrics view. Large means a larger font size."
   },
-  "finampCollectionNames": "{itemType, select, favorites{Oblíbené} allPlaylists{Všechny seznamy skladeb} fiveLatestAlbums{5 posledních alb} allPlaylistsMetadata{Metadata seznamu skladeb} collectionWithLibraryFilter{Sbírka s filtrem knihovny} other{{itemType}} }",
+  "finampCollectionNames": "{itemType, select, favorites{Oblíbené} allPlaylists{Všechny seznamy skladeb} fiveLatestAlbums{5 posledních alb} allPlaylistsMetadata{Metadata seznamů skladeb} collectionWithLibraryFilter{Sbírka s filtrem knihovny} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
