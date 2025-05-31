@@ -65,9 +65,10 @@ class FinampLogsHelper {
     // Get the Log instance and add its metadata at the top
     final logMeta = GetIt.instance.isRegistered<Log>() ? GetIt.instance<Log>() : null;
     if (logMeta != null) {
-      fullLogsBuffer.writeln("=== Device/App/Server Info ===");
-      fullLogsBuffer.writeln(jsonEncode(logMeta.toJson()));
-      fullLogsBuffer.writeln("==============================");
+      // Use the on-demand censored metadata, which fetches server info/version as needed
+      final censoredMeta = await logMeta.toCensoredJsonOnDemand();
+      // Prepend this metadata to the logs
+      fullLogsBuffer.writeln(jsonEncode(censoredMeta));
     }
 
     if (_logFileWriter != null) {
