@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <full-backup-content>
     <!-- Include sharedprefs for background_downloader settings -->
-    <include domain="sharedpref" path="./"/>
+    <include domain="sharedpref" path="."/>
     <!-- Include main documents diretory with all our databases -->
     <include domain="root" path="app_flutter/"/>
     <!-- Exclude legacy documents download location -->
