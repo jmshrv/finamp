@@ -1,6 +1,11 @@
 import "package:device_info_plus/device_info_plus.dart";
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:get_it/get_it.dart';
 
+import 'finamp_user_helper.dart';
+import 'jellyfin_api.dart';
+
+// Collects device information from the platform
 class DeviceInfo {
   String deviceName;
   String deviceModel;
@@ -12,6 +17,7 @@ class DeviceInfo {
     required this.osVersion,
   });
 
+  // Factory method to create DeviceInfo from the current platform
   static Future<DeviceInfo> fromPlatform() async {
     final deviceInfoPlugin = DeviceInfoPlugin();
 
@@ -55,6 +61,7 @@ class DeviceInfo {
     throw UnsupportedError("Unsupported platform");
   }
 
+  // Serializes device info to a map
   Map<String, String> toJson() {
     return {
       'deviceName': deviceName,
@@ -64,6 +71,7 @@ class DeviceInfo {
   }
 }
 
+// Collects app information from the platform
 class AppInfo {
   String appName;
   String packageName;
@@ -77,6 +85,7 @@ class AppInfo {
     required this.buildNumber,
   });
 
+  // Factory method to create AppInfo from the current platform
   static Future<AppInfo> fromPlatform() async {
     final packageInfo = await PackageInfo.fromPlatform();
     return AppInfo(
@@ -87,6 +96,7 @@ class AppInfo {
     );
   }
 
+  // Serializes app info to a map
   Map<String, String> toJson() {
     return {
       'appName': appName,
@@ -97,6 +107,7 @@ class AppInfo {
   }
 }
 
+// Collects server information from the current user/session
 class ServerInfo {
   String serverAddress;
   int serverPort;
@@ -108,52 +119,107 @@ class ServerInfo {
     required this.serverProtocol,
   });
 
-  static Future<ServerInfo> fromConfig() async {
-    // Replace with actual logic to retrieve server configuration
+  // Factory method to create ServerInfo from the current user's server config
+  static Future<ServerInfo> fromServer() async {
+    final userHelper = GetIt.instance<FinampUserHelper>();
+    final user = userHelper.currentUser;
+    if (user == null) {
+      // Fallback if no user is logged in
+      return ServerInfo(
+        serverAddress: 'REDACTED',
+        serverPort: 443,
+        serverProtocol: 'https',
+      );
+    }
+    final uri = Uri.parse(user.baseURL);
     return ServerInfo(
-      serverAddress: 'example.com',
-      serverPort: 443,
-      serverProtocol: 'https',
+      serverAddress: uri.host,
+      serverPort: uri.hasPort ? uri.port : (uri.scheme == 'https' ? 443 : 80),
+      serverProtocol: uri.scheme,
     );
   }
 
-  Map<String, dynamic> toJson() {
+  // Fetches the server version from the Jellyfin API (on demand)
+  static Future<String?> fetchServerVersion() async {
+    try {
+      final api = GetIt.instance<JellyfinApi>();
+      final response = await api.getPublicServerInfo();
+      // The response body should contain the version info, adjust as needed:
+      final version = response.body?['Version'] ?? response.body?['version'];
+      return version?.toString();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Serializes server info to a map, optionally including the server version
+  Map<String, dynamic> toJson({String? serverVersion}) {
     return {
       'serverAddress': serverAddress,
       'serverPort': serverPort,
       'serverProtocol': serverProtocol,
+      if (serverVersion != null) 'serverVersion': serverVersion,
     };
   }
 }
 
+// Central log metadata class, collects device and app info at startup
 class Log {
   final DeviceInfo deviceInfo;
   final AppInfo appInfo;
-  final ServerInfo serverInfo;
+  final ServerInfo? serverInfo; // Not used, kept for legacy/compatibility
 
   Log({
     required this.deviceInfo,
     required this.appInfo,
-    required this.serverInfo,
+    this.serverInfo,
   });
 
-  // Async factory to create and populate all fields
+  // Factory method to create Log with device and app info only
   static Future<Log> create() async {
     final deviceInfo = await DeviceInfo.fromPlatform();
     final appInfo = await AppInfo.fromPlatform();
-    final serverInfo = await ServerInfo.fromConfig();
+    // We don't fetch server info here, as it can be done on demand later
+
     return Log(
       deviceInfo: deviceInfo,
       appInfo: appInfo,
-      serverInfo: serverInfo,
     );
   }
 
-  Map<String, dynamic> toJson() {
+  // Serializes log info, fetching server info on demand
+  Future<Map<String, dynamic>> toJson() async{
+    // Fetch server info on demand, this can be slow so we do it here
+    final serverInfo = await ServerInfo.fromServer();
+
     return {
       'deviceInfo': deviceInfo.toJson(),
       'appInfo': appInfo.toJson(),
       'serverInfo': serverInfo.toJson(),
+    };
+  }
+}
+
+// Extension to always censor the server address in exported logs
+extension ServerInfoCensor on ServerInfo {
+  Map<String, dynamic> toCensoredJson({String? serverVersion}) => {
+    'serverAddress': 'REDACTED',
+    'serverPort': serverPort,
+    'serverProtocol': serverProtocol,
+    if (serverVersion != null) 'serverVersion': serverVersion,
+  };
+}
+
+// Extension to fetch and export censored log metadata on demand
+extension LogCensor on Log {
+  Future<Map<String, dynamic>> toCensoredJsonOnDemand() async {
+    final serverInfo = await ServerInfo.fromServer();
+    final version = await ServerInfo.fetchServerVersion();
+    
+    return {
+      'deviceInfo': deviceInfo.toJson(),
+      'appInfo': appInfo.toJson(),
+      'serverInfo': serverInfo.toCensoredJson(serverVersion: version),
     };
   }
 }
