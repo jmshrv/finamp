@@ -1,22 +1,25 @@
-import 'dart:io';
-
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/censored_log.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 import 'services/finamp_logs_helper.dart';
+import 'services/log.dart';
 
 Future<void> setupLogging() async {
   GetIt.instance.registerSingleton(FinampLogsHelper());
   await GetIt.instance<FinampLogsHelper>().openLog();
-  //Logger.root.level = kDebugMode ? Level.ALL : Level.INFO;
+
+  // Create and store the Log instance for later use
+  final log = await Log.create();
+  GetIt.instance.registerSingleton<Log>(log);
+
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((event) {
     final finampLogsHelper = GetIt.instance<FinampLogsHelper>();
+
+    // Example: You can now use log.toJson() or log fields here if needed
 
     // We don't want to print log messages from the Flutter logger since Flutter prints logs by itself
     if (kDebugMode && event.loggerName != "Flutter") {
@@ -31,43 +34,4 @@ Future<void> setupLogging() async {
     }
     finampLogsHelper.addLog(event);
   });
-  final startupLogger = Logger("Startup");
-  startupLogger.info("App starting, logging initialized.");
-
-  final packageInfo = await PackageInfo.fromPlatform();
-  final deviceInfo = DeviceInfoPlugin();
-
-  startupLogger.info(
-    "This is ${packageInfo.appName} version ${packageInfo.version}+${packageInfo.buildNumber} (Signature '${packageInfo.buildSignature}'), installed via ${packageInfo.installerStore}.",
-  );
-
-  try {
-    String deviceInfoString;
-    if (Platform.isAndroid) {
-      final androidInfo = await deviceInfo.androidInfo;
-      final isTV = androidInfo.systemFeatures.contains('android.software.leanback');
-      final isWatch = androidInfo.systemFeatures.contains('android.hardware.type.watch');
-      deviceInfoString =
-          "Android ${androidInfo.version.release} on ${androidInfo.model} (${androidInfo.product})${isTV ? ' (TV)' : ''}${isWatch ? ' (Watch)' : ''}";
-    } else if (Platform.isIOS) {
-      final iosInfo = await deviceInfo.iosInfo;
-      deviceInfoString = "${iosInfo.systemVersion} on ${iosInfo.model}";
-    } else if (Platform.isMacOS) {
-      final macosInfo = await deviceInfo.macOsInfo;
-      deviceInfoString =
-          "macOS ${macosInfo.majorVersion}.${macosInfo.minorVersion}.${macosInfo.patchVersion} on ${macosInfo.model}";
-    } else if (Platform.isLinux) {
-      final linuxInfo = await deviceInfo.linuxInfo;
-      deviceInfoString = "${linuxInfo.version} on ${linuxInfo.id}";
-    } else if (Platform.isWindows) {
-      final windowsInfo = await deviceInfo.windowsInfo;
-      deviceInfoString = "Windows ${windowsInfo.displayVersion} on ${windowsInfo.deviceId}";
-    } else {
-      final webInfo = await deviceInfo.webBrowserInfo;
-      deviceInfoString = "Web browser ${webInfo.userAgent} on ${webInfo.platform}";
-    }
-    startupLogger.info("Running on $deviceInfoString.");
-  } catch (e) {
-    startupLogger.warning("Failed to get device info: $e");
-  }
 }
