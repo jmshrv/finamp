@@ -380,7 +380,7 @@
   },
   "removeFromMix": "從組合中刪除",
   "@removeFromMix": {},
-  "addToMix": "加入到組合",
+  "addToMix": "加入至組合",
   "@addToMix": {},
   "disableGesture": "禁用手勢",
   "@disableGesture": {},
@@ -1077,7 +1077,7 @@
   "@periodicPlaybackSessionUpdateFrequency": {
     "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "loopModeOneButtonLabel": "歌曲循環",
+  "loopModeOneButtonLabel": "單曲循環",
   "@loopModeOneButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
   },
@@ -1222,7 +1222,7 @@
   },
   "hidePlayerBottomActionsSubtitle": "隱藏播放器畫面中的佇列與歌詞按鈕。向上滑可開啟佇列，若有歌詞可用，則可在專輯封面下方向左滑查看。",
   "@hidePlayerBottomActionsSubtitle": {},
-  "volumeNormalizationModeAlbumOnly": "僅用於專輯",
+  "volumeNormalizationModeAlbumOnly": "依專輯調整",
   "@volumeNormalizationModeAlbumOnly": {
     "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
   },
@@ -1305,7 +1305,7 @@
   "@startInstantMixForIndividualTracksSwitchTitle": {
     "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
   },
-  "volumeNormalizationModeTrackBased": "基於歌曲",
+  "volumeNormalizationModeTrackBased": "依音軌調整",
   "@volumeNormalizationModeTrackBased": {
     "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
   },
@@ -1520,7 +1520,7 @@
     },
     "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
   },
-  "cacheLibraryImagesName": "'{libraryName}'的快取影像",
+  "cacheLibraryImagesName": "'{libraryName}'的快取圖片",
   "@cacheLibraryImagesName": {
     "placeholders": {
       "libraryName": {
@@ -1559,7 +1559,7 @@
       }
     }
   },
-  "doTranscode": "下載格式：{codec}，位元率：@{bitrate}{size, select, null{} other{，大小：- ~{size}}}",
+  "doTranscode": "下載{codec}格式：@{bitrate}{size, select, null{} other{- ~{size}}}",
   "@doTranscode": {
     "placeholders": {
       "bitrate": {
@@ -1756,7 +1756,7 @@
   "@addPlaylistSubheader": {
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
   },
-  "cacheLibraryImagesSettings": "快取現在的音樂庫圖片",
+  "cacheLibraryImagesSettings": "快取目前音樂庫中的圖片",
   "@cacheLibraryImagesSettings": {},
   "showLyricsTimestampsTitle": "顯示同步歌詞的時間標記",
   "@showLyricsTimestampsTitle": {
@@ -1921,7 +1921,7 @@
   "@allowDeleteFromServerTitle": {
     "description": "Title for the setting that controls if items can be deleted from the server"
   },
-  "specialDownloads": "特別下載",
+  "specialDownloads": "其它",
   "@specialDownloads": {
     "description": "Title for the special downloads section on the downloads screen."
   },
