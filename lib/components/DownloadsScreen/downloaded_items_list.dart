@@ -58,9 +58,10 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
                       DownloadStub stub = items.elementAt(index);
                       return ExpansionTile(
                         key: PageStorageKey(stub.id),
-                        leading: (stub.type == DownloadItemType.finampCollection)
-                            ? AlbumImage(item: stub.finampCollection?.item)
-                            : AlbumImage(item: stub.baseItem),
+                        leading:
+                            (stub.type == DownloadItemType.finampCollection)
+                                ? AlbumImage(item: stub.finampCollection?.item)
+                                : AlbumImage(item: stub.baseItem),
                         title: Text(stub.baseItem?.name ?? stub.name),
                         subtitle: buildDownloadedItemSubtitle(context, stub),
                         trailing: Row(
@@ -142,10 +143,13 @@ class _DownloadedChildrenListState
 
     // If we're displaying an artist, we have to filter out tracks that are
     // children of albums we already have in the list
-    if ((widget.parent.type == DownloadItemType.collection 
-        && widget.parent.baseItemType == BaseItemDtoType.artist) ||
-      (widget.parent.type == DownloadItemType.finampCollection 
-        && BaseItemDtoType.fromItem(widget.parent.finampCollection!.item!) == BaseItemDtoType.artist)) {
+    if ((widget.parent.type == DownloadItemType.collection &&
+            widget.parent.baseItemType == BaseItemDtoType.artist) ||
+        (widget.parent.type == DownloadItemType.finampCollection &&
+            widget.parent.finampCollection!.type ==
+                FinampCollectionType.collectionWithLibraryFilter &&
+            BaseItemDtoType.fromItem(widget.parent.finampCollection!.item!) ==
+                BaseItemDtoType.artist)) {
       // Collect album names
       final albumIds = <BaseItemId>{};
       for (var stub in items) {
@@ -164,7 +168,7 @@ class _DownloadedChildrenListState
         return true;
       }).toList();
     }
-    
+
     return Container(
       color: Theme.of(context).colorScheme.surfaceContainerHighest,
       child: Column(children: [
@@ -197,35 +201,35 @@ class _DownloadedChildrenListState
 
 Column buildDownloadedItemSubtitle(BuildContext context, DownloadStub stub) {
   String? libraryName;
-  final isLegacyAllLibrariesDownload = stub.type == DownloadItemType.collection &&
+  final isLegacyAllLibrariesDownload = stub.type ==
+          DownloadItemType.collection &&
       (BaseItemDtoType.fromItem(stub.baseItem!) == BaseItemDtoType.artist ||
-        BaseItemDtoType.fromItem(stub.baseItem!) == BaseItemDtoType.genre);
+          BaseItemDtoType.fromItem(stub.baseItem!) == BaseItemDtoType.genre);
 
-  final isCollectionWithLibraryFilter = !isLegacyAllLibrariesDownload && 
-          (stub.type == DownloadItemType.finampCollection &&
-          stub.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter);
-  
-  final showLibraryName = isLegacyAllLibrariesDownload || isCollectionWithLibraryFilter;
-  
+  final isCollectionWithLibraryFilter = !isLegacyAllLibrariesDownload &&
+      (stub.type == DownloadItemType.finampCollection &&
+          stub.finampCollection?.type ==
+              FinampCollectionType.collectionWithLibraryFilter);
+
+  final showLibraryName =
+      isLegacyAllLibrariesDownload || isCollectionWithLibraryFilter;
+
   if (showLibraryName && isLegacyAllLibrariesDownload) {
     libraryName = AppLocalizations.of(context)!.allLibraries;
   } else if (showLibraryName) {
     libraryName = stub.finampCollection?.library?.name;
   }
-  
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      if (showLibraryName && libraryName != null)
-        Text(
-          libraryName,
-          style: TextStyle(
-            color: isLegacyAllLibrariesDownload 
-                ? Colors.orange
-                : Theme.of(context).textTheme.bodyMedium?.color,
-          ),
+
+  return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    if (showLibraryName && libraryName != null)
+      Text(
+        libraryName,
+        style: TextStyle(
+          color: isLegacyAllLibrariesDownload
+              ? Colors.orange
+              : Theme.of(context).textTheme.bodyMedium?.color,
         ),
-      ItemFileSize(stub: stub),
-    ]
-  );
+      ),
+    ItemFileSize(stub: stub),
+  ]);
 }
