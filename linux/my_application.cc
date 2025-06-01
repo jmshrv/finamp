@@ -26,16 +26,14 @@ static void my_application_activate(GApplication* application) {
   // If running on X and not using GNOME then just use a traditional title bar
   // in case the window manager does more exotic layout, e.g. tiling.
   // If running on Wayland always use a title bar because I don't know how to check the WM
-  gboolean use_header_bar = TRUE;
+  gboolean use_header_bar = FALSE;
 #ifdef GDK_WINDOWING_X11
   GdkScreen* screen = gtk_window_get_screen(window);
   if (GDK_IS_X11_SCREEN(screen)) {
     const gchar* wm_name = gdk_x11_screen_get_window_manager_name(screen);
-    if (g_strcmp0(wm_name, "GNOME Shell") != 0) {
-      use_header_bar = FALSE;
+    if (g_strcmp0(wm_name, "GNOME Shell") == 0) {
+      use_header_bar = TRUE;
     }
-  }else{
-      use_header_bar = FALSE;
   }
 #endif
   if (use_header_bar) {
