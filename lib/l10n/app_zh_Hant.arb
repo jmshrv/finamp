@@ -1383,7 +1383,7 @@
   "@downloadBitrateSubtitle": {
     "description": "subtitle for Download Bitrate settings slider"
   },
-  "activeDownloadsListHeader": "{itemCount} 個{typeName, select, downloading{下載中} failed{下載失敗} syncFailed{同步異常} enqueued{排隊等待} other{}}的{itemCount, plural, =1{下載項目} other{下載項目}}",
+  "activeDownloadsListHeader": "{itemCount} 個{typeName, select, downloading{正在下載} failed{失敗} syncFailed{同步異常} enqueued{排隊等待} other{}}的{itemCount, plural, =1{項目} other{項目}}",
   "@activeDownloadsListHeader": {
     "description": "Header text for lists of active downloads of a particular state.",
     "placeholders": {
@@ -1709,7 +1709,7 @@
   "@releaseDateFormatYear": {
     "description": "Date format option for the release date of an album, showing only the year"
   },
-  "deleteFromTargetConfirmButton": "從{target, select, device{裝置} server{伺服器} other{}}上刪除",
+  "deleteFromTargetConfirmButton": "{target, select, device{從裝置上} server{從伺服器上} other{}}刪除",
   "@deleteFromTargetConfirmButton": {
     "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
   },
