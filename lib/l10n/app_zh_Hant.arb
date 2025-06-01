@@ -732,7 +732,7 @@
       }
     }
   },
-  "removeFromPlaylistNamedTitle": "從播放清單「 '{playlistName}'」移除",
+  "removeFromPlaylistNamedTitle": "從播放清單'{playlistName}'中移除",
   "@removeFromPlaylistNamedTitle": {
     "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
     "placeholders": {
@@ -1780,7 +1780,7 @@
   "@keepScreenOnAlwaysOn": {},
   "artwork": "圖片",
   "@artwork": {},
-  "keepScreenOnWhilePluggedInSubtitle": "在設備移除電源前忽略保持螢幕開啟的設定",
+  "keepScreenOnWhilePluggedInSubtitle": "在設備移除電源前忽略螢幕逾時的設定",
   "@keepScreenOnWhilePluggedInSubtitle": {},
   "fontSizeOptionSmall": "小",
   "@fontSizeOptionSmall": {
@@ -2156,7 +2156,7 @@
   "@latestAlbums": {},
   "recentlyPlayedAlbums": "最近聽過的專輯",
   "@recentlyPlayedAlbums": {},
-  "latestTracks": "最新歌曲",
+  "latestTracks": "最新上架的歌曲",
   "@latestTracks": {},
   "recentlyPlayedTracks": "最近聽過的歌曲",
   "@recentlyPlayedTracks": {},
