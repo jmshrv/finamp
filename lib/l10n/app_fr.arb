@@ -83,11 +83,11 @@
   "@criticRating": {},
   "dateAdded": "Date d'ajout",
   "@dateAdded": {},
-  "datePlayed": "Date de lecture",
+  "datePlayed": "Date de la dernière lecture",
   "@datePlayed": {},
   "playCount": "nombre de lectures",
   "@playCount": {},
-  "premiereDate": "Date de première",
+  "premiereDate": "Date de lancement",
   "@premiereDate": {},
   "productionYear": "Date de production",
   "@productionYear": {},
@@ -176,7 +176,7 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Modifier le nom de la liste de lecture",
+  "editPlaylistNameTooltip": "Modifier la liste de lecture",
   "@editPlaylistNameTooltip": {},
   "editPlaylistNameTitle": "Modifier le nom de la liste de lecture",
   "@editPlaylistNameTitle": {},
@@ -510,7 +510,7 @@
   "@playingFrom": {
     "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
   },
-  "loginFlowLocalNetworkServersScanningForServers": "Recherche des serveurs…",
+  "loginFlowLocalNetworkServersScanningForServers": "Recherche de serveurs…",
   "@loginFlowLocalNetworkServersScanningForServers": {
     "description": "Text shown while servers are being discovered via UDP broadcasts"
   },
@@ -1340,7 +1340,7 @@
   "@connectionInterruptedBackgroundAndroid": {
     "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
   },
-  "confirmShuffleToNextUp": "Aléatoire ensuite",
+  "confirmShuffleToNextUp": "Lecture aléatoire après la file d'attente",
   "@confirmShuffleToNextUp": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
   },
@@ -2007,5 +2007,97 @@
   "outputMenuOpenConnectionSettingsButtonTitle": "Connecter un appareil",
   "@outputMenuOpenConnectionSettingsButtonTitle": {
     "description": "Button title for connecting to a device from the output menu"
-  }
+  },
+  "favorite": "Favori",
+  "@favorite": {},
+  "onlineMode": "Mode en ligne",
+  "@onlineMode": {},
+  "duration": "Durée",
+  "@duration": {},
+  "serverOrder": "Ordre du serveur",
+  "@serverOrder": {},
+  "notAvailable": "Indisponible",
+  "@notAvailable": {},
+  "browsePlaylists": "Parcourir les listes de lecture",
+  "@browsePlaylists": {
+    "description": "Label for a button on the genre screen that brings you to a list of genre-filtered playlists."
+  },
+  "removeFavorite": "Retirer des favoris",
+  "@removeFavorite": {},
+  "addFavorite": "Ajouter en favori",
+  "@addFavorite": {},
+  "stopAndClearQueue": "Arrêter la lecture et vider la file d'attente",
+  "@stopAndClearQueue": {
+    "description": "Label for a button that stops playback and removes all tracks from the queue."
+  },
+  "recentlyAddedTracks": "Pistes récemment ajoutées",
+  "@recentlyAddedTracks": {
+    "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedAlbums": "Albums récemment ajoutés",
+  "@recentlyAddedAlbums": {
+    "description": "Label for the genre section that shows albums that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedArtists": "Artistes récemment ajoutés",
+  "@recentlyAddedArtists": {
+    "description": "Label for the genre section that shows artists that were recently added to the library, sorted by the date they were added."
+  },
+  "latestAlbums": "Derniers albums",
+  "@latestAlbums": {},
+  "latestArtists": "Derniers artistes",
+  "@latestArtists": {},
+  "recentlyPlayedTracks": "Pistes récemment jouées",
+  "@recentlyPlayedTracks": {},
+  "recentlyPlayedAlbums": "Albums récemment joués",
+  "@recentlyPlayedAlbums": {},
+  "recentlyPlayedArtists": "Artistes récemment joués",
+  "@recentlyPlayedArtists": {},
+  "favoriteTracks": "Pistes favorites",
+  "@favoriteTracks": {},
+  "favoriteAlbums": "Albums favoris",
+  "@favoriteAlbums": {},
+  "recentlyAdded": "Récemment ajoutés",
+  "@recentlyAdded": {},
+  "recentlyPlayed": "Récemment joués",
+  "@recentlyPlayed": {},
+  "latestReleases": "Dernières sorties",
+  "@latestReleases": {},
+  "unknown": "Inconnu",
+  "@unknown": {},
+  "itemSectionsOrderSubtitle": "Contrôle l'ordre de la section des",
+  "@itemSectionsOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections on the screens."
+  },
+  "allLibraries": "Toutes les bibliothèques",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
+  "noGenres": "Aucun genre",
+  "@noGenres": {
+    "description": "Gets shown when there are no genres available for an album or artist"
+  },
+  "topAlbums": "Meilleurs albums",
+  "@topAlbums": {},
+  "topArtists": "Meilleurs artistes",
+  "@topArtists": {},
+  "latestTracks": "Dernière pistes",
+  "@latestTracks": {},
+  "randomTracks": "Pistes (Ordre aléatoire)",
+  "@randomTracks": {},
+  "randomAlbums": "Albums (Ordre aléatoire)",
+  "@randomAlbums": {},
+  "mostPlayed": "Les plus écoutés",
+  "@mostPlayed": {},
+  "randomFavoritesFirst": "Aléatoire (Favoris en premier)",
+  "@randomFavoritesFirst": {},
+  "randomArtists": "Artistes (Ordre aléatoire)",
+  "@randomArtists": {},
+  "favorites": "Favoris",
+  "@favorites": {},
+  "artistItemSectionFilterChipOrderTitle": "Ordre du filtre des pistes",
+  "@artistItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of the tracks sections filter chips."
+  },
+  "favoriteArtists": "Artistes favoris",
+  "@favoriteArtists": {}
 }
