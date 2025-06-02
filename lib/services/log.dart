@@ -1,6 +1,7 @@
 import "package:device_info_plus/device_info_plus.dart";
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:get_it/get_it.dart';
+import 'dart:io' show Platform;
 
 import 'finamp_user_helper.dart';
 import 'jellyfin_api.dart';
@@ -21,35 +22,40 @@ class DeviceInfo {
   static Future<DeviceInfo> fromPlatform() async {
     final deviceInfoPlugin = DeviceInfoPlugin();
 
-    if (await deviceInfoPlugin.deviceInfo is AndroidDeviceInfo) {
+    if (Platform.isAndroid) {
+      // Android-specific device info
       final info = await deviceInfoPlugin.androidInfo;
       return DeviceInfo(
         deviceName: info.brand,
         deviceModel: info.model,
         osVersion: info.version.release,
       );
-    } else if (await deviceInfoPlugin.deviceInfo is IosDeviceInfo) {
+    } else if (Platform.isIOS) {
+      // iOS-specific device info
       final info = await deviceInfoPlugin.iosInfo;
       return DeviceInfo(
         deviceName: info.name,
         deviceModel: info.model,
         osVersion: info.systemVersion,
       );
-    } else if (await deviceInfoPlugin.deviceInfo is MacOsDeviceInfo) {
+    } else if (Platform.isMacOS) {
+      // macOS-specific device info
       final info = await deviceInfoPlugin.macOsInfo;
       return DeviceInfo(
         deviceName: info.computerName,
         deviceModel: info.model,
         osVersion: "${info.majorVersion}.${info.minorVersion}.${info.patchVersion}",
       );
-    } else if (await deviceInfoPlugin.deviceInfo is LinuxDeviceInfo) {
+    } else if (Platform.isLinux) {
+      // Linux-specific device info
       final info = await deviceInfoPlugin.linuxInfo;
       return DeviceInfo(
         deviceName: info.name,
         deviceModel: info.id,
         osVersion: info.version ?? 'Unknown',
       );
-    } else if (await deviceInfoPlugin.deviceInfo is WindowsDeviceInfo) {
+    } else if (Platform.isWindows) {
+      // Windows-specific device info
       final info = await deviceInfoPlugin.windowsInfo;
       return DeviceInfo(
         deviceName: info.computerName,
@@ -167,20 +173,16 @@ class ServerInfo {
 class Log {
   final DeviceInfo deviceInfo;
   final AppInfo appInfo;
-  final ServerInfo? serverInfo; // Not used, kept for legacy/compatibility
-
+  
   Log({
     required this.deviceInfo,
     required this.appInfo,
-    this.serverInfo,
   });
 
   // Factory method to create Log with device and app info only
   static Future<Log> create() async {
     final deviceInfo = await DeviceInfo.fromPlatform();
     final appInfo = await AppInfo.fromPlatform();
-    // We don't fetch server info here, as it can be done on demand later
-
     return Log(
       deviceInfo: deviceInfo,
       appInfo: appInfo,
@@ -195,7 +197,7 @@ class Log {
     return {
       'deviceInfo': deviceInfo.toJson(),
       'appInfo': appInfo.toJson(),
-      'serverInfo': serverInfo.toJson(),
+      'serverInfo': serverInfo.toJson(), // Removed serverInfo field
     };
   }
 }
