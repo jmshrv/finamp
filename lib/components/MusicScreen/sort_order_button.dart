@@ -12,15 +12,19 @@ class SortOrderButton extends ConsumerWidget {
     required this.tabType,
     this.sortOrderOverride,
     this.onOverrideChanged,
+    this.forPlaylistTracks = false,
   });
 
   final TabContentType tabType;
   final SortOrder? sortOrderOverride;
   final void Function(SortOrder newOrder)? onOverrideChanged;
+  final bool forPlaylistTracks;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var order = sortOrderOverride ?? ref.watch(finampSettingsProvider.tabSortOrder(tabType));
+    var order = sortOrderOverride ?? (forPlaylistTracks
+          ? ref.watch(finampSettingsProvider.playlistTracksSortOrder)
+          : ref.watch(finampSettingsProvider.tabSortOrder(tabType)));
     return IconButton(
       tooltip: AppLocalizations.of(context)!.sortOrder,
       icon: order == SortOrder.ascending
@@ -32,6 +36,8 @@ class SortOrderButton extends ConsumerWidget {
             : SortOrder.ascending;
         if (sortOrderOverride != null && onOverrideChanged != null) {
           onOverrideChanged!(newOrder);
+        } else if (forPlaylistTracks) {
+          FinampSetters.setPlaylistTracksSortOrder(newOrder);
         } else {
           FinampSetters.setTabSortOrder(tabType, newOrder);
         }

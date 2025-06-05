@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/curated_item_filter_row.dart';
 import 'package:finamp/services/genre_screen_provider.dart';
 import 'package:finamp/components/curated_item_sections.dart';
@@ -30,8 +31,7 @@ class GenreScreenContent extends ConsumerStatefulWidget {
   final BaseItemDto? library;
 
   @override
-  ConsumerState<GenreScreenContent> createState() =>
-      _GenreScreenContentState();
+  ConsumerState<GenreScreenContent> createState() => _GenreScreenContentState();
 }
 
 class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
@@ -55,7 +55,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
     super.dispose();
   }
 
-void openSeeAll(
+  void openSeeAll(
     TabContentType tabContentType, {
     bool doOverride = true,
     CuratedItemSelectionType? itemSelectionType,
@@ -63,8 +63,10 @@ void openSeeAll(
     bool isFavoriteOverride = false;
     SortBy? sortByOverride;
     SortOrder? sortOrderOverride;
-   
-    if (doOverride && ref.read(finampSettingsProvider.genreListsInheritSorting) && itemSelectionType != null) {
+
+    if (doOverride &&
+        ref.read(finampSettingsProvider.genreListsInheritSorting) &&
+        itemSelectionType != null) {
       switch (itemSelectionType) {
         case CuratedItemSelectionType.mostPlayed:
           sortByOverride = itemSelectionType.getSortBy();
@@ -110,33 +112,52 @@ void openSeeAll(
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
     final library = finampUserHelper.currentUser?.currentView;
     final loc = AppLocalizations.of(context)!;
-    final genreCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
+    final genreCuratedItemSectionFilterOrder =
+        ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
     final genreItemSectionsOrder =
         ref.watch(finampSettingsProvider.genreItemSectionsOrder);
-    final bool autoSwitchItemCurationTypeEnabled = 
-      ref.watch(finampSettingsProvider.autoSwitchItemCurationType);
+    final bool autoSwitchItemCurationTypeEnabled =
+        ref.watch(finampSettingsProvider.autoSwitchItemCurationType);
 
     /// There are inidivual fetch methods for each section on the genre screen. They all are handled
     /// by a single entry point provider "genreCuratedItemsProvider". This provider returns multiple values:
     /// the items themselves, the total count of all items of that specific type within this genre as well as
-    /// the current ItemCurationType and a disabledFilterList. The genreCuratedItemsProvider uses a method 
+    /// the current ItemCurationType and a disabledFilterList. The genreCuratedItemsProvider uses a method
     /// in curated_items_filter_row.dart to get the next available filter as a fallback option in case that
-    /// the current filter would return an empty result and auto-switching is enabled. It then re-tries 
-    /// with that next filter. The filters that would've returned an empty result get returned in the 
+    /// the current filter would return an empty result and auto-switching is enabled. It then re-tries
+    /// with that next filter. The filters that would've returned an empty result get returned in the
     /// disabledFilters set, so we can pass them on to the UI to show them as disabled.
-    final tracksAsync = ref.watch(genreCuratedItemsProvider(widget.parent, BaseItemDtoType.track, widget.library));
-    final albumsAsync = ref.watch(genreCuratedItemsProvider(widget.parent, BaseItemDtoType.album, widget.library));
-    final artistsAsync = ref.watch(genreCuratedItemsProvider(widget.parent, BaseItemDtoType.artist, widget.library));
+    final tracksAsync = ref.watch(genreCuratedItemsProvider(
+        widget.parent, BaseItemDtoType.track, widget.library));
+    final albumsAsync = ref.watch(genreCuratedItemsProvider(
+        widget.parent, BaseItemDtoType.album, widget.library));
+    final artistsAsync = ref.watch(genreCuratedItemsProvider(
+        widget.parent, BaseItemDtoType.artist, widget.library));
 
-    final (tracks, trackCount, genreCuratedItemSelectionTypeTracks, newDisabledTrackFilters) = tracksAsync.valueOrNull ?? (null, null, null, null);
-    final (albums, albumCount, genreCuratedItemSelectionTypeAlbums, newDisabledAlbumFilters) = albumsAsync.valueOrNull ?? (null, null, null, null);
-    final (artists, artistCount, genreCuratedItemSelectionTypeArtists, newDisabledArtistFilters) = artistsAsync.valueOrNull ?? (null, null, null, null);
+    final (
+      tracks,
+      trackCount,
+      genreCuratedItemSelectionTypeTracks,
+      newDisabledTrackFilters
+    ) = tracksAsync.valueOrNull ?? (null, null, null, null);
+    final (
+      albums,
+      albumCount,
+      genreCuratedItemSelectionTypeAlbums,
+      newDisabledAlbumFilters
+    ) = albumsAsync.valueOrNull ?? (null, null, null, null);
+    final (
+      artists,
+      artistCount,
+      genreCuratedItemSelectionTypeArtists,
+      newDisabledArtistFilters
+    ) = artistsAsync.valueOrNull ?? (null, null, null, null);
 
     final isLoading = tracks == null || albums == null || artists == null;
 
-    /// We add the new disabled filters to a local set, which we actually use. That's because otherwise, 
+    /// We add the new disabled filters to a local set, which we actually use. That's because otherwise,
     /// we would re-enable deactivated filters once the user selects a different filter that's available.
-    /// But we want to keep disabled filters disabled until either a pull-refresh happens 
+    /// But we want to keep disabled filters disabled until either a pull-refresh happens
     /// or the screen gets accessed again freshly.
     if (newDisabledTrackFilters != null) {
       _disabledTrackFilters.addAll(newDisabledTrackFilters);
@@ -147,25 +168,29 @@ void openSeeAll(
     if (newDisabledArtistFilters != null) {
       _disabledArtistFilters.addAll(newDisabledArtistFilters);
     }
+
     /// The currently active filter either has items (now) or the user has disabled auto-switching,
     /// so we can remove it from our disabled Set in case it was there before and show it as enabled.
     _disabledTrackFilters.remove(genreCuratedItemSelectionTypeTracks);
     _disabledAlbumFilters.remove(genreCuratedItemSelectionTypeAlbums);
     _disabledArtistFilters.remove(genreCuratedItemSelectionTypeArtists);
-    /// In case the user selects an option that has no items and auto-switch is enabled, 
+
+    /// In case the user selects an option that has no items and auto-switch is enabled,
     /// we want to show a snackbar message in addition to disabling the filter.
-    if (autoSwitchItemCurationTypeEnabled && clickedCuratedItemSelectionTypeTracks != null && 
+    if (autoSwitchItemCurationTypeEnabled &&
+        clickedCuratedItemSelectionTypeTracks != null &&
         _disabledTrackFilters.contains(clickedCuratedItemSelectionTypeTracks)) {
       sendEmptyItemSelectionTypeMessage(
         context: context,
         typeSelected: clickedCuratedItemSelectionTypeTracks,
         messageFor: BaseItemDtoType.genre,
       );
-      // When we've sent the message, we should reset the clicked value 
+      // When we've sent the message, we should reset the clicked value
       // so that we don't send it again on next state refresh
       clickedCuratedItemSelectionTypeTracks = null;
     }
-    if (autoSwitchItemCurationTypeEnabled && clickedCuratedItemSelectionTypeAlbums != null && 
+    if (autoSwitchItemCurationTypeEnabled &&
+        clickedCuratedItemSelectionTypeAlbums != null &&
         _disabledAlbumFilters.contains(clickedCuratedItemSelectionTypeAlbums)) {
       sendEmptyItemSelectionTypeMessage(
         context: context,
@@ -174,8 +199,10 @@ void openSeeAll(
       );
       clickedCuratedItemSelectionTypeAlbums = null;
     }
-    if (autoSwitchItemCurationTypeEnabled && clickedCuratedItemSelectionTypeArtists != null && 
-        _disabledArtistFilters.contains(clickedCuratedItemSelectionTypeArtists)) {
+    if (autoSwitchItemCurationTypeEnabled &&
+        clickedCuratedItemSelectionTypeArtists != null &&
+        _disabledArtistFilters
+            .contains(clickedCuratedItemSelectionTypeArtists)) {
       sendEmptyItemSelectionTypeMessage(
         context: context,
         typeSelected: clickedCuratedItemSelectionTypeArtists,
@@ -183,35 +210,35 @@ void openSeeAll(
       );
       clickedCuratedItemSelectionTypeArtists = null;
     }
-    
+
     final countsTextColor = IconTheme.of(context).color;
     final countsSubtitleColor = IconTheme.of(context).color!.withOpacity(0.6);
-    final countsBorderColor = Theme.of(context).colorScheme.onSurface.withOpacity(0.2);
+    final countsBorderColor =
+        Theme.of(context).colorScheme.onSurface.withOpacity(0.2);
     final countsBackgroundColor = Theme.of(context).colorScheme.surface;
 
     return PaddedCustomScrollview(slivers: <Widget>[
       SliverAppBar(
-        title: Text(widget.parent.name ??
-            AppLocalizations.of(context)!.unknownName),
+        title: Text(
+            widget.parent.name ?? AppLocalizations.of(context)!.unknownName),
         pinned: true,
         centerTitle: false,
         actions: [
           FavoriteButton(item: widget.parent),
           if (!isLoading)
             DownloadButton(
-                item: DownloadStub.fromFinampCollection(
-                  FinampCollection(
-                      type: FinampCollectionType.collectionWithLibraryFilter,
-                      library: library,
-                      item: widget.parent,
-                  )
-                ),
+                item: DownloadStub.fromFinampCollection(FinampCollection(
+                  type: FinampCollectionType.collectionWithLibraryFilter,
+                  library: library,
+                  item: widget.parent,
+                )),
                 childrenCount: albumCount)
         ],
       ),
       SliverToBoxAdapter(
         child: Padding(
-          padding: const EdgeInsets.only(top: 6, bottom: 8, left: 10, right: 10),
+          padding:
+              const EdgeInsets.only(top: 6, bottom: 8, left: 10, right: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -252,7 +279,8 @@ void openSeeAll(
                   padding: const EdgeInsets.only(left: 4),
                   child: buildCountColumn(
                     count: artistCount,
-                    label: (ref.read(finampSettingsProvider.artistListType) == ArtistType.albumartist)
+                    label: (ref.read(finampSettingsProvider.artistListType) ==
+                            ArtistType.albumartist)
                         ? AppLocalizations.of(context)!.albumArtists
                         : AppLocalizations.of(context)!.performingArtists,
                     onTap: () {
@@ -269,6 +297,9 @@ void openSeeAll(
           ),
         ),
       ),
+      // TODO:
+      // Once we have a better handling of large queues (maybe with lazy-loading/adding?)
+      // and once we redesigned the play/shuffle buttons, they should get added here
       if (!isLoading)
         ...genreItemSectionsOrder.map((type) {
           switch (type) {
@@ -279,9 +310,10 @@ void openSeeAll(
                   parent: widget.parent,
                   tracks: tracks,
                   childrenForQueue: Future.value(tracks),
-                  tracksText: (genreCuratedItemSelectionTypeTracks != null) 
+                  tracksText: (genreCuratedItemSelectionTypeTracks != null)
                       ? genreCuratedItemSelectionTypeTracks
-                          .toLocalisedSectionTitle(context, BaseItemDtoType.track)
+                          .toLocalisedSectionTitle(
+                              context, BaseItemDtoType.track)
                       : loc.tracks,
                   isOnGenreScreen: true,
                   seeAllCallbackFunction: () => openSeeAll(
@@ -306,13 +338,14 @@ void openSeeAll(
                 padding: const EdgeInsets.only(bottom: 12.0),
                 sliver: CollectionsSection(
                   parent: widget.parent,
-                  itemsText: (genreCuratedItemSelectionTypeAlbums != null) 
+                  itemsText: (genreCuratedItemSelectionTypeAlbums != null)
                       ? genreCuratedItemSelectionTypeAlbums
-                          .toLocalisedSectionTitle(context, BaseItemDtoType.album)
+                          .toLocalisedSectionTitle(
+                              context, BaseItemDtoType.album)
                       : loc.albums,
                   items: albums,
                   seeAllCallbackFunction: () => openSeeAll(
-                    TabContentType.albums, 
+                    TabContentType.albums,
                     itemSelectionType: genreCuratedItemSelectionTypeAlbums,
                   ),
                   includeFilterRowFor: BaseItemDtoType.album,
@@ -330,9 +363,10 @@ void openSeeAll(
                 padding: const EdgeInsets.only(bottom: 12.0),
                 sliver: CollectionsSection(
                   parent: widget.parent,
-                  itemsText:  (genreCuratedItemSelectionTypeArtists != null) 
+                  itemsText: (genreCuratedItemSelectionTypeArtists != null)
                       ? genreCuratedItemSelectionTypeArtists
-                          .toLocalisedSectionTitle(context, BaseItemDtoType.artist)
+                          .toLocalisedSectionTitle(
+                              context, BaseItemDtoType.artist)
                       : loc.artists,
                   items: artists,
                   seeAllCallbackFunction: () => openSeeAll(
@@ -352,6 +386,32 @@ void openSeeAll(
               );
           }
         }),
+      if (!isLoading)
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.only(top: 32),
+            child: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SimpleButton(
+                    text: AppLocalizations.of(context)!
+                        .browsePlaylists
+                        .toUpperCase(),
+                    textColor: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w500,
+                    icon: Icons.chevron_right,
+                    iconPosition: IconPosition.end,
+                    onPressed: () => openSeeAll(
+                      TabContentType.playlists,
+                      doOverride: false,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       if (isLoading)
         SliverToBoxAdapter(
           child: Padding(

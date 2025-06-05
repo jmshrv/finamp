@@ -424,7 +424,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                       genreFilter: (widget.genreFilter != null &&
                           (tabType.itemType == BaseItemDtoType.track ||
                           tabType.itemType == BaseItemDtoType.album || 
-                          tabType.itemType == BaseItemDtoType.artist))
+                          tabType.itemType == BaseItemDtoType.artist ||
+                          tabType.itemType == BaseItemDtoType.playlist))
                           ? widget.genreFilter
                           : null,
                       tabBarFiltered: (widget.tabTypeFilter != null),

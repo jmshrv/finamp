@@ -152,7 +152,7 @@
   "@communityRating": {},
   "playCount": "Кількістю відтворень",
   "@playCount": {},
-  "premiereDate": "Датою прем'єри",
+  "premiereDate": "Дата випуску",
   "@premiereDate": {},
   "downloadCount": "{count,plural, =1{{count} Завантажено} other{{count} Завантажень}}",
   "@downloadCount": {
@@ -215,7 +215,7 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Редагувати назву плейлисту",
+  "editPlaylistNameTooltip": "Редагувати список відтворення",
   "@editPlaylistNameTooltip": {},
   "updateButtonLabel": "Оновити",
   "@updateButtonLabel": {},
@@ -227,7 +227,7 @@
       }
     }
   },
-  "editPlaylistNameTitle": "Редагувати назву плейлисту",
+  "editPlaylistNameTitle": "Редагувати список відтворенні",
   "@editPlaylistNameTitle": {},
   "transcoding": "Транскодування",
   "@transcoding": {},

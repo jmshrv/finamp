@@ -1977,7 +1977,7 @@
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
-  "deleteFromTargetDialogText": "Vous allez supprimer ce {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}} {device, select, device{de cet appareil} server{du système de fichiers et bibliothèque des serveurs.{deleteType, select, canDelete{ Cela supprimera également cet élément de cet appareil.} cantDelete{ Cet élément restera sur cet appareil jusqu’à la prochaine synchronisation.} notDownloaded{} other{}}\nCette action ne peut pas être annulée} other{}}.",
+  "deleteFromTargetDialogText": "Vous allez supprimer ce {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}} {device, select, device{de cet appareil} server{du système de fichiers et bibliothèque des serveurs.{deleteType, select, canDelete{ Cela supprimera également cet élément de cet appareil.} cantDelete{ Cet élément restera sur cet appareil jusqu’à la prochaine synchronisation.} notDownloaded{} other{}}\nCette action ne peut pas être annulée.} other{}}",
   "@deleteFromTargetDialogText": {
     "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
   },

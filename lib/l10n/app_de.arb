@@ -189,7 +189,7 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Zufällig",
   "@shuffleButtonLabel": {},
-  "editPlaylistNameTitle": "Playlist Umbenennen",
+  "editPlaylistNameTitle": "Playlist bearbeiten",
   "@editPlaylistNameTitle": {},
   "updateButtonLabel": "Aktualisieren",
   "@updateButtonLabel": {},
@@ -332,7 +332,7 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Playlist umbenennen",
+  "editPlaylistNameTooltip": "Playlist bearbeiten",
   "@editPlaylistNameTooltip": {},
   "playlistUpdated": "Playlist aktualisiert.",
   "@playlistUpdated": {},
@@ -2064,7 +2064,7 @@
   "@outputMenuButtonTitle": {
     "description": "Button title for opening the output menu/panel"
   },
-  "desktopShuffleWarning": "Zufallswiedergabe ist auf dem Desktop zur Zeit nicht verfügbar.",
+  "desktopShuffleWarning": "Das Ändern der Zufallswiedergabe ist auf dem Desktop zur Zeit nicht verfügbar.",
   "@desktopShuffleWarning": {
     "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
   },

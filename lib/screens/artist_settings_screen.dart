@@ -29,13 +29,6 @@ class _ArtistSettingsScreenState extends ConsumerState<ArtistSettingsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SwitchListTile.adaptive(
-              title: Text(AppLocalizations.of(context)!.artistGenreChipsApplyFilterTitle),
-              subtitle: Text(AppLocalizations.of(context)!.artistGenreChipsApplyFilterSubtitle),
-              value: ref.watch(finampSettingsProvider.artistGenreChipsApplyFilter),
-              onChanged: FinampSetters.setArtistGenreChipsApplyFilter,
-            ),
-            SizedBox(height: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

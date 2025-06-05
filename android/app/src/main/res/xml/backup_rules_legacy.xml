@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Include sharedprefs for background_downloader settings -->
+    <include domain="sharedpref" path="."/>
+    <!-- Include main documents diretory with all our databases -->
+    <include domain="root" path="app_flutter/"/>
+    <!-- Exclude legacy documents download location -->
+    <exclude domain="root" path="app_flutter/songs/"/>
+    <exclude domain="root" path="app_flutter/images/"/>
+    <!-- Exclude flutter engine assets-->
+    <exclude domain="root" path="app_flutter/flutter_assets/"/>
+    <!-- Exclude log files, which may be up to 10 MB -->
+    <exclude domain="root" path="app_flutter/finamp-logs.txt"/>
+    <exclude domain="root" path="app_flutter/finamp-logs-old.txt"/>
+</full-backup-content>

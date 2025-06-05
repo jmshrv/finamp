@@ -343,8 +343,7 @@ class IsarTaskQueue implements TaskQueue {
             continue;
           }
           while (_activeDownloads.length >=
-                      FinampSettingsHelper
-                          .finampSettings.maxConcurrentDownloads ||
+                  FinampSettingsHelper.finampSettings.maxConcurrentDownloads ||
               _finampUserHelper.currentUser == null) {
             await Future.delayed(const Duration(milliseconds: 500));
           }
@@ -589,7 +588,6 @@ class DownloadsDeleteService {
         return;
       }
     });
-    _deleteLogger.finer("Sync deleting ${canonItem?.name ?? isarId}");
     if (canonItem == null ||
         requiredByCount > 0 ||
         canonItem!.type == DownloadItemType.anchor) {
@@ -655,6 +653,7 @@ class DownloadsDeleteService {
             }
           }
         } else {
+          _deleteLogger.finer("Removing node for ${canonItem?.name}");
           childIds.addAll(
               transactionItem.info.filter().isarIdProperty().findAllSync());
           childIds.addAll(
@@ -679,6 +678,7 @@ class DownloadsDeleteService {
     if (item.file != null && item.file!.existsSync()) {
       try {
         await item.file!.delete();
+        _deleteLogger.finer("Deleted file for ${item.name}");
       } on PathNotFoundException {
         _deleteLogger.finer(
             "File ${item.file!.path} for ${item.name} missing during delete.");
@@ -886,7 +886,6 @@ class DownloadsSyncService {
       Set<int> requireCompleted,
       Set<int> infoCompleted,
       BaseItemId? viewId) async {
-
     switch (parent.type) {
       case DownloadItemType.collection:
         switch (parent.baseItemType) {
@@ -1011,12 +1010,12 @@ class DownloadsSyncService {
           // If we are an album, add the album artists as info children
           try {
             var collectionChildren = await Future.wait(
-              (item.albumArtists?.map((e) => e.id) ?? [])
-                  .map((e) => _getCollectionInfo(e, DownloadItemType.collection, false))
-            );
+                (item.albumArtists?.map((e) => e.id) ?? []).map((e) =>
+                    _getCollectionInfo(e, DownloadItemType.collection, false)));
             infoChildren.addAll(collectionChildren.nonNulls);
           } catch (e) {
-            _syncLogger.info("Failed to download metadata for ${item.name}: $e");
+            _syncLogger
+                .info("Failed to download metadata for ${item.name}: $e");
             rethrow;
           }
         }
@@ -1113,6 +1112,7 @@ class DownloadsSyncService {
               forceCopy: _downloadsService.forceFullSync);
           // copyWith returns null if no updates to important fields are needed
           if (newParent != null) {
+            _syncLogger.fine("Updating BaseItemDto for ${parent.name}");
             _isar.downloadItems.putSync(newParent);
             canonParent = newParent;
           }
@@ -1249,6 +1249,10 @@ class DownloadsSyncService {
     assert(
         missingChildIds.length + oldChildIds.length - childrenToUnlink.length ==
             children.length);
+    if (oldChildIds.isNotEmpty && newChildIds.isEmpty) {
+      _syncLogger.warning(
+          "Unlinking all ${required ? "required" : "info"} children of ${parent.name}");
+    }
     _isar.downloadItems.putAllSync(childrenToPutAndLink);
     _downloadsService.deleteBuffer
         .addAll(childrenToUnlink.map((e) => e.isarId));
@@ -1477,32 +1481,29 @@ class DownloadsSyncService {
           var item = collection.item!;
           var baseItemType = BaseItemDtoType.fromItem(collection.item!);
           outputItems = await _jellyfinApiData.getItems(
-                parentItem: (baseItemType == BaseItemDtoType.genre)
-                    ? collection.library!
-                    : item,
-                libraryFilter: (baseItemType == BaseItemDtoType.artist)
-                    ? collection.library!
-                    : null,
-                genreFilter: (baseItemType == BaseItemDtoType.genre)
-                    ? item
-                    : null,
-                includeItemTypes: BaseItemDtoType.album.idString,
-                fields: fields
-              ) ??
+                  parentItem: (baseItemType == BaseItemDtoType.genre)
+                      ? collection.library!
+                      : item,
+                  libraryFilter: (baseItemType == BaseItemDtoType.artist)
+                      ? collection.library!
+                      : null,
+                  genreFilter:
+                      (baseItemType == BaseItemDtoType.genre) ? item : null,
+                  includeItemTypes: BaseItemDtoType.album.idString,
+                  fields: fields) ??
               [];
           // If we are an artist, we also need to add the tracks where the artist
           // only is a performing artist, but not an album artist
           // We might get some overlap because we often see albumartist = performingartist,
           // but they will get filtered out later
           if (baseItemType == BaseItemDtoType.artist) {
-                outputItems.addAll(await _jellyfinApiData.getItems(
-                  parentItem: item,
-                  libraryFilter: collection.library!,
-                  includeItemTypes: BaseItemDtoType.track.idString,
-                  filters: "Artist=${parent.name}",
-                  artistType: ArtistType.artist,
-                  fields: fields
-                  ) ??
+            outputItems.addAll(await _jellyfinApiData.getItems(
+                    parentItem: item,
+                    libraryFilter: collection.library!,
+                    includeItemTypes: BaseItemDtoType.track.idString,
+                    filters: "Artist=${parent.name}",
+                    artistType: ArtistType.artist,
+                    fields: fields) ??
                 []);
           }
       }

@@ -277,7 +277,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
               CuratedItemSelectionType.recentlyPlayed
             ]
           : (fields[107] as List).cast<CuratedItemSelectionType>(),
-      artistGenreChipsApplyFilter:
+      applyFilterOnGenreChipTap:
           fields[108] == null ? false : fields[108] as bool,
       artistCuratedItemSelectionType: fields[109] == null
           ? CuratedItemSelectionType.mostPlayed
@@ -301,6 +301,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
           : (fields[111] as List).cast<ArtistItemSections>(),
       autoSwitchItemCurationType:
           fields[112] == null ? true : fields[112] as bool,
+      playlistTracksSortBy:
+          fields[113] == null ? SortBy.serverOrder : fields[113] as SortBy,
+      playlistTracksSortOrder:
+          fields[114] == null ? SortOrder.ascending : fields[114] as SortOrder,
+      genreFilterPlaylists: fields[115] == null ? false : fields[115] as bool,
     )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -311,7 +316,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(107)
+      ..writeByte(110)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -517,7 +522,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(107)
       ..write(obj.genreItemSectionFilterChipOrder)
       ..writeByte(108)
-      ..write(obj.artistGenreChipsApplyFilter)
+      ..write(obj.applyFilterOnGenreChipTap)
       ..writeByte(109)
       ..write(obj.artistCuratedItemSelectionType)
       ..writeByte(110)
@@ -525,7 +530,13 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(111)
       ..write(obj.artistItemSectionsOrder)
       ..writeByte(112)
-      ..write(obj.autoSwitchItemCurationType);
+      ..write(obj.autoSwitchItemCurationType)
+      ..writeByte(113)
+      ..write(obj.playlistTracksSortBy)
+      ..writeByte(114)
+      ..write(obj.playlistTracksSortOrder)
+      ..writeByte(115)
+      ..write(obj.genreFilterPlaylists);
   }
 
   @override

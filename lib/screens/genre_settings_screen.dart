@@ -14,6 +14,7 @@ class GenreSettingsScreen extends ConsumerStatefulWidget {
 class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.genreScreen),
@@ -60,7 +61,8 @@ class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
                 ),
               ]
             ),
-            SizedBox(height: 12),
+          SizedBox(height: 12),
+            SizedBox(height: 8),
             SwitchListTile.adaptive(
               title: Text(AppLocalizations.of(context)!.genreFilterArtistScreens),
               subtitle: Text(AppLocalizations.of(context)!.genreFilterArtistScreensSubtitle),
@@ -68,11 +70,13 @@ class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
               onChanged: FinampSetters.setGenreFilterArtistScreens,
             ),
             SizedBox(height: 8),
-            SwitchListTile.adaptive(
-              title: Text(AppLocalizations.of(context)!.genreListsInheritSorting),
-              subtitle: Text(AppLocalizations.of(context)!.genreListsInheritSortingSubtitle),
-              value: ref.watch(finampSettingsProvider.genreListsInheritSorting),
-              onChanged: FinampSetters.setGenreListsInheritSorting,
+          SwitchListTile.adaptive(
+            title:
+                Text(AppLocalizations.of(context)!.genreFilterPlaylistScreens),
+            subtitle: Text(AppLocalizations.of(context)!
+                .genreFilterPlaylistScreensSubtitle),
+            value: ref.watch(finampSettingsProvider.genreFilterPlaylists),
+            onChanged: FinampSetters.setGenreFilterPlaylists,
             ),
             SizedBox(height: 8),
             Column(
@@ -108,7 +112,14 @@ class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
                 ),
               ]
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 12),
+            SwitchListTile.adaptive(
+              title: Text(AppLocalizations.of(context)!.genreListsInheritSorting),
+              subtitle: Text(AppLocalizations.of(context)!.genreListsInheritSortingSubtitle),
+              value: ref.watch(finampSettingsProvider.genreListsInheritSorting),
+              onChanged: FinampSetters.setGenreListsInheritSorting,
+            ),
+            SizedBox(height: 40),
           ]
         ),
       ),

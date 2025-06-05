@@ -326,38 +326,35 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                     )
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Wrap(
-                      spacing: 8.0,
-                      alignment: WrapAlignment.spaceEvenly,
-                      children: [
-                        CTAMedium(
-                          text: AppLocalizations.of(context)!.playButtonLabel,
-                          icon: TablerIcons.player_play,
-                          onPressed: () => allTracks
-                              .then((items) => playAllFromArtist(items ?? [])),
-                          // set the minimum width as 25% of the screen width,
-                          minWidth: MediaQuery.of(context).size.width * 0.25,
-                        ),
-                        CTAMedium(
-                          text:
-                              AppLocalizations.of(context)!.shuffleButtonLabel,
-                          icon: TablerIcons.arrows_shuffle,
-                          onPressed: () => allTracks.then(
-                              (items) => shuffleAllFromArtist(items ?? [])),
-                          // set the minimum width as 25% of the screen width,
-                          minWidth: MediaQuery.of(context).size.width * 0.25,
-                        ),
-                        OverflowMenuButton(
-                          onPressed: () => showModalArtistMenu(
-                              context: context, baseItem: parentItem),
-                          label: AppLocalizations.of(context)!.menuButtonLabel,
-                        ),
-                      ],
-                    ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.only(left: 8, right: 8, top: 16),
+                  child: Wrap(
+                    spacing: 8.0,
+                    alignment: WrapAlignment.spaceEvenly,
+                    children: [
+                      CTAMedium(
+                        text: AppLocalizations.of(context)!.playButtonLabel,
+                        icon: TablerIcons.player_play,
+                        onPressed: () => allTracks
+                            .then((items) => playAllFromArtist(items ?? [])),
+                        // set the minimum width as 25% of the screen width,
+                        minWidth: MediaQuery.of(context).size.width * 0.25,
+                      ),
+                      CTAMedium(
+                        text: AppLocalizations.of(context)!.shuffleButtonLabel,
+                        icon: TablerIcons.arrows_shuffle,
+                        onPressed: () => allTracks
+                            .then((items) => shuffleAllFromArtist(items ?? [])),
+                        // set the minimum width as 25% of the screen width,
+                        minWidth: MediaQuery.of(context).size.width * 0.25,
+                      ),
+                      OverflowMenuButton(
+                        onPressed: () => showModalArtistMenu(
+                            context: context, baseItem: parentItem),
+                        label: AppLocalizations.of(context)!.menuButtonLabel,
+                      ),
+                    ],
                   ),
                 )
               ],

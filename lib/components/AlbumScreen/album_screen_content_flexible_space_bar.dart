@@ -34,11 +34,15 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
     required this.parentItem,
     required this.isPlaylist,
     required this.items,
+    this.genreFilter,
+    this.updateGenreFilter,
   });
 
   final BaseItemDto parentItem;
   final bool isPlaylist;
   final List<BaseItemDto> items;
+  final BaseItemDto? genreFilter;
+  final void Function(BaseItemDto?)? updateGenreFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -226,7 +230,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
         child: Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -243,7 +247,9 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                       flex: 2,
                       child: ItemInfo(
                         item: parentItem,
-                        itemTracks: items.length,
+                        itemTracks: items,
+                        genreFilter: genreFilter,
+                        updateGenreFilter: updateGenreFilter,
                       ),
                     )
                   ],
@@ -252,8 +258,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                 // that would however mean that the layout is different (but pretty static) across different languages, which is kinda strange
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  padding: const EdgeInsets.only(left: 8, right: 8, top: 16),
                   child: Wrap(
                       spacing: 8.0,
                       alignment: WrapAlignment.spaceEvenly,

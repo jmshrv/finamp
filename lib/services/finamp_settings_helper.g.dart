@@ -763,11 +763,9 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setArtistGenreChipsApplyFilter(
-      bool newArtistGenreChipsApplyFilter) {
+  static void setApplyFilterOnGenreChipTap(bool newApplyFilterOnGenreChipTap) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.artistGenreChipsApplyFilter =
-        newArtistGenreChipsApplyFilter;
+    finampSettingsTemp.applyFilterOnGenreChipTap = newApplyFilterOnGenreChipTap;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -803,6 +801,27 @@ extension FinampSetters on FinampSettingsHelper {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.autoSwitchItemCurationType =
         newAutoSwitchItemCurationType;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setPlaylistTracksSortBy(SortBy newPlaylistTracksSortBy) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.playlistTracksSortBy = newPlaylistTracksSortBy;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setPlaylistTracksSortOrder(SortOrder newPlaylistTracksSortOrder) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.playlistTracksSortOrder = newPlaylistTracksSortOrder;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setGenreFilterPlaylists(bool newGenreFilterPlaylists) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.genreFilterPlaylists = newGenreFilterPlaylists;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -1068,9 +1087,9 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<List<CuratedItemSelectionType>>
       get genreItemSectionFilterChipOrder => finampSettingsProvider.select(
           (value) => value.requireValue.genreItemSectionFilterChipOrder);
-  ProviderListenable<bool> get artistGenreChipsApplyFilter =>
+  ProviderListenable<bool> get applyFilterOnGenreChipTap =>
       finampSettingsProvider
-          .select((value) => value.requireValue.artistGenreChipsApplyFilter);
+          .select((value) => value.requireValue.applyFilterOnGenreChipTap);
   ProviderListenable<CuratedItemSelectionType>
       get artistCuratedItemSelectionType => finampSettingsProvider
           .select((value) => value.requireValue.artistCuratedItemSelectionType);
@@ -1083,6 +1102,13 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool> get autoSwitchItemCurationType =>
       finampSettingsProvider
           .select((value) => value.requireValue.autoSwitchItemCurationType);
+  ProviderListenable<SortBy> get playlistTracksSortBy => finampSettingsProvider
+      .select((value) => value.requireValue.playlistTracksSortBy);
+  ProviderListenable<SortOrder> get playlistTracksSortOrder =>
+      finampSettingsProvider
+          .select((value) => value.requireValue.playlistTracksSortOrder);
+  ProviderListenable<bool> get genreFilterPlaylists => finampSettingsProvider
+      .select((value) => value.requireValue.genreFilterPlaylists);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);

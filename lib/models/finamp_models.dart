@@ -213,13 +213,16 @@ class DefaultSettings {
   static const genreListsInheritSorting = true;
   static const genreItemSectionFilterChipOrder =
       CuratedItemSelectionType.values;
-  static const artistGenreChipsApplyFilter = false;
+  static const applyFilterOnGenreChipTap = false;
   static const artistCuratedItemSelectionType =
       CuratedItemSelectionType.mostPlayed;
   static const artistItemSectionFilterChipOrder =
       CuratedItemSelectionType.values;
   static const artistItemSectionsOrder = ArtistItemSections.values;
   static const autoSwitchItemCurationType = true;
+  static const playlistTracksSortBy = SortBy.serverOrder;
+  static const playlistTracksSortOrder = SortOrder.ascending;
+  static const genreFilterPlaylists = false;
 }
 
 @HiveType(typeId: 28)
@@ -354,8 +357,7 @@ class FinampSettings {
     this.genreListsInheritSorting = DefaultSettings.genreListsInheritSorting,
     this.genreItemSectionFilterChipOrder =
         DefaultSettings.genreItemSectionFilterChipOrder,
-    this.artistGenreChipsApplyFilter =
-        DefaultSettings.artistGenreChipsApplyFilter,
+    this.applyFilterOnGenreChipTap = DefaultSettings.applyFilterOnGenreChipTap,
     this.artistCuratedItemSelectionType =
         DefaultSettings.artistCuratedItemSelectionType,
     this.artistItemSectionFilterChipOrder =
@@ -363,6 +365,9 @@ class FinampSettings {
     this.artistItemSectionsOrder = DefaultSettings.artistItemSectionsOrder,
     this.autoSwitchItemCurationType =
         DefaultSettings.autoSwitchItemCurationType,
+    this.playlistTracksSortBy = DefaultSettings.playlistTracksSortBy,
+    this.playlistTracksSortOrder = DefaultSettings.playlistTracksSortOrder,
+    this.genreFilterPlaylists = DefaultSettings.genreFilterPlaylists,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -718,8 +723,8 @@ class FinampSettings {
   @HiveField(107, defaultValue: DefaultSettings.genreItemSectionFilterChipOrder)
   List<CuratedItemSelectionType> genreItemSectionFilterChipOrder;
 
-  @HiveField(108, defaultValue: DefaultSettings.artistGenreChipsApplyFilter)
-  bool artistGenreChipsApplyFilter;
+  @HiveField(108, defaultValue: DefaultSettings.applyFilterOnGenreChipTap)
+  bool applyFilterOnGenreChipTap;
 
   @HiveField(109, defaultValue: DefaultSettings.artistCuratedItemSelectionType)
   CuratedItemSelectionType artistCuratedItemSelectionType;
@@ -733,6 +738,15 @@ class FinampSettings {
 
   @HiveField(112, defaultValue: DefaultSettings.autoSwitchItemCurationType)
   bool autoSwitchItemCurationType;
+
+  @HiveField(113, defaultValue: DefaultSettings.playlistTracksSortBy)
+  SortBy playlistTracksSortBy;
+
+  @HiveField(114, defaultValue: DefaultSettings.playlistTracksSortOrder)
+  SortOrder playlistTracksSortOrder;
+
+  @HiveField(115, defaultValue: DefaultSettings.genreFilterPlaylists)
+  bool genreFilterPlaylists;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -3169,7 +3183,8 @@ enum CuratedItemSelectionType {
                 loc.latestTracks, loc.latestAlbums, loc.latestArtists) ??
             "Unsupported Type";
       case CuratedItemSelectionType.recentlyAdded:
-        return getTitle(loc.newTracks, loc.newAlbums, loc.newArtists) ??
+        return getTitle(loc.recentlyAddedTracks, loc.recentlyAddedAlbums,
+                loc.recentlyAddedArtists) ??
             "Unsupported Type";
       case CuratedItemSelectionType.recentlyPlayed:
         return getTitle(loc.recentlyPlayedTracks, loc.recentlyPlayedAlbums,
@@ -3312,7 +3327,8 @@ enum ArtistItemSections {
         return getTitle(loc.latestTracks, loc.albums, loc.appearsOnAlbums) ??
             "Unsupported Type";
       case CuratedItemSelectionType.recentlyAdded:
-        return getTitle(loc.newTracks, loc.albums, loc.appearsOnAlbums) ??
+        return getTitle(
+                loc.recentlyAddedTracks, loc.albums, loc.appearsOnAlbums) ??
             "Unsupported Type";
       case CuratedItemSelectionType.recentlyPlayed:
         return getTitle(

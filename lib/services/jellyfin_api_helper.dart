@@ -135,9 +135,8 @@ class JellyfinApiHelper {
       List<BaseItemDto> output = [];
       // Limit itemIds per request to 200.  Execute up to 10 requests in parallel.
       for (final slice in itemIds!.slices(2000)) {
-        final futures = slice
-            .slices(200)
-            .map((subSlice) => _fetchGetItemsResponse(itemIds: subSlice, fields: fields));
+        final futures = slice.slices(200).map((subSlice) =>
+            _fetchGetItemsResponse(itemIds: subSlice, fields: fields));
         final results = await Future.wait(futures);
         for (var subSliceResult in results) {
           output.addAll(subSliceResult.items ?? []);
@@ -155,7 +154,7 @@ class JellyfinApiHelper {
       searchTerm: searchTerm,
       itemIds: itemIds,
       filters: filters,
-      fields:fields,
+      fields: fields,
       recursive: recursive,
       artistType: artistType,
       genreFilter: genreFilter,
@@ -203,7 +202,7 @@ class JellyfinApiHelper {
     return response;
   }
 
-  Future<QueryResult_BaseItemDto> _fetchGetItemsResponse ({
+  Future<QueryResult_BaseItemDto> _fetchGetItemsResponse({
     BaseItemDto? parentItem,
     BaseItemDto? libraryFilter,
     String? includeItemTypes,
@@ -227,7 +226,8 @@ class JellyfinApiHelper {
       // since this error usually happens because the listeners on MusicScreenTabView
       // update milliseconds before the page is popped.
       // This shouldn't happen in normal use.
-      return QueryResult_BaseItemDto(totalRecordCount: 0, startIndex: 0, items: []);
+      return QueryResult_BaseItemDto(
+          totalRecordCount: 0, startIndex: 0, items: []);
     }
     assert(!FinampSettingsHelper.finampSettings.isOffline);
     assert(itemIds == null || parentItem == null);
@@ -239,6 +239,12 @@ class JellyfinApiHelper {
       _jellyfinApiHelperLogger.fine("Getting children of ${parentItem.name}");
     } else if (itemIds != null) {
       _jellyfinApiHelperLogger.fine("Getting items with ids $itemIds");
+      if (itemIds.isEmpty) {
+        // An empty itemIds list will not apply a filter to the results, but
+        // it should actually return no results
+        return QueryResult_BaseItemDto(
+            totalRecordCount: 0, startIndex: 0, items: []);
+      }
     } else {
       _jellyfinApiHelperLogger.fine("Getting items.");
     }
@@ -726,8 +732,7 @@ class JellyfinApiHelper {
 
   /// Gets a Playlist
   Future<dynamic> getPlaylist(BaseItemId playlistId) async {
-    final response =
-        await jellyfinApi.getPlaylist(playlistId: playlistId);
+    final response = await jellyfinApi.getPlaylist(playlistId: playlistId);
     return response;
   }
 
@@ -784,6 +789,7 @@ class JellyfinApiHelper {
   Future<void> updateItem({
     /// The item id.
     required BaseItemId itemId,
+
     /// the new Item.
     required BaseItemDto newItem,
   }) async {
@@ -795,14 +801,15 @@ class JellyfinApiHelper {
   }
 
   /// Updates playlist.
-  Future<void> updatePlaylist({
-    /// The item id.
-    required BaseItemId itemId,
-    /// The new Item.
-    required NewPlaylist newPlaylist    
-  }) async {
-    final response =
-        await jellyfinApi.updatePlaylist(playlistId: itemId, playlist: newPlaylist);
+  Future<void> updatePlaylist(
+      {
+      /// The item id.
+      required BaseItemId itemId,
+
+      /// The new Item.
+      required NewPlaylist newPlaylist}) async {
+    final response = await jellyfinApi.updatePlaylist(
+        playlistId: itemId, playlist: newPlaylist);
     if (response.toString().isNotEmpty) {
       throw response as Object;
     }
