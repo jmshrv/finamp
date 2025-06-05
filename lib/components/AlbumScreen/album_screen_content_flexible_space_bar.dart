@@ -265,8 +265,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                       children: [
                         CTAMedium(
                           text: AppLocalizations.of(context)!
-                              .playButtonLabel
-                              .toUpperCase(),
+                              .playButtonLabel,
                           icon: TablerIcons.player_play,
                           onPressed: () => playAlbum(),
                           // set the minimum width as 25% of the screen width,
@@ -274,8 +273,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                         ),
                         CTAMedium(
                           text: AppLocalizations.of(context)!
-                              .shuffleButtonLabel
-                              .toUpperCase(),
+                              .shuffleButtonLabel,
                           icon: TablerIcons.arrows_shuffle,
                           onPressed: () => shuffleAlbum(),
                           // set the minimum width as 25% of the screen width,
