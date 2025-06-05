@@ -195,7 +195,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
                     sliver: TracksSection(
                       parent: widget.parent,
                       tracks: topTracks,
-                      childrenForQueue: Future.value(topTracks),
+                      childrenForQueue: topTracks,
                       tracksText: type.toLocalisedSectionTitle(context, artistCuratedItemSelectionType),
                       isOnArtistScreen: true,
                       genreFilter: currentGenreFilter,

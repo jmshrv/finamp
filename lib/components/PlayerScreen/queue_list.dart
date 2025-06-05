@@ -456,7 +456,7 @@ class _PreviousTracksListState extends State<PreviousTracksList>
               return QueueListTile(
                 key: ValueKey(item.id),
                 item: item.baseItem!,
-                listIndex: Future.value(index),
+                listIndex: index,
                 actualIndex: actualIndex,
                 indexOffset: indexOffset,
                 isInPlaylist: queueItemInPlaylist(item),
@@ -549,7 +549,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                     return QueueListTile(
                       key: ValueKey(item.id),
                       item: item.baseItem!,
-                      listIndex: Future.value(index),
+                      listIndex: index,
                       actualIndex: actualIndex,
                       indexOffset: indexOffset,
                       isInPlaylist: queueItemInPlaylist(item),
@@ -644,7 +644,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
                 return QueueListTile(
                   key: ValueKey(item.id),
                   item: item.baseItem!,
-                  listIndex: Future.value(index),
+                  listIndex: index,
                   actualIndex: actualIndex,
                   indexOffset: indexOffset,
                   isInPlaylist: queueItemInPlaylist(item),
