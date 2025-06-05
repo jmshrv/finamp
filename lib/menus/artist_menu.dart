@@ -66,7 +66,7 @@ Future<void> showModalArtistMenu({
         ),
       ),
       MenuMask(
-        height: 135.0,
+        height: MenuMask.defaultHeight,
         child: SliverPadding(
           padding: const EdgeInsets.only(left: 8.0),
           sliver: SliverList(

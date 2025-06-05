@@ -19,18 +19,13 @@ class ClearQueueMenuEntry extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
 
-    final canGoToGenre = (baseItem.genreItems?.isNotEmpty ?? false);
-
-    return Visibility(
-      visible: canGoToGenre,
-      child: MenuEntry(
-        icon: TablerIcons.clear_all,
-        title: AppLocalizations.of(context)!.stopAndClearQueue,
-        onTap: () async {
-          if (context.mounted) Navigator.pop(context);
-          await queueService.stopPlayback();
-        },
-      ),
+    return MenuEntry(
+      icon: TablerIcons.clear_all,
+      title: AppLocalizations.of(context)!.stopAndClearQueue,
+      onTap: () async {
+        if (context.mounted) Navigator.pop(context);
+        await queueService.stopPlayback();
+      },
     );
   }
 }

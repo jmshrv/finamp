@@ -291,7 +291,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                 onPressed: (ref) async {
                   _queueService.togglePlaybackOrder();
                 },
-                tooltip: playbackOrderTooltips[playbackBehavior.order]!,
+                label: playbackOrderTooltips[playbackBehavior.order]!,
                 iconColor:
                     playbackBehavior.order == FinampPlaybackOrder.shuffled
                         ? iconColor
@@ -321,7 +321,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                         );
                       }
                     },
-                    tooltip: timerValue != null
+                    label: timerValue != null
                         ? AppLocalizations.of(context)
                                 ?.sleepTimerRemainingTime(remainingMinutes) ??
                             "Sleeping in $remainingMinutes minutes"
@@ -339,7 +339,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                 onPressed: (ref) async {
                   _queueService.toggleLoopMode();
                 },
-                tooltip: loopModeTooltips[playbackBehavior.loop]!,
+                label: loopModeTooltips[playbackBehavior.loop]!,
                 iconColor: playbackBehavior.loop == FinampLoopMode.none
                     ? Theme.of(context).textTheme.bodyMedium?.color ??
                         Colors.white
@@ -352,7 +352,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
               onPressed: (ref) {
                 toggleSpeedMenu();
               },
-              tooltip: AppLocalizations.of(context)!
+              label: AppLocalizations.of(context)!
                   .playbackSpeedButtonLabel(playbackBehavior.speed),
               iconColor: playbackBehavior.speed == 1.0
                   ? Theme.of(context).textTheme.bodyMedium?.color ??
@@ -382,7 +382,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         pinned: true,
       ),
       MenuMask(
-        height: playActionRowHeight + 8.0,
+        height: MenuMask.defaultHeight,
         child: SliverToBoxAdapter(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -412,7 +412,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         ),
       ),
       MenuMask(
-        height: 135.0,
+        height: MenuMask.defaultHeight,
         child: SliverPadding(
           padding: const EdgeInsets.only(left: 8.0),
           sliver: SliverList(

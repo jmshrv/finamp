@@ -23,7 +23,7 @@ class GoToAlbumMenuEntry extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
-    final canGoToAlbum = baseItem.parentId != null;
+    final canGoToAlbum = baseItem.albumId != null;
 
     return Visibility(
       visible: canGoToAlbum,

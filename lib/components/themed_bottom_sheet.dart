@@ -193,6 +193,8 @@ class MenuMask extends SingleChildRenderObjectWidget {
     required this.height,
   });
 
+  static const double defaultHeight = 135.0;
+
   final double height;
 
   @override

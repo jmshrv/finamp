@@ -3,6 +3,7 @@ import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/components/menuEntries/menu_entry.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/artist_screen.dart';
+import 'package:finamp/screens/genre_screen.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
@@ -49,7 +50,7 @@ class GoToGenreMenuEntry extends ConsumerWidget {
           if (context.mounted) {
             Navigator.pop(context);
             await Navigator.of(context)
-                .pushNamed(ArtistScreen.routeName, arguments: genre);
+                .pushNamed(GenreScreen.routeName, arguments: genre);
           }
         },
       ),

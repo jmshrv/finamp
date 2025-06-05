@@ -8,14 +8,14 @@ class PlaybackAction extends ConsumerWidget {
     required this.icon,
     this.value,
     required this.onPressed,
-    required this.tooltip,
+    required this.label,
     required this.iconColor,
   });
 
   final IconData icon;
   final String? value;
   final void Function(WidgetRef ref) onPressed;
-  final String tooltip;
+  final String label;
   final Color iconColor;
 
   @override
@@ -37,7 +37,7 @@ class PlaybackAction extends ConsumerWidget {
               child: Align(
                 alignment: Alignment.topCenter,
                 child: Text(
-                  tooltip,
+                  label,
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -58,7 +58,6 @@ class PlaybackAction extends ConsumerWidget {
         visualDensity: VisualDensity.compact,
         padding: const EdgeInsets.only(
             top: 10.0, left: 8.0, right: 8.0, bottom: 12.0),
-        tooltip: tooltip,
       ),
     );
   }
