@@ -25,6 +25,7 @@ Logger _autoOfflineLogger = Logger("Auto Offline");
 Logger _networKSwitcherLogger = Logger("Network Switcher");
 
 int activeDelayCounter = 0;
+
 /// This stream receives update when autoOffline enters/exists the 7 second confirmation/validation timeout
 final autoOfflineStatusStream = StreamController<int>.broadcast();
 final autoOfflineStatusProvider = StreamProvider((ref) async* {
@@ -33,18 +34,17 @@ final autoOfflineStatusProvider = StreamProvider((ref) async* {
   }
 }).select((v) => v.valueOrNull ?? 0);
 
-
 final StreamSubscription<List<ConnectivityResult>> _listener =
     Connectivity().onConnectivityChanged.listen(_onConnectivityChange);
 
 @riverpod
 class AutoOffline extends _$AutoOffline {
-
   static void startWatching() {
     ProviderContainer container = GetIt.instance<ProviderContainer>();
 
     container.listen(autoOfflineProvider, (_, automationEnabled) {
-      _networkAutomationLogger.info("${automationEnabled ? "Enabled" : "Paused"} Automation");
+      _networkAutomationLogger
+          .info("${automationEnabled ? "Enabled" : "Paused"} Automation");
 
       if (automationEnabled) {
         _listener.resume();
@@ -91,8 +91,9 @@ Future<void> _onConnectivityChange(
 }
 
 bool featureEnabled() {
-  return FinampSettingsHelper.finampSettings.autoOffline != AutoOfflineOption.disabled &&
-         FinampSettingsHelper.finampSettings.autoOfflineListenerActive;
+  return FinampSettingsHelper.finampSettings.autoOffline !=
+          AutoOfflineOption.disabled &&
+      FinampSettingsHelper.finampSettings.autoOfflineListenerActive;
 }
 
 /// Sets the offline mode based on the current connectivity and user settings
@@ -160,7 +161,7 @@ Future<bool> changeTargetUrl({bool? isLocal}) async {
     GetIt.instance<FinampUserHelper>().currentUser?.update(newIsLocal: isLocal);
     return true;
   }
-  
+
   // this avoids an infinite loop... again :)
   if (isLocal != null) {
     return false;
