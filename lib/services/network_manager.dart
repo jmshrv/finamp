@@ -24,6 +24,16 @@ Logger _networkAutomationLogger = Logger("Network Automation");
 Logger _autoOfflineLogger = Logger("Auto Offline");
 Logger _networKSwitcherLogger = Logger("Network Switcher");
 
+int activeDelayCounter = 0;
+/// This stream receives update when autoOffline enters/exists the 7 second confirmation/validation timeout
+final autoOfflineStatusStream = StreamController<int>.broadcast();
+final autoOfflineStatusProvider = StreamProvider((ref) async* {
+  await for (final value in autoOfflineStatusStream.stream) {
+    yield value;
+  }
+}).select((v) => v.valueOrNull ?? 0);
+
+
 final StreamSubscription<List<ConnectivityResult>> _listener =
     Connectivity().onConnectivityChanged.listen(_onConnectivityChange);
 
@@ -106,7 +116,9 @@ Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
   // The wait also acts as an timeout so offline mode is less
   // likely to engage when it doesnt need to and this helps
   // with queue reloading
+  autoOfflineStatusStream.add(++activeDelayCounter);
   await Future.delayed(Duration(seconds: 7), () => {});
+  autoOfflineStatusStream.add(--activeDelayCounter);
   bool state2 = _shouldBeOffline(await Connectivity().checkConnectivity());
 
   // skip if we are already in the target offline state, or the auto switch was disabled
