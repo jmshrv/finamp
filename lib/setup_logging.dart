@@ -9,7 +9,7 @@ import 'services/finamp_logs_helper.dart';
 import 'services/log.dart';
 
 Future<void> setupLogging() async {
-  await Hive.openBox('app_info');
+  await Hive.openBox<dynamic>('app_info');
 
   GetIt.instance.registerSingleton(FinampLogsHelper());
   await GetIt.instance<FinampLogsHelper>().openLog();
