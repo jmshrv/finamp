@@ -39,30 +39,20 @@ final StreamSubscription<List<ConnectivityResult>> _listener =
 
 @riverpod
 class AutoOffline extends _$AutoOffline {
+
   static void startWatching() {
-    GetIt.instance<ProviderContainer>().listen(autoOfflineProvider,
-        (_, newState) {
-      if (newState) {
-        _networkAutomationLogger.info("Resumed Automation");
+    ProviderContainer container = GetIt.instance<ProviderContainer>();
+
+    container.listen(autoOfflineProvider, (_, automationEnabled) {
+      _networkAutomationLogger.info("${automationEnabled ? "Enabled" : "Paused"} Automation");
+
+      if (automationEnabled) {
         _listener.resume();
-        // directly check if offline mode should be on
-        _onConnectivityChange(null);
+        // instantly check if offline mode should be on
+        _onConnectivityChange(null, instant: true);
       } else {
-        _networkAutomationLogger.info("Paused Automation");
         _listener.pause();
       }
-    });
-
-    AppLifecycleListener(onRestart: () {
-      if (GetIt.instance<ProviderContainer>().read(autoOfflineProvider)) {
-        _autoOfflineLogger.finer("Lifecycle restarted automation");
-        _listener.resume();
-      } else {
-        _autoOfflineLogger.finer("Lifecycle kept automation paused");
-      }
-    }, onPause: () {
-      _listener.pause();
-      _autoOfflineLogger.finer("Lifecycle paused automation");
     });
   }
 
@@ -100,37 +90,39 @@ Future<void> _onConnectivityChange(
   }
 }
 
+bool featureEnabled() {
+  return FinampSettingsHelper.finampSettings.autoOffline != AutoOfflineOption.disabled &&
+         FinampSettingsHelper.finampSettings.autoOfflineListenerActive;
+}
+
 /// Sets the offline mode based on the current connectivity and user settings
 Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
-  // skip when feature not enabled
-  if (FinampSettingsHelper.finampSettings.autoOffline ==
-          AutoOfflineOption.disabled ||
-      !FinampSettingsHelper.finampSettings.autoOfflineListenerActive) {
+  if (!featureEnabled()) {
     return FinampSettingsHelper.finampSettings.isOffline;
   }
 
   bool state1 = _shouldBeOffline(connections);
 
   // this prevents an issue on ios (and mac?) where the
-  // listener gets called even though it shouldnt.
+  // listener gets called even though it shouldn't.
   // The wait also acts as an timeout so offline mode is less
-  // likely to engage when it doesnt need to and this helps
+  // likely to engage when it doesn't need to and this helps
   // with queue reloading
   autoOfflineStatusStream.add(++activeDelayCounter);
   await Future.delayed(Duration(seconds: 7), () => {});
   autoOfflineStatusStream.add(--activeDelayCounter);
+
+  // Return Early to prevent another Connectivity check
+  if (!featureEnabled()) {
+    return FinampSettingsHelper.finampSettings.isOffline;
+  }
   bool state2 = _shouldBeOffline(await Connectivity().checkConnectivity());
 
-  // skip if we are already in the target offline state, or the auto switch was disabled
-  // while we waited out intermittent changes.  Also skip if the connection status changed
-  // during the waiting period, because we aren't sure which is better to use.  There should be
-  // another copy of this function triggered by the mid-wait switch which will handle
-  // if the final state is stable.
+  // skip if state changed during the delay because the function should be triggered by the change again
+  // skip if target state is already the active offline-mode state to prevent unessesary snackbar messages
+  // check if feature is enabled was already done after the delay
   if (state1 != state2 ||
-      FinampSettingsHelper.finampSettings.isOffline == state2 ||
-      FinampSettingsHelper.finampSettings.autoOffline ==
-          AutoOfflineOption.disabled ||
-      !FinampSettingsHelper.finampSettings.autoOfflineListenerActive) {
+      FinampSettingsHelper.finampSettings.isOffline == state2) {
     return FinampSettingsHelper.finampSettings.isOffline;
   }
 
@@ -168,6 +160,7 @@ Future<bool> changeTargetUrl({bool? isLocal}) async {
     GetIt.instance<FinampUserHelper>().currentUser?.update(newIsLocal: isLocal);
     return true;
   }
+  
   // this avoids an infinite loop... again :)
   if (isLocal != null) {
     return false;
