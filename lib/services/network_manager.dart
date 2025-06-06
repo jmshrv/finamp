@@ -28,10 +28,8 @@ int activeDelayCounter = 0;
 
 /// This stream receives update when autoOffline enters/exists the 7 second confirmation/validation timeout
 final autoOfflineStatusStream = StreamController<int>.broadcast();
-final autoOfflineStatusProvider = StreamProvider((ref) async* {
-  await for (final value in autoOfflineStatusStream.stream) {
-    yield value;
-  }
+final autoOfflineStatusProvider = StreamProvider((ref) {
+    return autoOfflineStatusStream.stream;
 }).select((v) => v.valueOrNull ?? 0);
 
 final StreamSubscription<List<ConnectivityResult>> _listener =
@@ -49,7 +47,7 @@ class AutoOffline extends _$AutoOffline {
       if (automationEnabled) {
         _listener.resume();
         // instantly check if offline mode should be on
-        _onConnectivityChange(null, instant: true);
+        _onConnectivityChange(null);
       } else {
         _listener.pause();
       }
