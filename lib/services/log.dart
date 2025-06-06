@@ -203,12 +203,17 @@ class Log {
     required this.serverInfo
   });
 
-  /// Constructs a full log instance from platform metadata.
+  /// Constructs a full log instance from platform and server metadata.
   static Future<Log> create() async {
     final deviceInfo = await DeviceInfo.fromPlatform();
     final appInfo = await AppInfo.fromPlatform();
     final serverInfo = await ServerInfo.fromServer();
-    return Log(deviceInfo: deviceInfo, appInfo: appInfo, serverInfo: serverInfo);
+    
+    return Log(
+      deviceInfo: deviceInfo, 
+      appInfo: appInfo, 
+      serverInfo: serverInfo
+    );
   }
 
   /// Serializes log to JSON
@@ -224,7 +229,7 @@ class Log {
 
 /// Censored version of Metadata, hiding Server address.
 extension LogCensor on Log {
-  Future<Map<String, dynamic>> toJsonCensored() async {
+  Future<Map<String, dynamic>> toCensoredJson() async {
     final serverInfo = await ServerInfo.fromServer();
 
     return {
@@ -236,7 +241,7 @@ extension LogCensor on Log {
 
   /// Logs metadata at startup.
   Future<void> logMetadata() async {
-    final metadata = await toJsonCensored();
+    final metadata = await toCensoredJson();
     final logger = Logger('Startup');
 
     logger.info('App Metadata on startup:\n$metadata');

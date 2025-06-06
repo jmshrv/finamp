@@ -63,14 +63,14 @@ class FinampLogsHelper {
     final fullLogsBuffer = StringBuffer();
 
     // Get the Log instance and add its metadata at the top
-    final logMeta = GetIt.instance.isRegistered<Log>() ? GetIt.instance<Log>() : null;
-    if (logMeta != null) {
-      // Use the on-demand censored metadata, which fetches server info/version as needed
-      final censoredMeta = await logMeta.toJsonCensored();
-      // Prepend this metadata to the logs
-      fullLogsBuffer.writeln(jsonEncode(censoredMeta));
-    }
+    final logMeta = await Log.create();
 
+    // Use the on-demand censored metadata, which fetches server info/version as needed
+    final censoredMeta = await logMeta.toCensoredJson();
+    
+    // Prepend this metadata to the logs
+    fullLogsBuffer.writeln(jsonEncode(censoredMeta));
+  
     if (_logFileWriter != null) {
       final basePath = (Platform.isAndroid || Platform.isIOS)
           ? await getApplicationDocumentsDirectory()
