@@ -125,6 +125,3 @@ app.*.map.json
 
 # generated localization files
 **/lib/l10n/*.dart
-linux/flutter/generated_plugin_registrant.cc
-linux/flutter/generated_plugin_registrant.h
-linux/flutter/generated_plugins.cmake

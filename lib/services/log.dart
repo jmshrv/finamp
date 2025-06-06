@@ -179,16 +179,15 @@ class ServerInfo {
       return null;
     }
   }
-}
 
-/// Extension method to redact sensitive server address.
-extension ServerInfoCensor on ServerInfo {
-  Map<String, dynamic> toCensoredJson({String? serverVersion}) => {
+  Map<String, dynamic> toCensoredJson() {
+      return {
         'serverAddress': 'REDACTED',
         'serverPort': serverPort,
         'serverProtocol': serverProtocol,
-        if (serverVersion != null) 'serverVersion': serverVersion,
+        'serverVersion': fetchServerVersion(),
       };
+  }
 }
 
 /// -------------------- LOG WRAPPER --------------------
@@ -212,7 +211,7 @@ class Log {
     return Log(deviceInfo: deviceInfo, appInfo: appInfo, serverInfo: serverInfo);
   }
 
-  /// Serializes log to JSON, including optional server info.
+  /// Serializes log to JSON
   Future<Map<String, dynamic>> toJson() async {
     final serverInfo = await ServerInfo.fromServer();
     return {
@@ -223,16 +222,15 @@ class Log {
   }
 }
 
-/// Extension to redact server info and include version info.
+/// Censored version of Metadata, hiding Server address.
 extension LogCensor on Log {
   Future<Map<String, dynamic>> toJsonCensored() async {
     final serverInfo = await ServerInfo.fromServer();
-    final version = await ServerInfo.fetchServerVersion();
 
     return {
       'deviceInfo': deviceInfo.toJson(),
       'appInfo': appInfo.toJson(),
-      'serverInfo': serverInfo?.toCensoredJson(serverVersion: version),
+      'serverInfo': serverInfo?.toCensoredJson(),
     };
   }
 
@@ -241,7 +239,7 @@ extension LogCensor on Log {
     final metadata = await toJsonCensored();
     final logger = Logger('Startup');
 
-    logger.info('App Metadata on startup:\n${metadata}');
+    logger.info('App Metadata on startup:\n$metadata');
   }
 
 }
