@@ -3,7 +3,7 @@ import 'package:finamp/services/censored_log.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
-import 'package:hive_ce/hive.dart
+import 'package:hive_ce/hive.dart';
 
 import 'services/finamp_logs_helper.dart';
 import 'services/log.dart';
