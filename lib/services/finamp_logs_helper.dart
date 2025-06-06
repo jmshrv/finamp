@@ -66,7 +66,7 @@ class FinampLogsHelper {
     final logMeta = GetIt.instance.isRegistered<Log>() ? GetIt.instance<Log>() : null;
     if (logMeta != null) {
       // Use the on-demand censored metadata, which fetches server info/version as needed
-      final censoredMeta = await logMeta.toCensoredJsonOnDemand();
+      final censoredMeta = await logMeta.toJsonCensored();
       // Prepend this metadata to the logs
       fullLogsBuffer.writeln(jsonEncode(censoredMeta));
     }

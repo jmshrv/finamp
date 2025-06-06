@@ -15,11 +15,11 @@ Future<void> setupLogging() async {
   final log = await Log.create();
   GetIt.instance.registerSingleton<Log>(log);
 
+  await log.logMetadata(); // Log metadata on startup
+
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((event) {
     final finampLogsHelper = GetIt.instance<FinampLogsHelper>();
-
-    // Example: You can now use log.toJson() or log fields here if needed
 
     // We don't want to print log messages from the Flutter logger since Flutter prints logs by itself
     if (kDebugMode && event.loggerName != "Flutter") {
