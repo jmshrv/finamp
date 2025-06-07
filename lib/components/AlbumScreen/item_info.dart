@@ -81,17 +81,17 @@ class ItemInfo extends ConsumerWidget {
                 text: ReleaseDateHelper.autoFormat(item) ??
                     AppLocalizations.of(context)!.noReleaseDate,
               )),
-          Row(
-            children: [
-              Expanded(
-                child: GenreIconAndText(
-                  parent: item,
-                  genreFilter: genreFilter,
-                  updateGenreFilter: updateGenreFilter,
-                ),
+        Row(
+          children: [
+            Expanded(
+              child: GenreIconAndText(
+                parent: item,
+                genreFilter: genreFilter,
+                updateGenreFilter: updateGenreFilter,
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
       ],
     );
   }
