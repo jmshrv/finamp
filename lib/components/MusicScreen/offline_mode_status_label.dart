@@ -19,17 +19,16 @@ class OfflineModeStatusLabel extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {    
     AutoOfflineOption automation = ref.watch(finampSettingsProvider.autoOffline);
 
-    String displayText = "Automation disabled";
-
-    if (automation != AutoOfflineOption.disabled) {
-        bool override = !ref.watch(finampSettingsProvider.autoOfflineListenerActive);
-
-        displayText = "${override ? "Override" : "Automation"} active";
+    if (automation == AutoOfflineOption.disabled) {
+      return SizedBox.shrink();
     }
-
+    bool override = !ref.watch(finampSettingsProvider.autoOfflineListenerActive);
+    if (!override) {
+      return SizedBox.shrink();
+    }
     return ListTile(
       autofocus: false,
-      title: Text(displayText),
+      title: Text("Automatic Offline Mode paused"),
     );
   }
 }
