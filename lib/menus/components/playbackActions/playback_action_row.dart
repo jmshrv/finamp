@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:finamp/menus/components/playbackActions/playback_action_page_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,6 +24,9 @@ class PlaybackActionRow extends ConsumerWidget {
           height: playActionRowHeight,
           child: PageView(
             controller: controller,
+            // animation speed can't be changed directly, so we use a custom ScrollPhysics (source: https://stackoverflow.com/questions/65325496/flutter-pageview-how-to-make-faster-animations-on-swipe)
+            physics: const FasterPageViewScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()),
             allowImplicitScrolling: true,
             scrollDirection: Axis.horizontal,
             children: playbackActionPages.values.toList(),
@@ -33,6 +37,19 @@ class PlaybackActionRow extends ConsumerWidget {
           pageController: controller,
         ),
       ],
+    );
+  }
+}
+
+class FasterPageViewScrollPhysics extends ScrollPhysics {
+  const FasterPageViewScrollPhysics({required ScrollPhysics super.parent});
+
+  @override
+  SpringDescription get spring {
+    return const SpringDescription(
+      mass: 40,
+      stiffness: 100,
+      damping: 1,
     );
   }
 }
