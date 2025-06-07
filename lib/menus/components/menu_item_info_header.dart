@@ -327,7 +327,7 @@ class GenreInfo extends ConsumerWidget {
       ),
       featureImage: AlbumImage(
         item: item,
-        borderRadius: BorderRadius.all(Radius.circular(12)),
+        borderRadius: BorderRadius.zero,
         tapToZoom: true,
       ),
       infoRows: [

@@ -1,12 +1,10 @@
 import 'dart:async';
 
+import 'package:finamp/menus/components/menuEntries/adaptive_download_lock_delete_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/add_to_playlist_menu_entry.dart';
-import 'package:finamp/menus/components/menuEntries/delete_from_device_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/delete_from_server_menu_entry.dart';
-import 'package:finamp/menus/components/menuEntries/download_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/edit_item_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/instant_mix_menu_entry.dart';
-import 'package:finamp/menus/components/menuEntries/lock_download_menu_entry.dart';
 import 'package:finamp/menus/components/menu_item_info_header.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/menus/components/menuEntries/toggle_favorite_menu_entry.dart';
@@ -30,10 +28,7 @@ Future<void> showModalPlaylistMenu({
     return [
       AddToPlaylistMenuEntry(baseItem: baseItem),
       InstantMixMenuEntry(baseItem: baseItem),
-      //FIXME addToMixList / removeFromMixList
-      DeleteFromDeviceMenuEntry(baseItem: baseItem),
-      DownloadMenuEntry(baseItem: baseItem),
-      LockDownloadMenuEntry(baseItem: baseItem),
+      AdaptiveDownloadLockDeleteMenuEntry(baseItem: baseItem),
       ToggleFavoriteMenuEntry(baseItem: baseItem),
       EditItemMenuEntry(baseItem: baseItem),
       DeleteFromServerMenuEntry(baseItem: baseItem),

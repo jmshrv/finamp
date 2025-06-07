@@ -1,20 +1,17 @@
 import 'dart:async';
 
+import 'package:finamp/menus/components/menuEntries/adaptive_download_lock_delete_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/clear_queue_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/go_to_album_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/instant_mix_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/add_to_playlist_menu_entry.dart';
-import 'package:finamp/menus/components/menuEntries/delete_from_device_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/delete_from_server_menu_entry.dart';
-import 'package:finamp/menus/components/menuEntries/download_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/go_to_artist_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/go_to_genre_menu_entry.dart';
-import 'package:finamp/menus/components/menuEntries/lock_download_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/remove_from_current_playlist_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/toggle_favorite_menu_entry.dart';
 import 'package:finamp/menus/components/menu_item_info_header.dart';
 import 'package:finamp/menus/components/playbackActions/playback_action.dart';
-import 'package:finamp/menus/components/playbackActions/playback_action_row.dart';
 import 'package:finamp/menus/components/playbackActions/playback_actions.dart';
 import 'package:finamp/menus/components/speed_menu.dart';
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
@@ -230,9 +227,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         onRemove: widget.onRemoveFromList,
       ),
       InstantMixMenuEntry(baseItem: widget.item),
-      DeleteFromDeviceMenuEntry(baseItem: widget.item),
-      DownloadMenuEntry(baseItem: widget.item),
-      LockDownloadMenuEntry(baseItem: widget.item),
+      AdaptiveDownloadLockDeleteMenuEntry(baseItem: widget.item),
       ToggleFavoriteMenuEntry(baseItem: widget.item),
       GoToAlbumMenuEntry(baseItem: widget.item),
       GoToArtistMenuEntry(baseItem: widget.item),
