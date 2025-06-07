@@ -420,6 +420,18 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Shuffle",
   "@shuffleButtonLabel": {},
+  "playbackActionPagePlay": "Play",
+  "@playbackActionPagePlay": {
+    "description": "Label for the playback action page that contains all actions related to playing in order"
+  },
+  "playbackActionPageShuffle": "Shuffle",
+  "@playbackActionPageShuffle": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled"
+  },
+  "playbackActionPageShuffleAlbums": "Shuffle Albums",
+  "@playbackActionPageShuffleAlbums": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+  },
   "trackCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}",
   "@trackCount": {
     "placeholders": {

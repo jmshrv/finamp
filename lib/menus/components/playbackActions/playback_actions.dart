@@ -10,13 +10,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
-Map<String, Widget> getPlaybackActionPages(BaseItemDto baseItem) {
+Map<String, Widget> getPlaybackActionPages({
+  required BuildContext context,
+  required BaseItemDto baseItem,
+}) {
   final queueService = GetIt.instance<QueueService>();
   switch (BaseItemDtoType.fromItem(baseItem)) {
     //TODO add case for custom (artists) options
     case BaseItemDtoType.artist:
       return {
-        'Play*': Row(
+        AppLocalizations.of(context)!.playbackActionPagePlay: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -27,7 +30,7 @@ Map<String, Widget> getPlaybackActionPages(BaseItemDto baseItem) {
             AddToQueuePlaybackAction(baseItem: baseItem),
           ],
         ),
-        'Shuffle*': Row(
+        AppLocalizations.of(context)!.playbackActionPageShuffle: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -38,7 +41,7 @@ Map<String, Widget> getPlaybackActionPages(BaseItemDto baseItem) {
             ShuffleToQueuePlaybackAction(baseItem: baseItem),
           ],
         ),
-        'Shuffle Albums*': Row(
+        AppLocalizations.of(context)!.playbackActionPageShuffleAlbums: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -52,7 +55,7 @@ Map<String, Widget> getPlaybackActionPages(BaseItemDto baseItem) {
       };
     default:
       return {
-        'Play*': Row(
+        AppLocalizations.of(context)!.playbackActionPagePlay: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -64,7 +67,7 @@ Map<String, Widget> getPlaybackActionPages(BaseItemDto baseItem) {
           ],
         ),
         // Shuffle
-        'Shuffle*': Row(
+        AppLocalizations.of(context)!.playbackActionPageShuffle: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
