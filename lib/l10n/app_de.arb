@@ -2407,5 +2407,9 @@
   "applyFilterOnGenreChipTapSubtitle": "Standardmäßig öffnet ein Tippen die entsprechende Genreseite, während ein Gedrückthalten die momentane Künstlerseite oder Playlist filtert. Ist diese Option aktiviert, wird das Verhalten umgekehrt.",
   "@applyFilterOnGenreChipTapSubtitle": {
     "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "defaultOrder": "Standard-Reihenfolge",
+  "@defaultOrder": {
+    "description": "Default sorting order for playlists (server order)"
   }
 }
