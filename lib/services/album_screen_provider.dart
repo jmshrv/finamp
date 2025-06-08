@@ -65,7 +65,7 @@ Future<(List<BaseItemDto>, List<BaseItemDto>)> getSortedPlaylistTracks(
   final playlistSortBy = (isOffline &&
           (playlistSortBySetting == SortBy.datePlayed ||
               playlistSortBySetting == SortBy.playCount))
-      ? SortBy.serverOrder
+      ? SortBy.defaultOrder
       : playlistSortBySetting;
 
   // Get Playlist Items
@@ -74,7 +74,7 @@ Future<(List<BaseItemDto>, List<BaseItemDto>)> getSortedPlaylistTracks(
   final playlistAllTracks = result.$1;
   final playlistPlayableTracks = result.$2;
 
-  if (playlistSortBy == SortBy.serverOrder) {
+  if (playlistSortBy == SortBy.defaultOrder) {
     playlistAllTracksSorted = (playlistSortOrder == SortOrder.descending)
         ? playlistAllTracks.reversed.toList()
         : playlistAllTracks;

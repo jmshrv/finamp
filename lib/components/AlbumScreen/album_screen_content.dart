@@ -68,7 +68,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
     final playlistSortBy = (isOffline &&
             (playlistSortBySetting == SortBy.datePlayed ||
                 playlistSortBySetting == SortBy.playCount))
-        ? SortBy.serverOrder
+        ? SortBy.defaultOrder
         : playlistSortBySetting;
 
     final tracksAsync = (widget.parent.type == "Playlist")

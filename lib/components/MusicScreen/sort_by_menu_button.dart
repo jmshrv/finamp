@@ -24,7 +24,8 @@ class SortByMenuButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
-    final rawSortOptions = SortBy.defaultsFor(type: tabType, includeServerOrder: forPlaylistTracks);
+    final rawSortOptions = SortBy.defaultsFor(
+        type: tabType, includeDefaultOrder: forPlaylistTracks);
     final sortOptions = isOffline
       ? [
           ...rawSortOptions.where((s) => s != SortBy.playCount && s != SortBy.datePlayed),
@@ -37,7 +38,8 @@ class SortByMenuButton extends ConsumerWidget {
     // PlayCount and Last Played are not representative in Offline Mode
     // so we disable it and overwrite it with the Sort Name if it was selected
     if (isOffline && (selectedSortBy == SortBy.playCount || selectedSortBy == SortBy.datePlayed)) {
-      selectedSortBy = forPlaylistTracks ? SortBy.serverOrder : SortBy.sortName;
+      selectedSortBy =
+          forPlaylistTracks ? SortBy.defaultOrder : SortBy.sortName;
     }
     return PopupMenuButton<SortBy>(
       icon: const Icon(Icons.sort),

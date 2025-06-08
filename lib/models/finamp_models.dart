@@ -214,7 +214,7 @@ class DefaultSettings {
   static const artistItemSectionFilterChipOrder = CuratedItemSelectionType.values;
   static const artistItemSectionsOrder = ArtistItemSections.values;
   static const autoSwitchItemCurationType = true;
-  static const playlistTracksSortBy = SortBy.serverOrder;
+  static const playlistTracksSortBy = SortBy.defaultOrder;
   static const playlistTracksSortOrder = SortOrder.ascending;
   static const genreFilterPlaylists = false;
 }

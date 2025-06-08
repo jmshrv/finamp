@@ -302,7 +302,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       autoSwitchItemCurationType:
           fields[112] == null ? true : fields[112] as bool,
       playlistTracksSortBy:
-          fields[113] == null ? SortBy.serverOrder : fields[113] as SortBy,
+          fields[113] == null ? SortBy.defaultOrder : fields[113] as SortBy,
       playlistTracksSortOrder:
           fields[114] == null ? SortOrder.ascending : fields[114] as SortOrder,
       genreFilterPlaylists: fields[115] == null ? false : fields[115] as bool,
