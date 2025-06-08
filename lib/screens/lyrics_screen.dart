@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
+import 'package:finamp/extensions/string.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
@@ -245,20 +246,24 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
     } else if (!metadata.value!.hasLyrics) {
       return getEmptyState(message: "No lyrics available.", icon: TablerIcons.microphone_2_off);
     } else {
+      // We have lyrics that we can display
+      final lyricLines = metadata.value!.lyrics!.lyrics ?? [];
+
       progressStateStreamSubscription?.cancel();
       progressStateStreamSubscription = progressStateStream.listen((state) async {
         currentPosition = state.position;
+        final currentMicros = state.position.inMicroseconds;
 
         if (!_isSynchronizedLyrics || !_isVisible) {
           return;
         }
 
-        // find the closest line to the current position, clamping to the first and last lines
+        // Find the closest line to the current position, clamping to the first and last lines
         int closestLineIndex = -1;
-        for (int i = 0; i < metadata.value!.lyrics!.lyrics!.length; i++) {
+        for (int i = 0; i < lyricLines.length; i++) {
           closestLineIndex = i;
-          final line = metadata.value!.lyrics!.lyrics![i];
-          if ((line.start ?? 0) ~/ 10 > (currentPosition?.inMicroseconds ?? 0)) {
+          final line = lyricLines[i];
+          if (line.startMicros > currentMicros) {
             closestLineIndex = i - 1;
             break;
           }
@@ -269,10 +274,9 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
           setState(() {}); // Rebuild to update the current line
           if (autoScrollController.hasClients && isAutoScrollEnabled) {
             int clampedIndex = currentLineIndex ?? 0;
-            if (clampedIndex >= metadata.value!.lyrics!.lyrics!.length) {
-              clampedIndex = metadata.value!.lyrics!.lyrics!.length - 1;
+            if (clampedIndex >= lyricLines.length) {
+              clampedIndex = lyricLines.length - 1;
             }
-            // print("currentPosition: ${currentPosition?.inMicroseconds}, currentLineIndex: $currentLineIndex, line: ${metadata.value!.lyrics!.lyrics![clampedIndex].text}");
             if (clampedIndex < 0) {
               await autoScrollController.scrollToIndex(
                 -1,
@@ -281,18 +285,18 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                     ? const Duration(
                         milliseconds: 1,
                       ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
-                    : const Duration(milliseconds: 500),
+                    : const Duration(milliseconds: 300),
               );
             } else {
               unawaited(
                 autoScrollController.scrollToIndex(
-                  clampedIndex.clamp(0, metadata.value!.lyrics!.lyrics!.length - 1),
+                  clampedIndex.clamp(0, lyricLines.length - 1),
                   preferPosition: AutoScrollPosition.middle,
                   duration: MediaQuery.of(context).disableAnimations
                       ? const Duration(
                           milliseconds: 1,
                         ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
-                      : const Duration(milliseconds: 500),
+                      : const Duration(milliseconds: 300),
                 ),
               );
             }
@@ -310,16 +314,15 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                 LyricsListMask(
                   child: ListView.builder(
                     controller: autoScrollController,
-                    itemCount: metadata.value!.lyrics!.lyrics?.length ?? 0,
+                    itemCount: lyricLines.length,
                     itemBuilder: (context, index) {
-                      final line = metadata.value!.lyrics!.lyrics![index];
-                      final nextLine = index < metadata.value!.lyrics!.lyrics!.length - 1
-                          ? metadata.value!.lyrics!.lyrics![index + 1]
-                          : null;
+                      final currentMicros = currentPosition?.inMicroseconds ?? 0;
+                      final line = lyricLines[index];
+                      final nextLine = index < lyricLines.length - 1 ? lyricLines[index + 1] : null;
 
                       final isCurrentLine =
-                          (currentPosition?.inMicroseconds ?? 0) >= (line.start ?? 0) ~/ 10 &&
-                          (nextLine == null || (currentPosition?.inMicroseconds ?? 0) < (nextLine.start ?? 0) ~/ 10);
+                          currentMicros >= line.startMicros &&
+                          (nextLine == null || currentMicros < nextLine.startMicros);
 
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -350,7 +353,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                               isCurrentLine: isCurrentLine,
                               onTap: () async {
                                 // Seek to the start of the line
-                                await audioHandler.seek(Duration(microseconds: (line.start ?? 0) ~/ 10));
+                                await audioHandler.seek(Duration(microseconds: line.startMicros));
                                 setState(() {
                                   isAutoScrollEnabled = true;
                                 });
@@ -370,8 +373,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                               },
                             ),
                           ),
-                          if (index == metadata.value!.lyrics!.lyrics!.length - 1)
-                            SizedBox(height: constraints.maxHeight * 0.2),
+                          if (index == lyricLines.length - 1) SizedBox(height: constraints.maxHeight * 0.2),
                         ],
                       );
                     },
@@ -422,10 +424,11 @@ class _LyricLine extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lowlightLine = !isCurrentLine && line.start != null;
-    final isSynchronized = line.start != null;
-
     final finampSettings = ref.watch(finampSettingsProvider).value;
+
+    final isSynchronized = line.start != null;
+    final showTimestamp = isSynchronized && !line.text.isNullOrBlank && (finampSettings?.showLyricsTimestamps ?? true);
+    final lowlightLine = isSynchronized && !isCurrentLine;
 
     return GestureDetector(
       onTap: isSynchronized ? onTap : null,
@@ -436,15 +439,13 @@ class _LyricLine extends ConsumerWidget {
           softWrap: true,
           TextSpan(
             children: [
-              if (line.start != null &&
-                  (line.text?.trim().isNotEmpty ?? false) &&
-                  (finampSettings?.showLyricsTimestamps ?? true))
+              if (showTimestamp)
                 WidgetSpan(
                   alignment: PlaceholderAlignment.bottom,
                   child: Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: Text(
-                      "${Duration(microseconds: (line.start ?? 0) ~/ 10).inMinutes}:${(Duration(microseconds: (line.start ?? 0) ~/ 10).inSeconds % 60).toString().padLeft(2, '0')}",
+                      "${Duration(microseconds: line.startMicros).inMinutes}:${(Duration(microseconds: line.startMicros).inSeconds % 60).toString().padLeft(2, '0')}",
                       style: TextStyle(
                         color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
                         fontSize: 16,

@@ -20,8 +20,10 @@ part 'jellyfin_models.g.dart';
 
 class BaseItemIdConverter extends JsonConverter<BaseItemId, String> {
   const BaseItemIdConverter();
+
   @override
   BaseItemId fromJson(String json) => BaseItemId(json);
+
   @override
   String toJson(BaseItemId object) => object.raw;
 }
@@ -30,6 +32,7 @@ extension type BaseItemId._(String raw) {
   /// Construct a BaseItemDto id from a raw string.  Please be sure you have a valid ID before using, and
   /// if you might not, consider the invalid ID's scope and if you can use an alternative, such as null
   BaseItemId(this.raw);
+
   String operator +(BaseItemId other) => raw + other.raw;
 }
 
@@ -3171,49 +3174,34 @@ class NewPlaylistResponse {
 enum SortBy {
   @HiveField(0)
   album,
-
   @HiveField(1)
   albumArtist,
-
   @HiveField(2)
   artist,
-
   @HiveField(3)
   budget,
-
   @HiveField(4)
   communityRating,
-
   @HiveField(5)
   criticRating,
-
   @HiveField(6)
   dateCreated,
-
   @HiveField(7)
   datePlayed,
-
   @HiveField(8)
   playCount,
-
   @HiveField(9)
   premiereDate,
-
   @HiveField(10)
   productionYear,
-
   @HiveField(11)
   sortName,
-
   @HiveField(12)
   random,
-
   @HiveField(13)
   revenue,
-
   @HiveField(14)
   runtime,
-
   @HiveField(15)
   defaultOrder;
 
@@ -3512,7 +3500,6 @@ enum SortBy {
 enum SortOrder {
   @HiveField(0)
   ascending,
-
   @HiveField(1)
   descending;
 
@@ -3700,7 +3687,7 @@ class LyricMetadata {
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 45)
 class LyricLine {
-  LyricLine({this.text, this.start});
+  LyricLine({this.text, this.start, this.cues});
 
   /// Gets the text of this lyric line.
   @HiveField(0)
@@ -3709,6 +3696,12 @@ class LyricLine {
   /// Gets the start time in ticks.
   @HiveField(1)
   int? start;
+
+  /// Gets the time-aligned cues for the song's lyrics.
+  @HiveField(2)
+  List<LyricLineCue>? cues;
+
+  int get startMicros => start != null ? start! ~/ 10 : 0;
 
   factory LyricLine.fromJson(Map<String, dynamic> json) => _$LyricLineFromJson(json);
   Map<String, dynamic> toJson() => _$LyricLineToJson(this);
@@ -3730,4 +3723,30 @@ class LyricDto {
 
   factory LyricDto.fromJson(Map<String, dynamic> json) => _$LyricDtoFromJson(json);
   Map<String, dynamic> toJson() => _$LyricDtoToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
+@HiveType(typeId: 49)
+class LyricLineCue {
+  LyricLineCue({required this.position, required this.start, this.end});
+
+  /// Gets the character index of the lyric.
+  @HiveField(0)
+  int position;
+
+  /// Gets the timestamp the lyric is synced to in ticks.
+  @HiveField(1)
+  int start;
+
+  /// Gets the end timestamp the lyric is synced to in ticks.
+  @HiveField(2)
+  int? end;
+
+  int get startMicros => start ~/ 10;
+
+  int get endMicros => end != null ? end! ~/ 10 : 0;
+
+  factory LyricLineCue.fromJson(Map<String, dynamic> json) => _$LyricLineCueFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LyricLineCueToJson(this);
 }

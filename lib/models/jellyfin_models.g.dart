@@ -2634,17 +2634,20 @@ class LyricLineAdapter extends TypeAdapter<LyricLine> {
     return LyricLine(
       text: fields[0] as String?,
       start: (fields[1] as num?)?.toInt(),
+      cues: (fields[2] as List?)?.cast<LyricLineCue>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, LyricLine obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.text)
       ..writeByte(1)
-      ..write(obj.start);
+      ..write(obj.start)
+      ..writeByte(2)
+      ..write(obj.cues);
   }
 
   @override
@@ -2691,6 +2694,46 @@ class LyricDtoAdapter extends TypeAdapter<LyricDto> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is LyricDtoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class LyricLineCueAdapter extends TypeAdapter<LyricLineCue> {
+  @override
+  final typeId = 49;
+
+  @override
+  LyricLineCue read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return LyricLineCue(
+      position: (fields[0] as num).toInt(),
+      start: (fields[1] as num).toInt(),
+      end: (fields[2] as num?)?.toInt(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, LyricLineCue obj) {
+    writer
+      ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.position)
+      ..writeByte(1)
+      ..write(obj.start)
+      ..writeByte(2)
+      ..write(obj.end);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LyricLineCueAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -4693,11 +4736,15 @@ Map<String, dynamic> _$LyricMetadataToJson(LyricMetadata instance) =>
 LyricLine _$LyricLineFromJson(Map json) => LyricLine(
   text: json['Text'] as String?,
   start: (json['Start'] as num?)?.toInt(),
+  cues: (json['Cues'] as List<dynamic>?)
+      ?.map((e) => LyricLineCue.fromJson(Map<String, dynamic>.from(e as Map)))
+      .toList(),
 );
 
 Map<String, dynamic> _$LyricLineToJson(LyricLine instance) => <String, dynamic>{
   'Text': instance.text,
   'Start': instance.start,
+  'Cues': instance.cues?.map((e) => e.toJson()).toList(),
 };
 
 LyricDto _$LyricDtoFromJson(Map json) => LyricDto(
@@ -4715,3 +4762,16 @@ Map<String, dynamic> _$LyricDtoToJson(LyricDto instance) => <String, dynamic>{
   'Metadata': instance.metadata?.toJson(),
   'Lyrics': instance.lyrics?.map((e) => e.toJson()).toList(),
 };
+
+LyricLineCue _$LyricLineCueFromJson(Map json) => LyricLineCue(
+  position: (json['Position'] as num).toInt(),
+  start: (json['Start'] as num).toInt(),
+  end: (json['End'] as num?)?.toInt(),
+);
+
+Map<String, dynamic> _$LyricLineCueToJson(LyricLineCue instance) =>
+    <String, dynamic>{
+      'Position': instance.position,
+      'Start': instance.start,
+      'End': instance.end,
+    };
