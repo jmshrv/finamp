@@ -2415,5 +2415,9 @@
   "applyFilterOnGenreChipTapTitle": "Po klepnutí na žánr použít filtr",
   "@applyFilterOnGenreChipTapTitle": {
     "description": "Title for the setting that controls if taps on genre chips should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "defaultOrder": "Výchozí pořadí",
+  "@defaultOrder": {
+    "description": "Default sorting order for playlists (server order)"
   }
 }
