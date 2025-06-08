@@ -2014,8 +2014,6 @@
   "@onlineMode": {},
   "duration": "Durée",
   "@duration": {},
-  "serverOrder": "Ordre du serveur",
-  "@serverOrder": {},
   "notAvailable": "Indisponible",
   "@notAvailable": {},
   "browsePlaylists": "Parcourir les listes de lecture",

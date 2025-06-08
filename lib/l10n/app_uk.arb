@@ -2390,8 +2390,6 @@
   "@noDateAdded": {
     "description": "Placeholder text if an item has no dateAdded set."
   },
-  "serverOrder": "Порядок сервера",
-  "@serverOrder": {},
   "applyFilterOnGenreChipTapPrompt": "Застосовано жанровий фільтр",
   "@applyFilterOnGenreChipTapPrompt": {
     "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"

@@ -2090,8 +2090,6 @@
   "@favorite": {},
   "duration": "播放時間",
   "@duration": {},
-  "serverOrder": "伺服器排序",
-  "@serverOrder": {},
   "autoSwitchItemCurationTypeTitle": "自動調整內容推薦方式",
   "@autoSwitchItemCurationTypeTitle": {},
   "showArtistsTracksSection": "顯示歌曲區域",

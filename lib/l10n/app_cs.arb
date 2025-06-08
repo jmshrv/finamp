@@ -2300,8 +2300,6 @@
   "@favorite": {},
   "performingArtist": "Účinkující umělec",
   "@performingArtist": {},
-  "serverOrder": "Pořadí serverů",
-  "@serverOrder": {},
   "recentlyAddedAlbums": "Nedávno přidaná alba",
   "@recentlyAddedAlbums": {
     "description": "Label for the genre section that shows albums that were recently added to the library, sorted by the date they were added."

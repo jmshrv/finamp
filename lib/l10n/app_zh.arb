@@ -2251,8 +2251,6 @@
   "@performingArtist": {},
   "duration": "持续时间",
   "@duration": {},
-  "serverOrder": "服务器顺序",
-  "@serverOrder": {},
   "notAvailable": "无法使用",
   "@notAvailable": {},
   "removeFavorite": "删除收藏",

@@ -2302,8 +2302,6 @@
   "@favorite": {},
   "duration": "Dauer",
   "@duration": {},
-  "serverOrder": "Server-Reihenfolge",
-  "@serverOrder": {},
   "genreNoItems": "Du hast keine {itemType, select, playlists{Playlists} artists{Künstler} albums{Alben} tracks{Titel} other{Items}} aus diesem Genre.",
   "@genreNoItems": {
     "description": "Message for empty See All lists for a genre.",
