@@ -2417,5 +2417,9 @@
     "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
   },
   "recentlyPlayedAlbums": "Нещодавно відтворені альбоми",
-  "@recentlyPlayedAlbums": {}
+  "@recentlyPlayedAlbums": {},
+  "defaultOrder": "Порядок за замовчуванням",
+  "@defaultOrder": {
+    "description": "Default sorting order for playlists (server order)"
+  }
 }
