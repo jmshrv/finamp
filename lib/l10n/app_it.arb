@@ -1,16 +1,6 @@
 {
   "serverUrl": "URL del Server",
   "@serverUrl": {},
-  "startupError": "Qualcosa è andato storto durante l'avvio dell'app. L'errore è stato: {error}\n\nPerfavore apri una segnalazione su github.com/UnicornsOnLSD/finamp con uno screenshot di questa pagina. Se il problema persiste puoi cancellare i dati dell'app per riportarla alle impostazioni iniziali.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "emptyServerUrl": "l'URL del Server non può essere vuoto",
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
@@ -105,8 +95,8 @@
   "@favourite": {},
   "location": "Posizione",
   "@location": {},
-  "playlistNameUpdated": "Playlist nome aggiornato.",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "Playlist nome aggiornato.",
+  "@playlistUpdated": {},
   "required": "Richiesto",
   "@required": {},
   "updateButtonLabel": "Aggiornamento",
@@ -137,8 +127,6 @@
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "Transcodifica I flussi di musica dal lato server.",
   "@enableTranscodingSubtitle": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin usa AAC per la transcodifica",
-  "@jellyfinUsesAACForTranscoding": {},
   "appDirectory": "Cartella dell'App",
   "@appDirectory": {},
   "directoryMustBeEmpty": "La cartella deve essere vuota",
@@ -275,7 +263,7 @@
   "@albumArtist": {},
   "albums": "Album",
   "@albums": {},
-  "bitrateSubtitle": "Un bitrate più alto permette di avere una qualità audio più alta al costo di un più alto consumo della connessione dati.",
+  "bitrateSubtitle": "Un bitrate più alto permette di avere una qualità audio più alta al costo di un più alto consumo della connessione dati. Non si applica ai codec lossless, es. FLAC",
   "@bitrateSubtitle": {},
   "shuffleAllTrackCountSubtitle": "Numero di brani da mettere in coda quando si usa il tasto per la riproduzione casuale di tutti i brani.",
   "@shuffleAllTrackCountSubtitle": {},
@@ -396,7 +384,7 @@
   "@dark": {},
   "createButtonLabel": "Crea",
   "@createButtonLabel": {},
-  "customLocationsBuggy": "Le posizioni personalizzate sono estremamente instabili a causa di problemi con i permessi. Sto pensando a un modo di aggiustarle, ma per adesso non ne consiglio l'utilizzo.",
+  "customLocationsBuggy": "Le posizioni personalizzate possono essere estremamente instabili e sono sconsigliate nella maggior parte dei casi. Posizioni all'interno della cartella di sistema \"Musica\" impediscono il salvataggio delle cover degli album a causa delle limitazioni del sistema operativo.",
   "@customLocationsBuggy": {},
   "removeFromMix": "Rimuovi dal Mix",
   "@removeFromMix": {},
@@ -570,7 +558,7 @@
   "@serverUrlInfoButtonTooltip": {
     "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "connectingToServer": "Connessione al server...",
+  "connectingToServer": "Connessione al server…",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
@@ -578,7 +566,7 @@
   "@loginFlowLocalNetworkServers": {
     "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
   },
-  "loginFlowLocalNetworkServersScanningForServers": "Ricerca dei server...",
+  "loginFlowLocalNetworkServersScanningForServers": "Ricerca dei server…",
   "@loginFlowLocalNetworkServersScanningForServers": {
     "description": "Text shown while servers are being discovered via UDP broadcasts"
   },
@@ -896,10 +884,6 @@
   "@speed": {
     "description": "Used as a placeholder in the input of the playback speed menu"
   },
-  "showArtistsTopTracks": "Mostra i brani top nella visualizzazione artista",
-  "@showArtistsTopTracks": {},
-  "showArtistsTopTracksSubtitle": "Se mostrare o no i 5 brani più ascoltati di un artista.",
-  "@showArtistsTopTracksSubtitle": {},
   "timeFractionTooltip": "{currentTime} di {totalTime}",
   "@timeFractionTooltip": {
     "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
@@ -968,7 +952,7 @@
     },
     "description": "Localized names of special downloadable collections like favorites."
   },
-  "missingDownloadSize": "Cancello...",
+  "missingDownloadSize": "Eliminazione…",
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
   },
@@ -1017,7 +1001,7 @@
   "@playbackSpeedIncreaseLabel": {
     "description": "Label for the button in the speed menu that increases the playback speed."
   },
-  "playingFromType": "Riproduco da {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "playingFromType": "Riproduzione da {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} remoteClient{a Remote Client} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1178,12 +1162,6 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "transcodingStreamingContainerTitle": "Seleziona l'estensione dei file di transcodifica",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
-  "transcodingStreamingContainerSubtitle": "Seleziona l'estensione per i segmenti di file quando si effettua lo streaming di audio transcodificato. I brani già in coda non saranno interessati.",
-  "@transcodingStreamingContainerSubtitle": {},
   "confirmAddToNextUp": "Aggiunto {type, select, track{Track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} alla coda A Seguire",
   "@confirmAddToNextUp": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
@@ -1214,11 +1192,11 @@
   "@loopModeAllButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
   },
-  "activeDownloadSize": "In download...",
+  "activeDownloadSize": "Download…",
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
-  "syncingDownloadSize": "Sincronizzo...",
+  "syncingDownloadSize": "Sincronizzazione…",
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
@@ -1353,7 +1331,7 @@
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
   },
-  "reportQueueToServerSubtitle": "Se abilitato, Finamp invierà la coda corrente al server. Al momento sembra che ci sia poca utilità per questa funzionalità, inoltre aumenta il traffico di rete.",
+  "reportQueueToServerSubtitle": "Se abilitato, Finamp invierà la coda corrente al server. Questo può migliorare il controllo remoto e permette la ripresa della coda via server. Sempre attivo se la funzione 'Play On' è attiva.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1558,7 +1536,7 @@
   "@lyricsAlignmentTitle": {
     "description": "Title for the setting that controls the alignment of lyrics in the lyrics view"
   },
-  "showLyricsScreenAlbumPreludeTitle": "Mostra l'album prima dei testi",
+  "showLyricsScreenAlbumPreludeTitle": "Mostra la cover dell'album prima dei testi",
   "@showLyricsScreenAlbumPreludeTitle": {
     "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   },
@@ -1630,7 +1608,7 @@
   "@codec": {
     "description": "Label for the feature chips showing the codec of a track"
   },
-  "showFeatureChipsToggleSubtitle": "Mostra sullo schermo del lettore informazioni avanzate sul brano come codec, bit rate e altro.",
+  "showFeatureChipsToggleSubtitle": "Mostra sullo schermo del lettore informazioni avanzate sul brano come codec, bitrate e altro.",
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
@@ -1681,7 +1659,7 @@
       }
     }
   },
-  "queueLoadingMessage": "Ripristino la coda...",
+  "queueLoadingMessage": "Ripristino la coda…",
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
   },
@@ -1835,10 +1813,291 @@
   },
   "bufferSizeTitle": "Dimensione del buffer",
   "@bufferSizeTitle": {},
-  "bufferSizeSubtitle": "La dimensione massima del buffer, in MB. Richiede un riavvio.",
+  "bufferSizeSubtitle": "La dimensione massima del buffer, in MB. Richiede un riavvio",
   "@bufferSizeSubtitle": {},
   "bufferDisableSizeConstraintsTitle": "Non limitare la dimensione del buffer",
   "@bufferDisableSizeConstraintsTitle": {},
   "bufferDisableSizeConstraintsSubtitle": "Disattiva i vincoli sulla dimensione del buffer (\"Buffer Size\"). Il buffer verrà sempre caricato fino alla durata configurata (\"Buffer Duration\"), anche per file di grandi dimensioni. Può causare arresti anomali. Richiede un riavvio.",
-  "@bufferDisableSizeConstraintsSubtitle": {}
+  "@bufferDisableSizeConstraintsSubtitle": {},
+  "deleteDownloadsPrompt": "Sei sicuro di voler eliminare {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}}'{itemName}' da questo dispositivo?",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "deleteDownloadsConfirmButtonText": "Elimina",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "swipeLeftToRightActionSubtitle": "Azione attivata facendo swipe su una traccia nella lista da sinistra verso destra.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "swipeLeftToRightAction": "Azione Scorrimento a Destra",
+  "@swipeLeftToRightAction": {},
+  "specialDownloads": "Download speciali",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "swipeRightToLeftActionSubtitle": "Azione attivata facendo swipe su una traccia nella lista da destra verso sinistra.",
+  "@swipeRightToLeftActionSubtitle": {},
+  "transcodingStreamingFormatTitle": "Seleziona il formato di transcodifica",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
+  },
+  "albumArtists": "Artisti dell'album",
+  "@albumArtists": {},
+  "appearsOnAlbums": "Compare In",
+  "@appearsOnAlbums": {},
+  "swipeRightToLeftAction": "Azione Scorrimento a Sinistra",
+  "@swipeRightToLeftAction": {},
+  "noItemsDownloaded": "Nessun elemento scaricato.",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "hideQueueButtonSubtitle": "Nascondi il pulsante della coda sulla schermata del player. Scorri verso l'alto per accedere alla coda.",
+  "@hideQueueButtonSubtitle": {},
+  "oneLineMarqueeTextButton": "Scorri automaticamente i Titoli Lunghi",
+  "@oneLineMarqueeTextButton": {},
+  "marqueeOrTruncateButton": "Usa i puntini di sospensione per i titoli lunghi",
+  "@marqueeOrTruncateButton": {},
+  "currentVolumeFeatureText": "volume {volume}%",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
+      }
+    }
+  },
+  "playOnStaleDelay": "'Riproduci Su' Timeout della Sessione",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "playOnStaleDelaySubtitle": "Quanto a lungo una sessione remota 'Play On' è considerata attiva dopo aver ricevuto un comando. Quando è considerata attiva, la riproduzione viene riportata più frequentemente, ciò può portare ad un aumento del consumo di dati.",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "enablePlayonTitle": "Attiva il Supporto a 'Riproduci Su'",
+  "@enablePlayonTitle": {
+    "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "playOnReconnectionDelaySubtitle": "Controlla il ritardo fra i tentativi di riconnettersi al websocket 'Riproduci Su' quando questo viene disconnesso (in secondi). Un ritardo più basso aumenta l'uso dei dati.",
+  "@playOnReconnectionDelaySubtitle": {
+    "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "lyricsScreenButtonTitle": "Testi",
+  "@lyricsScreenButtonTitle": {
+    "description": "Label for the button for opening the lyrics screen"
+  },
+  "libraryDownloads": "Download Libreria",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "audioFadeInDurationSettingSubtitle": "La durata della dissolvenza audio in apertura in millisecondi. Imposta su 0 per disabilitare la dissolvenza in apertura.",
+  "@audioFadeInDurationSettingSubtitle": {
+    "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
+  },
+  "releaseDateFormatTitle": "Formato della Data di Rilascio",
+  "@releaseDateFormatTitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "librarySelectError": "Errore nel caricare le librerie disponibili per l'utente",
+  "@librarySelectError": {
+    "description": "Error shown when the library select screen fails to load."
+  },
+  "downloadSizeWarningCutoff": "Limite per l'avviso delle dimensioni del download",
+  "@downloadSizeWarningCutoff": {
+    "description": "Title for the setting controlling when to warn about a large download"
+  },
+  "releaseDateFormatISO": "ISO 8601",
+  "@releaseDateFormatISO": {
+    "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
+  },
+  "autoOfflineOptionNetwork": "Rete",
+  "@autoOfflineOptionNetwork": {
+    "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
+  },
+  "autoOfflineOptionDisconnected": "Non connesso",
+  "@autoOfflineOptionDisconnected": {
+    "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
+  },
+  "performingArtists": "Artisti interpreti",
+  "@performingArtists": {},
+  "transcodingStreamingFormatSubtitle": "Seleziona il formato da usare quando si riproduce in streaming dell'audio transcodificato. Le tracce già in coda non saranno influenzate.",
+  "@transcodingStreamingFormatSubtitle": {},
+  "allowDeleteFromServerSubtitle": "Attiva e disattiva la possibilità di eliminare irreversibilmente una traccia dal disco del server quando l'eliminazione è possibile.",
+  "@allowDeleteFromServerSubtitle": {
+    "description": "Subtitle for the setting that controls if items can be deleted from the server"
+  },
+  "itemDeletedSnackbar": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} track{Track} library{Library} other{Item}} è stato cancellato da {deviceType, select, device{Device} server{Server} other{unknown}}",
+  "@itemDeletedSnackbar": {
+    "description": "Used whenever item gets deleted from the device or server, message in snackbar"
+  },
+  "releaseDateFormatYear": "Anno",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
+  },
+  "autoOfflineOptionOff": "Disattivo",
+  "@autoOfflineOptionOff": {
+    "description": "This is shown when the autoOffline feature is turned off and has no effects"
+  },
+  "releaseDateFormatMonthYear": "Mese & Anno",
+  "@releaseDateFormatMonthYear": {
+    "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
+  },
+  "showAlbumReleaseDateOnPlayerScreenTitle": "Mostra la Data di Rilascio dell'Album nella Schermata di Riproduzione",
+  "@showAlbumReleaseDateOnPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "autoOfflineSettingTitle": "Modalità Offline Automatizzata",
+  "@autoOfflineSettingTitle": {},
+  "startupErrorTitle": "Qualcosa non ha funzionato durante l'avvio dell'app!\nDesolato per l'inconveniente...",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorCallToAction": "Per favore crea una \"issue\" su github.com/jmshrv/finamp con i log(!) (usa i tasti qui sotto) e uno screenshot di questa pagina, in modo tale che possiamo sistemarla il prima possibile.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "outputMenuVolumeSectionTitle": "Volume",
+  "@outputMenuVolumeSectionTitle": {
+    "description": "Title for the volume section in the output menu"
+  },
+  "outputMenuDevicesSectionTitle": "Dispositivi disponibili",
+  "@outputMenuDevicesSectionTitle": {
+    "description": "Title for the available devices section in the output menu"
+  },
+  "deviceType": "{type, select, speaker{Altoparlante} tv{TV} bluetooth{Bluetooth} other{Sconosciuto}}",
+  "@deviceType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    },
+    "description": "Label for the type of device in the output menu"
+  },
+  "allowDeleteFromServerTitle": "Permetti l'eliminazione sul server",
+  "@allowDeleteFromServerTitle": {
+    "description": "Title for the setting that controls if items can be deleted from the server"
+  },
+  "largeDownloadWarning": "Attenzione: stai per scaricare {count} tracce.",
+  "@largeDownloadWarning": {
+    "description": "A line of warning text on the download dialog when large numbers of tracks are downloaded at once.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "publiclyVisiblePlaylist": "Visibile a tutti:",
+  "@publiclyVisiblePlaylist": {
+    "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."
+  },
+  "releaseDateFormatMonthDayYear": "Mese, Giorno & Anno",
+  "@releaseDateFormatMonthDayYear": {
+    "description": "Date format option for the release date of an album, showing the year and month and day/date. Example: March 2, 2022"
+  },
+  "exportLogs": "Salva i log",
+  "@exportLogs": {},
+  "playbackReportingSettingsTitle": "Report Riproduzione & Riproduci Su",
+  "@playbackReportingSettingsTitle": {
+    "description": "Title for the playback reporting settings screen"
+  },
+  "oneLineMarqueeTextButtonSubtitle": "Scorri automaticamente i titoli delle tracce che sono troppo lunghi per essere visualizzati in due linee",
+  "@oneLineMarqueeTextButtonSubtitle": {},
+  "deleteFromTargetConfirmButton": "Elimina{target, select, device{ dal Dispositivo} server{ dal Server} other{}}",
+  "@deleteFromTargetConfirmButton": {
+    "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
+  },
+  "downloadSizeWarningCutoffSubtitle": "Un messaggio d'avviso verrà mostrato quando si scarica in una volta sola un numero di tracce più grande di questo.",
+  "@downloadSizeWarningCutoffSubtitle": {
+    "description": "Subtitle for the setting controlling when to warn about a large download"
+  },
+  "releaseDateFormatSubtitle": "Controlla il formato di tutte le date di rilascio mostrate nell'app.",
+  "@releaseDateFormatSubtitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "autoOfflineNotification": "{state, select, enabled{enabled} disabled{disabled} other{set quantum position for}} automaticamente la Modalità Offline",
+  "@autoOfflineNotification": {
+    "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
+  },
+  "audioFadeOutDurationSettingTitle": "Durata della dissolvenza audio in chiusura",
+  "@audioFadeOutDurationSettingTitle": {
+    "description": "Title for the audio fade-out duration setting."
+  },
+  "audioFadeOutDurationSettingSubtitle": "La durata della dissolvenza audio in chiusura in millisecondi.",
+  "@audioFadeOutDurationSettingSubtitle": {
+    "description": "Subtitle for the audio fade-out duration setting. Set to 0 to disable fade-out."
+  },
+  "outputMenuButtonTitle": "Uscita Audio",
+  "@outputMenuButtonTitle": {
+    "description": "Button title for opening the output menu/panel"
+  },
+  "enablePlayonSubtitle": "Attiva la funzione 'Riproduci Su' di Jellyfin (permette di controllare in remoto Finamp da un altro client). Disattiva questa funzione se il tuo reverse-proxy o il tuo server non supportano le connessioni websocket.",
+  "@enablePlayonSubtitle": {
+    "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "playbackReporting": "Report riproduzione",
+  "@playbackReporting": {},
+  "startupErrorWorkaround": "Come soluzione alternativa puoi cancellare i tuoi dati dell'app per resettare l'app. Tieni presente che in tal caso tutte le tue impostazioni e i download saranno cancellati.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
+  },
+  "playOnReconnectionDelay": "'Riproduci Su' Ritardo per Riconnessione della Sessione",
+  "@playOnReconnectionDelay": {
+    "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "outputMenuOpenConnectionSettingsButtonTitle": "Connetti ad un dispositivo",
+  "@outputMenuOpenConnectionSettingsButtonTitle": {
+    "description": "Button title for connecting to a device from the output menu"
+  },
+  "desktopShuffleWarning": "La riproduzione casuale al momento non è disponibile sul desktop.",
+  "@desktopShuffleWarning": {
+    "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
+  },
+  "marqueeOrTruncateButtonSubtitle": "Mostra … alla fine dei titoli lunghi invece di far scorrere il testo",
+  "@marqueeOrTruncateButtonSubtitle": {},
+  "deleteFromTargetDialogText": "Stai per eliminare {itemType, select, album{album} playlist{playlist} artist{artista} genre{genre} track{traccia} library{library} other{item}} da {device, select, device{questo dispositivo} server{il disco del server e la libreria.{deleteType, select, canDelete{ Questa azione eliminerà anche l'elemento da questo Dispositivo.} cantDelete{ Questo elemento rimarrà su questo dispositivo fino alla prossima sincronizzazione.} notDownloaded{} other{}}\nQuesta azione non può essere annullata} other{}}.",
+  "@deleteFromTargetDialogText": {
+    "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
+  },
+  "confirmAddAlbumToPlaylist": "Sei sicuro di voler aggiungere tutte le tracce da {itemType, select, album{album} playlist{playlist} artist{artista} genre{genre} other{item}} '{itemName}' a questa playlist?  Possono essere rimosse solo una per una.",
+  "@confirmAddAlbumToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "audioFadeInDurationSettingTitle": "Durata della dissolvenza in apertura",
+  "@audioFadeInDurationSettingTitle": {
+    "description": "Title for the audio fade-in duration setting."
+  },
+  "showAlbumReleaseDateOnPlayerScreenSubtitle": "Mostra la data di rilascio dell'album nella schermata di riproduzione, dietro il nome dell'album.",
+  "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "outputMenuTitle": "Cambia Uscita Audio",
+  "@outputMenuTitle": {
+    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  },
+  "autoOfflineSettingDescription": "Attiva automaticamente la modalità Offline.\nDisattivo: Non attiverà automaticamente la modalità Offline. Può far risparmiare la batteria.\nRete: Attiva la modalità Offline quando non si è connessi al wifi o ad un cavo ethernet.\nNon connesso: Attiva la modalità Offline quando non si è connessi a niente.\nPuoi sempre attivare manualmente la modalità offline, ciò metterà in pausa le automazioni fino a quando non disattiverai la modalità offline",
+  "@autoOfflineSettingDescription": {
+    "description": "Setting description. Make sure the Mode names match the translations."
+  },
+  "hideQueueButton": "Nascondi il pulsante della coda",
+  "@hideQueueButton": {}
 }

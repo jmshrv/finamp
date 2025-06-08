@@ -1,20 +1,21 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/components/AlbumScreen/track_menu.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/current_album_image_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/datetime_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../services/audio_service_helper.dart';
@@ -33,13 +34,13 @@ enum TrackListTileMenuItems {
   removeFromPlaylist,
   instantMix,
   goToAlbum,
-  addFavourite,
-  removeFavourite,
+  addFavorite,
+  removeFavorite,
   download,
   delete,
 }
 
-class TrackListTile extends StatelessWidget {
+class TrackListTile extends ConsumerWidget {
   const TrackListTile({
     super.key,
     required this.item,
@@ -64,35 +65,45 @@ class TrackListTile extends StatelessWidget {
     this.isTrack = false,
     this.onRemoveFromList,
     this.showPlayCount = false,
+    this.forceAlbumArtists = false,
+    this.showReleaseDate = false,
+    this.showDateAdded = false,
+    this.showDateLastPlayed = false,
 
     /// Whether this widget is being displayed in a playlist. If true, will show
     /// the remove from playlist button.
     this.isInPlaylist = false,
     this.isOnArtistScreen = false,
+    this.isOnGenreScreen = false,
     this.isShownInSearch = false,
     this.allowDismiss = true,
     this.highlightCurrentTrack = true,
+    this.genreFilter,
   });
 
-  final jellyfin_models.BaseItemDto item;
-  final Future<List<jellyfin_models.BaseItemDto>>? children;
-  final Future<int>? index;
+  final BaseItemDto item;
+  final List<BaseItemDto>? children;
+  final int? index;
   final bool showIndex;
   final bool showCover;
   final bool isTrack;
-  final jellyfin_models.BaseItemDto? parentItem;
+  final BaseItemDto? parentItem;
   final VoidCallback? onRemoveFromList;
+  final bool forceAlbumArtists;
   final bool showPlayCount;
+  final bool showReleaseDate;
+  final bool showDateAdded;
+  final bool showDateLastPlayed;
   final bool isInPlaylist;
   final bool isOnArtistScreen;
+  final bool isOnGenreScreen;
   final bool isShownInSearch;
   final bool allowDismiss;
   final bool highlightCurrentTrack;
+  final BaseItemDto? genreFilter;
 
   @override
-  Widget build(BuildContext context) {
-    final currentSettings = FinampSettingsHelper.finampSettings;
-
+  Widget build(BuildContext context, WidgetRef ref) {
     Future<void> trackListTileOnTap(bool playable) async {
       final queueService = GetIt.instance<QueueService>();
       final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
@@ -101,25 +112,27 @@ class TrackListTile extends StatelessWidget {
       if (children != null) {
         // start linear playback of album from the given index
         await queueService.startPlayback(
-          items: await children!,
-          startingIndex: await index,
+          items: children!,
+          startingIndex: index,
           order: FinampPlaybackOrder.linear,
           source: QueueItemSource.rawId(
             type: isInPlaylist
                 ? QueueItemSourceType.playlist
                 : isOnArtistScreen
                     ? QueueItemSourceType.artist
-                    : QueueItemSourceType.album,
+                    : isOnGenreScreen
+                        ? QueueItemSourceType.genre
+                        : QueueItemSourceType.album,
             name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: ((isInPlaylist || isOnArtistScreen)
+                pretranslatedName: ((isInPlaylist || isOnArtistScreen || isOnGenreScreen)
                         ? parentItem?.name
                         : item.album) ??
                     AppLocalizations.of(context)!.placeholderSource),
             id: parentItem?.id.raw ?? "",
             item: parentItem,
             // we're playing from an album, so we should use the album's normalization gain.
-            contextNormalizationGain: (isInPlaylist || isOnArtistScreen)
+            contextNormalizationGain: (isInPlaylist || isOnArtistScreen || isOnGenreScreen)
                 ? null
                 : parentItem?.normalizationGain,
           ),
@@ -139,7 +152,8 @@ class TrackListTile extends StatelessWidget {
             viewFilter: finampUserHelper.currentUser?.currentView?.id,
             nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
             onlyFavorites:
-                settings.onlyShowFavourites && settings.trackOfflineFavorites,
+                settings.onlyShowFavorites && settings.trackOfflineFavorites,
+            genreFilter: genreFilter,
           );
 
           var items = offlineItems.map((e) => e.baseItem).nonNulls.toList();
@@ -151,7 +165,7 @@ class TrackListTile extends StatelessWidget {
             items: items,
             startingIndex: isShownInSearch
                 ? items.indexWhere((element) => element.id == item.id)
-                : await index,
+                : index,
             source: QueueItemSource(
               name: QueueItemSourceName(
                 type: item.name != null
@@ -185,57 +199,60 @@ class TrackListTile extends StatelessWidget {
 
     Future<bool> trackListTileConfirmDismiss(DismissDirection direction) async {
       var followUpAction = (direction == DismissDirection.startToEnd)
-          ? currentSettings.itemSwipeActionLeftToRight
-          : currentSettings.itemSwipeActionRightToLeft;
+          ? FinampSettingsHelper.finampSettings.itemSwipeActionLeftToRight
+          : FinampSettingsHelper.finampSettings.itemSwipeActionRightToLeft;
 
       final queueService = GetIt.instance<QueueService>();
-      
+
       switch (followUpAction) {
         case ItemSwipeActions.addToNextUp:
           unawaited(queueService.addToNextUp(
-            items: [item],
-            source: QueueItemSource.rawId(
-              type: QueueItemSourceType.nextUp,
-              name: QueueItemSourceName(
-                type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: AppLocalizations.of(context)!.queue),
-              id: parentItem?.id.raw ?? "",
-              item: parentItem,
-          )));
+              items: [item],
+              source: QueueItemSource.rawId(
+                type: QueueItemSourceType.nextUp,
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName: AppLocalizations.of(context)!.queue),
+                id: parentItem?.id.raw ?? "",
+                item: parentItem,
+              )));
           GlobalSnackbar.message(
-              (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp("track"),
-              isConfirmation: true,
+            (scaffold) =>
+                AppLocalizations.of(scaffold)!.confirmAddToNextUp("track"),
+            isConfirmation: true,
           );
           break;
         case ItemSwipeActions.playNext:
           unawaited(queueService.addNext(
-            items: [item],
-            source: QueueItemSource.rawId(
-              type: QueueItemSourceType.nextUp,
-              name: QueueItemSourceName(
-                type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: AppLocalizations.of(context)!.queue),
-              id: parentItem?.id.raw ?? "",
-              item: parentItem,
-          )));
+              items: [item],
+              source: QueueItemSource.rawId(
+                type: QueueItemSourceType.nextUp,
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName: AppLocalizations.of(context)!.queue),
+                id: parentItem?.id.raw ?? "",
+                item: parentItem,
+              )));
           GlobalSnackbar.message(
-              (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext("track"),
-              isConfirmation: true,
+            (scaffold) =>
+                AppLocalizations.of(scaffold)!.confirmPlayNext("track"),
+            isConfirmation: true,
           );
           break;
         case ItemSwipeActions.addToQueue:
           unawaited(queueService.addToQueue(
-            items: [item],
-            source: QueueItemSource.rawId(
-              type: QueueItemSourceType.queue,
-              name: QueueItemSourceName(
-                  type: QueueItemSourceNameType.preTranslated,
-                  pretranslatedName: AppLocalizations.of(context)!.queue),
-              id: parentItem?.id.raw ?? "",
-              item: parentItem,
-          )));
+              items: [item],
+              source: QueueItemSource.rawId(
+                type: QueueItemSourceType.queue,
+                name: QueueItemSourceName(
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName: AppLocalizations.of(context)!.queue),
+                id: parentItem?.id.raw ?? "",
+                item: parentItem,
+              )));
           GlobalSnackbar.message(
-            (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue("track"),
+            (scaffold) =>
+                AppLocalizations.of(scaffold)!.confirmAddToQueue("track"),
             isConfirmation: true,
           );
           break;
@@ -258,47 +275,38 @@ class TrackListTile extends StatelessWidget {
       }
     }
 
-    final dismissBackground = Container(
-      // color: Theme.of(context).colorScheme.secondaryContainer,
-      padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 8.0),
-      alignment: Alignment.centerLeft,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(getSwipeActionIcon(currentSettings.itemSwipeActionLeftToRight),
-                color: Theme.of(context).colorScheme.secondary,
-                size: 40,
-              ),
-              const SizedBox(width: 4.0),
-              Text(currentSettings.itemSwipeActionLeftToRight.toLocalisedString(context),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(currentSettings.itemSwipeActionRightToLeft.toLocalisedString(context),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-              ),
-              const SizedBox(width: 4.0),
-              Icon(getSwipeActionIcon(currentSettings.itemSwipeActionRightToLeft),
-                color: Theme.of(context).colorScheme.secondary,
-                size: 40,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+    Widget buildSwipeActionBackground(BuildContext context, DismissDirection direction) {
+      final action = (direction == DismissDirection.startToEnd)
+          ? ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight)
+          : ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft);
+
+      final icon = getSwipeActionIcon(action);
+      final label = action.toLocalisedString(context);
+
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+        alignment: (direction == DismissDirection.startToEnd)
+            ? Alignment.centerLeft
+            : Alignment.centerRight,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: (direction == DismissDirection.startToEnd)
+              ? MainAxisAlignment.start
+              : MainAxisAlignment.end,
+          children: direction == DismissDirection.startToEnd
+              ? [
+                  Icon(icon, color: Theme.of(context).colorScheme.secondary, size: 40),
+                  const SizedBox(width: 4.0),
+                  Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
+                ]
+              : [
+                  Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
+                  const SizedBox(width: 4.0),
+                  Icon(icon, color: Theme.of(context).colorScheme.secondary, size: 40),
+                ],
+        ),
+      );
+    }
 
     return TrackListItem(
       baseItem: item,
@@ -307,7 +315,11 @@ class TrackListTile extends StatelessWidget {
       actualIndex: item.indexNumber,
       showIndex: showIndex,
       showCover: showCover,
-      showArtists: parentItem?.isArtist != true,
+      showArtists: (forceAlbumArtists || parentItem?.isArtist != true),
+      forceAlbumArtists: forceAlbumArtists,
+      showReleaseDate: showReleaseDate,
+      showDateAdded: showDateAdded,
+      showDateLastPlayed: showDateLastPlayed,
       showPlayCount: showPlayCount,
       isInPlaylist: isInPlaylist,
       allowReorder: false,
@@ -316,15 +328,16 @@ class TrackListTile extends StatelessWidget {
       onRemoveFromList: onRemoveFromList,
       onTap: trackListTileOnTap,
       confirmDismiss: trackListTileConfirmDismiss,
-      dismissBackground: dismissBackground,
+      leftSwipeBackground: buildSwipeActionBackground(context, DismissDirection.startToEnd),
+      rightSwipeBackground: buildSwipeActionBackground(context, DismissDirection.endToStart),
     );
   }
 }
 
 class QueueListTile extends StatelessWidget {
-  final jellyfin_models.BaseItemDto item;
-  final jellyfin_models.BaseItemDto? parentItem;
-  final Future<int>? listIndex;
+  final BaseItemDto item;
+  final BaseItemDto? parentItem;
+  final int? listIndex;
   final int actualIndex;
   final int indexOffset;
   final bool isCurrentTrack;
@@ -356,7 +369,7 @@ class QueueListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     Future<bool> queueListTileConfirmDismiss(direction) async {
       final queueService = GetIt.instance<QueueService>();
-      FeedbackHelper.feedback(FeedbackType.impact);
+      FeedbackHelper.feedback(FeedbackType.heavy);
       unawaited(queueService.removeAtOffset(indexOffset));
       return true;
     }
@@ -380,19 +393,24 @@ class QueueListTile extends StatelessWidget {
 }
 
 class TrackListItem extends ConsumerStatefulWidget {
-  final jellyfin_models.BaseItemDto baseItem;
-  final jellyfin_models.BaseItemDto? parentItem;
-  final Future<int>? listIndex;
+  final BaseItemDto baseItem;
+  final BaseItemDto? parentItem;
+  final int? listIndex;
   final int? actualIndex;
   final bool showIndex;
   final bool showCover;
   final bool showArtists;
+  final bool forceAlbumArtists;
   final bool showPlayCount;
+  final bool showReleaseDate;
+  final bool showDateAdded;
+  final bool showDateLastPlayed;
   final bool isInPlaylist;
   final bool allowReorder;
   final bool allowDismiss;
   final bool highlightCurrentTrack;
-  final Widget dismissBackground;
+  final Widget leftSwipeBackground;
+  final Widget rightSwipeBackground;
 
   final void Function(bool playable) onTap;
   final Future<bool> Function(DismissDirection direction) confirmDismiss;
@@ -412,10 +430,16 @@ class TrackListItem extends ConsumerStatefulWidget {
       this.showIndex = false,
       this.showCover = true,
       this.showArtists = true,
+      this.forceAlbumArtists = false,
       this.showPlayCount = false,
+      this.showReleaseDate = false,
+      this.showDateAdded = false,
+      this.showDateLastPlayed = false,
       this.highlightCurrentTrack = true,
       this.onRemoveFromList,
-      this.dismissBackground = const SizedBox.shrink()});
+      this.leftSwipeBackground = const SizedBox.shrink(),
+      this.rightSwipeBackground = const SizedBox.shrink(),
+  });
 
   @override
   ConsumerState<TrackListItem> createState() => TrackListItemState();
@@ -428,7 +452,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
     BuildContext context,
   ) {
     bool playable;
-    if (FinampSettingsHelper.finampSettings.isOffline) {
+    if (ref.watch(finampSettingsProvider.isOffline)) {
       playable = ref.watch(GetIt.instance<DownloadsService>()
           .stateProvider(DownloadStub.fromItem(
               type: DownloadItemType.track, item: widget.baseItem))
@@ -460,8 +484,12 @@ class TrackListItemState extends ConsumerState<TrackListItem>
             showIndex: widget.showIndex,
             showCover: widget.showCover,
             showArtists: widget.showArtists,
+            forceAlbumArtists: widget.forceAlbumArtists,
             showAlbum: showAlbum,
             showPlayCount: widget.showPlayCount,
+            showReleaseDate: widget.showReleaseDate,
+            showDateAdded: widget.showDateAdded,
+            showDateLastPlayed: widget.showDateLastPlayed,
             isCurrentTrack: isCurrentlyPlaying,
             highlightCurrentTrack: widget.highlightCurrentTrack,
             allowReorder: widget.allowReorder,
@@ -485,9 +513,12 @@ class TrackListItemState extends ConsumerState<TrackListItem>
         }
       }
 
-      final currentSettings = FinampSettingsHelper.finampSettings;
-      final swipeLeftEnabled = (currentSettings.itemSwipeActionLeftToRight != ItemSwipeActions.nothing);
-      final swipeRightEnabled = (currentSettings.itemSwipeActionRightToLeft != ItemSwipeActions.nothing);
+      final swipeLeftEnabled =
+          ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight) !=
+              ItemSwipeActions.nothing;
+      final swipeRightEnabled =
+          ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft) !=
+              ItemSwipeActions.nothing;
       final allowedDismissDirection = (swipeLeftEnabled && swipeRightEnabled)
           ? DismissDirection.horizontal
           : swipeLeftEnabled
@@ -499,7 +530,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
       return GestureDetector(
         onTapDown: (_) {
           // Begin precalculating theme for song menu
-          ref.listen(
+          ref.listenManual(
               finampThemeProvider(ThemeInfo(widget.baseItem)), (_, __) {});
         },
         onLongPressStart: (details) => menuCallback(),
@@ -508,7 +539,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
             ? listItem
             : Dismissible(
                 key: Key(widget.listIndex.toString()),
-                direction: FinampSettingsHelper.finampSettings.disableGesture ||
+                direction: ref.watch(finampSettingsProvider.disableGesture) ||
                         !widget.allowDismiss
                     ? DismissDirection.none
                     : allowedDismissDirection,
@@ -518,7 +549,8 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                 },
                 // no background, dismissing really dismisses here
                 confirmDismiss: widget.confirmDismiss,
-                background: widget.dismissBackground,
+                background: widget.leftSwipeBackground,
+                secondaryBackground: widget.rightSwipeBackground,
                 child: listItem,
               ),
       );
@@ -526,7 +558,9 @@ class TrackListItemState extends ConsumerState<TrackListItem>
 
     return isCurrentlyPlaying && widget.highlightCurrentTrack
         ? PlayerScreenTheme(
-            themeTransitionDuration: const Duration(milliseconds: 500),
+            themeTransitionDuration: MediaQuery.of(context).disableAnimations
+                ? Duration.zero
+                : const Duration(milliseconds: 500),
             themeOverride: (imageTheme) {
               return imageTheme.copyWith(
                   colorScheme: imageTheme.colorScheme.copyWith(
@@ -552,7 +586,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
   }
 }
 
-class TrackListItemTile extends StatelessWidget {
+class TrackListItemTile extends ConsumerWidget {
   const TrackListItemTile({
     super.key,
     required this.baseItem,
@@ -564,21 +598,29 @@ class TrackListItemTile extends StatelessWidget {
     this.showIndex = false,
     this.showCover = true,
     this.showArtists = true,
+    this.forceAlbumArtists = false,
     this.showAlbum = true,
     this.showPlayCount = false,
+    this.showReleaseDate = false,
+    this.showDateAdded = false,
+    this.showDateLastPlayed = false,
     this.highlightCurrentTrack = true,
   });
 
-  final jellyfin_models.BaseItemDto baseItem;
+  final BaseItemDto baseItem;
   final bool isCurrentTrack;
   final bool allowReorder;
-  final Future<int>? listIndex;
+  final int? listIndex;
   final int? actualIndex;
   final bool showIndex;
   final bool showCover;
   final bool showArtists;
+  final bool forceAlbumArtists;
   final bool showAlbum;
   final bool showPlayCount;
+  final bool showReleaseDate;
+  final bool showDateAdded;
+  final bool showDateLastPlayed;
   final bool highlightCurrentTrack;
   final void Function() onTap;
 
@@ -586,10 +628,10 @@ class TrackListItemTile extends StatelessWidget {
   static const double defaultTitleGap = 10.0;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final highlightTrack = isCurrentTrack && highlightCurrentTrack;
-
-    final bool secondRowNeeded = showArtists || showAlbum || showPlayCount;
+    final isOnDesktop = Platform.isMacOS || Platform.isWindows || Platform.isLinux;
+    final bool secondRowNeeded = showArtists || showAlbum || showPlayCount || showReleaseDate || showDateAdded || showDateLastPlayed;
 
     final durationLabelFullHours =
         (baseItem.runTimeTicksDuration()?.inHours ?? 0);
@@ -600,9 +642,23 @@ class TrackListItemTile extends StatelessWidget {
     final durationLabelString =
         "${durationLabelFullHours > 0 ? "$durationLabelFullHours ${AppLocalizations.of(context)!.hours} " : ""}${durationLabelFullMinutes > 0 ? "$durationLabelFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$durationLabelSeconds ${AppLocalizations.of(context)!.seconds}";
 
-    final artistsString = (baseItem.artists?.isNotEmpty ?? false)
-        ? baseItem.artists?.join(", ")
-        : baseItem.albumArtist ?? AppLocalizations.of(context)!.unknownArtist;
+    final artistsString = (forceAlbumArtists)
+      ? (baseItem.albumArtists?.map((e) => e.name).join(", ") ?? AppLocalizations.of(context)!.unknownArtist)
+      : (baseItem.artists?.isNotEmpty ?? false)
+          ? baseItem.artists?.join(", ")
+          : (baseItem.albumArtists?.map((e) => e.name).join(", ") ?? AppLocalizations.of(context)!.unknownArtist);
+
+    final downloadedIndicator = DownloadedIndicator(
+      item: DownloadStub.fromItem(
+          item: baseItem, type: DownloadItemType.track),
+      size: Theme.of(context)
+              .textTheme
+              .bodyMedium!
+              .fontSize! +
+          1,
+    );
+    final addSpaceAfterSpecialIcons = (downloadedIndicator.isVisible(ref) || (baseItem.hasLyrics ?? false)) && 
+            (showDateAdded || showDateLastPlayed);
 
     return ListTileTheme(
       tileColor: highlightTrack
@@ -688,26 +744,21 @@ class TrackListItemTile extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(right: 2.0),
                         child: Transform.translate(
-                          offset: const Offset(-1.5, 2.5),
-                          child: DownloadedIndicator(
-                            item: DownloadStub.fromItem(
-                                item: baseItem, type: DownloadItemType.track),
-                            size: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .fontSize! +
-                                1,
-                          ),
+                          offset: isOnDesktop ? Offset(-1.5, 1.7) : Offset(-1.5, 0.4),
+                          child: downloadedIndicator,
                         ),
                       ),
-                      alignment: PlaceholderAlignment.top,
+                      alignment: PlaceholderAlignment.baseline,
+                      baseline: TextBaseline.alphabetic,
                     ),
+                    if (downloadedIndicator.isVisible(ref) && (baseItem.hasLyrics == null || baseItem.hasLyrics == false))
+                      const WidgetSpan(child: SizedBox(width: 4.5)),
                     if (baseItem.hasLyrics ?? false)
                       WidgetSpan(
                         child: Padding(
                           padding: const EdgeInsets.only(right: 2.0),
                           child: Transform.translate(
-                              offset: const Offset(-1.5, 2.5),
+                              offset: isOnDesktop ? Offset(-1.5, 1.7) : Offset(-1.5, 0.4),
                               child: Icon(
                                 TablerIcons.microphone_2,
                                 size: Theme.of(context)
@@ -717,8 +768,120 @@ class TrackListItemTile extends StatelessWidget {
                                     1,
                               )),
                         ),
-                        alignment: PlaceholderAlignment.top,
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
                       ),
+                    if (baseItem.hasLyrics ?? false)
+                      const WidgetSpan(child: SizedBox(width: 5)),
+                    if (addSpaceAfterSpecialIcons)
+                      const WidgetSpan(child: SizedBox(width: 5)),
+                    if (showPlayCount)
+                      TextSpan(
+                        text: AppLocalizations.of(context)!
+                            .playCountValue(baseItem.userData?.playCount ?? 0),
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .color!
+                              .withOpacity(0.75),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    if (showPlayCount)
+                      const WidgetSpan(child: SizedBox(width: 10.0)),
+                    if (showDateLastPlayed)
+                      WidgetSpan(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 2.0),
+                          child: Transform.translate(
+                              offset: isOnDesktop ? Offset(-1.5, 1.8) : Offset(-1.5, 0.3),
+                              child: Icon(
+                                TablerIcons.clock,
+                                size: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize! +
+                                    1,
+                              )),
+                        ),
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
+                      ),
+                    if (showDateLastPlayed)
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
+                        child: RelativeDateTimeTextFromString(
+                          dateString: baseItem.userData?.lastPlayedDate,
+                          fallback: AppLocalizations.of(context)!.noDateLastPlayed,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.
+                                  bodyMedium!.color!.withOpacity(0.75),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          disableTextScaling: true,
+                        ),
+                      ),
+                    if (showDateLastPlayed)
+                      const WidgetSpan(child: SizedBox(width: 10.0)),
+                    if (showReleaseDate)
+                      TextSpan(
+                        text: (ReleaseDateHelper.autoFormat(baseItem) ?? 
+                            AppLocalizations.of(context)!.noReleaseDate),
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .color!
+                              .withOpacity(0.75),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    if (showReleaseDate)
+                      const WidgetSpan(child: SizedBox(width: 10.0)),
+                    if (showDateAdded)
+                      WidgetSpan(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 3),
+                          child: Transform.translate(
+                              offset: isOnDesktop ? Offset(-1.5, 1.28) : Offset(-1.5, 0),
+                              child: Icon(
+                                TablerIcons.calendar_plus,
+                                size: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize! +
+                                    1,
+                                color: Theme.of(context).textTheme.
+                                    bodyMedium!.color!.withOpacity(0.75),
+                              )
+                          ),
+                        ),
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
+                      ),
+                    if (showDateAdded)
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
+                        child: RelativeDateTimeTextFromString(
+                          dateString: baseItem.dateCreated,
+                          fallback: AppLocalizations.of(context)!.noDateAdded,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.
+                                  bodyMedium!.color!.withOpacity(0.75),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          disableTextScaling: true,
+                        ),
+                      ),
+                    if (showDateAdded)
+                      const WidgetSpan(child: SizedBox(width: 10.0)),
                     if (showArtists)
                       TextSpan(
                         text: artistsString,
@@ -735,15 +898,13 @@ class TrackListItemTile extends StatelessWidget {
                     if (!secondRowNeeded)
                       // show the artist anyway if nothing else is shown
                       TextSpan(
-                        text: baseItem.artists?.join(", ") ??
-                            baseItem.albumArtist ??
-                            AppLocalizations.of(context)!.unknownArtist,
+                        text: artistsString,
                         style: TextStyle(
                           color: Theme.of(context)
                               .textTheme
                               .bodyMedium!
                               .color!
-                              .withOpacity(0.6),
+                              .withOpacity(0.75),
                           fontSize: 13,
                           fontWeight: FontWeight.w300,
                         ),
@@ -753,22 +914,6 @@ class TrackListItemTile extends StatelessWidget {
                     if (showAlbum)
                       TextSpan(
                         text: baseItem.album,
-                        style: TextStyle(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .color!
-                              .withOpacity(0.6),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                    if (showAlbum)
-                      const WidgetSpan(child: SizedBox(width: 10.0)),
-                    if (showPlayCount)
-                      TextSpan(
-                        text: AppLocalizations.of(context)!
-                            .playCountValue(baseItem.userData?.playCount ?? 0),
                         style: TextStyle(
                           color: Theme.of(context)
                               .textTheme
@@ -813,11 +958,8 @@ class TrackListItemTile extends StatelessWidget {
                 ),
               ),
               if (allowReorder)
-                FutureBuilder(
-                    future: listIndex,
-                    builder: (context, snapshot) {
-                      return ReorderableDragStartListener(
-                        index: snapshot.data ??
+                ReorderableDragStartListener(
+                        index: listIndex ??
                             0, // will briefly use 0 as index, but should resolve quickly enough for user not to notice
                         child: Padding(
                           padding: const EdgeInsets.only(left: 6.0),
@@ -830,8 +972,7 @@ class TrackListItemTile extends StatelessWidget {
                             weight: 1.5,
                           ),
                         ),
-                      );
-                    }),
+                      ),
             ],
           ),
         ),

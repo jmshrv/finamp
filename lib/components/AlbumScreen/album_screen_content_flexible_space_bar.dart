@@ -1,12 +1,11 @@
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -15,8 +14,8 @@ import '../album_image.dart';
 import 'item_info.dart';
 
 enum AlbumMenuItems {
-  addFavourite,
-  removeFavourite,
+  addFavorite,
+  removeFavorite,
   addToMixList,
   removeFromMixList,
   playNext,
@@ -33,11 +32,15 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
     required this.parentItem,
     required this.isPlaylist,
     required this.items,
+    this.genreFilter,
+    this.updateGenreFilter,
   });
 
   final BaseItemDto parentItem;
   final bool isPlaylist;
   final List<BaseItemDto> items;
+  final BaseItemDto? genreFilter;
+  final void Function(BaseItemDto?)? updateGenreFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -225,7 +228,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
         child: Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -233,7 +236,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   children: [
                     SizedBox(
                       height: 125,
-                      child: AlbumImage(item: parentItem),
+                      child: AlbumImage(item: parentItem, tapToZoom: true),
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 4),
@@ -242,13 +245,15 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                       flex: 2,
                       child: ItemInfo(
                         item: parentItem,
-                        itemTracks: items.length,
+                        itemTracks: items,
+                        genreFilter: genreFilter,
+                        updateGenreFilter: updateGenreFilter,
                       ),
                     )
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.only(top: 16.0),
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(

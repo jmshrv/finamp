@@ -5,7 +5,6 @@ import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:logging/logging.dart';
 
 @Deprecated("Use GlobalSnackbar.error(dynamic error) instead")
@@ -67,18 +66,25 @@ class GlobalSnackbar {
   static void message(
     String Function(BuildContext scaffold) message, {
     bool isConfirmation = false,
+    SnackBarAction Function(BuildContext scaffold)? action,
   }) =>
-      _enqueue(() => _message(message, isConfirmation));
+      _enqueue(() => _message(message, isConfirmation, action));
   static void _message(
-      String Function(BuildContext scaffold) message, bool isConfirmation) {
-    var text = message(materialAppNavigatorKey.currentContext!);
+    String Function(BuildContext scaffold) message,
+    bool isConfirmation,
+    SnackBarAction Function(BuildContext scaffold)? action,
+  ) {
+    BuildContext context = materialAppNavigatorKey.currentContext!;
+    var text = message(context);
     _logger.info("Displaying message: $text");
     materialAppScaffoldKey.currentState!.showSnackBar(
       SnackBar(
         content: Text(text),
-        duration: isConfirmation
+        actionOverflowThreshold: 0.5,
+        duration: (isConfirmation && action == null)
             ? const Duration(milliseconds: 1500)
             : const Duration(seconds: 4),
+        action: action?.call(context),
       ),
     );
   }

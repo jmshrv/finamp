@@ -102,16 +102,6 @@
   },
   "tracks": "Faixas",
   "@tracks": {},
-  "startupError": "Algo deu errado na inicialização. O erro foi: {error}\n\nPor favor, crie um chamado em github.com/UnicornsOnLSD/finamp anexando uma captura de tela dessa página. Se esse erro persistir, limpe os dados para restaurar o aplicativo.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "internalExternalIpExplanation": "Se você deseja acessar seu servidor Jellyfin remotamente, você precisa usar seu IP externo.\n\nSe seu servidor está em uma porta HTTP padrão (80 ou 443), ou na porta padrão do Jellyfin (8096), você não precisa especificar a porta.\n\nSe a URL estiver correta, você deverá ver informações sobre o seu servidor aparecerem abaixo do campo de texto.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
@@ -182,16 +172,14 @@
   "@editPlaylistNameTitle": {},
   "required": "Obrigatório",
   "@required": {},
-  "playlistNameUpdated": "Nome da lista de reprodução atualizado.",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "Nome da lista de reprodução atualizado.",
+  "@playlistUpdated": {},
   "favourite": "Favorito",
   "@favourite": {},
   "addDownloads": "Adicionar transferências",
   "@addDownloads": {},
   "logOut": "Sair",
   "@logOut": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin usa AAC para transcodificação",
-  "@jellyfinUsesAACForTranscoding": {},
   "bitrate": "Taxa de bits",
   "@bitrate": {},
   "downloadsDeleted": "Transferências apagadas.",
@@ -573,8 +561,6 @@
   "@apply": {
     "description": "Used for a button in the playback speed menu"
   },
-  "showArtistsTopTracks": "Exibir faixas mais tocadas na tela do artista",
-  "@showArtistsTopTracks": {},
   "hours": "Horas",
   "@hours": {},
   "seconds": "Segundos",
@@ -1273,8 +1259,6 @@
   "@speed": {
     "description": "Used as a placeholder in the input of the playback speed menu"
   },
-  "showArtistsTopTracksSubtitle": "Indica se as 5 faixas mais reproduzidas de um artista devem ser exibidas.",
-  "@showArtistsTopTracksSubtitle": {},
   "trackCountTooltip": "Faixa {currentTrackIndex} de {totalTrackCount}",
   "@trackCountTooltip": {
     "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
@@ -1428,12 +1412,6 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "transcodingStreamingContainerTitle": "Selecionar contêiner de transcodificação",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
-  "transcodingStreamingContainerSubtitle": "Selecione o contêiner de segmento a ser usado ao transmitir áudio transcodificado. As faixas que já estejam na fila não serão afetadas.",
-  "@transcodingStreamingContainerSubtitle": {},
   "downloadTranscodeEnableTitle": "Habilitar transferências transcodificadas",
   "@downloadTranscodeEnableTitle": {
     "description": "Title for Enable Transcoded Downloads dropdown"
@@ -1608,7 +1586,7 @@
       }
     }
   },
-  "enableAutoScroll": "Habiliar rolagem automática",
+  "enableAutoScroll": "Habilitar rolagem automática",
   "@enableAutoScroll": {
     "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
   },
@@ -1962,5 +1940,17 @@
   "trackMenuButtonTooltip": "Menu de faixas",
   "@trackMenuButtonTooltip": {
     "description": "Tooltip for the button that opens the track menu"
+  },
+  "startupErrorWorkaround": "Para uma correção temporária, limpe os dados do aplicativo. Lembre-se que fazendo isso, você irá reiniciar o aplicativo, e todas as suas configurações e faixas baixadas serão excluídas.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
+  },
+  "startupErrorTitle": "Algo deu errado na inicialização!\nSentimos muito pelo transtorno...",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorCallToAction": "Por favor, crie uma issue em github.com/jmshrv/finamp com o registro de logs (use o botão abaixo) e uma captura de tela desta página, para que possamos consertar o problema o mais rápido possível.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
   }
 }

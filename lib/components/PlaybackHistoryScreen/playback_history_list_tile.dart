@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:finamp/components/AlbumScreen/track_menu.dart';
-import 'package:finamp/components/favourite_button.dart';
+import 'package:finamp/components/favorite_button.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/audio_service_helper.dart';
 import 'package:flutter/material.dart' hide ReorderableList;
@@ -46,7 +46,8 @@ class _PlaybackHistoryListTileState
     return GestureDetector(
         onTapDown: (_) {
           // Begin precalculating theme for song menu
-          ref.listen(finampThemeProvider(ThemeInfo(baseItem)), (_, __) {});
+          ref.listenManual(
+              finampThemeProvider(ThemeInfo(baseItem)), (_, __) {});
         },
         onLongPressStart: (details) => menuCallback(),
         onSecondaryTapDown: (details) => menuCallback(),

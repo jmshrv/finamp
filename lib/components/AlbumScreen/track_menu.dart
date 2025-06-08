@@ -7,18 +7,18 @@ import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_dialog.dart';
 import 'package:finamp/components/delete_prompts.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/artist_screen.dart';
+import 'package:finamp/screens/genre_screen.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -49,6 +49,7 @@ Future<void> showModalTrackMenu({
   BaseItemDto? parentItem,
   Function? onRemoveFromList,
   bool confirmPlaylistRemoval = true,
+  bool showClearQueue = false,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
   final canGoToAlbum = item.parentId != null;
@@ -72,6 +73,7 @@ Future<void> showModalTrackMenu({
           canGoToGenre: canGoToGenre,
           onRemoveFromList: onRemoveFromList,
           confirmPlaylistRemoval: confirmPlaylistRemoval,
+          showClearQueue: showClearQueue,
           childBuilder: childBuilder,
           dragController: dragController,
         );
@@ -92,6 +94,7 @@ class TrackMenu extends ConsumerStatefulWidget {
     required this.canGoToGenre,
     required this.onRemoveFromList,
     required this.confirmPlaylistRemoval,
+    required this.showClearQueue,
     this.parentItem,
     required this.childBuilder,
     required this.dragController,
@@ -107,6 +110,7 @@ class TrackMenu extends ConsumerStatefulWidget {
   final bool canGoToGenre;
   final Function? onRemoveFromList;
   final bool confirmPlaylistRemoval;
+  final bool showClearQueue;
   final ScrollBuilder childBuilder;
   final DraggableScrollableController dragController;
 
@@ -176,11 +180,17 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
     var currentSize = scrollController.size;
     if ((percentage != null && currentSize < percentage) ||
         scrollController.size == inputStep) {
-      scrollController.animateTo(
-        percentage ?? oldExtent,
-        duration: trackMenuDefaultAnimationDuration,
-        curve: trackMenuDefaultInCurve,
-      );
+      if (MediaQuery.of(context).disableAnimations) {
+        scrollController.jumpTo(
+          percentage ?? oldExtent,
+        );
+      } else {
+        scrollController.animateTo(
+          percentage ?? oldExtent,
+          duration: trackMenuDefaultAnimationDuration,
+          curve: trackMenuDefaultInCurve,
+        );
+      }
     }
     oldExtent = currentSize;
   }
@@ -452,8 +462,8 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                         : iconColor,
                   ),
             title: Text(isFav
-                ? AppLocalizations.of(context)!.removeFavourite
-                : AppLocalizations.of(context)!.addFavourite),
+                ? AppLocalizations.of(context)!.removeFavorite
+                : AppLocalizations.of(context)!.addFavorite),
             onTap: () async {
               ref
                   .read(isFavoriteProvider(widget.item).notifier)
@@ -467,7 +477,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         visible: widget.canGoToAlbum,
         child: ListTile(
           leading: Icon(
-            Icons.album,
+            TablerIcons.disc,
             color: iconColor,
           ),
           title: Text(AppLocalizations.of(context)!.goToAlbum),
@@ -500,7 +510,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         visible: widget.canGoToArtist,
         child: ListTile(
           leading: Icon(
-            Icons.person,
+            TablerIcons.user,
             color: iconColor,
           ),
           title: Text(AppLocalizations.of(context)!.goToArtist),
@@ -533,7 +543,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         visible: widget.canGoToGenre,
         child: ListTile(
           leading: Icon(
-            Icons.category_outlined,
+            TablerIcons.color_swatch,
             color: iconColor,
           ),
           title: Text(AppLocalizations.of(context)!.goToGenre),
@@ -557,7 +567,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             if (context.mounted) {
               Navigator.pop(context);
               await Navigator.of(context)
-                  .pushNamed(ArtistScreen.routeName, arguments: genre);
+                  .pushNamed(GenreScreen.routeName, arguments: genre);
             }
           },
         ),
@@ -584,6 +594,20 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
               },
             ));
       }),
+      Visibility(
+        visible: widget.showClearQueue,
+        child: ListTile(
+          leading: Icon(
+            TablerIcons.clear_all,
+            color: iconColor,
+          ),
+          title: Text(AppLocalizations.of(context)!.stopAndClearQueue),
+          onTap: () async {
+            if (context.mounted) Navigator.pop(context);
+            await _queueService.stopPlayback();
+          },
+        ),
+      ),
     ];
   }
 
@@ -747,6 +771,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
           switchInCurve: trackMenuDefaultInCurve,
           switchOutCurve: trackMenuDefaultOutCurve,
           transitionBuilder: (child, animation) {
+            if (MediaQuery.of(context).disableAnimations) {
+              return child;
+            }
             return SizeTransition(sizeFactor: animation, child: child);
           },
           child: showSpeedMenu ? SpeedMenu(iconColor: iconColor) : null,
@@ -836,6 +863,7 @@ class _TrackInfoState extends ConsumerState<TrackInfo> {
                 child: AlbumImage(
                   item: widget.item,
                   borderRadius: BorderRadius.zero,
+                  tapToZoom: true,
                 ),
               ),
               Expanded(
@@ -950,7 +978,7 @@ class PlaybackAction extends StatelessWidget {
           ],
         ),
         onPressed: () {
-          FeedbackHelper.feedback(FeedbackType.success);
+          FeedbackHelper.feedback(FeedbackType.selection);
           onPressed();
         },
         visualDensity: VisualDensity.compact,

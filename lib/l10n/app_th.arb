@@ -138,8 +138,6 @@
   "@layoutAndTheme": {},
   "notAvailableInOfflineMode": "ไม่พร้อมใช้งานในโหมดออฟไลน์",
   "@notAvailableInOfflineMode": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin ใช้รหัส AAC สำหรับการแปลงไฟล์",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "เปิดใช้งานการแปลงไฟล์",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "การแปลงไฟล์เพลงจะถูกดำเนินการจากฝั่งเซิร์ฟเวอร์",
@@ -274,16 +272,6 @@
   "@offlineMode": {},
   "album": "อัลบั้ม",
   "@album": {},
-  "startupError": "พบข้อผิดพลาดขณะเริ่มต้นแอป ข้อผิดพลาด: {error}\n\nโปรดสร้าง Issue บน github.com/UnicornsOnLSD/finamp พร้อมแนบภาพหน้าจอของหน้านี้ หากปัญหานี้ยังคงเป็นอยู่ให้ลองเคลียร์ข้อมูลของแอปเพื่อรีเซ็ต",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "selectDirectory": "เลือกโฟลเดอร์",
   "@selectDirectory": {},
   "dateAdded": "วันที่เพิ่ม",
@@ -347,8 +335,8 @@
   "@failedToGetTrackFromDownloadId": {},
   "shuffleButtonLabel": "สุ่ม",
   "@shuffleButtonLabel": {},
-  "playlistNameUpdated": "อัปเดตชื่อเพลย์ลิสต์แล้ว",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "อัปเดตชื่อเพลย์ลิสต์แล้ว",
+  "@playlistUpdated": {},
   "message": "ข้อความ",
   "@message": {},
   "responseError401": "{error} รหัสข้อผิดพลาด {statusCode} เป็นไปได้ว่าคุณอาจจะใช้ ชื่อผู้ใช้หรือรหัสผ่านที่ไม่ถูกต้อง หรือตัวโปรแกรมไม่ได้อยู่ในสถานะล็อกอินแล้ว",

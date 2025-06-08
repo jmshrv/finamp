@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
 import 'package:clipboard/clipboard.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:finamp/services/censored_log.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -56,6 +58,27 @@ class FinampLogsHelper {
     return logsStringBuffer.toString();
   }
 
+  Future<String> getFullLogs() async {
+    final fullLogsBuffer = StringBuffer();
+    if (_logFileWriter != null) {
+      final basePath = (Platform.isAndroid || Platform.isIOS)
+          ? await getApplicationDocumentsDirectory()
+          : await getApplicationSupportDirectory();
+      var oldLogs =
+          File(path_helper.join(basePath.path, "finamp-logs-old.txt"));
+      var newLogs = File(path_helper.join(basePath.path, "finamp-logs.txt"));
+      if (oldLogs.existsSync()) {
+        fullLogsBuffer.write(await oldLogs.readAsString());
+      }
+      if (newLogs.existsSync()) {
+        fullLogsBuffer.write(await newLogs.readAsString());
+      }
+    } else {
+      fullLogsBuffer.write(getSanitisedLogs());
+    }
+    return fullLogsBuffer.toString();
+  }
+
   Future<void> copyLogs() async =>
       await FlutterClipboard.copy(getSanitisedLogs());
 
@@ -65,29 +88,20 @@ class FinampLogsHelper {
     final tempFile = File(path_helper.join(tempDir.path, "finamp-logs.txt"));
     tempFile.createSync();
 
-    if (_logFileWriter != null) {
-      final basePath = (Platform.isAndroid || Platform.isIOS)
-          ? await getApplicationDocumentsDirectory()
-          : await getApplicationSupportDirectory();
-      var oldLogs =
-          File(path_helper.join(basePath.path, "finamp-logs-old.txt"));
-      var newLogs = File(path_helper.join(basePath.path, "finamp-logs.txt"));
-      if (oldLogs.existsSync()) {
-        await tempFile.writeAsBytes(await oldLogs.readAsBytes(),
-            mode: FileMode.writeOnly);
-      }
-      if (newLogs.existsSync()) {
-        await tempFile.writeAsBytes(await newLogs.readAsBytes(),
-            mode: FileMode.writeOnlyAppend);
-      }
-    } else {
-      await tempFile.writeAsString(getSanitisedLogs());
-    }
+    tempFile.writeAsStringSync(await getFullLogs());
 
     final xFile = XFile(tempFile.path, mimeType: "text/plain");
-
     await Share.shareXFiles([xFile]);
 
     await tempFile.delete();
+  }
+
+  /// Write logs to a file and save to user-picked directory
+  Future<void> exportLogs() async {
+    await FilePicker.platform.saveFile(
+        fileName: "finamp-logs.txt",
+        // initialDirectory is ignored on mobile
+        initialDirectory: (await getApplicationDocumentsDirectory()).path,
+        bytes: utf8.encode(await getFullLogs()));
   }
 }

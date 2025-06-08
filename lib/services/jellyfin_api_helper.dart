@@ -4,9 +4,13 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:chopper/chopper.dart';
+import 'package:collection/collection.dart';
+import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:http/io_client.dart' as http;
 import 'package:isar/isar.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
@@ -67,6 +71,7 @@ class JellyfinApiHelper {
     );
     GetIt.instance.registerSingleton(isar);
     GetIt.instance.registerSingleton(FinampUserHelper());
+    // TODO get logging working in background isolate
     await GetIt.instance<FinampUserHelper>().setAuthHeader();
     jellyfin_api.JellyfinApi backgroundApi =
         jellyfin_api.JellyfinApi.create(false);
@@ -85,22 +90,28 @@ class JellyfinApiHelper {
   }
 
   /// Runs the given function in a background isolate, supplying a valid API instance.
-  Future<T> _runInIsolate<T>(
+  Future<T> runInIsolate<T>(
       Future<T> Function(jellyfin_api.JellyfinApi) func) async {
     if (_workerIsolatePort == null) {
       return func(jellyfinApi);
     }
     ReceivePort port = ReceivePort();
-    _workerIsolatePort!.send((func, port.sendPort));
+    try {
+      _workerIsolatePort!.send((func, port.sendPort));
+    } catch (e) {
+      GlobalSnackbar.error(e);
+    }
     dynamic output = await port.first;
     if (output is T) {
       return output;
     }
+    GlobalSnackbar.error(output);
     throw output as Object;
   }
 
   Future<List<BaseItemDto>?> getItems({
     BaseItemDto? parentItem,
+    BaseItemDto? libraryFilter,
     String? includeItemTypes,
     String? sortBy,
     String? sortOrder,
@@ -110,6 +121,8 @@ class JellyfinApiHelper {
     String? fields,
     bool? recursive,
     ArtistType? artistType,
+    BaseItemDto? genreFilter,
+    bool? isFavorite,
 
     /// The record index to start at. All items with a lower index will be
     /// dropped from the results.
@@ -118,14 +131,103 @@ class JellyfinApiHelper {
     /// The maximum number of records to return.
     int? limit,
   }) async {
+    if ((itemIds?.length ?? 0) > 200) {
+      List<BaseItemDto> output = [];
+      // Limit itemIds per request to 200.  Execute up to 10 requests in parallel.
+      for (final slice in itemIds!.slices(2000)) {
+        final futures = slice.slices(200).map((subSlice) =>
+            _fetchGetItemsResponse(itemIds: subSlice, fields: fields));
+        final results = await Future.wait(futures);
+        for (var subSliceResult in results) {
+          output.addAll(subSliceResult.items ?? []);
+        }
+      }
+      return output;
+    }
+
+    final response = await _fetchGetItemsResponse(
+      parentItem: parentItem,
+      libraryFilter: libraryFilter,
+      includeItemTypes: includeItemTypes,
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      searchTerm: searchTerm,
+      itemIds: itemIds,
+      filters: filters,
+      fields: fields,
+      recursive: recursive,
+      artistType: artistType,
+      genreFilter: genreFilter,
+      isFavorite: isFavorite,
+      startIndex: startIndex,
+      limit: limit,
+    );
+    return response.items;
+  }
+
+  Future<QueryResult_BaseItemDto> getItemsWithTotalRecordCount({
+    BaseItemDto? parentItem,
+    BaseItemDto? libraryFilter,
+    String? includeItemTypes,
+    String? sortBy,
+    String? sortOrder,
+    String? searchTerm,
+    List<BaseItemId>? itemIds,
+    String? filters,
+    String? fields,
+    bool? recursive,
+    ArtistType? artistType,
+    BaseItemDto? genreFilter,
+    bool? isFavorite,
+    int? startIndex,
+    int? limit,
+  }) async {
+    final response = await _fetchGetItemsResponse(
+      parentItem: parentItem,
+      libraryFilter: libraryFilter,
+      includeItemTypes: includeItemTypes,
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      searchTerm: searchTerm,
+      itemIds: itemIds,
+      filters: filters,
+      fields: fields,
+      recursive: recursive,
+      artistType: artistType,
+      genreFilter: genreFilter,
+      isFavorite: isFavorite,
+      startIndex: startIndex,
+      limit: limit,
+    );
+    return response;
+  }
+
+  Future<QueryResult_BaseItemDto> _fetchGetItemsResponse({
+    BaseItemDto? parentItem,
+    BaseItemDto? libraryFilter,
+    String? includeItemTypes,
+    String? sortBy,
+    String? sortOrder,
+    String? searchTerm,
+    List<BaseItemId>? itemIds,
+    String? filters,
+    String? fields,
+    bool? recursive,
+    ArtistType? artistType,
+    BaseItemDto? genreFilter,
+    bool? isFavorite,
+    int? startIndex,
+    int? limit,
+  }) async {
     final currentUserId = _finampUserHelper.currentUser?.id;
     if (currentUserId == null) {
       // When logging out, this request causes errors since currentUser is
-      // required sometimes. We just return an empty list since this error
-      // usually happens becuase the listeners on MusicScreenTabView update
-      // milliseconds before the page is popped. This shouldn't happen in normal
-      // use.
-      return [];
+      // required sometimes. We just return an fake api response that is empty,
+      // since this error usually happens because the listeners on MusicScreenTabView
+      // update milliseconds before the page is popped.
+      // This shouldn't happen in normal use.
+      return QueryResult_BaseItemDto(
+          totalRecordCount: 0, startIndex: 0, items: []);
     }
     assert(!FinampSettingsHelper.finampSettings.isOffline);
     assert(itemIds == null || parentItem == null);
@@ -137,11 +239,17 @@ class JellyfinApiHelper {
       _jellyfinApiHelperLogger.fine("Getting children of ${parentItem.name}");
     } else if (itemIds != null) {
       _jellyfinApiHelperLogger.fine("Getting items with ids $itemIds");
+      if (itemIds.isEmpty) {
+        // An empty itemIds list will not apply a filter to the results, but
+        // it should actually return no results
+        return QueryResult_BaseItemDto(
+            totalRecordCount: 0, startIndex: 0, items: []);
+      }
     } else {
       _jellyfinApiHelperLogger.fine("Getting items.");
     }
 
-    return _runInIsolate((api) async {
+    return runInIsolate((api) async {
       dynamic response;
 
       // We send a different request for playlists so that we get them back in the
@@ -168,12 +276,15 @@ class JellyfinApiHelper {
             sortOrder: sortOrder,
             searchTerm: searchTerm,
             filters: filters,
+            genreIds: genreFilter?.id.raw,
             startIndex: startIndex,
             limit: limit,
             userId: currentUserId,
             fields: fields,
+            isFavorite: isFavorite,
           );
-        } else { //artistType == ArtistType.artist
+        } else {
+          //artistType == ArtistType.artist
           // Performing Artists
           response = await api.getArtists(
             parentId: parentItem?.id,
@@ -181,18 +292,23 @@ class JellyfinApiHelper {
             sortOrder: sortOrder,
             searchTerm: searchTerm,
             filters: filters,
+            genreIds: genreFilter?.id.raw,
             startIndex: startIndex,
             limit: limit,
             fields: fields,
+            isFavorite: isFavorite,
           );
         }
       } else if (parentItem?.type == "MusicArtist") {
         // For getting the children of artists, we need to use
         // artistIDs or albumArtistIds instead of parentId
+        // also, in order to only get the items from within one library
+        // we have to use a separated libraryFilter,
         if (artistType == ArtistType.albumartist || artistType == null) {
           // Albums of Album Artists
           response = await api.getItems(
             userId: currentUserId,
+            parentId: libraryFilter?.id,
             albumArtistIds: parentItem?.id.raw,
             includeItemTypes: includeItemTypes,
             recursive: recursive,
@@ -200,14 +316,18 @@ class JellyfinApiHelper {
             sortOrder: sortOrder,
             searchTerm: searchTerm,
             filters: filters,
+            genreIds: genreFilter?.id.raw,
             startIndex: startIndex,
             limit: limit,
             fields: fields,
+            isFavorite: isFavorite,
           );
-        } else { //artistType == ArtistType.artist
+        } else {
+          //artistType == ArtistType.artist
           // Performing Artists
           response = await api.getItems(
             userId: currentUserId,
+            parentId: libraryFilter?.id,
             artistIds: parentItem?.id.raw,
             includeItemTypes: includeItemTypes,
             recursive: recursive,
@@ -215,15 +335,20 @@ class JellyfinApiHelper {
             sortOrder: sortOrder,
             searchTerm: searchTerm,
             filters: filters,
+            genreIds: genreFilter?.id.raw,
             startIndex: startIndex,
             limit: limit,
             fields: fields,
+            isFavorite: isFavorite,
           );
         }
       } else if (includeItemTypes == "MusicGenre") {
         response = await api.getGenres(
           parentId: parentItem?.id,
           // includeItemTypes: includeItemTypes,
+          sortBy: sortBy,
+          sortOrder: sortOrder,
+          isFavorite: isFavorite,
           searchTerm: searchTerm,
           startIndex: startIndex,
           limit: limit,
@@ -231,6 +356,7 @@ class JellyfinApiHelper {
         );
       } else if (parentItem?.type == "MusicGenre") {
         response = await api.getItems(
+          parentId: libraryFilter?.id,
           userId: currentUserId,
           genreIds: parentItem?.id.raw,
           includeItemTypes: includeItemTypes,
@@ -242,6 +368,7 @@ class JellyfinApiHelper {
           startIndex: startIndex,
           limit: limit,
           fields: fields,
+          isFavorite: isFavorite,
         );
       } else {
         // This will be run when getting albums, tracks in albums, and stuff like
@@ -255,15 +382,15 @@ class JellyfinApiHelper {
           sortOrder: sortOrder,
           searchTerm: searchTerm,
           filters: filters,
+          genreIds: genreFilter?.id.raw,
           startIndex: startIndex,
           limit: limit,
           ids: itemIds?.join(","),
           fields: fields,
+          isFavorite: isFavorite,
         );
       }
-
-      return QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>)
-          .items;
+      return QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>);
     });
   }
 
@@ -302,7 +429,7 @@ class JellyfinApiHelper {
       _jellyfinApiHelperLogger.fine("Getting artists.");
     }
 
-    return _runInIsolate((api) async {
+    return runInIsolate((api) async {
       dynamic response;
 
       response = await api.getArtists(
@@ -442,13 +569,18 @@ class JellyfinApiHelper {
 
     FinampUser newUser = FinampUser(
       id: newUserAuthenticationResult.user!.id,
-      baseUrl: baseUrlTemp!.toString(),
+      publicAddress: baseUrlTemp!.toString(),
+      homeAddress: DefaultSettings.homeNetworkAddress,
+      isLocal: false,
+      preferHomeNetwork: DefaultSettings.preferHomeNetwork,
       accessToken: newUserAuthenticationResult.accessToken!,
       serverId: newUserAuthenticationResult.serverId!,
       views: {},
     );
 
     await _finampUserHelper.saveUser(newUser);
+    baseUrlTemp =
+        null; // Clear the temporary base URL after authentication, since this has priority over the regular URL
   }
 
   /// Authenticates a user and saves the login details
@@ -456,7 +588,7 @@ class JellyfinApiHelper {
     required String username,
     String? password,
   }) async {
-    var response;
+    dynamic response;
 
     // Some users won't have a password.
     if (password == null) {
@@ -471,13 +603,18 @@ class JellyfinApiHelper {
 
     FinampUser newUser = FinampUser(
       id: newUserAuthenticationResult.user!.id,
-      baseUrl: baseUrlTemp!.toString(),
+      publicAddress: baseUrlTemp!.toString(),
+      homeAddress: DefaultSettings.homeNetworkAddress,
+      isLocal: false,
+      preferHomeNetwork: DefaultSettings.preferHomeNetwork,
       accessToken: newUserAuthenticationResult.accessToken!,
       serverId: newUserAuthenticationResult.serverId!,
       views: {},
     );
 
     await _finampUserHelper.saveUser(newUser);
+    baseUrlTemp =
+        null; // Clear the temporary base URL after authentication, since this has priority over the regular URL
   }
 
   /// Gets all the user's views.
@@ -514,6 +651,22 @@ class JellyfinApiHelper {
 
     return (QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>)
         .items);
+  }
+
+  /// Updates capabilities for this client.
+  Future<void> updateCapabilities(ClientCapabilities capabilities) async {
+    await jellyfinApi.updateCapabilities(
+      playableMediaTypes: capabilities.playableMediaTypes?.join(",") ?? "",
+      supportedCommands: capabilities.supportedCommands?.join(",") ?? "",
+      supportsMediaControl: capabilities.supportsMediaControl ?? false,
+      supportsPersistentIdentifier:
+          capabilities.supportsPersistentIdentifier ?? false,
+    );
+  }
+
+  /// Updates capabilities for this client.
+  Future<void> updateCapabilitiesFull(ClientCapabilities capabilities) async {
+    await jellyfinApi.updateCapabilitiesFull(capabilities);
   }
 
   /// Tells the Jellyfin server that playback has started
@@ -569,12 +722,18 @@ class JellyfinApiHelper {
     _getItemByIdBatchedFuture ??=
         Future.delayed(const Duration(milliseconds: 250), () async {
       _getItemByIdBatchedFuture = null;
-      var ids = _getItemByIdBatchedRequests.take(200).toList();
-      _getItemByIdBatchedRequests.removeAll(ids);
+      var ids = _getItemByIdBatchedRequests.toList();
+      _getItemByIdBatchedRequests.clear();
       var items = await getItems(itemIds: ids, fields: fields) ?? [];
       return Map.fromIterable(items, key: (e) => (e as BaseItemDto).id);
     });
     return _getItemByIdBatchedFuture!.then((value) => value[itemId]);
+  }
+
+  /// Gets a Playlist
+  Future<dynamic> getPlaylist(BaseItemId playlistId) async {
+    final response = await jellyfinApi.getPlaylist(playlistId: playlistId);
+    return response;
   }
 
   /// Creates a new playlist.
@@ -600,7 +759,7 @@ class JellyfinApiHelper {
     );
   }
 
-  /// Remove items to a playlist.
+  /// Remove items from a playlist.
   Future<void> removeItemsFromPlaylist({
     /// The playlist id.
     required BaseItemId playlistId,
@@ -624,13 +783,14 @@ class JellyfinApiHelper {
     }
   }
 
-  /// Updates an item.
+  /// Updates an item. (Not for Playlists: use updatePlaylist for that)
+  /// You should give a BaseItemDto with only
+  /// changed values.
   Future<void> updateItem({
     /// The item id.
     required BaseItemId itemId,
 
-    /// What to update the item with. You should give a BaseItemDto with only
-    /// changed values.
+    /// the new Item.
     required BaseItemDto newItem,
   }) async {
     final response =
@@ -640,10 +800,25 @@ class JellyfinApiHelper {
     }
   }
 
+  /// Updates playlist.
+  Future<void> updatePlaylist(
+      {
+      /// The item id.
+      required BaseItemId itemId,
+
+      /// The new Item.
+      required NewPlaylist newPlaylist}) async {
+    final response = await jellyfinApi.updatePlaylist(
+        playlistId: itemId, playlist: newPlaylist);
+    if (response.toString().isNotEmpty) {
+      throw response as Object;
+    }
+  }
+
   /// Marks an item as a favorite.
-  Future<UserItemDataDto> addFavourite(BaseItemId itemId) async {
+  Future<UserItemDataDto> addFavorite(BaseItemId itemId) async {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
-    final response = await jellyfinApi.addFavourite(
+    final response = await jellyfinApi.addFavorite(
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
     final downloadsService = GetIt.instance<DownloadsService>();
@@ -656,9 +831,9 @@ class JellyfinApiHelper {
   }
 
   /// Unmarks item as a favorite.
-  Future<UserItemDataDto> removeFavourite(BaseItemId itemId) async {
+  Future<UserItemDataDto> removeFavorite(BaseItemId itemId) async {
     assert(!FinampSettingsHelper.finampSettings.isOffline);
-    final response = await jellyfinApi.removeFavourite(
+    final response = await jellyfinApi.removeFavorite(
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
     final downloadsService = GetIt.instance<DownloadsService>();
@@ -709,6 +884,7 @@ class JellyfinApiHelper {
   Future<List<BaseItemDto>?> getArtistMix(List<BaseItemId> artistIds) async {
     final response = await jellyfinApi.getItems(
         userId: _finampUserHelper.currentUser!.id,
+        parentId: _finampUserHelper.currentUser!.currentView?.id,
         artistIds: artistIds.join(","),
         filters: "IsNotFolder",
         recursive: true,
@@ -737,6 +913,7 @@ class JellyfinApiHelper {
   Future<List<BaseItemDto>?> getGenreMix(List<BaseItemId> genreIds) async {
     final response = await jellyfinApi.getItems(
         userId: _finampUserHelper.currentUser!.id,
+        parentId: _finampUserHelper.currentUser!.currentView?.id,
         genreIds: genreIds.join(","),
         filters: "IsNotFolder",
         recursive: true,
@@ -761,7 +938,7 @@ class JellyfinApiHelper {
 
   /// Removes the current user from the DB and revokes the token on Jellyfin
   Future<void> logoutCurrentUser() async {
-    Response? response;
+    Response<dynamic>? response;
 
     // We put this in a try-catch loop that basically ignores errors so that the
     // user can still log out during scenarios like wrong IP, no internet etc.
@@ -799,6 +976,62 @@ class JellyfinApiHelper {
     }
   }
 
+  Future<bool> _pingSpecificServer(String url) async {
+    final client = ChopperClient(
+        baseUrl: Uri.tryParse(url),
+        client: http.IOClient(
+            HttpClient()..connectionTimeout = const Duration(seconds: 3)),
+        interceptors: [
+          jellyfin_api.JellyfinSpecificInterceptor(url),
+          HttpAggregateLoggingInterceptor()
+        ],
+        converter: JsonConverter());
+
+    final Request $request = Request(
+      'GET',
+      Uri.parse("/System/Endpoint"),
+      client.baseUrl,
+    );
+
+    try {
+      Response<dynamic> response =
+          await client.send<dynamic, dynamic>($request);
+      if (response.statusCode != 200) return false;
+      final body = response.bodyOrThrow as Map<String, dynamic>;
+      // If IsInNetwork doesn't exist -> catch
+      // because then its not a jellyfin server
+      return body["IsInNetwork"] as bool;
+    } catch (e) {
+      Logger("Ayoo").severe(e);
+      return false;
+    }
+  }
+
+  Future<bool> pingLocalServer() async {
+    FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
+    if (user == null) return false;
+    return await _pingSpecificServer(user.homeAddress);
+  }
+
+  Future<bool> pingPublicServer() async {
+    FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
+    if (user == null) return false;
+    return await _pingSpecificServer(user.publicAddress);
+  }
+
+  Future<bool> pingActiveServer() async {
+    try {
+      Response<dynamic>? response = await jellyfinApi
+          .pingServer()
+          .then((e) => e as Response<dynamic>?)
+          .timeout(Duration(seconds: 3));
+      return response?.statusCode == 200;
+    } catch (e) {
+      _jellyfinApiHelperLogger.severe(e);
+      return false;
+    }
+  }
+
   /// Returns the correct image URL for the given item, or null if there is no
   /// image. Uses [getImageId] to get the actual id. [maxWidth] and [maxHeight]
   /// can be specified to return a smaller image. [quality] can be modified to
@@ -814,7 +1047,7 @@ class JellyfinApiHelper {
       return null;
     }
 
-    final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
+    final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseURL);
     List<String> builtPath = List<String>.from(parsedBaseUrl.pathSegments);
     builtPath.addAll([
       "Items",
@@ -874,7 +1107,7 @@ class JellyfinApiHelper {
     required BaseItemDto item,
     required DownloadProfile? transcodingProfile,
   }) {
-    Uri uri = Uri.parse(_finampUserHelper.currentUser!.baseUrl);
+    Uri uri = Uri.parse(_finampUserHelper.currentUser!.baseURL);
 
     if (transcodingProfile != null &&
         transcodingProfile.codec != FinampTranscodingCodec.original) {

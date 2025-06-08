@@ -243,8 +243,8 @@
   "@location": {},
   "downloadsQueued": "بارگیری آماده شد، در حال بارگیری فایل‌ها",
   "@downloadsQueued": {},
-  "playlistNameUpdated": "نام فهرست پخش بروزرسانی شد.",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "نام فهرست پخش بروزرسانی شد.",
+  "@playlistUpdated": {},
   "interactions": "برهم کنش",
   "@interactions": {},
   "layoutAndTheme": "طرح‌بندی و تم",
@@ -259,8 +259,6 @@
   "@transcoding": {},
   "audioService": "سرویس صدا",
   "@audioService": {},
-  "jellyfinUsesAACForTranscoding": "جلی‌فین از AAC برای رمزگردانی (transcoding) استفاده می‌کند",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "فعال‌سازی رمزگردانی (transcoding)",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "آهنگ را سمت سرور رمزگردانی می‌کند.",
@@ -315,16 +313,6 @@
   "@downloadAllPlaylistsSetting": {},
   "fiveLatestAlbumsSetting": "بارگیری ۵ آلبوم واپسین",
   "@fiveLatestAlbumsSetting": {},
-  "startupError": "مشکلی حین راه اندازی نرم‌افزار رخ داد. مشکل رخ داده: {error}\n\nلطفاً یک مسأله روی github.com/UnicornsOnLSD/finamp به همراه تصویری از صفحه ایجاد کنید. اگر این مشکل ادامه‌دار است، می‌توانید داده‌ی نرم‌افزارتان را پاک کنید تا نرم‌افزار را بازنشانی شود.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "aboutContributionPrompt": "ساخته‌ی افراد خفن و باحال در اوقات فراغتشان.\nشما هم می‌توانید یکی از آن‌ها باشید!",
   "@aboutContributionPrompt": {
     "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
@@ -714,8 +702,6 @@
       }
     }
   },
-  "showArtistsTopTracks": "نشان دادن قطعه‌های برتر در نمایش هنرمند",
-  "@showArtistsTopTracks": {},
   "gridCrossAxisCount": "{value} تعداد محور افقی جدول",
   "@gridCrossAxisCount": {
     "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
@@ -744,8 +730,6 @@
   "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "cancelSleepTimer": "لغو زمان‌سنج خواب؟",
   "@cancelSleepTimer": {},
-  "showArtistsTopTracksSubtitle": "اینکه ۵ قطعه‌ی برتر هنرمند نمایش داده شود یا نه.",
-  "@showArtistsTopTracksSubtitle": {},
   "removeFromPlaylistNamedTooltip": "حذف از فهرست پخش '{playlistName}'",
   "@removeFromPlaylistNamedTooltip": {
     "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
@@ -1351,12 +1335,6 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "transcodingStreamingContainerTitle": "گزینش ظرف رمزگردانی (Transcoding Container)",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
-  "transcodingStreamingContainerSubtitle": "ظرف سگمنت را انتخاب کنید تا به هنگام پخش لحظه‌ای صدای رمزگردانی شده به کار بسته شود. قطعه‌های به صف شده کنونی تحت تأثیر قرار نمی‌گیرند.",
-  "@transcodingStreamingContainerSubtitle": {},
   "downloadBitrate": "نرخ انتقال بارگیری",
   "@downloadBitrate": {
     "description": "Title for Download Bitrate settings slider"

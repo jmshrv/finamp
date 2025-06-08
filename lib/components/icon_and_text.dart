@@ -5,13 +5,20 @@ class IconAndText extends StatelessWidget {
     super.key,
     required this.iconData,
     required this.textSpan,
+    this.iconColor,
   });
 
   final IconData iconData;
   final TextSpan textSpan;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
+    final effectiveIconColor = iconColor ??
+        Theme.of(context).iconTheme.color?.withOpacity(
+          Theme.of(context).brightness == Brightness.light ? 0.38 : 0.5,
+        );
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
@@ -22,18 +29,20 @@ class IconAndText extends StatelessWidget {
             // Inactive icons have an opacity of 50% with dark theme and 38%
             // with bright theme
             // https://material.io/design/iconography/system-icons.html#color
-            color: Theme.of(context).iconTheme.color?.withOpacity(
-                Theme.of(context).brightness == Brightness.light ? 0.38 : 0.5),
+            color: effectiveIconColor,
           ),
           const Padding(padding: EdgeInsets.symmetric(horizontal: 2)),
           Expanded(
             // RichText blocks theming.  Text.rich does not.
-            child: Text.rich(
-              textSpan,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Text.rich(
+                textSpan,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-          )
+          ),
         ],
       ),
     );

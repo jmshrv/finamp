@@ -157,8 +157,8 @@
   "@editPlaylistNameTooltip": {},
   "favourite": "المفضل",
   "@favourite": {},
-  "playlistNameUpdated": "تم تحديث إسم قائمة الأغاني.",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "تم تحديث إسم قائمة الأغاني.",
+  "@playlistUpdated": {},
   "required": "ملزوم",
   "@required": {},
   "addButtonLabel": "إضافة",
@@ -187,8 +187,6 @@
   "@enableTranscoding": {},
   "notAvailableInOfflineMode": "عير متوفر في وضع غير الإتصال",
   "@notAvailableInOfflineMode": {},
-  "jellyfinUsesAACForTranscoding": "\"جلي فين\" يستعمل مشفر <AAC> للتحويل",
-  "@jellyfinUsesAACForTranscoding": {},
   "layoutAndTheme": "تخطيط و ظاهرة",
   "@layoutAndTheme": {},
   "logOut": "تسجيل الخروج",
@@ -339,16 +337,6 @@
   "@replaceQueue": {},
   "system": "نظام",
   "@system": {},
-  "startupError": "‐شيء خطأ حصل اثناء تفتيح التطبيك! الخطأ هو:{error}\n\nاقتح تعليقةعلى <GitHub> في الموقع <github.com/UnicornsOnLSD/finamp> مع لقتة شاشة من هذا الصفحة. إذا هذا الخطأ يستمر, إمسح تخزين التطبيق.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "noArtist": "بدون فنان",
   "@noArtist": {},
   "password": "كلمة السرية",

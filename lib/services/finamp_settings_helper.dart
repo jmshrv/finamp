@@ -1,10 +1,12 @@
 import 'package:finamp/components/confirmation_prompt_dialog.dart';
+import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/locale_helper.dart';
 import 'package:finamp/services/theme_mode_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
@@ -49,45 +51,6 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setShowTab(TabContentType tabContentType, bool value) {
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.showTabs[tabContentType] = value;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setSortBy(TabContentType tabType, SortBy sortBy) {
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.tabSortBy[tabType] = sortBy;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setSortOrder(TabContentType tabType, SortOrder sortOrder) {
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.tabSortOrder[tabType] = sortOrder;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setItemSwipeAction(DismissDirection direction, ItemSwipeActions newItemSwipeAction){
-    FinampSettings finampSettingsTemp = finampSettings;
-    if (direction == DismissDirection.startToEnd) {
-      finampSettingsTemp.itemSwipeActionLeftToRight = newItemSwipeAction;
-    } else if (direction == DismissDirection.endToStart) {
-      finampSettingsTemp.itemSwipeActionRightToLeft = newItemSwipeAction;
-    }
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
-  static void setArtistListType(ArtistType artistListType){
-    FinampSettings finampSettingsTemp = finampSettings;
-    finampSettingsTemp.artistListType = artistListType;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-  
   static void overwriteFinampSettings(FinampSettings newFinampSettings) {
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", newFinampSettings);
@@ -161,6 +124,38 @@ class FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void resetArtistSettings() {
+    FinampSettings finampSettingsTemp = finampSettings;
+    
+    finampSettingsTemp.artistItemSectionsOrder =
+        DefaultSettings.artistItemSectionsOrder;
+    finampSettingsTemp.showArtistsTracksSection =
+        DefaultSettings.showArtistsTracksSection;
+    finampSettingsTemp.artistItemSectionFilterChipOrder =
+        DefaultSettings.artistItemSectionFilterChipOrder;
+
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void resetGenreSettings() {
+    FinampSettings finampSettingsTemp = finampSettings;
+    
+    finampSettingsTemp.genreItemSectionsOrder =
+        DefaultSettings.genreItemSectionsOrder;
+    finampSettingsTemp.genreItemSectionFilterChipOrder =
+        DefaultSettings.genreItemSectionFilterChipOrder;
+    finampSettingsTemp.genreFilterArtistScreens =
+        DefaultSettings.genreFilterArtistScreens;
+    finampSettingsTemp.genreFilterPlaylists =
+        DefaultSettings.genreFilterPlaylists;
+    finampSettingsTemp.genreListsInheritSorting =
+        DefaultSettings.genreListsInheritSorting;
+
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void resetLayoutSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
@@ -177,11 +172,12 @@ class FinampSettingsHelper {
     FinampSetters.setUseCoverAsBackground(DefaultSettings.useCoverAsBackground);
     finampSettingsTemp.showArtistChipImage =
         DefaultSettings.showArtistChipImage;
-    finampSettingsTemp.showArtistsTopTracks =
-        DefaultSettings.showArtistsTopTracks;
     finampSettingsTemp.allowSplitScreen = DefaultSettings.allowSplitScreen;
     finampSettingsTemp.showProgressOnNowPlayingBar =
         DefaultSettings.showProgressOnNowPlayingBar;
+    finampSettingsTemp.autoSwitchItemCurationType = 
+        DefaultSettings.autoSwitchItemCurationType;
+
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
@@ -237,11 +233,19 @@ class FinampSettingsHelper {
         seconds: DefaultSettings.bufferDurationSeconds)); // DOES NOT update UI
     FinampSetters.setAutoloadLastQueueOnStartup(
         DefaultSettings.autoLoadLastQueueOnStartup);
+    FinampSetters.setAutoReloadQueue(DefaultSettings.autoReloadQueue);
+  }
+
+  static void resetPlaybackReportingSettings() {
     FinampSetters.setPeriodicPlaybackSessionUpdateFrequencySeconds(DefaultSettings
         .periodicPlaybackSessionUpdateFrequencySeconds); // DOES NOT update UI
+    FinampSetters.setEnablePlayon(DefaultSettings.enablePlayon);
     FinampSetters.setReportQueueToServer(DefaultSettings.reportQueueToServer);
+    FinampSetters.setPlayOnStaleDelay(DefaultSettings.playOnStaleDelay);
     FinampSetters.setAudioFadeInDuration(DefaultSettings.audioFadeInDuration);
     FinampSetters.setAudioFadeOutDuration(DefaultSettings.audioFadeOutDuration);
+    FinampSetters.setPlayOnReconnectionDelay(
+        DefaultSettings.playOnReconnectionDelay);
   }
 
   static void resetNormalizationSettings() {
@@ -261,10 +265,14 @@ class FinampSettingsHelper {
   static void resetInteractionsSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 
-    finampSettingsTemp.itemSwipeActionLeftToRight = DefaultSettings.itemSwipeActionLeftToRight;
-    finampSettingsTemp.itemSwipeActionRightToLeft = DefaultSettings.itemSwipeActionRightToLeft;
+    finampSettingsTemp.itemSwipeActionLeftToRight =
+        DefaultSettings.itemSwipeActionLeftToRight;
+    finampSettingsTemp.itemSwipeActionRightToLeft =
+        DefaultSettings.itemSwipeActionRightToLeft;
     finampSettingsTemp.startInstantMixForIndividualTracks =
         DefaultSettings.startInstantMixForIndividualTracks;
+    finampSettingsTemp.applyFilterOnGenreChipTap =
+        DefaultSettings.applyFilterOnGenreChipTap;
     FinampSetters.setShowFastScroller(DefaultSettings.showFastScroller);
     FinampSetters.setDisableGesture(DefaultSettings.disableGesture);
     FinampSetters.setEnableVibration(DefaultSettings.enableVibration);
@@ -274,6 +282,15 @@ class FinampSettingsHelper {
 
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void resetNetworkSettings() {
+    GetIt.instance<FinampUserHelper>().currentUser?.update(
+          newIsLocal: DefaultSettings.isLocal,
+          newHomeAddress: DefaultSettings.homeNetworkAddress,
+          newPreferHomeNetwork: DefaultSettings.preferHomeNetwork,
+        );
+    FinampSetters.setAutoOffline(DefaultSettings.autoOffline);
   }
 
   static void resetAllSettings() {
@@ -288,7 +305,10 @@ class FinampSettingsHelper {
     resetPlayerScreenSettings();
     resetLyricsSettings();
     resetAlbumSettings();
+    resetArtistSettings();
+    resetGenreSettings();
     resetTabsSettings();
+    resetNetworkSettings();
 
     LocaleHelper.setLocale(null); // Reset to System Language
   }

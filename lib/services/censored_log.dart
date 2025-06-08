@@ -20,6 +20,28 @@ extension CensoredMessage on LogRecord {
 
     String workingLogString = logString;
 
+    // If userHelper is not initialized, calling code cannot have used baseurl/token
+    // so skipping censoring is fine.
+    if (GetIt.instance.isRegistered<FinampUserHelper>()) {
+      final user = GetIt.instance<FinampUserHelper>().currentUser;
+
+      if (user != null) {
+        var useLocal = user.isLocal && user.preferHomeNetwork;
+        workingLogString = workingLogString.replaceAll(
+            CaseInsensitivePattern(user.homeAddress),
+            "HOMEURL${!useLocal ? "(INACTIVE)" : ""}");
+        workingLogString = workingLogString.replaceAll(
+            CaseInsensitivePattern(user.publicAddress),
+            "PUBLICURL${useLocal ? "(INACTIVE)" : ""}");
+        workingLogString = workingLogString.replaceAll(
+            CaseInsensitivePattern(user.accessToken), "TOKEN");
+        workingLogString = workingLogString.replaceAll(
+            CaseInsensitivePattern(user.id), "USER_ID");
+      }
+    }
+
+    // If we are currently logging in, there may be a temp URL to censor.
+    // Check after normal URL replacement to prefer that if both urls are set.
     if (GetIt.instance.isRegistered<JellyfinApiHelper>()) {
       final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
@@ -40,23 +62,6 @@ extension CensoredMessage on LogRecord {
         // remove anything between the quotes in "Failed host lookup: ''"
         workingLogString = workingLogString.replaceAll(
             RegExp(r"host: [^,]+, port: \d+"), "HOST");
-      }
-    }
-
-    // If userHelper is not initialized, calling code cannot have used baseurl/token
-    // so skipping censoring is fine.
-    if (GetIt.instance.isRegistered<FinampUserHelper>()) {
-      final finampUserHelper = GetIt.instance<FinampUserHelper>();
-
-      for (final user in finampUserHelper.finampUsers) {
-        workingLogString = workingLogString.replaceAll(
-            CaseInsensitivePattern(user.baseUrl), "BASEURL");
-        workingLogString = workingLogString.replaceAll(
-            CaseInsensitivePattern(user.baseUrl), "BASEURL");
-        workingLogString = workingLogString.replaceAll(
-            CaseInsensitivePattern(user.accessToken), "TOKEN");
-        workingLogString = workingLogString.replaceAll(
-            CaseInsensitivePattern(user.id), "USER_ID");
       }
     }
 

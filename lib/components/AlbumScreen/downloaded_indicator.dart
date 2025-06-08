@@ -17,6 +17,18 @@ class DownloadedIndicator extends ConsumerWidget {
   final DownloadStub item;
   final double? size;
 
+  bool isVisible(WidgetRef ref) {
+    final downloadsService = GetIt.instance<DownloadsService>();
+    final status = ref.watch(downloadsService.stateProvider(item));
+    return switch (status) {
+      AsyncData(:final value) => switch (value) {
+        null || DownloadItemState.notDownloaded => false,
+        _ => true,
+      },
+      _ => false,
+    };
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloadsService = GetIt.instance<DownloadsService>();

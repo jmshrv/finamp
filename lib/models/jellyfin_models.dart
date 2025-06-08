@@ -9,9 +9,10 @@
 library;
 
 import 'package:collection/collection.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -784,29 +785,18 @@ class SessionUserInfo {
 @HiveType(typeId: 16)
 class ClientCapabilities {
   ClientCapabilities({
-    this.playableMediaTypes,
-    this.supportedCommands,
+    required this.playableMediaTypes,
+    required this.supportedCommands,
     required this.supportsMediaControl,
     required this.supportsPersistentIdentifier,
-    required this.supportsSync,
     this.deviceProfile,
-    this.iconUrl,
-    required this.supportsContentUploading,
-    this.messageCallbackUrl,
     this.appStoreUrl,
+    this.iconUrl,
   });
 
   @HiveField(0)
   List<String>? playableMediaTypes;
 
-  /// Items Enum: "MoveUp" "MoveDown" "MoveLeft" "MoveRight" "PageUp" "PageDown"
-  /// "PreviousLetter" "NextLetter" "ToggleOsd" "ToggleContextMenu" "Select"
-  /// "Back" "TakeScreenshot" "SendKey" "SendString" "GoHome" "GoToSettings"
-  /// "VolumeUp" "VolumeDown" "Mute" "Unmute" "ToggleMute" "SetVolume"
-  /// "SetAudioStreamIndex" "SetSubtitleStreamIndex" "ToggleFullscreen"
-  /// "DisplayContent" "GoToSearch" "DisplayMessage" "SetRepeatMode" "ChannelUp"
-  /// "ChannelDown" "Guide" "ToggleStats" "PlayMediaSource" "PlayTrailers"
-  /// "SetShuffleQueue" "PlayState" "PlayNext" "ToggleOsdMenu" "Play"
   @HiveField(1)
   List<String>? supportedCommands;
 
@@ -816,9 +806,6 @@ class ClientCapabilities {
   @HiveField(3)
   bool? supportsPersistentIdentifier;
 
-  @HiveField(4)
-  bool? supportsSync;
-
   /// Defines the MediaBrowser.Model.Dlna.DeviceProfile.
   @HiveField(5)
   DeviceProfile? deviceProfile;
@@ -827,12 +814,6 @@ class ClientCapabilities {
   String? iconUrl;
 
   // Below fields were added during null safety migration (0.5.0)
-
-  @HiveField(7)
-  bool? supportsContentUploading;
-
-  @HiveField(8)
-  String? messageCallbackUrl;
 
   @HiveField(9)
   String? appStoreUrl;
@@ -3389,7 +3370,7 @@ class QueueItem {
 class NewPlaylist {
   NewPlaylist({
     this.name,
-    required this.ids,
+    this.ids,
     this.userId,
     this.mediaType,
     this.isPublic,
@@ -3399,7 +3380,7 @@ class NewPlaylist {
   String? name;
 
   /// Gets or sets item ids to add to the playlist.
-  List<BaseItemId> ids;
+  List<BaseItemId>?ids;
 
   /// Gets or sets the user id. Required when creating playlists, but not adding
   /// to them.
@@ -3479,24 +3460,66 @@ enum SortBy {
   revenue,
 
   @HiveField(14)
-  runtime;
+  runtime,
 
-  /// default SortBy options shown to the user, such as in the sort by menu
-  static List<SortBy> get defaults => [
-        SortBy.sortName,
-        SortBy.albumArtist,
-        SortBy.communityRating,
-        SortBy.criticRating,
-        SortBy.dateCreated,
-        SortBy.premiereDate,
-        SortBy.random,
-      ];
+  @HiveField(15)
+  defaultOrder;
 
-  /// default SortBy options shown to the user, such as in the sort by menu
-  static List<SortBy> get trackSortOptions => [
-        ...defaults,
-        SortBy.playCount,
-      ];
+  static List<SortBy> defaultsFor({
+    required TabContentType type, 
+    bool includeDefaultOrder = false
+  }) {
+    List<SortBy> options;
+
+    switch (type) {
+      case TabContentType.tracks:
+        options = [
+          SortBy.sortName,
+          SortBy.album,
+          SortBy.albumArtist,
+          SortBy.artist,
+          //SortBy.communityRating,
+          //SortBy.criticRating,
+          SortBy.premiereDate,
+          SortBy.dateCreated,
+          SortBy.datePlayed,
+          SortBy.playCount,
+          SortBy.runtime,
+          SortBy.random,
+        ];
+      case TabContentType.albums:
+        options = [
+          SortBy.sortName,
+          SortBy.albumArtist,
+          //SortBy.communityRating,
+          //SortBy.criticRating,
+          //SortBy.datePlayed,
+          SortBy.premiereDate,
+          SortBy.dateCreated,
+          SortBy.runtime,
+          SortBy.random,
+        ];
+      case TabContentType.playlists:
+      case TabContentType.artists:
+        options = [
+          SortBy.sortName,
+          //SortBy.datePlayed,
+          SortBy.dateCreated,
+          SortBy.runtime,
+          SortBy.random,
+        ];
+      case TabContentType.genres:
+        options = [
+          SortBy.sortName,
+          SortBy.dateCreated,
+          SortBy.random,
+        ];
+    }
+    if (includeDefaultOrder) {
+      options.insert(0, SortBy.defaultOrder);
+    }
+    return options;
+  }
 
   /// Human-readable version of the [SortBy]. For example, toString() on
   /// [SortBy.album], toString() would return "SortBy.album". With this
@@ -3527,7 +3550,7 @@ enum SortBy {
       case SortBy.albumArtist:
         return "Album Artist";
       case SortBy.artist:
-        return "Artist";
+        return "Performing Artist";
       case SortBy.budget:
         return "Budget";
       case SortBy.communityRating:
@@ -3541,7 +3564,7 @@ enum SortBy {
       case SortBy.playCount:
         return "Play Count";
       case SortBy.premiereDate:
-        return "Premiere Date";
+        return "Release Date";
       case SortBy.productionYear:
         return "Production Year";
       case SortBy.sortName:
@@ -3552,6 +3575,8 @@ enum SortBy {
         return "Revenue";
       case SortBy.runtime:
         return "Runtime";
+      case SortBy.defaultOrder:
+        return "Server Order";
     }
   }
 
@@ -3562,7 +3587,7 @@ enum SortBy {
       case SortBy.albumArtist:
         return AppLocalizations.of(context)!.albumArtist;
       case SortBy.artist:
-        return AppLocalizations.of(context)!.artist;
+        return AppLocalizations.of(context)!.performingArtist;
       case SortBy.budget:
         return AppLocalizations.of(context)!.budget;
       case SortBy.communityRating:
@@ -3586,7 +3611,9 @@ enum SortBy {
       case SortBy.revenue:
         return AppLocalizations.of(context)!.revenue;
       case SortBy.runtime:
-        return AppLocalizations.of(context)!.runtime;
+        return AppLocalizations.of(context)!.duration;
+      case SortBy.defaultOrder:
+        return AppLocalizations.of(context)!.defaultOrder;
     }
   }
 
@@ -3622,6 +3649,8 @@ enum SortBy {
         return "Revenue";
       case SortBy.runtime:
         return "Runtime";
+      case SortBy.defaultOrder:
+        return "";
     }
   }
 
@@ -3657,6 +3686,8 @@ enum SortBy {
         return "Revenue";
       case SortBy.runtime:
         return "Runtime";
+      case SortBy.defaultOrder:
+        return "";
     }
   }
 
@@ -3692,6 +3723,42 @@ enum SortBy {
         return "Revenue";
       case SortBy.runtime:
         return "Runtime,AlbumArtist,Album,SortName";
+      case SortBy.defaultOrder:
+        return "";
+    }
+  }
+
+  IconData? getIcon() {
+    switch (this) {
+      case SortBy.album:
+        return TablerIcons.disc;
+      case SortBy.albumArtist:
+      case SortBy.artist:
+        return TablerIcons.user;
+      case SortBy.communityRating:
+      case SortBy.criticRating:
+        return TablerIcons.chart_bar_popular;
+      case SortBy.dateCreated:
+        return TablerIcons.calendar_plus;
+      case SortBy.datePlayed:
+        return TablerIcons.clock;
+      case SortBy.playCount:
+        return TablerIcons.sum;
+      case SortBy.premiereDate:
+      case SortBy.productionYear:
+        return TablerIcons.calendar;
+      case SortBy.sortName:
+        return TablerIcons.abc;
+      case SortBy.random:
+        return TablerIcons.arrows_shuffle;
+      case SortBy.revenue:
+        return TablerIcons.coins;
+      case SortBy.runtime:
+        return TablerIcons.stopwatch;
+      case SortBy.defaultOrder:
+        return TablerIcons.server;
+      default:
+        return null;
     }
   }
 }
@@ -3765,7 +3832,6 @@ class PublicSystemInfoResult {
   Map<String, dynamic> toJson() => _$PublicSystemInfoResultToJson(this);
 }
 
-@HiveType(typeId: 41)
 class PublicUsersResponse {
   PublicUsersResponse({
     required this.users,
@@ -3780,7 +3846,6 @@ class PublicUsersResponse {
   explicitToJson: true,
   anyMap: true,
 )
-@HiveType(typeId: 42)
 class QuickConnectState {
   QuickConnectState({
     required this.authenticated,

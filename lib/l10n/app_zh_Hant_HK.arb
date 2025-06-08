@@ -137,21 +137,21 @@
   "@editPlaylistNameTitle": {},
   "updateButtonLabel": "更新",
   "@updateButtonLabel": {},
-  "playlistNameUpdated": "已更新播放清單名稱。",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "已更新播放清單名稱。",
+  "@playlistUpdated": {},
   "favourite": "我的最愛",
   "@favourite": {},
   "location": "位置",
   "@location": {},
   "addButtonLabel": "加入",
   "@addButtonLabel": {},
-  "shareLogs": "分享所有紀錄檔",
+  "shareLogs": "分享所有記錄檔",
   "@shareLogs": {},
-  "logsCopied": "已複製所有紀錄。",
+  "logsCopied": "已複製所有記錄。",
   "@logsCopied": {},
   "stackTrace": "除錯資訊（Stack Trace）",
   "@stackTrace": {},
-  "applicationLegalese": "採用 Mozilla Public License 2.0 特許條款。原始碼：\n\ngithub.com/jmshrv/finamp",
+  "applicationLegalese": "採用 Mozilla Public License 2.0 特許條款。\n原始碼：{sourceCodeLink}。",
   "@applicationLegalese": {},
   "transcoding": "轉碼（Transcoding）",
   "@transcoding": {},
@@ -167,13 +167,11 @@
   "@logOut": {},
   "areYouSure": "您確定嗎？",
   "@areYouSure": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin 使用 AAC 進行轉碼",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscodingSubtitle": "啟用後，音訊會先在伺服器轉碼。",
   "@enableTranscodingSubtitle": {},
   "bitrate": "位元速率（Bitrate）",
   "@bitrate": {},
-  "bitrateSubtitle": "越高的位元速率帶來越好的音質，但亦會使用更多的流量。",
+  "bitrateSubtitle": "越高的位元速率帶來越好的音質，但亦會使用更多的流量。不會套用至無損格式，例如 FLAC。",
   "@bitrateSubtitle": {},
   "addDownloadLocation": "添加下載位置",
   "@addDownloadLocation": {},
@@ -185,13 +183,13 @@
   "@selectDirectory": {},
   "appDirectory": "應用程式資料夾",
   "@appDirectory": {},
-  "enterLowPriorityStateOnPause": "暫停播放時會進入「低優先」狀態",
+  "enterLowPriorityStateOnPause": "暫停播放時進入「低優先」狀態",
   "@enterLowPriorityStateOnPause": {},
-  "enterLowPriorityStateOnPauseSubtitle": "在停止播放時，允許本程式的「通知」能被掃走及關閉應用程式（適用於 Android 裝置）。",
+  "enterLowPriorityStateOnPauseSubtitle": "停止播放時，允許本程式的「通知」能被掃走及關閉應用程式（適用於 Android 裝置）。",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "shuffleAllTrackCount": "隨機播放上限",
   "@shuffleAllTrackCount": {},
-  "shuffleAllTrackCountSubtitle": "使用「隨機播放全部」時，播放歌曲的數量上限。",
+  "shuffleAllTrackCountSubtitle": "隨機播放的歌曲數量上限。",
   "@shuffleAllTrackCountSubtitle": {},
   "message": "訊息",
   "@message": {},
@@ -314,16 +312,6 @@
   "@bufferDuration": {},
   "bufferDurationSubtitle": "播放器可以預先載入多少的音訊數據（秒）。重啟以套用設定。",
   "@bufferDurationSubtitle": {},
-  "startupError": "應用程式啟動時出錯（{error}）\n\n您可以在 github.com/UnicornsOnLSD/finamp 回報有關問題並附上截圖。如果問題持續，您可以嘗試重設應用程式。",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "downloadedMissingImages": "{count,plural, =0{沒有缺少的圖片} =1{已下載{count}張圖片} other{已下載{count}張圖片}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
@@ -341,7 +329,7 @@
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
-  "internalExternalIpExplanation": "如果您需要在局部區域網絡（LAN）以外的地方連接 Jellyfin，請使用伺服器的區域網絡（WAN）IP。\n\n如果目標伺服器使用的連接埠（port）是 HTTP 的預設連接埠（80／433），則毋須填寫連接埠。",
+  "internalExternalIpExplanation": "如果您需要在局部區域網絡（LAN）以外的地方連接 Jellyfin，請使用伺服器的區域網絡（WAN）IP。\n\n如果目標伺服器使用的連接埠（port）是 HTTP 的預設連接埠（80／433），則毋須填寫連接埠。\n\n如果 URL 輸入正確，伺服器的資訊將會在下方的輸入欄位顯示。",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
@@ -375,13 +363,13 @@
   "@required": {},
   "addDownloads": "添加至下載",
   "@addDownloads": {},
-  "downloadsQueued": "已添加至下載。",
+  "downloadsQueued": "開始下載檔案。",
   "@downloadsQueued": {},
   "downloadedTracksWillNotBeDeleted": "已下載的歌曲並不會被刪除",
   "@downloadedTracksWillNotBeDeleted": {},
   "customLocation": "自訂位置",
   "@customLocation": {},
-  "customLocationsBuggy": "現時，自訂位置功能因權限問題而未能完全正常運作。如非必要，建議不要使用。",
+  "customLocationsBuggy": "自訂位置功能並不保證可正常運作。如非必要，建議不要使用。使用系統的「音樂」資料夾會因權限問題而令專輯封面圖無法儲存。",
   "@customLocationsBuggy": {},
   "viewTypeSubtitle": "顯示資訊的方式",
   "@viewTypeSubtitle": {},
@@ -461,5 +449,276 @@
   "swipeInsertQueueNextSubtitle": "在歌曲列表中輕掃歌曲時，將其插入至播放佇列的最頭而不是最後。",
   "@swipeInsertQueueNextSubtitle": {},
   "about": "關於 Finamp",
-  "@about": {}
+  "@about": {},
+  "startupErrorWorkaround": "你可嘗試透過清除資料來重設應用程式，但重設後，所有設定及已下載的檔案將會被刪除。",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
+  },
+  "startupErrorTitle": "啟動應用程式時出現錯誤！",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorCallToAction": "請在 github.com/jmshrv/finamp 上提交錯誤報告並附上程式記錄(!) （可使用下方按鈕）及截圖，讓我們能為你更快修正問題。",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "aboutThanks": "感謝您使用 Finamp！",
+  "@aboutThanks": {
+    "description": "Thank you message shown in the about screen."
+  },
+  "loginFlowWelcomeHeading": "歡迎使用",
+  "@loginFlowWelcomeHeading": {
+    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+  },
+  "loginFlowSlogan": "音樂，隨心所欲。",
+  "@loginFlowSlogan": {
+    "description": "Slogan shown on the login screen."
+  },
+  "loginFlowGetStarted": "開始使用！",
+  "@loginFlowGetStarted": {
+    "description": "Button label for the login/splash screen."
+  },
+  "serverUrlInfoButtonTooltip": "伺服器 URL 說明",
+  "@serverUrlInfoButtonTooltip": {
+    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+  },
+  "loginFlowAccountSelectionHeading": "選擇您的帳號",
+  "@loginFlowAccountSelectionHeading": {
+    "description": "Heading for the account selection step during the login flow."
+  },
+  "backToAccountSelection": "返回至帳號揀選",
+  "@backToAccountSelection": {
+    "description": "Label for the button that takes the user back to the account selection step during the login flow."
+  },
+  "finampTagline": "一個為 Jellyfin 而設的開源音樂播放器",
+  "@finampTagline": {
+    "description": "Tagline / short description for the app"
+  },
+  "aboutContributionPrompt": "由一班慷慨的人在空閒的時間開發而成。\n你也可以成為其中一份子！",
+  "@aboutContributionPrompt": {
+    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+  },
+  "aboutContributionLink": "在 GitHub 上參與 Finamp 的開發：",
+  "@aboutContributionLink": {
+    "description": "Link to the Finamp GitHub repository, shown in the about screen."
+  },
+  "aboutReleaseNotes": "瀏覽最新版本的說明：",
+  "@aboutReleaseNotes": {
+    "description": "Link to the release notes, shown in the about screen."
+  },
+  "aboutTranslations": "協助翻譯 Finamp：",
+  "@aboutTranslations": {
+    "description": "Link to the translation project, shown in the about screen."
+  },
+  "viewLogs": "檢視程式記錄",
+  "@viewLogs": {
+    "description": "Label for button shown during the login process that allows the user to view the app logs"
+  },
+  "back": "返回",
+  "@back": {
+    "description": "Label for the back button."
+  },
+  "changeLanguage": "更改語言",
+  "@changeLanguage": {
+    "description": "Label for button shown during the login process that allows the user to change the app language"
+  },
+  "loginFlowServerSelectionHeading": "連接至 Jellyfin",
+  "@loginFlowServerSelectionHeading": {
+    "description": "Heading for the server selection step during the login flow."
+  },
+  "connectingToServer": "正在連接伺服器…",
+  "@connectingToServer": {
+    "description": "Text shown while the connection to the specified server is attempted"
+  },
+  "serverUrlHint": "例如：demo.jellyfin.org/stable",
+  "@serverUrlHint": {
+    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+  },
+  "loginFlowLocalNetworkServers": "在區域網路上的伺服器：",
+  "@loginFlowLocalNetworkServers": {
+    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+  },
+  "loginFlowLocalNetworkServersScanningForServers": "正在搜尋伺服器…",
+  "@loginFlowLocalNetworkServersScanningForServers": {
+    "description": "Text shown while servers are being discovered via UDP broadcasts"
+  },
+  "loginFlowNamelessUser": "無名氏",
+  "@loginFlowNamelessUser": {
+    "description": "Name for a user that doesn't have a name set on the server."
+  },
+  "backToServerSelection": "返回伺服器揀選",
+  "@backToServerSelection": {
+    "description": "Label for the button that takes the user back to the server selection step during the login flow."
+  },
+  "loginFlowCustomUser": "自訂用戶",
+  "@loginFlowCustomUser": {
+    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+  },
+  "loginFlowAuthenticationHeading": "登入",
+  "@loginFlowAuthenticationHeading": {
+    "description": "Heading for the authentication step during the login flow."
+  },
+  "loginFlowQuickConnectPrompt": "使用 Quick Connect 代碼",
+  "@loginFlowQuickConnectPrompt": {
+    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "loginFlowQuickConnectInstructions": "打開 Jellyfin 應用程式或網頁，然後點擊用戶圖示，再選擇 Quick Connect。",
+  "@loginFlowQuickConnectInstructions": {
+    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+  },
+  "deleteDownloadsConfirmButtonText": "刪除",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "usernameHint": "輸入您的用戶名稱",
+  "@usernameHint": {
+    "description": "Hint text for the username input field."
+  },
+  "orDivider": "或",
+  "@orDivider": {
+    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+  },
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} 首歌曲} other{{trackCount} 首歌曲}}, {imageCount,plural,=1{{imageCount} 張圖片} other{{imageCount} 張圖片}}\n{syncCount,plural,=1{{syncCount} 個節點同步中} other{{syncCount} 個節點同步中}}{repairing, plural, =0{} other{\n目前正在修復}}",
+  "@downloadedCountUnified": {
+    "description": "Display of downloaded track and image count on downloads screen.",
+    "placeholders": {
+      "trackCount": {
+        "type": "int"
+      },
+      "imageCount": {
+        "type": "int"
+      },
+      "syncCount": {
+        "type": "int"
+      },
+      "repairing": {
+        "type": "int"
+      }
+    }
+  },
+  "albumArtists": "專輯歌手",
+  "@albumArtists": {},
+  "performingArtists": "參演歌手",
+  "@performingArtists": {},
+  "deleteDownloadsPrompt": "你確定要刪除 {itemType, select, album{專輯} playlist{播放清單} artist{歌手} genre{曲風} track{歌曲} library{媒體庫} other{項目}} '{itemName}' 嗎？",
+  "@deleteDownloadsPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "example": "Abandon Ship"
+      },
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      }
+    },
+    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+  },
+  "offlineTrackCountArtist": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}} 已下載",
+  "@offlineTrackCountArtist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "libraryDownloads": "媒體庫下載",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "appearsOnAlbums": "出現在",
+  "@appearsOnAlbums": {},
+  "loginFlowQuickConnectDisabled": "伺服器停用了 Quick Connect 功能。",
+  "@loginFlowQuickConnectDisabled": {
+    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+  },
+  "loginFlowSelectAUser": "揀選用戶",
+  "@loginFlowSelectAUser": {
+    "description": "Heading for the list of users that the user can select from during the login flow."
+  },
+  "startMixNoTracksGenre": "在開始混音之前，長按曲風以添加至混音器或從混音器移除",
+  "@startMixNoTracksGenre": {
+    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+  },
+  "title": "標題",
+  "@title": {},
+  "activeDownloads": "正在下載",
+  "@activeDownloads": {},
+  "activeDownloadsTitle": "正在下載",
+  "@activeDownloadsTitle": {},
+  "offlineTrackCount": "{count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}}，{downloads} 首已下載",
+  "@offlineTrackCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "downloads": {
+        "type": "int"
+      }
+    }
+  },
+  "specialDownloads": "特別下載",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "noItemsDownloaded": "沒有任何項目。",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "usernameValidationMissingUsername": "用戶名稱不能漏空",
+  "@usernameValidationMissingUsername": {
+    "description": "Error message that shows when the user submits a login without a username"
+  },
+  "passwordHint": "請輸入你的密碼",
+  "@passwordHint": {
+    "description": "Hint text for the password input field."
+  },
+  "login": "登入",
+  "@login": {
+    "description": "Label for the login button."
+  },
+  "noActiveDownloads": "無正下載的項目。",
+  "@noActiveDownloads": {},
+  "exportLogs": "儲存記錄檔",
+  "@exportLogs": {},
+  "confirmDownloadStarted": "已開始下載",
+  "@confirmDownloadStarted": {
+    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+  },
+  "playbackSpeedControlSettingSubtitle": "播放速度控制是否顯示在播放介面的選單中",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "automatic": "自動",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "customizationSettingsTitle": "自訂",
+  "@customizationSettingsTitle": {
+    "description": "Title for the customization settings screen"
+  },
+  "apply": "套用",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "reset": "重設",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "playbackSpeedControlSetting": "速度控制顯示",
+  "@playbackSpeedControlSetting": {
+    "description": "Title of the visibility setting of the playback speed controls"
+  },
+  "shown": "顯示",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "speed": "速度",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "hidden": "隱藏",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  }
 }

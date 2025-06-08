@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:finamp/components/Buttons/cta_medium.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
@@ -21,7 +21,7 @@ import '../AlbumScreen/track_list_tile.dart';
 import '../first_page_progress_indicator.dart';
 import '../global_snackbar.dart';
 import '../new_page_progress_indicator.dart';
-import 'album_item.dart';
+import 'item_collection_wrapper.dart';
 import 'alphabet_item_list.dart';
 
 // this is used to allow refreshing the music screen from other parts of the app, e.g. after deleting items from the server
@@ -34,12 +34,22 @@ class MusicScreenTabView extends StatefulWidget {
     this.searchTerm,
     required this.view,
     this.refresh,
+    this.genreFilter,
+    this.tabBarFiltered = false,
+    this.sortByOverride,
+    this.sortOrderOverride,
+    this.isFavoriteOverride,
   });
 
   final TabContentType tabContentType;
   final String? searchTerm;
   final BaseItemDto? view;
   final MusicRefreshCallback? refresh;
+  final BaseItemDto? genreFilter;
+  final bool tabBarFiltered;
+  final SortBy? sortByOverride;
+  final SortOrder? sortOrderOverride;
+  final bool? isFavoriteOverride;
 
   @override
   State<MusicScreenTabView> createState() => _MusicScreenTabViewState();
@@ -87,9 +97,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     }
     int localRefreshCount = refreshCount;
     try {
-      final sortOrder =
-          settings.tabSortOrder[widget.tabContentType]?.toString() ??
-              SortOrder.ascending.toString();
+      final sortOrder = (widget.sortOrderOverride ??
+                  settings.tabSortOrder[widget.tabContentType])
+              ?.toString() ??
+          SortOrder.ascending.toString();
       final newItems = await _jellyfinApiHelper.getItems(
         // starting with Jellyfin 10.9, only automatically created playlists will have a specific library as parent. user-created playlists will not be returned anymore
         // this condition fixes this by not providing a parentId when fetching playlists
@@ -101,17 +112,32 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         // If we're on the tracks tab, sort by "Album,SortName". This is what the
         // Jellyfin web client does. If this isn't the case, sort by "SortName".
         // If widget.sortBy is set, it is used instead.
-        sortBy: settings.tabSortBy[widget.tabContentType]
-                ?.jellyfinName(widget.tabContentType) ??
-            (widget.tabContentType == TabContentType.tracks
-                ? "Album,SortName"
-                : "SortName"),
+        sortBy:
+            (widget.sortByOverride ?? settings.tabSortBy[widget.tabContentType])
+                    ?.jellyfinName(widget.tabContentType) ??
+                (widget.tabContentType == TabContentType.tracks
+                    ? "Album,SortName"
+                    : "SortName"),
         sortOrder: sortOrder,
         searchTerm: widget.searchTerm?.trim(),
-        filters: settings.onlyShowFavourites ? "IsFavorite" : null,
+        filters: (widget.isFavoriteOverride == true ||
+                (widget.isFavoriteOverride == null &&
+                    settings.onlyShowFavorites))
+            ? "IsFavorite"
+            : null,
+        // "filters" are not implemented in the Jellyfin API Endpoint for Genres
+        // but the bool "isFavorite" is, so we use it instead (but don't set it
+        // to "false", because then it will actually exclude all favorites)
+        isFavorite: (widget.tabContentType.itemType == BaseItemDtoType.genre &&
+                (widget.isFavoriteOverride == true ||
+                    (widget.isFavoriteOverride == null &&
+                        settings.onlyShowFavorites)))
+            ? true
+            : null,
         startIndex: pageKey,
         limit: _pageSize,
         artistType: settings.artistListType,
+        genreFilter: widget.genreFilter,
       );
 
       // Skip appending page if a refresh triggered while processing
@@ -137,7 +163,9 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   Future<void> _getPageOffline() async {
     var settings = FinampSettingsHelper.finampSettings;
     int localRefreshCount = refreshCount;
-    var artistInfoForType = (settings.artistListType == ArtistType.albumartist) ? BaseItemDtoType.album : BaseItemDtoType.track;
+    var artistInfoForType = (settings.artistListType == ArtistType.albumartist)
+        ? BaseItemDtoType.album
+        : BaseItemDtoType.track;
 
     List<DownloadStub> offlineItems;
     if (widget.tabContentType == TabContentType.tracks) {
@@ -147,8 +175,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           nameFilter: widget.searchTerm,
           viewFilter: widget.view?.id,
           nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
-          onlyFavorites:
-              settings.onlyShowFavourites && settings.trackOfflineFavorites);
+          onlyFavorites: (widget.isFavoriteOverride == true ||
+                  (widget.isFavoriteOverride == null &&
+                      settings.onlyShowFavorites)) &&
+              settings.trackOfflineFavorites,
+          genreFilter: widget.genreFilter);
     } else {
       offlineItems = await _isarDownloader.getAllCollections(
           nameFilter: widget.searchTerm,
@@ -163,18 +194,40 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
               : null,
           nullableViewFilters: widget.tabContentType == TabContentType.albums &&
               settings.showDownloadsWithUnknownLibrary,
-          onlyFavorites:
-              settings.onlyShowFavourites && settings.trackOfflineFavorites,
+          onlyFavorites: (widget.isFavoriteOverride == true ||
+                  (widget.isFavoriteOverride == null &&
+                      settings.onlyShowFavorites)) &&
+              settings.trackOfflineFavorites,
           infoForType: (widget.tabContentType == TabContentType.artists)
               ? artistInfoForType
               : null,
-      );
+          genreFilter: widget.tabContentType == TabContentType.playlists
+              ? null
+              : widget.genreFilter);
     }
 
     var items = offlineItems.map((e) => e.baseItem).nonNulls.toList();
+    var sortBy =
+        widget.sortByOverride ?? settings.tabSortBy[widget.tabContentType];
+    // PlayCount and Last Played are not representative in Offline Mode
+    // so we disable it and overwrite it with the Sort Name if it was selected
+    if (sortBy == SortBy.playCount || sortBy == SortBy.datePlayed) {
+      sortBy = SortBy.sortName;
+    }
+    final sortOrder = widget.sortOrderOverride ??
+        settings.tabSortOrder[widget.tabContentType];
+    items = sortItems(items, sortBy, sortOrder);
 
-    items = sortItems(items, settings.tabSortBy[widget.tabContentType],
-        settings.tabSortOrder[widget.tabContentType]);
+    // Playlists use different genreIds due to their cross-library functionality.
+    // In Online Mode, the api still returns correct data, but in Offline Mode,
+    // we only have genres with their "libraryId" but playlists with their
+    // "cross-library-genreIds", so we won't get any results. Therefore,
+    // we have to load all playlists and manually filter by genreName.
+    if (items.isNotEmpty &&
+        widget.genreFilter != null &&
+        widget.tabContentType == TabContentType.playlists) {
+      items = filterItemsByGenreName(items, widget.genreFilter!);
+    }
 
     // Skip appending page if a refresh triggered while processing
     if (localRefreshCount == refreshCount && mounted) {
@@ -270,12 +323,17 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       _pagingController
           .notifyPageRequestListeners(_pagingController.nextPageKey!);
     }
-    await controller.animateTo(controller.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 500), curve: Curves.ease);
+    if (MediaQuery.of(context).disableAnimations) {
+      controller.jumpTo(controller.position.maxScrollExtent);
+    } else {
+      await controller.animateTo(controller.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 500), curve: Curves.ease);
+    }
   }
 
   Duration _getAnimationDurationForOffsetToIndex(int index) {
     final renderedIndices = controller.tagMap.keys;
+    if (renderedIndices.isEmpty) return Duration(milliseconds: 200);
     final medianIndex = renderedIndices.elementAt(renderedIndices.length ~/ 2);
 
     final duration = Duration(
@@ -307,6 +365,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     super.build(context);
     widget.refresh?.callback = _refresh;
 
+    // TODO stop unnecessary rebuilds from unrelated settings changes
     return ValueListenableBuilder<Box<FinampSettings>>(
         valueListenable: FinampSettingsHelper.finampSettingsListener,
         builder: (context, box, _) {
@@ -316,14 +375,18 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           var settings = box.get("FinampSettings")!;
           var newRefreshHash = Object.hash(
             widget.searchTerm,
-            settings.onlyShowFavourites,
+            settings.onlyShowFavorites,
+            widget.isFavoriteOverride,
             settings.tabSortBy[widget.tabContentType],
+            widget.sortByOverride,
             settings.tabSortOrder[widget.tabContentType],
+            widget.sortOrderOverride,
             settings.onlyShowFullyDownloaded,
             widget.view?.id,
             settings.isOffline,
-            settings.tabOrder.indexOf(widget.tabContentType),
+            settings.tabOrder,
             settings.trackOfflineFavorites,
+            widget.genreFilter?.id,
           );
           if (refreshHash == null) {
             refreshHash = newRefreshHash;
@@ -345,28 +408,41 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  AppLocalizations.of(context)!.emptyFilteredListSubtitle,
-                  style: TextStyle(
-                    fontSize: 16,
+                if (widget.genreFilter != null &&
+                    widget.tabContentType != TabContentType.genres)
+                  Text(
+                    AppLocalizations.of(context)!
+                        .genreNoItems(widget.tabContentType.name),
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
+                  )
+                else ...[
+                  Text(
+                    AppLocalizations.of(context)!.emptyFilteredListSubtitle,
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                CTAMedium(
-                  icon: TablerIcons.filter_x,
-                  text: AppLocalizations.of(context)!.resetFiltersButton,
-                  onPressed: () {
-                    FinampSetters.setOnlyShowFavourites(
-                        DefaultSettings.onlyShowFavourites);
-                    FinampSetters.setOnlyShowFullyDownloaded(
-                        DefaultSettings.onlyShowFullyDownloaded);
-                  },
-                )
+                  const SizedBox(height: 8),
+                  CTAMedium(
+                    icon: TablerIcons.filter_x,
+                    text: AppLocalizations.of(context)!.resetFiltersButton,
+                    onPressed: () {
+                      FinampSetters.setOnlyShowFavorites(
+                          DefaultSettings.onlyShowFavorites);
+                      FinampSetters.setOnlyShowFullyDownloaded(
+                          DefaultSettings.onlyShowFullyDownloaded);
+                    },
+                  )
+                ],
               ],
             ),
           );
-
+          var sortBy = widget.sortByOverride ??
+              settings.tabSortBy[widget.tabContentType];
           var tabContent = box.get("FinampSettings")!.contentViewType ==
                       ContentViewType.list ||
                   widget.tabContentType == TabContentType.tracks
@@ -394,16 +470,34 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                   key: ValueKey(item.id),
                                   item: item,
                                   isTrack: true,
-                                  index: Future.value(index),
+                                  index: index,
                                   isShownInSearch: widget.searchTerm != null,
-                                  allowDismiss: false,
+                                  // when the tabBar was filtered and we only have the tracks tab,
+                                  // we can allow Dismiss gestures in the track list
+                                  allowDismiss: widget.tabBarFiltered,
+                                  genreFilter: widget.genreFilter,
+                                  isOnGenreScreen: (widget.genreFilter != null)
+                                      ? true
+                                      : false,
+                                  parentItem: widget.genreFilter,
+                                  forceAlbumArtists:
+                                      (sortBy == SortBy.albumArtist),
+                                  showPlayCount: (!settings.isOffline &&
+                                      sortBy == SortBy.playCount),
+                                  showReleaseDate:
+                                      (sortBy == SortBy.premiereDate),
+                                  showDateAdded: (sortBy == SortBy.dateCreated),
+                                  showDateLastPlayed: (!settings.isOffline &&
+                                      sortBy == SortBy.datePlayed),
                                 )
-                              : AlbumItem(
+                              : ItemCollectionWrapper(
                                   key: ValueKey(item.id),
-                                  album: item,
+                                  item: item,
                                   isPlaylist: widget.tabContentType ==
                                       TabContentType.playlists,
-                                ),
+                                  genreFilter: widget.genreFilter,
+                                  showAdditionalInfoForSortBy: sortBy,
+                                  showFavoriteIconOnlyWhenFilterDisabled: true),
                         ),
                       );
                     },
@@ -428,13 +522,13 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                         key: ValueKey(index),
                         controller: controller,
                         index: index,
-                        child: AlbumItem(
+                        child: ItemCollectionWrapper(
                           key: ValueKey(item.id),
-                          album: item,
+                          item: item,
                           isPlaylist:
                               widget.tabContentType == TabContentType.playlists,
                           isGrid: true,
-                          gridAddSettingsListener: false,
+                          genreFilter: widget.genreFilter,
                         ),
                       );
                     },
@@ -463,12 +557,17 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           return RefreshIndicator(
             onRefresh: () async => _refresh(),
             child: box.get("FinampSettings")!.showFastScroller &&
-                    settings.tabSortBy[widget.tabContentType] == SortBy.sortName
+                    (widget.sortByOverride == SortBy.sortName ||
+                        (widget.sortByOverride == null &&
+                            settings.tabSortBy[widget.tabContentType] ==
+                                SortBy.sortName))
                 ? AlphabetList(
                     callback: scrollToLetter,
                     scrollController: controller,
-                    sortOrder: settings.tabSortOrder[widget.tabContentType] ??
-                        SortOrder.ascending,
+                    sortOrder: (widget.sortOrderOverride != null)
+                        ? widget.sortOrderOverride ?? SortOrder.ascending
+                        : (settings.tabSortOrder[widget.tabContentType] ??
+                            SortOrder.ascending),
                     child: tabContent)
                 : tabContent,
           );
@@ -550,11 +649,23 @@ List<BaseItemDto> sortItems(
           } else {
             return a.nameForSorting!.compareTo(b.nameForSorting!);
           }
+        case SortBy.album:
+          if (a.album == null || b.album == null) {
+            return 0;
+          } else {
+            return a.album!.compareTo(b.album!);
+          }
         case SortBy.albumArtist:
           if (a.albumArtist == null || b.albumArtist == null) {
             return 0;
           } else {
             return a.albumArtist!.compareTo(b.albumArtist!);
+          }
+        case SortBy.artist:
+          if (a.artists == null || b.artists == null) {
+            return 0;
+          } else {
+            return a.artists!.join(', ').compareTo(b.artists!.join(', '));
           }
         case SortBy.communityRating:
           if (a.communityRating == null || b.communityRating == null) {
@@ -568,23 +679,50 @@ List<BaseItemDto> sortItems(
           } else {
             return a.criticRating!.compareTo(b.criticRating!);
           }
+        case SortBy.datePlayed:
+          final dateA = a.userData?.lastPlayedDate == null
+              ? null
+              : DateTime.tryParse(a.userData!.lastPlayedDate!.trim());
+          final dateB = b.userData?.lastPlayedDate == null
+              ? null
+              : DateTime.tryParse(b.userData!.lastPlayedDate!.trim());
+          if (dateA == null && dateB == null) return 0;
+          if (dateA == null) return -1;
+          if (dateB == null) return 1;
+          return dateA.compareTo(dateB);
         case SortBy.dateCreated:
-          if (a.dateCreated == null || b.dateCreated == null) {
-            return 0;
-          } else {
-            return a.dateCreated!.compareTo(b.dateCreated!);
-          }
+          final dateA = a.dateCreated == null
+              ? null
+              : DateTime.tryParse(a.dateCreated!.trim());
+          final dateB = b.dateCreated == null
+              ? null
+              : DateTime.tryParse(b.dateCreated!.trim());
+          if (dateA == null && dateB == null) return 0;
+          if (dateA == null) return -1;
+          if (dateB == null) return 1;
+          return dateA.compareTo(dateB);
         case SortBy.premiereDate:
-          if (a.premiereDate == null || b.premiereDate == null) {
-            return 0;
-          } else {
-            return a.premiereDate!.compareTo(b.premiereDate!);
-          }
+          final dateA = a.premiereDate == null
+              ? null
+              : DateTime.tryParse(a.premiereDate!.trim());
+          final dateB = b.premiereDate == null
+              ? null
+              : DateTime.tryParse(b.premiereDate!.trim());
+          if (dateA == null && dateB == null) return 0;
+          if (dateA == null) return -1;
+          if (dateB == null) return 1;
+          return dateA.compareTo(dateB);
         case SortBy.playCount:
           if (a.userData?.playCount == null || b.userData?.playCount == null) {
             return 0;
           } else {
             return a.userData!.playCount.compareTo(b.userData!.playCount);
+          }
+        case SortBy.runtime:
+          if (a.runTimeTicks == null || b.runTimeTicks == null) {
+            return 0;
+          } else {
+            return a.runTimeTicks!.compareTo(b.runTimeTicks!);
           }
         // SortBy.random is handled outside this switch as per-comparison logic does not produce a good shuffle
         default:
@@ -596,4 +734,16 @@ List<BaseItemDto> sortItems(
   return sortOrder == SortOrder.descending
       ? itemsToSort.reversed.toList()
       : itemsToSort;
+}
+
+List<BaseItemDto> filterItemsByGenreName(
+    List<BaseItemDto> items, BaseItemDto genreFilter) {
+  if (genreFilter.name == null) return [];
+
+  return items.where((item) {
+    final assignedGenres = item.genreItems;
+    if (assignedGenres == null) return false;
+
+    return assignedGenres.any((genre) => genre.name == genreFilter.name);
+  }).toList();
 }

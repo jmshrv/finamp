@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hive_ce/hive.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../services/finamp_settings_helper.dart';
 import '../../../models/finamp_models.dart';
+import '../../../services/finamp_settings_helper.dart';
 
-class HideTabToggle extends StatelessWidget {
+class HideTabToggle extends ConsumerWidget {
   const HideTabToggle({
     super.key,
     required this.index,
@@ -15,23 +15,16 @@ class HideTabToggle extends StatelessWidget {
   final int index;
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (_, box, __) {
-        return SwitchListTile.adaptive(
-          title: Text(tabContentType.toLocalisedString(context)),
-          secondary: ReorderableDragStartListener(
-            index: index,
-            child: const Icon(Icons.drag_handle),
-          ),
-          // This should never be null, but it gets set to true if it is.
-          value: FinampSettingsHelper.finampSettings.showTabs[tabContentType] ??
-              true,
-          onChanged: (value) =>
-              FinampSettingsHelper.setShowTab(tabContentType, value),
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(tabContentType.toLocalisedString(context)),
+      secondary: ReorderableDragStartListener(
+        index: index,
+        child: const Icon(Icons.drag_handle),
+      ),
+      // This should never be null, but it gets set to true if it is.
+      value: ref.watch(finampSettingsProvider.showTabs(tabContentType)) ?? true,
+      onChanged: (value) => FinampSetters.setShowTabs(tabContentType, value),
     );
   }
 }

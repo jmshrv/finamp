@@ -2,14 +2,17 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/services/finamp_logs_helper.dart';
-import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/finamp_logs_helper.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -29,7 +32,10 @@ part 'finamp_models.g.dart';
 class FinampUser {
   FinampUser({
     required this.id,
-    required this.baseUrl,
+    required this.publicAddress,
+    required this.homeAddress,
+    required this.preferHomeNetwork,
+    required this.isLocal,
     required this.accessToken,
     required this.serverId,
     this.currentViewId,
@@ -38,8 +44,16 @@ class FinampUser {
 
   @HiveField(0)
   String id;
+
+  // @HiveField(1)
+  // String baseUrl;
   @HiveField(1)
-  String baseUrl;
+  @Name("baseUrl")
+  String publicAddress;
+
+  String get baseURL =>
+      isLocal && preferHomeNetwork ? homeAddress : publicAddress;
+
   @HiveField(2)
   String accessToken;
   @HiveField(3)
@@ -55,6 +69,15 @@ class FinampUser {
   @HiveField(5)
   Map<BaseItemId, BaseItemDto> views;
 
+  @HiveField(7, defaultValue: DefaultSettings.homeNetworkAddress)
+  String homeAddress;
+
+  @HiveField(8, defaultValue: DefaultSettings.isLocal)
+  bool isLocal;
+
+  @HiveField(9, defaultValue: DefaultSettings.preferHomeNetwork)
+  bool preferHomeNetwork;
+
   // We only need 1 user, the current user
   final Id isarId = 0;
   String get isarViews => jsonEncode(views);
@@ -64,6 +87,18 @@ class FinampUser {
 
   @ignore
   BaseItemDto? get currentView => views[currentViewId];
+
+  void update(
+      {bool? newIsLocal,
+      String? newHomeAddress,
+      String? newPublicAddress,
+      bool? newPreferHomeNetwork}) {
+    isLocal = newIsLocal ?? isLocal;
+    homeAddress = newHomeAddress ?? homeAddress;
+    publicAddress = newPublicAddress ?? publicAddress;
+    preferHomeNetwork = newPreferHomeNetwork ?? preferHomeNetwork;
+    GetIt.instance<FinampUserHelper>().saveUser(this);
+  }
 }
 
 class DefaultSettings {
@@ -74,7 +109,7 @@ class DefaultSettings {
   static const shouldTranscode = false;
   static const transcodeBitrate = 320000;
   static const androidStopForegroundOnPause = true;
-  static const onlyShowFavourites = false;
+  static const onlyShowFavorites = false;
   static const trackShuffleItemCount = 250;
   static const volumeNormalizationActive = true;
   // 80% volume in dB. In my testing, most tracks were louder than the default target
@@ -89,11 +124,11 @@ class DefaultSettings {
   static const contentGridViewCrossAxisCountPortrait = 2;
   static const contentGridViewCrossAxisCountLandscape = 3;
   static const showTextOnGridView = true;
-  static const sleepTimerDuration = 1800; // 30 Minutes default
+  static const sleepTimerDurationSeconds = 60 * 30;
   static const sleepTimerType = SleepTimerType.duration;
   static const useCoverAsBackground = true;
   static const playerScreenCoverMinimumPadding = 1.5;
-  static const showArtistsTopTracks = true;
+  static const showArtistsTracksSection = true;
   static const disableGesture = false;
   static const showFastScroller = true;
   static const bufferDisableSizeConstraints = false;
@@ -117,6 +152,9 @@ class DefaultSettings {
   static const hidePlayerBottomActions = false;
   static const reportQueueToServer = false;
   static const periodicPlaybackSessionUpdateFrequencySeconds = 150;
+  static const playOnStaleDelay = 90;
+  static const playOnReconnectionDelay = 5;
+  static const enablePlayon = true;
   static const showArtistChipImage = true;
   static const trackOfflineFavorites = true;
   static const showProgressOnNowPlayingBar = true;
@@ -126,6 +164,8 @@ class DefaultSettings {
   static const lyricsFontSize = LyricsFontSize.medium;
   static const showLyricsScreenAlbumPrelude = true;
   static const showStopButtonOnMediaNotification = false;
+  static const showShuffleButtonOnMediaNotification = true;
+  static const showFavoriteButtonOnMediaNotification = true;
   static const showSeekControlsOnMediaNotification = true;
   static const keepScreenOnOption = KeepScreenOnOption.whileLyrics;
   static const keepScreenOnWhilePluggedIn = true;
@@ -157,11 +197,31 @@ class DefaultSettings {
   static const oneLineMarqueeTextButton = false;
   static const showAlbumReleaseDateOnPlayerScreen = false;
   static const releaseDateFormat = ReleaseDateFormat.year;
-    static const autoOffline = AutoOfflineOption.disconnected;
+  static const double currentVolume = 1.0;
+  static const autoOffline = AutoOfflineOption.disconnected;
   static const autoOfflineListenerActive = true;
   static const audioFadeOutDuration = Duration(milliseconds: 0);
   static const audioFadeInDuration = Duration(milliseconds: 0);
   static const artistListType = ArtistType.albumartist;
+  static const isLocal = false;
+  static const preferHomeNetwork = false;
+  static const homeNetworkAddress = "http://0.0.0.0:8096";
+  static const autoReloadQueue = false;
+  static const genreCuratedItemSelectionTypeTracks = CuratedItemSelectionType.mostPlayed;
+  static const genreCuratedItemSelectionTypeAlbums = CuratedItemSelectionType.latestReleases;
+  static const genreCuratedItemSelectionTypeArtists = CuratedItemSelectionType.favorites;
+  static const genreItemSectionsOrder = GenreItemSections.values;
+  static const genreFilterArtistScreens = true;
+  static const genreListsInheritSorting = true;
+  static const genreItemSectionFilterChipOrder = CuratedItemSelectionType.values;
+  static const applyFilterOnGenreChipTap = false;
+  static const artistCuratedItemSelectionType = CuratedItemSelectionType.mostPlayed;
+  static const artistItemSectionFilterChipOrder = CuratedItemSelectionType.values;
+  static const artistItemSectionsOrder = ArtistItemSections.values;
+  static const autoSwitchItemCurationType = true;
+  static const playlistTracksSortBy = SortBy.defaultOrder;
+  static const playlistTracksSortOrder = SortOrder.ascending;
+  static const genreFilterPlaylists = false;
 }
 
 @HiveType(typeId: 28)
@@ -177,12 +237,11 @@ class FinampSettings {
     this.androidStopForegroundOnPause =
         DefaultSettings.androidStopForegroundOnPause,
     required this.showTabs,
-    this.onlyShowFavourites = DefaultSettings.onlyShowFavourites,
+    this.onlyShowFavorites = DefaultSettings.onlyShowFavorites,
     this.sortBy = SortBy.sortName,
     this.sortOrder = SortOrder.ascending,
     this.trackShuffleItemCount = DefaultSettings.trackShuffleItemCount,
-      this.volumeNormalizationActive =
-          DefaultSettings.volumeNormalizationActive,
+    this.volumeNormalizationActive = DefaultSettings.volumeNormalizationActive,
     this.volumeNormalizationIOSBaseGain =
         DefaultSettings.volumeNormalizationIOSBaseGain,
     this.volumeNormalizationMode = DefaultSettings.volumeNormalizationMode,
@@ -197,7 +256,7 @@ class FinampSettings {
     this.useCoverAsBackground = DefaultSettings.useCoverAsBackground,
     this.playerScreenCoverMinimumPadding =
         DefaultSettings.playerScreenCoverMinimumPadding,
-    this.showArtistsTopTracks = DefaultSettings.showArtistsTopTracks,
+    this.showArtistsTracksSection = DefaultSettings.showArtistsTracksSection,
     this.bufferDisableSizeConstraints =
         DefaultSettings.bufferDisableSizeConstraints,
     this.bufferDurationSeconds = DefaultSettings.bufferDurationSeconds,
@@ -226,8 +285,10 @@ class FinampSettings {
     this.shouldTranscodeDownloads = DefaultSettings.shouldTranscodeDownloads,
     this.shouldRedownloadTranscodes =
         DefaultSettings.shouldRedownloadTranscodes,
-    this.itemSwipeActionLeftToRight = DefaultSettings.itemSwipeActionLeftToRight,
-    this.itemSwipeActionRightToLeft = DefaultSettings.itemSwipeActionRightToLeft,
+    this.itemSwipeActionLeftToRight =
+        DefaultSettings.itemSwipeActionLeftToRight,
+    this.itemSwipeActionRightToLeft =
+        DefaultSettings.itemSwipeActionRightToLeft,
     this.useFixedSizeGridTiles = DefaultSettings.useFixedSizeGridTiles,
     this.fixedGridTileSize = DefaultSettings.fixedGridTileSize,
     this.allowSplitScreen = DefaultSettings.allowSplitScreen,
@@ -239,6 +300,10 @@ class FinampSettings {
     this.reportQueueToServer = DefaultSettings.reportQueueToServer,
     this.periodicPlaybackSessionUpdateFrequencySeconds =
         DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds,
+    this.playOnStaleDelay = DefaultSettings.playOnStaleDelay,
+    this.playOnReconnectionDelay = DefaultSettings.playOnReconnectionDelay,
+    this.enablePlayon = DefaultSettings.enablePlayon,
+    this.currentVolume = DefaultSettings.currentVolume,
     this.showArtistChipImage = DefaultSettings.showArtistChipImage,
     this.trackOfflineFavorites = DefaultSettings.trackOfflineFavorites,
     this.showProgressOnNowPlayingBar =
@@ -252,19 +317,21 @@ class FinampSettings {
         DefaultSettings.showLyricsScreenAlbumPrelude,
     this.showStopButtonOnMediaNotification =
         DefaultSettings.showStopButtonOnMediaNotification,
+    this.showShuffleButtonOnMediaNotification =
+        DefaultSettings.showShuffleButtonOnMediaNotification,
+    this.showFavoriteButtonOnMediaNotification =
+        DefaultSettings.showFavoriteButtonOnMediaNotification,
     this.showSeekControlsOnMediaNotification =
         DefaultSettings.showSeekControlsOnMediaNotification,
     this.keepScreenOnOption = DefaultSettings.keepScreenOnOption,
     this.keepScreenOnWhilePluggedIn =
         DefaultSettings.keepScreenOnWhilePluggedIn,
-    this.featureChipsConfiguration =
-          DefaultSettings.featureChipsConfiguration,
+    this.featureChipsConfiguration = DefaultSettings.featureChipsConfiguration,
     this.showCoversOnAlbumScreen = DefaultSettings.showCoversOnAlbumScreen,
     this.hasDownloadedPlaylistInfo = DefaultSettings.hasDownloadedPlaylistInfo,
     this.transcodingStreamingFormat =
-          DefaultSettings.transcodingStreamingFormat,
-    this.downloadSizeWarningCutoff =
-          DefaultSettings.downloadSizeWarningCutoff,
+        DefaultSettings.transcodingStreamingFormat,
+    this.downloadSizeWarningCutoff = DefaultSettings.downloadSizeWarningCutoff,
     this.allowDeleteFromServer = DefaultSettings.allowDeleteFromServer,
     this.oneLineMarqueeTextButton = DefaultSettings.oneLineMarqueeTextButton,
     this.showAlbumReleaseDateOnPlayerScreen =
@@ -272,10 +339,26 @@ class FinampSettings {
     this.releaseDateFormat = DefaultSettings.releaseDateFormat,
     this.artistListType = DefaultSettings.artistListType,
     this.autoOffline = DefaultSettings.autoOffline,
-    this.autoOfflineListenerActive =
-        DefaultSettings.autoOfflineListenerActive,
+    this.autoOfflineListenerActive = DefaultSettings.autoOfflineListenerActive,
     this.audioFadeOutDuration = DefaultSettings.audioFadeOutDuration,
-    this.audioFadeInDuration = DefaultSettings.audioFadeInDuration
+    this.audioFadeInDuration = DefaultSettings.audioFadeInDuration,
+    this.autoReloadQueue = DefaultSettings.autoReloadQueue,
+    this.screenSize,
+    this.genreCuratedItemSelectionTypeTracks = DefaultSettings.genreCuratedItemSelectionTypeTracks,
+    this.genreCuratedItemSelectionTypeAlbums = DefaultSettings.genreCuratedItemSelectionTypeAlbums,
+    this.genreCuratedItemSelectionTypeArtists = DefaultSettings.genreCuratedItemSelectionTypeArtists,
+    this.genreItemSectionsOrder = DefaultSettings.genreItemSectionsOrder,
+    this.genreFilterArtistScreens = DefaultSettings.genreFilterArtistScreens,
+    this.genreListsInheritSorting = DefaultSettings.genreListsInheritSorting,
+    this.genreItemSectionFilterChipOrder = DefaultSettings.genreItemSectionFilterChipOrder,
+    this.applyFilterOnGenreChipTap = DefaultSettings.applyFilterOnGenreChipTap,
+    this.artistCuratedItemSelectionType = DefaultSettings.artistCuratedItemSelectionType,
+    this.artistItemSectionFilterChipOrder = DefaultSettings.artistItemSectionFilterChipOrder,
+    this.artistItemSectionsOrder = DefaultSettings.artistItemSectionsOrder,
+    this.autoSwitchItemCurationType = DefaultSettings.autoSwitchItemCurationType,
+    this.playlistTracksSortBy = DefaultSettings.playlistTracksSortBy,
+    this.playlistTracksSortOrder = DefaultSettings.playlistTracksSortOrder,
+    this.genreFilterPlaylists = DefaultSettings.genreFilterPlaylists,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -291,13 +374,15 @@ class FinampSettings {
 
   @HiveField(4, defaultValue: DefaultSettings.androidStopForegroundOnPause)
   bool androidStopForegroundOnPause;
+
   @HiveField(5)
+  @SettingsHelperMap("tabContentType", "value")
   Map<TabContentType, bool> showTabs;
 
-  /// Used to remember if the user has set their music screen to favourites
+  /// Used to remember if the user has set their music screen to favorites
   /// mode.
-  @HiveField(6, defaultValue: DefaultSettings.onlyShowFavourites)
-  bool onlyShowFavourites;
+  @HiveField(6, defaultValue: DefaultSettings.onlyShowFavorites)
+  bool onlyShowFavorites;
 
   /// Current sort by setting.
   @Deprecated("Use per-tab sort by instead")
@@ -332,15 +417,11 @@ class FinampSettings {
   @HiveField(13, defaultValue: DefaultSettings.showTextOnGridView)
   bool showTextOnGridView = DefaultSettings.showTextOnGridView;
 
-  /// The number of seconds to wait in a sleep timer. This is so that the app
-  /// can remember the last duration. I'd use a Duration type here but Hive
-  /// doesn't come with an adapter for it by default.
-  // @HiveField(14, defaultValue: DefaultSettings.sleepTimerSeconds)
-  @HiveField(14)
-  SleepTimer? sleepTimer;
+  // @HiveField(14, defaultValue: DefaultSettings.sleepTimerSeconds) //!!! don't reuse this hive ID!
 
   @HiveField(15, defaultValue: <String, DownloadLocation>{})
-  @FinampSetterIgnore()
+  @SettingsHelperIgnore(
+      "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.")
   Map<String, DownloadLocation> downloadLocationsMap;
 
   /// Whether or not to use blurred cover art as background on player screen.
@@ -354,11 +435,11 @@ class FinampSettings {
   bool disableGesture = DefaultSettings.disableGesture;
 
   @HiveField(20, defaultValue: <TabContentType, SortBy>{})
-  @FinampSetterIgnore()
+  @SettingsHelperMap("tabContentType", "sortBy")
   Map<TabContentType, SortBy> tabSortBy;
 
   @HiveField(21, defaultValue: <TabContentType, SortOrder>{})
-  @FinampSetterIgnore()
+  @SettingsHelperMap("tabContentType", "sortOrder")
   Map<TabContentType, SortOrder> tabSortOrder;
 
   @HiveField(22, defaultValue: DefaultSettings.tabOrder)
@@ -452,8 +533,8 @@ class FinampSettings {
           DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds)
   int periodicPlaybackSessionUpdateFrequencySeconds;
 
-  @HiveField(54, defaultValue: DefaultSettings.showArtistsTopTracks)
-  bool showArtistsTopTracks = DefaultSettings.showArtistsTopTracks;
+  @HiveField(54, defaultValue: DefaultSettings.showArtistsTracksSection)
+  bool showArtistsTracksSection = DefaultSettings.showArtistsTracksSection;
 
   @HiveField(55, defaultValue: DefaultSettings.showArtistChipImage)
   bool showArtistChipImage;
@@ -569,7 +650,7 @@ class FinampSettings {
   // automatically disabled when connecting to wifi
   @HiveField(89, defaultValue: DefaultSettings.autoOfflineListenerActive)
   bool autoOfflineListenerActive;
-  
+
   @HiveField(90, defaultValue: DefaultSettings.itemSwipeActionLeftToRight)
   ItemSwipeActions itemSwipeActionLeftToRight;
 
@@ -578,6 +659,80 @@ class FinampSettings {
 
   @HiveField(92, defaultValue: DefaultSettings.artistListType)
   ArtistType artistListType;
+
+  @HiveField(93, defaultValue: DefaultSettings.currentVolume)
+  double currentVolume;
+
+  @HiveField(94, defaultValue: DefaultSettings.playOnStaleDelay)
+  int playOnStaleDelay;
+
+  @HiveField(95, defaultValue: DefaultSettings.playOnReconnectionDelay)
+  int playOnReconnectionDelay;
+
+  @HiveField(96, defaultValue: DefaultSettings.enablePlayon)
+  bool enablePlayon;
+
+  @HiveField(97, defaultValue: DefaultSettings.autoReloadQueue)
+  bool autoReloadQueue;
+
+  @HiveField(98,
+      defaultValue: DefaultSettings.showShuffleButtonOnMediaNotification)
+  bool showShuffleButtonOnMediaNotification;
+
+  @HiveField(99,
+      defaultValue: DefaultSettings.showFavoriteButtonOnMediaNotification)
+  bool showFavoriteButtonOnMediaNotification;
+
+  @HiveField(100)
+  ScreenSize? screenSize;
+
+  @HiveField(101, defaultValue: DefaultSettings.genreCuratedItemSelectionTypeTracks)
+  CuratedItemSelectionType genreCuratedItemSelectionTypeTracks;
+
+  @HiveField(102, defaultValue: DefaultSettings.genreCuratedItemSelectionTypeAlbums)
+  CuratedItemSelectionType genreCuratedItemSelectionTypeAlbums;
+
+  @HiveField(103, defaultValue: DefaultSettings.genreCuratedItemSelectionTypeArtists)
+  CuratedItemSelectionType genreCuratedItemSelectionTypeArtists;
+
+  @HiveField(104, defaultValue: DefaultSettings.genreItemSectionsOrder)
+  List<GenreItemSections> genreItemSectionsOrder;
+
+  @HiveField(105, defaultValue: DefaultSettings.genreFilterArtistScreens)
+  bool genreFilterArtistScreens;
+
+  @HiveField(106, defaultValue: DefaultSettings.genreListsInheritSorting)
+  bool genreListsInheritSorting;
+
+  @HiveField(107, defaultValue: DefaultSettings.genreItemSectionFilterChipOrder)
+  List<CuratedItemSelectionType> genreItemSectionFilterChipOrder;
+
+  @HiveField(108, defaultValue: DefaultSettings.applyFilterOnGenreChipTap)
+  bool applyFilterOnGenreChipTap;
+
+  @HiveField(109, defaultValue: DefaultSettings.artistCuratedItemSelectionType)
+  CuratedItemSelectionType artistCuratedItemSelectionType;
+
+  @HiveField(110, defaultValue: DefaultSettings.artistItemSectionFilterChipOrder)
+  List<CuratedItemSelectionType> artistItemSectionFilterChipOrder;
+
+  @HiveField(111, defaultValue: DefaultSettings.artistItemSectionsOrder)
+  List<ArtistItemSections> artistItemSectionsOrder;
+
+  @HiveField(112, defaultValue: DefaultSettings.autoSwitchItemCurationType)
+  bool autoSwitchItemCurationType;
+
+  @HiveField(113, defaultValue: DefaultSettings.playlistTracksSortBy)
+  SortBy playlistTracksSortBy;
+
+  @HiveField(114, defaultValue: DefaultSettings.playlistTracksSortOrder)
+  SortOrder playlistTracksSortOrder;
+
+  @HiveField(115, defaultValue: DefaultSettings.genreFilterPlaylists)
+  bool genreFilterPlaylists;
+
+  @HiveField(116)
+  SleepTimer? sleepTimer;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -1568,7 +1723,8 @@ enum DownloadsScreenCategory {
   playlists(DownloadItemType.collection, BaseItemDtoType.playlist),
   genres(DownloadItemType.collection, BaseItemDtoType.genre),
   tracks(DownloadItemType.track, BaseItemDtoType.track),
-  special(DownloadItemType.finampCollection, null);
+  special(DownloadItemType.finampCollection, null),
+  library(DownloadItemType.collection, BaseItemDtoType.library);
 
   const DownloadsScreenCategory(this.type, this.baseItemType);
 
@@ -1665,17 +1821,21 @@ enum QueueItemSourceType {
   @HiveField(13)
   nextUpArtist,
   @HiveField(14)
-  formerNextUp,
+  nextUpGenre,
   @HiveField(15)
-  downloads,
+  formerNextUp,
   @HiveField(16)
-  queue,
+  downloads,
   @HiveField(17)
-  unknown,
+  queue,
   @HiveField(18)
-  genreMix,
+  unknown,
   @HiveField(19)
-  track;
+  genreMix,
+  @HiveField(20)
+  track,
+  @HiveField(21)
+  remoteClient;
 }
 
 @HiveType(typeId: 53)
@@ -1744,6 +1904,8 @@ enum QueueItemSourceNameType {
   savedQueue,
   @HiveField(8)
   queue,
+  @HiveField(9)
+  remoteClient
 }
 
 @HiveType(typeId: 56)
@@ -1781,6 +1943,8 @@ class QueueItemSourceName {
         return AppLocalizations.of(context)!.savedQueue;
       case QueueItemSourceNameType.queue:
         return AppLocalizations.of(context)!.queue;
+      case QueueItemSourceNameType.remoteClient:
+        return "";
     }
   }
 }
@@ -1884,6 +2048,12 @@ class FinampQueueInfo {
       previousTracks.length + (currentTrack == null ? 0 : 1);
   int get remainingTrackCount => nextUp.length + queue.length;
   int get trackCount => currentTrackIndex + remainingTrackCount;
+  List<FinampQueueItem> get fullQueue => CombinedIterableView([
+        previousTracks,
+        currentTrack != null ? [currentTrack!] : <FinampQueueItem>[],
+        nextUp,
+        queue
+      ]).toList(growable: false);
 
   /// Remaining duration of queue.  Does not consider position in current track.
   Duration get remainingDuration {
@@ -1894,17 +2064,28 @@ class FinampQueueInfo {
     return Duration(microseconds: remaining);
   }
 
-  Duration get totalDuration {
+  Duration getDurationUntil(int offset) {
     var total = 0;
-    for (var item in CombinedIterableView([
-      previousTracks,
-      [currentTrack],
-      nextUp,
-      queue
-    ])) {
-      total += item?.item.duration?.inMicroseconds ?? 0;
+    for (var item
+        in CombinedIterableView([nextUp, queue]).take(max(offset - 1, 0))) {
+      total += item.item.duration?.inMicroseconds ?? 0;
     }
     return Duration(microseconds: total);
+  }
+
+  Duration get totalDuration {
+    var total = 0;
+    for (var item in fullQueue) {
+      total += item.item.duration?.inMicroseconds ?? 0;
+    }
+    return Duration(microseconds: total);
+  }
+
+  int get undownloadedTracks {
+    return fullQueue
+        .where(
+            (e) => e.item.extras?["android.media.extra.DOWNLOAD_STATUS"] != 2)
+        .length;
   }
 }
 
@@ -2238,7 +2419,8 @@ enum FinampCollectionType {
   allPlaylists(true),
   latest5Albums(true),
   libraryImages(false),
-  allPlaylistsMetadata(false);
+  allPlaylistsMetadata(false),
+  collectionWithLibraryFilter(true);
 
   const FinampCollectionType(this.hasAudio);
 
@@ -2252,13 +2434,20 @@ enum FinampCollectionType {
   includeIfNull: false,
 )
 class FinampCollection {
-  FinampCollection({required this.type, this.library}) {
-    assert(type == FinampCollectionType.libraryImages || library == null);
-    assert(type != FinampCollectionType.libraryImages || library != null);
+  FinampCollection({required this.type, this.library, this.item}) {
+    assert(
+      (type == FinampCollectionType.libraryImages && library != null && item == null) ||
+      (type == FinampCollectionType.collectionWithLibraryFilter && library != null && item != null) ||
+      (type != FinampCollectionType.libraryImages &&
+       type != FinampCollectionType.collectionWithLibraryFilter &&
+       item == null && library == null),
+      'Invalid combination of type, library, and item for FinampCollection.'
+    );
   }
 
   final FinampCollectionType type;
   final BaseItemDto? library;
+  final BaseItemDto? item;
 
   String get id => switch (type) {
         FinampCollectionType.favorites => "Favorites",
@@ -2267,6 +2456,8 @@ class FinampCollection {
         FinampCollectionType.libraryImages =>
           "Cache Library Images:${library!.id}",
         FinampCollectionType.allPlaylistsMetadata => "All Playlists Metadata",
+        FinampCollectionType.collectionWithLibraryFilter =>
+          "Collection with Library Filter:${library!.id}:${item!.id}",
       };
 
   String getName(BuildContext context) => switch (type) {
@@ -2281,6 +2472,8 @@ class FinampCollection {
         FinampCollectionType.allPlaylistsMetadata =>
           AppLocalizations.of(context)!
               .finampCollectionNames("allPlaylistsMetadata"),
+        FinampCollectionType.collectionWithLibraryFilter =>
+          item!.name?? "Unkown Item",
       };
 
   factory FinampCollection.fromJson(Map<String, dynamic> json) =>
@@ -2480,6 +2673,7 @@ enum FinampTranscodingStreamingFormat {
   const FinampTranscodingStreamingFormat(this.codec, this.container);
 
   final String codec;
+
   /// The container to use to transport the segments
   final String container;
 }
@@ -2689,7 +2883,6 @@ enum AutoOfflineOption {
   }
 }
 
-
 @HiveType(typeId: 92)
 enum ItemSwipeActions {
   @HiveField(0)
@@ -2726,7 +2919,8 @@ enum ItemSwipeActions {
       ItemSwipeActions itemSwipeAction, BuildContext context) {
     switch (itemSwipeAction) {
       case ItemSwipeActions.nothing:
-        return AppLocalizations.of(context)!.keepScreenOnDisabled; // reused here
+        return AppLocalizations.of(context)!
+            .keepScreenOnDisabled; // reused here
       case ItemSwipeActions.addToQueue:
         return AppLocalizations.of(context)!.addToQueue;
       case ItemSwipeActions.addToNextUp:
@@ -2746,19 +2940,357 @@ enum ArtistType {
   artist;
 }
 
-@HiveType(typeId: 82)
+@JsonSerializable()
+class FinampOutputRoute {
+  // mapOf(
+  //   "name" to route.name,
+  //   "connectionState" to route.connectionState,
+  //   "isSystemRoute" to route.isSystemRoute,
+  //   "isDefault" to route.isDefault,
+  //   "isDeviceSpeaker" to route.isDeviceSpeaker,
+  //   "isBluetooth" to route.isBluetooth,
+  //   "volume" to route.volume,
+  //   "providerPackageName" to route.provider.packageName
+  // )
+
+  @HiveField(0)
+  final String name;
+  @HiveField(1)
+  final int connectionState;
+  @HiveField(2)
+  final bool isSystemRoute;
+  @HiveField(3)
+  final bool isDefault;
+  @HiveField(4)
+  final bool isDeviceSpeaker;
+  @HiveField(5)
+  final bool isBluetooth;
+  @HiveField(6)
+  final double volume;
+  @HiveField(7)
+  final String providerPackageName;
+  @HiveField(8)
+  final bool isSelected;
+  @HiveField(9)
+  final int deviceType;
+  @HiveField(10)
+  final String? description;
+  @HiveField(11)
+  final Object? extras;
+  @HiveField(12)
+  final String? iconUri;
+  // @HiveField(13)
+  // final List<Object>? controlFilters;
+
+  FinampOutputRoute({
+    required this.name,
+    required this.connectionState,
+    required this.isSystemRoute,
+    required this.isDefault,
+    required this.isDeviceSpeaker,
+    required this.isBluetooth,
+    required this.volume,
+    required this.providerPackageName,
+    required this.isSelected,
+    required this.deviceType,
+    required this.description,
+    required this.extras,
+    required this.iconUri,
+    // required this.controlFilters,
+  });
+
+  factory FinampOutputRoute.fromJson(Map<String, dynamic> json) {
+    return _$FinampOutputRouteFromJson(json);
+  }
+
+  Map<String, dynamic> toJson() {
+    return _$FinampOutputRouteToJson(this);
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(toJson());
+  }
+}
+
+@HiveType(typeId: 94)
+class ScreenSize {
+  ScreenSize(this.sizeX, this.sizeY, this.locationX, this.locationY);
+
+  ScreenSize.from(Size size, Offset location)
+      : sizeX = size.width,
+        sizeY = size.height,
+        locationX = location.dx,
+        locationY = location.dy;
+
+  Size get size => Size(sizeX, sizeY);
+
+  Offset get location => Offset(locationX, locationY);
+
+  @HiveField(1)
+  double sizeX;
+
+  @HiveField(2)
+  double sizeY;
+
+  @HiveField(3)
+  double locationX;
+
+  @HiveField(4)
+  double locationY;
+}
+
+@HiveType(typeId: 95)
+enum CuratedItemSelectionType {
+  @HiveField(0)
+  mostPlayed,
+  @HiveField(1)
+  favorites,
+  @HiveField(2)
+  random,
+  @HiveField(3)
+  latestReleases,
+  @HiveField(4)
+  recentlyAdded,
+  @HiveField(5)
+  recentlyPlayed;
+
+  /// Human-readable version of this enum.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String toLocalisedSectionTitle(BuildContext context, BaseItemDtoType baseType) =>
+      _toLocalisedSectionTitle(this, context, baseType);
+
+  String _humanReadableName(
+      CuratedItemSelectionType curatedItemSelectionType) {
+    switch (curatedItemSelectionType) {
+      case CuratedItemSelectionType.mostPlayed:
+        return "Most Played";    
+      case CuratedItemSelectionType.favorites:
+        return "Favorites";
+      case CuratedItemSelectionType.random:
+        return "Random";
+      case CuratedItemSelectionType.latestReleases:
+        return "Latest Releases";
+      case CuratedItemSelectionType.recentlyAdded:
+        return "Recently Added";
+      case CuratedItemSelectionType.recentlyPlayed:
+        return "Recently Played";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      CuratedItemSelectionType curatedItemSelectionType,
+      BuildContext context) {
+    switch (curatedItemSelectionType) {
+      case CuratedItemSelectionType.mostPlayed:
+        return AppLocalizations.of(context)!.mostPlayed;
+      case CuratedItemSelectionType.favorites:
+        return AppLocalizations.of(context)!.favorites;
+      case CuratedItemSelectionType.random:
+        return AppLocalizations.of(context)!.random;
+      case CuratedItemSelectionType.latestReleases:
+        return AppLocalizations.of(context)!.latestReleases;
+      case CuratedItemSelectionType.recentlyAdded:
+        return AppLocalizations.of(context)!.recentlyAdded;
+      case CuratedItemSelectionType.recentlyPlayed:
+        return AppLocalizations.of(context)!.recentlyPlayed;
+    }
+  }
+
+  String _toLocalisedSectionTitle(
+      CuratedItemSelectionType curatedItemSelectionType,
+      BuildContext context,
+      BaseItemDtoType baseType) {
+    final loc = AppLocalizations.of(context)!;
+
+    String? getTitle(String track, String album, String artist) {
+      switch (baseType) {
+        case BaseItemDtoType.track:
+          return track;
+        case BaseItemDtoType.album:
+          return album;
+        case BaseItemDtoType.artist:
+          return artist;
+        default:
+          return null;
+      }
+    }
+
+    switch (curatedItemSelectionType) {
+      case CuratedItemSelectionType.mostPlayed:
+        return getTitle(loc.topTracks, loc.topAlbums, loc.topArtists) ?? "Unsupported Type";
+      case CuratedItemSelectionType.favorites:
+        return getTitle(loc.favoriteTracks, loc.favoriteAlbums, loc.favoriteArtists) ?? "Unsupported Type";
+      case CuratedItemSelectionType.random:
+        return getTitle(loc.tracks, loc.albums, loc.artists) ?? "Unsupported Type";
+      case CuratedItemSelectionType.latestReleases:
+        return getTitle(loc.latestTracks, loc.latestAlbums, loc.latestArtists) ?? "Unsupported Type";
+      case CuratedItemSelectionType.recentlyAdded:
+        return getTitle(loc.recentlyAddedTracks, loc.recentlyAddedAlbums, loc.recentlyAddedArtists) ?? "Unsupported Type";
+      case CuratedItemSelectionType.recentlyPlayed:
+        return getTitle(loc.recentlyPlayedTracks, loc.recentlyPlayedAlbums, loc.recentlyPlayedArtists) ?? "Unsupported Type";
+    }
+  }
+
+  SortBy getSortBy() {
+    switch (this) {
+        case CuratedItemSelectionType.mostPlayed:
+          return SortBy.playCount;
+        case CuratedItemSelectionType.favorites:
+          return SortBy.random;
+        case CuratedItemSelectionType.random:
+          return SortBy.random;
+        case CuratedItemSelectionType.latestReleases:
+          return SortBy.premiereDate;
+        case CuratedItemSelectionType.recentlyAdded:
+          return SortBy.dateCreated;
+        case CuratedItemSelectionType.recentlyPlayed:
+          return SortBy.datePlayed;
+    }
+  }
+}
+
+@HiveType(typeId: 96)
+enum GenreItemSections {
+  @HiveField(0)
+  tracks,
+  @HiveField(1)
+  albums,
+  @HiveField(2)
+  artists;
+
+  /// Human-readable version of this enum.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(GenreItemSections genreItemSection) {
+    switch (genreItemSection) {
+      case GenreItemSections.tracks:
+        return "Tracks";
+      case GenreItemSections.albums:
+        return "Albums";
+      case GenreItemSections.artists:
+        return "Artists";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      GenreItemSections genreItemSection, BuildContext context) {
+    switch (genreItemSection) {
+      case GenreItemSections.tracks:
+        return AppLocalizations.of(context)!.tracks;
+      case GenreItemSections.albums:
+        return AppLocalizations.of(context)!.albums;
+      case GenreItemSections.artists:
+        return AppLocalizations.of(context)!.artists;
+    }
+  }
+}
+
+@HiveType(typeId: 97)
+enum ArtistItemSections {
+  @HiveField(0)
+  tracks,
+  @HiveField(1)
+  albums,
+  @HiveField(2)
+  appearsOn;
+
+/// Human-readable version of this enum.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
+
+  String toLocalisedSectionTitle(BuildContext context, CuratedItemSelectionType? curatedItemSelectionType) =>
+      _toLocalisedSectionTitle(this, context, curatedItemSelectionType);
+
+  String _humanReadableName(
+      ArtistItemSections artistItemSection) {
+    switch (artistItemSection) {
+      case ArtistItemSections.tracks:
+        return "Tracks";    
+      case ArtistItemSections.albums:
+        return "Albums";
+      case ArtistItemSections.appearsOn:
+        return "Appears On";
+    }
+  }
+
+  String _humanReadableLocalisedName(
+      ArtistItemSections artistItemSection,
+      BuildContext context) {
+    switch (artistItemSection) {
+      case ArtistItemSections.tracks:
+        return AppLocalizations.of(context)!.tracks;
+      case ArtistItemSections.albums:
+        return AppLocalizations.of(context)!.albums;
+      case ArtistItemSections.appearsOn:
+        return AppLocalizations.of(context)!.appearsOnAlbums;
+    }
+  }
+
+  String _toLocalisedSectionTitle(
+      ArtistItemSections artistItemSection,
+      BuildContext context,
+      CuratedItemSelectionType? curatedItemSelectionType) {
+    final loc = AppLocalizations.of(context)!;
+
+    String? getTitle(String tracks, String albums, String appearsOn) {
+      switch (artistItemSection) {
+        case ArtistItemSections.tracks:
+          return tracks;
+        case ArtistItemSections.albums:
+          return albums;
+        case ArtistItemSections.appearsOn:
+          return appearsOn;
+      }
+    }
+
+    switch (curatedItemSelectionType) {
+      case CuratedItemSelectionType.mostPlayed:
+        return getTitle(loc.topTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+      case CuratedItemSelectionType.favorites:
+        return getTitle(loc.favoriteTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+      case CuratedItemSelectionType.random:
+        return getTitle(loc.randomTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+      case CuratedItemSelectionType.latestReleases:
+        return getTitle(loc.latestTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+      case CuratedItemSelectionType.recentlyAdded:
+        return getTitle(loc.recentlyAddedTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+      case CuratedItemSelectionType.recentlyPlayed:
+        return getTitle(loc.recentlyPlayedTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+      case null:
+        return getTitle(loc.tracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+    }
+  }
+}
+
+@HiveType(typeId: 98)
 class SleepTimer {
   @HiveField(0, defaultValue: DefaultSettings.sleepTimerType)
   SleepTimerType type;
 
-  @HiveField(1, defaultValue: DefaultSettings.sleepTimerDuration)
+  @HiveField(1, defaultValue: DefaultSettings.sleepTimerDurationSeconds)
   int length;
 
   @HiveField(2)
   DateTime? startTime;
 
-  @HiveField(3, defaultValue: DefaultSettings.sleepTimerDuration)
-  int remainingLength = DefaultSettings.sleepTimerDuration;
+  @HiveField(3, defaultValue: DefaultSettings.sleepTimerDurationSeconds)
+  int remainingLength = DefaultSettings.sleepTimerDurationSeconds;
 
   // Used in conjunction with duration timer
   bool finishTrack = false;
@@ -2820,11 +3352,12 @@ class SleepTimer {
 
     return AppLocalizations.of(context)!
         .sleepTimerRemainingTime(minutes, durationPrefix, durationSuffix);
+
   }
+
 }
 
-
-@HiveType(typeId: 81)
+@HiveType(typeId: 99)
 enum SleepTimerType {
   @HiveField(0)
   duration("Duration"), // TODO: Use localizations?

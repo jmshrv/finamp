@@ -59,15 +59,15 @@
   "@downloadMissingImages": {},
   "failedToGetTrackFromDownloadId": "Nepodařilo se získat skladbu z ID stahování",
   "@failedToGetTrackFromDownloadId": {},
-  "editPlaylistNameTooltip": "Upravit název seznamu skladeb",
+  "editPlaylistNameTooltip": "Upravit seznam skladeb",
   "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Upravit název seznamu skladeb",
+  "editPlaylistNameTitle": "Upravit seznam skladeb",
   "@editPlaylistNameTitle": {},
   "addButtonLabel": "Přidat",
   "@addButtonLabel": {},
   "addDownloadLocation": "Přidat umístění stažených",
   "@addDownloadLocation": {},
-  "bitrateSubtitle": "Vyšší datový tok poskytuje vyšší kvalitu zvuku, ale zvýší využití internetu.",
+  "bitrateSubtitle": "Vyšší datový tok poskytuje vyšší kvalitu zvuku, ale zvýší využití internetu. Neplatí pro bezztrátové kodeky, např. FLAC",
   "@bitrateSubtitle": {},
   "appDirectory": "Adresář aplikací",
   "@appDirectory": {},
@@ -188,7 +188,7 @@
   "@communityRating": {},
   "playCount": "Počet přehrání",
   "@playCount": {},
-  "premiereDate": "Datum premiéry",
+  "premiereDate": "Datum vydání",
   "@premiereDate": {},
   "revenue": "Výnos",
   "@revenue": {},
@@ -327,8 +327,8 @@
   "@required": {},
   "updateButtonLabel": "Upravit",
   "@updateButtonLabel": {},
-  "playlistNameUpdated": "Název seznamu skladeb upraven.",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "Název seznamu skladeb upraven.",
+  "@playlistUpdated": {},
   "downloadsDeleted": "Stažené smazány.",
   "@downloadsDeleted": {},
   "addDownloads": "Přidat stahování",
@@ -345,8 +345,6 @@
   "@downloadLocations": {},
   "audioService": "Služba zvuku",
   "@audioService": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin používá pro překódování formát AAC",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscodingSubtitle": "Překóduje hudební streamy na straně serveru.",
   "@enableTranscodingSubtitle": {},
   "selectDirectory": "Vybrat adresář",
@@ -404,16 +402,6 @@
   },
   "bufferDurationSubtitle": "Maximální doba trvání, která má být uložena do vyrovnávací paměti, v sekundách. Vyžaduje restart aplikace.",
   "@bufferDurationSubtitle": {},
-  "startupError": "Při spouštění aplikace se něco pokazilo. Chyba: {error}\n\nNahlaste prosím problém na stránce github.com/UnicornsOnLSD/finamp společně se snímkem obrazovky této stránky. Pokud tento problém přetrvává, můžete vymazat data aplikace pro její obnovení.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "startMix": "Spustit mix",
   "@startMix": {},
   "music": "Hudba",
@@ -544,7 +532,7 @@
   "@aboutThanks": {
     "description": "Thank you message shown in the about screen."
   },
-  "loginFlowWelcomeHeading": "Vítejte v aplikaci",
+  "loginFlowWelcomeHeading": "Vítejte v aplikaci {styledName}",
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
@@ -697,7 +685,7 @@
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
-  "reportQueueToServerSubtitle": "Pokud je tato možnost povolena, odešle Finamp aktuální frontu na server. Tato funkce v současné době není přiliš užitečná a zvyšuje síťový provoz.",
+  "reportQueueToServerSubtitle": "Pokud je tato možnost povolena, odešle Finamp aktuální frontu na server. Tato funkce může zlepšit vzdálené ovládání a umožnit serverové obnovení fronty. Povoleno vždy, pokud je povolena možnost „Přehrát na“.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -723,8 +711,6 @@
   "@playerScreenMinimumCoverPaddingEditorTitle": {
     "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopTracksSubtitle": "Zda zobrazit 5 nejposlouchanějších skladeb na stránce umělce.",
-  "@showArtistsTopTracksSubtitle": {},
   "confirmDownloadStarted": "Stahování zahájeno",
   "@confirmDownloadStarted": {
     "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
@@ -1050,12 +1036,6 @@
     },
     "description": "Localized names of special downloadable collection representing cached images for a certain library."
   },
-  "transcodingStreamingContainerTitle": "Vyberte kontejner překódování",
-  "@transcodingStreamingContainerTitle": {
-    "description": "Title for the dropdown that selects the container format for transcoded streams"
-  },
-  "transcodingStreamingContainerSubtitle": "Vyberte kontejner segmentů k použití při streamování překódovaného zvuku. Skladby, které jsou ve frontě, nebudou ovlivněny.",
-  "@transcodingStreamingContainerSubtitle": {},
   "downloadTranscodeEnableOption": "{option, select, always{Vždy} never{Nikdy} ask{Zeptat} other{{option}} }",
   "@downloadTranscodeEnableOption": {
     "placeholders": {
@@ -1073,7 +1053,7 @@
   "@transcodeHint": {
     "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
   },
-  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} překódováno}}",
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} překódováno}}{location, select, null{} other{ ({location})}}",
   "@downloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1091,7 +1071,7 @@
     },
     "description": "Track info line in downloads screen lists"
   },
-  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ jako {codec} @ {bitrate}}}",
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ jako {codec} @ {bitrate}}}{location, select, null{} other{ ({location})}}",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1226,7 +1206,7 @@
   "@showStopButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
-  "showSeekControlsOnMediaNotificationTitle": "Zobrazit ovládání posunu v oznámení médií",
+  "showSeekControlsOnMediaNotificationTitle": "Umožnit ovládání posunu v oznámení médií",
   "@showSeekControlsOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a seekable progress bar."
   },
@@ -1329,8 +1309,6 @@
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "showArtistsTopTracks": "Zobrazit nejlepší skladby v zobrazení umělce",
-  "@showArtistsTopTracks": {},
   "playerScreen": "Obrazovka přehrávače",
   "@playerScreen": {
     "description": "Name for the expanded player"
@@ -1525,7 +1503,7 @@
   "@fontSizeOptionLarge": {
     "description": "Font size option for things like the lyrics view. Large means a larger font size."
   },
-  "finampCollectionNames": "{itemType, select, favorites{Oblíbené} allPlaylists{Všechny seznamy skladeb} fiveLatestAlbums{5 posledních alb} allPlaylistsMetadata{Metadata seznamu skladeb} other{{itemType}} }",
+  "finampCollectionNames": "{itemType, select, favorites{Oblíbené} allPlaylists{Všechny seznamy skladeb} fiveLatestAlbums{5 posledních alb} allPlaylistsMetadata{Metadata seznamu skladeb} collectionWithLibraryFilter{Sbírka s filtrem knihovny} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
@@ -1675,7 +1653,7 @@
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
-  "showStopButtonOnMediaNotificationSubtitle": "Určuje, zda má oznámení médií mít kromě tlačítka pro pozastavení také tlačítko pro zastavení. To umožňuje zastavit přehrávání bez otevření aplikace.",
+  "showStopButtonOnMediaNotificationSubtitle": "Určuje, zda má oznámení médií mít tlačítko pro zastavení. To umožňuje zastavit přehrávání bez otevření aplikace.",
   "@showStopButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
@@ -1733,7 +1711,7 @@
   "@confirmShuffleToQueue": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
   },
-  "playingFromType": "Přehrávání z {source, select, album{alba} playlist{seznamu skladeb} trackMix{mixu skladeb} artistMix{mixu umělců} albumMix{mixu alb} genreMix{mixu žánrů} favorites{oblíbených} allTracks{všech skladeb} filteredList{skladeb} genre{žánru} artist{umělce} track{skladby} nextUpAlbum{alba v dalších na řadě} nextUpPlaylist{playlistu v dalších na řadě} nextUpArtist{umělce v dalších na řadě} other{}}",
+  "playingFromType": "Přehrávání z {source, select, album{alba} playlist{seznamu skladeb} trackMix{mixu skladeb} artistMix{mixu umělců} albumMix{mixu alb} genreMix{mixu žánrů} favorites{oblíbených} allTracks{všech skladeb} filteredList{skladeb} genre{žánru} artist{umělce} track{skladby} nextUpAlbum{alba v dalších na řadě} nextUpPlaylist{playlistu v dalších na řadě} nextUpArtist{umělce v dalších na řadě} remoteClient{vzdáleného zařízení} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1978,5 +1956,368 @@
   "audioFadeOutDurationSettingTitle": "Délka ztlumování zvuku",
   "@audioFadeOutDurationSettingTitle": {
     "description": "Title for the audio fade-in duration setting."
+  },
+  "swipeRightToLeftAction": "Akce při přejetí doleva",
+  "@swipeRightToLeftAction": {},
+  "swipeLeftToRightAction": "Akce při přejetí doprava",
+  "@swipeLeftToRightAction": {},
+  "swipeLeftToRightActionSubtitle": "Akce vyvolaná při přejetí po skladbě v seznamu zleva doprava.",
+  "@swipeLeftToRightActionSubtitle": {},
+  "swipeRightToLeftActionSubtitle": "Akce vyvolaná při přejetí po skladbě v seznamu zprava doleva.",
+  "@swipeRightToLeftActionSubtitle": {},
+  "transcodingStreamingFormatTitle": "Vyberte formát překódování",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
+  },
+  "transcodingStreamingFormatSubtitle": "Vyberte formát, který se má použít při streamování překódovaného zvuku. Skladby, které jsou již ve frontě, nebudou ovlivněny.",
+  "@transcodingStreamingFormatSubtitle": {},
+  "autoOfflineOptionNetwork": "Místní síť",
+  "@autoOfflineOptionNetwork": {
+    "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
+  },
+  "autoOfflineSettingTitle": "Automatický offline režim",
+  "@autoOfflineSettingTitle": {},
+  "autoOfflineNotification": "Offline režim automaticky {state, select, enabled{zapnut} disabled{vypnut} other{nastavena kvantová pozice}}",
+  "@autoOfflineNotification": {
+    "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
+  },
+  "autoOfflineOptionOff": "Zakázáno",
+  "@autoOfflineOptionOff": {
+    "description": "This is shown when the autoOffline feature is turned off and has no effects"
+  },
+  "autoOfflineOptionDisconnected": "Odpojeno",
+  "@autoOfflineOptionDisconnected": {
+    "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
+  },
+  "autoOfflineSettingDescription": "Automaticky povolit offline režim\nZakázáno: offline režim nebude automaticky zapnut. Může šetřit baterii.\nMístní síť: zapnout offline režim, když nejste připojeni k Wi-Fi nebo ethernetu.\nOdpojeno: zapnout offline režim, když nejste připojeni k ničemu.\nOffline režim můžete vždy ručně zapnout. Pozastavíte tím automatické akce, dokud režim opět nevypnete",
+  "@autoOfflineSettingDescription": {
+    "description": "Setting description. Make sure the Mode names match the translations."
+  },
+  "appearsOnAlbums": "Také na",
+  "@appearsOnAlbums": {},
+  "albumArtists": "Umělci alba",
+  "@albumArtists": {},
+  "performingArtists": "Účinkující umělci",
+  "@performingArtists": {},
+  "libraryDownloads": "Stahování z knihovny",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "desktopShuffleWarning": "Změna náhodného přehrávání není na počítačích v současné době k dispozici.",
+  "@desktopShuffleWarning": {
+    "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
+  },
+  "playbackReporting": "Hlášení přehrávání",
+  "@playbackReporting": {},
+  "currentVolumeFeatureText": "Hlasitost {volume} %",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
+      }
+    }
+  },
+  "playOnStaleDelay": "Vypršení relace „Přehrát na“",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "enablePlayonTitle": "Povolit podporu „Přehrát na“",
+  "@enablePlayonTitle": {
+    "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "enablePlayonSubtitle": "Povolí funkci „Přehrát na“ služby Jellyfin (vzdálené ovládání aplikace Finamp z jiného klienta). Zakažte, pokud vaše reverzní proxy nebo server nepodporuje websockety.",
+  "@enablePlayonSubtitle": {
+    "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "playOnReconnectionDelaySubtitle": "Ovládá zpoždění mezi pokusy o opětovné připojení k websocketu PlayOn po jeho odpojení (v sekundách). Nižší zpoždění zvýší využití dat.",
+  "@playOnReconnectionDelaySubtitle": {
+    "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "playbackReportingSettingsTitle": "Hlášení přehrávání a „Přehrát na“",
+  "@playbackReportingSettingsTitle": {
+    "description": "Title for the playback reporting settings screen"
+  },
+  "lyricsScreenButtonTitle": "Text",
+  "@lyricsScreenButtonTitle": {
+    "description": "Label for the button for opening the lyrics screen"
+  },
+  "outputMenuButtonTitle": "Výstup",
+  "@outputMenuButtonTitle": {
+    "description": "Button title for opening the output menu/panel"
+  },
+  "outputMenuTitle": "Změnit výstup",
+  "@outputMenuTitle": {
+    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  },
+  "outputMenuVolumeSectionTitle": "Hlasitost",
+  "@outputMenuVolumeSectionTitle": {
+    "description": "Title for the volume section in the output menu"
+  },
+  "playOnStaleDelaySubtitle": "Jak dlouho po obdržení příkazu bude relace „Přehrát na“ považována za aktivní. Když je považována za aktivní, je přehrávání hlášeno častěji, což může vést ke zvýšené spotřebě dat.",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "outputMenuOpenConnectionSettingsButtonTitle": "Připojit se k zařízení",
+  "@outputMenuOpenConnectionSettingsButtonTitle": {
+    "description": "Button title for connecting to a device from the output menu"
+  },
+  "playOnReconnectionDelay": "Zpoždění opětovného spojení relace „Přehrát na“",
+  "@playOnReconnectionDelay": {
+    "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "outputMenuDevicesSectionTitle": "Dostupná zařízení",
+  "@outputMenuDevicesSectionTitle": {
+    "description": "Title for the available devices section in the output menu"
+  },
+  "deviceType": "{type, select, speaker{Reproduktor zařízení} tv{TV} bluetooth{Bluetooth} other{Neznámé}}",
+  "@deviceType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    },
+    "description": "Label for the type of device in the output menu"
+  },
+  "startupErrorTitle": "Při spouštění aplikace se něco nepovedlo!\nZa to se omlouváme…",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorCallToAction": "Vytvořte prosím problém na github.com/jmshrv/finamp i s protokoly(!) (použijte tlačítko níže) a snímkem této stránky, abychom chybu mohli opravit co nejrychleji to bude možné.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "startupErrorWorkaround": "Jako řešení můžete vymazat data aplikace a resetovat ji. Mějte na paměti, že v tomto případě budou odstraněna všechna vaše nastavení a stažené soubory.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
+  },
+  "exportLogs": "Uložit protokoly",
+  "@exportLogs": {},
+  "showFavoriteButtonOnMediaNotificationTitle": "Zobrazit tlačítko Oblíbené v oznámení médií",
+  "@showFavoriteButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a favorite button."
+  },
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Určuje, zda má oznámení médií mít tlačítko Oblíbené. To umožňuje označit aktuální skladbu jako oblíbenou bez otevření aplikace.",
+  "@showFavoriteButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a favorite button."
+  },
+  "showShuffleButtonOnMediaNotificationSubtitle": "Určuje, zda má oznámení médií mít tlačítko pro náhodné přehrávání. To umožňuje zamíchat / zrušit zamíchání přehrávání bez otevření aplikace.",
+  "@showShuffleButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
+  },
+  "showShuffleButtonOnMediaNotificationTitle": "Zobrazit tlačítko náhodného přehrávání v oznámení médií",
+  "@showShuffleButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a shuffle button."
+  },
+  "networkSettingsTitle": "Síť",
+  "@networkSettingsTitle": {
+    "description": "Title for the network settings screen"
+  },
+  "downloadPaused": "Stahování pozastaveno, protože zařízení není připojeno k síti Wi-Fi",
+  "@downloadPaused": {
+    "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
+  },
+  "preferHomeNetworkActiveAddressInfoText": "Aktivní adresa",
+  "@preferHomeNetworkActiveAddressInfoText": {
+    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+  },
+  "preferHomeNetworkTargetAddressLocalSettingTitle": "Adresa domácí sítě",
+  "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
+  "preferHomeNetworkTargetAddressLocalSettingDescription": "Cílová adresa serveru Jellyfin uvnitř vaší domácí sítě",
+  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
+  "preferHomeNetworkEnableSwitchTitle": "Upřednostňovat domácí síť",
+  "@preferHomeNetworkEnableSwitchTitle": {},
+  "preferHomeNetworkEnableSwitchDescription": "Zda používat jinou adresu, když jste doma",
+  "@preferHomeNetworkEnableSwitchDescription": {},
+  "preferHomeNetworkPublicAddressSettingTitle": "Veřejná adresa",
+  "@preferHomeNetworkPublicAddressSettingTitle": {},
+  "preferHomeNetworkPublicAddressSettingDescription": "Primární adresa používaná k připojení k vašemu serveru Jellyfin",
+  "@preferHomeNetworkPublicAddressSettingDescription": {},
+  "preferHomeNetworkInfoBox": "Tato funkce vyžaduje oprávnění k poloze (a zapnuté polohové služby) pro přečtení názvu sítě.",
+  "@preferHomeNetworkInfoBox": {
+    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
+  },
+  "missingSchemaError": "Adresa musí začínat textem http(s)://",
+  "@missingSchemaError": {
+    "description": "Snackbar message when the user changes their home/public address but it doesn't start with http"
+  },
+  "testConnectionButtonLabel": "Otestovat obě spojení",
+  "@testConnectionButtonLabel": {
+    "description": "Button to test the public and local url inside the network settings tab"
+  },
+  "autoReloadQueueTitle": "Automaticky znovu načíst frontu",
+  "@autoReloadQueueTitle": {
+    "description": "Title for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "autoReloadQueueSubtitle": "Automaticky znovu načíst frontu při změně zdroje (např. povolený offline režim nebo přepnutí adresy serveru). Pokud je zakázáno, Finamp se vás nejprve zeptá.",
+  "@autoReloadQueueSubtitle": {
+    "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "autoReloadPrompt": "Znovu načíst frontu pro použití nového {type, select, network{nastavení sítě} transcoding{nastavení kódování} other{nastavení}}",
+  "@autoReloadPrompt": {
+    "description": "Prompt shown when the queue needs to be reloaded after changing network settings",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks, plural, =1{1 skladba} few{{amountUndownloadedTracks} skladby} other{{amountUndownloadedTracks} skladeb}} bude odstraněno z fronty, protože nejsou staženy.",
+  "@autoReloadPromptMissingTracks": {
+    "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
+    "placeholders": {
+      "amountUndownloadedTracks": {
+        "type": "int"
+      }
+    }
+  },
+  "autoReloadPromptReloadButton": "Znovu načíst",
+  "@autoReloadPromptReloadButton": {
+    "description": "Button title for reloading the queue after network settings change"
+  },
+  "ping": "{status, select, true_true{Obě dosažitelná} true_false{NEPODAŘILO se dosáhnout místní adresy} false_true{NEPODAŘILO se dosáhnout veřejné adresy} false_false{NEPODAŘILO se dosáhnout obou} other{neznámé}}",
+  "@ping": {
+    "description": "Gets shown in the Snackbar when using the Test Connection Button inside the Network Settings. true means reachable, false means unreachable. the first value is for the public address, the second value is fot the home address."
+  },
+  "stopAndClearQueue": "Zastavit přehrávání a vymazat frontu",
+  "@stopAndClearQueue": {
+    "description": "Label for a button that stops playback and removes all tracks from the queue."
+  },
+  "allLibraries": "Všechny knihovny",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
+  "noGenres": "Žádné žánry",
+  "@noGenres": {
+    "description": "Gets shown when there are no genres available for an album or artist"
+  },
+  "onlineMode": "Režim online",
+  "@onlineMode": {},
+  "autoSwitchItemCurationTypeTitle": "Automaticky přepnout typ kurátorství položek",
+  "@autoSwitchItemCurationTypeTitle": {},
+  "showArtistsTracksSection": "Zobrazit sekci skladeb",
+  "@showArtistsTracksSection": {},
+  "showArtistsTracksSectionSubtitle": "Zda zobrazit sekci s až pěti skladbami. Můžete si vybírat mezi nejpřehrávanějšími, oblíbenými,náhodnými, nejnovějšími vydáními a nedávno přidanými skladbami.",
+  "@showArtistsTracksSectionSubtitle": {},
+  "randomAlbums": "Alba (náhodný výběr)",
+  "@randomAlbums": {},
+  "randomArtists": "Umělci (náhodný výběr)",
+  "@randomArtists": {},
+  "mostPlayed": "Nejpřehrávanější",
+  "@mostPlayed": {},
+  "favorites": "Oblíbené",
+  "@favorites": {},
+  "randomFavoritesFirst": "Náhodné (nejdříve oblíbené)",
+  "@randomFavoritesFirst": {},
+  "recentlyAdded": "Nedávno přidané",
+  "@recentlyAdded": {},
+  "latestReleases": "Nejnovější vydání",
+  "@latestReleases": {},
+  "itemSectionsOrder": "Pořadí sekcí položek",
+  "@itemSectionsOrder": {
+    "description": "Label for the setting that controls the order of item sections on the screens."
+  },
+  "genreItemSectionFilterChipOrderSubtitle": "Ovládá pořadí dostupných filtrů u sekcí položek.",
+  "@genreItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections filter chips."
+  },
+  "artistItemSectionFilterChipOrderSubtitle": "Ovládá pořadí dostupných filtrů u sekce skladeb.",
+  "@artistItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of the tracks sections filter chips."
+  },
+  "genreListsInheritSorting": "Kompletní dědění řazení seznamů",
+  "@genreListsInheritSorting": {
+    "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "genreListsInheritSortingSubtitle": "Seznamy „Zobrazit vše“ budou dědit řazení a filtrování z obrazovky Žánry. Pokud je zakázáno, budou místo toho použita nastavení z odpovídající karty knihovny. Klepnutím na Počty v horní části obrazovky Žánry vždy otevřete kompletní seznam s nastavením řazení z karty knihovny.",
+  "@genreListsInheritSortingSubtitle": {
+    "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "curatedItemsFavoritesDisabledTooltip": "Zatím nemáte žádné oblíbené.",
+  "@curatedItemsFavoritesDisabledTooltip": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet."
+  },
+  "seeAll": "Zobrazit vše",
+  "@seeAll": {
+    "description": ""
+  },
+  "artistScreen": "Obrazovka umělce",
+  "@artistScreen": {
+    "description": "Name for the view/screen that shows artists"
+  },
+  "artistGenreChipsApplyFilterTitle": "Použít filtr namísto otevření žánru",
+  "@artistGenreChipsApplyFilterTitle": {},
+  "curatedItemsMostPlayedDisabledTooltip": "Zatím jste neposlouchali žádné skladby.",
+  "@curatedItemsMostPlayedDisabledTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Online Mode when not yet listened to any tracks."
+  },
+  "latestArtists": "Nejnovější umělci",
+  "@latestArtists": {},
+  "artistItemSectionFilterChipOrderTitle": "Pořadí filtrů sekce skladeb",
+  "@artistItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of the tracks sections filter chips."
+  },
+  "curatedItemsMostPlayedOfflineTooltip": "Nedostupné v režimu offline.",
+  "@curatedItemsMostPlayedOfflineTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Offline Mode."
+  },
+  "latestAlbums": "Nejnovější alba",
+  "@latestAlbums": {},
+  "favoriteAlbums": "Oblíbená alba",
+  "@favoriteAlbums": {},
+  "newAlbums": "Nová alba",
+  "@newAlbums": {},
+  "genreItemSectionFilterChipOrderTitle": "Pořadí filtrů sekcí položek",
+  "@genreItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of item sections filter chips."
+  },
+  "topAlbums": "Nejlepší alba",
+  "@topAlbums": {},
+  "newArtists": "Noví umělci",
+  "@newArtists": {},
+  "genreScreen": "Obrazovka žánrů",
+  "@genreScreen": {
+    "description": "Name for the view/screen that shows genres"
+  },
+  "genreFilterArtistScreens": "Filtrovat obrazovky umělců",
+  "@genreFilterArtistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "favoriteArtists": "Oblíbení umělci",
+  "@favoriteArtists": {},
+  "genreFilterArtistScreensSubtitle": "Obrazovky umělců (přistupované přes žánry) zobrazí pouze skladby a alba, která odpovídají žánru, který si aktuálně procházíte. (Vždy je možné ručně odebrat filtr žánrů pro zobrazení všech skladeb a alb.)",
+  "@genreFilterArtistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "artistGenreChipsApplyFilterSubtitle": "Klepnutím na žánr vyfiltrujete umělce podle daného žánru. Pro otevření žánru můžete stále dlouze podržet na položce.",
+  "@artistGenreChipsApplyFilterSubtitle": {},
+  "topArtists": "Nejlepší umělci",
+  "@topArtists": {},
+  "autoSwitchItemCurationTypeSubtitle": "Sekce položek na obrazovkách umělců a žánrů se automaticky přepnou na jiný typ kurátorství, pokud nejsou dostupné žádné položky (např. žádné oblíbené u konkrétního umělce).",
+  "@autoSwitchItemCurationTypeSubtitle": {},
+  "newTracks": "Nové skladby",
+  "@newTracks": {},
+  "latestTracks": "Nejnovější skladby",
+  "@latestTracks": {},
+  "randomTracks": "Skladby (náhodný výběr)",
+  "@randomTracks": {},
+  "favoriteTracks": "Oblíbené skladby",
+  "@favoriteTracks": {},
+  "itemSectionsOrderSubtitle": "Ovládá pořadí sekcí položek.",
+  "@itemSectionsOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections on the screens."
+  },
+  "noReleaseDate": "Žádné datum vydání",
+  "@noReleaseDate": {
+    "description": "Placeholder text if an album has no release date set."
+  },
+  "artistGenreChipsApplyFilterPrompt": "Filtr žánru použit",
+  "@artistGenreChipsApplyFilterPrompt": {
+    "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "artistGenreChipsApplyFilterPromptButton": "Otevřít žánr",
+  "@artistGenreChipsApplyFilterPromptButton": {
+    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
   }
 }

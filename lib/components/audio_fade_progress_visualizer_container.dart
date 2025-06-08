@@ -56,13 +56,13 @@ class _AudioFadeProgressVisualizerContainerState
       if (_isVisible && state.fadeDirection != _state.fadeDirection) {
         if (state.fadeDirection == FadeDirection.fadeOut) {
           if (_state.fadeDirection == FadeDirection.fadeIn) {
-            startFadeOut(from: state.fadeVolumePercent);
+            startFadeOut(from: state.fadeVolume);
           } else {
             startFadeOut();
           }
         } else if (state.fadeDirection == FadeDirection.fadeIn) {
           if (_state.fadeDirection == FadeDirection.fadeOut) {
-            startFadeIn(from: state.fadeVolumePercent);
+            startFadeIn(from: state.fadeVolume);
           } else {
             startFadeIn();
           }
@@ -81,9 +81,9 @@ class _AudioFadeProgressVisualizerContainerState
 
     if (_state.fadeDirection != FadeDirection.none) {
       if (_state.fadeDirection == FadeDirection.fadeOut) {
-        startFadeOut(from: _state.fadeVolumePercent);
+        startFadeOut(from: _state.fadeVolume);
       } else if (_state.fadeDirection == FadeDirection.fadeIn) {
-        startFadeIn(from: _state.fadeVolumePercent);
+        startFadeIn(from: _state.fadeVolume);
       }
     }
   }
@@ -133,8 +133,9 @@ class _AudioFadeProgressVisualizerContainerState
                 height: widget.height,
                 decoration: BoxDecoration(
                   borderRadius: widget.borderRadius,
-                  border: _controller.status == AnimationStatus.forward ||
-                          _controller.status == AnimationStatus.reverse
+                  border: (_controller.status == AnimationStatus.forward ||
+                              _controller.status == AnimationStatus.reverse) &&
+                          !MediaQuery.of(context).disableAnimations
                       ? ProgressBorder.all(
                           color: IconTheme.of(context).color!.withAlpha(128),
                           width: 4,

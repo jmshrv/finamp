@@ -1,16 +1,14 @@
-import 'package:finamp/components/InteractionSettingsScreen/auto_offline_selector.dart';
+import 'package:finamp/components/InteractionSettingsScreen/item_swipe_action_dropdown_list_tile.dart';
 import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_dropdown_list_tile.dart';
 import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_while_charging_selector.dart';
-import 'package:finamp/components/InteractionSettingsScreen/item_swipe_action_dropdown_list_tile.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../components/InteractionSettingsScreen/FastScrollSelector.dart';
 import '../components/InteractionSettingsScreen/disable_gestures.dart';
 import '../components/InteractionSettingsScreen/disable_vibration.dart';
-
 
 class InteractionSettingsScreen extends StatefulWidget {
   const InteractionSettingsScreen({super.key});
@@ -33,16 +31,16 @@ class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
       ),
       body: ListView(
         children: const [
-          ItemSwipeActionDropdownListTile(DismissDirection.startToEnd),
-          ItemSwipeActionDropdownListTile(DismissDirection.endToStart),
+          ItemSwipeLeftToRightActionDropdownListTile(),
+          ItemSwipeRightToLeftActionDropdownListTile(),
           StartInstantMixForIndividualTracksSwitch(),
+          ApplyFilterOnGenreChipTapSwitch(),
           FastScrollSelector(),
           ShowDeleteFromServerOptionToggle(),
           DisableGestureSelector(),
           DisableVibrationSelector(),
           KeepScreenOnDropdownListTile(),
-          KeepScreenOnWhilePluggedInSelector(),
-          AutoOfflineSelector(),
+          KeepScreenOnWhilePluggedInSelector()
         ],
       ),
     );
@@ -62,6 +60,20 @@ class StartInstantMixForIndividualTracksSwitch extends ConsumerWidget {
       value:
           ref.watch(finampSettingsProvider.startInstantMixForIndividualTracks),
       onChanged: FinampSetters.setStartInstantMixForIndividualTracks,
+    );
+  }
+}
+
+class ApplyFilterOnGenreChipTapSwitch extends ConsumerWidget {
+  const ApplyFilterOnGenreChipTapSwitch({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.applyFilterOnGenreChipTapTitle),
+      subtitle: Text(AppLocalizations.of(context)!.applyFilterOnGenreChipTapSubtitle),
+      value: ref.watch(finampSettingsProvider.applyFilterOnGenreChipTap),
+      onChanged: FinampSetters.setApplyFilterOnGenreChipTap,
     );
   }
 }

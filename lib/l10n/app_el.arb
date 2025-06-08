@@ -1,14 +1,4 @@
 {
-  "startupError": "Ωχ, κάτι δεν πήγε καλά κατά την έναρξη της εφαρμογής. Ο αριθμός σφάλματος είναι:{error}\nΔημιούργησε ένα issue στο\ngithub.com/UnicornsOnLSD/finamp μαζί με ένα στιγμιότυπο οθόνης από αυτήν την σελίδα. Εάν το πρόβλημα παραμένει μπορείς να διαγράψεις τα δεδομένα της εφαρμογής με σκοπό την επαναφορά της.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "internalExternalIpExplanation": "Αν θέλεις να έχεις πρόσβαση στον jellyfin διακομιστή σου εξ-αποστασεως, πρέπει να χρησιμοποιήσεις την εξωτερική Διεύθυνση IP.\n\nΑν ο διακομιστής βρίσκεται σε πύλη HTTP(80/443), δεν είναι απαραίτητος ο ορισμός πύλης. Αυτό είναι πιθανόν εφόσον ο διακομιστής σου βρίσκεται πίσω από reverse proxy.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
@@ -133,8 +123,8 @@
   },
   "failedToGetTrackFromDownloadId": "Απέτυχε η λήψη τραγουδιού από το download ID",
   "@failedToGetTrackFromDownloadId": {},
-  "playlistNameUpdated": "Ανανεώθηκε το όνομα λίστας αναπαραγωγής.",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "Ανανεώθηκε το όνομα λίστας αναπαραγωγής.",
+  "@playlistUpdated": {},
   "runtime": "Διάρκεια",
   "@runtime": {},
   "stackTrace": "Stack Trace",
@@ -234,8 +224,6 @@
   "@applicationLegalese": {},
   "downloadLocations": "Τοποθεσίες λήψεων",
   "@downloadLocations": {},
-  "jellyfinUsesAACForTranscoding": "Το Jellyfin χρησιμοποιεί AAC για την μετακωδικοποίηση",
-  "@jellyfinUsesAACForTranscoding": {},
   "enableTranscoding": "Ενεργοποίηση μετακωδικοποίησης",
   "@enableTranscoding": {},
   "bitrate": "Bitrate",

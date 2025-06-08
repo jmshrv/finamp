@@ -71,7 +71,7 @@ PODS:
   - flutter_to_airplay (0.0.1):
     - Flutter
     - Mux-Stats-AVPlayer
-  - flutter_vibrate (0.0.1):
+  - gaimon (0.0.1):
     - Flutter
   - isar_flutter_libs (1.0.0):
     - Flutter
@@ -114,7 +114,7 @@ DEPENDENCIES:
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `Flutter`)
   - flutter_to_airplay (from `.symlinks/plugins/flutter_to_airplay/ios`)
-  - flutter_vibrate (from `.symlinks/plugins/flutter_vibrate/ios`)
+  - gaimon (from `.symlinks/plugins/gaimon/ios`)
   - isar_flutter_libs (from `.symlinks/plugins/isar_flutter_libs/ios`)
   - just_audio (from `.symlinks/plugins/just_audio/darwin`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
@@ -157,8 +157,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_to_airplay:
     :path: ".symlinks/plugins/flutter_to_airplay/ios"
-  flutter_vibrate:
-    :path: ".symlinks/plugins/flutter_vibrate/ios"
+  gaimon:
+    :path: ".symlinks/plugins/gaimon/ios"
   isar_flutter_libs:
     :path: ".symlinks/plugins/isar_flutter_libs/ios"
   just_audio:
@@ -179,34 +179,34 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock_plus/ios"
 
 SPEC CHECKSUMS:
-  app_set_id: 7f0af7ac377647e0517efd55896a2c152a0569f4
-  audio_service: aa99a6ba2ae7565996015322b0bb024e1d25c6fd
-  audio_session: 9bb7f6c970f21241b19f5a3658097ae459681ba0
-  background_downloader: b42a56120f5348bff70e74222f0e9e6f7f1a1537
-  battery_plus: b42253f6d2dde71712f8c36fef456d99121c5977
-  connectivity_plus: cb623214f4e1f6ef8fe7403d580fdad517d2f7dd
+  app_set_id: e0349a05a0ecc6d5c937d42869aa941f90801c9c
+  audio_service: cab6c1a0eaf01b5a35b567e11fa67d3cc1956910
+  audio_session: 19e9480dbdd4e5f6c4543826b2e8b0e4ab6145fe
+  background_downloader: 3ca0e156ad83a9fc1c8300f5f7c38e94e2d0bf51
+  battery_plus: 34f72fa2afeeea83bbae306c72a25828d3ec727a
+  connectivity_plus: 2a701ffec2c0ae28a48cf7540e279787e77c447d
   CropViewController: 58fb440f30dac788b129d2a1f24cffdcb102669c
-  device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
+  device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
   DKCamera: a902b66921fca14b7a75266feb8c7568aa7caa71
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
-  file_picker: a0560bc09d61de87f12d246fc47d2119e6ef37be
+  file_picker: b159e0c068aef54932bb15dc9fd1571818edaf49
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_to_airplay: 06ecea4c4458e28e1bfeff6741de84b79aa28821
-  flutter_vibrate: 207bbbeb62dd5638b479846c8e46168d7229f14a
-  isar_flutter_libs: 9fc2cfb928c539e1b76c481ba5d143d556d94920
-  just_audio: 4e391f57b79cad2b0674030a00453ca5ce817eed
+  flutter_to_airplay: 3194fe6e4ca6ba1d9529c3c4194c32b9610d990f
+  gaimon: 266fec2cd27726df54a6694c14fc9e3f2a415c33
+  isar_flutter_libs: b69f437aeab9c521821c3f376198c4371fa21073
+  just_audio: a42c63806f16995daf5b219ae1d679deb76e6a79
   Mux-Stats-AVPlayer: 1b1a877e5d8b57ca22e0717fa0a4eefef7529c40
   Mux-Stats-Core: 53902e414f077b2239ea10d909a4cf072c0d4d5c
-  package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
-  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
-  permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
+  package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   SDWebImage: c0de394d7cf7f9838aed1fd6bb6037654a4572e4
-  share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
-  sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
+  share_plus: 8b6f8b3447e494cca5317c8c3073de39b3600d1f
+  sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
-  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
-  wakelock_plus: 04623e3f525556020ebd4034310f20fe7fda8b49
+  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
+  wakelock_plus: 373cfe59b235a6dd5837d0fb88791d2f13a90d56
 
 PODFILE CHECKSUM: 047c0919aa274fcdf0ce568f883473a4587eda02
 

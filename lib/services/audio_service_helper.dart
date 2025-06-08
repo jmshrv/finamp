@@ -19,7 +19,10 @@ class AudioServiceHelper {
   final audioServiceHelperLogger = Logger("AudioServiceHelper");
 
   /// Shuffles every track in the user's current view.
-  Future<void> shuffleAll(bool onlyShowFavourites) async {
+  Future<void> shuffleAll({
+    required bool onlyShowFavorites,
+    BaseItemDto? genreFilter,
+  }) async {
     List<jellyfin_models.BaseItemDto>? items;
 
     if (FinampSettingsHelper.finampSettings.isOffline) {
@@ -29,6 +32,8 @@ class AudioServiceHelper {
       // way.
       items = (await _isarDownloader.getAllTracks(
               viewFilter: _finampUserHelper.currentUser?.currentView?.id,
+              genreFilter: genreFilter,
+              onlyFavorites: onlyShowFavorites,
               nullableViewFilters: FinampSettingsHelper
                   .finampSettings.showDownloadsWithUnknownLibrary))
           .map((e) => e.baseItem!)
@@ -44,26 +49,39 @@ class AudioServiceHelper {
       items = await _jellyfinApiHelper.getItems(
         parentItem: _finampUserHelper.currentUser!.currentView,
         includeItemTypes: "Audio",
-        filters: onlyShowFavourites ? "IsFavorite" : null,
+        filters: onlyShowFavorites ? "IsFavorite" : null,
         limit: FinampSettingsHelper.finampSettings.trackShuffleItemCount,
         sortBy: "Random",
+        genreFilter: genreFilter
       );
     }
 
     if (items != null) {
-      await _queueService.startPlayback(
-        items: items,
-        source: QueueItemSource.rawId(
-          type: onlyShowFavourites
+      QueueItemSource source = (genreFilter != null)
+        ? QueueItemSource(
+          type: QueueItemSourceType.genre,
+          name: QueueItemSourceName(
+              type: QueueItemSourceNameType.preTranslated,
+              pretranslatedName: genreFilter.name
+          ),
+          id: genreFilter.id,
+          item: genreFilter,
+        )
+        : QueueItemSource.rawId(
+          type: onlyShowFavorites
               ? QueueItemSourceType.favorites
               : QueueItemSourceType.allTracks,
           name: QueueItemSourceName(
-            type: onlyShowFavourites
+            type: onlyShowFavorites
                 ? QueueItemSourceNameType.yourLikes
                 : QueueItemSourceNameType.shuffleAll,
           ),
           id: "shuffleAll",
-        ),
+        );
+
+      await _queueService.startPlayback(
+        items: items,
+        source: source,
         order: FinampPlaybackOrder.shuffled,
       );
     }

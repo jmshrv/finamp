@@ -7,15 +7,17 @@
   "@finampTagline": {
     "description": "Tagline / short description for the app"
   },
-  "startupError": "Something went wrong during app startup. The error was: {error}\n\nPlease create an issue on github.com/UnicornsOnLSD/finamp with a screenshot of this page. If this problem persists you can clear your app data to reset the app.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
+  "startupErrorTitle": "Something went wrong during app startup!\nSorry about that...",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorCallToAction": "Please create an issue on github.com/jmshrv/finamp with the logs(!) (use the button below) and a screenshot of this page, so that we can fix it as quickly as possible.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "startupErrorWorkaround": "As a workaround you could clear your app data to reset the app. Keep in mind that in this case all your settings and downloads will be deleted.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
   },
   "about": "About Finamp",
   "@about": {
@@ -41,9 +43,15 @@
   "@aboutThanks": {
     "description": "Thank you message shown in the about screen."
   },
-  "loginFlowWelcomeHeading": "Welcome to",
+  "loginFlowWelcomeHeading": "Welcome to {styledName}",
   "@loginFlowWelcomeHeading": {
-    "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
+    "description": "Greeting shown on the login screen.",
+    "placeholders": {
+      "styledName": {
+        "type": "String",
+        "example": "Finamp"
+      }
+    }
   },
   "loginFlowSlogan": "Your music, the way you want it.",
   "@loginFlowSlogan": {
@@ -175,6 +183,10 @@
   "@couldNotFindLibraries": {
     "description": "Error message when the user does not have any libraries"
   },
+  "allLibraries": "All Libraries",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
   "unknownName": "Unknown Name",
   "@unknownName": {},
   "tracks": "Tracks",
@@ -187,6 +199,10 @@
   "@artists": {},
   "genres": "Genres",
   "@genres": {},
+  "noGenres": "No Genres",
+  "@noGenres": {
+    "description": "Gets shown when there are no genres available for an album or artist"
+  },
   "playlists": "Playlists",
   "@playlists": {},
   "startMix": "Start Mix",
@@ -207,8 +223,10 @@
   "@music": {},
   "clear": "Clear",
   "@clear": {},
-  "favourites": "Favourites",
-  "@favourites": {},
+  "favorite": "Favorite",
+  "@favorite": {},
+  "favorites": "Favorites",
+  "@favorites": {},
   "shuffleAll": "Shuffle all",
   "@shuffleAll": {},
   "downloads": "Downloads",
@@ -217,6 +235,8 @@
   "@settings": {},
   "offlineMode": "Offline Mode",
   "@offlineMode": {},
+  "onlineMode": "Online Mode",
+  "@onlineMode": {},
   "sortOrder": "Sort order",
   "@sortOrder": {},
   "sortBy": "Sort by",
@@ -233,6 +253,8 @@
   "@performingArtists": {},
   "artist": "Artist",
   "@artist": {},
+  "performingArtist": "Performing Artist",
+  "@performingArtist": {},
   "budget": "Budget",
   "@budget": {},
   "communityRating": "Community Rating",
@@ -241,11 +263,11 @@
   "@criticRating": {},
   "dateAdded": "Date Added",
   "@dateAdded": {},
-  "datePlayed": "Date Played",
+  "datePlayed": "Date Last Played",
   "@datePlayed": {},
   "playCount": "Play Count",
   "@playCount": {},
-  "premiereDate": "Premiere Date",
+  "premiereDate": "Release Date",
   "@premiereDate": {},
   "productionYear": "Production Year",
   "@productionYear": {},
@@ -255,8 +277,26 @@
   "@random": {},
   "revenue": "Revenue",
   "@revenue": {},
-  "runtime": "Runtime",
-  "@runtime": {},
+  "duration": "Duration",
+  "@duration": {},
+  "defaultOrder": "Default Order",
+  "@defaultOrder": {
+    "description": "Default sorting order for playlists (server order)"
+  },
+  "formattedRelativeTime": "{type, select, just_now{just now} minutes{{value} min ago} hours{{value} h ago} yesterday{yesterday} days{{value, plural, =1{1 day ago} other{{value} days ago}}} other{value}}",
+  "@formattedRelativeTime": {
+    "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
+    "placeholders": {
+      "type": {
+        "type": "String",
+        "description": "The category of time passed: one of 'just_now', 'minutes', 'hours', 'yesterday', or 'days'."
+      },
+      "value": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
   "syncDownloadedPlaylists": "Sync downloaded playlists",
   "@syncDownloadedPlaylists": {},
   "downloadMissingImages": "Download missing images",
@@ -360,6 +400,10 @@
   "@specialDownloads": {
     "description": "Title for the special downloads section on the downloads screen."
   },
+  "libraryDownloads": "Library downloads",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
   "noItemsDownloaded": "No items downloaded.",
   "@noItemsDownloaded": {
     "description": "Shown on the downloads screen for sections without any downloaded items."
@@ -405,18 +449,16 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Edit playlist name",
+  "editPlaylistNameTooltip": "Edit playlist",
   "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Edit Playlist Name",
+  "editPlaylistNameTitle": "Edit Playlist",
   "@editPlaylistNameTitle": {},
   "required": "Required",
   "@required": {},
   "updateButtonLabel": "Update",
   "@updateButtonLabel": {},
-  "playlistNameUpdated": "Playlist name updated.",
-  "@playlistNameUpdated": {},
-  "favourite": "Favourite",
-  "@favourite": {},
+  "playlistUpdated": "Playlist updated.",
+  "@playlistUpdated": {},
   "downloadsDeleted": "Downloads deleted.",
   "@downloadsDeleted": {},
   "addDownloads": "Add Downloads",
@@ -433,6 +475,8 @@
   "@addButtonLabel": {},
   "shareLogs": "Share logs",
   "@shareLogs": {},
+  "exportLogs": "Save logs",
+  "@exportLogs": {},
   "logsCopied": "Logs copied.",
   "@logsCopied": {},
   "message": "Message",
@@ -454,10 +498,14 @@
   "@downloadLocations": {},
   "audioService": "Audio Service",
   "@audioService": {},
+  "playbackReporting": "Playback Reporting",
+  "@playbackReporting": {},
   "interactions": "Interactions",
   "@interactions": {},
   "layoutAndTheme": "Layout & Theme",
   "@layoutAndTheme": {},
+  "notAvailable": "Not available",
+  "@notAvailable": {},
   "notAvailableInOfflineMode": "Not available in offline mode",
   "@notAvailableInOfflineMode": {},
   "logOut": "Log Out",
@@ -604,10 +652,14 @@
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
   "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Whether to show track artists on the album screen if not differing from album artists.",
   "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "showArtistsTopTracks": "Show top tracks in artist view",
-  "@showArtistsTopTracks": {},
-  "showArtistsTopTracksSubtitle": "Whether to show the top 5 most listened to tracks of an artist.",
-  "@showArtistsTopTracksSubtitle": {},
+  "autoSwitchItemCurationTypeTitle": "Auto-Switch Item Curation Type",
+  "@autoSwitchItemCurationTypeTitle": {},
+  "autoSwitchItemCurationTypeSubtitle": "When enabled, Item Sections on the Artist and Genre Screens automatically switch to a different curation type if no items are available (e.g., no favorites for a specific artist).",
+  "@autoSwitchItemCurationTypeSubtitle": {},
+  "showArtistsTracksSection": "Show Tracks Section",
+  "@showArtistsTracksSection": {},
+  "showArtistsTracksSectionSubtitle": "Whether to show a section with up to five tracks. When enabled, you can choose between Most Played, Favorite, Random, Latest Releases, Recently Added and Recently Played Tracks.",
+  "@showArtistsTracksSectionSubtitle": {},
   "disableGesture": "Disable gestures",
   "@disableGesture": {},
   "disableGestureSubtitle": "Whether to disables gestures.",
@@ -723,6 +775,10 @@
   "@playlistActionsMenuButtonTooltip": {
     "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
   },
+  "browsePlaylists": "Browse Playlists",
+  "@browsePlaylists": {
+    "description": "Label for a button on the genre screen that brings you to a list of genre-filtered playlists."
+  },
   "noAlbum": "No Album",
   "@noAlbum": {},
   "noItem": "No Item",
@@ -771,10 +827,10 @@
   "@goToArtist": {},
   "goToGenre": "Go to Genre",
   "@goToGenre": {},
-  "removeFavourite": "Remove Favourite",
-  "@removeFavourite": {},
-  "addFavourite": "Add Favourite",
-  "@addFavourite": {},
+  "removeFavorite": "Remove Favorite",
+  "@removeFavorite": {},
+  "addFavorite": "Add Favorite",
+  "@addFavorite": {},
   "confirmFavoriteAdded": "Added Favorite",
   "@confirmFavoriteAdded": {},
   "confirmFavoriteRemoved": "Removed Favorite",
@@ -875,6 +931,10 @@
   "@clearNextUp": {
     "description": "Label for the action that deletes all tracks added to Next Up"
   },
+  "stopAndClearQueue": "Stop playback and clear queue",
+  "@stopAndClearQueue": {
+    "description": "Label for a button that stops playback and removes all tracks from the queue."
+  },
   "playingFrom": "Playing from",
   "@playingFrom": {
     "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
@@ -972,7 +1032,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} other{}}",
+  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} remoteClient{a Remote Client} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1016,6 +1076,16 @@
     "placeholders": {
       "speed": {
         "type": "double"
+      }
+    }
+  },
+  "currentVolumeFeatureText": "{volume}% volume",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
       }
     }
   },
@@ -1099,11 +1169,11 @@
   "@reportQueueToServer": {
     "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "reportQueueToServerSubtitle": "When enabled, Finamp will send the current queue to the server. There currently seems to be little use for this, and it increases network traffic.",
+  "reportQueueToServerSubtitle": "When enabled, Finamp will send the current queue to the server. This can improve remote control and allow server-side restoration of the queue. Always enabled if the 'Play On' feature is enabled.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "periodicPlaybackSessionUpdateFrequency": "Playback session update frequency",
+  "periodicPlaybackSessionUpdateFrequency": "Playback Session Update Frequency",
   "@periodicPlaybackSessionUpdateFrequency": {
     "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1115,8 +1185,167 @@
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
+  "playOnStaleDelay": "'Play On' Session Timeout",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "playOnStaleDelaySubtitle": "How long a remote 'Play On' session is considered active after receiving a command. When considered active, playback is reported more frequently, which can lead to increased bandwidth usage.",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "enablePlayonTitle": "Enable 'Play On' Support",
+  "@enablePlayonTitle": {
+    "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "enablePlayonSubtitle": "Enables Jellyfin's 'Play On' feature (remote-controlling Finamp from another client). Disable this if your reverse proxy or server doesn't support websockets.",
+  "@enablePlayonSubtitle": {
+    "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "playOnReconnectionDelay": "'Play On' Session Reconnection Delay",
+  "@playOnReconnectionDelay": {
+    "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "playOnReconnectionDelaySubtitle": "Controls the delay between the attempts to reconnect to the PlayOn websocket when it gets disconnected (in seconds). A lower delay increases bandwidth usage.",
+  "@playOnReconnectionDelaySubtitle": {
+    "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
   "topTracks": "Top Tracks",
   "@topTracks": {},
+  "topAlbums": "Top Albums",
+  "@topAlbums": {},
+  "topArtists": "Top Artists",
+  "@topArtists": {},
+  "recentlyAddedTracks": "Recently Added Tracks",
+  "@recentlyAddedTracks": {
+    "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedAlbums": "Recently Added Albums",
+  "@recentlyAddedAlbums": {
+    "description": "Label for the genre section that shows albums that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedArtists": "Recently Added Artists",
+  "@recentlyAddedArtists": {
+    "description": "Label for the genre section that shows artists that were recently added to the library, sorted by the date they were added."
+  },
+  "latestTracks": "Latest Tracks",
+  "@latestTracks": {},
+  "latestAlbums": "Latest Albums",
+  "@latestAlbums": {},
+  "latestArtists": "Latest Artists",
+  "@latestArtists": {},
+  "recentlyPlayedTracks": "Recently Played Tracks",
+  "@recentlyPlayedTracks": {},
+  "recentlyPlayedAlbums": "Recently Played Albums",
+  "@recentlyPlayedAlbums": {},
+  "recentlyPlayedArtists": "Recently Played Artists",
+  "@recentlyPlayedArtists": {},
+  "favoriteTracks": "Favorite Tracks",
+  "@favoriteTracks": {},
+  "favoriteAlbums": "Favorite Albums",
+  "@favoriteAlbums": {},
+  "favoriteArtists": "Favorite Artists",
+  "@favoriteArtists": {},
+  "randomTracks": "Tracks (Random Picks)",
+  "@randomTracks": {},
+  "randomAlbums": "Albums (Random Picks)",
+  "@randomAlbums": {},
+  "randomArtists": "Artists (Random Picks)",
+  "@randomArtists": {},
+  "mostPlayed": "Most Played",
+  "@mostPlayed": {},
+  "randomFavoritesFirst": "Random (Favorites First)",
+  "@randomFavoritesFirst": {},
+  "recentlyAdded": "Recently Added",
+  "@recentlyAdded": {},
+  "recentlyPlayed": "Recently Played",
+  "@recentlyPlayed": {},
+  "latestReleases": "Latest Releases",
+  "@latestReleases": {},
+  "itemSectionsOrder": "Item Sections Order",
+  "@itemSectionsOrder": {
+    "description": "Label for the setting that controls the order of item sections on the screens."
+  },
+  "unknown": "Unknown",
+  "@unknown": {},
+  "itemSectionsOrderSubtitle": "Controls the order of Item Sections.",
+  "@itemSectionsOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections on the screens."
+  },
+  "genreItemSectionFilterChipOrderTitle": "Item Sections Filter Order",
+  "@genreItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of item sections filter chips."
+  },
+  "genreItemSectionFilterChipOrderSubtitle": "Controls the order of available filters for item sections.",
+  "@genreItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections filter chips."
+  },
+  "artistItemSectionFilterChipOrderTitle": "Tracks Section Filter Order",
+  "@artistItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of the tracks sections filter chips."
+  },
+  "artistItemSectionFilterChipOrderSubtitle": "Controls the order of available filters for the tracks section.",
+  "@artistItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of the tracks sections filter chips."
+  },
+  "genreFilterArtistScreens": "Filter Artists",
+  "@genreFilterArtistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreFilterArtistScreensSubtitle": "When enabled, Artists (accessed through a genre) will only show tracks and albums that match the genre you're currently browsing. (It is always possible to manually remove the Genre Filter to reveal all tracks and albums.)",
+  "@genreFilterArtistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreFilterPlaylistScreens": "Filter Playlists",
+  "@genreFilterPlaylistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "genreFilterPlaylistScreensSubtitle": "When enabled, Playlists (accessed through a genre) will only show tracks that match the genre you're currently browsing. (It is always possible to manually remove the Genre Filter to reveal all tracks.)",
+  "@genreFilterPlaylistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "genreListsInheritSorting": "Full Lists Sorting Inheritance",
+  "@genreListsInheritSorting": {
+    "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "genreListsInheritSortingSubtitle": "When enabled, the \"See All\" lists will inherit the sorting and filtering from the Genre Screen. If disabled, settings from the corresponding library tab will be used instead. Tapping on the Counts on the top of the Genre Screen or the \"Browse Playlists\" button will always open a full list with the sorting settings from the library tab.",
+  "@genreListsInheritSortingSubtitle": {
+    "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "curatedItemsMostPlayedOfflineTooltip": "Not available in Offline Mode.",
+  "@curatedItemsMostPlayedOfflineTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Offline Mode."
+  },
+  "curatedItemsNotListenedYet": "You haven't listened to any tracks{itemType, select, artistGenreFilter{ by this artist in this genre} artist{ by this artist} genre{ in this genre} other{}}.",
+  "@curatedItemsNotListenedYet": {
+    "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "curatedItemsNoFavorites": "You don't have any favorites{itemType, select, artistGenreFilter{ for this artist in this genre} artist{ for this artist} genre{ for this genre} other{}}.",
+  "@curatedItemsNoFavorites": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "genreNoItems": "You don't have any {itemType, select, playlists{playlists} artists{artists} albums{albums} tracks{tracks} other{items}} for this genre.",
+  "@genreNoItems": {
+    "description": "Message for empty See All lists for a genre.",
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
   "albumCount": "{count,plural,=1{{count} Album} other{{count} Albums}}",
   "@albumCount": {
     "placeholders": {
@@ -1181,6 +1410,10 @@
   "volumeNormalizationSettingsTitle": "Volume Normalization",
   "@volumeNormalizationSettingsTitle": {
     "description": "Title for the replay gain settings screen"
+  },
+  "playbackReportingSettingsTitle": "Playback Reporting & Play On",
+  "@playbackReportingSettingsTitle": {
+    "description": "Title for the playback reporting settings screen"
   },
   "volumeNormalizationSwitchTitle": "Enable Volume Normalization",
   "@volumeNormalizationSwitchTitle": {
@@ -1414,6 +1647,23 @@
     },
     "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
   },
+  "downloadButtonDisabledGenreFilterTooltip": "Please remove the genre filter to enable the download actions.",
+  "@downloadButtonDisabledGenreFilterTooltip": {
+    "description": "Tooltip shown when a download button is disabled because of an active genre filter."
+  },
+  "genreFilterNotAvailableForAlbums": "Genre Filters are not available for Albums.",
+  "@genreFilterNotAvailableForAlbums": {
+    "description": "Message shown when the user tries to apply a genre filter to an album."
+  },
+  "genreNotFound": "The genre could not be found.{additionalInfo, select, offline{ It might not be downloaded or may belong to a different library.} other{ It may belong to a different library.}}",
+  "@genreNotFound": {
+    "placeholders": {
+      "additionalInfo": {
+        "type": "String"
+      }
+    },
+    "description": "Message shown when a genre filter or open-genre action fails because the genre item could not be found."
+  },
   "incidentalDownloadTooltip": "This item is required to be downloaded by {parentName}.",
   "@incidentalDownloadTooltip": {
     "placeholders": {
@@ -1423,7 +1673,7 @@
     },
     "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
   },
-  "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} allPlaylistsMetadata{Playlist Metadata} other{{itemType}} }",
+  "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} allPlaylistsMetadata{Playlist Metadata} collectionWithLibraryFilter{Collection with Library Filter} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
@@ -1493,7 +1743,7 @@
     },
     "description": "Dropdown option to download transcoded version of tracks"
   },
-  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transcoded}}",
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transcoded}}{location, select, null{} other{ ({location})}}",
   "@downloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1507,11 +1757,15 @@
       "size": {
         "type": "String",
         "example": "456"
+      },
+      "location": {
+        "type": "String",
+        "example": "Internal Storage"
       }
     },
     "description": "Track info line in downloads screen lists"
   },
-  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ as {codec} @ {bitrate}}}",
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ as {codec} @ {bitrate}}}{location, select, null{} other{ ({location})}}",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1525,6 +1779,10 @@
       "size": {
         "type": "String",
         "example": "456"
+      },
+      "location": {
+        "type": "String",
+        "example": "Internal Storage"
       }
     },
     "description": "Collection info line in downloads screen lists"
@@ -1704,6 +1962,10 @@
   "@showProgressOnNowPlayingBarSubtitle": {
     "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the bottom of the music screen functions as a progress bar"
   },
+  "lyricsScreenButtonTitle": "Lyrics",
+  "@lyricsScreenButtonTitle": {
+    "description": "Label for the button for opening the lyrics screen"
+  },
   "lyricsScreen": "Lyrics View",
   "@lyricsScreen": {
     "description": "Name for the view/screen that shows lyrics for the currently playing track"
@@ -1716,15 +1978,31 @@
   "@showLyricsTimestampsSubtitle": {
     "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
   },
-  "showStopButtonOnMediaNotificationTitle": "Show stop button on media notification",
+  "showStopButtonOnMediaNotificationTitle": "Show Stop Button on Media Notification",
   "@showStopButtonOnMediaNotificationTitle": {
-    "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
+    "description": "Title for the setting that controls if the media notification has a stop button."
   },
-  "showStopButtonOnMediaNotificationSubtitle": "Controls if the media notification has a stop button in addition to the pause button. This lets you stop playback without opening the app.",
+  "showStopButtonOnMediaNotificationSubtitle": "Controls if the media notification has a stop button. This lets you stop playback without opening the app.",
   "@showStopButtonOnMediaNotificationSubtitle": {
-    "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
+    "description": "Subtitle for the setting that controls if the media notification has a stop button."
   },
-  "showSeekControlsOnMediaNotificationTitle": "Show seek controls on media notification",
+  "showShuffleButtonOnMediaNotificationTitle": "Show Shuffle Button on Media Notification",
+  "@showShuffleButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a shuffle button."
+  },
+  "showShuffleButtonOnMediaNotificationSubtitle": "Controls if the media notification has a shuffle button. This lets you shuffle/unshuffle playback without opening the app.",
+  "@showShuffleButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
+  },
+  "showFavoriteButtonOnMediaNotificationTitle": "Show Favorite Button on Media Notification",
+  "@showFavoriteButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a favorite button."
+  },
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Controls if the media notification has a favorite button. This lets you favorite/unfavorite the current track without opening the app.",
+  "@showFavoriteButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a favorite button."
+  },
+  "showSeekControlsOnMediaNotificationTitle": "Allow Seeking on Media Notification",
   "@showSeekControlsOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a seekable progress bar."
   },
@@ -1868,6 +2146,10 @@
   "@showFeatureChipsToggleSubtitle": {
     "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
   },
+  "seeAll": "See All",
+  "@seeAll": {
+    "description": ""
+  },
   "albumScreen": "Album Screen",
   "@albumScreen": {
     "description": "Name for the view/screen that shows albums"
@@ -1879,6 +2161,30 @@
   "showCoversOnAlbumScreenSubtitle": "Show album covers for each track separately on the album screen.",
   "@showCoversOnAlbumScreenSubtitle": {
     "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "artistScreen": "Artist Screen",
+  "@artistScreen": {
+    "description": "Name for the view/screen that shows artists"
+  },
+  "applyFilterOnGenreChipTapTitle": "Apply Filter On Genre Tap",
+  "@applyFilterOnGenreChipTapTitle": {
+    "description": "Title for the setting that controls if taps on genre chips should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "applyFilterOnGenreChipTapSubtitle": "By default, tapping a genre opens it, while long-pressing filters the artist or playlist by that genre. When enabled, this behavior is inverted.",
+  "@applyFilterOnGenreChipTapSubtitle": {
+    "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "applyFilterOnGenreChipTapPrompt": "Applied genre filter",
+  "@applyFilterOnGenreChipTapPrompt": {
+    "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "applyFilterOnGenreChipTapPromptButton": "Open Genre",
+  "@applyFilterOnGenreChipTapPromptButton": {
+    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "genreScreen": "Genre Screen",
+  "@genreScreen": {
+    "description": "Name for the view/screen that shows genres"
   },
   "emptyTopTracksList": "You haven't listened to any track by this artist yet.",
   "@emptyTopTracksList": {
@@ -1998,6 +2304,18 @@
   "@releaseDateFormatSubtitle": {
     "description": "Title for the setting that controls the format release dates throughout the app."
   },
+  "noReleaseDate": "No Release Date",
+  "@noReleaseDate": {
+    "description": "Placeholder text if an item has no release date set."
+  },
+  "noDateAdded": "No Date Added",
+  "@noDateAdded": {
+    "description": "Placeholder text if an item has no dateAdded set."
+  },
+  "noDateLastPlayed": "Not played yet",
+  "@noDateLastPlayed": {
+    "description": "Placeholder text if an item has no lastPlayedDate set."
+  },
   "librarySelectError": "Error loading available libraries for user",
   "@librarySelectError": {
     "description": "Error shown when the library select screen fails to load."
@@ -2006,15 +2324,15 @@
   "@autoOfflineOptionOff": {
     "description": "This is shown when the autoOffline feature is turned off and has no effects"
   },
-  "autoOfflineOptionNetwork": "Network",
+  "autoOfflineOptionNetwork": "Local Network",
   "@autoOfflineOptionNetwork": {
-    "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
+    "description": "This is shown when the autoOffline feature is set to \"local Network\", this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
   },
   "autoOfflineOptionDisconnected": "Disconnected",
   "@autoOfflineOptionDisconnected": {
     "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
   },
-  "autoOfflineSettingDescription": "Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nNetwork: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again",
+  "autoOfflineSettingDescription": "Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nLocal Network: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
@@ -2025,18 +2343,115 @@
   },
   "audioFadeOutDurationSettingTitle": "Audio fade-out duration",
   "@audioFadeOutDurationSettingTitle": {
-      "description": "Title for the audio fade-out duration setting."
+    "description": "Title for the audio fade-out duration setting."
   },
   "audioFadeOutDurationSettingSubtitle": "The duration of the audio fade out in milliseconds.",
   "@audioFadeOutDurationSettingSubtitle": {
-      "description": "Subtitle for the audio fade-out duration setting. Set to 0 to disable fade-out."
+    "description": "Subtitle for the audio fade-out duration setting. Set to 0 to disable fade-out."
   },
   "audioFadeInDurationSettingTitle": "Audio fade-in duration",
-  "@audioFadeOutDurationSettingTitle": {
-      "description": "Title for the audio fade-in duration setting."
+  "@audioFadeInDurationSettingTitle": {
+    "description": "Title for the audio fade-in duration setting."
   },
   "audioFadeInDurationSettingSubtitle": "The duration of the audio fade-in in milliseconds. Set to 0 to disable fade-in.",
-  "@audioFadeOutDurationSettingSubtitle": {
+  "@audioFadeInDurationSettingSubtitle": {
       "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
+  },
+  "outputMenuButtonTitle": "Output",
+  "@outputMenuButtonTitle": {
+    "description": "Button title for opening the output menu/panel"
+  },
+  "outputMenuTitle": "Change Output",
+  "@outputMenuTitle": {
+    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  },
+  "outputMenuVolumeSectionTitle": "Volume",
+  "@outputMenuVolumeSectionTitle": {
+    "description": "Title for the volume section in the output menu"
+  },
+  "outputMenuDevicesSectionTitle": "Available Devices",
+  "@outputMenuDevicesSectionTitle": {
+    "description": "Title for the available devices section in the output menu"
+  },
+  "outputMenuOpenConnectionSettingsButtonTitle": "Connect to a device",
+  "@outputMenuOpenConnectionSettingsButtonTitle": {
+    "description": "Button title for connecting to a device from the output menu"
+  },
+  "deviceType": "{type, select, speaker{Device Speaker} tv{TV} bluetooth{Bluetooth} other{Unknown}}",
+  "@deviceType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    },
+    "description": "Label for the type of device in the output menu"
+  },
+  "desktopShuffleWarning": "Changing shuffle mode is not currently available on desktop.",
+  "@desktopShuffleWarning": {
+    "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
+  },
+  "preferHomeNetworkActiveAddressInfoText": "Active Address",
+  "@preferHomeNetworkActiveAddressInfoText": {
+      "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+  },
+  "preferHomeNetworkTargetAddressLocalSettingTitle": "Home Network Address",
+  "preferHomeNetworkTargetAddressLocalSettingDescription": "Target address of the Jellyfin server inside your home network",
+  "preferHomeNetworkEnableSwitchTitle": "Prefer Home Network",
+  "preferHomeNetworkEnableSwitchDescription": "Whether or not to use a different address when you are at home",
+  "preferHomeNetworkPublicAddressSettingTitle": "Public Address",
+  "preferHomeNetworkPublicAddressSettingDescription": "The primary address used to connect to your Jellyfin server",
+  "preferHomeNetworkInfoBox": "This Feature requires Location permissions (and location needs to be enabled) to read the network name.",
+  "@preferHomeNetworkInfoBox": {
+    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
+  },
+  "networkSettingsTitle": "Network",
+  "@networkSettingsTitle": {
+    "description": "Title for the network settings screen"
+  },
+  "downloadPaused": "Downloading paused because device is not connected to WiFi",
+  "@downloadPaused": {
+    "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
+  },
+  "missingSchemaError": "Url needs to start with http(s)://",
+  "@missingSchemaError": {
+    "description": "Snackbar message when the user changes their home/public address but it doesn't start with http"
+  },
+  "testConnectionButtonLabel": "Test both connections",
+  "@testConnectionButtonLabel": {
+    "description": "Button to test the public and local url inside the network settings tab"
+  },
+  "ping": "{status, select, true_true{Both reachable} true_false{FAILED to reach local address} false_true{FAILED to reach public address} false_false{FAILED to reach both} other{unknown}}",
+  "@ping": {
+    "description": "Gets shown in the Snackbar when using the Test Connection Button inside the Network Settings. true means reachable, false means unreachable. the first value is for the public address, the second value is fot the home address."
+  },
+  "autoReloadQueueTitle": "Automatically Reload Queue",
+  "@autoReloadQueueTitle": {
+    "description": "Title for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "autoReloadQueueSubtitle": "Automatically reload the queue when the source changes (i.e. offline mode enabled or server address switch). If disabled, Finamp will prompt you instead.",
+  "@autoReloadQueueSubtitle": {
+    "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "autoReloadPrompt": "Reload queue to apply new {type, select, network{network settings} transcoding{transcoding settings} other{settings}}",
+  "@autoReloadPrompt": {
+    "description": "Prompt shown when the queue needs to be reloaded after changing network settings",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks, plural, =1{1 track} other{{amountUndownloadedTracks} tracks}} will be removed from the queue because they aren't downloaded.",
+  "@autoReloadPromptMissingTracks": {
+    "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
+    "placeholders": {
+      "amountUndownloadedTracks": {
+        "type": "int"
+      }
+    }
+  },
+  "autoReloadPromptReloadButton": "Reload",
+  "@autoReloadPromptReloadButton": {
+    "description": "Button title for reloading the queue after network settings change"
   }
 }

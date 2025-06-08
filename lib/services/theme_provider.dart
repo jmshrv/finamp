@@ -14,6 +14,7 @@ import 'package:palette_generator/palette_generator.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../models/jellyfin_models.dart';
+import 'widget_bindings_observer_provider.dart';
 
 part 'theme_provider.g.dart';
 
@@ -136,9 +137,6 @@ final Provider<ColorScheme> localThemeProvider = Provider((ref) {
       ThemeRequestFromImage(image.image, image.useIsolate)));
 }, dependencies: [localImageProvider]);
 
-// This provider gets updated to the latest brightness by a valuelistner in main.dart
-final brightnessProvider = StateProvider((ref) => Brightness.dark);
-
 @riverpod
 ColorScheme finampTheme(Ref ref, ThemeInfo request) {
   var image = ref.watch(themeImageProvider(request));
@@ -200,7 +198,6 @@ class FinampThemeFromImage extends _$FinampThemeFromImage {
 
     listener = ImageStreamListener((listenerImage, synchronousCall) async {
       stream.removeListener(listener!);
-
       completer.complete(listenerImage);
     }, onError: (e, stack) {
       stream.removeListener(listener!);
@@ -209,7 +206,9 @@ class FinampThemeFromImage extends _$FinampThemeFromImage {
     });
 
     ref.onDispose(() {
-      stream.removeListener(listener!);
+      if (!completer.isCompleted) {
+        stream.removeListener(listener!);
+      }
     });
 
     stream.addListener(listener);
@@ -369,11 +368,9 @@ class _ThemeTransitionCalculator {
   bool _skipAllTransitions = false;
 
   Duration getThemeTransitionDuration(BuildContext context) {
-    if (_skipAllTransitions) {
-      return const Duration(milliseconds: 0);
+    if (_skipAllTransitions || MediaQuery.of(context).disableAnimations) {
+      return Duration.zero;
     }
-    return context.mounted
-        ? const Duration(milliseconds: 1000)
-        : const Duration(milliseconds: 0);
+    return context.mounted ? const Duration(milliseconds: 1000) : Duration.zero;
   }
 }

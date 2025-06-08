@@ -178,6 +178,13 @@ abstract class JellyfinApi extends ChopperService {
     /// IsFavorite, IsResumable, Likes, Dislikes.
     @Query("Filters") String? filters,
 
+    /// Optional filter by items that are marked as favorite, or not.
+    @Query("isFavorite") bool? isFavorite,
+
+    /// Optional. If specified, results will be filtered by excluding item ids.
+    /// This allows multiple, comma delimited.
+    @Query("excludeItemIds") String? excludeItemIds,
+
     /// Optional. The record index to start at. All items with a lower index
     /// will be dropped from the results.
     @Query("StartIndex") int? startIndex,
@@ -275,6 +282,22 @@ abstract class JellyfinApi extends ChopperService {
   });
 
   @FactoryConverter(request: JsonConverter.requestFactory)
+  @Post(path: "/Sessions/Capabilities", optionalBody: true)
+  Future<dynamic> updateCapabilities({
+    @Query() required String playableMediaTypes,
+    @Query() required String supportedCommands,
+    @Query() required bool supportsMediaControl,
+    @Query() required bool supportsPersistentIdentifier,
+  });
+
+  @FactoryConverter(request: JsonConverter.requestFactory)
+  @Post(path: "/Sessions/Capabilities/Full")
+  Future<dynamic> updateCapabilitiesFull(
+    // @Query() required String id,
+    @Body() ClientCapabilities clientCapabilities,
+  );
+
+  @FactoryConverter(request: JsonConverter.requestFactory)
   @Post(path: "/Sessions/Playing")
   Future<dynamic> startPlayback(
       @Body() PlaybackProgressInfo playbackProgressInfo);
@@ -339,6 +362,20 @@ abstract class JellyfinApi extends ChopperService {
     @Query() String? entryIds,
   });
 
+  /// updates or gets propertys of a Playlist
+  @FactoryConverter(request: JsonConverter.requestFactory)
+  @Post(path: "/Playlists/{playlistId}")
+  Future<dynamic> updatePlaylist({
+    @Path() required BaseItemId playlistId,
+    @Body() required NewPlaylist playlist,
+  });
+
+  @FactoryConverter(response: JsonConverter.responseFactory)
+  @Get(path: "/Playlists/{playlistId}")
+  Future<dynamic> getPlaylist({
+    @Path() required BaseItemId playlistId,
+  });
+
   @FactoryConverter(
     request: JsonConverter.requestFactory,
     response: JsonConverter.responseFactory,
@@ -386,6 +423,10 @@ abstract class JellyfinApi extends ChopperService {
     /// IsFavorite, IsResumable, Likes, Dislikes.
     @Query("Filters") String? filters,
 
+    /// Optional. If specified, results will be filtered to include only those
+    /// containing the specified genre id.
+    @Query("GenreIds") String? genreIds,
+
     /// Optional. The record index to start at. All items with a lower index
     /// will be dropped from the results.
     @Query("StartIndex") int? startIndex,
@@ -393,8 +434,8 @@ abstract class JellyfinApi extends ChopperService {
     /// Optional. The maximum number of records to return.
     @Query("Limit") int? limit,
 
-    /// Optional. If enabled, only favorite artists will be returned.
-    @Query("IsFavorite") bool? isFavorite,
+    /// Optional filter by items that are marked as favorite, or not.
+    @Query("isFavorite") bool? isFavorite,
   });
 
   @FactoryConverter(
@@ -425,6 +466,10 @@ abstract class JellyfinApi extends ChopperService {
     /// Optional. Specify additional filters to apply.
     @Query("Filters") String? filters,
 
+    /// Optional. If specified, results will be filtered to include only those
+    /// containing the specified genre id.
+    @Query("GenreIds") String? genreIds,
+
     /// Optional. The record index to start at. All items with a lower index
     /// will be dropped from the results.
     @Query("StartIndex") int? startIndex,
@@ -433,8 +478,11 @@ abstract class JellyfinApi extends ChopperService {
     @Query("Limit") int? limit,
 
     /// User id. Technically nullable in the Jellyfin API docs, but getting
-    /// favourited artists will break if this is not given.
+    /// favorited artists will break if this is not given.
     @Query("UserId") required String userId,
+
+    /// Optional filter by items that are marked as favorite, or not.
+    @Query("isFavorite") bool? isFavorite,
   });
 
   /// Gets all genres from a given item, folder, or the entire library.
@@ -469,6 +517,18 @@ abstract class JellyfinApi extends ChopperService {
     /// "Height" "ExtraIds" "LocalTrailerCount" "IsHD" "SpecialFeatureCount"
     @Query("Fields") String? fields = defaultFields,
 
+    /// Optional. Specify one or more sort orders, comma delimited. Options:
+    /// Album, AlbumArtist, Artist, Budget, CommunityRating, CriticRating,
+    /// DateCreated, DatePlayed, PlayCount, PremiereDate, ProductionYear,
+    /// SortName, Random, Revenue, Runtime.
+    @Query("SortBy") String? sortBy,
+
+    /// Sort Order - Ascending,Descending.
+    @Query("SortOrder") String? sortOrder,
+
+    /// Optional filter by items that are marked as favorite, or not.
+    @Query("isFavorite") bool? isFavorite,
+
     /// Optional. Filter based on a search term.
     @Query("SearchTerm") String? searchTerm,
 
@@ -486,7 +546,7 @@ abstract class JellyfinApi extends ChopperService {
     response: JsonConverter.responseFactory,
   )
   @Post(path: "/Users/{userId}/FavoriteItems/{itemId}", optionalBody: true)
-  Future<dynamic> addFavourite({
+  Future<dynamic> addFavorite({
     /// User id.
     @Path() required String userId,
 
@@ -500,7 +560,7 @@ abstract class JellyfinApi extends ChopperService {
     response: JsonConverter.responseFactory,
   )
   @Delete(path: "/Users/{userId}/FavoriteItems/{itemId}")
-  Future<dynamic> removeFavourite({
+  Future<dynamic> removeFavorite({
     /// User id.
     @Path() required String userId,
 
@@ -525,6 +585,9 @@ abstract class JellyfinApi extends ChopperService {
   )
   @Post(path: "/Sessions/Logout", optionalBody: true)
   Future<Response<dynamic>> logout();
+
+  @Get(path: "/System/Endpoint", optionalBody: true)
+  Future<Response<dynamic>> pingServer();
 
   static JellyfinApi create(bool inForeground) {
     final chopperHttpLogLevel = Level
@@ -579,7 +642,7 @@ class JellyfinInterceptor implements Interceptor {
     // If baseUrlTemp is null, use the baseUrl of the current user.
     // If baseUrlTemp is set, we're setting up a new user and should use it instead.
     Uri baseUri =
-        baseUrlTemp ?? Uri.parse(finampUserHelper.currentUser!.baseUrl);
+        baseUrlTemp ?? Uri.parse(finampUserHelper.currentUser!.baseURL);
 
     // Add the request path on to the baseUrl
     baseUri = baseUri.replace(
@@ -591,6 +654,36 @@ class JellyfinInterceptor implements Interceptor {
       headers: {
         "Content-Type": "application/json",
         "Authorization": authHeader,
+      },
+    );
+  }
+}
+
+/// Interceptor for just the local address
+class JellyfinSpecificInterceptor implements Interceptor {
+  JellyfinSpecificInterceptor(this.url);
+
+  final String url;
+  
+  @override
+  FutureOr<Response<BodyType>> intercept<BodyType>(
+      Chain<BodyType> chain) async {
+    return await chain.proceed(updateRequest(chain.request));
+  }
+
+  Request updateRequest(Request request) {
+    final finampUserHelper = GetIt.instance<FinampUserHelper>();
+
+    Uri baseUri = Uri.parse(url);
+    baseUri = baseUri.replace(
+        pathSegments:
+            baseUri.pathSegments.followedBy(request.uri.pathSegments));
+
+    return request.copyWith(
+      uri: baseUri,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": finampUserHelper.authorizationHeader,
       },
     );
   }

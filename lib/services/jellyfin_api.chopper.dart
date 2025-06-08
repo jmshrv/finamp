@@ -208,6 +208,8 @@ final class _$JellyfinApi extends JellyfinApi {
     String? fields = defaultFields,
     String? searchTerm,
     String? filters,
+    bool? isFavorite,
+    String? excludeItemIds,
     int? startIndex,
     int? limit,
     bool? collapseMultiDiscAlbums,
@@ -228,6 +230,8 @@ final class _$JellyfinApi extends JellyfinApi {
       'Fields': fields,
       'SearchTerm': searchTerm,
       'Filters': filters,
+      'isFavorite': isFavorite,
+      'excludeItemIds': excludeItemIds,
       'StartIndex': startIndex,
       'Limit': limit,
       'CollapseBoxSetItems': collapseMultiDiscAlbums,
@@ -349,6 +353,51 @@ final class _$JellyfinApi extends JellyfinApi {
   }) async {
     final Uri $url = Uri.parse('/Items/${itemId}');
     final $body = newItem;
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    final Response $response = await client.send<dynamic, dynamic>(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+    );
+    return $response.bodyOrThrow;
+  }
+
+  @override
+  Future<dynamic> updateCapabilities({
+    required String playableMediaTypes,
+    required String supportedCommands,
+    required bool supportsMediaControl,
+    required bool supportsPersistentIdentifier,
+  }) async {
+    final Uri $url = Uri.parse('/Sessions/Capabilities');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'playableMediaTypes': playableMediaTypes,
+      'supportedCommands': supportedCommands,
+      'supportsMediaControl': supportsMediaControl,
+      'supportsPersistentIdentifier': supportsPersistentIdentifier,
+    };
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    final Response $response = await client.send<dynamic, dynamic>(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+    );
+    return $response.bodyOrThrow;
+  }
+
+  @override
+  Future<dynamic> updateCapabilitiesFull(
+      ClientCapabilities clientCapabilities) async {
+    final Uri $url = Uri.parse('/Sessions/Capabilities/Full');
+    final $body = clientCapabilities;
     final Request $request = Request(
       'POST',
       $url,
@@ -510,6 +559,41 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
+  Future<dynamic> updatePlaylist({
+    required BaseItemId playlistId,
+    required NewPlaylist playlist,
+  }) async {
+    final Uri $url = Uri.parse('/Playlists/${playlistId}');
+    final $body = playlist;
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    final Response $response = await client.send<dynamic, dynamic>(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+    );
+    return $response.bodyOrThrow;
+  }
+
+  @override
+  Future<dynamic> getPlaylist({required BaseItemId playlistId}) async {
+    final Uri $url = Uri.parse('/Playlists/${playlistId}');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    final Response $response = await client.send<dynamic, dynamic>(
+      $request,
+      responseConverter: JsonConverter.responseFactory,
+    );
+    return $response.bodyOrThrow;
+  }
+
+  @override
   Future<dynamic> getArtists({
     BaseItemId? parentId,
     String? sortBy,
@@ -517,6 +601,7 @@ final class _$JellyfinApi extends JellyfinApi {
     String? fields = defaultFields,
     String? searchTerm,
     String? filters,
+    String? genreIds,
     int? startIndex,
     int? limit,
     bool? isFavorite,
@@ -529,9 +614,10 @@ final class _$JellyfinApi extends JellyfinApi {
       'Fields': fields,
       'SearchTerm': searchTerm,
       'Filters': filters,
+      'GenreIds': genreIds,
       'StartIndex': startIndex,
       'Limit': limit,
-      'IsFavorite': isFavorite,
+      'isFavorite': isFavorite,
     };
     final Request $request = Request(
       'GET',
@@ -558,9 +644,11 @@ final class _$JellyfinApi extends JellyfinApi {
     String? searchTerm,
     bool enableUserData = true,
     String? filters,
+    String? genreIds,
     int? startIndex,
     int? limit,
     required String userId,
+    bool? isFavorite,
   }) async {
     final Uri $url = Uri.parse('/Artists/AlbumArtists');
     final Map<String, dynamic> $params = <String, dynamic>{
@@ -573,9 +661,11 @@ final class _$JellyfinApi extends JellyfinApi {
       'SearchTerm': searchTerm,
       'EnableUserData': enableUserData,
       'Filters': filters,
+      'GenreIds': genreIds,
       'StartIndex': startIndex,
       'Limit': limit,
       'UserId': userId,
+      'isFavorite': isFavorite,
     };
     final Request $request = Request(
       'GET',
@@ -596,6 +686,9 @@ final class _$JellyfinApi extends JellyfinApi {
     String? includeItemTypes,
     BaseItemId? parentId,
     String? fields = defaultFields,
+    String? sortBy,
+    String? sortOrder,
+    bool? isFavorite,
     String? searchTerm,
     int? startIndex,
     int? limit,
@@ -605,6 +698,9 @@ final class _$JellyfinApi extends JellyfinApi {
       'IncludeItemTypes': includeItemTypes,
       'ParentId': parentId,
       'Fields': fields,
+      'SortBy': sortBy,
+      'SortOrder': sortOrder,
+      'isFavorite': isFavorite,
       'SearchTerm': searchTerm,
       'StartIndex': startIndex,
       'Limit': limit,
@@ -624,7 +720,7 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> addFavourite({
+  Future<dynamic> addFavorite({
     required String userId,
     required BaseItemId itemId,
   }) async {
@@ -643,7 +739,7 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> removeFavourite({
+  Future<dynamic> removeFavorite({
     required String userId,
     required BaseItemId itemId,
   }) async {
@@ -689,5 +785,16 @@ final class _$JellyfinApi extends JellyfinApi {
       $request,
       requestConverter: JsonConverter.requestFactory,
     );
+  }
+
+  @override
+  Future<Response<dynamic>> pingServer() {
+    final Uri $url = Uri.parse('/System/Endpoint');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<dynamic, dynamic>($request);
   }
 }

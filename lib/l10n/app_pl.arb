@@ -55,8 +55,8 @@
   "@shuffleButtonLabel": {},
   "editPlaylistNameTitle": "Edytuj nazwę listy odtwarzania",
   "@editPlaylistNameTitle": {},
-  "playlistNameUpdated": "Zaktualizowano nazwę listy odtwarzania.",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "Zaktualizowano nazwę listy odtwarzania.",
+  "@playlistUpdated": {},
   "favourite": "Ulubiony",
   "@favourite": {},
   "required": "Wymagane",
@@ -173,8 +173,6 @@
   "@addDownloadLocation": {},
   "downloadLocations": "Lokalizacje pobierania",
   "@downloadLocations": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin używa AAC do transkodowania",
-  "@jellyfinUsesAACForTranscoding": {},
   "theme": "Motyw",
   "@theme": {},
   "goToAlbum": "Idź do albumu",
@@ -386,16 +384,6 @@
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "startupError": "Coś poszło nie tak podczas startu aplikacji. Wystąpił błąd : {error}\n\nProszę utworzyć zgłoszenie (https://github.com/jmshrv/finamp) wraz ze zrzutem ekranu. Jeśli problem będzie się powtarzać, usuń dane aplikacji.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "runtime": "Czas trwania",
   "@runtime": {},
   "removeFromMix": "Usuń z miksu",
@@ -604,10 +592,6 @@
   "@shown": {
     "description": "Used as an option in the playback speed visibility settings"
   },
-  "showArtistsTopTracksSubtitle": "Czy wyświetlać 5 najczęściej słuchanych utworów artysty.",
-  "@showArtistsTopTracksSubtitle": {},
-  "showArtistsTopTracks": "Pokaż najczęściej słuchane utwory w widoku wykonawcy",
-  "@showArtistsTopTracks": {},
   "playerScreen": "Ekran odtwarzacza",
   "@playerScreen": {
     "description": "Name for the expanded player"

@@ -5,16 +5,6 @@
   "@sleepTimerTooltip": {},
   "shuffleAllTrackCount": "Az összes szám véletlenszerű lejátszása",
   "@shuffleAllTrackCount": {},
-  "startupError": "Hiba történt az alkalmazás indításakor! A hiba a következő volt: {error}\n\nKérjük, hozzon létre egyGithub-problémát a github.com/UnicornsOnLSD/finamp oldalon az oldal képernyőképével. Ha a probléma továbbra is fennáll, törölje az alkalmazás adatait az alkalmazás visszaállításához.",
-  "@startupError": {
-    "description": "The error message that shows when startup fails.",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Failed to open download DB"
-      }
-    }
-  },
   "updateButtonLabel": "FRISSÍTÉS",
   "@updateButtonLabel": {},
   "username": "Felhasználónév",
@@ -181,8 +171,6 @@
   "@favourite": {},
   "enableTranscodingSubtitle": "Transzkódolja a zenestreameket a szerver oldalon.",
   "@enableTranscodingSubtitle": {},
-  "jellyfinUsesAACForTranscoding": "Jellyfin AAC-t használ az transzkódoláshoz",
-  "@jellyfinUsesAACForTranscoding": {},
   "layoutAndTheme": "Elrendezés & Téma",
   "@layoutAndTheme": {},
   "location": "Elhelyezkedés",
@@ -197,8 +185,8 @@
   "@notAvailableInOfflineMode": {},
   "playButtonLabel": "LEJÁTSZÁS",
   "@playButtonLabel": {},
-  "playlistNameUpdated": "A lejátszási lista neve frissítve.",
-  "@playlistNameUpdated": {},
+  "playlistUpdated": "A lejátszási lista neve frissítve.",
+  "@playlistUpdated": {},
   "required": "Szükséges",
   "@required": {},
   "shareLogs": "Naplók megosztása",

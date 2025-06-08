@@ -4,20 +4,19 @@ import 'dart:math';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
-import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/components/audio_fade_progress_visualizer_container.dart';
+import 'package:finamp/components/one_line_marquee_helper.dart';
+import 'package:finamp/components/print_duration.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/feedback_helper.dart';
-import 'package:finamp/services/one_line_marquee_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
@@ -31,7 +30,7 @@ import '../services/process_artist.dart';
 import 'PlayerScreen/player_split_screen_scaffold.dart';
 import 'album_image.dart';
 
-class NowPlayingBar extends ConsumerWidget {
+class NowPlayingBar extends StatelessWidget {
   const NowPlayingBar({
     super.key,
   });
@@ -50,21 +49,22 @@ class NowPlayingBar extends ConsumerWidget {
                     : darkColorScheme.surface.withOpacity(0.7))
           ]);
 
-  Color getProgressBackgroundColor(BuildContext context) {
-    return FinampSettingsHelper.finampSettings.showProgressOnNowPlayingBar
+  Color getProgressBackgroundColor(WidgetRef ref) {
+    return ref.watch(finampSettingsProvider.showProgressOnNowPlayingBar)
         ? Color.alphaBlend(
-            Theme.of(context).brightness == Brightness.dark
-                ? IconTheme.of(context).color!.withOpacity(0.35)
-                : IconTheme.of(context).color!.withOpacity(0.5),
-            Theme.of(context).brightness == Brightness.dark
+            Theme.of(ref.context).brightness == Brightness.dark
+                ? IconTheme.of(ref.context).color!.withOpacity(0.35)
+                : IconTheme.of(ref.context).color!.withOpacity(0.5),
+            Theme.of(ref.context).brightness == Brightness.dark
                 ? Colors.black
                 : Colors.white)
-        : IconTheme.of(context).color!.withOpacity(0.85);
+        : IconTheme.of(ref.context).color!.withOpacity(0.85);
   }
 
-  Widget buildLoadingQueueBar(BuildContext context, Function()? retryCallback) {
+  Widget buildLoadingQueueBar(WidgetRef ref, Function()? retryCallback) {
     final progressBackgroundColor =
-        getProgressBackgroundColor(context).withOpacity(0.5);
+        getProgressBackgroundColor(ref).withOpacity(0.5);
+    var context = ref.context;
 
     return SimpleGestureDetector(
         onVerticalSwipe: (direction) {
@@ -76,7 +76,7 @@ class NowPlayingBar extends ConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
           child: Container(
-            decoration: getShadow(context),
+            decoration: getShadow(ref.context),
             child: Material(
               shadowColor: Theme.of(context).colorScheme.primary.withOpacity(
                   Theme.of(context).brightness == Brightness.light
@@ -136,8 +136,7 @@ class NowPlayingBar extends ConsumerWidget {
         ));
   }
 
-  Widget buildNowPlayingBar(
-      BuildContext context, FinampQueueItem currentTrack) {
+  Widget buildNowPlayingBar(WidgetRef ref, FinampQueueItem currentTrack) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
     final queueService = GetIt.instance<QueueService>();
 
@@ -147,8 +146,9 @@ class NowPlayingBar extends ConsumerWidget {
         ? jellyfin_models.BaseItemDto.fromJson(
             currentTrack.item.extras!["itemJson"] as Map<String, dynamic>)
         : null;
+    var context = ref.context;
 
-    final progressBackgroundColor = getProgressBackgroundColor(context);
+    final progressBackgroundColor = getProgressBackgroundColor(ref);
 
     Future openPlayerScreen() => Navigator.of(context).push(
           PageRouteBuilder(
@@ -156,6 +156,9 @@ class NowPlayingBar extends ConsumerWidget {
                 const PlayerScreen(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
+              if (MediaQuery.of(context).disableAnimations) {
+                return child;
+              }
               const begin = Offset(0.0, 1.0);
               const end = Offset.zero;
 
@@ -189,7 +192,7 @@ class NowPlayingBar extends ConsumerWidget {
           onTap: openPlayerScreen,
           child: Dismissible(
             key: const Key("NowPlayingBarDismiss"),
-            direction: FinampSettingsHelper.finampSettings.disableGesture
+            direction: ref.watch(finampSettingsProvider.disableGesture)
                 ? DismissDirection.none
                 : DismissDirection.vertical,
             confirmDismiss: (direction) async {
@@ -211,7 +214,7 @@ class NowPlayingBar extends ConsumerWidget {
               //TODO use a PageView instead of a Dismissible, and only wrap dynamic items (not the buttons)
               child: Dismissible(
                 key: const Key("NowPlayingBar"),
-                direction: FinampSettingsHelper.finampSettings.disableGesture
+                direction: ref.watch(finampSettingsProvider.disableGesture)
                     ? DismissDirection.none
                     : DismissDirection.horizontal,
                 confirmDismiss: (direction) async {
@@ -313,8 +316,8 @@ class NowPlayingBar extends ConsumerWidget {
                                 Expanded(
                                   child: Stack(
                                     children: [
-                                      if (FinampSettingsHelper.finampSettings
-                                          .showProgressOnNowPlayingBar)
+                                      if (ref.watch(finampSettingsProvider
+                                          .showProgressOnNowPlayingBar))
                                         Positioned(
                                           left: 0,
                                           top: 0,
@@ -599,11 +602,8 @@ class NowPlayingBar extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final queueService = GetIt.instance<QueueService>();
-
-    ref.listen(currentTrackMetadataProvider,
-        (metadataOrNull, metadata) {}); // keep provider alive
 
     return Hero(
         tag: "nowplaying",
@@ -612,28 +612,36 @@ class NowPlayingBar extends ConsumerWidget {
           // Scaffold ignores system elements padding if bottom bar is present, so we must
           // use SafeArea in all cases to include it in our height
           child: SafeArea(
-            child: StreamBuilder<FinampQueueInfo?>(
-                stream: queueService.getQueueStream(),
-                initialData: queueService.getQueue(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData &&
-                      snapshot.data!.saveState == SavedQueueState.loading &&
-                      !usingPlayerSplitScreen) {
-                    return buildLoadingQueueBar(context, null);
-                  } else if (snapshot.hasData &&
-                      snapshot.data!.saveState == SavedQueueState.failed &&
-                      !usingPlayerSplitScreen) {
-                    return buildLoadingQueueBar(
-                        context, queueService.retryQueueLoad);
-                  } else if (snapshot.hasData &&
-                      snapshot.data!.currentTrack != null &&
-                      !usingPlayerSplitScreen) {
-                    return buildNowPlayingBar(
-                        context, snapshot.data!.currentTrack!);
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                }),
+            // Use consumer inside PlayerScreenTheme to generate ref
+            child: Consumer(
+              builder: (context, ref, child) {
+                ref.listen(currentTrackMetadataProvider,
+                    (metadataOrNull, metadata) {}); // keep provider alive
+
+                return StreamBuilder<FinampQueueInfo?>(
+                    stream: queueService.getQueueStream(),
+                    initialData: queueService.getQueue(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData &&
+                          snapshot.data!.saveState == SavedQueueState.loading &&
+                          !usingPlayerSplitScreen) {
+                        return buildLoadingQueueBar(ref, null);
+                      } else if (snapshot.hasData &&
+                          snapshot.data!.saveState == SavedQueueState.failed &&
+                          !usingPlayerSplitScreen) {
+                        return buildLoadingQueueBar(
+                            ref, queueService.retryQueueLoad);
+                      } else if (snapshot.hasData &&
+                          snapshot.data!.currentTrack != null &&
+                          !usingPlayerSplitScreen) {
+                        return buildNowPlayingBar(
+                            ref, snapshot.data!.currentTrack!);
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    });
+              },
+            ),
           ),
         ));
   }

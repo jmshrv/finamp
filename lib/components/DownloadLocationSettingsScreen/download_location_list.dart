@@ -1,39 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:hive_ce/hive.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 import 'download_location_list_tile.dart';
 
-class DownloadLocationList extends StatefulWidget {
+class DownloadLocationList extends ConsumerWidget {
   const DownloadLocationList({super.key});
 
   @override
-  State<DownloadLocationList> createState() => _DownloadLocationListState();
-}
-
-class _DownloadLocationListState extends State<DownloadLocationList> {
-  late Iterable<DownloadLocation> downloadLocationsIterable;
-
-  @override
-  void initState() {
-    super.initState();
-    downloadLocationsIterable =
-        FinampSettingsHelper.finampSettings.downloadLocationsMap.values;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, box, child) {
-        return ListView.builder(
-          itemCount: downloadLocationsIterable.length,
-          itemBuilder: (context, index) {
-            return DownloadLocationListTile(
-              downloadLocation: downloadLocationsIterable.elementAt(index),
-            );
-          },
+  Widget build(BuildContext context, WidgetRef ref) {
+    // TODO make this not rebuild on every settings change
+    var locations = ref.watch(finampSettingsProvider
+        .select((x) => x.requireValue.downloadLocationsMap.values));
+    return ListView.builder(
+      itemCount: locations.length,
+      itemBuilder: (context, index) {
+        return DownloadLocationListTile(
+          downloadLocation: locations.elementAt(index),
         );
       },
     );
