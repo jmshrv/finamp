@@ -438,7 +438,7 @@
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "開啟後滑動清單中的歌曲，可以將歌曲接著播放，而不是加到播放清單的最後一首。",
   "@swipeInsertQueueNextSubtitle": {},
-  "loginFlowQuickConnectInstructions": "打開 Jellyfin 應用程式或網站，點擊你的用戶圖示，然後選擇「快速連線」。",
+  "loginFlowQuickConnectInstructions": "打開 Jellyfin 應用程式或網站，點擊你的用戶圖示，然後選擇「快速連接」。",
   "@loginFlowQuickConnectInstructions": {
     "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
   },
@@ -562,11 +562,11 @@
   "@backToAccountSelection": {
     "description": "Label for the button that takes the user back to the account selection step during the login flow."
   },
-  "loginFlowQuickConnectPrompt": "使用快速連線代碼",
+  "loginFlowQuickConnectPrompt": "使用快速連接代碼",
   "@loginFlowQuickConnectPrompt": {
     "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
   },
-  "loginFlowQuickConnectDisabled": "快速連線已在此伺服器上停用。",
+  "loginFlowQuickConnectDisabled": "快速連接已在此伺服器上停用。",
   "@loginFlowQuickConnectDisabled": {
     "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
   },
@@ -2417,5 +2417,9 @@
   "preferHomeNetworkTargetAddressLocalSettingTitle": "家用網路位址",
   "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
   "preferHomeNetworkTargetAddressLocalSettingDescription": "Jellyfin 伺服器在家用網路內的連線位址",
-  "@preferHomeNetworkTargetAddressLocalSettingDescription": {}
+  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
+  "defaultOrder": "預設排序方式",
+  "@defaultOrder": {
+    "description": "Default sorting order for playlists (server order)"
+  }
 }
