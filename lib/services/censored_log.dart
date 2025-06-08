@@ -26,9 +26,9 @@ extension CensoredMessage on LogRecord {
       final user = GetIt.instance<FinampUserHelper>().currentUser;
 
       if (user != null) {
-        var useLocal = user.isLocal && user.preferHomeNetwork;
+        var useLocal = user.isLocal && user.preferLocalNetwork;
         workingLogString = workingLogString.replaceAll(
-            CaseInsensitivePattern(user.homeAddress),
+            CaseInsensitivePattern(user.localAddress),
             "HOMEURL${!useLocal ? "(INACTIVE)" : ""}");
         workingLogString = workingLogString.replaceAll(
             CaseInsensitivePattern(user.publicAddress),

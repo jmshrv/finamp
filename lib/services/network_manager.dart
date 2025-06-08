@@ -9,7 +9,6 @@ import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/playon_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -66,8 +65,8 @@ class AutoOffline extends _$AutoOffline {
     bool autoServerSwitch = ref
             .watch(FinampUserHelper.finampCurrentUserProvider)
             .valueOrNull
-            ?.preferHomeNetwork ??
-        DefaultSettings.preferHomeNetwork;
+            ?.preferLocalNetwork ??
+        DefaultSettings.preferLocalNetwork;
 
     return (autoOfflineEnabled && autoOfflineActive) || autoServerSwitch;
   }
@@ -155,7 +154,7 @@ Future<bool> changeTargetUrl({bool? isLocal}) async {
 
   if (isLocal != null && isLocal != user.isLocal) {
     _networKSwitcherLogger.info(
-        "Changed active network to ${isLocal ? "home" : "public"} address");
+        "Changed active network to ${isLocal ? "local" : "public"} address");
     GetIt.instance<FinampUserHelper>().currentUser?.update(newIsLocal: isLocal);
     return true;
   }
@@ -166,7 +165,7 @@ Future<bool> changeTargetUrl({bool? isLocal}) async {
   }
 
   // Disable this feature
-  if (!user.preferHomeNetwork) return changeTargetUrl(isLocal: false);
+  if (!user.preferLocalNetwork) return changeTargetUrl(isLocal: false);
 
   bool reachable = await GetIt.instance<JellyfinApiHelper>().pingLocalServer();
   return await changeTargetUrl(isLocal: reachable);
