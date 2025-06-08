@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
@@ -424,56 +426,113 @@ class _LyricLine extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final lyricsLineLogger = Logger("LyricsLine");
     final finampSettings = ref.watch(finampSettingsProvider).value;
 
     final isSynchronized = line.start != null;
     final showTimestamp = isSynchronized && !line.text.isNullOrBlank && (finampSettings?.showLyricsTimestamps ?? true);
     final lowlightLine = isSynchronized && !isCurrentLine;
 
+    final textSpan = TextSpan(
+      children: [
+        // TODO: the timestamps currently crash the painter, they should probably be extracted to a Row anyways.
+        if (showTimestamp && false)
+          WidgetSpan(
+            alignment: PlaceholderAlignment.bottom,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Text(
+                "${Duration(microseconds: line.startMicros).inMinutes}:${(Duration(microseconds: line.startMicros).inSeconds % 60).toString().padLeft(2, '0')}",
+                style: TextStyle(
+                  color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
+                  fontSize: 16,
+                  height: 1.75 * (lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) / 26),
+                ),
+              ),
+            ),
+          ),
+        TextSpan(
+          text: line.text ?? "<missing lyric line>",
+          style: TextStyle(
+            color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
+            fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
+            // Keep text width consistent across the different weights
+            letterSpacing: lowlightLine || !isSynchronized ? 0.05 : -0.045,
+            fontSize:
+                lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) *
+                (isSynchronized ? 1.0 : 0.75),
+            height: 1.25,
+          ),
+        ),
+      ],
+    );
+
     return GestureDetector(
       onTap: isSynchronized ? onTap : null,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: isSynchronized ? 10.0 : 6.0),
-        child: Text.rich(
-          textAlign: lyricsAlignmentToTextAlign(finampSettings?.lyricsAlignment ?? LyricsAlignment.start),
-          softWrap: true,
-          TextSpan(
-            children: [
-              if (showTimestamp)
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.bottom,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Text(
-                      "${Duration(microseconds: line.startMicros).inMinutes}:${(Duration(microseconds: line.startMicros).inSeconds % 60).toString().padLeft(2, '0')}",
-                      style: TextStyle(
-                        color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
-                        fontSize: 16,
-                        height:
-                            1.75 * (lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) / 26),
-                      ),
-                    ),
-                  ),
-                ),
-              TextSpan(
-                text: line.text ?? "<missing lyric line>",
-                style: TextStyle(
-                  color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
-                  fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
-                  // Keep text width consistent across the different weights
-                  letterSpacing: lowlightLine || !isSynchronized ? 0.05 : -0.045,
-                  fontSize:
-                      lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) *
-                      (isSynchronized ? 1.0 : 0.75),
-                  height: 1.25,
-                ),
-              ),
-            ],
-          ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final linePainter = TextPainter(
+              text: textSpan,
+              textAlign: lyricsAlignmentToTextAlign(finampSettings?.lyricsAlignment ?? LyricsAlignment.start),
+              textDirection: TextDirection.ltr,
+            )..setPlaceholderDimensions([]);
+            linePainter.layout(minWidth: constraints.minWidth, maxWidth: constraints.maxWidth);
+            final text = line.text!;
+            lyricsLineLogger.info("Line: $text, ${text.length}");
+            final cues = line.cues ?? [];
+            for (int i = 0; i < cues.length - 1; i++) {
+              final cue = cues[i];
+              final nextCue = cues[i + 1];
+              final position = TextPosition(offset: cue.position, affinity: TextAffinity.downstream);
+              final endPosition = TextPosition(offset: nextCue.position, affinity: TextAffinity.upstream);
+              // TODO: use linePainter.computeLineMetrics(); if necessary
+              final offset = linePainter.getOffsetForCaret(position, Rect.zero);
+              final endOffset = linePainter.getOffsetForCaret(endPosition, Rect.zero);
+              // TODO: the min is required because server data is wrong…
+              final cueText = text.substring(cue.position, min(nextCue.position, text.length));
+              lyricsLineLogger.info(
+                "[${cue.position}:${nextCue.position}] $cueText: spans ${offset.dx}:${endOffset.dx} (${endOffset.dx - offset.dx})",
+              );
+            }
+            return CustomPaint(
+              size: Size(constraints.maxWidth, linePainter.height),
+              painter: LyricsLinePainter(linePainter),
+            );
+          },
         ),
       ),
     );
   }
+}
+
+class LyricsLinePainter extends ChangeNotifier implements CustomPainter {
+  final TextPainter textPainter;
+
+  LyricsLinePainter(this.textPainter);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    textPainter.paint(canvas, Offset.zero);
+  }
+
+  @override
+  bool shouldRepaint(LyricsLinePainter oldDelegate) {
+    return textPainter.text != oldDelegate.textPainter.text ||
+        textPainter.textAlign != oldDelegate.textPainter.textAlign;
+  }
+
+  @override
+  SemanticsBuilderCallback? get semanticsBuilder => null;
+
+  @override
+  bool shouldRebuildSemantics(covariant LyricsLinePainter oldDelegate) {
+    return shouldRepaint(oldDelegate);
+  }
+
+  @override
+  bool? hitTest(Offset position) => null;
 }
 
 class LyricsListMask extends StatelessWidget {
