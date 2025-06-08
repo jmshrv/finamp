@@ -1,4 +1,5 @@
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/network_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,11 +25,13 @@ class OfflineModeSwitchListTile extends ConsumerWidget {
       inactiveTrackColor: Colors.transparent,
       value: ref.watch(finampSettingsProvider.isOffline),
       onChanged: (value) {
-        // when using the switch it toggles the automation on and off again
-        // this is so the user can overwrite the automation at any time with
-        // any value.
-        bool currentValue = FinampSettingsHelper.finampSettings.autoOfflineListenerActive;
-        FinampSetters.setAutoOfflineListenerActive(!currentValue);
+
+        AutoOfflineOption automationStatus = FinampSettingsHelper.finampSettings.autoOffline;
+
+        if (automationStatus != AutoOfflineOption.disabled) {
+          // Pause Automation
+          FinampSetters.setAutoOfflineListenerActive(false);
+        }
         FinampSetters.setIsOffline(value);
       },
     );

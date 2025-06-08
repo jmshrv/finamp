@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ffi';
 
+import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/MusicScreen/offline_mode_switch_list_tile.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -26,9 +27,14 @@ class OfflineModeStatusLabel extends ConsumerWidget {
     if (!override) {
       return SizedBox.shrink();
     }
+
     return ListTile(
       autofocus: false,
-      title: Text("Automatic Offline Mode paused"),
+      title: Text("Automatic switching paused"),
+      subtitle: Text("Tap to reenable automatic switching"),
+      onTap: () {
+            FinampSetters.setAutoOfflineListenerActive(true);
+      }
     );
   }
 }
