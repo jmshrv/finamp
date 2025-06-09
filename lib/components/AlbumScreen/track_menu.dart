@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:finamp/components/AlbumScreen/sleep_timer_menu.dart';
 import 'package:finamp/components/AlbumScreen/speed_menu.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
@@ -80,6 +81,11 @@ Future<void> showModalTrackMenu({
       });
 }
 
+enum SubMenu {
+  speed,
+  sleepTimer,
+}
+
 class TrackMenu extends ConsumerStatefulWidget {
   static const routeName = "/track-menu";
 
@@ -118,7 +124,8 @@ class TrackMenu extends ConsumerStatefulWidget {
   ConsumerState<TrackMenu> createState() => _TrackMenuState();
 }
 
-class _TrackMenuState extends ConsumerState<TrackMenu> {
+class _TrackMenuState extends ConsumerState<TrackMenu>
+    with TickerProviderStateMixin {
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
@@ -126,7 +133,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
 
   // Makes sure that widget doesn't just disappear after press while menu is visible
   bool speedWidgetWasVisible = false;
-  bool showSpeedMenu = false;
+  SubMenu? activeMenu;
+  SubMenu? previousMenu;
+
 
   double initialSheetExtent = 0.0;
   double inputStep = 0.9;
@@ -149,14 +158,23 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
     return false;
   }
 
-  void toggleSpeedMenu() {
+  void setActiveMenu(SubMenu? menu) {
     setState(() {
-      showSpeedMenu = !showSpeedMenu;
+      previousMenu = activeMenu;
+      activeMenu = menu;
     });
     if (widget.dragController.isAttached) {
-      scrollToExtent(widget.dragController, showSpeedMenu ? inputStep : null);
+      scrollToExtent(widget.dragController, menu != null ? inputStep : null);
     }
     FeedbackHelper.feedback(FeedbackType.selection);
+  }
+
+  void toggleSpeedMenu() {
+    setActiveMenu(activeMenu == SubMenu.speed ? null : SubMenu.speed);
+  }
+
+  void toggleSleepTimerMenu() {
+    setActiveMenu(activeMenu == SubMenu.sleepTimer ? null : SubMenu.sleepTimer);
   }
 
   bool shouldShowSpeedControls(
@@ -615,6 +633,21 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
   List<Widget> menu(BuildContext context, List<Widget> menuEntries,
       MetadataProvider? metadata) {
     var iconColor = Theme.of(context).colorScheme.primary;
+    // Define heights for each menu state
+    const double closedHeight = 0;
+    const double speedMenuHeight = 120;
+    const double sleepTimerMenuHeight = 285;
+    double menuHeight;
+    switch (activeMenu) {
+      case SubMenu.speed:
+        menuHeight = speedMenuHeight;
+        break;
+      case SubMenu.sleepTimer:
+        menuHeight = sleepTimerMenuHeight;
+        break;
+      default:
+        menuHeight = closedHeight;
+    }
     return [
       SliverPersistentHeader(
         delegate: TrackMenuSliverAppBar(
@@ -684,12 +717,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                     builder: (context, timerValue, child) {
                       if (timerValue == null) {
                         return PlaybackAction(
-                          icon: TablerIcons.hourglass_empty,
+                          icon: TablerIcons.bell_z,
                           onPressed: () async {
-                            await showDialog(
-                              context: context,
-                              builder: (context) => const SleepTimerDialog(),
-                            );
+                            toggleSleepTimerMenu();
                           },
                           tooltip:
                               AppLocalizations.of(context)!.sleepTimerTooltip,
@@ -703,9 +733,8 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                         valueListenable: timerValue.remainingNotifier,
                         builder: (context, remaining, _) {
                           final hasTimeLeft = remaining > 0;
-
                           return PlaybackAction(
-                            icon: TablerIcons.hourglass_high,
+                            icon: TablerIcons.bell_z_filled,
                             onPressed: () async {
                               if (hasTimeLeft) {
                                 await showDialog(
@@ -714,11 +743,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                                       const SleepTimerCancelDialog(),
                                 );
                               } else {
-                                await showDialog(
-                                  context: context,
-                                  builder: (context) =>
-                                      const SleepTimerDialog(),
-                                );
+                                toggleSleepTimerMenu();
                               }
                             },
                             tooltip: hasTimeLeft
@@ -776,17 +801,78 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
               },
             )),
       SliverToBoxAdapter(
-        child: AnimatedSwitcher(
+        child: AnimatedSize(
           duration: trackMenuDefaultAnimationDuration,
-          switchInCurve: trackMenuDefaultInCurve,
-          switchOutCurve: trackMenuDefaultOutCurve,
-          transitionBuilder: (child, animation) {
-            if (MediaQuery.of(context).disableAnimations) {
-              return child;
-            }
-            return SizeTransition(sizeFactor: animation, child: child);
-          },
-          child: showSpeedMenu ? SpeedMenu(iconColor: iconColor) : null,
+          curve: Curves.easeInOut,
+          clipBehavior: Clip.none,
+          child: SizedBox(
+            height: menuHeight,
+            child: AnimatedSwitcher(
+              duration: trackMenuDefaultAnimationDuration,
+              switchInCurve: Curves.easeInOut,
+              switchOutCurve: Curves.easeInOut,
+              layoutBuilder: (currentChild, previousChildren) {
+                return Stack(
+                  alignment: Alignment.topCenter,
+                  children: <Widget>[
+                    ...previousChildren,
+                    if (currentChild != null) currentChild,
+                  ],
+                );
+              },
+              transitionBuilder: (child, animation) {
+                if (MediaQuery.of(context).disableAnimations) {
+                  return child;
+                }
+                // Determine if this is the incoming or outgoing child
+                final isSpeedMenu = (child.key is ValueKey &&
+                    (child.key as ValueKey).value == 'speed');
+                final isSleepMenu = (child.key is ValueKey &&
+                    (child.key as ValueKey).value == 'sleep');
+                // Slide in from right for speed, left for sleep
+                final Offset beginOffset = isSpeedMenu
+                    ? const Offset(1, 0)
+                    : isSleepMenu
+                        ? const Offset(-1, 0)
+                        : Offset.zero;
+                // // Slide in from right for speed, left for sleep
+                // final Offset beginOffset = switch (activeMenu) {
+                //   SubMenu.speed => const Offset(1, 0),
+                //   SubMenu.sleepTimer => const Offset(-1, 0),
+                //   _ => Offset.zero,
+                // };
+                // final Offset beginOffset = previousMenu == null
+                //     ? const Offset(0, 0)
+                //     : switch (activeMenu) {
+                //         SubMenu.speed => const Offset(1, 0),
+                //         SubMenu.sleepTimer => const Offset(-1, 0),
+                //         _ => const Offset(0, 0),
+                //       };
+                final Offset endOffset = Offset.zero;
+                return FadeTransition(
+                  opacity: animation,
+                  child: SlideTransition(
+                    position: Tween<Offset>(
+                      begin: beginOffset,
+                      end: endOffset,
+                    ).animate(animation),
+                    child: child,
+                  ),
+                );
+              },
+              child: switch (activeMenu) {
+                SubMenu.speed => SpeedMenu(
+                    key: const ValueKey('speed'),
+                    iconColor: iconColor,
+                  ),
+                SubMenu.sleepTimer => SleepTimerMenu(
+                    key: const ValueKey('sleep'),
+                    iconColor: iconColor,
+                  ),
+                _ => null,
+              },
+            ),
+          ),
         ),
       ),
       MenuMask(
@@ -951,7 +1037,7 @@ class PlaybackAction extends StatelessWidget {
 
   final IconData icon;
   final String? value;
-  final Function() onPressed;
+  final VoidCallback onPressed;
   final String tooltip;
   final Color iconColor;
 

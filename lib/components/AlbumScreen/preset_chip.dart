@@ -23,6 +23,8 @@ class PresetChips extends StatefulWidget {
     this.onTap,
     this.mainColour,
     this.onPresetSelected,
+    this.prefix = "",
+    this.showAsDouble = false,
     this.chipWidth = 64.0,
     this.chipHeight = 44.0,
   });
@@ -33,7 +35,9 @@ class PresetChips extends StatefulWidget {
   final double activeValue;
   final Function()? onTap;
   final Color? mainColour; // used for different background colours
-  final Function()? onPresetSelected;
+  final Function(double)? onPresetSelected;
+  final bool showAsDouble;
+  final String prefix;
   final double chipWidth;
   final double chipHeight;
 
@@ -78,7 +82,8 @@ class _PresetChipsState extends State<PresetChips> {
       scrollToActivePreset(value, constraints.maxWidth);
     }
 
-    final stringValue = "x$value";
+    final stringValue =
+        "${widget.prefix}${widget.showAsDouble ? value : value.round()}";
 
     return PresetChip(
       value: stringValue,
@@ -94,8 +99,14 @@ class _PresetChipsState extends State<PresetChips> {
       height: widget.chipHeight,
       onTap: () {
         setState(() {});
-        _queueService.playbackSpeed = value;
-        widget.onPresetSelected?.call();
+        // Only update playbackSpeed for speed menu, not for sleep timer menu
+        if (widget.type == PresetTypes.speed &&
+            widget.onPresetSelected == null) {
+          _queueService.playbackSpeed = value;
+        }
+        if (widget.onPresetSelected != null) {
+          widget.onPresetSelected!(value);
+        }
       },
     );
   }
