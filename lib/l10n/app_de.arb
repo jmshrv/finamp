@@ -328,7 +328,7 @@
   "@playlistUpdated": {},
   "logsCopied": "Logs kopiert.",
   "@logsCopied": {},
-  "downloadsQueued": "Downloads hinzugefügt",
+  "downloadsQueued": "Dateien werden heruntergeladen",
   "@downloadsQueued": {},
   "addButtonLabel": "Hinzufügen",
   "@addButtonLabel": {},
@@ -1395,7 +1395,7 @@
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "periodicPlaybackSessionUpdateFrequencyDetails": "Nach 5 Minuten ohne Komunikation zwischen Client und Server wird der Server davon ausgehen, dass die Wiedergabe gestoppt wurde. Das heißt: für Tracks, die länger als 5 Minuten sind, könnte es zu fehlerhaften Wiedergabe-Meldungen führen, was die Qualität dieser Daten reduziert.",
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Nach 5 Minuten ohne Kommunikation zwischen Client und Server wird der Server davon ausgehen, dass die Wiedergabe gestoppt wurde. Das heißt: für Tracks, die länger als 5 Minuten sind, könnte es zu fehlerhaften Wiedergabe-Meldungen führen, was die Qualität dieser Daten reduziert.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -2194,17 +2194,17 @@
   "@noGenres": {
     "description": "Gets shown when there are no genres available for an album or artist"
   },
-  "startupErrorCallToAction": "Bitte erstelle einen Issue auf github.com/jmshrv/finamp mit den Logs(!) (nutze den Button unten) und hänge einen Screenshot dieser Seite an, so dass wir den Fehler so schnell wie möglich beheben können.",
+  "startupErrorCallToAction": "Bitte erstelle einen Issue auf \\\"github.com/jmshrv/finamp\\\" mit den Logs (nutze den Button unten) und hänge einen Screenshot dieser Seite an, so dass wir den Fehler so schnell wie möglich beheben können.",
   "@startupErrorCallToAction": {
     "description": "The subtitle / call to action for what to do after encountering a startup error"
   },
   "onlineMode": "Online Mode",
   "@onlineMode": {},
-  "startupErrorTitle": "Beim Starten der App ist etwas schiefgegangen!\nEs tut uns leid…",
+  "startupErrorTitle": "Beim Starten der App ist etwas schiefgegangen!",
   "@startupErrorTitle": {
     "description": "The title for the error screen that shows when startup fails."
   },
-  "startupErrorWorkaround": "Als Workaround könntest du den App-Speicher löschen und die App zurücksetzen. Aber bedenke, dass dann alle Einstellungen und Downloads verloren gehen.",
+  "startupErrorWorkaround": "Als Workaround für den Fehler könntest du den App-Speicher löschen und die App zurücksetzen. Aber bedenke, dass dann alle Einstellungen und Downloads verloren gehen.",
   "@startupErrorWorkaround": {
     "description": "The subtitle for how to manually recover from a startup error"
   },
