@@ -1,10 +1,7 @@
-import 'dart:ffi';
 import 'dart:math';
 
-import 'package:finamp/components/PlayerScreen/queue_list.dart';
 import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/services/media_state_stream.dart';
 import 'package:finamp/services/progress_state_stream.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
@@ -66,27 +63,30 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
               // Duration (Minutes) Row
               Row(
                 children: [
-                  Switch.adaptive(
-                    value: durationMode,
-                    inactiveThumbColor: Theme.of(context).colorScheme.primary,
-                    onChanged: (value) {
-                      setState(() {
-                        durationMode = value;
-                        if (value) {
-                          if (newSleepTimer.type != SleepTimerType.duration) {
-                            newSleepTimer.type = SleepTimerType.duration;
+                  Expanded(
+                    child: SwitchListTile.adaptive(
+                      value: durationMode,
+                      title: Text(AppLocalizations.of(context)!.minutes,
+                          style: TextTheme.of(context).bodyMedium),
+                      onChanged: (value) {
+                        setState(() {
+                          durationMode = value;
+                          if (value) {
+                            if (newSleepTimer.type != SleepTimerType.duration) {
+                              newSleepTimer.type = SleepTimerType.duration;
+                            }
+                            trackMode = false;
+                            afterCurrentTrack = false;
                           }
-                          trackMode = false;
-                          afterCurrentTrack = false;
-                        } else {
-                          finishTrack = false;
-                        }
-                      });
-                    },
+                        });
+                      },
+                      contentPadding: EdgeInsets.zero,
+                      controlAffinity:
+                          ListTileControlAffinity.leading, // Switch on the left
+                      inactiveThumbColor: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                   const SizedBox(width: 8),
-                  const Text("Minutes"),
-                  const Spacer(),
                   SizedBox(
                     width: 80,
                     child: TextFormField(
@@ -124,30 +124,29 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
               const SizedBox(height: 8),
 
               // Finish Track Switch (alone)
-              Row(
-                children: [
-                  Switch.adaptive(
-                    value: finishTrack,
-                    inactiveThumbColor: Theme.of(context).colorScheme.primary,
-                    onChanged: (value) {
-                      setState(() {
-                        finishTrack = value;
-                        if (newSleepTimer.type != SleepTimerType.duration) {
-                          newSleepTimer.type = SleepTimerType.duration;
-                        }
-                        if (value) {
-                          trackMode = false;
-                          afterCurrentTrack = false;
-                          durationMode = true;
-                        }
-                        newSleepTimer.finishTrack = value;
-                      });
-                    },
-                  ),
-                  const SizedBox(width: 8),
-                  const Text("Finish Track"),
-                ],
+              CheckboxListTile.adaptive(
+                value: finishTrack && durationMode,
+                title: Text(
+                  AppLocalizations.of(context)!.sleepTimerFinishLastTrack,
+                  style: TextTheme.of(context).bodyMedium,
+                ),
+                // inactiveThumbColor: Theme.of(context).colorScheme.primary,
+                onChanged: (value) {
+                  setState(() {
+                    finishTrack = value ?? false;
+                    if (newSleepTimer.type != SleepTimerType.duration) {
+                      newSleepTimer.type = SleepTimerType.duration;
+                    }
+                    if (finishTrack) {
+                      trackMode = false;
+                      afterCurrentTrack = false;
+                      durationMode = true;
+                    }
+                    newSleepTimer.finishTrack = finishTrack;
+                  });
+                },
               ),
+              const SizedBox(width: 8),
 
               Divider(
                 color: Theme.of(context).colorScheme.secondary.withOpacity(0.3),
@@ -156,27 +155,31 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
               // Tracks Row
               Row(
                 children: [
-                  Switch.adaptive(
-                    value: trackMode,
-                    inactiveThumbColor: Theme.of(context).colorScheme.primary,
-                    onChanged: (value) {
-                      setState(() {
-                        trackMode = value;
-                        if (newSleepTimer.type != SleepTimerType.tracks)
-                          newSleepTimer.type = SleepTimerType.tracks;
-                        if (value) {
-                          durationMode = false;
-                          finishTrack = false;
-                          afterCurrentTrack = false;
-                          newSleepTimer.length =
-                              int.parse(_trackCountController.value.text);
-                        }
-                      });
-                    },
+                  Expanded(
+                    child: SwitchListTile.adaptive(
+                      value: trackMode,
+                      title: Text(AppLocalizations.of(context)!.tracks,
+                          style: TextTheme.of(context).bodyMedium),
+                      inactiveThumbColor: Theme.of(context).colorScheme.primary,
+                      onChanged: (value) {
+                        setState(() {
+                          trackMode = value;
+                          if (newSleepTimer.type != SleepTimerType.tracks)
+                            newSleepTimer.type = SleepTimerType.tracks;
+                          if (value) {
+                            durationMode = false;
+                            afterCurrentTrack = false;
+                            newSleepTimer.length =
+                                int.parse(_trackCountController.value.text);
+                          }
+                        });
+                      },
+                      contentPadding: EdgeInsets.zero,
+                      controlAffinity:
+                          ListTileControlAffinity.leading, // Switch on the left
+                    ),
                   ),
                   const SizedBox(width: 8),
-                  const Text("Tracks"),
-                  const Spacer(),
                   SizedBox(
                     width: 80,
                     child: TextFormField(
@@ -219,27 +222,34 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
               // Finish Track Switch (alone)
               Row(
                 children: [
-                  Switch.adaptive(
-                    value: afterCurrentTrack,
-                    inactiveThumbColor: Theme.of(context).colorScheme.primary,
-                    onChanged: (value) {
-                      setState(() {
-                        afterCurrentTrack = value;
-                        if (newSleepTimer.type != SleepTimerType.tracks) {
-                          newSleepTimer.type = SleepTimerType.tracks;
-                        }
-                        if (value) {
-                          trackMode = false;
-                          durationMode = false;
-                          finishTrack = false;
-                          newSleepTimer.finishTrack = true;
-                          newSleepTimer.length = 1;
-                        }
-                      });
-                    },
+                  Expanded(
+                    child: SwitchListTile.adaptive(
+                      value: afterCurrentTrack,
+                      title: Text(
+                          AppLocalizations.of(context)!
+                              .sleepTimerAfterCurrentTrack,
+                          style: TextTheme.of(context).bodyMedium),
+                      inactiveThumbColor: Theme.of(context).colorScheme.primary,
+                      onChanged: (value) {
+                        setState(() {
+                          afterCurrentTrack = value;
+                          if (newSleepTimer.type != SleepTimerType.tracks) {
+                            newSleepTimer.type = SleepTimerType.tracks;
+                          }
+                          if (value) {
+                            trackMode = false;
+                            durationMode = false;
+                            newSleepTimer.finishTrack = true;
+                            newSleepTimer.length = 1;
+                          }
+                        });
+                      },
+                      contentPadding: EdgeInsets.zero,
+                      controlAffinity:
+                          ListTileControlAffinity.leading, // Switch on the left
+                    ),
                   ),
                   const SizedBox(width: 8),
-                  const Text("After current track"),
                 ],
               ),
               StreamBuilder(

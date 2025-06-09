@@ -9,7 +9,6 @@ import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:finamp/services/finamp_logs_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -3349,10 +3348,11 @@ class SleepTimer {
 
   final ValueNotifier<int> remainingNotifier = ValueNotifier<int>(0);
 
+  final sleepTimerLogger = Logger("SleepTimer");
+
   SleepTimer(this.type, this.length)
       : remainingLength = length,
-        callback = (() => FinampLogsHelper()
-            .addLog(LogRecord(Level.INFO, "Sleep Timer done", "Playback")));
+        callback = (() {});
 
   Future<void> start(Function callback) async {
     remainingLength = length;
@@ -3371,10 +3371,14 @@ class SleepTimer {
 
         if (secondsLeft <= 0) {
           t.cancel();
+          sleepTimerLogger.info("Sleep timer finished");
           await this.callback();
         }
       });
     }
+
+    sleepTimerLogger.info(
+        "Sleep timer started for ${type == SleepTimerType.duration ? Duration(seconds: length) : "$length tracks"}, finishTrack: $finishTrack");
   }
 
   void cancel() {
@@ -3383,6 +3387,7 @@ class SleepTimer {
     timer?.cancel();
     timer = null;
     remainingNotifier.value = 0;
+    sleepTimerLogger.info("Sleep timer cancelled");
   }
 
   Duration get totalDuration => Duration(seconds: length);

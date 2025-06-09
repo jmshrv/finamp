@@ -691,8 +691,11 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                               builder: (context) => const SleepTimerDialog(),
                             );
                           },
-                          tooltip: AppLocalizations.of(context)!.sleepTimerTooltip,
-                          iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+                          tooltip:
+                              AppLocalizations.of(context)!.sleepTimerTooltip,
+                          iconColor:
+                              Theme.of(context).textTheme.bodyMedium?.color ??
+                                  Colors.white,
                         );
                       }
 
@@ -707,21 +710,28 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                               if (hasTimeLeft) {
                                 await showDialog(
                                   context: context,
-                                  builder: (context) => const SleepTimerCancelDialog(),
+                                  builder: (context) =>
+                                      const SleepTimerCancelDialog(),
                                 );
                               } else {
                                 await showDialog(
                                   context: context,
-                                  builder: (context) => const SleepTimerDialog(),
+                                  builder: (context) =>
+                                      const SleepTimerDialog(),
                                 );
                               }
                             },
                             tooltip: hasTimeLeft
                                 ? timerValue.asString(context)
-                                : AppLocalizations.of(context)!.sleepTimerTooltip,
+                                : AppLocalizations.of(context)!
+                                    .sleepTimerTooltip,
                             iconColor: hasTimeLeft
                                 ? iconColor
-                                : Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+                                : Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color ??
+                                    Colors.white,
                           );
                         },
                       );

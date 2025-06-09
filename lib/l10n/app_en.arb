@@ -686,7 +686,7 @@
   "@yesButtonLabel": {},
   "noButtonLabel": "No",
   "@noButtonLabel": {},
-  "setSleepTimer": "Set Sleep Timer",
+  "setSleepTimer": "Pause Playback After",
   "@setSleepTimer": {},
   "hours": "Hours",
   "@hours": {},
@@ -696,6 +696,16 @@
   "@minutes": {},
   "timeFractionTooltip": "{currentTime} of {totalTime}",
   "@timeFractionTooltip": {
+    "placeholders": {
+      "currentTime": {
+        "type": "String",
+        "example": "2 minutes 40 seconds"
+      },
+      "totalTime": {
+        "type": "String",
+        "example": "3 minutes 20 seconds"
+      }
+    },
     "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
   },
   "trackCountTooltip": "Track {currentTrackIndex} of {totalTrackCount}",
@@ -2463,5 +2473,13 @@
   "autoReloadPromptReloadButton": "Reload",
   "@autoReloadPromptReloadButton": {
     "description": "Button title for reloading the queue after network settings change"
+  },
+  "sleepTimerFinishLastTrack": "Finish Last Track?",
+  "@sleepTimerFinishLastTrack": {
+    "description": "Option for the sleep timer that will finish the last track before stopping playback."
+  },
+  "sleepTimerAfterCurrentTrack": "After Current Track",
+  "@sleepTimerAfterCurrentTrack" : {
+    "description": "Option for the sleep timer that will stop playback after the current track finishes."
   }
 }
