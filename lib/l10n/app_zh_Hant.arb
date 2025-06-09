@@ -188,7 +188,7 @@
   "@addDownloads": {},
   "location": "位置",
   "@location": {},
-  "downloadsQueued": "已準備完成，正在下載中",
+  "downloadsQueued": "正在下載中",
   "@downloadsQueued": {},
   "addButtonLabel": "新增",
   "@addButtonLabel": {},
@@ -1053,7 +1053,7 @@
       }
     }
   },
-  "periodicPlaybackSessionUpdateFrequencyDetails": "調整目前播放狀態向 Jellyfin 伺服器回報頻率（秒數）的進階細節。若 Jellyfin 伺服器在過去 5 分鐘內未收到來自客戶端的更新，則會假設播放已結束。這表示對於長度超過 5 分鐘的歌曲，系統可能會錯誤地判定播放已結束，從而降低播放回報數據的準確性。",
+  "periodicPlaybackSessionUpdateFrequencyDetails": "如果 Jellyfin 伺服器在過去 5 分鐘內沒有收到任何用戶端的回報，它會假設播放已結束。這代表當播放超過 5 分鐘的歌曲時，可能會被錯誤判定為播放中斷，進而降低播放回報資料的準確性。",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1699,7 +1699,7 @@
   "@releaseDateFormatISO": {
     "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
   },
-  "releaseDateFormatMonthYear": "年和月",
+  "releaseDateFormatMonthYear": "月、年",
   "@releaseDateFormatMonthYear": {
     "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
   },
@@ -1740,7 +1740,7 @@
   "@lyricsAlignmentSubtitle": {
     "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
   },
-  "releaseDateFormatMonthDayYear": "月，日和年",
+  "releaseDateFormatMonthDayYear": "月、日、年",
   "@releaseDateFormatMonthDayYear": {
     "description": "Date format option for the release date of an album, showing the year and month and day/date. Example: March 2, 2022"
   },
@@ -2072,17 +2072,17 @@
   "@libraryDownloads": {
     "description": "Title for the library downloads section on the downloads screen."
   },
-  "startupErrorCallToAction": "請在網站 github.com/jmshrv/finamp 提交問題描述並附上程式日誌檔(!) (可使用下方按鈕) 以及現在畫面的截圖, 以讓我們盡快修正此問題.",
+  "startupErrorCallToAction": "請在網站 \"github.com/jmshrv/finamp\" 提交問題描述並附上程式日誌檔 (可使用下方按鈕) 以及現在畫面的截圖, 以讓我們盡快修正此問題.",
   "@startupErrorCallToAction": {
     "description": "The subtitle / call to action for what to do after encountering a startup error"
   },
   "exportLogs": "儲存程式日誌檔案",
   "@exportLogs": {},
-  "startupErrorTitle": "啟動時發生了一些錯誤!\n不好意思...",
+  "startupErrorTitle": "啟動應用程式時發生錯誤！",
   "@startupErrorTitle": {
     "description": "The title for the error screen that shows when startup fails."
   },
-  "startupErrorWorkaround": "您可以嘗試清除應用程式資料以重置 App，但請注意，這將會刪除您所有的設定與下載內容。",
+  "startupErrorWorkaround": "可透過清除 App 資料來重設，請注意：此操作不可還原，所有資料將被刪除。",
   "@startupErrorWorkaround": {
     "description": "The subtitle for how to manually recover from a startup error"
   },
