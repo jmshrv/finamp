@@ -7,15 +7,15 @@
   "@finampTagline": {
     "description": "Tagline / short description for the app"
   },
-  "startupErrorTitle": "Something went wrong during app startup!\nSorry about that...",
+  "startupErrorTitle": "Something went wrong during app startup!",
   "@startupErrorTitle": {
     "description": "The title for the error screen that shows when startup fails."
   },
-  "startupErrorCallToAction": "Please create an issue on github.com/jmshrv/finamp with the logs(!) (use the button below) and a screenshot of this page, so that we can fix it as quickly as possible.",
+  "startupErrorCallToAction": "Please create an issue on \"github.com/jmshrv/finamp\" with the logs (use the button below) and a screenshot of this page, so that we can fix it as quickly as possible.",
   "@startupErrorCallToAction": {
     "description": "The subtitle / call to action for what to do after encountering a startup error"
   },
-  "startupErrorWorkaround": "As a workaround you could clear your app data to reset the app. Keep in mind that in this case all your settings and downloads will be deleted.",
+  "startupErrorWorkaround": "As a workaround to the error you could clear your app data to reset the app. Keep in mind that in this case all your settings and downloads will be deleted.",
   "@startupErrorWorkaround": {
     "description": "The subtitle for how to manually recover from a startup error"
   },
@@ -469,7 +469,7 @@
   "@confirmDownloadStarted": {
     "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
   },
-  "downloadsQueued": "Download prepared, downloading files",
+  "downloadsQueued": "Downloading files",
   "@downloadsQueued": {},
   "addButtonLabel": "Add",
   "@addButtonLabel": {},
@@ -1173,7 +1173,7 @@
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
     "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "periodicPlaybackSessionUpdateFrequencyDetails": "If the Jellyfin server hasn''t received any updates from a client in the last 5 minutes, it assumes that playback has ended. This means that for tracks longer than 5 minutes, that playback could be incorrectly reported as having ended, which reduced the quality of the playback reporting data.",
+  "periodicPlaybackSessionUpdateFrequencyDetails": "If the Jellyfin server hasn't received any updates from a client in the last 5 minutes, it assumes that playback has ended. This means that for tracks longer than 5 minutes, that playback could be incorrectly reported as having ended, which reduces the quality of the playback reporting data.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1473,7 +1473,6 @@
   "@swipeRightToLeftAction": {},
   "swipeRightToLeftActionSubtitle": "Action triggered when swiping a track in the list from right to left.",
   "@swipeRightToLeftActionSubtitle": {},
-  
   "startInstantMixForIndividualTracksSwitchTitle": "Start Instant Mixes for Individual Tracks",
   "@startInstantMixForIndividualTracksSwitchTitle": {
     "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
@@ -1688,6 +1687,7 @@
     "description": "Title for the dropdown that selects the format for transcoded streams"
   },
   "transcodingStreamingFormatSubtitle": "Select the format to use when streaming transcoded audio. Already queued tracks will not be affected.",
+  "@transcodingStreamingFormatSubtitle": {},
   "downloadTranscodeEnableTitle": "Enable Transcoded Downloads",
   "@downloadTranscodeEnableTitle": {
     "description": "Title for Enable Transcoded Downloads dropdown"
@@ -2329,6 +2329,7 @@
     "description": "Setting description. Make sure the Mode names match the translations."
   },
   "autoOfflineSettingTitle": "Automated Offline Mode",
+  "@autoOfflineSettingTitle": {},
   "autoOfflineNotification": "Automatically {state, select, enabled{enabled} disabled{disabled} other{set quantum position for}} Offline Mode",
   "@autoOfflineNotification": {
     "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
@@ -2347,7 +2348,7 @@
   },
   "audioFadeInDurationSettingSubtitle": "The duration of the audio fade-in in milliseconds. Set to 0 to disable fade-in.",
   "@audioFadeInDurationSettingSubtitle": {
-      "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
+    "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
   },
   "outputMenuButtonTitle": "Output",
   "@outputMenuButtonTitle": {
@@ -2384,14 +2385,20 @@
   },
   "preferHomeNetworkActiveAddressInfoText": "Active Address",
   "@preferHomeNetworkActiveAddressInfoText": {
-      "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
   },
   "preferHomeNetworkTargetAddressLocalSettingTitle": "Home Network Address",
+  "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
   "preferHomeNetworkTargetAddressLocalSettingDescription": "Target address of the Jellyfin server inside your home network",
+  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
   "preferHomeNetworkEnableSwitchTitle": "Prefer Home Network",
+  "@preferHomeNetworkEnableSwitchTitle": {},
   "preferHomeNetworkEnableSwitchDescription": "Whether or not to use a different address when you are at home",
+  "@preferHomeNetworkEnableSwitchDescription": {},
   "preferHomeNetworkPublicAddressSettingTitle": "Public Address",
+  "@preferHomeNetworkPublicAddressSettingTitle": {},
   "preferHomeNetworkPublicAddressSettingDescription": "The primary address used to connect to your Jellyfin server",
+  "@preferHomeNetworkPublicAddressSettingDescription": {},
   "preferHomeNetworkInfoBox": "This Feature requires Location permissions (and location needs to be enabled) to read the network name.",
   "@preferHomeNetworkInfoBox": {
     "description": "This is only shown on ios and android since desktop doesnt require location permissions"
