@@ -19,10 +19,12 @@ class SleepTimerMenu extends StatefulWidget {
     super.key,
     required this.iconColor,
     this.scrollFunction,
+    this.onStartTimer,
   });
 
   final Color iconColor;
   final void Function()? scrollFunction;
+  final void Function()? onStartTimer;
 
   @override
   State<SleepTimerMenu> createState() => _SleepTimerMenuState();
@@ -507,6 +509,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                     GetIt.instance<MusicPlayerBackgroundTask>()
                         .startSleepTimer(newSleepTimer);
                     FinampSetters.setSleepTimer(newSleepTimer);
+                    widget.onStartTimer?.call();
                   }
                 },
               ),

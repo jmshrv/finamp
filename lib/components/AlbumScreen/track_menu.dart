@@ -38,7 +38,7 @@ import '../album_image.dart';
 import '../global_snackbar.dart';
 import 'download_dialog.dart';
 
-const Duration trackMenuDefaultAnimationDuration = Duration(milliseconds: 750);
+const Duration trackMenuDefaultAnimationDuration = Duration(milliseconds: 500);
 const Curve trackMenuDefaultInCurve = Curves.easeOutCubic;
 const Curve trackMenuDefaultOutCurve = Curves.easeInCubic;
 
@@ -830,24 +830,14 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
                 final isSleepMenu = (child.key is ValueKey &&
                     (child.key as ValueKey).value == 'sleep');
                 // Slide in from right for speed, left for sleep
-                final Offset beginOffset = isSpeedMenu
+                final Offset beginOffset = previousMenu == null
+                    ? Offset.zero
+                    : (isSpeedMenu
                     ? const Offset(1, 0)
                     : isSleepMenu
                         ? const Offset(-1, 0)
-                        : Offset.zero;
-                // // Slide in from right for speed, left for sleep
-                // final Offset beginOffset = switch (activeMenu) {
-                //   SubMenu.speed => const Offset(1, 0),
-                //   SubMenu.sleepTimer => const Offset(-1, 0),
-                //   _ => Offset.zero,
-                // };
-                // final Offset beginOffset = previousMenu == null
-                //     ? const Offset(0, 0)
-                //     : switch (activeMenu) {
-                //         SubMenu.speed => const Offset(1, 0),
-                //         SubMenu.sleepTimer => const Offset(-1, 0),
-                //         _ => const Offset(0, 0),
-                //       };
+                            : Offset.zero);
+
                 final Offset endOffset = Offset.zero;
                 return FadeTransition(
                   opacity: animation,
@@ -868,6 +858,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
                 SubMenu.sleepTimer => SleepTimerMenu(
                     key: const ValueKey('sleep'),
                     iconColor: iconColor,
+                    onStartTimer: () {
+                      toggleSleepTimerMenu();
+                    }
                   ),
                 _ => null,
               },
