@@ -130,7 +130,7 @@
       }
     }
   },
-  "dlEnqueued": "{count} 個加入佇列",
+  "dlEnqueued": "{count} 個等待下載",
   "@dlEnqueued": {
     "placeholders": {
       "count": {
@@ -816,7 +816,7 @@
   "@genericCancel": {
     "description": "Used when the user stops an action from taking place inside a popup dialog window"
   },
-  "confirmDownloadStarted": "已開始下載",
+  "confirmDownloadStarted": "開始下載",
   "@confirmDownloadStarted": {
     "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
   },
@@ -1323,7 +1323,7 @@
   "@repairDownloads": {
     "description": "Tooltip for downloads repair button."
   },
-  "requireWifiForDownloads": "僅在 Wi-Fi 環境下允許下載。",
+  "requireWifiForDownloads": "僅在 Wi-Fi 下允許下載。",
   "@requireWifiForDownloads": {
     "description": "Description of setting for only performing downloads while on wifi"
   },
@@ -1383,7 +1383,7 @@
   "@downloadBitrateSubtitle": {
     "description": "subtitle for Download Bitrate settings slider"
   },
-  "activeDownloadsListHeader": "{itemCount} 個{typeName, select, downloading{正在下載} failed{失敗} syncFailed{同步異常} enqueued{排隊等待} other{}}的{itemCount, plural, =1{項目} other{項目}}",
+  "activeDownloadsListHeader": "{itemCount} 個{typeName, select, downloading{正在下載} failed{失敗} syncFailed{同步異常} enqueued{等待下載} other{}}的{itemCount, plural, =1{項目} other{項目}}",
   "@activeDownloadsListHeader": {
     "description": "Header text for lists of active downloads of a particular state.",
     "placeholders": {
@@ -1520,7 +1520,7 @@
     },
     "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
   },
-  "cacheLibraryImagesName": "'{libraryName}'的快取圖片",
+  "cacheLibraryImagesName": "'{libraryName}'的圖片暫存",
   "@cacheLibraryImagesName": {
     "placeholders": {
       "libraryName": {
@@ -1756,7 +1756,7 @@
   "@addPlaylistSubheader": {
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
   },
-  "cacheLibraryImagesSettings": "快取目前音樂庫中的圖片",
+  "cacheLibraryImagesSettings": "暫存目前音樂庫的圖片",
   "@cacheLibraryImagesSettings": {},
   "showLyricsTimestampsTitle": "顯示同步歌詞的時間標記",
   "@showLyricsTimestampsTitle": {
