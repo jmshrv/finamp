@@ -382,6 +382,16 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       _applyVolumeNormalization(currentTrack);
     });
 
+    // trigger sleep timer if we're almost at the end of the final track
+    _player.positionStream.listen((position) {
+      if ((sleepTimer?.remainingLength ?? 0) <= 1 &&
+          ((mediaItem.value?.duration ?? Duration.zero) - position) <=
+              FinampSettingsHelper.finampSettings.audioFadeOutDuration) {
+        sleepTimer?.callback();
+        return;
+      }
+    });
+
     // Special processing for state transitions.
     _player.processingStateStream.listen((event) async {
       if (event == ProcessingState.completed) {

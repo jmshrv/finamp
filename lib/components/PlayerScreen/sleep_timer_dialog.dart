@@ -1,12 +1,17 @@
 import 'dart:ffi';
+import 'dart:math';
 
+import 'package:finamp/components/PlayerScreen/queue_list.dart';
 import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/media_state_stream.dart';
+import 'package:finamp/services/progress_state_stream.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../services/finamp_settings_helper.dart';
 import '../../services/music_player_background_task.dart';
@@ -27,7 +32,7 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
   SleepTimer newSleepTimer = SleepTimer(
       SleepTimerType.duration, DefaultSettings.sleepTimerDurationSeconds);
 
-  final _trackCountController = TextEditingController(text: "1");
+  final _trackCountController = TextEditingController(text: "2");
 
   bool durationMode = true;
   bool trackMode = false;
@@ -208,46 +213,6 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
                   )
                 ],
               ),
-                      // TODO: On set, calculate duration from queue?
-                      if (!trackMode) return null;
-                      if (value == null || value.isEmpty) {
-                        return AppLocalizations.of(context)!.required;
-                      }
-                      if (int.tryParse(value) == null ||
-                          int.parse(value) <= 0) {
-                        return AppLocalizations.of(context)!.invalidNumber;
-                      }
-                      return null;
-                    },
-                  ),
-                )
-              ],
-            ),
-
-            // Finish Track Switch (alone)
-            Row(
-              children: [
-                Switch(
-                  value: afterCurrentTrack,
-                  onChanged: (value) {
-                    setState(() {
-                      afterCurrentTrack = value;
-                      if (newSleepTimer.type != SleepTimerType.tracks)
-                          {newSleepTimer.type = SleepTimerType.tracks;}
-                      if (value) {
-                        trackMode = false;
-                        durationMode = false;
-                        finishTrack = false;
-                        newSleepTimer.finishTrack = true;
-                        newSleepTimer.length = 1;
-                      }
-                    });
-                  },
-                ),
-                const SizedBox(width: 8),
-                const Text("After current track"),
-              ],
-            ),
               Divider(
                 color: Theme.of(context).colorScheme.secondary.withOpacity(0.3),
               ),
@@ -277,10 +242,90 @@ class _SleepTimerDialogState extends ConsumerState<SleepTimerDialog> {
                   const Text("After current track"),
                 ],
               ),
-
-              // TODO: Set/Calculate this text
-              // Text("Playback will end in ~12m 34s",
-              // style: Theme.of(context).textTheme.labelSmall,)
+              StreamBuilder(
+                  stream: Rx.combineLatest2<ProgressState, FinampQueueInfo?,
+                          (ProgressState?, FinampQueueInfo?)>(
+                      progressStateStream,
+                      GetIt.instance<QueueService>().getQueueStream(),
+                      (a, b) => (a, b)),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      ProgressState progressState = snapshot.data!.$1!;
+                      FinampQueueInfo queueInfo = snapshot.data!.$2!;
+                      Duration currentTrackRemainingDuration =
+                          (progressState.mediaItem!.duration! -
+                              progressState.position);
+                      Duration queueRemainingDuration =
+                          queueInfo.remainingDuration;
+                      Duration remaining;
+                      if (durationMode) {
+                        int? finalTrackIndex = queueInfo.getTrackIndexAfter(
+                            newSleepTimer.totalDuration -
+                                currentTrackRemainingDuration);
+                        Duration? durationOfFinalTrack;
+                        Duration? durationUntilFinalTrack;
+                        Duration? durationUntilEndOfFinalTrack;
+                        if (finalTrackIndex != null) {
+                          durationOfFinalTrack = queueInfo
+                              .fullQueue[finalTrackIndex - 1].item.duration!;
+                          durationUntilFinalTrack = newSleepTimer
+                                      .totalDuration <
+                                  currentTrackRemainingDuration
+                              ? Duration.zero
+                              : currentTrackRemainingDuration +
+                                  queueInfo.getDurationUntil(finalTrackIndex -
+                                      queueInfo.currentTrackIndex);
+                          durationUntilEndOfFinalTrack = newSleepTimer
+                                      .totalDuration <
+                                  currentTrackRemainingDuration
+                              ? currentTrackRemainingDuration
+                              : durationUntilFinalTrack + durationOfFinalTrack;
+                        }
+                        remaining = finishTrack
+                            ? Duration(
+                                milliseconds: min(
+                                    durationUntilEndOfFinalTrack
+                                            ?.inMilliseconds ??
+                                        queueRemainingDuration.inMilliseconds,
+                                    (queueRemainingDuration +
+                                            currentTrackRemainingDuration)
+                                        .inMilliseconds))
+                            : Duration(
+                                milliseconds: min(
+                                    newSleepTimer.totalDuration.inMilliseconds,
+                                    (queueRemainingDuration +
+                                            currentTrackRemainingDuration)
+                                        .inMilliseconds));
+                      } else if (trackMode) {
+                        remaining = currentTrackRemainingDuration +
+                            queueInfo.getDurationUntil(newSleepTimer.length);
+                      } else if (afterCurrentTrack) {
+                        remaining = currentTrackRemainingDuration +
+                            queueInfo.getDurationUntil(1);
+                      } else {
+                        remaining = Duration.zero;
+                      }
+                      var remainText =
+                          printDuration(remaining, leadingZeroes: false);
+                      final remainingLabelFullHours = (remaining.inHours);
+                      final remainingLabelFullMinutes =
+                          (remaining.inMinutes) % 60;
+                      final remainingLabelSeconds = (remaining.inSeconds) % 60;
+                      final remainingLabelString =
+                          "${remainingLabelFullHours > 0 ? "$remainingLabelFullHours ${AppLocalizations.of(context)!.hours} " : ""}${remainingLabelFullMinutes > 0 ? "$remainingLabelFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$remainingLabelSeconds ${AppLocalizations.of(context)!.seconds}";
+                      return Padding(
+                          padding: const EdgeInsets.only(top: 4.0, right: 8.0),
+                          child: Text(
+                            AppLocalizations.of(context)!
+                                .sleepTimerProjectedDuration(remainText),
+                            semanticsLabel: AppLocalizations.of(context)!
+                                .sleepTimerProjectedDuration(
+                                    remainingLabelString),
+                            style: Theme.of(context).textTheme.labelSmall,
+                          ));
+                    }
+                    return const SizedBox.shrink();
+                  }),
             ],
           ),
         ),

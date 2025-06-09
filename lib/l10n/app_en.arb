@@ -1904,6 +1904,16 @@
       }
     }
   },
+  "sleepTimerProjectedDuration": "Playback will pause in ~{duration}",
+  "@sleepTimerProjectedDuration": {
+    "description": "Displays duration until playback is expected to be ended by the sleep timer (unless the queue is modified before). {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
   "removeFromPlaylistConfirm": "Remove",
   "@removeFromPlaylistConfirm": {},
   "removeFromPlaylistPrompt": "Remove '{itemName}' from playlist '{playlistName}'?",
