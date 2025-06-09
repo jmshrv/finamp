@@ -30,7 +30,6 @@ Future<void> showModalArtistMenu({
       AdaptiveDownloadLockDeleteMenuEntry(baseItem: baseItem),
       ToggleFavoriteMenuEntry(baseItem: baseItem),
       GoToGenreMenuEntry(baseItem: baseItem),
-      DeleteFromServerMenuEntry(baseItem: baseItem),
     ];
   }
 

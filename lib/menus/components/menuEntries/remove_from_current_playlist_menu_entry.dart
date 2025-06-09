@@ -27,7 +27,7 @@ class RemoveFromCurrentPlaylistMenuEntry extends ConsumerWidget {
         visible:
             parentItem != null && !ref.watch(finampSettingsProvider.isOffline),
         child: MenuEntry(
-          icon: TablerIcons.playlist_add,
+          icon: TablerIcons.playlist_x,
           title: AppLocalizations.of(context)!.removeFromPlaylistTitle,
           enabled: parentItem != null,
           onTap: () async {

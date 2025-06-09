@@ -25,7 +25,7 @@ class PlaybackActionPageIndicator extends StatelessWidget {
                 onTap: () {
                   pageController.animateToPage(
                     index,
-                    duration: Duration(milliseconds: 750),
+                    duration: Duration(milliseconds: 500),
                     curve: Curves.easeOutCubic,
                   );
                 },
@@ -34,8 +34,10 @@ class PlaybackActionPageIndicator extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 8.0, vertical: 4.0),
                   decoration: BoxDecoration(
-                    color: pageController.page?.round() == index
-                        ? Theme.of(context).colorScheme.primary
+                    color: (pageController.page ?? pageController.initialPage)
+                                .round() ==
+                            index
+                        ? Theme.of(context).colorScheme.primary.withOpacity(0.8)
                         : Theme.of(context)
                             .colorScheme
                             .onSurface

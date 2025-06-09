@@ -28,7 +28,6 @@ Future<void> showModalGenreMenu({
       InstantMixMenuEntry(baseItem: baseItem),
       AdaptiveDownloadLockDeleteMenuEntry(baseItem: baseItem),
       ToggleFavoriteMenuEntry(baseItem: baseItem),
-      DeleteFromServerMenuEntry(baseItem: baseItem),
     ];
   }
 
@@ -50,18 +49,19 @@ Future<void> showModalGenreMenu({
         ),
         pinned: true,
       ),
-      MenuMask(
-        height: playActionRowHeight + 8.0,
-        child: SliverToBoxAdapter(
-          child: PlaybackActionRow(
-            controller: pageViewController,
-            playbackActionPages: getPlaybackActionPages(
-              context: context,
-              baseItem: baseItem,
-            ),
-          ),
-        ),
-      ),
+      //!!! temporarily disabled due to performance issues with large queues
+      // MenuMask(
+      //   height: playActionRowHeight + 8.0,
+      //   child: SliverToBoxAdapter(
+      //     child: PlaybackActionRow(
+      //       controller: pageViewController,
+      //       playbackActionPages: getPlaybackActionPages(
+      //         context: context,
+      //         baseItem: baseItem,
+      //       ),
+      //     ),
+      //   ),
+      // ),
       MenuMask(
         height: MenuMask.defaultHeight,
         child: SliverPadding(

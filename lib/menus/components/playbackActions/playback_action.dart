@@ -14,7 +14,7 @@ class PlaybackAction extends ConsumerWidget {
 
   final IconData icon;
   final String? value;
-  final void Function(WidgetRef ref) onPressed;
+  final void Function() onPressed;
   final String label;
   final Color iconColor;
 
@@ -24,6 +24,9 @@ class PlaybackAction extends ConsumerWidget {
       flex: 1,
       child: IconButton(
         icon: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: 9,
           children: [
             Icon(
               icon,
@@ -31,29 +34,22 @@ class PlaybackAction extends ConsumerWidget {
               size: 35,
               weight: 1.0,
             ),
-            const SizedBox(height: 9),
-            SizedBox(
-              height: 2 * 12 * 1.4 + 6,
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    height: 1.4,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 12,
+                height: 1.4,
+                fontWeight: FontWeight.w300,
               ),
             ),
           ],
         ),
         onPressed: () {
           FeedbackHelper.feedback(FeedbackType.selection);
-          onPressed(ref);
+          onPressed();
         },
         visualDensity: VisualDensity.compact,
         padding: const EdgeInsets.only(

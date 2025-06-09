@@ -31,11 +31,9 @@ class MenuItemInfoHeader extends SliverPersistentHeaderDelegate {
           item: item,
         ),
       BaseItemDtoType.album => AlbumInfo(
-          //TODO don't show parent album
           item: item,
         ),
       BaseItemDtoType.playlist => PlaylistInfo(
-          //TODO show track count instead of artist+album info
           item: item,
         ),
       BaseItemDtoType.genre => GenreInfo(
@@ -230,7 +228,7 @@ class PlaylistInfo extends ConsumerWidget {
         const SizedBox(height: 4),
         ItemAmountChip(
           baseItem:
-              item, //FIXME fetch extended item when menu is opened to include BaseItemDto.albumCount
+              item,
           backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??
               Theme.of(context).textTheme.bodyMedium?.color ??
               Colors.white,
@@ -390,36 +388,38 @@ class _ItemInfoState extends ConsumerState<ItemInfo> {
           ),
           child: Stack(
             children: [
-              Positioned(
-                top: 0,
-                right: 0,
-                child: IconButton(
-                  icon: const Icon(
-                    TablerIcons.external_link,
-                    size: 20,
+              if (BaseItemDtoType.fromItem(widget.item) !=
+                  BaseItemDtoType.track)
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: IconButton(
+                    icon: const Icon(
+                      TablerIcons.external_link,
+                      size: 20,
+                    ),
+                    padding: const EdgeInsets.all(0.0),
+                    onPressed: () {
+                      if (BaseItemDtoType.fromItem(widget.item) ==
+                          BaseItemDtoType.track) {
+                        return;
+                      }
+                      Navigator.pushNamed(
+                        context,
+                        switch (BaseItemDtoType.fromItem(widget.item)) {
+                          BaseItemDtoType.album => AlbumScreen.routeName,
+                          BaseItemDtoType.playlist => AlbumScreen.routeName,
+                          BaseItemDtoType.genre => GenreScreen.routeName,
+                          BaseItemDtoType.artist => ArtistScreen.routeName,
+                          _ => AlbumScreen.routeName,
+                        },
+                        arguments: widget.item,
+                      );
+                    },
+                    color: Theme.of(context).textTheme.bodyMedium?.color ??
+                        Colors.white,
                   ),
-                  padding: const EdgeInsets.all(0.0),
-                  onPressed: () {
-                    if (BaseItemDtoType.fromItem(widget.item) ==
-                        BaseItemDtoType.track) {
-                      return;
-                    }
-                    Navigator.pushNamed(
-                      context,
-                      switch (BaseItemDtoType.fromItem(widget.item)) {
-                        BaseItemDtoType.album => AlbumScreen.routeName,
-                        BaseItemDtoType.playlist => AlbumScreen.routeName,
-                        BaseItemDtoType.genre => GenreScreen.routeName,
-                        BaseItemDtoType.artist => ArtistScreen.routeName,
-                        _ => AlbumScreen.routeName,
-                      },
-                      arguments: widget.item,
-                    );
-                  },
-                  color: Theme.of(context).textTheme.bodyMedium?.color ??
-                      Colors.white,
                 ),
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

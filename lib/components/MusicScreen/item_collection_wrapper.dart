@@ -12,11 +12,8 @@ import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/album_screen.dart';
 import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/screens/genre_screen.dart';
-import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
-import 'package:finamp/services/jellyfin_api_helper.dart';
-import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -83,10 +80,9 @@ class ItemCollectionWrapper extends ConsumerStatefulWidget {
 class _ItemCollectionWrapperState extends ConsumerState<ItemCollectionWrapper> {
   late BaseItemDto mutableItem;
 
-  QueueService get _queueService => GetIt.instance<QueueService>();
   final finampUserHelper = GetIt.instance<FinampUserHelper>();
 
-  late Function() onTap;
+  late void Function() onTap;
   late AppLocalizations local;
 
   @override
@@ -125,44 +121,12 @@ class _ItemCollectionWrapperState extends ConsumerState<ItemCollectionWrapper> {
         };
   }
 
-  final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-
   @override
   Widget build(BuildContext context) {
     local = AppLocalizations.of(context)!;
 
-    final screenSize = MediaQuery.of(context).size;
-    final library = finampUserHelper.currentUser?.currentView;
-
-    final itemType = BaseItemDtoType.fromItem(widget.item);
-    final isArtistOrGenre = (itemType == BaseItemDtoType.artist ||
-            itemType == BaseItemDtoType.genre);
-    final itemDownloadStub = isArtistOrGenre
-          ? DownloadStub.fromFinampCollection(
-                FinampCollection(
-                  type: FinampCollectionType.collectionWithLibraryFilter,
-                  library: library,
-                  item: widget.item
-                )
-            )
-          : DownloadStub.fromItem(
-                type: DownloadItemType.collection,
-                item: widget.item
-            );
-
     void menuCallback() async {
       unawaited(Feedback.forLongPress(context));
-
-      final downloadsService = GetIt.instance<DownloadsService>();
-      final canDeleteFromServer = ref
-          .watch(_jellyfinApiHelper.canDeleteFromServerProvider(widget.item));
-      final isOffline = ref.watch(finampSettingsProvider.isOffline);
-      final downloadStatus = downloadsService.getStatus(
-          itemDownloadStub,
-          null);
-      final albumArtistId = widget.item.albumArtists?.firstOrNull?.id ??
-          widget.item.artistItems?.firstOrNull?.id;
-      String itemType;
 
       switch (BaseItemDtoType.fromItem(widget.item)) {
         case BaseItemDtoType.artist:

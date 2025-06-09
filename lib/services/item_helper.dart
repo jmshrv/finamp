@@ -12,11 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'item_helper.g.dart';
-
-@riverpod
-Future<List<BaseItemDto>?> loadChildTracks(
-  Ref ref, {
+Future<List<BaseItemDto>?> loadChildTracks({
   required BaseItemDto baseItem,
   SortBy? sortBy,
   SortOrder? sortOrder,
@@ -32,9 +28,9 @@ Future<List<BaseItemDto>?> loadChildTracks(
   List<BaseItemDto>? newItems;
 
   if (settings.isOffline) {
-    newItemsFuture = ref.read(loadChildTracksOfflineProvider(
+    newItemsFuture = loadChildTracksOffline(
       baseItem: baseItem,
-    ).future);
+    );
   } else {
     switch (BaseItemDtoType.fromItem(baseItem)) {
       case BaseItemDtoType.track:
@@ -54,7 +50,10 @@ Future<List<BaseItemDto>?> loadChildTracks(
         );
         break;
       case BaseItemDtoType.artist:
-        newItemsFuture = ref.read(getArtistTracksProvider(baseItem,
+        newItemsFuture = ProviderScope.containerOf(
+                GlobalSnackbar.materialAppScaffoldKey.currentContext!,
+                listen: false)
+            .read(getArtistTracksProvider(baseItem,
                 finampUserHelper.currentUser?.currentView, genreFilter)
             .future);
         break;
@@ -102,9 +101,7 @@ Future<List<BaseItemDto>?> loadChildTracks(
   return newItems;
 }
 
-@riverpod
-Future<List<BaseItemDto>?> loadChildTracksOffline(
-  Ref ref, {
+Future<List<BaseItemDto>?> loadChildTracksOffline({
   required BaseItemDto baseItem,
   int? limit,
   BaseItemDto? genreFilter,
@@ -130,7 +127,10 @@ Future<List<BaseItemDto>?> loadChildTracksOffline(
           .toList();
       break;
     case BaseItemDtoType.artist:
-      items = await ref.read(getArtistTracksProvider(
+      items = await ProviderScope.containerOf(
+              GlobalSnackbar.materialAppScaffoldKey.currentContext!,
+              listen: false)
+          .read(getArtistTracksProvider(
               baseItem, finampUserHelper.currentUser?.currentView, genreFilter)
           .future);
       break;

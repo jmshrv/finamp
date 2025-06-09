@@ -254,7 +254,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             if (!snapshot.hasData) {
               return const SliverToBoxAdapter();
             }
-
+        
             final playbackBehavior = snapshot.data!;
             const playbackOrderIcons = {
               FinampPlaybackOrder.linear: TablerIcons.arrows_right,
@@ -283,7 +283,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             var playbackActionsArray = [
               PlaybackAction(
                 icon: playbackOrderIcons[playbackBehavior.order]!,
-                onPressed: (ref) async {
+                onPressed: () async {
                   _queueService.togglePlaybackOrder();
                 },
                 label: playbackOrderTooltips[playbackBehavior.order]!,
@@ -303,7 +303,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                     icon: timerValue != null
                         ? TablerIcons.hourglass_high
                         : TablerIcons.hourglass_empty,
-                    onPressed: (ref) async {
+                    onPressed: () async {
                       if (timerValue != null) {
                         await showDialog<SleepTimerCancelDialog>(
                           context: context,
@@ -331,7 +331,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
               // [Playback speed widget will be added here if conditions are met]
               PlaybackAction(
                 icon: loopModeIcons[playbackBehavior.loop]!,
-                onPressed: (ref) async {
+                onPressed: () async {
                   _queueService.toggleLoopMode();
                 },
                 label: loopModeTooltips[playbackBehavior.loop]!,
@@ -344,7 +344,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         
             final speedWidget = PlaybackAction(
               icon: TablerIcons.brand_speedtest,
-              onPressed: (ref) {
+              onPressed: () {
                 toggleSpeedMenu();
               },
               label: AppLocalizations.of(context)!
@@ -354,7 +354,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                       Colors.white
                   : iconColor,
             );
-
+        
             if (speedWidgetWasVisible ||
                 shouldShowSpeedControls(playbackBehavior.speed, metadata)) {
               speedWidgetWasVisible = true;
@@ -369,6 +369,18 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
               ),
             );
           },
+        ),
+      if (widget.showPlaybackControls)
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Divider(
+              color: Colors.white.withOpacity(0.2),
+              indent: 20.0,
+              endIndent: 20.0,
+              height: 2.0,
+            ),
+          ),
         ),
       SliverPersistentHeader(
         delegate: MenuItemInfoHeader(
