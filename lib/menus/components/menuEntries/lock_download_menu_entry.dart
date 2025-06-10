@@ -10,32 +10,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 class LockDownloadMenuEntry extends ConsumerWidget {
-  final BaseItemDto baseItem;
+  final DownloadStub downloadStub;
 
   const LockDownloadMenuEntry({
     super.key,
-    required this.baseItem,
+    required this.downloadStub,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloadsService = GetIt.instance<DownloadsService>();
 
-    final downloadStatus = downloadsService.getStatus(
-        DownloadStub.fromItem(
-            type: BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.track
-                ? DownloadItemType.track
-                : DownloadItemType.collection,
-            item: baseItem),
-        null);
+    final DownloadItemStatus? downloadStatus =
+        ref.watch(downloadsService.statusProvider((downloadStub, null))).value;
 
     String? parentTooltip;
-    if (downloadStatus.isIncidental) {
-      var parent = downloadsService.getFirstRequiringItem(DownloadStub.fromItem(
-          type: BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.track
-              ? DownloadItemType.track
-              : DownloadItemType.collection,
-          item: baseItem));
+    if (downloadStatus?.isIncidental ?? false) {
+      var parent = downloadsService.getFirstRequiringItem(downloadStub);
       if (parent != null) {
         var parentName = AppLocalizations.of(context)!
             .itemTypeSubtitle(parent.baseItemType.name, parent.name);
@@ -46,20 +37,14 @@ class LockDownloadMenuEntry extends ConsumerWidget {
 
     return Visibility(
         visible: !ref.watch(finampSettingsProvider.isOffline) &&
-            downloadStatus.isIncidental,
+            (downloadStatus?.isIncidental ?? false),
         child: Tooltip(
           message: parentTooltip ?? "Widget shouldn't be visible",
           child: MenuEntry(
               icon: Icons.lock_outlined,
               title: AppLocalizations.of(context)!.lockDownload,
               onTap: () async {
-                var item = DownloadStub.fromItem(
-                    type: BaseItemDtoType.fromItem(baseItem) ==
-                            BaseItemDtoType.track
-                        ? DownloadItemType.track
-                        : DownloadItemType.collection,
-                    item: baseItem);
-                await DownloadDialog.show(context, item, null);
+                await DownloadDialog.show(context, downloadStub, null);
                 if (context.mounted) {
                   Navigator.pop(context);
                 }

@@ -3,6 +3,8 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:finamp/components/padded_custom_scrollview.dart';
+import 'package:finamp/menus/components/menu_item_info_header.dart';
+import 'package:finamp/menus/components/playbackActions/playback_action_row.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -96,6 +98,23 @@ class ThemedBottomSheet extends ConsumerStatefulWidget {
   final WrapperBuilder? buildWrapper;
   final double minDraggableHeight;
   final bool showDragHandle;
+
+  static double calculateStackHeight({
+    required BuildContext context,
+    required List<Widget> menuEntries,
+    double? extraHeight,
+  }) {
+    double stackHeight = (infoHeaderFullExtent) +
+        (playActionRowHeight + playActionPageIndicatorHeight);
+    stackHeight += MediaQuery.paddingOf(context).bottom;
+    stackHeight += menuEntries
+            .where((element) =>
+                switch (element) { Visibility e => e.visible, _ => true })
+            .length *
+        (Theme.of(context).visualDensity == VisualDensity.compact ? 48 : 56);
+    stackHeight += extraHeight ?? 0.0;
+    return stackHeight;
+  }
 
   @override
   ConsumerState<ThemedBottomSheet> createState() => _ThemedBottomSheetState();

@@ -11,24 +11,19 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 class DownloadMenuEntry extends ConsumerWidget {
-  final BaseItemDto baseItem;
+  final DownloadStub downloadStub;
 
   const DownloadMenuEntry({
     super.key,
-    required this.baseItem,
+    required this.downloadStub,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloadsService = GetIt.instance<DownloadsService>();
 
-    final downloadStatus = downloadsService.getStatus(
-        DownloadStub.fromItem(
-            type: BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.track
-                ? DownloadItemType.track
-                : DownloadItemType.collection,
-            item: baseItem),
-        null);
+    final DownloadItemStatus? downloadStatus =
+        ref.watch(downloadsService.statusProvider((downloadStub, null))).value;
 
     return Visibility(
         visible: !ref.watch(finampSettingsProvider.isOffline) &&
@@ -37,13 +32,7 @@ class DownloadMenuEntry extends ConsumerWidget {
             icon: TablerIcons.download,
             title: AppLocalizations.of(context)!.downloadItem,
             onTap: () async {
-              var item = DownloadStub.fromItem(
-                  type: BaseItemDtoType.fromItem(baseItem) ==
-                          BaseItemDtoType.track
-                      ? DownloadItemType.track
-                      : DownloadItemType.collection,
-                  item: baseItem);
-              await DownloadDialog.show(context, item, null);
+              await DownloadDialog.show(context, downloadStub, null);
               if (context.mounted) {
                 Navigator.pop(context);
               }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final double playActionRowHeight = 96.0;
+final double playActionPageIndicatorHeight = 31.0;
 
 class PlaybackActionRow extends ConsumerWidget {
   const PlaybackActionRow({

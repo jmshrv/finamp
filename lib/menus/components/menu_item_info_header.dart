@@ -18,8 +18,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
-final double infoHeaderFullHeight = 140.0;
-final double infoHeaderCondensedHeight = 80.0;
+final double infoHeaderFullExtent = 150.0;
+final double infoHeaderFullInternalHeight = 140.0;
+final double infoHeaderCondensedInternalHeight = 80.0;
 
 Widget _getMenuHeaderForItemType(
     {required BaseItemDto item,
@@ -452,8 +453,8 @@ class _ItemInfoState extends ConsumerState<ItemInfo> {
           margin:
               EdgeInsets.symmetric(horizontal: widget.condensed ? 28.0 : 12.0),
           height: widget.condensed
-              ? infoHeaderCondensedHeight
-              : infoHeaderFullHeight,
+              ? infoHeaderCondensedInternalHeight
+              : infoHeaderFullInternalHeight,
           clipBehavior: Clip.antiAlias,
           decoration: ShapeDecoration(
             color: Theme.of(context).brightness == Brightness.dark

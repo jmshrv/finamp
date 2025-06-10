@@ -8,6 +8,7 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -23,23 +24,34 @@ class AdaptiveDownloadLockDeleteMenuEntry extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloadsService = GetIt.instance<DownloadsService>();
+    final library = GetIt.instance<FinampUserHelper>().currentUser?.currentView;
 
-    final downloadStatus = downloadsService.getStatus(
-        DownloadStub.fromItem(
-            type: BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.track
-                ? DownloadItemType.track
-                : DownloadItemType.collection,
-            item: baseItem),
-        null);
+    final DownloadStub downloadStub =
+        switch (BaseItemDtoType.fromItem(baseItem)) {
+      BaseItemDtoType.track =>
+        DownloadStub.fromItem(type: DownloadItemType.track, item: baseItem),
+      BaseItemDtoType.artist ||
+      BaseItemDtoType.genre =>
+        DownloadStub.fromFinampCollection(FinampCollection(
+          type: FinampCollectionType.collectionWithLibraryFilter,
+          library: library,
+          item: baseItem,
+        )),
+      _ => DownloadStub.fromItem(
+          type: DownloadItemType.collection, item: baseItem),
+    };
+
+    final DownloadItemStatus? downloadStatus =
+        ref.watch(downloadsService.statusProvider((downloadStub, null))).value;
 
     if (!ref.watch(finampSettingsProvider.isOffline) &&
         downloadStatus == DownloadItemStatus.notNeeded) {
-      return DownloadMenuEntry(baseItem: baseItem);
-    } else if (downloadStatus.isRequired) {
-      return DeleteFromDeviceMenuEntry(baseItem: baseItem);
+      return DownloadMenuEntry(downloadStub: downloadStub);
+    } else if (downloadStatus?.isRequired ?? false) {
+      return DeleteFromDeviceMenuEntry(downloadStub: downloadStub);
     } else if (!ref.watch(finampSettingsProvider.isOffline) &&
-        downloadStatus.isIncidental) {
-      return LockDownloadMenuEntry(baseItem: baseItem);
+        (downloadStatus?.isIncidental ?? false)) {
+      return LockDownloadMenuEntry(downloadStub: downloadStub);
     } else {
       return SizedBox.shrink();
     }

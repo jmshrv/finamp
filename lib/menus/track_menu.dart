@@ -192,12 +192,11 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
   @override
   Widget build(BuildContext context) {
     final menuEntries = _getMenuEntries(context);
-    var stackHeight = widget.showPlaybackControls ? 255.0 : 155.0;
-    stackHeight += menuEntries
-            .where((element) =>
-                switch (element) { Visibility e => e.visible, _ => true })
-            .length *
-        56;
+    final stackHeight = ThemedBottomSheet.calculateStackHeight(
+      context: context,
+      menuEntries: menuEntries,
+      extraHeight: widget.showPlaybackControls ? 100 : null,
+    );
 
     return Consumer(builder: (context, ref, child) {
       final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();

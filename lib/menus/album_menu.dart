@@ -37,13 +37,11 @@ Future<void> showModalAlbumMenu({
   }
 
   (double, List<Widget>) getMenuProperties(BuildContext context) {
-    var stackHeight = infoHeaderFullHeight + playActionRowHeight;
-    var menuEntries = getMenuEntries(context);
-    stackHeight += menuEntries
-            .where((element) =>
-                switch (element) { Visibility e => e.visible, _ => true })
-            .length *
-        56;
+    final menuEntries = getMenuEntries(context);
+    final stackHeight = ThemedBottomSheet.calculateStackHeight(
+      context: context,
+      menuEntries: menuEntries,
+    );
 
     final pageViewController = PageController();
 
@@ -87,4 +85,3 @@ Future<void> showModalAlbumMenu({
     buildSlivers: (context) => getMenuProperties(context),
   );
 }
-
