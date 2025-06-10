@@ -18,6 +18,7 @@ import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
@@ -805,65 +806,72 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
           duration: trackMenuDefaultAnimationDuration,
           curve: Curves.easeInOut,
           clipBehavior: Clip.none,
+          alignment: Alignment.topCenter,
           child: SizedBox(
             height: menuHeight,
-            child: AnimatedSwitcher(
-              duration: trackMenuDefaultAnimationDuration,
-              switchInCurve: Curves.easeInOut,
-              switchOutCurve: Curves.easeInOut,
-              layoutBuilder: (currentChild, previousChildren) {
-                return Stack(
-                  alignment: Alignment.topCenter,
-                  children: <Widget>[
-                    ...previousChildren,
-                    if (currentChild != null) currentChild,
-                  ],
-                );
-              },
-              transitionBuilder: (child, animation) {
-                if (MediaQuery.of(context).disableAnimations) {
-                  return child;
-                }
-                // Determine if this is the incoming or outgoing child
-                final isSpeedMenu = (child.key is ValueKey &&
-                    (child.key as ValueKey).value == 'speed');
-                final isSleepMenu = (child.key is ValueKey &&
-                    (child.key as ValueKey).value == 'sleep');
-                // Slide in from right for speed, left for sleep
-                final Offset beginOffset = previousMenu == null
-                    ? Offset.zero
-                    : (isSpeedMenu
-                    ? const Offset(1, 0)
-                    : isSleepMenu
-                        ? const Offset(-1, 0)
-                            : Offset.zero);
+            child: OverflowBox(
+              maxHeight: double.infinity,
+              fit: OverflowBoxFit.deferToChild,
+              alignment: Alignment.topCenter,
+              child: AnimatedSwitcher(
+                duration: trackMenuDefaultAnimationDuration,
+                switchInCurve: Curves.easeInOut,
+                switchOutCurve: Curves.easeInOut,
+                layoutBuilder: (currentChild, previousChildren) {
+                  return Stack(
+                    alignment: Alignment.topCenter,
+                    children: <Widget>[
+                      ...previousChildren,
+                      if (currentChild != null) currentChild,
+                    ],
+                  );
+                },
+                transitionBuilder: (child, animation) {
+                  if (MediaQuery.of(context).disableAnimations) {
+                    return child;
+                  }
+                  // Determine if this is the incoming or outgoing child
+                  final isSpeedMenu = (child.key is ValueKey &&
+                      (child.key as ValueKey).value == 'speed');
+                  final isSleepMenu = (child.key is ValueKey &&
+                      (child.key as ValueKey).value == 'sleep');
+                  // Slide in from right for speed, left for sleep
+                  final Offset beginOffset =
+                      previousMenu == null || activeMenu == null
+                          ? Offset(0, -0.3)
+                          : (isSpeedMenu
+                              ? const Offset(1, 0)
+                              : isSleepMenu
+                                  ? const Offset(-1, 0)
+                                  : Offset.zero);
 
-                final Offset endOffset = Offset.zero;
-                return FadeTransition(
-                  opacity: animation,
-                  child: SlideTransition(
-                    position: Tween<Offset>(
-                      begin: beginOffset,
-                      end: endOffset,
-                    ).animate(animation),
-                    child: child,
-                  ),
-                );
-              },
-              child: switch (activeMenu) {
-                SubMenu.speed => SpeedMenu(
-                    key: const ValueKey('speed'),
-                    iconColor: iconColor,
-                  ),
-                SubMenu.sleepTimer => SleepTimerMenu(
-                    key: const ValueKey('sleep'),
-                    iconColor: iconColor,
-                    onStartTimer: () {
-                      toggleSleepTimerMenu();
-                    }
-                  ),
-                _ => null,
-              },
+                  final Offset endOffset = Offset.zero;
+                  return FadeTransition(
+                    opacity: animation,
+                    child: SlideTransition(
+                      position: Tween<Offset>(
+                        begin: beginOffset,
+                        end: endOffset,
+                      ).animate(animation),
+                      child: child,
+                    ),
+                  );
+                },
+                child: switch (activeMenu) {
+                  SubMenu.speed => SpeedMenu(
+                      key: const ValueKey('speed'),
+                      iconColor: iconColor,
+                    ),
+                  SubMenu.sleepTimer => SleepTimerMenu(
+                      key: const ValueKey('sleep'),
+                      iconColor: iconColor,
+                      onStartTimer: () {
+                        toggleSleepTimerMenu();
+                      },
+                    ),
+                  _ => null,
+                },
+              ),
             ),
           ),
         ),
