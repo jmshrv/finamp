@@ -180,6 +180,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
                     type: PresetTypes.speed,
                     mainColour: widget.iconColor,
                     values: presets,
+                    defaultValue: 1.0,
                     prefix: "x",
                     showAsDouble: true,
                     activeValue:

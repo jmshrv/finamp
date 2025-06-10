@@ -137,10 +137,14 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
   SubMenu? activeMenu;
   SubMenu? previousMenu;
 
-
   double initialSheetExtent = 0.0;
   double inputStep = 0.9;
   double oldExtent = 0.0;
+
+  // Define heights for each submenu state
+  double closedHeight = 0;
+  double speedMenuHeight = 120;
+  double sleepTimerMenuHeight = 265;
 
   @override
   void initState() {
@@ -634,10 +638,6 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
   List<Widget> menu(BuildContext context, List<Widget> menuEntries,
       MetadataProvider? metadata) {
     var iconColor = Theme.of(context).colorScheme.primary;
-    // Define heights for each menu state
-    const double closedHeight = 0;
-    const double speedMenuHeight = 120;
-    const double sleepTimerMenuHeight = 285;
     double menuHeight;
     switch (activeMenu) {
       case SubMenu.speed:
@@ -868,6 +868,11 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
                         iconColor: iconColor,
                         onStartTimer: () {
                           toggleSleepTimerMenu();
+                        },
+                        onSizeChange: (double height) {
+                          setState(() {
+                            sleepTimerMenuHeight = height;
+                          });
                         },
                       ),
                     _ => null,

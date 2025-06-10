@@ -20,11 +20,13 @@ class SleepTimerMenu extends StatefulWidget {
     required this.iconColor,
     this.scrollFunction,
     this.onStartTimer,
+    this.onSizeChange,
   });
 
   final Color iconColor;
   final void Function()? scrollFunction;
   final void Function()? onStartTimer;
+  final void Function(double)? onSizeChange;
 
   @override
   State<SleepTimerMenu> createState() => _SleepTimerMenuState();
@@ -40,6 +42,10 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
   int selectedMode = _persistedSelectedMode;
   bool finishTrack = false;
 
+  final double durationTypeMenuHeight = 265;
+  final double tracksTypeMenuHeight = 220;
+  final double afterCurrentTrackTypeMenuHeight = 140;
+
   @override
   void dispose() {
     // Persist the selected mode when the menu is closed
@@ -53,6 +59,11 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
       AppLocalizations.of(context)!.minutes,
       AppLocalizations.of(context)!.tracks,
       AppLocalizations.of(context)!.sleepTimerAfterCurrentTrack,
+    ];
+    final List<double> menuHeights = [
+      durationTypeMenuHeight,
+      tracksTypeMenuHeight,
+      afterCurrentTrackTypeMenuHeight,
     ];
 
     return Container(
@@ -81,9 +92,14 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                       style: TextButton.styleFrom(
                         textStyle: TextStyle(
                           backgroundColor: Colors.transparent,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: selectedMode == i
+                              ? FontWeight.w600
+                              : FontWeight.w500,
                         ),
-                        foregroundColor: Colors.white,
+                        foregroundColor: selectedMode == i
+                            ? Colors.white
+                            : Theme.of(context).textTheme.bodySmall?.color ??
+                                Colors.white,
                         backgroundColor: Theme.of(context)
                             .colorScheme
                             .primary
@@ -103,10 +119,14 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                             newSleepTimer.type = SleepTimerType.duration;
                             newSleepTimer.length =
                                 60 * 30; // Default to 30 minutes
-                          } else {
+                          } else if (i == 1) {
                             newSleepTimer.type = SleepTimerType.tracks;
                             newSleepTimer.length = 5; // Default to 5 tracks
+                          } else {
+                            newSleepTimer.type = SleepTimerType.tracks;
+                            newSleepTimer.length = 1;
                           }
+                          widget.onSizeChange?.call(menuHeights[i]);
                         });
                       },
                       child: Text(chipLabels[i]),
@@ -211,7 +231,8 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                       visualDensity:
                           VisualDensity(horizontal: -4, vertical: -4),
                       padding: EdgeInsets.zero,
-                      tooltip: '+',
+                      tooltip: AppLocalizations.of(context)!
+                          .playbackSpeedIncreaseLabel,
                     ),
                     SizedBox(width: 12),
                     SizedBox(
@@ -256,23 +277,41 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
               Padding(
                 padding: const EdgeInsets.only(left: 16.0, right: 8.0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: CheckboxListTile.adaptive(
-                        value: finishTrack,
-                        onChanged: (val) {
+                    Center(
+                      child: GestureDetector(
+                        onTap: () {
                           setState(() {
-                            finishTrack = val ?? false;
+                            finishTrack = !finishTrack;
                             newSleepTimer.finishTrack = finishTrack;
                           });
                         },
-                        title: Text(
-                          AppLocalizations.of(context)!
-                              .sleepTimerFinishLastTrack,
-                          style: Theme.of(context).textTheme.bodyMedium,
+                        child: IntrinsicWidth(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  AppLocalizations.of(context)!
+                                      .sleepTimerFinishLastTrack,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  overflow: TextOverflow.visible,
+                                ),
+                              ),
+                              Checkbox.adaptive(
+                                value: finishTrack,
+                                onChanged: (val) {
+                                  setState(() {
+                                    finishTrack = val ?? false;
+                                    newSleepTimer.finishTrack = finishTrack;
+                                  });
+                                },
+                                visualDensity: VisualDensity.compact,
+                              ),
+                            ],
+                          ),
                         ),
-                        visualDensity: VisualDensity.compact,
-                        contentPadding: EdgeInsets.zero,
                       ),
                     ),
                   ],
@@ -315,7 +354,8 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                       visualDensity:
                           VisualDensity(horizontal: -4, vertical: -4),
                       padding: EdgeInsets.zero,
-                      tooltip: '-',
+                      tooltip: AppLocalizations.of(context)!
+                          .playbackSpeedDecreaseLabel,
                     ),
                     Expanded(
                       child: SliderTheme(
@@ -498,11 +538,11 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                 },
               ),
             ),
-            // OK button right-aligned
+            // Start Timer button
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SimpleButton(
-                text: "Start Timer",
+                text: AppLocalizations.of(context)!.sleepTimerStartTimer,
                 icon: TablerIcons.hourglass_high,
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {

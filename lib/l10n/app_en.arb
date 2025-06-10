@@ -2481,5 +2481,9 @@
   "sleepTimerAfterCurrentTrack": "After Current Track",
   "@sleepTimerAfterCurrentTrack" : {
     "description": "Option for the sleep timer that will stop playback after the current track finishes."
+  },
+  "sleepTimerStartTimer": "Start Timer",
+  "@sleepTimerStartTimer" : {
+    "description": "Label for the button that starts the sleep timer"
   }
 }
