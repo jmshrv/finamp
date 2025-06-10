@@ -373,17 +373,17 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
       if (widget.showPlaybackControls)
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
             child: Divider(
               color: Colors.white.withOpacity(0.2),
-              indent: 20.0,
-              endIndent: 20.0,
+              indent: 24.0,
+              endIndent: 24.0,
               height: 2.0,
             ),
           ),
         ),
       SliverPersistentHeader(
-        delegate: MenuItemInfoHeader(
+        delegate: MenuItemInfoSliverHeader(
           item: widget.item,
         ),
         pinned: true,

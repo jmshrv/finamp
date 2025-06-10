@@ -39,7 +39,7 @@ Future<void> showPlaylistActionsMenu({
         );
 
         final menuEntries = [
-          TrackInfo.condensed(
+          MenuItemInfoHeader.condensed(
             item: item,
           ),
           const SizedBox(height: 16),
@@ -108,9 +108,7 @@ Future<void> showPlaylistActionsMenu({
             sliver: MenuMask(
                 height: 36.0,
                 child: SliverList(
-                    delegate: SliverChildListDelegate.fixed(
-                  menuEntries,
-                ))),
+                    delegate: SliverChildListDelegate(menuEntries))),
           ),
           SliverStickyHeader(
               header: Padding(
@@ -120,7 +118,7 @@ Future<void> showPlaylistActionsMenu({
                     style: Theme.of(context).textTheme.titleMedium),
               ),
               sliver: MenuMask(
-                height: 35.0,
+                height: 36.0,
                 child: AddToPlaylistList(
                   itemToAdd: item,
                   playlistsFuture: playlistsFuture.then((value) => (value

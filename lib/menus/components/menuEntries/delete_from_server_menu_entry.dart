@@ -37,7 +37,10 @@ class DeleteFromServerMenuEntry extends ConsumerWidget {
             .deleteFromTargetConfirmButton("server"),
         onTap: () async {
           var item = DownloadStub.fromItem(
-              type: DownloadItemType.collection, item: baseItem);
+              type: BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.track
+                  ? DownloadItemType.track
+                  : DownloadItemType.collection,
+              item: baseItem);
           await askBeforeDeleteFromServerAndDevice(context, item);
           Navigator.pop(context); // close popup
           musicScreenRefreshStream.add(null);

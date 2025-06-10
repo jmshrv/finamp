@@ -3,6 +3,7 @@ import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/album_screen_provider.dart';
 import 'package:finamp/services/artist_content_provider.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -23,6 +24,7 @@ Future<List<BaseItemDto>?> loadChildTracks({
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final finampUserHelper = GetIt.instance<FinampUserHelper>();
   final settings = FinampSettingsHelper.finampSettings;
+  final ref = GetIt.instance<ProviderContainer>();
 
   final Future<List<BaseItemDto>?> newItemsFuture;
   List<BaseItemDto>? newItems;
@@ -38,22 +40,12 @@ Future<List<BaseItemDto>?> loadChildTracks({
         break;
       case BaseItemDtoType.album:
       case BaseItemDtoType.playlist:
-        newItemsFuture = jellyfinApiHelper.getItems(
-          parentItem: baseItem,
-          includeItemTypes: [
-            BaseItemDtoType.track.idString,
-          ].join(","),
-          sortBy: sortBy?.jellyfinName(null) ??
-              "ParentIndexNumber,IndexNumber,SortName",
-          sortOrder: sortOrder?.toString(),
-          // filters: settings.onlyShowFavorites ? "IsFavorite" : null,
-        );
+        newItemsFuture = ref
+            .read(getAlbumOrPlaylistTracksProvider(baseItem).future)
+            .then((value) => value.$2); // get playable tracks
         break;
       case BaseItemDtoType.artist:
-        newItemsFuture = ProviderScope.containerOf(
-                GlobalSnackbar.materialAppScaffoldKey.currentContext!,
-                listen: false)
-            .read(getArtistTracksProvider(baseItem,
+        newItemsFuture = ref.read(getArtistTracksProvider(baseItem,
                 finampUserHelper.currentUser?.currentView, genreFilter)
             .future);
         break;
@@ -127,12 +119,10 @@ Future<List<BaseItemDto>?> loadChildTracksOffline({
           .toList();
       break;
     case BaseItemDtoType.artist:
-      items = await ProviderScope.containerOf(
-              GlobalSnackbar.materialAppScaffoldKey.currentContext!,
-              listen: false)
-          .read(getArtistTracksProvider(
-              baseItem, finampUserHelper.currentUser?.currentView, genreFilter)
-          .future);
+      items = await GetIt.instance<ProviderContainer>().read(
+          getArtistTracksProvider(baseItem,
+                  finampUserHelper.currentUser?.currentView, genreFilter)
+              .future);
       break;
     default:
       items = await downloadsService.getCollectionTracks(

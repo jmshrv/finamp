@@ -151,7 +151,7 @@ Future<void> showOutputMenu({
                     style: Theme.of(context).textTheme.titleMedium),
               ),
               sliver: MenuMask(
-                height: 35.0,
+                height: 36.0,
                 child: OutputTargetList(), // Pass the outputRoutes
               ),
             ),

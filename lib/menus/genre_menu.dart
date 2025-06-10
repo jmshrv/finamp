@@ -44,14 +44,14 @@ Future<void> showModalGenreMenu({
 
     List<Widget> menu = [
       SliverPersistentHeader(
-        delegate: MenuItemInfoHeader(
+        delegate: MenuItemInfoSliverHeader(
           item: baseItem,
         ),
         pinned: true,
       ),
       //!!! temporarily disabled due to performance issues with large queues
       // MenuMask(
-      //   height: playActionRowHeight + 8.0,
+      //   height: MenuMask.defaultHeight,
       //   child: SliverToBoxAdapter(
       //     child: PlaybackActionRow(
       //       controller: pageViewController,

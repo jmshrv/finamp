@@ -31,7 +31,7 @@ class PlaybackAction extends ConsumerWidget {
             Icon(
               icon,
               color: iconColor,
-              size: 35,
+              size: 28,
               weight: 1.0,
             ),
             Text(

@@ -502,7 +502,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
   @override
   Widget build(context) {
     return MenuMask(
-      height: 131.0,
+      height: MenuMask.defaultHeight,
       child: StreamBuilder<FinampQueueInfo?>(
         stream: _queueService.getQueueStream(),
         builder: (context, snapshot) {
@@ -597,7 +597,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
   @override
   Widget build(context) {
     return MenuMask(
-      height: 131.0,
+      height: MenuMask.defaultHeight,
       child: StreamBuilder<FinampQueueInfo?>(
         stream: _queueService.getQueueStream(),
         builder: (context, snapshot) {

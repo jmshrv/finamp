@@ -8,6 +8,7 @@ import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 
 import '../models/jellyfin_models.dart';
 import '../services/feedback_helper.dart';
@@ -29,7 +30,7 @@ Future<void> showThemedBottomSheet({
   bool showDragHandle = true,
 }) async {
   FeedbackHelper.feedback(FeedbackType.heavy);
-  var ref = ProviderScope.containerOf(context, listen: false);
+  var ref = GetIt.instance<ProviderContainer>();
   var themeInfo = ref.read(localThemeInfoProvider);
   ThemeImage? themeImage;
   // If we have a usable theme image for our item, propagate this information

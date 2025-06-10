@@ -113,7 +113,7 @@ class PlayPlaybackAction extends ConsumerWidget {
             isConfirmation: true);
         Navigator.pop(context);
       },
-      iconColor: Theme.of(context).colorScheme.primary,
+      iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
     );
   }
 }
@@ -150,7 +150,8 @@ class PlayNextPlaybackAction extends ConsumerWidget {
               isConfirmation: true);
           Navigator.pop(context);
         },
-        iconColor: Theme.of(context).colorScheme.primary,
+        iconColor:
+            Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
       ),
     );
   }
@@ -186,7 +187,7 @@ class AddToNextUpPlaybackAction extends ConsumerWidget {
             isConfirmation: true);
         Navigator.pop(context);
       },
-      iconColor: Theme.of(context).colorScheme.primary,
+      iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
     );
   }
 }
@@ -220,7 +221,7 @@ class AddToQueuePlaybackAction extends ConsumerWidget {
             isConfirmation: true);
         Navigator.pop(context);
       },
-      iconColor: Theme.of(context).colorScheme.primary,
+      iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
     );
   }
 }
@@ -251,7 +252,7 @@ class ShufflePlaybackAction extends ConsumerWidget {
 
         Navigator.pop(context);
       },
-      iconColor: Theme.of(context).colorScheme.primary,
+      iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
     );
   }
 }
@@ -288,7 +289,8 @@ class ShuffleNextPlaybackAction extends ConsumerWidget {
               isConfirmation: true);
           Navigator.pop(context);
         },
-        iconColor: Theme.of(context).colorScheme.primary,
+        iconColor:
+            Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
       ),
     );
   }
@@ -324,7 +326,7 @@ class ShuffleToNextUpPlaybackAction extends ConsumerWidget {
             isConfirmation: true);
         Navigator.pop(context);
       },
-      iconColor: Theme.of(context).colorScheme.primary,
+      iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
     );
   }
 }
@@ -358,7 +360,7 @@ class ShuffleToQueuePlaybackAction extends ConsumerWidget {
             isConfirmation: true);
         Navigator.pop(context);
       },
-      iconColor: Theme.of(context).colorScheme.primary,
+      iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
     );
   }
 }
@@ -391,7 +393,7 @@ class ShuffleAlbumsAction extends ConsumerWidget {
 
         Navigator.pop(context);
       },
-      iconColor: Theme.of(context).colorScheme.primary,
+      iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
     );
   }
 }
@@ -429,7 +431,8 @@ class ShuffleAlbumsNextPlaybackAction extends ConsumerWidget {
               isConfirmation: true);
           Navigator.pop(context);
         },
-        iconColor: Theme.of(context).colorScheme.primary,
+        iconColor:
+            Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
       ),
     );
   }
@@ -466,7 +469,7 @@ class ShuffleAlbumsToNextUpPlaybackAction extends ConsumerWidget {
             isConfirmation: true);
         Navigator.pop(context);
       },
-      iconColor: Theme.of(context).colorScheme.primary,
+      iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
     );
   }
 }
@@ -501,7 +504,7 @@ class ShuffleAlbumsToQueuePlaybackAction extends ConsumerWidget {
             isConfirmation: true);
         Navigator.pop(context);
       },
-      iconColor: Theme.of(context).colorScheme.primary,
+      iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
     );
   }
 }

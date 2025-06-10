@@ -46,13 +46,13 @@ Future<void> showModalArtistMenu({
 
     List<Widget> menu = [
       SliverPersistentHeader(
-        delegate: MenuItemInfoHeader(
+        delegate: MenuItemInfoSliverHeader(
           item: baseItem,
         ),
         pinned: true,
       ),
       MenuMask(
-        height: playActionRowHeight + 8.0,
+        height: MenuMask.defaultHeight,
         child: SliverToBoxAdapter(
           child: PlaybackActionRow(
             controller: pageViewController,
