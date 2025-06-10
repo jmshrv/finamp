@@ -502,7 +502,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
   @override
   Widget build(context) {
     return MenuMask(
-      height: MenuMask.defaultHeight,
+      height: NextUpSectionHeader.defaultHeight,
       child: StreamBuilder<FinampQueueInfo?>(
         stream: _queueService.getQueueStream(),
         builder: (context, snapshot) {
@@ -597,7 +597,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
   @override
   Widget build(context) {
     return MenuMask(
-      height: MenuMask.defaultHeight,
+      height: QueueSectionHeader.defaultHeight,
       child: StreamBuilder<FinampQueueInfo?>(
         stream: _queueService.getQueueStream(),
         builder: (context, snapshot) {
@@ -1031,6 +1031,8 @@ class QueueSectionHeader extends StatelessWidget {
     this.controls = false,
   });
 
+  static MenuMaskHeight defaultHeight = MenuMaskHeight(132.0);
+
   @override
   Widget build(context) {
     final queueService = GetIt.instance<QueueService>();
@@ -1162,6 +1164,8 @@ class NextUpSectionHeader extends StatelessWidget {
     required this.nextUpHeaderKey,
     this.controls = false,
   });
+
+  static MenuMaskHeight defaultHeight = MenuMaskHeight(114.0);
 
   @override
   Widget build(context) {

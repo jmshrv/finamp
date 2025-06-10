@@ -374,7 +374,13 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
           child: Padding(
             padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
             child: Divider(
-              color: Colors.white.withOpacity(0.2),
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Color.alphaBlend(
+                      Theme.of(context).primaryColor.withOpacity(0.6),
+                      Colors.black26)
+                  : Color.alphaBlend(
+                      Theme.of(context).primaryColor.withOpacity(0.8),
+                      Colors.white),
               indent: 24.0,
               endIndent: 24.0,
               height: 2.0,
@@ -388,7 +394,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         pinned: true,
       ),
       MenuMask(
-        height: MenuMask.defaultHeight,
+        height: MenuItemInfoSliverHeader.defaultHeight,
         child: SliverToBoxAdapter(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -418,7 +424,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
         ),
       ),
       MenuMask(
-        height: MenuMask.defaultHeight,
+        height: MenuItemInfoSliverHeader.defaultHeight,
         child: SliverPadding(
           padding: const EdgeInsets.only(left: 8.0),
           sliver: SliverList(

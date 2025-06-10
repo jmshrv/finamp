@@ -206,6 +206,12 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
   }
 }
 
+/// This type extension ensures that the MenuMask isn't used with an arbitrary height, but only with the heights of the actual used headers
+extension type MenuMaskHeight._(double raw) {
+  MenuMaskHeight(this.raw);
+  double operator +(MenuMaskHeight other) => raw + other.raw;
+  double operator /(double other) => raw / other;
+}
 class MenuMask extends SingleChildRenderObjectWidget {
   const MenuMask({
     super.key,
@@ -213,19 +219,17 @@ class MenuMask extends SingleChildRenderObjectWidget {
     required this.height,
   });
 
-  static const double defaultHeight = 135.0;
-
-  final double height;
+  final MenuMaskHeight height;
 
   @override
   RenderTrackMenuMask createRenderObject(BuildContext context) {
-    return RenderTrackMenuMask(height);
+    return RenderTrackMenuMask(height.raw);
   }
 
   @override
   void updateRenderObject(
       BuildContext context, RenderTrackMenuMask renderObject) {
-    renderObject.updateHeight(height);
+    renderObject.updateHeight(height.raw);
     super.updateRenderObject(context, renderObject);
   }
 }

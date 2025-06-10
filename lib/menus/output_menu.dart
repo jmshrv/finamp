@@ -66,64 +66,11 @@ Future<void> showOutputMenu({
 
         var menu = [
           SliverStickyHeader(
-              header: Padding(
-                padding: const EdgeInsets.only(top: 6.0, bottom: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      // just for justifying the remaining contents of the row
-                      width: 38,
-                    ),
-                    Center(
-                      child: Text(AppLocalizations.of(context)!.outputMenuTitle,
-                          // AppLocalizations.of(context)!.outputMenuTitle,
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color!,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w400)),
-                    ),
-                    if (Platform.isIOS)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: AnimatedSwitcher(
-                          duration: MediaQuery.of(context).disableAnimations
-                              ? Duration.zero
-                              : const Duration(milliseconds: 1000),
-                          switchOutCurve: const Threshold(0.0),
-                          child: Consumer(builder: (context, ref, child) {
-                            return AirPlayRoutePickerView(
-                              key: ValueKey(
-                                  ref.watch(localThemeProvider).primary),
-                              tintColor: ref.watch(localThemeProvider).primary,
-                              activeTintColor: jellyfinBlueColor,
-                              onShowPickerView: () => FeedbackHelper.feedback(
-                                  FeedbackType.selection),
-                            );
-                          }),
-                        ),
-                      ),
-                    if (Platform.isAndroid)
-                      IconButton(
-                        icon: Icon(TablerIcons.cast),
-                        onPressed: () {
-                          final audioHandler =
-                              GetIt.instance<MusicPlayerBackgroundTask>();
-                          audioHandler.getRoutes();
-                          // audioHandler.setOutputToDeviceSpeaker();
-                          // audioHandler.setOutputToBluetoothDevice();
-                          audioHandler.showOutputSwitcherDialog();
-                        },
-                      ),
-                    if (!Platform.isAndroid && !Platform.isIOS)
-                      SizedBox(width: 32, height: 8),
-                  ],
-                ),
-              ),
-              sliver: SliverToBoxAdapter(
-                child: SizedBox.shrink(),
-              )),
+            header: const OutputMenuHeader(),
+            sliver: SliverToBoxAdapter(
+              child: SizedBox.shrink(),
+            ),
+          ),
           SliverStickyHeader(
             header: Padding(
               padding: const EdgeInsets.only(
@@ -134,7 +81,7 @@ Future<void> showOutputMenu({
                   style: Theme.of(context).textTheme.titleMedium),
             ),
             sliver: MenuMask(
-                height: 36.0,
+                height: OutputMenuHeader.defaultHeight,
                 child: SliverList(
                     delegate: SliverChildListDelegate.fixed(
                   menuEntries,
@@ -151,7 +98,7 @@ Future<void> showOutputMenu({
                     style: Theme.of(context).textTheme.titleMedium),
               ),
               sliver: MenuMask(
-                height: 36.0,
+                height: OutputMenuHeader.defaultHeight,
                 child: OutputTargetList(), // Pass the outputRoutes
               ),
             ),
@@ -161,6 +108,71 @@ Future<void> showOutputMenu({
             (Platform.isAndroid ? 0.65 : 0.4);
         return (stackHeight, menu);
       });
+}
+
+class OutputMenuHeader extends ConsumerWidget {
+  const OutputMenuHeader({
+    super.key,
+  });
+
+  static MenuMaskHeight defaultHeight = MenuMaskHeight(36.0);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 6.0, bottom: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+            // just for justifying the remaining contents of the row
+            width: 38,
+          ),
+          Center(
+            child: Text(AppLocalizations.of(context)!.outputMenuTitle,
+                // AppLocalizations.of(context)!.outputMenuTitle,
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyLarge!.color!,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400)),
+          ),
+          if (Platform.isIOS)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: AnimatedSwitcher(
+                duration: MediaQuery.of(context).disableAnimations
+                    ? Duration.zero
+                    : const Duration(milliseconds: 1000),
+                switchOutCurve: const Threshold(0.0),
+                child: Consumer(builder: (context, ref, child) {
+                  return AirPlayRoutePickerView(
+                    key: ValueKey(ref.watch(localThemeProvider).primary),
+                    tintColor: ref.watch(localThemeProvider).primary,
+                    activeTintColor: jellyfinBlueColor,
+                    onShowPickerView: () =>
+                        FeedbackHelper.feedback(FeedbackType.selection),
+                  );
+                }),
+              ),
+            ),
+          if (Platform.isAndroid)
+            IconButton(
+              icon: Icon(TablerIcons.cast),
+              onPressed: () {
+                final audioHandler =
+                    GetIt.instance<MusicPlayerBackgroundTask>();
+                audioHandler.getRoutes();
+                // audioHandler.setOutputToDeviceSpeaker();
+                // audioHandler.setOutputToBluetoothDevice();
+                audioHandler.showOutputSwitcherDialog();
+              },
+            ),
+          if (!Platform.isAndroid && !Platform.isIOS)
+            SizedBox(width: 32, height: 8),
+        ],
+      ),
+    );
+  }
 }
 
 class OutputTargetList extends StatefulWidget {

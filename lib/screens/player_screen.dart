@@ -6,7 +6,7 @@ import 'package:balanced_text/balanced_text.dart';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/menus/track_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
-import 'package:finamp/menus/output_panel.dart';
+import 'package:finamp/menus/output_menu.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';

@@ -61,7 +61,7 @@ Future<void> showModalGenreMenu({
       //   ),
       // ),
       MenuMask(
-        height: MenuMask.defaultHeight,
+        height: MenuItemInfoSliverHeader.defaultHeight,
         child: SliverPadding(
           padding: const EdgeInsets.only(left: 8.0),
           sliver: SliverList(

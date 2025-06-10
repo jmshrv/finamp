@@ -95,18 +95,9 @@ Future<void> showPlaylistActionsMenu({
 
         var menu = [
           SliverStickyHeader(
-            header: Padding(
-              padding: const EdgeInsets.only(top: 6.0, bottom: 16.0),
-              child: Center(
-                child: Text(AppLocalizations.of(context)!.addRemoveFromPlaylist,
-                    style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color!,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400)),
-              ),
-            ),
+            header: const PlaylistActionsMenuHeader(),
             sliver: MenuMask(
-                height: 36.0,
+                height: PlaylistActionsMenuHeader.defaultHeight,
                 child: SliverList(
                     delegate: SliverChildListDelegate(menuEntries))),
           ),
@@ -118,7 +109,7 @@ Future<void> showPlaylistActionsMenu({
                     style: Theme.of(context).textTheme.titleMedium),
               ),
               sliver: MenuMask(
-                height: 36.0,
+                height: PlaylistActionsMenuHeader.defaultHeight,
                 child: AddToPlaylistList(
                   itemToAdd: item,
                   playlistsFuture: playlistsFuture.then((value) => (value
@@ -133,6 +124,25 @@ Future<void> showPlaylistActionsMenu({
         var stackHeight = MediaQuery.sizeOf(context).height * 0.9;
         return (stackHeight, menu);
       });
+}
+
+class PlaylistActionsMenuHeader extends ConsumerWidget {
+  const PlaylistActionsMenuHeader({super.key});
+  static MenuMaskHeight defaultHeight = MenuMaskHeight(35.0);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 6.0, bottom: 16.0),
+      child: Center(
+        child: Text(AppLocalizations.of(context)!.addRemoveFromPlaylist,
+            style: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge!.color!,
+                fontSize: 18,
+                fontWeight: FontWeight.w400)),
+      ),
+    );
+  }
 }
 
 class ToggleableListTile extends ConsumerStatefulWidget {

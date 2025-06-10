@@ -64,6 +64,9 @@ class MenuItemInfoSliverHeader extends SliverPersistentHeaderDelegate {
     this.features = const [MenuItemInfoHeaderFeatures.openItem],
   }) : condensed = true;
 
+  static MenuMaskHeight defaultHeight = MenuMaskHeight(151.0);
+  static MenuMaskHeight condensedHeight = MenuMaskHeight(80.0);
+
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -75,10 +78,12 @@ class MenuItemInfoSliverHeader extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 150;
+  double get maxExtent =>
+      (condensed ? condensedHeight.raw : defaultHeight.raw) + 10.0;
 
   @override
-  double get minExtent => 150;
+  double get minExtent =>
+      (condensed ? condensedHeight.raw : defaultHeight.raw) + 10.0;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
@@ -105,6 +110,9 @@ class MenuItemInfoHeader extends ConsumerWidget {
     ],
   }) : condensed = true;
 
+  static MenuMaskHeight defaultHeight = MenuMaskHeight(152.0);
+  static MenuMaskHeight condensedHeight = MenuMaskHeight(35.0);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return _getMenuHeaderForItemType(
@@ -113,6 +121,7 @@ class MenuItemInfoHeader extends ConsumerWidget {
       features: features,
     );
   }
+
 }
 
 class TrackInfo extends ConsumerWidget {
@@ -332,8 +341,8 @@ class ArtistInfo extends ConsumerWidget {
       features: features,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(MenuMask.defaultHeight / 2),
-            bottomLeft: Radius.circular(MenuMask.defaultHeight / 2),
+            topLeft: Radius.circular(MenuItemInfoHeader.defaultHeight / 2),
+            bottomLeft: Radius.circular(MenuItemInfoHeader.defaultHeight / 2),
             topRight: Radius.circular(12),
             bottomRight: Radius.circular(12)),
       ),
