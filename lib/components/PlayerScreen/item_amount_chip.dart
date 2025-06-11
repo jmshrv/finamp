@@ -46,7 +46,10 @@ class _ItemAmountChipState extends ConsumerState<ItemAmountChip> {
       BaseItemDtoType.album => Future.value(widget.baseItem.childCount ?? 0),
       BaseItemDtoType.artist => isOffline
           ? ref
-              .read(getArtistAlbumsProvider(widget.baseItem, library, null)
+              .read((showTrackCountForArtists
+                      ? getArtistAlbumsProvider(widget.baseItem, library, null)
+                      : getPerformingArtistTracksProvider(
+                          widget.baseItem, library, null))
                   .future)
               .then((albums) => albums.length)
           : jellyfinApiHelper
