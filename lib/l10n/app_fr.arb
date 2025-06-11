@@ -484,7 +484,7 @@
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
-  "aboutContributionPrompt": "Créé par des gens géniaux sur leur temps libre.\nVous pouvez les rejoindre !",
+  "aboutContributionPrompt": "Créé par des gens géniaux sur leur temps libre.\nVous pourriez être l’un d’entre eux !",
   "@aboutContributionPrompt": {
     "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
   },
@@ -1894,7 +1894,7 @@
   "@startupErrorWorkaround": {
     "description": "The subtitle for how to manually recover from a startup error"
   },
-  "startupErrorTitle": "Une erreur s'est produite au démarrage de l'application!",
+  "startupErrorTitle": "Une erreur s'est produite au démarrage de l'application !",
   "@startupErrorTitle": {
     "description": "The title for the error screen that shows when startup fails."
   },
@@ -1902,7 +1902,7 @@
   "@librarySelectError": {
     "description": "Error shown when the library select screen fails to load."
   },
-  "startupErrorCallToAction": "Veuillez créer un problème sur \"github.com/jmshrv/finamp\" avec les logs (!) (utilisez le bouton ci-dessous) et une capture d'écran de cette page, afin que nous puissions le résoudre le plus rapidement possible.",
+  "startupErrorCallToAction": "Veuillez créer un problème sur \"github.com/jmshrv/finamp\" avec les logs (utilisez le bouton ci-dessous) et une capture d'écran de cette page, afin que nous puissions le résoudre le plus rapidement possible.",
   "@startupErrorCallToAction": {
     "description": "The subtitle / call to action for what to do after encountering a startup error"
   },
