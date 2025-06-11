@@ -49,23 +49,18 @@ class _ItemAmountChipState extends ConsumerState<ItemAmountChip> {
               .read(getArtistAlbumsProvider(widget.baseItem, library, null)
                   .future)
               .then((albums) => albums.length)
-          : (showTrackCountForArtists
-              ? jellyfinApiHelper
+          : jellyfinApiHelper
                   .getItemsWithTotalRecordCount(
                       libraryFilter: library,
                       parentItem: widget.baseItem,
-                      includeItemTypes: BaseItemDtoType.track.idString,
+                  includeItemTypes: showTrackCountForArtists
+                      ? BaseItemDtoType.track.idString
+                      : BaseItemDtoType.album.idString,
                       limit: 1,
-                      artistType: ArtistType.artist)
-                  .then((fetchedItems) => fetchedItems.totalRecordCount)
-              : jellyfinApiHelper
-                  .getItemsWithTotalRecordCount(
-                      libraryFilter: library,
-                      parentItem: widget.baseItem,
-                      includeItemTypes: BaseItemDtoType.album.idString,
-                      limit: 1,
-                      artistType: ArtistType.albumartist)
-                  .then((fetchedItems) => fetchedItems.totalRecordCount)),
+                  artistType: showTrackCountForArtists
+                      ? ArtistType.artist
+                      : ArtistType.albumartist)
+              .then((fetchedItems) => fetchedItems.totalRecordCount),
       BaseItemDtoType.genre => isOffline
           ? downloadsService
               .getAllCollections(
