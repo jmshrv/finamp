@@ -178,7 +178,7 @@
   },
   "editPlaylistNameTooltip": "Modifier la liste de lecture",
   "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Modifier le nom de la liste de lecture",
+  "editPlaylistNameTitle": "Modifier la liste de lecture",
   "@editPlaylistNameTitle": {},
   "required": "Requis",
   "@required": {},
@@ -480,7 +480,7 @@
   "@changeLanguage": {
     "description": "Label for button shown during the login process that allows the user to change the app language"
   },
-  "loginFlowWelcomeHeading": "Bienvenue sur",
+  "loginFlowWelcomeHeading": "Bienvenue sur {styledName}",
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
@@ -1894,7 +1894,7 @@
   "@startupErrorWorkaround": {
     "description": "The subtitle for how to manually recover from a startup error"
   },
-  "startupErrorTitle": "Une erreur s'est produite au démarrage de l'application\nDésole pour ça…",
+  "startupErrorTitle": "Une erreur s'est produite au démarrage de l'application!",
   "@startupErrorTitle": {
     "description": "The title for the error screen that shows when startup fails."
   },
@@ -1902,7 +1902,7 @@
   "@librarySelectError": {
     "description": "Error shown when the library select screen fails to load."
   },
-  "startupErrorCallToAction": "Veuillez créer un problème sur github.com/jmshrv/finamp avec les logs (!) (utilisez le bouton ci-dessous) et une capture d'écran de cette page, afin que nous puissions le résoudre le plus rapidement possible.",
+  "startupErrorCallToAction": "Veuillez créer un problème sur \"github.com/jmshrv/finamp\" avec les logs (!) (utilisez le bouton ci-dessous) et une capture d'écran de cette page, afin que nous puissions le résoudre le plus rapidement possible.",
   "@startupErrorCallToAction": {
     "description": "The subtitle / call to action for what to do after encountering a startup error"
   },
@@ -2291,5 +2291,9 @@
   "preferHomeNetworkEnableSwitchTitle": "Préférer le réseau domestique",
   "@preferHomeNetworkEnableSwitchTitle": {},
   "preferHomeNetworkEnableSwitchDescription": "Utiliser ou non une adresse différente lorsque vous êtes à la maison",
-  "@preferHomeNetworkEnableSwitchDescription": {}
+  "@preferHomeNetworkEnableSwitchDescription": {},
+  "defaultOrder": "Ordre par défaut",
+  "@defaultOrder": {
+    "description": "Default sorting order for playlists (server order)"
+  }
 }
