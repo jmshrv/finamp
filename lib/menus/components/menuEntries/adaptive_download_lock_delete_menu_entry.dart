@@ -1,9 +1,6 @@
-import 'package:finamp/components/AlbumScreen/download_dialog.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/components/menuEntries/delete_from_device_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/download_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/lock_download_menu_entry.dart';
-import 'package:finamp/menus/components/menuEntries/menu_entry.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/downloads_service.dart';
@@ -42,7 +39,7 @@ class AdaptiveDownloadLockDeleteMenuEntry extends ConsumerWidget {
     };
 
     final DownloadItemStatus? downloadStatus =
-        ref.watch(downloadsService.statusProvider((downloadStub, null))).value;
+        ref.watch(downloadsService.statusProvider((downloadStub, null)));
 
     if (!ref.watch(finampSettingsProvider.isOffline) &&
         downloadStatus == DownloadItemStatus.notNeeded) {

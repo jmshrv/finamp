@@ -20,7 +20,7 @@ class DeleteFromDeviceMenuEntry extends ConsumerWidget {
     final downloadsService = GetIt.instance<DownloadsService>();
 
     final DownloadItemStatus? downloadStatus =
-        ref.watch(downloadsService.statusProvider((downloadStub, null))).value;
+        ref.watch(downloadsService.statusProvider((downloadStub, null)));
 
     return Visibility(
         visible: downloadStatus?.isRequired ?? false,
