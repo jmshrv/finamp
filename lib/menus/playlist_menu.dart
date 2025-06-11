@@ -1,17 +1,19 @@
 import 'dart:async';
 
+import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/menus/components/menuEntries/adaptive_download_lock_delete_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/add_to_playlist_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/delete_from_server_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/edit_item_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/instant_mix_menu_entry.dart';
-import 'package:finamp/menus/components/menu_item_info_header.dart';
-import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/menus/components/menuEntries/toggle_favorite_menu_entry.dart';
+import 'package:finamp/menus/components/menu_item_info_header.dart';
 import 'package:finamp/menus/components/playbackActions/playback_action_row.dart';
 import 'package:finamp/menus/components/playbackActions/playback_actions.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
+
+import 'components/menuEntries/menu_entry.dart';
 
 const Duration playlistMenuDefaultAnimationDuration =
     Duration(milliseconds: 750);
@@ -24,7 +26,7 @@ Future<void> showModalPlaylistMenu({
   required BaseItemDto baseItem,
 }) async {
   // Normal menu entries, excluding headers
-  List<Widget> getMenuEntries(BuildContext context) {
+  List<HideableMenuEntry> getMenuEntries(BuildContext context) {
     return [
       AddToPlaylistMenuEntry(baseItem: baseItem),
       InstantMixMenuEntry(baseItem: baseItem),

@@ -4,15 +4,15 @@ import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/components/menuEntries/menu_entry.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/services/downloads_service.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
-import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
-class DeleteFromServerMenuEntry extends ConsumerWidget {
+class DeleteFromServerMenuEntry extends ConsumerWidget
+    implements HideableMenuEntry {
   final BaseItemDto baseItem;
 
   const DeleteFromServerMenuEntry({
@@ -23,8 +23,6 @@ class DeleteFromServerMenuEntry extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-    final downloadsService = GetIt.instance<DownloadsService>();
-    final queueService = GetIt.instance<QueueService>();
 
     final canDelete =
         ref.watch(jellyfinApiHelper.canDeleteFromServerProvider(baseItem));
@@ -47,5 +45,31 @@ class DeleteFromServerMenuEntry extends ConsumerWidget {
         },
       ),
     );
+  }
+
+  @override
+  bool get isVisible {
+    if (FinampSettingsHelper.finampSettings.isOffline) {
+      return false;
+    }
+    var itemType = BaseItemDtoType.fromItem(baseItem);
+    var isPlaylist = itemType == BaseItemDtoType.playlist;
+    bool deleteEnabled =
+        FinampSettingsHelper.finampSettings.allowDeleteFromServer;
+
+    // always check if a playlist is deletable
+    if (!deleteEnabled && !isPlaylist) {
+      return false;
+    }
+
+    // do not bother checking server for item types known to not be deletable
+    if (![
+      BaseItemDtoType.album,
+      BaseItemDtoType.playlist,
+      BaseItemDtoType.track
+    ].contains(itemType)) {
+      return false;
+    }
+    return baseItem.canDelete ?? true;
   }
 }

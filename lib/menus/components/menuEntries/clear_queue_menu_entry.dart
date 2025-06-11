@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
-class ClearQueueMenuEntry extends ConsumerWidget {
+class ClearQueueMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final BaseItemDto baseItem;
 
   const ClearQueueMenuEntry({
@@ -28,4 +28,7 @@ class ClearQueueMenuEntry extends ConsumerWidget {
       },
     );
   }
+
+  @override
+  bool get isVisible => true;
 }

@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
-class LockDownloadMenuEntry extends ConsumerWidget {
+class LockDownloadMenuEntry extends ConsumerWidget
+    implements HideableMenuEntry {
   final DownloadStub downloadStub;
 
   const LockDownloadMenuEntry({
@@ -50,4 +51,11 @@ class LockDownloadMenuEntry extends ConsumerWidget {
               }),
         ));
   }
+
+  @override
+  bool get isVisible =>
+      GetIt.instance<DownloadsService>()
+          .getStatus(downloadStub, null)
+          .isIncidental &&
+      !FinampSettingsHelper.finampSettings.isOffline;
 }

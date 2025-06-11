@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
-class EditItemMenuEntry extends ConsumerWidget {
+class EditItemMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final BaseItemDto baseItem;
 
   const EditItemMenuEntry({
@@ -33,8 +33,7 @@ class EditItemMenuEntry extends ConsumerWidget {
               case BaseItemDtoType.playlist:
                 showDialog<PlaylistEditDialog>(
                   context: context,
-                  builder: (context) =>
-                      PlaylistEditDialog(playlist: baseItem),
+                  builder: (context) => PlaylistEditDialog(playlist: baseItem),
                 );
                 break;
               default:
@@ -44,4 +43,9 @@ class EditItemMenuEntry extends ConsumerWidget {
           },
         ));
   }
+
+  @override
+  bool get isVisible =>
+      !FinampSettingsHelper.finampSettings.isOffline &&
+      [BaseItemDtoType.playlist].contains(BaseItemDtoType.fromItem(baseItem));
 }

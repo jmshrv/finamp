@@ -1,24 +1,21 @@
 import 'dart:async';
 
+import 'package:finamp/components/PlayerScreen/queue_list.dart';
+import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
+import 'package:finamp/components/PlayerScreen/sleep_timer_dialog.dart';
+import 'package:finamp/components/themed_bottom_sheet.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/components/menuEntries/adaptive_download_lock_delete_menu_entry.dart';
-import 'package:finamp/menus/components/menuEntries/clear_queue_menu_entry.dart';
-import 'package:finamp/menus/components/menuEntries/go_to_album_menu_entry.dart';
-import 'package:finamp/menus/components/menuEntries/instant_mix_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/add_to_playlist_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/clear_queue_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/delete_from_server_menu_entry.dart';
-import 'package:finamp/menus/components/menuEntries/go_to_artist_menu_entry.dart';
-import 'package:finamp/menus/components/menuEntries/go_to_genre_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/instant_mix_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/remove_from_current_playlist_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/toggle_favorite_menu_entry.dart';
 import 'package:finamp/menus/components/menu_item_info_header.dart';
 import 'package:finamp/menus/components/playbackActions/playback_action.dart';
 import 'package:finamp/menus/components/playbackActions/playback_actions.dart';
 import 'package:finamp/menus/components/speed_menu.dart';
-import 'package:finamp/components/PlayerScreen/queue_list.dart';
-import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
-import 'package:finamp/components/PlayerScreen/sleep_timer_dialog.dart';
-import 'package:finamp/components/themed_bottom_sheet.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
@@ -32,6 +29,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
+
+import 'components/menuEntries/menu_entry.dart';
 
 const Duration trackMenuDefaultAnimationDuration = Duration(milliseconds: 750);
 const Curve trackMenuDefaultInCurve = Curves.easeOutCubic;
@@ -195,7 +194,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
     final stackHeight = ThemedBottomSheet.calculateStackHeight(
       context: context,
       menuEntries: menuEntries,
-      extraHeight: widget.showPlaybackControls ? 100 : null,
+      // Include 60 height of shorter track playback row
+      extraHeight: widget.showPlaybackControls ? 160 : 60,
+      includePlaybackrow: false,
     );
 
     return Consumer(builder: (context, ref, child) {
@@ -206,8 +207,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
   }
 
   // Normal track menu entries, excluding headers
-  List<Widget> _getMenuEntries(BuildContext context) {
-
+  List<HideableMenuEntry> _getMenuEntries(BuildContext context) {
     final currentTrack = _queueService.getCurrentTrack();
     FinampQueueItem? queueItem;
     if (isBaseItemInQueueItem(widget.item, currentTrack)) {
@@ -250,7 +250,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             if (!snapshot.hasData) {
               return const SliverToBoxAdapter();
             }
-        
+
             final playbackBehavior = snapshot.data!;
             const playbackOrderIcons = {
               FinampPlaybackOrder.linear: TablerIcons.arrows_right,
@@ -275,7 +275,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
               FinampLoopMode.all:
                   AppLocalizations.of(context)!.loopModeAllButtonLabel,
             };
-        
+
             var playbackActionsArray = [
               PlaybackAction(
                 icon: playbackOrderIcons[playbackBehavior.order]!,
@@ -337,7 +337,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                     : iconColor,
               ),
             ];
-        
+
             final speedWidget = PlaybackAction(
               icon: TablerIcons.brand_speedtest,
               onPressed: () {
@@ -350,13 +350,13 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                       Colors.white
                   : iconColor,
             );
-        
+
             if (speedWidgetWasVisible ||
                 shouldShowSpeedControls(playbackBehavior.speed, metadata)) {
               speedWidgetWasVisible = true;
               playbackActionsArray.insertAll(2, [speedWidget]);
             }
-        
+
             return SliverToBoxAdapter(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

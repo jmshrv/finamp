@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
-class ToggleFavoriteMenuEntry extends ConsumerWidget {
+class ToggleFavoriteMenuEntry extends ConsumerWidget
+    implements HideableMenuEntry {
   final BaseItemDto baseItem;
 
   const ToggleFavoriteMenuEntry({
@@ -17,7 +18,6 @@ class ToggleFavoriteMenuEntry extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     bool isFav = ref.watch(isFavoriteProvider(baseItem));
 
     return Visibility(
@@ -34,4 +34,7 @@ class ToggleFavoriteMenuEntry extends ConsumerWidget {
               if (context.mounted) Navigator.pop(context);
             }));
   }
+
+  @override
+  bool get isVisible => !FinampSettingsHelper.finampSettings.isOffline;
 }

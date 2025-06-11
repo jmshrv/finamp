@@ -1,16 +1,15 @@
 import 'dart:async';
 
-import 'package:finamp/menus/components/menuEntries/adaptive_download_lock_delete_menu_entry.dart';
-import 'package:finamp/menus/components/menuEntries/instant_mix_menu_entry.dart';
-import 'package:finamp/menus/components/menuEntries/add_to_playlist_menu_entry.dart';
-import 'package:finamp/menus/components/menuEntries/delete_from_server_menu_entry.dart';
-import 'package:finamp/menus/components/menu_item_info_header.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
+import 'package:finamp/menus/components/menuEntries/adaptive_download_lock_delete_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/add_to_playlist_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/instant_mix_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/toggle_favorite_menu_entry.dart';
-import 'package:finamp/menus/components/playbackActions/playback_action_row.dart';
-import 'package:finamp/menus/components/playbackActions/playback_actions.dart';
+import 'package:finamp/menus/components/menu_item_info_header.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
+
+import 'components/menuEntries/menu_entry.dart';
 
 const Duration genreMenuDefaultAnimationDuration = Duration(milliseconds: 750);
 const Curve genreMenuDefaultInCurve = Curves.easeOutCubic;
@@ -22,7 +21,7 @@ Future<void> showModalGenreMenu({
   required BaseItemDto baseItem,
 }) async {
   // Normal menu entries, excluding headers
-  List<Widget> getMenuEntries(BuildContext context) {
+  List<HideableMenuEntry> getMenuEntries(BuildContext context) {
     return [
       AddToPlaylistMenuEntry(baseItem: baseItem),
       InstantMixMenuEntry(baseItem: baseItem),
@@ -36,6 +35,7 @@ Future<void> showModalGenreMenu({
     final stackHeight = ThemedBottomSheet.calculateStackHeight(
       context: context,
       menuEntries: menuEntries,
+      includePlaybackrow: false,
     );
 
     final pageViewController = PageController();

@@ -11,7 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
-class GoToArtistMenuEntry extends ConsumerWidget {
+class GoToArtistMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final BaseItemDto baseItem;
 
   const GoToArtistMenuEntry({
@@ -55,4 +55,7 @@ class GoToArtistMenuEntry extends ConsumerWidget {
       ),
     );
   }
+
+  @override
+  bool get isVisible => baseItem.artistItems?.isNotEmpty ?? false;
 }

@@ -12,6 +12,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
+import '../menus/components/menuEntries/menu_entry.dart';
 import '../models/jellyfin_models.dart';
 import '../services/feedback_helper.dart';
 import '../services/finamp_settings_helper.dart';
@@ -101,18 +102,17 @@ class ThemedBottomSheet extends ConsumerStatefulWidget {
 
   static double calculateStackHeight({
     required BuildContext context,
-    required List<Widget> menuEntries,
+    required List<HideableMenuEntry> menuEntries,
     double? extraHeight,
+    bool includePlaybackrow = true,
   }) {
-    double stackHeight = (infoHeaderFullExtent) +
-        (playActionRowHeight + playActionPageIndicatorHeight);
-    stackHeight += MediaQuery.paddingOf(context).bottom;
-    stackHeight += menuEntries
-            .where((element) =>
-                switch (element) { Visibility e => e.visible, _ => true })
-            .length *
+    double stackHeight = infoHeaderFullExtent;
+    stackHeight += menuEntries.where((element) => element.isVisible).length *
         (Theme.of(context).visualDensity == VisualDensity.compact ? 48 : 56);
     stackHeight += extraHeight ?? 0.0;
+    stackHeight += includePlaybackrow
+        ? (playActionPageIndicatorHeight + playActionRowHeight)
+        : 0;
     return stackHeight;
   }
 
@@ -147,6 +147,10 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
 
   Widget buildInternal(double stackHeight, List<Widget> slivers) {
     return LayoutBuilder(builder: (context, constraints) {
+      stackHeight += widget.showDragHandle ? 29.5 : 0;
+      // Account for bottom padding in PaddedCustomscrollview
+      stackHeight += 32;
+      stackHeight += MediaQuery.paddingOf(context).bottom;
       if (Platform.isIOS || Platform.isAndroid) {
         var size = (stackHeight / constraints.maxHeight)
             .clamp(widget.minDraggableHeight, 1.0);
@@ -208,10 +212,11 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
 
 /// This type extension ensures that the MenuMask isn't used with an arbitrary height, but only with the heights of the actual used headers
 extension type MenuMaskHeight._(double raw) {
-  MenuMaskHeight(this.raw);
+  const MenuMaskHeight(this.raw);
   double operator +(MenuMaskHeight other) => raw + other.raw;
   double operator /(double other) => raw / other;
 }
+
 class MenuMask extends SingleChildRenderObjectWidget {
   const MenuMask({
     super.key,

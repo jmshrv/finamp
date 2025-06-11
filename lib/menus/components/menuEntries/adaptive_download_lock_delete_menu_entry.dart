@@ -10,7 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
-class AdaptiveDownloadLockDeleteMenuEntry extends ConsumerWidget {
+import 'menu_entry.dart';
+
+class AdaptiveDownloadLockDeleteMenuEntry extends ConsumerWidget
+    implements HideableMenuEntry {
   final BaseItemDto baseItem;
 
   const AdaptiveDownloadLockDeleteMenuEntry({
@@ -53,4 +56,7 @@ class AdaptiveDownloadLockDeleteMenuEntry extends ConsumerWidget {
       return SizedBox.shrink();
     }
   }
+
+  @override
+  bool get isVisible => !FinampSettingsHelper.finampSettings.isOffline;
 }

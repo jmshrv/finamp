@@ -30,3 +30,7 @@ class MenuEntry extends ConsumerWidget {
     );
   }
 }
+
+abstract class HideableMenuEntry implements Widget {
+  bool get isVisible;
+}

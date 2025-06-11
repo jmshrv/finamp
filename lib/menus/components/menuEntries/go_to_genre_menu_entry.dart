@@ -2,7 +2,6 @@ import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/components/menuEntries/menu_entry.dart';
 import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/screens/artist_screen.dart';
 import 'package:finamp/screens/genre_screen.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -12,7 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
-class GoToGenreMenuEntry extends ConsumerWidget {
+class GoToGenreMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final BaseItemDto baseItem;
 
   const GoToGenreMenuEntry({
@@ -56,4 +55,7 @@ class GoToGenreMenuEntry extends ConsumerWidget {
       ),
     );
   }
+
+  @override
+  bool get isVisible => baseItem.genreItems?.isNotEmpty ?? false;
 }

@@ -4,7 +4,6 @@ import 'package:finamp/components/PlayerScreen/artist_chip.dart';
 import 'package:finamp/components/PlayerScreen/genre_chip.dart';
 import 'package:finamp/components/PlayerScreen/item_amount_chip.dart';
 import 'package:finamp/components/album_image.dart';
-import 'package:finamp/components/favorite_button.dart';
 import 'package:finamp/components/icon_and_text.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/l10n/app_localizations.dart';
@@ -18,9 +17,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
-final double infoHeaderFullExtent = 150.0;
-final double infoHeaderFullInternalHeight = 140.0;
-final double infoHeaderCondensedInternalHeight = 80.0;
+const double infoHeaderFullExtent = 162.0;
+const double infoHeaderFullInternalHeight = 140.0;
+const double infoHeaderCondensedInternalHeight = 80.0;
 
 Widget _getMenuHeaderForItemType(
     {required BaseItemDto item,
@@ -64,8 +63,8 @@ class MenuItemInfoSliverHeader extends SliverPersistentHeaderDelegate {
     this.features = const [MenuItemInfoHeaderFeatures.openItem],
   }) : condensed = true;
 
-  static MenuMaskHeight defaultHeight = MenuMaskHeight(151.0);
-  static MenuMaskHeight condensedHeight = MenuMaskHeight(80.0);
+  static const MenuMaskHeight defaultHeight = MenuMaskHeight(151.0);
+  static const MenuMaskHeight condensedHeight = MenuMaskHeight(80.0);
 
   @override
   Widget build(
@@ -110,8 +109,8 @@ class MenuItemInfoHeader extends ConsumerWidget {
     ],
   }) : condensed = true;
 
-  static MenuMaskHeight defaultHeight = MenuMaskHeight(152.0);
-  static MenuMaskHeight condensedHeight = MenuMaskHeight(35.0);
+  static const MenuMaskHeight defaultHeight = MenuMaskHeight(152.0);
+  static const MenuMaskHeight condensedHeight = MenuMaskHeight(35.0);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -121,7 +120,6 @@ class MenuItemInfoHeader extends ConsumerWidget {
       features: features,
     );
   }
-
 }
 
 class TrackInfo extends ConsumerWidget {
@@ -177,8 +175,7 @@ class TrackInfo extends ConsumerWidget {
                 Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
           ),
         ),
-        if (!condensed)
-          ...[
+        if (!condensed) ...[
           AlbumChips(
             baseItem: item,
             backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??
@@ -263,6 +260,7 @@ class AlbumInfo extends ConsumerWidget {
     );
   }
 }
+
 class PlaylistInfo extends ConsumerWidget {
   const PlaylistInfo({
     super.key,

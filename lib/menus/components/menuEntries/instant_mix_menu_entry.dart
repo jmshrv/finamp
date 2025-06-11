@@ -11,7 +11,7 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 /// Start Mix for Tracks, Add/Remove for item collections
-class InstantMixMenuEntry extends ConsumerWidget {
+class InstantMixMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final BaseItemDto baseItem;
 
   const InstantMixMenuEntry({
@@ -91,4 +91,7 @@ class InstantMixMenuEntry extends ConsumerWidget {
             },
           );
   }
+
+  @override
+  bool get isVisible => true;
 }
