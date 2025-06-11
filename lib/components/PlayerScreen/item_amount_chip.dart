@@ -13,23 +13,21 @@ import 'package:get_it/get_it.dart';
 
 final _borderRadius = BorderRadius.circular(4);
 
-class ItemAmountChip extends ConsumerStatefulWidget {
-  const ItemAmountChip({
+class ItemAmount extends ConsumerStatefulWidget {
+  const ItemAmount({
     required this.baseItem,
-    this.backgroundColor,
     this.color,
     super.key,
   });
 
   final BaseItemDto baseItem;
-  final Color? backgroundColor;
   final Color? color;
 
   @override
-  ConsumerState<ItemAmountChip> createState() => _ItemAmountChipState();
+  ConsumerState<ItemAmount> createState() => _ItemAmountChipState();
 }
 
-class _ItemAmountChipState extends ConsumerState<ItemAmountChip> {
+class _ItemAmountChipState extends ConsumerState<ItemAmount> {
   bool showTrackCountForArtists =
       FinampSettingsHelper.finampSettings.artistListType == ArtistType.artist;
   
@@ -116,46 +114,42 @@ class _ItemAmountChipState extends ConsumerState<ItemAmountChip> {
             ),
             excludeSemantics: true,
             container: true,
-            child: Material(
-              color: widget.backgroundColor ?? Colors.white.withOpacity(0.1),
-              borderRadius: _borderRadius,
-              child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    spacing: 4.0,
-                    children: [
-                      if (itemCount == null)
-                        CircularProgressIndicator(
-                          constraints: const BoxConstraints(
-                            minWidth: 16,
-                            minHeight: 16,
-                            maxWidth: 16,
-                            maxHeight: 16,
-                          ),
-                          padding: const EdgeInsets.all(2.0),
-                          color: widget.color ??
-                              Theme.of(context).textTheme.bodySmall!.color ??
-                              Colors.white,
-                          strokeWidth: 2.0,
-                        ),
-                      Text(
-                        itemCount != null
-                            ? AppLocalizations.of(context)!
-                                .itemCount(childItemType.name, itemCount)
-                            : AppLocalizations.of(context)!
-                                .itemCountLoading(childItemType.name),
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                        style: TextStyle(
-                          color: widget.color ??
-                              Theme.of(context).textTheme.bodySmall!.color ??
-                              Colors.white,
-                        ),
-                      )
-                    ],
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 2.0, vertical: 1.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 4.0,
+                children: [
+                  if (itemCount == null)
+                    CircularProgressIndicator(
+                      constraints: const BoxConstraints(
+                        minWidth: 16,
+                        minHeight: 16,
+                        maxWidth: 16,
+                        maxHeight: 16,
+                      ),
+                      padding: const EdgeInsets.all(2.0),
+                      color: widget.color ??
+                          Theme.of(context).textTheme.bodySmall!.color ??
+                          Colors.white,
+                      strokeWidth: 2.0,
+                    ),
+                  Text(
+                    itemCount != null
+                        ? AppLocalizations.of(context)!
+                            .itemCount(childItemType.name, itemCount)
+                        : AppLocalizations.of(context)!
+                            .itemCountLoading(childItemType.name),
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
+                    style: TextStyle(
+                      color: widget.color ??
+                          Theme.of(context).textTheme.bodySmall!.color ??
+                          Colors.white,
+                    ),
                   )
+                ],
               ),
             ),
           );

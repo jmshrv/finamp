@@ -309,11 +309,8 @@ class PlaylistInfo extends ConsumerWidget {
             parent: item,
           ),
           const SizedBox(height: 4),
-          ItemAmountChip(
+          ItemAmount(
             baseItem: item,
-            backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??
-                Theme.of(context).textTheme.bodyMedium?.color ??
-                Colors.white,
           ),
         ]
       ],
@@ -370,15 +367,10 @@ class ArtistInfo extends ConsumerWidget {
           GenreIconAndText(
             parent: item,
           ),
-          const SizedBox(height: 4),
-          if (!condensed)
-            ItemAmountChip(
-              baseItem:
-                  item, //FIXME fetch extended item when menu is opened to include BaseItemDto.albumCount
-              backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??
-                  Theme.of(context).textTheme.bodyMedium?.color ??
-                  Colors.white,
-            )
+          const SizedBox(height: 6),
+          ItemAmount(
+            baseItem: item,
+          )
         ]
       ],
     );
@@ -426,12 +418,9 @@ class GenreInfo extends ConsumerWidget {
           maxLines: 2,
         ),
         if (!condensed) ...[
-          const SizedBox(height: 4),
-          ItemAmountChip(
+          const SizedBox(height: 6),
+          ItemAmount(
             baseItem: item,
-            backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??
-                Theme.of(context).textTheme.bodyMedium?.color ??
-                Colors.white,
           ),
         ]
       ],

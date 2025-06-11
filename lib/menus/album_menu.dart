@@ -30,8 +30,6 @@ Future<void> showModalAlbumMenu({
       InstantMixMenuEntry(baseItem: baseItem),
       AdaptiveDownloadLockDeleteMenuEntry(baseItem: baseItem),
       ToggleFavoriteMenuEntry(baseItem: baseItem),
-      GoToArtistMenuEntry(baseItem: baseItem),
-      GoToGenreMenuEntry(baseItem: baseItem),
       DeleteFromServerMenuEntry(baseItem: baseItem),
     ];
   }

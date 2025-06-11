@@ -228,9 +228,6 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
       InstantMixMenuEntry(baseItem: widget.item),
       AdaptiveDownloadLockDeleteMenuEntry(baseItem: widget.item),
       ToggleFavoriteMenuEntry(baseItem: widget.item),
-      GoToAlbumMenuEntry(baseItem: widget.item),
-      GoToArtistMenuEntry(baseItem: widget.item),
-      GoToGenreMenuEntry(baseItem: widget.item),
       DeleteFromServerMenuEntry(baseItem: widget.item),
       if (widget.showClearQueue) ClearQueueMenuEntry(baseItem: widget.item),
     ];
