@@ -238,7 +238,7 @@ class AlbumInfo extends ConsumerWidget {
         Padding(
           padding: condensed
               ? const EdgeInsets.only(top: 6.0)
-              : const EdgeInsets.symmetric(vertical: 4.0),
+              : const EdgeInsets.symmetric(vertical: 0.0),
           child: ArtistChips(
             baseItem: item,
             backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??
@@ -305,15 +305,15 @@ class PlaylistInfo extends ConsumerWidget {
         ),
         if (!condensed) ...[
           const SizedBox(height: 4),
+          GenreIconAndText(
+            parent: item,
+          ),
+          const SizedBox(height: 4),
           ItemAmountChip(
             baseItem: item,
             backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??
                 Theme.of(context).textTheme.bodyMedium?.color ??
                 Colors.white,
-          ),
-          const SizedBox(height: 4),
-          GenreIconAndText(
-            parent: item,
           ),
         ]
       ],
@@ -425,6 +425,15 @@ class GenreInfo extends ConsumerWidget {
           softWrap: true,
           maxLines: 2,
         ),
+        if (!condensed) ...[
+          const SizedBox(height: 4),
+          ItemAmountChip(
+            baseItem: item,
+            backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??
+                Theme.of(context).textTheme.bodyMedium?.color ??
+                Colors.white,
+          ),
+        ]
       ],
     );
   }
