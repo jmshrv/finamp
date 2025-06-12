@@ -7,7 +7,7 @@ part of 'artist_content_provider.dart';
 // **************************************************************************
 
 String _$getArtistTracksSectionHash() =>
-    r'e27704d47a640692852025446faa55735b278b22';
+    r'e3302229394d2a96e2143dd0555cbecc15f47aa3';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -226,7 +226,7 @@ class _GetArtistTracksSectionProviderElement
       (origin as GetArtistTracksSectionProvider).genreFilter;
 }
 
-String _$getArtistAlbumsHash() => r'0224beeee2ebe77aeb7d302ae2b3d063c77017ec';
+String _$getArtistAlbumsHash() => r'5e17f095e550296b3f959456747c7df840307764';
 
 /// See also [getArtistAlbums].
 @ProviderFor(getArtistAlbums)
@@ -753,7 +753,7 @@ class _GetPerformingArtistTracksProviderElement
       (origin as GetPerformingArtistTracksProvider).onlyFavorites;
 }
 
-String _$getArtistTracksHash() => r'a5adb99fc855be57a8d8b53dd32879fb345fea77';
+String _$getArtistTracksHash() => r'7615ffa7216bd68666ef600e95ccef9faf352464';
 
 /// See also [getArtistTracks].
 @ProviderFor(getArtistTracks)

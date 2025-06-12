@@ -413,7 +413,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                   buildArtistTypeSelectionRow(
                       context,
                       tabType,
-                      ref.watch(finampSettingsProvider.artistListType),
+                      ref.watch(finampSettingsProvider.defaultArtistType),
                       refreshTab),
                   Expanded(
                     child: MusicScreenTabView(

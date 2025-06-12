@@ -279,8 +279,9 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                   padding: const EdgeInsets.only(left: 4),
                   child: buildCountColumn(
                     count: artistCount,
-                    label: (ref.read(finampSettingsProvider.artistListType) ==
-                            ArtistType.albumartist)
+                    label:
+                        (ref.read(finampSettingsProvider.defaultArtistType) ==
+                                ArtistType.albumArtist)
                         ? AppLocalizations.of(context)!.albumArtists
                         : AppLocalizations.of(context)!.performingArtists,
                     onTap: () {

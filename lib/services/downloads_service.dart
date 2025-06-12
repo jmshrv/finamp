@@ -1573,12 +1573,12 @@ late final userDownloadedItemsProvider =
                 q.typeEqualTo(DownloadItemType.track).requiredByIsNotEmpty()))
         // Returns albums where the artist (relatedTo) is an Album Artist
         .optional(
-            artistType == ArtistType.albumartist && relatedTo != null,
+            artistType == ArtistType.albumArtist && relatedTo != null,
             (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(
                 relatedTo!.id.raw, DownloadItemType.collection))))
         // Returns albums related to the performing artist or genre
         .optional(
-            artistType != ArtistType.albumartist && relatedTo != null,
+            artistType != ArtistType.albumArtist && relatedTo != null,
             (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
                 DownloadStub.getHash(
                     relatedTo!.id.raw, DownloadItemType.collection)))))

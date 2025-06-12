@@ -67,7 +67,7 @@ class ItemInfo extends ConsumerWidget {
         if (item.type != "Playlist")
           ArtistChips(
             baseItem: item,
-            artistType: ArtistType.albumartist,
+            artistType: ArtistType.albumArtist,
           ),
         IconAndText(
             iconData: Icons.music_note,

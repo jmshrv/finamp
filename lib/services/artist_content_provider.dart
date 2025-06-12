@@ -72,7 +72,7 @@ Future<
         libraryFilter: library,
         parentItem: parent,
         genreFilter: genreFilter,
-        artistType: ArtistType.albumartist,
+        artistType: ArtistType.albumArtist,
         sortBy: sortBy.jellyfinName(TabContentType.tracks),
         sortOrder: "Descending",
         isFavorite:
@@ -184,7 +184,7 @@ Future<List<BaseItemDto>> getArtistAlbums(
                 .watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
             baseTypeFilter: BaseItemDtoType.album,
             relatedTo: parent,
-            artistType: ArtistType.albumartist,
+            artistType: ArtistType.albumArtist,
             genreFilter: genreFilter);
     fetchArtistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "")
         .compareTo(b.baseItem!.premiereDate ?? ""));
@@ -200,7 +200,7 @@ Future<List<BaseItemDto>> getArtistAlbums(
         genreFilter: genreFilter,
         sortBy: "PremiereDate,SortName",
         includeItemTypes: "MusicAlbum",
-        artistType: ArtistType.albumartist);
+        artistType: ArtistType.albumArtist);
     return artistAlbums ?? [];
   }
 }
@@ -363,7 +363,7 @@ Future<List<BaseItemDto>> getArtistTracks(
       genreFilter: genreFilter,
       sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
       includeItemTypes: "Audio",
-      artistType: ArtistType.albumartist,
+      artistType: ArtistType.albumArtist,
     );
     // Get all performing artist tracks
     final List<BaseItemDto> allPerformingArtistTracks = await ref.watch(

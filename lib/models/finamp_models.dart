@@ -197,7 +197,7 @@ class DefaultSettings {
   static const autoOfflineListenerActive = true;
   static const audioFadeOutDuration = Duration(milliseconds: 0);
   static const audioFadeInDuration = Duration(milliseconds: 0);
-  static const artistListType = ArtistType.albumartist;
+  static const defaultArtistType = ArtistType.albumArtist;
   static const isLocal = false;
   static const preferHomeNetwork = false;
   static const homeNetworkAddress = "http://0.0.0.0:8096";
@@ -339,7 +339,7 @@ class FinampSettings {
     this.showAlbumReleaseDateOnPlayerScreen =
         DefaultSettings.showAlbumReleaseDateOnPlayerScreen,
     this.releaseDateFormat = DefaultSettings.releaseDateFormat,
-    this.artistListType = DefaultSettings.artistListType,
+    this.defaultArtistType = DefaultSettings.defaultArtistType,
     this.autoOffline = DefaultSettings.autoOffline,
     this.autoOfflineListenerActive = DefaultSettings.autoOfflineListenerActive,
     this.audioFadeOutDuration = DefaultSettings.audioFadeOutDuration,
@@ -670,8 +670,8 @@ class FinampSettings {
   @HiveField(91, defaultValue: DefaultSettings.itemSwipeActionRightToLeft)
   ItemSwipeActions itemSwipeActionRightToLeft;
 
-  @HiveField(92, defaultValue: DefaultSettings.artistListType)
-  ArtistType artistListType;
+  @HiveField(92, defaultValue: DefaultSettings.defaultArtistType)
+  ArtistType defaultArtistType;
 
   @HiveField(93, defaultValue: DefaultSettings.currentVolume)
   double currentVolume;
@@ -2981,7 +2981,7 @@ enum ItemSwipeActions {
 @HiveType(typeId: 93)
 enum ArtistType {
   @HiveField(0)
-  albumartist,
+  albumArtist,
   @HiveField(1)
   artist;
 }
