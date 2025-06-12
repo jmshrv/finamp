@@ -49,9 +49,8 @@ class AlbumChips extends ConsumerWidget {
                           ref.watch(finampSettingsProvider
                               .showAlbumReleaseDateOnPlayerScreen))) &&
                   ReleaseDateHelper.autoFormat(baseItem) != null)
-                _ReleaseDateChip(
+                ReleaseDate(
                   baseItem: baseItem,
-                  backgroundColor: backgroundColor,
                   color: color,
                 )
             ]),
@@ -101,8 +100,8 @@ class _EmptyAlbumChip extends StatelessWidget {
   }
 }
 
-class _ReleaseDateChip extends StatelessWidget {
-  const _ReleaseDateChip({
+class ReleaseDate extends StatelessWidget {
+  const ReleaseDate({
     this.baseItem,
     this.backgroundColor,
     this.color,
@@ -123,20 +122,16 @@ class _ReleaseDateChip extends StatelessWidget {
       ),
       excludeSemantics: true,
       container: true,
-      child: Material(
-        color: backgroundColor ?? Colors.white.withOpacity(0.1),
-        borderRadius: _borderRadius,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-          child: Text(
-            releaseDate ?? "Unknown",
-            overflow: TextOverflow.ellipsis,
-            softWrap: false,
-            style: TextStyle(
-              color: color ??
-                  Theme.of(context).textTheme.bodySmall!.color ??
-                  Colors.white,
-            ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 1.0),
+        child: Text(
+          releaseDate ?? "Unknown",
+          overflow: TextOverflow.ellipsis,
+          softWrap: false,
+          style: TextStyle(
+            color: color ??
+                Theme.of(context).textTheme.bodySmall!.color ??
+                Colors.white,
           ),
         ),
       ),

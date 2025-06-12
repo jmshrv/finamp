@@ -136,7 +136,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
             : null,
         startIndex: pageKey,
         limit: _pageSize,
-        artistType: settings.artistListType,
+        artistType: settings.defaultArtistType,
         genreFilter: widget.genreFilter,
       );
 
@@ -163,7 +163,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   Future<void> _getPageOffline() async {
     var settings = FinampSettingsHelper.finampSettings;
     int localRefreshCount = refreshCount;
-    var artistInfoForType = (settings.artistListType == ArtistType.albumartist)
+    var artistInfoForType =
+        (settings.defaultArtistType == ArtistType.albumArtist)
         ? BaseItemDtoType.album
         : BaseItemDtoType.track;
 

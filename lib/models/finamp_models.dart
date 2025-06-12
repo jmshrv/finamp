@@ -32,8 +32,8 @@ class FinampUser {
   FinampUser({
     required this.id,
     required this.publicAddress,
-    required this.homeAddress,
-    required this.preferHomeNetwork,
+    required this.localAddress,
+    required this.preferLocalNetwork,
     required this.isLocal,
     required this.accessToken,
     required this.serverId,
@@ -51,7 +51,7 @@ class FinampUser {
   String publicAddress;
 
   String get baseURL =>
-      isLocal && preferHomeNetwork ? homeAddress : publicAddress;
+      isLocal && preferLocalNetwork ? localAddress : publicAddress;
 
   @HiveField(2)
   String accessToken;
@@ -68,14 +68,14 @@ class FinampUser {
   @HiveField(5)
   Map<BaseItemId, BaseItemDto> views;
 
-  @HiveField(7, defaultValue: DefaultSettings.homeNetworkAddress)
-  String homeAddress;
+  @HiveField(7, defaultValue: DefaultSettings.localNetworkAddress)
+  String localAddress;
 
   @HiveField(8, defaultValue: DefaultSettings.isLocal)
   bool isLocal;
 
-  @HiveField(9, defaultValue: DefaultSettings.preferHomeNetwork)
-  bool preferHomeNetwork;
+  @HiveField(9, defaultValue: DefaultSettings.preferLocalNetwork)
+  bool preferLocalNetwork;
 
   // We only need 1 user, the current user
   final Id isarId = 0;
@@ -89,13 +89,13 @@ class FinampUser {
 
   void update(
       {bool? newIsLocal,
-      String? newHomeAddress,
+      String? newLocalAddress,
       String? newPublicAddress,
-      bool? newPreferHomeNetwork}) {
+      bool? newPreferLocalNetwork}) {
     isLocal = newIsLocal ?? isLocal;
-    homeAddress = newHomeAddress ?? homeAddress;
+    localAddress = newLocalAddress ?? localAddress;
     publicAddress = newPublicAddress ?? publicAddress;
-    preferHomeNetwork = newPreferHomeNetwork ?? preferHomeNetwork;
+    preferLocalNetwork = newPreferLocalNetwork ?? preferLocalNetwork;
     GetIt.instance<FinampUserHelper>().saveUser(this);
   }
 }
@@ -201,10 +201,10 @@ class DefaultSettings {
   static const autoOfflineListenerActive = true;
   static const audioFadeOutDuration = Duration(milliseconds: 0);
   static const audioFadeInDuration = Duration(milliseconds: 0);
-  static const artistListType = ArtistType.albumartist;
+  static const defaultArtistType = ArtistType.albumArtist;
   static const isLocal = false;
-  static const preferHomeNetwork = false;
-  static const homeNetworkAddress = "http://0.0.0.0:8096";
+  static const preferLocalNetwork = false;
+  static const localNetworkAddress = "http://0.0.0.0:8096";
   static const autoReloadQueue = false;
   static const genreCuratedItemSelectionTypeTracks =
       CuratedItemSelectionType.mostPlayed;
@@ -342,7 +342,7 @@ class FinampSettings {
     this.showAlbumReleaseDateOnPlayerScreen =
         DefaultSettings.showAlbumReleaseDateOnPlayerScreen,
     this.releaseDateFormat = DefaultSettings.releaseDateFormat,
-    this.artistListType = DefaultSettings.artistListType,
+    this.defaultArtistType = DefaultSettings.defaultArtistType,
     this.autoOffline = DefaultSettings.autoOffline,
     this.autoOfflineListenerActive = DefaultSettings.autoOfflineListenerActive,
     this.audioFadeOutDuration = DefaultSettings.audioFadeOutDuration,
@@ -669,8 +669,8 @@ class FinampSettings {
   @HiveField(91, defaultValue: DefaultSettings.itemSwipeActionRightToLeft)
   ItemSwipeActions itemSwipeActionRightToLeft;
 
-  @HiveField(92, defaultValue: DefaultSettings.artistListType)
-  ArtistType artistListType;
+  @HiveField(92, defaultValue: DefaultSettings.defaultArtistType)
+  ArtistType defaultArtistType;
 
   @HiveField(93, defaultValue: DefaultSettings.currentVolume)
   double currentVolume;
@@ -1876,6 +1876,43 @@ class QueueItemSource {
     this.contextNormalizationGain,
   });
 
+  factory QueueItemSource.fromBaseItem(
+    BaseItemDto baseItem, {
+    QueueItemSourceType? type,
+    QueueItemSourceNameType? nameType,
+  }) {
+    final type = switch (BaseItemDtoType.fromItem(baseItem)) {
+      BaseItemDtoType.album => QueueItemSourceType.album,
+      BaseItemDtoType.playlist => QueueItemSourceType.playlist,
+      BaseItemDtoType.artist => QueueItemSourceType.artist,
+      BaseItemDtoType.genre => QueueItemSourceType.genre,
+      BaseItemDtoType.track => QueueItemSourceType.track,
+      _ => QueueItemSourceType.unknown
+    };
+
+    final gain = switch (BaseItemDtoType.fromItem(baseItem)) {
+      BaseItemDtoType.playlist => null,
+      BaseItemDtoType.artist => null,
+      _ => baseItem.normalizationGain
+    };
+
+    return QueueItemSource(
+      type: type,
+      name: nameType != null
+          ? QueueItemSourceName(
+              type: nameType, localizationParameter: baseItem.name ?? "")
+          : QueueItemSourceName(
+              type: QueueItemSourceNameType.preTranslated,
+              pretranslatedName: baseItem.name ??
+                  AppLocalizations.of(GlobalSnackbar
+                          .materialAppScaffoldKey.currentContext!)!
+                      .placeholderSource),
+      id: baseItem.id,
+      item: baseItem,
+      contextNormalizationGain: gain,
+    );
+  }
+
   QueueItemSource({
     required this.type,
     required this.name,
@@ -2966,7 +3003,7 @@ enum ItemSwipeActions {
 @HiveType(typeId: 93)
 enum ArtistType {
   @HiveField(0)
-  albumartist,
+  albumArtist,
   @HiveField(1)
   artist;
 }

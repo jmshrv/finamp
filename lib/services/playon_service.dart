@@ -64,8 +64,7 @@ class PlayOnService {
     });
 
     //!!! not working, context is null during initialization
-    // ProviderScope.containerOf(
-    //         GlobalSnackbar.materialAppScaffoldKey.currentContext!)
+    // GetIt.instance<ProviderContainer>()
     //     .listen(
     //         finampSettingsProvider.select((s) => (
     //               s.value?.isOffline ?? false,
@@ -328,9 +327,7 @@ class PlayOnService {
 
             // Handle toggling favorite status from remote client
             _playOnServiceLogger.info("Updating favorite ui state");
-            ProviderScope.containerOf(
-                    GlobalSnackbar.materialAppScaffoldKey.currentContext!,
-                    listen: false)
+            GetIt.instance<ProviderContainer>()
                 .read(isFavoriteProvider(item).notifier)
                 .updateState(item.userData!.isFavorite);
             break;

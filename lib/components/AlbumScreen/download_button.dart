@@ -39,8 +39,7 @@ class DownloadButton extends ConsumerWidget {
     final childrenLength = childrenCount ?? children?.length;
     final downloadsService = GetIt.instance<DownloadsService>();
     DownloadItemStatus? status = ref
-        .watch(downloadsService.statusProvider((item, childrenLength)))
-        .value;
+        .watch(downloadsService.statusProvider((item, childrenLength)));
     var isOffline = ref.watch(finampSettingsProvider.isOffline);
     bool canDeleteFromServer = false;
     if (item.type.requiresItem) {
@@ -72,8 +71,8 @@ class DownloadButton extends ConsumerWidget {
       opacity: downloadDisabled ? 0.4 : 1.0,
       child: IconButton(
         icon: status == DownloadItemStatus.notNeeded
-            ? const Icon(Icons.file_download)
-            : const Icon(Icons.lock), //TODO get better icon
+            ? const Icon(TablerIcons.download)
+            : const Icon(TablerIcons.lock), //TODO get better icon
         onPressed: () async {
           if (downloadDisabled) {
             sendDisabledDownloadMessageToSnackbar(customTooltip);
@@ -98,8 +97,10 @@ class DownloadButton extends ConsumerWidget {
               BaseItemDtoType.album ||
               BaseItemDtoType.playlist =>
                 children?.length,
-              BaseItemDtoType.artist || BaseItemDtoType.genre => children
-                  ?.fold<int>(0, (count, item) => count + (item.childCount ?? 0)),
+              BaseItemDtoType.artist ||
+              BaseItemDtoType.genre =>
+                children?.fold<int>(
+                    0, (count, item) => count + (item.childCount ?? 0)),
               _ => null
             };
             await DownloadDialog.show(context, item, viewId,
@@ -111,9 +112,10 @@ class DownloadButton extends ConsumerWidget {
     );
     var deleteButton = Opacity(
       opacity: downloadDisabled ? 0.4 : 1.0,
-        child: IconButton(
-        icon: const Icon(Icons.delete),
-        tooltip: AppLocalizations.of(context)!.deleteFromTargetConfirmButton(""),
+      child: IconButton(
+        icon: const Icon(TablerIcons.trash),
+        tooltip:
+            AppLocalizations.of(context)!.deleteFromTargetConfirmButton(""),
         onPressed: () {
           if (downloadDisabled) {
             sendDisabledDownloadMessageToSnackbar(customTooltip);
@@ -134,9 +136,9 @@ class DownloadButton extends ConsumerWidget {
     var serverDeleteButton = Opacity(
       opacity: downloadDisabled ? 0.4 : 1.0,
       child: IconButton(
-        icon: const Icon(Icons.delete_forever),
-        tooltip:
-            AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server"),
+        icon: const Icon(TablerIcons.trash_x),
+        tooltip: AppLocalizations.of(context)!
+            .deleteFromTargetConfirmButton("server"),
         onPressed: () {
           if (downloadDisabled) {
             sendDisabledDownloadMessageToSnackbar(customTooltip);
@@ -159,38 +161,38 @@ class DownloadButton extends ConsumerWidget {
           PopupMenuItem(
               value: null,
               child: Opacity(
-                opacity: downloadDisabled ? 0.4 : 1.0,
-                child: ListTile(
-                  leading: Icon(Icons.delete_outline),
-                  title: Text(AppLocalizations.of(context)!
-                      .deleteFromTargetConfirmButton("")),
-                  enabled: true,
-                  onTap: () {
-                    if (downloadDisabled) {
-                      sendDisabledDownloadMessageToSnackbar(customTooltip);
-                      return;
-                    }
-                    askBeforeDeleteDownloadFromDevice(context, item);
-                  }))),
+                  opacity: downloadDisabled ? 0.4 : 1.0,
+                  child: ListTile(
+                      leading: Icon(Icons.delete_outline),
+                      title: Text(AppLocalizations.of(context)!
+                          .deleteFromTargetConfirmButton("")),
+                      enabled: true,
+                      onTap: () {
+                        if (downloadDisabled) {
+                          sendDisabledDownloadMessageToSnackbar(customTooltip);
+                          return;
+                        }
+                        askBeforeDeleteDownloadFromDevice(context, item);
+                      }))),
           PopupMenuItem(
               value: null,
               child: Opacity(
-                opacity: downloadDisabled ? 0.4 : 1.0,
-                child: ListTile(
-                  leading: Icon(Icons.delete_forever),
-                  title: Text(AppLocalizations.of(context)!
-                      .deleteFromTargetConfirmButton("server")),
-                  enabled: true,
-                  onTap: () {
-                    if (downloadDisabled) {
-                      sendDisabledDownloadMessageToSnackbar(customTooltip);
-                      return;
-                    }
-                    askBeforeDeleteFromServerAndDevice(context, item,
-                        popIt: true,
-                        refresh: () => musicScreenRefreshStream.add(
-                            null)); // trigger a refresh of the music screen
-                  })))
+                  opacity: downloadDisabled ? 0.4 : 1.0,
+                  child: ListTile(
+                      leading: Icon(Icons.delete_forever),
+                      title: Text(AppLocalizations.of(context)!
+                          .deleteFromTargetConfirmButton("server")),
+                      enabled: true,
+                      onTap: () {
+                        if (downloadDisabled) {
+                          sendDisabledDownloadMessageToSnackbar(customTooltip);
+                          return;
+                        }
+                        askBeforeDeleteFromServerAndDevice(context, item,
+                            popIt: true,
+                            refresh: () => musicScreenRefreshStream.add(
+                                null)); // trigger a refresh of the music screen
+                      })))
         ];
       },
     );
@@ -234,9 +236,7 @@ class DownloadButton extends ConsumerWidget {
   }
 }
 
-void sendDisabledDownloadMessageToSnackbar(String? customTooltip){
-  GlobalSnackbar.message((context) =>
-                            customTooltip ??
-                            AppLocalizations.of(context)!
-                                .notAvailable);
+void sendDisabledDownloadMessageToSnackbar(String? customTooltip) {
+  GlobalSnackbar.message(
+      (context) => customTooltip ?? AppLocalizations.of(context)!.notAvailable);
 }

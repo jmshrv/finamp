@@ -31,8 +31,8 @@ class _PublicAddressSelector extends ConsumerState<PublicAddressSelector> {
         text: publicAddress.toString());
     
     return ListTile(
-      title: Text(AppLocalizations.of(context)!.preferHomeNetworkPublicAddressSettingTitle),
-      subtitle: Text(AppLocalizations.of(context)!.preferHomeNetworkPublicAddressSettingDescription),
+      title: Text(AppLocalizations.of(context)!.preferLocalNetworkPublicAddressSettingTitle),
+      subtitle: Text(AppLocalizations.of(context)!.preferLocalNetworkPublicAddressSettingDescription),
       trailing: SizedBox(
         width: 200 * MediaQuery.of(context).textScaleFactor,
         child: TextField(

@@ -943,6 +943,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   Future<dynamic> customAction(String name,
       [Map<String, dynamic>? extras]) async {
     try {
+      final ref = GetIt.instance<ProviderContainer>();
       final action = CustomPlaybackActions.values
           .firstWhere((element) => element.name == name);
       switch (action) {
@@ -962,14 +963,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           bool isFavorite = currentItem.userData?.isFavorite ?? false;
           if (GlobalSnackbar.materialAppScaffoldKey.currentContext != null) {
             // get current favorite status from the provider
-            isFavorite = ProviderScope.containerOf(
-                    GlobalSnackbar.materialAppScaffoldKey.currentContext!,
-                    listen: false)
-                .read(isFavoriteProvider(currentItem));
+            isFavorite = ref.read(isFavoriteProvider(currentItem));
             // update favorite status with the value returned by the provider
-            isFavorite = ProviderScope.containerOf(
-                    GlobalSnackbar.materialAppScaffoldKey.currentContext!,
-                    listen: false)
+            isFavorite = ref
                 .read(isFavoriteProvider(currentItem).notifier)
                 .updateFavorite(!isFavorite);
           } else {
@@ -1102,9 +1098,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       currentItem = jellyfin_models.BaseItemDto.fromJson(
           mediaItem.valueOrNull?.extras!["itemJson"] as Map<String, dynamic>);
       if (GlobalSnackbar.materialAppScaffoldKey.currentContext != null) {
-        isFavorite = ProviderScope.containerOf(
-                GlobalSnackbar.materialAppScaffoldKey.currentContext!,
-                listen: false)
+        isFavorite = GetIt.instance<ProviderContainer>()
             .read(isFavoriteProvider(currentItem));
       } else {
         isFavorite = currentItem.userData?.isFavorite ?? false;

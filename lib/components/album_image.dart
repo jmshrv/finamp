@@ -149,7 +149,7 @@ class _AlbumImageState extends ConsumerState<AlbumImage> {
           final largeImage = AlbumImage(
             item: imageScaled ? widget.item : null,
             imageListenable: imageScaled ? null : listenable,
-            borderRadius: borderRadius,
+            borderRadius: BorderRadius.zero,
             placeholderBuilder: (_) => image,
             autoScale: false,
             tapToZoom: false,

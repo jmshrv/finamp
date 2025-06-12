@@ -14,7 +14,6 @@ class GenreSettingsScreen extends ConsumerStatefulWidget {
 class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.genreScreen),
@@ -36,16 +35,20 @@ class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
                   subtitle: Text(AppLocalizations.of(context)!.itemSectionsOrderSubtitle),
                 ),
                 ReorderableListView.builder(
+                  buildDefaultDragHandles: false,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: FinampSettingsHelper.finampSettings.genreItemSectionsOrder.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
+                    return ReorderableDelayedDragStartListener(
                       key: ValueKey(FinampSettingsHelper.finampSettings.genreItemSectionsOrder[index]),
-                      title: Text(FinampSettingsHelper.finampSettings.genreItemSectionsOrder[index].toLocalisedString(context)),
-                      leading: ReorderableDragStartListener(
-                        index: index,
-                        child: const Icon(Icons.drag_handle),
+                      index: index,
+                      child: ListTile(
+                        title: Text(FinampSettingsHelper.finampSettings.genreItemSectionsOrder[index].toLocalisedString(context)),
+                        leading: ReorderableDragStartListener(
+                          index: index,
+                          child: const Icon(Icons.drag_handle),
+                        ),
                       ),
                     );
                   },
@@ -87,16 +90,20 @@ class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
                   subtitle: Text(AppLocalizations.of(context)!.genreItemSectionFilterChipOrderSubtitle),
                 ),
                 ReorderableListView.builder(
+                  buildDefaultDragHandles: false,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: FinampSettingsHelper.finampSettings.genreItemSectionFilterChipOrder.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
+                    return ReorderableDelayedDragStartListener(
                       key: ValueKey(FinampSettingsHelper.finampSettings.genreItemSectionFilterChipOrder[index]),
-                      title: Text(FinampSettingsHelper.finampSettings.genreItemSectionFilterChipOrder[index].toLocalisedString(context)),
-                      leading: ReorderableDragStartListener(
-                        index: index,
-                        child: const Icon(Icons.drag_handle),
+                      index: index,
+                      child: ListTile(
+                        title: Text(FinampSettingsHelper.finampSettings.genreItemSectionFilterChipOrder[index].toLocalisedString(context)),
+                        leading: ReorderableDragStartListener(
+                          index: index,
+                          child: const Icon(Icons.drag_handle),
+                        ),
                       ),
                     );
                   },

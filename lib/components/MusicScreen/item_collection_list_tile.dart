@@ -52,7 +52,7 @@ class ItemCollectionListTile extends ConsumerWidget {
             item: item,
             parentType: parentType,
             context: context,
-            artistType: ref.watch(finampSettingsProvider.artistListType),
+                artistType: ref.watch(finampSettingsProvider.defaultArtistType),
           ) : null;
     final itemDownloadStub = isArtistOrGenre
           ? DownloadStub.fromFinampCollection(
