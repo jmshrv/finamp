@@ -24,22 +24,8 @@ class AdaptiveDownloadLockDeleteMenuEntry extends ConsumerWidget
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final downloadsService = GetIt.instance<DownloadsService>();
-    final library = GetIt.instance<FinampUserHelper>().currentUser?.currentView;
 
-    final DownloadStub downloadStub =
-        switch (BaseItemDtoType.fromItem(baseItem)) {
-      BaseItemDtoType.track =>
-        DownloadStub.fromItem(type: DownloadItemType.track, item: baseItem),
-      BaseItemDtoType.artist ||
-      BaseItemDtoType.genre =>
-        DownloadStub.fromFinampCollection(FinampCollection(
-          type: FinampCollectionType.collectionWithLibraryFilter,
-          library: library,
-          item: baseItem,
-        )),
-      _ => DownloadStub.fromItem(
-          type: DownloadItemType.collection, item: baseItem),
-    };
+    final DownloadStub downloadStub = _getStub();
 
     final DownloadItemStatus? downloadStatus =
         ref.watch(downloadsService.statusProvider((downloadStub, null)));
@@ -57,6 +43,29 @@ class AdaptiveDownloadLockDeleteMenuEntry extends ConsumerWidget
     }
   }
 
+  DownloadStub _getStub() {
+    final library = GetIt.instance<FinampUserHelper>().currentUser?.currentView;
+    return switch (BaseItemDtoType.fromItem(baseItem)) {
+      BaseItemDtoType.track =>
+        DownloadStub.fromItem(type: DownloadItemType.track, item: baseItem),
+      BaseItemDtoType.artist ||
+      BaseItemDtoType.genre =>
+        DownloadStub.fromFinampCollection(FinampCollection(
+          type: FinampCollectionType.collectionWithLibraryFilter,
+          library: library,
+          item: baseItem,
+        )),
+      _ => DownloadStub.fromItem(
+          type: DownloadItemType.collection, item: baseItem),
+    };
+  }
+
   @override
-  bool get isVisible => !FinampSettingsHelper.finampSettings.isOffline;
+  bool get isVisible {
+    final DownloadItemStatus downloadStatus =
+        GetIt.instance<DownloadsService>().getStatus(_getStub(), null);
+
+    return downloadStatus.isRequired ||
+        !FinampSettingsHelper.finampSettings.isOffline;
+  }
 }

@@ -32,5 +32,7 @@ class MenuEntry extends ConsumerWidget {
 }
 
 abstract class HideableMenuEntry implements Widget {
+  /// Whether the menuentry is expected to be visible.  If visibility is unknown until
+  /// a server request or other async codee completes, the implementation should return true;
   bool get isVisible;
 }
