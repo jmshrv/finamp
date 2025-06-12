@@ -28,11 +28,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter/rendering.dart';
 import 'package:rxdart/rxdart.dart';
-
+import 'package:finamp/components/AlbumScreen/sleep_timer_menu.dart';
 import 'components/menuEntries/menu_entry.dart';
 
-const Duration trackMenuDefaultAnimationDuration = Duration(milliseconds: 750);
+const Duration trackMenuDefaultAnimationDuration = Duration(milliseconds: 500);
 const Curve trackMenuDefaultInCurve = Curves.easeOutCubic;
 const Curve trackMenuDefaultOutCurve = Curves.easeInCubic;
 
@@ -75,6 +76,11 @@ Future<void> showModalTrackMenu({
       });
 }
 
+enum SubMenu {
+  speed,
+  sleepTimer,
+}
+
 class TrackMenu extends ConsumerStatefulWidget {
   static const routeName = "/track-menu";
 
@@ -113,17 +119,25 @@ class TrackMenu extends ConsumerStatefulWidget {
   ConsumerState<TrackMenu> createState() => _TrackMenuState();
 }
 
-class _TrackMenuState extends ConsumerState<TrackMenu> {
+class _TrackMenuState extends ConsumerState<TrackMenu>
+    with TickerProviderStateMixin {
+
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _queueService = GetIt.instance<QueueService>();
 
   // Makes sure that widget doesn't just disappear after press while menu is visible
   bool speedWidgetWasVisible = false;
-  bool showSpeedMenu = false;
+  SubMenu? activeMenu;
+  SubMenu? previousMenu;
 
   double initialSheetExtent = 0.0;
   double inputStep = 0.9;
   double oldExtent = 0.0;
+
+  // Define heights for each submenu state
+  double closedHeight = 0;
+  double speedMenuHeight = 120;
+  double sleepTimerMenuHeight = 265;
 
   @override
   void initState() {
@@ -141,15 +155,24 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
     }
     return false;
   }
-
-  void toggleSpeedMenu() {
+  
+  void setActiveMenu(SubMenu? menu) {
     setState(() {
-      showSpeedMenu = !showSpeedMenu;
+      previousMenu = activeMenu;
+      activeMenu = menu;
     });
     if (widget.dragController.isAttached) {
-      scrollToExtent(widget.dragController, showSpeedMenu ? inputStep : null);
+      scrollToExtent(widget.dragController, menu != null ? inputStep : null);
     }
     FeedbackHelper.feedback(FeedbackType.selection);
+  }
+
+  void toggleSpeedMenu() {
+    setActiveMenu(activeMenu == SubMenu.speed ? null : SubMenu.speed);
+  }
+
+  void toggleSleepTimerMenu() {
+    setActiveMenu(activeMenu == SubMenu.sleepTimer ? null : SubMenu.sleepTimer);
   }
 
   bool shouldShowSpeedControls(
@@ -237,9 +260,20 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
   List<Widget> menu(BuildContext context, List<Widget> menuEntries,
       MetadataProvider? metadata) {
     var iconColor = Theme.of(context).colorScheme.primary;
-
+    double menuHeight;
+    switch (activeMenu) {
+      case SubMenu.speed:
+        menuHeight = speedMenuHeight;
+        break;
+      case SubMenu.sleepTimer:
+        menuHeight = sleepTimerMenuHeight;
+        break;
+      default:
+        menuHeight = closedHeight;
+    }
     return [
       if (widget.showPlaybackControls)
+        ...[
         StreamBuilder<PlaybackBehaviorInfo>(
           stream: Rx.combineLatest3(
               _queueService.getPlaybackOrderStream(),
@@ -289,42 +323,51 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
                         : Theme.of(context).textTheme.bodyMedium?.color ??
                             Colors.white,
               ),
-              ValueListenableBuilder<Timer?>(
-                valueListenable: _audioHandler.sleepTimer,
+              ValueListenableBuilder<SleepTimer?>(
+                valueListenable: _audioHandler.timer,
                 builder: (context, timerValue, child) {
-                  final remainingMinutes =
-                      (_audioHandler.sleepTimerRemaining.inSeconds / 60.0)
-                          .ceil();
-                  return PlaybackAction(
-                    icon: timerValue != null
-                        ? TablerIcons.hourglass_high
-                        : TablerIcons.hourglass_empty,
-                    onPressed: () async {
-                      if (timerValue != null) {
-                        await showDialog<SleepTimerCancelDialog>(
-                          context: context,
-                          builder: (context) => const SleepTimerCancelDialog(),
-                        );
-                      } else {
-                        await showDialog<SleepTimerDialog>(
-                          context: context,
-                          builder: (context) => const SleepTimerDialog(),
-                        );
-                      }
+                  if (timerValue == null) {
+                    return PlaybackAction(
+                      icon: TablerIcons.bell_z,
+                      onPressed: () async {
+                        toggleSleepTimerMenu();
+                      },
+                      label: AppLocalizations.of(context)!.sleepTimerTooltip,
+                      iconColor:
+                          Theme.of(context).textTheme.bodyMedium?.color ??
+                              Colors.white,
+                    );
+                  }
+
+                  return ValueListenableBuilder<int>(
+                    valueListenable: timerValue.remainingNotifier,
+                    builder: (context, remaining, _) {
+                      final hasTimeLeft = remaining > 0;
+                      return PlaybackAction(
+                        icon: TablerIcons.bell_z_filled,
+                        onPressed: () async {
+                          if (hasTimeLeft) {
+                            await showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  const SleepTimerCancelDialog(),
+                            );
+                          } else {
+                            toggleSleepTimerMenu();
+                          }
+                        },
+                        label: hasTimeLeft
+                            ? timerValue.asString(context)
+                            : AppLocalizations.of(context)!.sleepTimerTooltip,
+                        iconColor: hasTimeLeft
+                            ? iconColor
+                            : Theme.of(context).textTheme.bodyMedium?.color ??
+                                Colors.white,
+                      );
                     },
-                    label: timerValue != null
-                        ? AppLocalizations.of(context)
-                                ?.sleepTimerRemainingTime(remainingMinutes) ??
-                            "Sleeping in $remainingMinutes minutes"
-                        : AppLocalizations.of(context)!.sleepTimerTooltip,
-                    iconColor: timerValue != null
-                        ? iconColor
-                        : Theme.of(context).textTheme.bodyMedium?.color ??
-                            Colors.white,
                   );
                 },
               ),
-              // [Playback speed widget will be added here if conditions are met]
               PlaybackAction(
                 icon: loopModeIcons[playbackBehavior.loop]!,
                 onPressed: () async {
@@ -366,7 +409,88 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             );
           },
         ),
-      if (widget.showPlaybackControls)
+        SliverToBoxAdapter(
+          child: ClipRect(
+            child: AnimatedSize(
+              duration: trackMenuDefaultAnimationDuration,
+              curve: Curves.easeInOut,
+              clipBehavior: Clip.none,
+              alignment: Alignment.topCenter,
+              child: SizedBox(
+                height: menuHeight,
+                child: OverflowBox(
+                  maxHeight: double.infinity,
+                  fit: OverflowBoxFit.deferToChild,
+                  alignment: Alignment.topCenter,
+                  child: AnimatedSwitcher(
+                    duration: trackMenuDefaultAnimationDuration,
+                    switchInCurve: Curves.easeInOut,
+                    switchOutCurve: Curves.easeInOut,
+                    layoutBuilder: (currentChild, previousChildren) {
+                      return Stack(
+                        alignment: Alignment.topCenter,
+                        children: <Widget>[
+                          ...previousChildren,
+                          if (currentChild != null) currentChild,
+                        ],
+                      );
+                    },
+                    transitionBuilder: (child, animation) {
+                      if (MediaQuery.of(context).disableAnimations) {
+                        return child;
+                      }
+                      // Determine if this is the incoming or outgoing child
+                      final isSpeedMenu = (child.key is ValueKey &&
+                          (child.key as ValueKey).value == 'speed');
+                      final isSleepMenu = (child.key is ValueKey &&
+                          (child.key as ValueKey).value == 'sleep');
+                      // Slide in from right for speed, left for sleep
+                      final Offset beginOffset =
+                          previousMenu == null || activeMenu == null
+                              ? Offset(0, 0)
+                              : (isSpeedMenu
+                                  ? const Offset(1, 0)
+                                  : isSleepMenu
+                                      ? const Offset(-1, 0)
+                                      : Offset.zero);
+
+                      final Offset endOffset = Offset.zero;
+                      return FadeTransition(
+                        opacity: animation,
+                        child: SlideTransition(
+                          position: Tween<Offset>(
+                            begin: beginOffset,
+                            end: endOffset,
+                          ).animate(animation),
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: switch (activeMenu) {
+                      SubMenu.speed => SpeedMenu(
+                          key: const ValueKey('speed'),
+                          iconColor: iconColor,
+                        ),
+                      SubMenu.sleepTimer => SleepTimerMenu(
+                          key: const ValueKey('sleep'),
+                          iconColor: iconColor,
+                          onStartTimer: () {
+                            toggleSleepTimerMenu();
+                          },
+                          onSizeChange: (double height) {
+                            setState(() {
+                              sleepTimerMenuHeight = height;
+                            });
+                          },
+                        ),
+                      _ => null,
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
@@ -384,6 +508,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
             ),
           ),
         ),
+      ],
       SliverPersistentHeader(
         delegate: MenuItemInfoSliverHeader(
           item: widget.item,
@@ -404,20 +529,6 @@ class _TrackMenuState extends ConsumerState<TrackMenu> {
               AddToQueuePlaybackAction(baseItem: widget.item),
             ],
           ),
-        ),
-      ),
-      SliverToBoxAdapter(
-        child: AnimatedSwitcher(
-          duration: trackMenuDefaultAnimationDuration,
-          switchInCurve: trackMenuDefaultInCurve,
-          switchOutCurve: trackMenuDefaultOutCurve,
-          transitionBuilder: (child, animation) {
-            if (MediaQuery.of(context).disableAnimations) {
-              return child;
-            }
-            return SizeTransition(sizeFactor: animation, child: child);
-          },
-          child: showSpeedMenu ? SpeedMenu(iconColor: iconColor) : null,
         ),
       ),
       MenuMask(

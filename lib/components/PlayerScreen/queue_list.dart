@@ -33,8 +33,8 @@ import '../padded_custom_scrollview.dart';
 import '../themed_bottom_sheet.dart';
 import 'queue_source_helper.dart';
 
-class _QueueListStreamState {
-  _QueueListStreamState(
+class QueueListStreamState {
+  QueueListStreamState(
     this.mediaState,
     this.queueInfo,
   );
@@ -698,12 +698,12 @@ class _CurrentTrackState extends State<CurrentTrack> {
     MediaState? mediaState;
     Duration? playbackPosition;
 
-    return StreamBuilder<_QueueListStreamState>(
+    return StreamBuilder<QueueListStreamState>(
       stream: Rx.combineLatest2<MediaState, FinampQueueInfo?,
-              _QueueListStreamState>(
+              QueueListStreamState>(
           mediaStateStream,
           _queueService.getQueueStream(),
-          (a, b) => _QueueListStreamState(a, b)),
+              (a, b) => QueueListStreamState(a, b)),
       builder: (context, snapshot) {
         var data = snapshot.data;
         currentTrack = data?.queueInfo?.currentTrack;

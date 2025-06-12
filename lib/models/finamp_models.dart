@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:background_downloader/background_downloader.dart';
@@ -13,6 +15,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
@@ -120,7 +123,8 @@ class DefaultSettings {
   static const contentGridViewCrossAxisCountPortrait = 2;
   static const contentGridViewCrossAxisCountLandscape = 3;
   static const showTextOnGridView = true;
-  static const sleepTimerSeconds = 1800; // 30 Minutes
+  static const sleepTimerDurationSeconds = 60 * 30;
+  static const sleepTimerType = SleepTimerType.duration;
   static const useCoverAsBackground = true;
   static const playerScreenCoverMinimumPadding = 1.5;
   static const showArtistsTracksSection = true;
@@ -253,7 +257,6 @@ class FinampSettings {
     this.contentGridViewCrossAxisCountLandscape =
         DefaultSettings.contentGridViewCrossAxisCountLandscape,
     this.showTextOnGridView = DefaultSettings.showTextOnGridView,
-    this.sleepTimerSeconds = DefaultSettings.sleepTimerSeconds,
     required this.downloadLocationsMap,
     this.useCoverAsBackground = DefaultSettings.useCoverAsBackground,
     this.playerScreenCoverMinimumPadding =
@@ -426,11 +429,7 @@ class FinampSettings {
   @HiveField(13, defaultValue: DefaultSettings.showTextOnGridView)
   bool showTextOnGridView = DefaultSettings.showTextOnGridView;
 
-  /// The number of seconds to wait in a sleep timer. This is so that the app
-  /// can remember the last duration. I'd use a Duration type here but Hive
-  /// doesn't come with an adapter for it by default.
-  @HiveField(14, defaultValue: DefaultSettings.sleepTimerSeconds)
-  int sleepTimerSeconds;
+  // @HiveField(14, defaultValue: DefaultSettings.sleepTimerSeconds) //!!! don't reuse this hive ID!
 
   @HiveField(15, defaultValue: <String, DownloadLocation>{})
   @SettingsHelperIgnore(
@@ -747,6 +746,9 @@ class FinampSettings {
 
   @HiveField(115, defaultValue: DefaultSettings.genreFilterPlaylists)
   bool genreFilterPlaylists;
+
+  @HiveField(116)
+  SleepTimer? sleepTimer;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -2115,6 +2117,26 @@ class FinampQueueInfo {
     return Duration(microseconds: remaining);
   }
 
+  Duration getDurationUntil(int offset) {
+    var total = 0;
+    for (var item
+        in CombinedIterableView([nextUp, queue]).take(max(offset - 1, 0))) {
+      total += item.item.duration?.inMicroseconds ?? 0;
+    }
+    return Duration(microseconds: total);
+  }
+
+  int? getTrackIndexAfter(Duration offset) {
+    var total = 0;
+    for (var (index, item) in CombinedIterableView([nextUp, queue]).indexed) {
+      total += item.item.duration?.inMicroseconds ?? 0;
+      if (total >= offset.inMicroseconds) {
+        return currentTrackIndex + index + 1;
+      }
+    }
+    return null;
+  }
+
   Duration get totalDuration {
     var total = 0;
     for (var item in fullQueue) {
@@ -3339,4 +3361,110 @@ enum ArtistItemSections {
             "Unsupported Type";
     }
   }
+}
+
+@HiveType(typeId: 98)
+class SleepTimer {
+  @HiveField(0, defaultValue: DefaultSettings.sleepTimerType)
+  SleepTimerType type;
+
+  @HiveField(1, defaultValue: DefaultSettings.sleepTimerDurationSeconds)
+  int length;
+
+  @HiveField(2)
+  DateTime? startTime;
+
+  @HiveField(3, defaultValue: DefaultSettings.sleepTimerDurationSeconds)
+  int remainingLength = DefaultSettings.sleepTimerDurationSeconds;
+
+  // Used in conjunction with duration timer
+  bool finishTrack = false;
+  Timer? timer;
+
+  Function callback;
+
+  final ValueNotifier<int> remainingNotifier = ValueNotifier<int>(0);
+
+  final sleepTimerLogger = Logger("SleepTimer");
+
+  SleepTimer(this.type, this.length)
+      : remainingLength = length,
+        callback = (() {});
+
+  Future<void> start(Function callback) async {
+    remainingLength = length;
+    startTime = DateTime.now();
+    this.callback = callback;
+
+    // TODO: Implement this regardless of type, so that the text updates
+    // Immediately update remaining
+    remainingNotifier.value = remainingLength;
+
+    if (type == SleepTimerType.duration) {
+      timer = Timer.periodic(const Duration(seconds: 1), (t) async {
+        final secondsLeft = remainingDuration.inSeconds;
+
+        remainingNotifier.value = secondsLeft;
+
+        if (secondsLeft <= 0) {
+          t.cancel();
+          sleepTimerLogger.info("Sleep timer finished");
+          await this.callback();
+        }
+      });
+    }
+
+    sleepTimerLogger.info(
+        "Sleep timer started for ${type == SleepTimerType.duration ? Duration(seconds: length) : "$length tracks"}, finishTrack: $finishTrack");
+  }
+
+  void cancel() {
+    remainingLength = 0;
+    startTime = null;
+    timer?.cancel();
+    timer = null;
+    remainingNotifier.value = 0;
+    sleepTimerLogger.info("Sleep timer cancelled");
+  }
+
+  Duration get totalDuration => Duration(seconds: length);
+
+  Duration get remainingDuration {
+    if (startTime == null) return Duration.zero;
+    final diff = startTime!.add(totalDuration).difference(DateTime.now());
+    // we want to make sure playback ends when specified, so we need to be done fading by then
+    final remaining =
+        diff - FinampSettingsHelper.finampSettings.audioFadeOutDuration;
+    return diff.isNegative ? Duration.zero : remaining;
+  }
+
+  String asString(BuildContext context) {
+    final minutes = type == SleepTimerType.duration
+        ? (remainingDuration.inSeconds / 60).ceil()
+        : remainingLength;
+    final durationPrefix =
+        type == SleepTimerType.duration && minutes == 1 ? "<" : "";
+    final durationSuffix = type == SleepTimerType.duration
+        ? AppLocalizations.of(context)!.minutes.toLowerCase()
+        : AppLocalizations.of(context)!.tracks.toLowerCase();
+
+    return AppLocalizations.of(context)!
+        .sleepTimerRemainingTime(minutes, durationPrefix, durationSuffix);
+  }
+}
+
+@HiveType(typeId: 99)
+enum SleepTimerType {
+  @HiveField(0)
+  duration("Duration"), // TODO: Use localizations?
+
+  @HiveField(1)
+  tracks("Tracks");
+
+  final String _display;
+
+  const SleepTimerType(this._display);
+
+  @override
+  String toString() => _display;
 }
