@@ -1,18 +1,17 @@
+import 'package:finamp/components/MusicScreen/offline_mode_switch_list_tile.dart';
+import 'package:finamp/components/MusicScreen/view_list_tile.dart';
+import 'package:finamp/screens/downloads_screen.dart';
+import 'package:finamp/screens/logs_screen.dart';
 import 'package:finamp/components/MusicScreen/offline_mode_status_label.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
+import 'package:finamp/screens/settings_screen.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
-
-import '../../screens/downloads_screen.dart';
-import '../../screens/logs_screen.dart';
-import '../../screens/settings_screen.dart';
-import '../../services/finamp_user_helper.dart';
-import 'offline_mode_switch_list_tile.dart';
-import 'view_list_tile.dart';
 
 class MusicScreenDrawer extends StatelessWidget {
   const MusicScreenDrawer({super.key});

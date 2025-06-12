@@ -638,9 +638,9 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setArtistListType(ArtistType newArtistListType) {
+  static void setDefaultArtistType(ArtistType newDefaultArtistType) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.artistListType = newArtistListType;
+    finampSettingsTemp.defaultArtistType = newDefaultArtistType;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -1046,8 +1046,8 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<ItemSwipeActions> get itemSwipeActionRightToLeft =>
       finampSettingsProvider
           .select((value) => value.requireValue.itemSwipeActionRightToLeft);
-  ProviderListenable<ArtistType> get artistListType => finampSettingsProvider
-      .select((value) => value.requireValue.artistListType);
+  ProviderListenable<ArtistType> get defaultArtistType => finampSettingsProvider
+      .select((value) => value.requireValue.defaultArtistType);
   ProviderListenable<double> get currentVolume => finampSettingsProvider
       .select((value) => value.requireValue.currentVolume);
   ProviderListenable<int> get playOnStaleDelay => finampSettingsProvider

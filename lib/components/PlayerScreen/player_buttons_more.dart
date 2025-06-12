@@ -1,4 +1,4 @@
-import 'package:finamp/components/AlbumScreen/track_menu.dart';
+import 'package:finamp/menus/track_menu.dart';
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/music_player_background_task.dart';

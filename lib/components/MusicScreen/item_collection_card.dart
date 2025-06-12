@@ -63,7 +63,7 @@ class _ItemCollectionCardText extends ConsumerWidget {
       context: context,
       item: item, 
       parentType: parentType,
-      artistType: ref.watch(finampSettingsProvider.artistListType),
+      artistType: ref.watch(finampSettingsProvider.defaultArtistType),
     );
 
     return Align(

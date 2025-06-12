@@ -48,7 +48,7 @@ class ArtistChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final artists = ((artistType == ArtistType.albumartist)
+    final artists = ((artistType == ArtistType.albumArtist)
             ? baseItem?.albumArtists
             : baseItem?.artistItems) ??
         [];

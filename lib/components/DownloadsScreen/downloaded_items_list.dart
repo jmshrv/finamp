@@ -178,21 +178,14 @@ class _DownloadedChildrenListState
             title: Text(stub.baseItem?.name ?? stub.name),
             leading: AlbumImage(item: stub.baseItem),
             subtitle: ItemFileSize(stub: stub),
-            trailing: FutureBuilder(
-              future: ref
-                  .watch(_downloadsService.statusProvider((stub, null)).future)
-                  .then((item) => item.isRequired),
-              builder: (context, snapshot) {
-                if (snapshot.hasData && snapshot.data!) {
-                  return IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () =>
-                        askBeforeDeleteDownloadFromDevice(context, stub),
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-            ),
+            trailing: ref
+                    .watch(_downloadsService.statusProvider((stub, null)))
+                    .isRequired
+                ? IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () => askBeforeDeleteDownloadFromDevice(context, stub),
+                  )
+                : null,
           )
       ]),
     );

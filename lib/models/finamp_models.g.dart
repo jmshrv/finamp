@@ -234,8 +234,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       releaseDateFormat: fields[84] == null
           ? ReleaseDateFormat.year
           : fields[84] as ReleaseDateFormat,
-      artistListType: fields[92] == null
-          ? ArtistType.albumartist
+      defaultArtistType: fields[92] == null
+          ? ArtistType.albumArtist
           : fields[92] as ArtistType,
       autoOffline: fields[88] == null
           ? AutoOfflineOption.disconnected
@@ -490,7 +490,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(91)
       ..write(obj.itemSwipeActionRightToLeft)
       ..writeByte(92)
-      ..write(obj.artistListType)
+      ..write(obj.defaultArtistType)
       ..writeByte(93)
       ..write(obj.currentVolume)
       ..writeByte(94)
@@ -2385,18 +2385,18 @@ class ArtistTypeAdapter extends TypeAdapter<ArtistType> {
   ArtistType read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return ArtistType.albumartist;
+        return ArtistType.albumArtist;
       case 1:
         return ArtistType.artist;
       default:
-        return ArtistType.albumartist;
+        return ArtistType.albumArtist;
     }
   }
 
   @override
   void write(BinaryWriter writer, ArtistType obj) {
     switch (obj) {
-      case ArtistType.albumartist:
+      case ArtistType.albumArtist:
         writer.writeByte(0);
       case ArtistType.artist:
         writer.writeByte(1);

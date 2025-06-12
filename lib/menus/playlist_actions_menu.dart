@@ -1,27 +1,26 @@
 import 'package:collection/collection.dart';
+import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_list.dart';
+import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/menus/components/menu_item_info_header.dart';
+import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/favorite_provider.dart';
+import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../models/jellyfin_models.dart';
-import '../../services/favorite_provider.dart';
-import '../../services/feedback_helper.dart';
-import '../../services/finamp_settings_helper.dart';
-import '../../services/jellyfin_api_helper.dart';
-import '../AlbumScreen/track_menu.dart';
-import '../global_snackbar.dart';
-import '../themed_bottom_sheet.dart';
-import 'add_to_playlist_list.dart';
-
 const playlistActionsMenuRouteName = "/playlist-actions-menu";
 
 Future<void> showPlaylistActionsMenu({
   required BuildContext context,
   required BaseItemDto item,
-  required BaseItemDto? parentPlaylist,
+  BaseItemDto? parentPlaylist,
 }) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
@@ -40,7 +39,7 @@ Future<void> showPlaylistActionsMenu({
         );
 
         final menuEntries = [
-          TrackInfo.condensed(
+          MenuItemInfoHeader.condensed(
             item: item,
           ),
           const SizedBox(height: 16),
@@ -96,22 +95,11 @@ Future<void> showPlaylistActionsMenu({
 
         var menu = [
           SliverStickyHeader(
-            header: Padding(
-              padding: const EdgeInsets.only(top: 6.0, bottom: 16.0),
-              child: Center(
-                child: Text(AppLocalizations.of(context)!.addRemoveFromPlaylist,
-                    style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color!,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400)),
-              ),
-            ),
+            header: const PlaylistActionsMenuHeader(),
             sliver: MenuMask(
-                height: 36.0,
+                height: PlaylistActionsMenuHeader.defaultHeight,
                 child: SliverList(
-                    delegate: SliverChildListDelegate.fixed(
-                  menuEntries,
-                ))),
+                    delegate: SliverChildListDelegate(menuEntries))),
           ),
           SliverStickyHeader(
               header: Padding(
@@ -121,7 +109,7 @@ Future<void> showPlaylistActionsMenu({
                     style: Theme.of(context).textTheme.titleMedium),
               ),
               sliver: MenuMask(
-                height: 35.0,
+                height: PlaylistActionsMenuHeader.defaultHeight,
                 child: AddToPlaylistList(
                   itemToAdd: item,
                   playlistsFuture: playlistsFuture.then((value) => (value
@@ -136,6 +124,25 @@ Future<void> showPlaylistActionsMenu({
         var stackHeight = MediaQuery.sizeOf(context).height * 0.9;
         return (stackHeight, menu);
       });
+}
+
+class PlaylistActionsMenuHeader extends ConsumerWidget {
+  const PlaylistActionsMenuHeader({super.key});
+  static MenuMaskHeight defaultHeight = MenuMaskHeight(35.0);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 6.0, bottom: 16.0),
+      child: Center(
+        child: Text(AppLocalizations.of(context)!.addRemoveFromPlaylist,
+            style: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge!.color!,
+                fontSize: 18,
+                fontWeight: FontWeight.w400)),
+      ),
+    );
+  }
 }
 
 class ToggleableListTile extends ConsumerStatefulWidget {

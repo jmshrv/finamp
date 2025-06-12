@@ -422,6 +422,18 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Shuffle",
   "@shuffleButtonLabel": {},
+  "playbackActionPagePlay": "Play",
+  "@playbackActionPagePlay": {
+    "description": "Label for the playback action page that contains all actions related to playing in order"
+  },
+  "playbackActionPageShuffle": "Shuffle",
+  "@playbackActionPageShuffle": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled"
+  },
+  "playbackActionPageShuffleAlbums": "Shuffle Albums",
+  "@playbackActionPageShuffleAlbums": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+  },
   "trackCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}",
   "@trackCount": {
     "placeholders": {
@@ -449,10 +461,14 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Edit playlist",
-  "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Edit Playlist",
-  "@editPlaylistNameTitle": {},
+  "editItemTitle": "Edit {itemType, select, playlist{Playlist} other{}}",
+  "@editItemTitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
   "required": "Required",
   "@required": {},
   "updateButtonLabel": "Update",
@@ -1024,7 +1040,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} remoteClient{a Remote Client} other{}}",
+  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} nextUpGenre{Genre in Next Up} remoteClient{a Remote Client} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1371,7 +1387,7 @@
       }
     }
   },
-  "couldNotLoad": "Couldn''t load {source, select, album{album} playlist{playlist} trackMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allTracks{all tracks} filteredList{tracks} genre{genre} artist{artist} track{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
+  "couldNotLoad": "Couldn''t load {source, select, album{album} playlist{playlist} trackMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allTracks{all tracks} filteredList{tracks} genre{genre} artist{artist} track{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} nextUpGenre{genre in next up} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -2382,6 +2398,35 @@
   "@desktopShuffleWarning": {
     "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
   },
+  "itemCount": "{childType, select, track{{amount, plural, =1{1 track} other{{amount} tracks}}} album{{amount, plural, =1{1 album} other{{amount} albums}}} other{{amount, plural, =1{1 item} other{{amount} items}}}}",
+  "@itemCount": {
+    "description": "Error shown when the library select screen fails to load.",
+    "placeholders": {
+      "childType": {
+        "type": "String",
+        "example": "album",
+        "description": "Options match BaseItemDtoType.name"
+      },
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "itemCountLoading": "{childType, select, track{tracks} album{albums} other{items}}",
+  "@itemCountLoading": {
+    "description": "Shown while the item count is being calculated.",
+    "placeholders": {
+      "childType": {
+        "type": "String",
+        "example": "album",
+        "description": "Options match BaseItemDtoType.name"
+      }
+    }
+  },
+  "itemCountCalculating": "Calculating item count", 
+  "@itemCountCalculating": {
+    "description": "Shown to screen readers while the item count is being calculated."
+  },
   "preferLocalNetworkActiveAddressInfoText": "Active Address",
   "@preferLocalNetworkActiveAddressInfoText": {
       "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
@@ -2442,9 +2487,17 @@
       }
     }
   },
+  "menuButtonLabel": "More actions",
+  "@menuButtonLabel": {
+    "description": "Generic label for menu buttons shown throughout the app. Used for the album, artist, playlist, etc. menus"
+  },
   "autoReloadPromptReloadButton": "Reload",
   "@autoReloadPromptReloadButton": {
     "description": "Button title for reloading the queue after network settings change"
+  },
+  "notImplementedYet": "Not implemented yet.",
+  "@notImplementedYet": {
+    "description": "Message shown when a feature is not implemented yet"
   },
   "automaticOfflineModeOverrideActiveTitle": "Automatic switching paused",
   "@automaticOfflineModeOverrideActiveTitle": {

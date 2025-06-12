@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/curated_item_filter_row.dart';
-import 'package:finamp/services/artist_screen_provider.dart';
+import 'package:finamp/services/artist_content_provider.dart';
 import 'package:finamp/components/curated_item_sections.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
@@ -66,7 +66,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     ref.invalidate(getArtistAlbumsProvider);
     ref.invalidate(getPerformingArtistAlbumsProvider);
     ref.invalidate(getPerformingArtistTracksProvider);
-    ref.invalidate(getAllTracksProvider);
+    ref.invalidate(getArtistTracksProvider);
     _disabledTrackFilters.clear();
   }
 
@@ -105,7 +105,8 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     final allPerformingArtistTracksAsync = ref.watch(
         getPerformingArtistTracksProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull;
     final allTracks = ref.watch(
-        getAllTracksProvider(widget.parent, widget.library, currentGenreFilter).future,
+      getArtistTracksProvider(widget.parent, widget.library, currentGenreFilter)
+          .future,
     );
 
     final isLoading = topTracksAsync == null || albumArtistAlbumsAsync == null || performingArtistAlbumsAsync == null;

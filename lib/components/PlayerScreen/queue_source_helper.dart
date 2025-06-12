@@ -21,16 +21,19 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
   switch (source.type) {
     case QueueItemSourceType.album:
     case QueueItemSourceType.nextUpAlbum:
+    case QueueItemSourceType.albumMix:
       Navigator.of(context)
           .pushNamed(AlbumScreen.routeName, arguments: source.item);
       break;
     case QueueItemSourceType.artist:
     case QueueItemSourceType.nextUpArtist:
+    case QueueItemSourceType.artistMix:
       Navigator.of(context)
           .pushNamed(ArtistScreen.routeName, arguments: source.item);
       break;
     case QueueItemSourceType.genre:
     case QueueItemSourceType.nextUpGenre:
+    case QueueItemSourceType.genreMix:
       Navigator.of(context)
           .pushNamed(GenreScreen.routeName, arguments: source.item);
       break;
@@ -38,14 +41,6 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
     case QueueItemSourceType.nextUpPlaylist:
       Navigator.of(context)
           .pushNamed(AlbumScreen.routeName, arguments: source.item);
-      break;
-    case QueueItemSourceType.albumMix:
-      Navigator.of(context)
-          .pushNamed(AlbumScreen.routeName, arguments: source.item);
-      break;
-    case QueueItemSourceType.artistMix:
-      Navigator.of(context)
-          .pushNamed(ArtistScreen.routeName, arguments: source.item);
       break;
     case QueueItemSourceType.allTracks:
       Navigator.of(context).pushNamed(MusicScreen.routeName,
@@ -65,12 +60,13 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
       break;
     case QueueItemSourceType.favorites:
     case QueueItemSourceType.trackMix:
+    //TODO show track menu
     case QueueItemSourceType.filteredList:
     case QueueItemSourceType.downloads:
     default:
       FeedbackHelper.feedback(FeedbackType.warning);
       GlobalSnackbar.message(
-        (scaffold) => "Not implemented yet.",
+        (scaffold) => AppLocalizations.of(context)!.notImplementedYet,
       );
   }
 }

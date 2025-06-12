@@ -2,16 +2,15 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:finamp/components/AlbumScreen/preset_chip.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/feedback_helper.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
-
-import '../../services/finamp_settings_helper.dart';
-import 'preset_chip.dart';
 
 final _queueService = GetIt.instance<QueueService>();
 final presets = [0.75, 0.9, 1.0, 1.1, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0, 3.5];
@@ -114,7 +113,7 @@ class SpeedMenu extends StatefulWidget {
   });
 
   final Color iconColor;
-  final Function()? scrollFunction;
+  final VoidCallback? scrollFunction;
 
   @override
   State<SpeedMenu> createState() => _SpeedMenuState();
