@@ -9,7 +9,6 @@ import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/playon_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -24,35 +23,33 @@ Logger _networkAutomationLogger = Logger("Network Automation");
 Logger _autoOfflineLogger = Logger("Auto Offline");
 Logger _networKSwitcherLogger = Logger("Network Switcher");
 
+int activeDelayCounter = 0;
+
+/// This stream receives update when autoOffline enters/exists the 7 second confirmation/validation timeout
+final autoOfflineStatusStream = StreamController<int>.broadcast();
+final autoOfflineStatusProvider = StreamProvider((ref) {
+    return autoOfflineStatusStream.stream;
+}).select((v) => v.valueOrNull ?? 0);
+
 final StreamSubscription<List<ConnectivityResult>> _listener =
     Connectivity().onConnectivityChanged.listen(_onConnectivityChange);
 
 @riverpod
 class AutoOffline extends _$AutoOffline {
   static void startWatching() {
-    GetIt.instance<ProviderContainer>().listen(autoOfflineProvider,
-        (_, newState) {
-      if (newState) {
-        _networkAutomationLogger.info("Resumed Automation");
+    ProviderContainer container = GetIt.instance<ProviderContainer>();
+
+    container.listen(autoOfflineProvider, (_, automationEnabled) {
+      _networkAutomationLogger
+          .info("${automationEnabled ? "Enabled" : "Paused"} Automation");
+
+      if (automationEnabled) {
         _listener.resume();
-        // directly check if offline mode should be on
+        // instantly check if offline mode should be on
         _onConnectivityChange(null);
       } else {
-        _networkAutomationLogger.info("Paused Automation");
         _listener.pause();
       }
-    });
-
-    AppLifecycleListener(onRestart: () {
-      if (GetIt.instance<ProviderContainer>().read(autoOfflineProvider)) {
-        _autoOfflineLogger.finer("Lifecycle restarted automation");
-        _listener.resume();
-      } else {
-        _autoOfflineLogger.finer("Lifecycle kept automation paused");
-      }
-    }, onPause: () {
-      _listener.pause();
-      _autoOfflineLogger.finer("Lifecycle paused automation");
     });
   }
 
@@ -68,8 +65,8 @@ class AutoOffline extends _$AutoOffline {
     bool autoServerSwitch = ref
             .watch(FinampUserHelper.finampCurrentUserProvider)
             .valueOrNull
-            ?.preferHomeNetwork ??
-        DefaultSettings.preferHomeNetwork;
+            ?.preferLocalNetwork ??
+        DefaultSettings.preferLocalNetwork;
 
     return (autoOfflineEnabled && autoOfflineActive) || autoServerSwitch;
   }
@@ -90,35 +87,40 @@ Future<void> _onConnectivityChange(
   }
 }
 
+bool featureEnabled() {
+  return FinampSettingsHelper.finampSettings.autoOffline !=
+          AutoOfflineOption.disabled &&
+      FinampSettingsHelper.finampSettings.autoOfflineListenerActive;
+}
+
 /// Sets the offline mode based on the current connectivity and user settings
 Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
-  // skip when feature not enabled
-  if (FinampSettingsHelper.finampSettings.autoOffline ==
-          AutoOfflineOption.disabled ||
-      !FinampSettingsHelper.finampSettings.autoOfflineListenerActive) {
+  if (!featureEnabled()) {
     return FinampSettingsHelper.finampSettings.isOffline;
   }
 
   bool state1 = _shouldBeOffline(connections);
 
   // this prevents an issue on ios (and mac?) where the
-  // listener gets called even though it shouldnt.
+  // listener gets called even though it shouldn't.
   // The wait also acts as an timeout so offline mode is less
-  // likely to engage when it doesnt need to and this helps
+  // likely to engage when it doesn't need to and this helps
   // with queue reloading
+  autoOfflineStatusStream.add(++activeDelayCounter);
   await Future.delayed(Duration(seconds: 7), () => {});
+  autoOfflineStatusStream.add(--activeDelayCounter);
+
+  // Return Early to prevent another Connectivity check
+  if (!featureEnabled()) {
+    return FinampSettingsHelper.finampSettings.isOffline;
+  }
   bool state2 = _shouldBeOffline(await Connectivity().checkConnectivity());
 
-  // skip if we are already in the target offline state, or the auto switch was disabled
-  // while we waited out intermittent changes.  Also skip if the connection status changed
-  // during the waiting period, because we aren't sure which is better to use.  There should be
-  // another copy of this function triggered by the mid-wait switch which will handle
-  // if the final state is stable.
+  // skip if state changed during the delay because the function should be triggered by the change again
+  // skip if target state is already the active offline-mode state to prevent unessesary snackbar messages
+  // check if feature is enabled was already done after the delay
   if (state1 != state2 ||
-      FinampSettingsHelper.finampSettings.isOffline == state2 ||
-      FinampSettingsHelper.finampSettings.autoOffline ==
-          AutoOfflineOption.disabled ||
-      !FinampSettingsHelper.finampSettings.autoOfflineListenerActive) {
+      FinampSettingsHelper.finampSettings.isOffline == state2) {
     return FinampSettingsHelper.finampSettings.isOffline;
   }
 
@@ -152,17 +154,18 @@ Future<bool> changeTargetUrl({bool? isLocal}) async {
 
   if (isLocal != null && isLocal != user.isLocal) {
     _networKSwitcherLogger.info(
-        "Changed active network to ${isLocal ? "home" : "public"} address");
+        "Changed active network to ${isLocal ? "local" : "public"} address");
     GetIt.instance<FinampUserHelper>().currentUser?.update(newIsLocal: isLocal);
     return true;
   }
+
   // this avoids an infinite loop... again :)
   if (isLocal != null) {
     return false;
   }
 
   // Disable this feature
-  if (!user.preferHomeNetwork) return changeTargetUrl(isLocal: false);
+  if (!user.preferLocalNetwork) return changeTargetUrl(isLocal: false);
 
   bool reachable = await GetIt.instance<JellyfinApiHelper>().pingLocalServer();
   return await changeTargetUrl(isLocal: reachable);

@@ -7,19 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
-class HomeNetworkSelector extends ConsumerWidget {
-  const HomeNetworkSelector({super.key});
+class LocalNetworkSelector extends ConsumerWidget {
+  const LocalNetworkSelector({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool preferLocalNetwork = ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.preferHomeNetwork ?? DefaultSettings.preferHomeNetwork;
+    bool preferLocalNetwork = ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.preferLocalNetwork ?? DefaultSettings.preferLocalNetwork;
 
     return SwitchListTile.adaptive(
-      title: Text(AppLocalizations.of(context)!.preferHomeNetworkEnableSwitchTitle),
-      subtitle: Text(AppLocalizations.of(context)!.preferHomeNetworkEnableSwitchDescription),
+      title: Text(AppLocalizations.of(context)!.preferLocalNetworkEnableSwitchTitle),
+      subtitle: Text(AppLocalizations.of(context)!.preferLocalNetworkEnableSwitchDescription),
       value: preferLocalNetwork,
       onChanged: (value) async {
-        GetIt.instance<FinampUserHelper>().currentUser?.update(newPreferHomeNetwork: value);
+        GetIt.instance<FinampUserHelper>().currentUser?.update(newPreferLocalNetwork: value);
         await changeTargetUrl();
       },
     );

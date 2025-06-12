@@ -570,9 +570,9 @@ class JellyfinApiHelper {
     FinampUser newUser = FinampUser(
       id: newUserAuthenticationResult.user!.id,
       publicAddress: baseUrlTemp!.toString(),
-      homeAddress: DefaultSettings.homeNetworkAddress,
+      localAddress: DefaultSettings.localNetworkAddress,
       isLocal: false,
-      preferHomeNetwork: DefaultSettings.preferHomeNetwork,
+      preferLocalNetwork: DefaultSettings.preferLocalNetwork,
       accessToken: newUserAuthenticationResult.accessToken!,
       serverId: newUserAuthenticationResult.serverId!,
       views: {},
@@ -604,9 +604,9 @@ class JellyfinApiHelper {
     FinampUser newUser = FinampUser(
       id: newUserAuthenticationResult.user!.id,
       publicAddress: baseUrlTemp!.toString(),
-      homeAddress: DefaultSettings.homeNetworkAddress,
+      localAddress: DefaultSettings.localNetworkAddress,
       isLocal: false,
-      preferHomeNetwork: DefaultSettings.preferHomeNetwork,
+      preferLocalNetwork: DefaultSettings.preferLocalNetwork,
       accessToken: newUserAuthenticationResult.accessToken!,
       serverId: newUserAuthenticationResult.serverId!,
       views: {},
@@ -1010,7 +1010,7 @@ class JellyfinApiHelper {
   Future<bool> pingLocalServer() async {
     FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
     if (user == null) return false;
-    return await _pingSpecificServer(user.homeAddress);
+    return await _pingSpecificServer(user.localAddress);
   }
 
   Future<bool> pingPublicServer() async {
