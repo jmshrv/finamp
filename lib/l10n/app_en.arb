@@ -2443,5 +2443,13 @@
   "autoReloadPromptReloadButton": "Reload",
   "@autoReloadPromptReloadButton": {
     "description": "Button title for reloading the queue after network settings change"
+  },
+  "automaticOfflineModeOverrideActiveTitle": "Automatic switching paused",
+  "@automaticOfflineModeOverrideActiveTitle": {
+    "description": "Title for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "automaticOfflineModeOverrideActiveSubtitle": "Tap here to resume",
+  "@automaticOfflineModeOverrideActiveSubtitle": {
+    "description": "Subtitle for the label shown below the offline mode toggle when automatic offline mode switching is paused"
   }
 }

@@ -1,11 +1,5 @@
-import 'dart:async';
-import 'dart:ffi';
-
-import 'package:finamp/components/Buttons/simple_button.dart';
-import 'package:finamp/components/MusicScreen/offline_mode_switch_list_tile.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/services/network_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -28,13 +22,24 @@ class OfflineModeStatusLabel extends ConsumerWidget {
       return SizedBox.shrink();
     }
 
-    return ListTile(
-      autofocus: false,
-      title: Text("Automatic switching paused"),
-      subtitle: Text("Tap to reenable automatic switching"),
-      onTap: () {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 2.0),
+      child: ListTile(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
+          tileColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+          autofocus: false,
+          title: Text(AppLocalizations.of(context)!
+              .automaticOfflineModeOverrideActiveTitle),
+          subtitle: Text(AppLocalizations.of(context)!
+              .automaticOfflineModeOverrideActiveSubtitle),
+          onTap: () {
             FinampSetters.setAutoOfflineListenerActive(true);
-      }
+          }
+      ),
     );
   }
 }
