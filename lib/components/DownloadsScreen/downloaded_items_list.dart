@@ -178,10 +178,14 @@ class _DownloadedChildrenListState
             title: Text(stub.baseItem?.name ?? stub.name),
             leading: AlbumImage(item: stub.baseItem),
             subtitle: ItemFileSize(stub: stub),
-            trailing: IconButton(
+            trailing: ref
+                    .watch(_downloadsService.statusProvider((stub, null)))
+                    .isRequired
+                ? IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () => askBeforeDeleteDownloadFromDevice(context, stub),
-            ),
+                  )
+                : null,
           )
       ]),
     );

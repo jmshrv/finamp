@@ -2,7 +2,7 @@ import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dar
 import 'package:finamp/components/PlayerScreen/album_chip.dart';
 import 'package:finamp/components/PlayerScreen/artist_chip.dart';
 import 'package:finamp/components/PlayerScreen/genre_chip.dart';
-import 'package:finamp/components/PlayerScreen/item_amount_chip.dart';
+import 'package:finamp/components/PlayerScreen/item_amount.dart';
 import 'package:finamp/components/album_image.dart';
 import 'package:finamp/components/icon_and_text.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
