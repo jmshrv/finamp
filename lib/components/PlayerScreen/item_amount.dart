@@ -1,6 +1,5 @@
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/item_amount_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -23,7 +22,7 @@ class ItemAmount extends ConsumerWidget {
         baseItem: baseItem,
       ),
     );
-    
+
     return Semantics.fromProperties(
         properties: SemanticsProperties(
           label: itemCount.hasValue
@@ -56,16 +55,10 @@ class ItemAmount extends ConsumerWidget {
                 ),
               Text(
                 itemCount.hasValue
-                    ? AppLocalizations.of(context)!
-                        .itemCount(
+                    ? AppLocalizations.of(context)!.itemCount(
                         itemCount.value!.$2.name, itemCount.value!.$1)
-                    : AppLocalizations.of(context)!
-                        .itemCountLoading(
-                        getChildItemType(
-                                baseItem,
-                                ref.watch(
-                                    finampSettingsProvider.defaultArtistType))
-                            .name),
+                    : AppLocalizations.of(context)!.itemCountLoading(
+                        ref.watch(childItemTypeProvider(baseItem)).name),
                 overflow: TextOverflow.ellipsis,
                 softWrap: false,
                 style: TextStyle(
