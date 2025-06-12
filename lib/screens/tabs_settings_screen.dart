@@ -25,7 +25,7 @@ class _TabsSettingsScreenState extends State<TabsSettingsScreen> {
         ],
       ),
       body: ReorderableListView.builder(
-        // buildDefaultDragHandles: false,
+        buildDefaultDragHandles: false,
         itemCount: FinampSettingsHelper.finampSettings.tabOrder.length,
         itemBuilder: (context, index) {
           return HideTabToggle(

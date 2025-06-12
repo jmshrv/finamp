@@ -29,8 +29,8 @@ class FinampUser {
   FinampUser({
     required this.id,
     required this.publicAddress,
-    required this.homeAddress,
-    required this.preferHomeNetwork,
+    required this.localAddress,
+    required this.preferLocalNetwork,
     required this.isLocal,
     required this.accessToken,
     required this.serverId,
@@ -48,7 +48,7 @@ class FinampUser {
   String publicAddress;
 
   String get baseURL =>
-      isLocal && preferHomeNetwork ? homeAddress : publicAddress;
+      isLocal && preferLocalNetwork ? localAddress : publicAddress;
 
   @HiveField(2)
   String accessToken;
@@ -65,14 +65,14 @@ class FinampUser {
   @HiveField(5)
   Map<BaseItemId, BaseItemDto> views;
 
-  @HiveField(7, defaultValue: DefaultSettings.homeNetworkAddress)
-  String homeAddress;
+  @HiveField(7, defaultValue: DefaultSettings.localNetworkAddress)
+  String localAddress;
 
   @HiveField(8, defaultValue: DefaultSettings.isLocal)
   bool isLocal;
 
-  @HiveField(9, defaultValue: DefaultSettings.preferHomeNetwork)
-  bool preferHomeNetwork;
+  @HiveField(9, defaultValue: DefaultSettings.preferLocalNetwork)
+  bool preferLocalNetwork;
 
   // We only need 1 user, the current user
   final Id isarId = 0;
@@ -86,13 +86,13 @@ class FinampUser {
 
   void update(
       {bool? newIsLocal,
-      String? newHomeAddress,
+      String? newLocalAddress,
       String? newPublicAddress,
-      bool? newPreferHomeNetwork}) {
+      bool? newPreferLocalNetwork}) {
     isLocal = newIsLocal ?? isLocal;
-    homeAddress = newHomeAddress ?? homeAddress;
+    localAddress = newLocalAddress ?? localAddress;
     publicAddress = newPublicAddress ?? publicAddress;
-    preferHomeNetwork = newPreferHomeNetwork ?? preferHomeNetwork;
+    preferLocalNetwork = newPreferLocalNetwork ?? preferLocalNetwork;
     GetIt.instance<FinampUserHelper>().saveUser(this);
   }
 }
@@ -199,8 +199,8 @@ class DefaultSettings {
   static const audioFadeInDuration = Duration(milliseconds: 0);
   static const defaultArtistType = ArtistType.albumArtist;
   static const isLocal = false;
-  static const preferHomeNetwork = false;
-  static const homeNetworkAddress = "http://0.0.0.0:8096";
+  static const preferLocalNetwork = false;
+  static const localNetworkAddress = "http://0.0.0.0:8096";
   static const autoReloadQueue = false;
   static const genreCuratedItemSelectionTypeTracks =
       CuratedItemSelectionType.mostPlayed;
@@ -220,7 +220,7 @@ class DefaultSettings {
       CuratedItemSelectionType.values;
   static const artistItemSectionsOrder = ArtistItemSections.values;
   static const autoSwitchItemCurationType = true;
-  static const playlistTracksSortBy = SortBy.serverOrder;
+  static const playlistTracksSortBy = SortBy.defaultOrder;
   static const playlistTracksSortOrder = SortOrder.ascending;
   static const genreFilterPlaylists = false;
 }

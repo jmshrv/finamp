@@ -82,8 +82,8 @@ class TrackListTile extends ConsumerWidget {
   });
 
   final BaseItemDto item;
-  final Future<List<BaseItemDto>>? children;
-  final Future<int>? index;
+  final List<BaseItemDto>? children;
+  final int? index;
   final bool showIndex;
   final bool showCover;
   final bool isTrack;
@@ -112,8 +112,8 @@ class TrackListTile extends ConsumerWidget {
       if (children != null) {
         // start linear playback of album from the given index
         await queueService.startPlayback(
-          items: await children!,
-          startingIndex: await index,
+          items: children!,
+          startingIndex: index,
           order: FinampPlaybackOrder.linear,
           source: QueueItemSource.rawId(
             type: isInPlaylist
@@ -165,7 +165,7 @@ class TrackListTile extends ConsumerWidget {
             items: items,
             startingIndex: isShownInSearch
                 ? items.indexWhere((element) => element.id == item.id)
-                : await index,
+                : index,
             source: QueueItemSource(
               name: QueueItemSourceName(
                 type: item.name != null
@@ -337,7 +337,7 @@ class TrackListTile extends ConsumerWidget {
 class QueueListTile extends StatelessWidget {
   final BaseItemDto item;
   final BaseItemDto? parentItem;
-  final Future<int>? listIndex;
+  final int? listIndex;
   final int actualIndex;
   final int indexOffset;
   final bool isCurrentTrack;
@@ -395,7 +395,7 @@ class QueueListTile extends StatelessWidget {
 class TrackListItem extends ConsumerStatefulWidget {
   final BaseItemDto baseItem;
   final BaseItemDto? parentItem;
-  final Future<int>? listIndex;
+  final int? listIndex;
   final int? actualIndex;
   final bool showIndex;
   final bool showCover;
@@ -610,7 +610,7 @@ class TrackListItemTile extends ConsumerWidget {
   final BaseItemDto baseItem;
   final bool isCurrentTrack;
   final bool allowReorder;
-  final Future<int>? listIndex;
+  final int? listIndex;
   final int? actualIndex;
   final bool showIndex;
   final bool showCover;
@@ -958,11 +958,8 @@ class TrackListItemTile extends ConsumerWidget {
                 ),
               ),
               if (allowReorder)
-                FutureBuilder(
-                    future: listIndex,
-                    builder: (context, snapshot) {
-                      return ReorderableDragStartListener(
-                        index: snapshot.data ??
+                ReorderableDragStartListener(
+                        index: listIndex ??
                             0, // will briefly use 0 as index, but should resolve quickly enough for user not to notice
                         child: Padding(
                           padding: const EdgeInsets.only(left: 6.0),
@@ -975,8 +972,7 @@ class TrackListItemTile extends ConsumerWidget {
                             weight: 1.5,
                           ),
                         ),
-                      );
-                    }),
+                      ),
             ],
           ),
         ),

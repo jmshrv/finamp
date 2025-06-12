@@ -2734,7 +2734,7 @@ class SortByAdapter extends TypeAdapter<SortBy> {
       case 14:
         return SortBy.runtime;
       case 15:
-        return SortBy.serverOrder;
+        return SortBy.defaultOrder;
       default:
         return SortBy.album;
     }
@@ -2773,7 +2773,7 @@ class SortByAdapter extends TypeAdapter<SortBy> {
         writer.writeByte(13);
       case SortBy.runtime:
         writer.writeByte(14);
-      case SortBy.serverOrder:
+      case SortBy.defaultOrder:
         writer.writeByte(15);
     }
   }

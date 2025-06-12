@@ -279,8 +279,10 @@
   "@revenue": {},
   "duration": "Duration",
   "@duration": {},
-  "serverOrder": "Server Order",
-  "@serverOrder": {},
+  "defaultOrder": "Default Order",
+  "@defaultOrder": {
+    "description": "Default sorting order for playlists (server order)"
+  },
   "formattedRelativeTime": "{type, select, just_now{just now} minutes{{value} min ago} hours{{value} h ago} yesterday{yesterday} days{{value, plural, =1{1 day ago} other{{value} days ago}}} other{value}}",
   "@formattedRelativeTime": {
     "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
@@ -2421,22 +2423,22 @@
       }
     }
   },
-  "itemCountCalculating": "Calculating item count",
+  "itemCountCalculating": "Calculating item count", 
   "@itemCountCalculating": {
     "description": "Shown to screen readers while the item count is being calculated."
   },
-  "preferHomeNetworkActiveAddressInfoText": "Active Address",
-  "@preferHomeNetworkActiveAddressInfoText": {
+  "preferLocalNetworkActiveAddressInfoText": "Active Address",
+  "@preferLocalNetworkActiveAddressInfoText": {
       "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
   },
-  "preferHomeNetworkTargetAddressLocalSettingTitle": "Home Network Address",
-  "preferHomeNetworkTargetAddressLocalSettingDescription": "Target address of the Jellyfin server inside your home network",
-  "preferHomeNetworkEnableSwitchTitle": "Prefer Home Network",
-  "preferHomeNetworkEnableSwitchDescription": "Whether or not to use a different address when you are at home",
-  "preferHomeNetworkPublicAddressSettingTitle": "Public Address",
-  "preferHomeNetworkPublicAddressSettingDescription": "The primary address used to connect to your Jellyfin server",
-  "preferHomeNetworkInfoBox": "This Feature requires Location permissions (and location needs to be enabled) to read the network name.",
-  "@preferHomeNetworkInfoBox": {
+  "preferLocalNetworkTargetAddressLocalSettingTitle": "Local Network Address",
+  "preferLocalNetworkTargetAddressLocalSettingDescription": "Target address of the Jellyfin server inside your local network",
+  "preferLocalNetworkEnableSwitchTitle": "Prefer Local Network",
+  "preferLocalNetworkEnableSwitchDescription": "Whether or not to use a different address when you are in the local network of your jellyfin server",
+  "preferLocalNetworkPublicAddressSettingTitle": "Public Address",
+  "preferLocalNetworkPublicAddressSettingDescription": "The primary address used to connect to your Jellyfin server",
+  "preferLocalNetworkInfoBox": "This Feature requires Location permissions (and location needs to be enabled) to read the network name.",
+  "@preferLocalNetworkInfoBox": {
     "description": "This is only shown on ios and android since desktop doesnt require location permissions"
   },
   "networkSettingsTitle": "Network",
@@ -2496,5 +2498,13 @@
   "notImplementedYet": "Not implemented yet.",
   "@notImplementedYet": {
     "description": "Message shown when a feature is not implemented yet"
+  },
+  "automaticOfflineModeOverrideActiveTitle": "Automatic switching paused",
+  "@automaticOfflineModeOverrideActiveTitle": {
+    "description": "Title for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "automaticOfflineModeOverrideActiveSubtitle": "Tap here to resume",
+  "@automaticOfflineModeOverrideActiveSubtitle": {
+    "description": "Subtitle for the label shown below the offline mode toggle when automatic offline mode switching is paused"
   }
 }

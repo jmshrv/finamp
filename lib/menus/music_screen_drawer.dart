@@ -2,6 +2,7 @@ import 'package:finamp/components/MusicScreen/offline_mode_switch_list_tile.dart
 import 'package:finamp/components/MusicScreen/view_list_tile.dart';
 import 'package:finamp/screens/downloads_screen.dart';
 import 'package:finamp/screens/logs_screen.dart';
+import 'package:finamp/components/MusicScreen/offline_mode_status_label.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:finamp/screens/settings_screen.dart';
@@ -72,6 +73,7 @@ class MusicScreenDrawer extends StatelessWidget {
                         .pushNamed(PlaybackHistoryScreen.routeName),
                   ),
                   const OfflineModeSwitchListTile(),
+                  const OfflineModeStatusLabel(),
                   const Divider(),
                 ],
               ),

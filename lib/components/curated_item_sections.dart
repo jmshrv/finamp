@@ -29,7 +29,7 @@ class TracksSection extends ConsumerStatefulWidget {
 
   final BaseItemDto parent;
   final List<BaseItemDto>? tracks;
-  final Future<List<BaseItemDto>>? childrenForQueue;
+  final List<BaseItemDto>? childrenForQueue;
   final String tracksText;
   final VoidCallback? seeAllCallbackFunction;
   final BaseItemDto? genreFilter;

@@ -287,8 +287,8 @@ class FinampSettingsHelper {
   static void resetNetworkSettings() {
     GetIt.instance<FinampUserHelper>().currentUser?.update(
           newIsLocal: DefaultSettings.isLocal,
-          newHomeAddress: DefaultSettings.homeNetworkAddress,
-          newPreferHomeNetwork: DefaultSettings.preferHomeNetwork,
+          newLocalAddress: DefaultSettings.localNetworkAddress,
+          newPreferLocalNetwork: DefaultSettings.preferLocalNetwork,
         );
     FinampSetters.setAutoOffline(DefaultSettings.autoOffline);
   }

@@ -37,6 +37,7 @@ class _ArtistSettingsScreenState extends ConsumerState<ArtistSettingsScreen> {
                   subtitle: Text(AppLocalizations.of(context)!.itemSectionsOrderSubtitle),
                 ),
                 ReorderableListView.builder(
+                  buildDefaultDragHandles: false,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: FinampSettingsHelper.finampSettings.artistItemSectionsOrder.length,
@@ -47,11 +48,14 @@ class _ArtistSettingsScreenState extends ConsumerState<ArtistSettingsScreen> {
                     return Opacity(
                       opacity: (isTracksSection && !showTracks) ? 0.4 : 1.0,
                       key: ValueKey(FinampSettingsHelper.finampSettings.artistItemSectionsOrder[index]),
-                      child: ListTile(
-                        title: Text(section.toLocalisedString(context)),
-                        leading: ReorderableDragStartListener(
-                          index: index,
-                          child: const Icon(Icons.drag_handle),
+                      child: ReorderableDelayedDragStartListener(
+                        index: index,
+                        child: ListTile(
+                          title: Text(section.toLocalisedString(context)),
+                          leading: ReorderableDragStartListener(
+                            index: index,
+                            child: const Icon(Icons.drag_handle),
+                          ),
                         ),
                       ),
                     );
@@ -85,16 +89,20 @@ class _ArtistSettingsScreenState extends ConsumerState<ArtistSettingsScreen> {
                   subtitle: Text(AppLocalizations.of(context)!.artistItemSectionFilterChipOrderSubtitle),
                 ),
                 ReorderableListView.builder(
+                  buildDefaultDragHandles: false,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: FinampSettingsHelper.finampSettings.artistItemSectionFilterChipOrder.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
+                    return ReorderableDelayedDragStartListener(
                       key: ValueKey(FinampSettingsHelper.finampSettings.artistItemSectionFilterChipOrder[index]),
-                      title: Text(FinampSettingsHelper.finampSettings.artistItemSectionFilterChipOrder[index].toLocalisedString(context)),
-                      leading: ReorderableDragStartListener(
-                        index: index,
-                        child: const Icon(Icons.drag_handle),
+                      index: index,
+                      child: ListTile(
+                        title: Text(FinampSettingsHelper.finampSettings.artistItemSectionFilterChipOrder[index].toLocalisedString(context)),
+                        leading: ReorderableDragStartListener(
+                          index: index,
+                          child: const Icon(Icons.drag_handle),
+                        ),
                       ),
                     );
                   },

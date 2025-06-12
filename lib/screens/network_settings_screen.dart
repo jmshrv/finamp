@@ -1,8 +1,8 @@
 
 import 'package:finamp/components/NetworkSettingsScreen/active_network_display.dart';
 import 'package:finamp/components/NetworkSettingsScreen/auto_offline_selector.dart';
-import 'package:finamp/components/NetworkSettingsScreen/prefer_home_network_address_selector.dart';
-import 'package:finamp/components/NetworkSettingsScreen/prefer_home_network_selector.dart';
+import 'package:finamp/components/NetworkSettingsScreen/prefer_local_network_address_selector.dart';
+import 'package:finamp/components/NetworkSettingsScreen/prefer_local_network_selector.dart';
 import 'package:finamp/components/NetworkSettingsScreen/public_address_selector.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
@@ -36,8 +36,8 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
           Divider(),
           ActiveNetworkDisplay(),
           PublicAddressSelector(),
-          HomeNetworkSelector(),
-          HomeNetworkAddressSelector(),
+          LocalNetworkSelector(),
+          LocalNetworkAddressSelector(),
           TextButton(
             onPressed: () async {
               final [public, private] = await Future.wait([

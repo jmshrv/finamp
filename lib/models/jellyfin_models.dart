@@ -3463,11 +3463,11 @@ enum SortBy {
   runtime,
 
   @HiveField(15)
-  serverOrder;
+  defaultOrder;
 
   static List<SortBy> defaultsFor({
     required TabContentType type, 
-    bool includeServerOrder = false
+    bool includeDefaultOrder = false
   }) {
     List<SortBy> options;
 
@@ -3515,8 +3515,8 @@ enum SortBy {
           SortBy.random,
         ];
     }
-    if (includeServerOrder) {
-      options.insert(0, SortBy.serverOrder);
+    if (includeDefaultOrder) {
+      options.insert(0, SortBy.defaultOrder);
     }
     return options;
   }
@@ -3575,7 +3575,7 @@ enum SortBy {
         return "Revenue";
       case SortBy.runtime:
         return "Runtime";
-      case SortBy.serverOrder:
+      case SortBy.defaultOrder:
         return "Server Order";
     }
   }
@@ -3612,8 +3612,8 @@ enum SortBy {
         return AppLocalizations.of(context)!.revenue;
       case SortBy.runtime:
         return AppLocalizations.of(context)!.duration;
-      case SortBy.serverOrder:
-        return AppLocalizations.of(context)!.serverOrder;
+      case SortBy.defaultOrder:
+        return AppLocalizations.of(context)!.defaultOrder;
     }
   }
 
@@ -3649,7 +3649,7 @@ enum SortBy {
         return "Revenue";
       case SortBy.runtime:
         return "Runtime";
-      case SortBy.serverOrder:
+      case SortBy.defaultOrder:
         return "";
     }
   }
@@ -3686,7 +3686,7 @@ enum SortBy {
         return "Revenue";
       case SortBy.runtime:
         return "Runtime";
-      case SortBy.serverOrder:
+      case SortBy.defaultOrder:
         return "";
     }
   }
@@ -3723,7 +3723,7 @@ enum SortBy {
         return "Revenue";
       case SortBy.runtime:
         return "Runtime,AlbumArtist,Album,SortName";
-      case SortBy.serverOrder:
+      case SortBy.defaultOrder:
         return "";
     }
   }
@@ -3755,7 +3755,7 @@ enum SortBy {
         return TablerIcons.coins;
       case SortBy.runtime:
         return TablerIcons.stopwatch;
-      case SortBy.serverOrder:
+      case SortBy.defaultOrder:
         return TablerIcons.server;
       default:
         return null;

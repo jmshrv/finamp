@@ -310,7 +310,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                 sliver: TracksSection(
                   parent: widget.parent,
                   tracks: tracks,
-                  childrenForQueue: Future.value(tracks),
+                  childrenForQueue: tracks,
                   tracksText: (genreCuratedItemSelectionTypeTracks != null)
                       ? genreCuratedItemSelectionTypeTracks
                           .toLocalisedSectionTitle(

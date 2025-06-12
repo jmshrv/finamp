@@ -16,15 +16,19 @@ class HideTabToggle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SwitchListTile.adaptive(
-      title: Text(tabContentType.toLocalisedString(context)),
-      secondary: ReorderableDragStartListener(
-        index: index,
-        child: const Icon(Icons.drag_handle),
+    return ReorderableDelayedDragStartListener(
+      index: index,
+      child: SwitchListTile.adaptive(
+        title: Text(tabContentType.toLocalisedString(context)),
+        secondary: ReorderableDragStartListener(
+          index: index,
+          child: const Icon(Icons.drag_handle),
+        ),
+        // This should never be null, but it gets set to true if it is.
+        value:
+            ref.watch(finampSettingsProvider.showTabs(tabContentType)) ?? true,
+        onChanged: (value) => FinampSetters.setShowTabs(tabContentType, value),
       ),
-      // This should never be null, but it gets set to true if it is.
-      value: ref.watch(finampSettingsProvider.showTabs(tabContentType)) ?? true,
-      onChanged: (value) => FinampSetters.setShowTabs(tabContentType, value),
     );
   }
 }

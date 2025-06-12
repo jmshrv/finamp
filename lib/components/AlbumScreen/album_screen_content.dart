@@ -68,7 +68,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
     final playlistSortBy = (isOffline &&
             (playlistSortBySetting == SortBy.datePlayed ||
                 playlistSortBySetting == SortBy.playCount))
-        ? SortBy.serverOrder
+        ? SortBy.defaultOrder
         : playlistSortBySetting;
 
     final tracksAsync = (widget.parent.type == "Playlist")
@@ -189,7 +189,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
               ),
               sliver: TracksSliverList(
                 childrenForList: childrenOfThisDisc,
-                childrenForQueue: Future.value(queueChildren),
+                childrenForQueue: queueChildren,
                 parent: widget.parent,
                 onRemoveFromList: onDelete,
                 showDateAdded: (widget.parent.type == "Playlist" &&
@@ -207,7 +207,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
         else if (!isLoading && displayChildren.isNotEmpty)
           TracksSliverList(
             childrenForList: displayChildren,
-            childrenForQueue: Future.value(queueChildren),
+            childrenForQueue: queueChildren,
             parent: widget.parent,
             onRemoveFromList: onDelete,
             showDateAdded: (widget.parent.type == "Playlist" &&
@@ -249,7 +249,7 @@ class TracksSliverList extends ConsumerStatefulWidget {
   });
 
   final List<BaseItemDto> childrenForList;
-  final Future<List<BaseItemDto>> childrenForQueue;
+  final List<BaseItemDto> childrenForQueue;
   final BaseItemDto parent;
   final BaseItemDtoCallback? onRemoveFromList;
   final bool forceAlbumArtists;
@@ -296,9 +296,9 @@ class _TracksSliverListState extends ConsumerState<TracksSliverList> {
           // When user selects track from disc other than first, index number is
           // incorrect and track with the same index on first disc is played instead.
           // Adding this offset ensures playback starts for nth track on correct disc.
-          final indexOffset = widget.childrenForQueue.then((childrenForQueue) =>
-              childrenForQueue.indexWhere(
-                  (element) => element.id == widget.childrenForList[index].id));
+          final indexOffset =
+              widget.childrenForQueue.indexWhere(
+                  (element) => element.id == widget.childrenForList[index].id);
 
           final BaseItemDto item = widget.childrenForList[index];
 
