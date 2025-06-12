@@ -244,7 +244,7 @@
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPause": "暫停時進入低優先級狀態",
   "@enterLowPriorityStateOnPause": {},
-  "enterLowPriorityStateOnPauseSubtitle": "允許在暫停播放時滑掉通知，也允許 Android 在暫停播放時終止該服務。",
+  "enterLowPriorityStateOnPauseSubtitle": "允許暫停後可滑掉通知，並讓 Android 關閉播放服務。",
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "shuffleAllTrackCount": "隨機播放所有歌曲次數",
   "@shuffleAllTrackCount": {},
@@ -252,7 +252,7 @@
   "@shuffleAllTrackCountSubtitle": {},
   "viewType": "瀏覽方式",
   "@viewType": {},
-  "viewTypeSubtitle": "音樂清單的瀏覽方式",
+  "viewTypeSubtitle": "調整音樂清單的瀏覽方式",
   "@viewTypeSubtitle": {},
   "list": "列表",
   "@list": {},
@@ -286,7 +286,7 @@
   "@showTextOnGridView": {},
   "useCoverAsBackground": "使用模糊的專輯圖作為播放器的背景",
   "@useCoverAsBackground": {},
-  "useCoverAsBackgroundSubtitle": "在播放器介面中是否顯示模糊的專輯圖作為背景。",
+  "useCoverAsBackgroundSubtitle": "在播放介面中是否顯示模糊的專輯圖作為背景。",
   "@useCoverAsBackgroundSubtitle": {},
   "hideTrackArtistsIfSameAsAlbumArtists": "若與專輯藝人相同則隱藏歌曲藝人",
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
@@ -616,7 +616,7 @@
   "@resetSettingsPromptGlobalConfirm": {
     "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
   },
-  "playbackSpeedControlSettingDescription": "自動：\nFinamp 會根據音軌是否符合以下條件，自動判斷其為podcast或有聲書的一部分：音軌時長超過 {trackDuration} 分鐘、專輯總時長超過 {albumDuration} 小時，或類型包含以下任一項：{genreList}。\n播放速度控制選單將會顯示於播放器介面中。\n\n顯示:\n播放介面選單中的播放速度控制功能將一律保持顯示。\n\n隱藏：\n播放介面選單中的播放速度控制功能將一律保持隱藏。",
+  "playbackSpeedControlSettingDescription": "自動：\nFinamp 會根據音軌是否符合以下條件，自動判斷其為podcast或有聲書的一部分：音軌時長超過 {trackDuration} 分鐘、專輯總時長超過 {albumDuration} 小時，或類型包含以下任一項：{genreList}。\n播放速度控制選單將會顯示於播放介面中。\n\n顯示:\n播放介面選單中的播放速度控制功能將一律保持顯示。\n\n隱藏：\n播放介面選單中的播放速度控制功能將一律保持隱藏。",
   "@playbackSpeedControlSettingDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
     "placeholders": {
@@ -663,7 +663,7 @@
   "@automatic": {
     "description": "Used as an option in the playback speed visibility settings"
   },
-  "playerScreen": "播放器介面",
+  "playerScreen": "播放介面",
   "@playerScreen": {
     "description": "Name for the expanded player"
   },
@@ -828,7 +828,7 @@
   "@playbackSpeedControlSetting": {
     "description": "Title of the visibility setting of the playback speed controls"
   },
-  "playbackSpeedControlSettingSubtitle": "播放速度控制是否顯示在播放器介面的選單中",
+  "playbackSpeedControlSettingSubtitle": "在播放介面中顯示調整速度的選項",
   "@playbackSpeedControlSettingSubtitle": {
     "description": "Subtitle for the playback speed visibility setting"
   },
@@ -896,7 +896,7 @@
   "@shown": {
     "description": "Used as an option in the playback speed visibility settings"
   },
-  "playerScreenMinimumCoverPaddingEditorSubtitle": "專輯封面在播放器介面上的最小間隔距離，以螢幕寬度的百分比計算。",
+  "playerScreenMinimumCoverPaddingEditorSubtitle": "專輯封面在播放介面上的最小間隔距離，以螢幕寬度的百分比計算。",
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
@@ -1220,15 +1220,15 @@
     },
     "description": "Localized names of special downloadable collections like favorites."
   },
-  "hidePlayerBottomActionsSubtitle": "隱藏播放器介面中的佇列與歌詞按鈕。向上滑可開啟佇列列表，若有可用的歌詞，則可在專輯封面下方向左滑查看。",
+  "hidePlayerBottomActionsSubtitle": "隱藏播放介面中的佇列與歌詞按鈕。向上滑可開啟佇列列表，若有可用的歌詞，則可在專輯封面下方向左滑查看。",
   "@hidePlayerBottomActionsSubtitle": {},
   "volumeNormalizationModeAlbumOnly": "依專輯調整",
   "@volumeNormalizationModeAlbumOnly": {
     "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
   },
-  "suppressPlayerPaddingSubtitle": "在專輯封面未達全尺寸時，減少播放器介面控制項的內邊距。",
+  "suppressPlayerPaddingSubtitle": "在專輯封面未達全尺寸時，減少播放介面控制項的內邊距。",
   "@suppressPlayerPaddingSubtitle": {},
-  "prioritizePlayerCoverSubtitle": "播放器介面將優先顯示較大的專輯封面顯示，而在較小螢幕上，非必要的操作介面將進一步隱藏，以提升視覺體驗。",
+  "prioritizePlayerCoverSubtitle": "播放介面將優先顯示較大的專輯封面顯示，而在較小螢幕上，非必要的操作介面將進一步隱藏，以提升視覺體驗。",
   "@prioritizePlayerCoverSubtitle": {},
   "fiveLatestAlbumsSettingSubtitle": "下載內容會在到期後自動移除。若要防止專輯被移除，請鎖定下載。",
   "@fiveLatestAlbumsSettingSubtitle": {},
@@ -1615,7 +1615,7 @@
   },
   "fixedGridSizeSwitchSubtitle": "網格大小不會隨著視窗/畫面大小改變。",
   "@fixedGridSizeSwitchSubtitle": {},
-  "hideQueueButtonSubtitle": "隱藏播放器介面的佇列按鈕。向上滑動以開啟佇列列表。",
+  "hideQueueButtonSubtitle": "隱藏播放介面的佇列按鈕。向上滑動以開啟佇列列表。",
   "@hideQueueButtonSubtitle": {},
   "oneLineMarqueeTextButton": "自動捲動較長的標題",
   "@oneLineMarqueeTextButton": {},
@@ -1629,7 +1629,7 @@
   "@hidePlayerBottomActions": {},
   "marqueeOrTruncateButtonSubtitle": "在較長的標題盡頭顯示 … 代替捲動文字",
   "@marqueeOrTruncateButtonSubtitle": {},
-  "showArtistChipImageSubtitle": "此設定會影響小尺寸的藝人圖片預覽，例如播放器介面中的顯示。",
+  "showArtistChipImageSubtitle": "此設定會影響小尺寸的藝人圖片預覽，例如播放介面中的顯示。",
   "@showArtistChipImageSubtitle": {},
   "fixedGridTileSizeEnum": "{size, select, small{小} medium{中} large{大} veryLarge{非常大} other{???}}",
   "@fixedGridTileSizeEnum": {
@@ -1687,7 +1687,7 @@
   "@alignmentOptionEnd": {
     "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
   },
-  "nowPlayingBarTooltip": "打開播放器介面",
+  "nowPlayingBarTooltip": "打開播放介面",
   "@nowPlayingBarTooltip": {
     "description": "Tooltip for the now playing bar at the bottom of the screen"
   },
@@ -1744,7 +1744,7 @@
   "@releaseDateFormatMonthDayYear": {
     "description": "Date format option for the release date of an album, showing the year and month and day/date. Example: March 2, 2022"
   },
-  "showAlbumReleaseDateOnPlayerScreenTitle": "在播放器介面上顯示專輯發行日期",
+  "showAlbumReleaseDateOnPlayerScreenTitle": "在播放介面上顯示專輯發行日期",
   "@showAlbumReleaseDateOnPlayerScreenTitle": {
     "description": "Title for the setting that controls if the release date of an album is shown on the player screen"
   },
@@ -1913,7 +1913,7 @@
   "@releaseDateFormatSubtitle": {
     "description": "Title for the setting that controls the format release dates throughout the app."
   },
-  "showAlbumReleaseDateOnPlayerScreenSubtitle": "在播放器介面中顯示專輯發行日期於專輯名稱之後。",
+  "showAlbumReleaseDateOnPlayerScreenSubtitle": "在播放介面中顯示專輯發行日期於專輯名稱之後。",
   "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
     "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
   },
