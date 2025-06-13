@@ -1203,8 +1203,8 @@ bool _verifyCallable() {
   }
   var stack = StackTrace.current.toString();
   if (stack.contains('ProviderContainer.readProviderElement') ||
-      stack.contains('initState') ||
-      stack.contains('didChangeDependencies')) {
+      stack.contains('initState ') ||
+      stack.contains('didUpdateWidget')) {
     return true;
   }
   return false;
