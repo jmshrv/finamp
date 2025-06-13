@@ -262,6 +262,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                   child: Wrap(
                       spacing: 8.0,
                       alignment: WrapAlignment.spaceEvenly,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         CTAMedium(
                           text: AppLocalizations.of(context)!

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:finamp/components/PlayerScreen/queue_list.dart';
 import 'package:finamp/components/PlayerScreen/sleep_timer_cancel_dialog.dart';
-import 'package:finamp/components/PlayerScreen/sleep_timer_dialog.dart';
+import 'package:finamp/menus/sleep_timer_menu.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/components/menuEntries/adaptive_download_lock_delete_menu_entry.dart';
@@ -30,7 +30,6 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter/rendering.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:finamp/components/AlbumScreen/sleep_timer_menu.dart';
 import 'components/menuEntries/menu_entry.dart';
 
 const Duration trackMenuDefaultAnimationDuration = Duration(milliseconds: 500);

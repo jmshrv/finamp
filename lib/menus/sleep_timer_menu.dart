@@ -34,6 +34,9 @@ class SleepTimerMenu extends StatefulWidget {
 
 class _SleepTimerMenuState extends State<SleepTimerMenu> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _durationController = TextEditingController();
+  final TextEditingController _trackController = TextEditingController();
+
   SleepTimer newSleepTimer = SleepTimer(
       SleepTimerType.duration, DefaultSettings.sleepTimerDurationSeconds);
 
@@ -47,7 +50,22 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
   final double afterCurrentTrackTypeMenuHeight = 140;
 
   @override
+  void initState() {
+    super.initState();
+    _updateControllers();
+  }
+
+  void _updateControllers() {
+    // Update duration controller (in minutes)
+    _durationController.text = (newSleepTimer.length / 60).round().toString();
+    // Update track controller
+    _trackController.text = newSleepTimer.length.toString();
+  }
+
+  @override
   void dispose() {
+    _durationController.dispose();
+    _trackController.dispose();
     // Persist the selected mode when the menu is closed
     _persistedSelectedMode = selectedMode;
     super.dispose();
@@ -127,6 +145,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                             newSleepTimer.length = 1;
                           }
                           widget.onSizeChange?.call(menuHeights[i]);
+                          _updateControllers();
                         });
                       },
                       child: Text(chipLabels[i]),
@@ -149,6 +168,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                   onPresetSelected: (val) {
                     setState(() {
                       newSleepTimer.length = (val).round() * 60;
+                      _updateControllers();
                     });
                   },
                   chipWidth: 52,
@@ -160,6 +180,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                     const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     IconButton(
                       icon: Icon(TablerIcons.minus, color: widget.iconColor),
@@ -168,6 +189,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                         if (current > 1) {
                           setState(() {
                             newSleepTimer.length = max(1, current - 1) * 60;
+                            _updateControllers();
                           });
                         }
                       },
@@ -211,6 +233,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                             onChanged: (val) {
                               setState(() {
                                 newSleepTimer.length = (val).round() * 60;
+                                _updateControllers();
                               });
                             },
                             label: '${(newSleepTimer.length / 60).round()} min',
@@ -225,6 +248,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                         if (current < 120) {
                           setState(() {
                             newSleepTimer.length = min(120, current + 1) * 60;
+                            _updateControllers();
                           });
                         }
                       },
@@ -238,37 +262,44 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                     SizedBox(
                       width: 48,
                       height: 28,
-                      child: TextFormField(
-                        initialValue:
-                            (newSleepTimer.length / 60).round().toString(),
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: EdgeInsets.symmetric(vertical: 4),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide.none),
-                          filled: true,
-                          fillColor: widget.iconColor.withOpacity(0.08),
+                      child: Center(
+                        child: TextFormField(
+                          controller: _durationController,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: EdgeInsets.symmetric(vertical: 4),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none),
+                            filled: true,
+                            fillColor: widget.iconColor.withOpacity(0.08),
+                          ),
+                          keyboardType: TextInputType.number,
+                          onFieldSubmitted: (val) {
+                            final parsed = int.tryParse(val);
+                            if (parsed != null &&
+                                parsed >= 1 &&
+                                parsed <= 120) {
+                              setState(() {
+                                newSleepTimer.length = parsed * 60;
+                                _updateControllers();
+                              });
+                            }
+                          },
+                          onChanged: (val) {
+                            final parsed = int.tryParse(val);
+                            if (parsed != null &&
+                                parsed >= 1 &&
+                                parsed <= 120) {
+                              setState(() {
+                                newSleepTimer.length = parsed * 60;
+                                _updateControllers();
+                              });
+                            }
+                          },
                         ),
-                        keyboardType: TextInputType.number,
-                        onFieldSubmitted: (val) {
-                          final parsed = int.tryParse(val);
-                          if (parsed != null && parsed >= 1 && parsed <= 120) {
-                            setState(() {
-                              newSleepTimer.length = parsed * 60;
-                            });
-                          }
-                        },
-                        onChanged: (val) {
-                          final parsed = int.tryParse(val);
-                          if (parsed != null && parsed >= 1 && parsed <= 120) {
-                            setState(() {
-                              newSleepTimer.length = parsed * 60;
-                            });
-                          }
-                        },
                       ),
                     ),
                   ],
@@ -329,6 +360,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                   onPresetSelected: (val) {
                     setState(() {
                       newSleepTimer.length = (val).round();
+                      _updateControllers();
                     });
                   },
                   chipWidth: 52,
@@ -340,6 +372,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                     const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     IconButton(
                       icon: Icon(TablerIcons.minus, color: widget.iconColor),
@@ -348,6 +381,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                         if (current > 1) {
                           setState(() {
                             newSleepTimer.length = max(1, current - 1);
+                            _updateControllers();
                           });
                         }
                       },
@@ -389,6 +423,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                             onChanged: (val) {
                               setState(() {
                                 newSleepTimer.length = val.round();
+                                _updateControllers();
                               });
                             },
                             label: '${newSleepTimer.length} tracks',
@@ -403,6 +438,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                         if (current < 20) {
                           setState(() {
                             newSleepTimer.length = min(20, current + 1);
+                            _updateControllers();
                           });
                         }
                       },
@@ -415,36 +451,40 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                     SizedBox(
                       width: 48,
                       height: 28,
-                      child: TextFormField(
-                        initialValue: newSleepTimer.length.toString(),
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: EdgeInsets.symmetric(vertical: 4),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide.none),
-                          filled: true,
-                          fillColor: widget.iconColor.withOpacity(0.08),
+                      child: Center(
+                        child: TextFormField(
+                          controller: _trackController,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: EdgeInsets.symmetric(vertical: 4),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide.none),
+                            filled: true,
+                            fillColor: widget.iconColor.withOpacity(0.08),
+                          ),
+                          keyboardType: TextInputType.number,
+                          onFieldSubmitted: (val) {
+                            final parsed = int.tryParse(val);
+                            if (parsed != null && parsed >= 1 && parsed <= 20) {
+                              setState(() {
+                                newSleepTimer.length = parsed;
+                                _updateControllers();
+                              });
+                            }
+                          },
+                          onChanged: (val) {
+                            final parsed = int.tryParse(val);
+                            if (parsed != null && parsed >= 1 && parsed <= 20) {
+                              setState(() {
+                                newSleepTimer.length = parsed;
+                                _updateControllers();
+                              });
+                            }
+                          },
                         ),
-                        keyboardType: TextInputType.number,
-                        onFieldSubmitted: (val) {
-                          final parsed = int.tryParse(val);
-                          if (parsed != null && parsed >= 1 && parsed <= 20) {
-                            setState(() {
-                              newSleepTimer.length = parsed;
-                            });
-                          }
-                        },
-                        onChanged: (val) {
-                          final parsed = int.tryParse(val);
-                          if (parsed != null && parsed >= 1 && parsed <= 20) {
-                            setState(() {
-                              newSleepTimer.length = parsed;
-                            });
-                          }
-                        },
                       ),
                     ),
                   ],
@@ -484,7 +524,8 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                             ? Duration.zero
                             : currentTrackRemainingDuration +
                                 queueInfo.getDurationUntil(finalTrackIndex -
-                                    queueInfo.currentTrackIndex);
+                                    queueInfo.currentTrackIndex +
+                                    1);
                         durationUntilEndOfFinalTrack = newSleepTimer
                                     .totalDuration <
                                 currentTrackRemainingDuration
@@ -496,7 +537,9 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                               milliseconds: min(
                                   durationUntilEndOfFinalTrack
                                           ?.inMilliseconds ??
-                                      queueRemainingDuration.inMilliseconds,
+                                      (queueRemainingDuration +
+                                              currentTrackRemainingDuration)
+                                          .inMilliseconds,
                                   (queueRemainingDuration +
                                           currentTrackRemainingDuration)
                                       .inMilliseconds))
