@@ -129,18 +129,18 @@ class DownloadsService {
   /// Provider for the download status of an item.  See [getStatus] for details.
   /// This provider relies on the fact that [_syncDownload] always re-inserts
   /// processed items into Isar to know when to re-check status.
-  late final statusProvider = StreamProvider.family
+  late final statusProvider = Provider.family
       .autoDispose<DownloadItemStatus, (DownloadStub, int?)>((ref, record) {
     var (stub, childCount) = record;
     assert(stub.type != DownloadItemType.image &&
         stub.type != DownloadItemType.anchor);
     // Refresh on addDownload/removeDownload as well as state change
     ref.watch(_anchorProvider);
-    return _isar.downloadItems
-        .watchObjectLazy(stub.isarId, fireImmediately: true)
-        .map((event) {
-      return getStatus(stub, childCount);
-    }).distinct();
+    var sub = _isar.downloadItems.watchObjectLazy(stub.isarId).listen((_) {
+      ref.state = getStatus(stub, childCount);
+    });
+    ref.onDispose(sub.cancel);
+    return getStatus(stub, childCount);
   });
 
   /// Provider for the actual download item associated with a stub.  This is used
@@ -1573,12 +1573,12 @@ late final userDownloadedItemsProvider =
                 q.typeEqualTo(DownloadItemType.track).requiredByIsNotEmpty()))
         // Returns albums where the artist (relatedTo) is an Album Artist
         .optional(
-            artistType == ArtistType.albumartist && relatedTo != null,
+            artistType == ArtistType.albumArtist && relatedTo != null,
             (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(
                 relatedTo!.id.raw, DownloadItemType.collection))))
         // Returns albums related to the performing artist or genre
         .optional(
-            artistType != ArtistType.albumartist && relatedTo != null,
+            artistType != ArtistType.albumArtist && relatedTo != null,
             (q) => q.infoFor((q) => q.info((q) => q.isarIdEqualTo(
                 DownloadStub.getHash(
                     relatedTo!.id.raw, DownloadItemType.collection)))))

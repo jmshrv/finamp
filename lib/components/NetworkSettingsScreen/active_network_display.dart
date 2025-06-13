@@ -18,7 +18,7 @@ class ActiveNetworkDisplay extends ConsumerWidget {
       builder: (context, box, __) {
         return ListTile(
           leading: Icon(Icons.router_outlined),
-          subtitle: Text(AppLocalizations.of(context)!.preferHomeNetworkActiveAddressInfoText),
+          subtitle: Text(AppLocalizations.of(context)!.preferLocalNetworkActiveAddressInfoText),
           trailing: Text(address ?? "")
         );
       }

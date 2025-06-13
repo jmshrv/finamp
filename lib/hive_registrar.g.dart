@@ -78,6 +78,8 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(ScreenSizeAdapter());
     registerAdapter(SessionInfoAdapter());
     registerAdapter(SessionUserInfoAdapter());
+    registerAdapter(SleepTimerAdapter());
+    registerAdapter(SleepTimerTypeAdapter());
     registerAdapter(SortByAdapter());
     registerAdapter(SortOrderAdapter());
     registerAdapter(SubtitleProfileAdapter());
@@ -165,6 +167,8 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
     registerAdapter(ScreenSizeAdapter());
     registerAdapter(SessionInfoAdapter());
     registerAdapter(SessionUserInfoAdapter());
+    registerAdapter(SleepTimerAdapter());
+    registerAdapter(SleepTimerTypeAdapter());
     registerAdapter(SortByAdapter());
     registerAdapter(SortOrderAdapter());
     registerAdapter(SubtitleProfileAdapter());

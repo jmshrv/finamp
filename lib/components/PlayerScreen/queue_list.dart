@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/components/AlbumScreen/track_list_tile.dart';
-import 'package:finamp/components/AlbumScreen/track_menu.dart';
+import 'package:finamp/menus/track_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/one_line_marquee_helper.dart';
 import 'package:finamp/components/print_duration.dart';
@@ -33,8 +33,8 @@ import '../padded_custom_scrollview.dart';
 import '../themed_bottom_sheet.dart';
 import 'queue_source_helper.dart';
 
-class _QueueListStreamState {
-  _QueueListStreamState(
+class QueueListStreamState {
+  QueueListStreamState(
     this.mediaState,
     this.queueInfo,
   );
@@ -502,7 +502,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
   @override
   Widget build(context) {
     return MenuMask(
-      height: 131.0,
+      height: NextUpSectionHeader.defaultHeight,
       child: StreamBuilder<FinampQueueInfo?>(
         stream: _queueService.getQueueStream(),
         builder: (context, snapshot) {
@@ -597,7 +597,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
   @override
   Widget build(context) {
     return MenuMask(
-      height: 131.0,
+      height: QueueSectionHeader.defaultHeight,
       child: StreamBuilder<FinampQueueInfo?>(
         stream: _queueService.getQueueStream(),
         builder: (context, snapshot) {
@@ -698,12 +698,12 @@ class _CurrentTrackState extends State<CurrentTrack> {
     MediaState? mediaState;
     Duration? playbackPosition;
 
-    return StreamBuilder<_QueueListStreamState>(
+    return StreamBuilder<QueueListStreamState>(
       stream: Rx.combineLatest2<MediaState, FinampQueueInfo?,
-              _QueueListStreamState>(
+              QueueListStreamState>(
           mediaStateStream,
           _queueService.getQueueStream(),
-          (a, b) => _QueueListStreamState(a, b)),
+              (a, b) => QueueListStreamState(a, b)),
       builder: (context, snapshot) {
         var data = snapshot.data;
         currentTrack = data?.queueInfo?.currentTrack;
@@ -1031,6 +1031,8 @@ class QueueSectionHeader extends StatelessWidget {
     this.controls = false,
   });
 
+  static MenuMaskHeight defaultHeight = MenuMaskHeight(132.0);
+
   @override
   Widget build(context) {
     final queueService = GetIt.instance<QueueService>();
@@ -1162,6 +1164,8 @@ class NextUpSectionHeader extends StatelessWidget {
     required this.nextUpHeaderKey,
     this.controls = false,
   });
+
+  static MenuMaskHeight defaultHeight = MenuMaskHeight(114.0);
 
   @override
   Widget build(context) {

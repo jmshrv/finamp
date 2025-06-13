@@ -1,3 +1,4 @@
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
@@ -7,8 +8,8 @@ import '../../models/jellyfin_models.dart';
 import '../../services/jellyfin_api_helper.dart';
 import '../global_snackbar.dart';
 
-class PlaylistNameEditDialog extends StatefulWidget {
-  const PlaylistNameEditDialog({
+class PlaylistEditDialog extends StatefulWidget {
+  const PlaylistEditDialog({
     super.key,
     required this.playlist,
   });
@@ -16,10 +17,10 @@ class PlaylistNameEditDialog extends StatefulWidget {
   final BaseItemDto playlist;
 
   @override
-  State<PlaylistNameEditDialog> createState() => _PlaylistNameEditDialogState();
+  State<PlaylistEditDialog> createState() => _PlaylistEditDialogState();
 }
 
-class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
+class _PlaylistEditDialogState extends State<PlaylistEditDialog> {
   String? _name;
   BaseItemId? _id;
   bool? _publicVisibility;
@@ -38,7 +39,8 @@ class _PlaylistNameEditDialogState extends State<PlaylistNameEditDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(AppLocalizations.of(context)!.editPlaylistNameTitle),
+      title: Text(AppLocalizations.of(context)!
+          .editItemTitle(BaseItemDtoType.fromItem(widget.playlist).name)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         spacing: 8,

@@ -95,13 +95,6 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setSleepTimerSeconds(int newSleepTimerSeconds) {
-    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.sleepTimerSeconds = newSleepTimerSeconds;
-    Hive.box<FinampSettings>("FinampSettings")
-        .put("FinampSettings", finampSettingsTemp);
-  }
-
   static void setUseCoverAsBackground(bool newUseCoverAsBackground) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.useCoverAsBackground = newUseCoverAsBackground;
@@ -638,9 +631,9 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setArtistListType(ArtistType newArtistListType) {
+  static void setDefaultArtistType(ArtistType newDefaultArtistType) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.artistListType = newArtistListType;
+    finampSettingsTemp.defaultArtistType = newDefaultArtistType;
     Hive.box<FinampSettings>("FinampSettings")
         .put("FinampSettings", finampSettingsTemp);
   }
@@ -826,6 +819,13 @@ extension FinampSetters on FinampSettingsHelper {
         .put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setSleepTimer(SleepTimer? newSleepTimer) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.sleepTimer = newSleepTimer;
+    Hive.box<FinampSettings>("FinampSettings")
+        .put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -863,8 +863,6 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
           (value) => value.requireValue.contentGridViewCrossAxisCountLandscape);
   ProviderListenable<bool> get showTextOnGridView => finampSettingsProvider
       .select((value) => value.requireValue.showTextOnGridView);
-  ProviderListenable<int> get sleepTimerSeconds => finampSettingsProvider
-      .select((value) => value.requireValue.sleepTimerSeconds);
   ProviderListenable<bool> get useCoverAsBackground => finampSettingsProvider
       .select((value) => value.requireValue.useCoverAsBackground);
   ProviderListenable<int> get bufferDurationSeconds => finampSettingsProvider
@@ -1046,8 +1044,8 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<ItemSwipeActions> get itemSwipeActionRightToLeft =>
       finampSettingsProvider
           .select((value) => value.requireValue.itemSwipeActionRightToLeft);
-  ProviderListenable<ArtistType> get artistListType => finampSettingsProvider
-      .select((value) => value.requireValue.artistListType);
+  ProviderListenable<ArtistType> get defaultArtistType => finampSettingsProvider
+      .select((value) => value.requireValue.defaultArtistType);
   ProviderListenable<double> get currentVolume => finampSettingsProvider
       .select((value) => value.requireValue.currentVolume);
   ProviderListenable<int> get playOnStaleDelay => finampSettingsProvider
@@ -1109,6 +1107,8 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
           .select((value) => value.requireValue.playlistTracksSortOrder);
   ProviderListenable<bool> get genreFilterPlaylists => finampSettingsProvider
       .select((value) => value.requireValue.genreFilterPlaylists);
+  ProviderListenable<SleepTimer?> get sleepTimer =>
+      finampSettingsProvider.select((value) => value.requireValue.sleepTimer);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider
           .select((value) => value.requireValue.downloadTranscodingProfile);

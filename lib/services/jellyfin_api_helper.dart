@@ -267,7 +267,7 @@ class JellyfinApiHelper {
         );
       } else if (includeItemTypes == "MusicArtist") {
         // For artists, we need to use different endpoints
-        if (artistType == ArtistType.albumartist) {
+        if (artistType == ArtistType.albumArtist) {
           // Album Artists
           response = await api.getAlbumArtists(
             parentId: parentItem?.id,
@@ -304,7 +304,7 @@ class JellyfinApiHelper {
         // artistIDs or albumArtistIds instead of parentId
         // also, in order to only get the items from within one library
         // we have to use a separated libraryFilter,
-        if (artistType == ArtistType.albumartist || artistType == null) {
+        if (artistType == ArtistType.albumArtist || artistType == null) {
           // Albums of Album Artists
           response = await api.getItems(
             userId: currentUserId,
@@ -570,9 +570,9 @@ class JellyfinApiHelper {
     FinampUser newUser = FinampUser(
       id: newUserAuthenticationResult.user!.id,
       publicAddress: baseUrlTemp!.toString(),
-      homeAddress: DefaultSettings.homeNetworkAddress,
+      localAddress: DefaultSettings.localNetworkAddress,
       isLocal: false,
-      preferHomeNetwork: DefaultSettings.preferHomeNetwork,
+      preferLocalNetwork: DefaultSettings.preferLocalNetwork,
       accessToken: newUserAuthenticationResult.accessToken!,
       serverId: newUserAuthenticationResult.serverId!,
       views: {},
@@ -604,9 +604,9 @@ class JellyfinApiHelper {
     FinampUser newUser = FinampUser(
       id: newUserAuthenticationResult.user!.id,
       publicAddress: baseUrlTemp!.toString(),
-      homeAddress: DefaultSettings.homeNetworkAddress,
+      localAddress: DefaultSettings.localNetworkAddress,
       isLocal: false,
-      preferHomeNetwork: DefaultSettings.preferHomeNetwork,
+      preferLocalNetwork: DefaultSettings.preferLocalNetwork,
       accessToken: newUserAuthenticationResult.accessToken!,
       serverId: newUserAuthenticationResult.serverId!,
       views: {},
@@ -1010,7 +1010,7 @@ class JellyfinApiHelper {
   Future<bool> pingLocalServer() async {
     FinampUser? user = GetIt.instance<FinampUserHelper>().currentUser;
     if (user == null) return false;
-    return await _pingSpecificServer(user.homeAddress);
+    return await _pingSpecificServer(user.localAddress);
   }
 
   Future<bool> pingPublicServer() async {

@@ -14,7 +14,7 @@ import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../../services/current_album_image_provider.dart';
 import '../../services/favorite_provider.dart';
-import '../AlbumScreen/track_menu.dart';
+import '../../menus/track_menu.dart';
 import '../album_image.dart';
 
 class PlayerScreenAlbumImage extends ConsumerWidget {

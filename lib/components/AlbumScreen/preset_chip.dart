@@ -20,9 +20,12 @@ class PresetChips extends StatefulWidget {
     required this.type,
     required this.values,
     required this.activeValue,
+    this.defaultValue,
     this.onTap,
     this.mainColour,
     this.onPresetSelected,
+    this.prefix = "",
+    this.showAsDouble = false,
     this.chipWidth = 64.0,
     this.chipHeight = 44.0,
   });
@@ -30,10 +33,13 @@ class PresetChips extends StatefulWidget {
   final PresetTypes type;
 
   final List<double> values;
+  final double? defaultValue;
   final double activeValue;
   final Function()? onTap;
   final Color? mainColour; // used for different background colours
-  final Function()? onPresetSelected;
+  final Function(double)? onPresetSelected;
+  final bool showAsDouble;
+  final String prefix;
   final double chipWidth;
   final double chipHeight;
 
@@ -78,24 +84,31 @@ class _PresetChipsState extends State<PresetChips> {
       scrollToActivePreset(value, constraints.maxWidth);
     }
 
-    final stringValue = "x$value";
+    final stringValue =
+        "${widget.prefix}${widget.showAsDouble ? value : value.round()}";
 
     return PresetChip(
       value: stringValue,
       backgroundColour:
           widget.mainColour?.withOpacity(value == widget.activeValue
               ? 0.6
-              : (value == 1.0)
+              : (value == widget.defaultValue)
                   ? 0.3
                   : 0.1),
       isSelected: value == widget.activeValue,
-      isPresetDefault: value == 1.0,
+      isPresetDefault: value == widget.defaultValue,
       width: widget.chipWidth,
       height: widget.chipHeight,
       onTap: () {
         setState(() {});
-        _queueService.playbackSpeed = value;
-        widget.onPresetSelected?.call();
+        // Only update playbackSpeed for speed menu, not for sleep timer menu
+        if (widget.type == PresetTypes.speed &&
+            widget.onPresetSelected == null) {
+          _queueService.playbackSpeed = value;
+        }
+        if (widget.onPresetSelected != null) {
+          widget.onPresetSelected!(value);
+        }
       },
     );
   }
@@ -107,7 +120,7 @@ class _PresetChipsState extends State<PresetChips> {
       // initial offset to be calculated first.
       var list = List.generate(widget.values.length,
           (index) => generatePresetChip(widget.values[index], constraints));
-      assert(_controller != null);
+      // assert(_controller != null);
       // Allow drag scrolling on desktop
       return ScrollConfiguration(
           behavior: ScrollConfiguration.of(context)
@@ -148,7 +161,9 @@ class PresetChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final backgroundColor = backgroundColour ?? _defaultBackgroundColour;
-    final color = Theme.of(context).textTheme.bodySmall?.color ?? Colors.white;
+    final color = (isSelected ?? false)
+        ? Colors.white
+        : Theme.of(context).textTheme.bodySmall?.color ?? Colors.white;
 
     return TextButton(
       style: TextButton.styleFrom(
@@ -164,7 +179,7 @@ class PresetChip extends StatelessWidget {
         style: TextStyle(
           color: color,
           overflow: TextOverflow.visible,
-          fontWeight: isSelected! ? FontWeight.w800 : FontWeight.normal,
+          fontWeight: isSelected! ? FontWeight.w600 : FontWeight.normal,
         ),
         softWrap: false,
       ),

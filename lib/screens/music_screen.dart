@@ -10,7 +10,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
 import '../components/MusicScreen/artist_type_selection_row.dart';
-import '../components/MusicScreen/music_screen_drawer.dart';
+import '../menus/music_screen_drawer.dart';
 import '../components/MusicScreen/music_screen_tab_view.dart';
 import '../components/MusicScreen/sort_by_menu_button.dart';
 import '../components/MusicScreen/sort_order_button.dart';
@@ -413,7 +413,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
                   buildArtistTypeSelectionRow(
                       context,
                       tabType,
-                      ref.watch(finampSettingsProvider.artistListType),
+                      ref.watch(finampSettingsProvider.defaultArtistType),
                       refreshTab),
                   Expanded(
                     child: MusicScreenTabView(

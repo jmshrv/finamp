@@ -7,7 +7,7 @@ import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 Widget buildArtistTypeSelectionRow(BuildContext context, TabContentType tabType,
-    ArtistType artistListType, Function(TabContentType) refreshTab) {
+    ArtistType defaultArtistType, Function(TabContentType) refreshTab) {
   if (tabType == TabContentType.artists) {
     double screenWidth = MediaQuery.of(context).size.width;
     bool alignLeft = screenWidth > 600;
@@ -29,15 +29,15 @@ Widget buildArtistTypeSelectionRow(BuildContext context, TabContentType tabType,
               FilterChip(
                 label: Text(AppLocalizations.of(context)!.albumArtists),
                 onSelected: (_) {
-                  FinampSetters.setArtistListType(ArtistType.albumartist);
+                  FinampSetters.setDefaultArtistType(ArtistType.albumArtist);
                   refreshTab(tabType);
                 },
-                selected: artistListType == ArtistType.albumartist,
+                selected: defaultArtistType == ArtistType.albumArtist,
                 showCheckmark: false,
                 selectedColor: Theme.of(context).colorScheme.primary,
                 backgroundColor: Theme.of(context).colorScheme.surface,
                 labelStyle: TextStyle(
-                  color: artistListType == ArtistType.albumartist
+                  color: defaultArtistType == ArtistType.albumArtist
                       ? Theme.of(context).colorScheme.onPrimary
                       : Theme.of(context).colorScheme.onSurface,
                 ),
@@ -47,15 +47,15 @@ Widget buildArtistTypeSelectionRow(BuildContext context, TabContentType tabType,
               FilterChip(
                 label: Text(AppLocalizations.of(context)!.performingArtists),
                 onSelected: (_) {
-                  FinampSetters.setArtistListType(ArtistType.artist);
+                  FinampSetters.setDefaultArtistType(ArtistType.artist);
                   refreshTab(tabType);
                 },
-                selected: artistListType == ArtistType.artist,
+                selected: defaultArtistType == ArtistType.artist,
                 showCheckmark: false,
                 selectedColor: Theme.of(context).colorScheme.primary,
                 backgroundColor: Theme.of(context).colorScheme.surface,
                 labelStyle: TextStyle(
-                    color: artistListType == ArtistType.artist
+                    color: defaultArtistType == ArtistType.artist
                         ? Theme.of(context).colorScheme.onPrimary
                         : Theme.of(context).colorScheme.onSurface),
                 shape: StadiumBorder(),

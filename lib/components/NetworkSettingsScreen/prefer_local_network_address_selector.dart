@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
-class HomeNetworkAddressSelector extends ConsumerStatefulWidget {
-  const HomeNetworkAddressSelector({super.key});
+class LocalNetworkAddressSelector extends ConsumerStatefulWidget {
+  const LocalNetworkAddressSelector({super.key});
   
   @override
-  ConsumerState<HomeNetworkAddressSelector> createState() => _HomeNetworkAddressSelector();
+  ConsumerState<LocalNetworkAddressSelector> createState() => _LocalNetworkAddressSelector();
 }
 
-class _HomeNetworkAddressSelector extends ConsumerState<HomeNetworkAddressSelector> {
+class _LocalNetworkAddressSelector extends ConsumerState<LocalNetworkAddressSelector> {
 
   TextEditingController? _controller;
   @override
@@ -26,16 +26,16 @@ class _HomeNetworkAddressSelector extends ConsumerState<HomeNetworkAddressSelect
   @override
   Widget build(BuildContext context) {
     FinampUser? user = ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull;
-    String address = user?.homeAddress ?? DefaultSettings.homeNetworkAddress;
-    bool featureEnabled = user?.preferHomeNetwork ?? DefaultSettings.preferHomeNetwork;
+    String address = user?.localAddress ?? DefaultSettings.localNetworkAddress;
+    bool featureEnabled = user?.preferLocalNetwork ?? DefaultSettings.preferLocalNetwork;
 
     _controller ??= TextEditingController(
       text: address);
 
     return ListTile(
       enabled: featureEnabled,
-      title: Text(AppLocalizations.of(context)!.preferHomeNetworkTargetAddressLocalSettingTitle),
-      subtitle: Text(AppLocalizations.of(context)!.preferHomeNetworkTargetAddressLocalSettingDescription),
+      title: Text(AppLocalizations.of(context)!.preferLocalNetworkTargetAddressLocalSettingTitle),
+      subtitle: Text(AppLocalizations.of(context)!.preferLocalNetworkTargetAddressLocalSettingDescription),
       trailing: SizedBox(
         width: 200 * MediaQuery.of(context).textScaleFactor,
         child: TextField(
@@ -48,7 +48,7 @@ class _HomeNetworkAddressSelector extends ConsumerState<HomeNetworkAddressSelect
               return GlobalSnackbar.message((context) =>
                   AppLocalizations.of(context)!.missingSchemaError);
             }
-            GetIt.instance<FinampUserHelper>().currentUser?.update(newHomeAddress: value);
+            GetIt.instance<FinampUserHelper>().currentUser?.update(newLocalAddress: value);
             await changeTargetUrl();
           },
         ),
