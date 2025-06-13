@@ -94,7 +94,7 @@ class DownloadsOverview extends StatelessWidget {
                                           (snapshot.data?[DownloadItemState
                                                   .needsRedownloadComplete] ??
                                               -1)),
-                                  style: const TextStyle(color: Colors.green),
+                                  style: const TextStyle(color: Colors.blue),
                                 ),
                                 Text(
                                   AppLocalizations.of(context)!.dlFailed(
