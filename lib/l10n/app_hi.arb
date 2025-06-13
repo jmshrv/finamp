@@ -759,10 +759,6 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "शफ़ल",
   "@shuffleButtonLabel": {},
-  "editPlaylistNameTooltip": "प्लेलिस्ट का नाम संपादित करें",
-  "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "प्लेलिस्ट नाम संपादन",
-  "@editPlaylistNameTitle": {},
   "trackCount": "{count,plural,=1{{count} ट्रैक} other {{count} ट्रैक}}",
   "@trackCount": {
     "placeholders": {

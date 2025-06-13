@@ -435,10 +435,6 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "ویرایش نام فهرست پخش",
-  "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "ویرایش نام فهرست پخش",
-  "@editPlaylistNameTitle": {},
   "required": "الزامی",
   "@required": {},
   "stackTrace": "ردیابی پشته (Stack Trace)",

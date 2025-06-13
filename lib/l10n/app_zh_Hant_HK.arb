@@ -129,10 +129,6 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "編輯播放清單名稱",
-  "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "編輯播放清單名稱",
-  "@editPlaylistNameTitle": {},
   "updateButtonLabel": "更新",
   "@updateButtonLabel": {},
   "playlistUpdated": "已更新播放清單名稱。",

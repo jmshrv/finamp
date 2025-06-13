@@ -336,8 +336,6 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Edita el nom de la llista de reproducció",
-  "@editPlaylistNameTooltip": {},
   "audioService": "Servei d'Àudio",
   "@audioService": {},
   "customLocation": "Ubicació Personalitzada",
@@ -511,8 +509,6 @@
       }
     }
   },
-  "editPlaylistNameTitle": "Edita el nom de la llista de reproducció",
-  "@editPlaylistNameTitle": {},
   "playlistUpdated": "Nom de la llista de reproducció actualitzat.",
   "@playlistUpdated": {},
   "location": "Localització",

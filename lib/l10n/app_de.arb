@@ -181,8 +181,6 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Zufällig",
   "@shuffleButtonLabel": {},
-  "editPlaylistNameTitle": "Playlist bearbeiten",
-  "@editPlaylistNameTitle": {},
   "updateButtonLabel": "Aktualisieren",
   "@updateButtonLabel": {},
   "downloadsDeleted": "Downloads gelöscht.",
@@ -263,7 +261,7 @@
   "@tabs": {},
   "cancelSleepTimer": "Schlaf-Timer abbrechen?",
   "@cancelSleepTimer": {},
-  "setSleepTimer": "Schlaf-Timer einstellen",
+  "setSleepTimer": "Wiedergabe pausieren nach",
   "@setSleepTimer": {},
   "minutes": "Minuten",
   "@minutes": {},
@@ -322,8 +320,6 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Playlist bearbeiten",
-  "@editPlaylistNameTooltip": {},
   "playlistUpdated": "Playlist aktualisiert.",
   "@playlistUpdated": {},
   "logsCopied": "Logs kopiert.",
@@ -406,7 +402,7 @@
   "@topTracks": {},
   "shuffleAlbums": "Alben zufällig wiedergeben",
   "@shuffleAlbums": {},
-  "couldNotLoad": "Laden {source, select, album{des Albums} playlist{der Wiedergabeliste} trackMix{des Titelmixes} artistMix{des Künstlermixes} albumMix{des Albummixes} favorites{der Favoriten} allTracks{aller Titel} filteredList{der Tracks} genre{des Genre} artist{des Künstlers} nextUpAlbum{des Album in \\\"Als Nächstes\\\"} nextUpPlaylist{der Playlist in \\\"Als Nächstes\\\"} nextUpArtist{des Künstlers in \\\"Als Nächstes\\\"} other{}} fehlgeschlagen",
+  "couldNotLoad": "Laden {source, select, album{des Albums} playlist{der Wiedergabeliste} trackMix{des Titelmixes} artistMix{des Künstlermixes} albumMix{des Albummixes} favorites{der Favoriten} allTracks{aller Titel} filteredList{der Tracks} genre{des Genre} artist{des Künstlers} nextUpAlbum{des Album in \\\"Als Nächstes\\\"} nextUpPlaylist{der Playlist in \\\"Als Nächstes\\\"} nextUpArtist{des Künstlers in \\\"Als Nächstes\\\"} nextUpGenre{des Genres in \\\"Als Nächstes\\\"} other{}} fehlgeschlagen",
   "@couldNotLoad": {},
   "bufferDurationSubtitle": "Die maximale Pufferdauer in Sekunden. Neustart erforderlich.",
   "@bufferDurationSubtitle": {},
@@ -713,7 +709,7 @@
   "@timeFractionTooltip": {
     "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
   },
-  "sleepTimerRemainingTime": "Schlaftimer endet in {time} Minuten",
+  "sleepTimerRemainingTime": "Schlaftimer endet in {prefix}{time} {suffix}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -1456,7 +1452,7 @@
       }
     }
   },
-  "playingFromType": "Wiedergabe von {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Künstler Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favoriten} allTracks{allen Tracks} filteredList{Tracks} genre{Genre} artist{Künstler} track{Track} nextUpAlbum{Album in \"Als Nächstes\"} nextUpPlaylist{Playlist in \"Als Nächstes\"} nextUpArtist{Artist in \"Als Nächstes\"} remoteClient{anderem Client} other{}}",
+  "playingFromType": "Wiedergabe von {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Künstler Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favoriten} allTracks{allen Tracks} filteredList{Tracks} genre{Genre} artist{Künstler} track{Track} nextUpAlbum{Album in \"Als Nächstes\"} nextUpPlaylist{Playlist in \"Als Nächstes\"} nextUpArtist{Artist in \"Als Nächstes\"} nextUpGenre{Genre in \"Als Nächstes\"} remoteClient{anderem Client} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -2072,10 +2068,6 @@
   "@showFavoriteButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a favorite button."
   },
-  "preferHomeNetworkEnableSwitchDescription": "Ob eine andere Adresse verwendet werden soll, wenn du zuhause bist",
-  "@preferHomeNetworkEnableSwitchDescription": {},
-  "preferHomeNetworkPublicAddressSettingTitle": "Öffentliche Adresse",
-  "@preferHomeNetworkPublicAddressSettingTitle": {},
   "networkSettingsTitle": "Netzwerk",
   "@networkSettingsTitle": {
     "description": "Title for the network settings screen"
@@ -2160,18 +2152,6 @@
   "@genreScreen": {
     "description": "Name for the view/screen that shows genres"
   },
-  "preferHomeNetworkActiveAddressInfoText": "Aktive Adresse",
-  "@preferHomeNetworkActiveAddressInfoText": {
-    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
-  },
-  "preferHomeNetworkTargetAddressLocalSettingTitle": "Heimnetzwerk Adresse",
-  "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
-  "preferHomeNetworkPublicAddressSettingDescription": "Die primäre Adresse, die für die Verbindung zum Jellyfin Server verwendet wird",
-  "@preferHomeNetworkPublicAddressSettingDescription": {},
-  "preferHomeNetworkInfoBox": "Dieses Feature benötigt eine Ortungsdienst-Freigabe (und Ortungsdienste muss aktiviert sein), um den Netzwerknamen lesen zu können.",
-  "@preferHomeNetworkInfoBox": {
-    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
-  },
   "downloadPaused": "Downloads wurden pausiert, da das Gerät nicht über WLAN verbunden ist",
   "@downloadPaused": {
     "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
@@ -2230,8 +2210,6 @@
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
-  "preferHomeNetworkEnableSwitchTitle": "Heimnetzwerk bevorzugen",
-  "@preferHomeNetworkEnableSwitchTitle": {},
   "showShuffleButtonOnMediaNotificationSubtitle": "Legt fest, ob die Medienbenachrichtigung einen Zufällig-Button hat. Dadurch kannst du die Zufallswiedergabe aktivieren oder deaktivieren, ohne die App öffnen zu müssen.",
   "@showShuffleButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
@@ -2244,8 +2222,6 @@
   "@artistScreen": {
     "description": "Name for the view/screen that shows artists"
   },
-  "preferHomeNetworkTargetAddressLocalSettingDescription": "Zieladresse des Jellyfin Servers innerhalb deines Heimnetzwerks",
-  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
   "ping": "{status, select, true_true{Beide erreichbar} true_false{Lokale Adresse nicht erreichbar} false_true{Öffentliche Adresse nicht erreichbar} false_false{Beide Adressen nicht erreichbar} other{unbekannt}}",
   "@ping": {
     "description": "Gets shown in the Snackbar when using the Test Connection Button inside the Network Settings. true means reachable, false means unreachable. the first value is for the public address, the second value is fot the home address."
@@ -2411,5 +2387,112 @@
   "defaultOrder": "Standard-Reihenfolge",
   "@defaultOrder": {
     "description": "Default sorting order for playlists (server order)"
+  },
+  "editItemTitle": "{itemType, select, playlist{Playlist} other{}} bearbeiten",
+  "@editItemTitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
+  "playbackActionPageShuffle": "Zufällig",
+  "@playbackActionPageShuffle": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled"
+  },
+  "playbackActionPagePlay": "Play",
+  "@playbackActionPagePlay": {
+    "description": "Label for the playback action page that contains all actions related to playing in order"
+  },
+  "playbackActionPageShuffleAlbums": "Alben zufällig abspielen",
+  "@playbackActionPageShuffleAlbums": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+  },
+  "sleepTimerProjectedDuration": "Wiedergabe wird in ~{duration} pausieren",
+  "@sleepTimerProjectedDuration": {
+    "description": "Displays duration until playback is expected to be ended by the sleep timer (unless the queue is modified before). {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "itemCountLoading": "{childType, select, track{Titel} album{Alben} other{Items}}",
+  "@itemCountLoading": {
+    "description": "Shown while the item count is being calculated.",
+    "placeholders": {
+      "childType": {
+        "type": "String",
+        "example": "album",
+        "description": "Options match BaseItemDtoType.name"
+      }
+    }
+  },
+  "itemCountCalculating": "Anzahl wird berechnet",
+  "@itemCountCalculating": {
+    "description": "Shown to screen readers while the item count is being calculated."
+  },
+  "preferLocalNetworkTargetAddressLocalSettingTitle": "Lokale Adresse",
+  "@preferLocalNetworkTargetAddressLocalSettingTitle": {},
+  "preferLocalNetworkTargetAddressLocalSettingDescription": "Zieladresse des Jellyfin Servers innerhalb deines lokalen Netzwerks",
+  "@preferLocalNetworkTargetAddressLocalSettingDescription": {},
+  "preferLocalNetworkEnableSwitchTitle": "Lokales Netzwerk bevorzugen",
+  "@preferLocalNetworkEnableSwitchTitle": {},
+  "preferLocalNetworkEnableSwitchDescription": "Ob eine andere Adresse verwendet werden soll, wenn du im lokalen Netzwerk deines Jellyfin Servers bist",
+  "@preferLocalNetworkEnableSwitchDescription": {},
+  "preferLocalNetworkPublicAddressSettingTitle": "Öffentliche Adresse",
+  "@preferLocalNetworkPublicAddressSettingTitle": {},
+  "menuButtonLabel": "Mehr Aktionen",
+  "@menuButtonLabel": {
+    "description": "Generic label for menu buttons shown throughout the app. Used for the album, artist, playlist, etc. menus"
+  },
+  "notImplementedYet": "Noch nicht implementiert.",
+  "@notImplementedYet": {
+    "description": "Message shown when a feature is not implemented yet"
+  },
+  "automaticOfflineModeOverrideActiveSubtitle": "Tippe hier zum Fortsetzen",
+  "@automaticOfflineModeOverrideActiveSubtitle": {
+    "description": "Subtitle for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "sleepTimerFinishLastTrack": "Letzten Titel beenden?",
+  "@sleepTimerFinishLastTrack": {
+    "description": "Option for the sleep timer that will finish the last track before stopping playback."
+  },
+  "sleepTimerAfterCurrentTrack": "Nach dem aktuellen Titel",
+  "@sleepTimerAfterCurrentTrack": {
+    "description": "Option for the sleep timer that will stop playback after the current track finishes."
+  },
+  "sleepTimerStartTimer": "Timer starten",
+  "@sleepTimerStartTimer": {
+    "description": "Label for the button that starts the sleep timer"
+  },
+  "preferLocalNetworkPublicAddressSettingDescription": "Die Hauptadresse zum Verbinden mit deinem Jellyfin Server",
+  "@preferLocalNetworkPublicAddressSettingDescription": {},
+  "preferLocalNetworkActiveAddressInfoText": "Aktive Adresse",
+  "@preferLocalNetworkActiveAddressInfoText": {
+    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+  },
+  "itemCount": "{childType, select, track{{amount, plural, =1{1 Titel} other{{amount} Titel}}} album{{amount, plural, =1{1 Album} other{{amount} Alben}}} other{{amount, plural, =1{1 Item} other{{amount} Items}}}}",
+  "@itemCount": {
+    "description": "Error shown when the library select screen fails to load.",
+    "placeholders": {
+      "childType": {
+        "type": "String",
+        "example": "album",
+        "description": "Options match BaseItemDtoType.name"
+      },
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "preferLocalNetworkInfoBox": "Diese Funktion erfordert Standortberechtigungen (und der Standort muss aktiviert sein), um den Netzwerknamen zu lesen.",
+  "@preferLocalNetworkInfoBox": {
+    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
+  },
+  "automaticOfflineModeOverrideActiveTitle": "Automatisches Wechseln pausiert",
+  "@automaticOfflineModeOverrideActiveTitle": {
+    "description": "Title for the label shown below the offline mode toggle when automatic offline mode switching is paused"
   }
 }

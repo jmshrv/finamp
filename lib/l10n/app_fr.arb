@@ -176,10 +176,6 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Modifier la liste de lecture",
-  "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Modifier la liste de lecture",
-  "@editPlaylistNameTitle": {},
   "required": "Requis",
   "@required": {},
   "updateButtonLabel": "Mettre à jour",
@@ -2240,10 +2236,6 @@
   "@additionalPeople": {
     "description": "Label for the feature chips showing additional people in the credits of a track or album"
   },
-  "preferHomeNetworkInfoBox": "Cette fonctionnalité nécessite des autorisations de localisation (et la localisation doit être activée) pour lire le nom du réseau.",
-  "@preferHomeNetworkInfoBox": {
-    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
-  },
   "genreListsInheritSorting": "Listes Complètes Tri Héritage",
   "@genreListsInheritSorting": {
     "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
@@ -2276,22 +2268,6 @@
   "@genreScreen": {
     "description": "Name for the view/screen that shows genres"
   },
-  "preferHomeNetworkPublicAddressSettingTitle": "Adresse publique",
-  "@preferHomeNetworkPublicAddressSettingTitle": {},
-  "preferHomeNetworkPublicAddressSettingDescription": "L'adresse principale utilisée pour se connecter à votre serveur Jellyfin",
-  "@preferHomeNetworkPublicAddressSettingDescription": {},
-  "preferHomeNetworkActiveAddressInfoText": "Adresse active",
-  "@preferHomeNetworkActiveAddressInfoText": {
-    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
-  },
-  "preferHomeNetworkTargetAddressLocalSettingTitle": "Adresse du réseau domestique",
-  "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
-  "preferHomeNetworkTargetAddressLocalSettingDescription": "Adresse cible du serveur Jellyfin à l'intérieur de votre réseau domestique",
-  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
-  "preferHomeNetworkEnableSwitchTitle": "Préférer le réseau domestique",
-  "@preferHomeNetworkEnableSwitchTitle": {},
-  "preferHomeNetworkEnableSwitchDescription": "Utiliser ou non une adresse différente lorsque vous êtes à la maison",
-  "@preferHomeNetworkEnableSwitchDescription": {},
   "defaultOrder": "Ordre par défaut",
   "@defaultOrder": {
     "description": "Default sorting order for playlists (server order)"

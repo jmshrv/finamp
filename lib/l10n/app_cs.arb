@@ -57,10 +57,6 @@
   "@downloadMissingImages": {},
   "failedToGetTrackFromDownloadId": "Nepodařilo se získat skladbu z ID stahování",
   "@failedToGetTrackFromDownloadId": {},
-  "editPlaylistNameTooltip": "Upravit seznam skladeb",
-  "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Upravit seznam skladeb",
-  "@editPlaylistNameTitle": {},
   "addButtonLabel": "Přidat",
   "@addButtonLabel": {},
   "addDownloadLocation": "Přidat umístění stažených",
@@ -2107,26 +2103,6 @@
   "downloadPaused": "Stahování pozastaveno, protože zařízení není připojeno k síti Wi-Fi",
   "@downloadPaused": {
     "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
-  },
-  "preferHomeNetworkActiveAddressInfoText": "Aktivní adresa",
-  "@preferHomeNetworkActiveAddressInfoText": {
-    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
-  },
-  "preferHomeNetworkTargetAddressLocalSettingTitle": "Adresa domácí sítě",
-  "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
-  "preferHomeNetworkTargetAddressLocalSettingDescription": "Cílová adresa serveru Jellyfin uvnitř vaší domácí sítě",
-  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
-  "preferHomeNetworkEnableSwitchTitle": "Upřednostňovat domácí síť",
-  "@preferHomeNetworkEnableSwitchTitle": {},
-  "preferHomeNetworkEnableSwitchDescription": "Zda používat jinou adresu, když jste doma",
-  "@preferHomeNetworkEnableSwitchDescription": {},
-  "preferHomeNetworkPublicAddressSettingTitle": "Veřejná adresa",
-  "@preferHomeNetworkPublicAddressSettingTitle": {},
-  "preferHomeNetworkPublicAddressSettingDescription": "Primární adresa používaná k připojení k vašemu serveru Jellyfin",
-  "@preferHomeNetworkPublicAddressSettingDescription": {},
-  "preferHomeNetworkInfoBox": "Tato funkce vyžaduje oprávnění k poloze (a zapnuté polohové služby) pro přečtení názvu sítě.",
-  "@preferHomeNetworkInfoBox": {
-    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
   },
   "missingSchemaError": "Adresa musí začínat textem http(s)://",
   "@missingSchemaError": {

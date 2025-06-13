@@ -285,10 +285,6 @@
   "@downloadMissingImages": {},
   "hideTrackArtistsIfSameAsAlbumArtists": "如果歌曲艺术家与专辑艺术家相同，则隐藏歌曲艺术家",
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
-  "editPlaylistNameTooltip": "编辑播放列表",
-  "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "编辑播放列表",
-  "@editPlaylistNameTitle": {},
   "failedToGetTrackFromDownloadId": "无法通过下载 ID 获取歌曲",
   "@failedToGetTrackFromDownloadId": {},
   "grid": "网格",
@@ -2104,20 +2100,6 @@
   "@testConnectionButtonLabel": {
     "description": "Button to test the public and local url inside the network settings tab"
   },
-  "preferHomeNetworkActiveAddressInfoText": "活动地址",
-  "@preferHomeNetworkActiveAddressInfoText": {
-    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
-  },
-  "preferHomeNetworkTargetAddressLocalSettingTitle": "家庭网络地址",
-  "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
-  "preferHomeNetworkTargetAddressLocalSettingDescription": "家庭网络内的 Jellyfin 服务器的目标地址",
-  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
-  "preferHomeNetworkEnableSwitchTitle": "首选家庭网络",
-  "@preferHomeNetworkEnableSwitchTitle": {},
-  "preferHomeNetworkEnableSwitchDescription": "在家时是否使用其他地址",
-  "@preferHomeNetworkEnableSwitchDescription": {},
-  "preferHomeNetworkPublicAddressSettingDescription": "用于连接 Jellyfin 服务器的主要地址",
-  "@preferHomeNetworkPublicAddressSettingDescription": {},
   "networkSettingsTitle": "网络",
   "@networkSettingsTitle": {
     "description": "Title for the network settings screen"
@@ -2145,10 +2127,6 @@
   "autoReloadPromptReloadButton": "重新加载",
   "@autoReloadPromptReloadButton": {
     "description": "Button title for reloading the queue after network settings change"
-  },
-  "preferHomeNetworkInfoBox": "此功能需要位置权限（并且需要启用位置）才能读取网络名称。",
-  "@preferHomeNetworkInfoBox": {
-    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
   },
   "autoReloadPromptMissingTracks": "{amountUndownloadedTracks} 将从队列中删除，因为它们尚未下载。",
   "@autoReloadPromptMissingTracks": {

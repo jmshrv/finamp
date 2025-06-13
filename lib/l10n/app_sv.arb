@@ -211,8 +211,6 @@
   "@playButtonLabel": {},
   "artists": "Artister",
   "@artists": {},
-  "editPlaylistNameTooltip": "Ändra namn på spellista",
-  "@editPlaylistNameTooltip": {},
   "genres": "Genrer",
   "@genres": {},
   "offlineMode": "Offlineläge",
@@ -227,8 +225,6 @@
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "editPlaylistNameTitle": "Ändra namn på Spellista",
-  "@editPlaylistNameTitle": {},
   "grid": "Rutnät",
   "@grid": {},
   "enableTranscodingSubtitle": "Transkodar musikströmmar på serversidan.",
@@ -2088,14 +2084,6 @@
   "@showFavoriteButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a favorite button."
   },
-  "preferHomeNetworkActiveAddressInfoText": "Aktiv adress",
-  "@preferHomeNetworkActiveAddressInfoText": {
-    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
-  },
-  "preferHomeNetworkEnableSwitchTitle": "Föredra hemmanätverk",
-  "@preferHomeNetworkEnableSwitchTitle": {},
-  "preferHomeNetworkPublicAddressSettingDescription": "Den huvudsakliga adressen för att koppla upp sig mot din Jellyfin-server",
-  "@preferHomeNetworkPublicAddressSettingDescription": {},
   "networkSettingsTitle": "Nätverk",
   "@networkSettingsTitle": {
     "description": "Title for the network settings screen"
@@ -2108,8 +2096,6 @@
   "@missingSchemaError": {
     "description": "Snackbar message when the user changes their home/public address but it doesn't start with http"
   },
-  "preferHomeNetworkPublicAddressSettingTitle": "Publik adress",
-  "@preferHomeNetworkPublicAddressSettingTitle": {},
   "autoReloadQueueTitle": "Hämta om spelkön automatiskt",
   "@autoReloadQueueTitle": {
     "description": "Title for the setting that controls if the queue is automatically reloaded when the source changes"
@@ -2147,14 +2133,6 @@
   "@stopAndClearQueue": {
     "description": "Label for a button that stops playback and removes all tracks from the queue."
   },
-  "preferHomeNetworkTargetAddressLocalSettingDescription": "Måladress till Jellyfinservern inom ditt hemmanätverk",
-  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
-  "preferHomeNetworkEnableSwitchDescription": "Huruvida du vill använda en annan adress när du befinner dig hemma",
-  "@preferHomeNetworkEnableSwitchDescription": {},
-  "preferHomeNetworkInfoBox": "Den här funktionen kräver tillstånd för Plats (och plats måste vara aktiverat) för att läsa namnet på nätverket.",
-  "@preferHomeNetworkInfoBox": {
-    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
-  },
   "autoReloadPrompt": "Hämta om spelkön för att verkställa nya {type, select, network{nätverksinställningar} transcoding{transkodningsinställningar} other{inställningar}}",
   "@autoReloadPrompt": {
     "description": "Prompt shown when the queue needs to be reloaded after changing network settings",
@@ -2164,8 +2142,6 @@
       }
     }
   },
-  "preferHomeNetworkTargetAddressLocalSettingTitle": "Hemmanätverksadress",
-  "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
   "testConnectionButtonLabel": "Testa båda uppkopplingar",
   "@testConnectionButtonLabel": {
     "description": "Button to test the public and local url inside the network settings tab"

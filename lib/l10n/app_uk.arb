@@ -213,8 +213,6 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Редагувати список відтворення",
-  "@editPlaylistNameTooltip": {},
   "updateButtonLabel": "Оновити",
   "@updateButtonLabel": {},
   "dlRunning": "{count} запущено",
@@ -225,8 +223,6 @@
       }
     }
   },
-  "editPlaylistNameTitle": "Редагувати список відтворенні",
-  "@editPlaylistNameTitle": {},
   "transcoding": "Транскодування",
   "@transcoding": {},
   "logsCopied": "Логи скопійовано.",
@@ -295,7 +291,7 @@
   "@light": {},
   "hideTrackArtistsIfSameAsAlbumArtists": "Приховати виконавців композицій, якщо вони збігаються з виконавцями альбомів",
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
-  "setSleepTimer": "Встановити таймер сну",
+  "setSleepTimer": "Призупинити відтворення після",
   "@setSleepTimer": {},
   "sleepTimerTooltip": "Таймер сну",
   "@sleepTimerTooltip": {},
@@ -701,7 +697,7 @@
   },
   "removeFromPlaylistConfirm": "Вилучити",
   "@removeFromPlaylistConfirm": {},
-  "sleepTimerRemainingTime": "Сон через {time} хвилин",
+  "sleepTimerRemainingTime": "Сон у {prefix}{time} {suffix}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -1107,7 +1103,7 @@
     },
     "description": "Dropdown option to download original version of tracks"
   },
-  "playingFromType": "Відтворення з {source, select, album{Альбому} playlist{Списку відтворення} trackMix{Міксу композиції} artistMix{Міксу виконавця} albumMix{Міксу альбому} genreMix{Міксу жанру} favorites{Обраного} allTracks{Усіх композицій} filteredList{Композицій} genre{Жанру} artist{Виконавця} track{Композиції} nextUpAlbum{Альбому з Наступного} nextUpPlaylist{Списку відтворення з Наступного} nextUpArtist{Виконавця з наступного} other{}}",
+  "playingFromType": "Відтворення з {source, select, album{Альбом} playlist{Список відтворення} trackMix{Мікс треків} artistMix{Мікс виконавців} albumMix{Мікс альбомів} genreMix{Жанровий мікс} favorites{Улюблені} allTracks{Усі треки} filteredList{Треки} genre{Жанр} artist{Артист} track{Трек} nextUpAlbum{Альбом у розділі «Далі»} nextUpPlaylist{Список відтворення у розділі «Далі»} nextUpArtist{Виконавець у Next Up} nextUpGenre{Жанр у Next Up} remoteClient{Віддалений клієнт} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -2119,26 +2115,6 @@
       }
     }
   },
-  "preferHomeNetworkActiveAddressInfoText": "Активна адреса",
-  "@preferHomeNetworkActiveAddressInfoText": {
-    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
-  },
-  "preferHomeNetworkTargetAddressLocalSettingTitle": "Адреса домашньої мережі",
-  "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
-  "preferHomeNetworkTargetAddressLocalSettingDescription": "Цільова адреса сервера Jellyfin у вашій домашній мережі",
-  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
-  "preferHomeNetworkEnableSwitchTitle": "Віддати перевагу домашній мережі",
-  "@preferHomeNetworkEnableSwitchTitle": {},
-  "preferHomeNetworkEnableSwitchDescription": "Чи використовувати іншу адресу, коли ви вдома",
-  "@preferHomeNetworkEnableSwitchDescription": {},
-  "preferHomeNetworkPublicAddressSettingTitle": "Публічна адреса",
-  "@preferHomeNetworkPublicAddressSettingTitle": {},
-  "preferHomeNetworkPublicAddressSettingDescription": "Основна адреса, яка використовується для підключення до вашого сервера Jellyfin",
-  "@preferHomeNetworkPublicAddressSettingDescription": {},
-  "preferHomeNetworkInfoBox": "Ця функція вимагає дозволів на доступ до геоданих (і геодані мають бути ввімкнені), щоб зчитувати назву мережі.",
-  "@preferHomeNetworkInfoBox": {
-    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
-  },
   "networkSettingsTitle": "Мережа",
   "@networkSettingsTitle": {
     "description": "Title for the network settings screen"
@@ -2421,5 +2397,112 @@
   "defaultOrder": "Порядок за замовчуванням",
   "@defaultOrder": {
     "description": "Default sorting order for playlists (server order)"
-  }
+  },
+  "itemCount": "{childType, select, track{{amount, plural, =1{1 доріжка} other{{amount} треки}}} album{{amount, plural, =1{1 альбом} other{{amount} альбоми}}} other{{amount, plural, =1{1 елемент} other{{amount} елементів}}}}",
+  "@itemCount": {
+    "description": "Amount of various child item, like artist albums, performing artist tracks, or genre albums. Shown for example in the menu headers.",
+    "placeholders": {
+      "childType": {
+        "type": "String",
+        "example": "album",
+        "description": "Options match BaseItemDtoType.name"
+      },
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "playbackActionPageShuffle": "Перемішати",
+  "@playbackActionPageShuffle": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled"
+  },
+  "editItemTitle": "Редагувати {itemType, select, playlist{Список відтворення} other{}}",
+  "@editItemTitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
+  "sleepTimerProjectedDuration": "Відтворення буде призупинено через ~{duration}",
+  "@sleepTimerProjectedDuration": {
+    "description": "Displays duration until playback is expected to be ended by the sleep timer (unless the queue is modified before). {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "itemCountLoading": "{childType, select, track{треки} album{альбоми} other{елементів}}",
+  "@itemCountLoading": {
+    "description": "Shown while the item count is being calculated.",
+    "placeholders": {
+      "childType": {
+        "type": "String",
+        "example": "album",
+        "description": "Options match BaseItemDtoType.name"
+      }
+    }
+  },
+  "itemCountCalculating": "Обчислення кількості елементів",
+  "@itemCountCalculating": {
+    "description": "Shown to screen readers while the item count is being calculated."
+  },
+  "preferLocalNetworkEnableSwitchTitle": "Надавати перевагу локальній мережі",
+  "@preferLocalNetworkEnableSwitchTitle": {},
+  "preferLocalNetworkPublicAddressSettingTitle": "Публічна адреса",
+  "@preferLocalNetworkPublicAddressSettingTitle": {},
+  "preferLocalNetworkInfoBox": "Ця функція вимагає дозволів на доступ до геоданих (і геодані мають бути ввімкнені), щоб зчитувати назву мережі.",
+  "@preferLocalNetworkInfoBox": {
+    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
+  },
+  "menuButtonLabel": "Більше дій",
+  "@menuButtonLabel": {
+    "description": "Generic label for menu buttons shown throughout the app. Used for the album, artist, playlist, etc. menus"
+  },
+  "notImplementedYet": "Ще не впроваджено.",
+  "@notImplementedYet": {
+    "description": "Message shown when a feature is not implemented yet"
+  },
+  "automaticOfflineModeOverrideActiveTitle": "Автоматичне перемикання призупинено",
+  "@automaticOfflineModeOverrideActiveTitle": {
+    "description": "Title for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "automaticOfflineModeOverrideActiveSubtitle": "Натисніть тут, щоб відновити",
+  "@automaticOfflineModeOverrideActiveSubtitle": {
+    "description": "Subtitle for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "sleepTimerFinishLastTrack": "Закінчити останній трек?",
+  "@sleepTimerFinishLastTrack": {
+    "description": "Option for the sleep timer that will finish the last track before stopping playback."
+  },
+  "sleepTimerAfterCurrentTrack": "Після поточного треку",
+  "@sleepTimerAfterCurrentTrack": {
+    "description": "Option for the sleep timer that will stop playback after the current track finishes."
+  },
+  "sleepTimerStartTimer": "Запустити таймер",
+  "@sleepTimerStartTimer": {
+    "description": "Label for the button that starts the sleep timer"
+  },
+  "preferLocalNetworkActiveAddressInfoText": "Активна адреса",
+  "@preferLocalNetworkActiveAddressInfoText": {
+    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+  },
+  "playbackActionPageShuffleAlbums": "Перемішати альбоми",
+  "@playbackActionPageShuffleAlbums": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+  },
+  "preferLocalNetworkEnableSwitchDescription": "Чи використовувати іншу адресу, коли ви перебуваєте в локальній мережі вашого сервера jellyfin",
+  "@preferLocalNetworkEnableSwitchDescription": {},
+  "preferLocalNetworkPublicAddressSettingDescription": "Основна адреса, яка використовується для підключення до вашого сервера Jellyfin",
+  "@preferLocalNetworkPublicAddressSettingDescription": {},
+  "playbackActionPagePlay": "Відтворити",
+  "@playbackActionPagePlay": {
+    "description": "Label for the playback action page that contains all actions related to playing in order"
+  },
+  "preferLocalNetworkTargetAddressLocalSettingTitle": "Адреса локальної мережі",
+  "@preferLocalNetworkTargetAddressLocalSettingTitle": {},
+  "preferLocalNetworkTargetAddressLocalSettingDescription": "Цільова адреса сервера Jellyfin у вашій локальній мережі",
+  "@preferLocalNetworkTargetAddressLocalSettingDescription": {}
 }
