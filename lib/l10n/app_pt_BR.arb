@@ -156,16 +156,12 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Editar nome da lista de reprodução",
-  "@editPlaylistNameTooltip": {},
   "notAvailableInOfflineMode": "Não disponível no modo offline",
   "@notAvailableInOfflineMode": {},
   "downloadedTracksWillNotBeDeleted": "Faixas transferidas não serão apagadas",
   "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Tem certeza?",
   "@areYouSure": {},
-  "editPlaylistNameTitle": "Editar nome da lista de reprodução",
-  "@editPlaylistNameTitle": {},
   "required": "Obrigatório",
   "@required": {},
   "playlistUpdated": "Nome da lista de reprodução atualizado.",

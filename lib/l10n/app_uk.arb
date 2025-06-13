@@ -213,8 +213,6 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Редагувати список відтворення",
-  "@editPlaylistNameTooltip": {},
   "updateButtonLabel": "Оновити",
   "@updateButtonLabel": {},
   "dlRunning": "{count} запущено",
@@ -225,8 +223,6 @@
       }
     }
   },
-  "editPlaylistNameTitle": "Редагувати список відтворенні",
-  "@editPlaylistNameTitle": {},
   "transcoding": "Транскодування",
   "@transcoding": {},
   "logsCopied": "Логи скопійовано.",
@@ -2118,26 +2114,6 @@
         "type": "int"
       }
     }
-  },
-  "preferHomeNetworkActiveAddressInfoText": "Активна адреса",
-  "@preferHomeNetworkActiveAddressInfoText": {
-    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
-  },
-  "preferHomeNetworkTargetAddressLocalSettingTitle": "Адреса домашньої мережі",
-  "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
-  "preferHomeNetworkTargetAddressLocalSettingDescription": "Цільова адреса сервера Jellyfin у вашій домашній мережі",
-  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
-  "preferHomeNetworkEnableSwitchTitle": "Віддати перевагу домашній мережі",
-  "@preferHomeNetworkEnableSwitchTitle": {},
-  "preferHomeNetworkEnableSwitchDescription": "Чи використовувати іншу адресу, коли ви вдома",
-  "@preferHomeNetworkEnableSwitchDescription": {},
-  "preferHomeNetworkPublicAddressSettingTitle": "Публічна адреса",
-  "@preferHomeNetworkPublicAddressSettingTitle": {},
-  "preferHomeNetworkPublicAddressSettingDescription": "Основна адреса, яка використовується для підключення до вашого сервера Jellyfin",
-  "@preferHomeNetworkPublicAddressSettingDescription": {},
-  "preferHomeNetworkInfoBox": "Ця функція вимагає дозволів на доступ до геоданих (і геодані мають бути ввімкнені), щоб зчитувати назву мережі.",
-  "@preferHomeNetworkInfoBox": {
-    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
   },
   "networkSettingsTitle": "Мережа",
   "@networkSettingsTitle": {

@@ -51,8 +51,6 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Losowo",
   "@shuffleButtonLabel": {},
-  "editPlaylistNameTitle": "Edytuj nazwę listy odtwarzania",
-  "@editPlaylistNameTitle": {},
   "playlistUpdated": "Zaktualizowano nazwę listy odtwarzania.",
   "@playlistUpdated": {},
   "required": "Wymagane",
@@ -153,8 +151,6 @@
   "@unknownArtist": {},
   "offlineMode": "Tryb offline",
   "@offlineMode": {},
-  "editPlaylistNameTooltip": "Edytuj nazwę listy odtwarzania",
-  "@editPlaylistNameTooltip": {},
   "discNumber": "Dysk {number}",
   "@discNumber": {
     "placeholders": {

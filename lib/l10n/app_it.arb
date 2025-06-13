@@ -85,8 +85,6 @@
   "@shuffleButtonLabel": {},
   "downloadsDeleted": "Download cancellati.",
   "@downloadsDeleted": {},
-  "editPlaylistNameTitle": "Modifica il Nome della Playlist",
-  "@editPlaylistNameTitle": {},
   "location": "Posizione",
   "@location": {},
   "playlistUpdated": "Playlist nome aggiornato.",
@@ -282,8 +280,6 @@
   "@downloadedTracksWillNotBeDeleted": {},
   "downloads": "Download",
   "@downloads": {},
-  "editPlaylistNameTooltip": "Modifica il nome della playlist",
-  "@editPlaylistNameTooltip": {},
   "internalExternalIpExplanation": "Se vuoi accedere al tuo server di Jellyfin da remoto devi usare il tuo IP pubblico.\n\nSe il tuo server usa una porta HTTP di default (80/443) o la porta di default di Jellyfin (8096) non è necessario specificare la porta.\n\nSe l'URL è corretto dovresti vedere comparire qualche informazione riguardo il tuo server al di sotto della casella di testo.",
   "@internalExternalIpExplanation": {
     "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."

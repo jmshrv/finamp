@@ -172,10 +172,6 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "編輯播放清單",
-  "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "編輯播放清單",
-  "@editPlaylistNameTitle": {},
   "required": "必需的",
   "@required": {},
   "updateButtonLabel": "更新",
@@ -2254,8 +2250,6 @@
   "@noDateLastPlayed": {
     "description": "Placeholder text if an item has no lastPlayedDate set."
   },
-  "preferHomeNetworkPublicAddressSettingDescription": "連線 Jellyfin 伺服器時使用的主要位址",
-  "@preferHomeNetworkPublicAddressSettingDescription": {},
   "networkSettingsTitle": "網路",
   "@networkSettingsTitle": {
     "description": "Title for the network settings screen"
@@ -2313,10 +2307,6 @@
         "type": "String"
       }
     }
-  },
-  "preferHomeNetworkInfoBox": "此功能需要位置權限（且需開啟定位功能）以讀取網路名稱。",
-  "@preferHomeNetworkInfoBox": {
-    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
   },
   "applyFilterOnGenreChipTapSubtitle": "預設情況下，點擊類型會開啟該類型介面，長按則會以該類型篩選藝人或播放清單。啟用此選項後，行為將會反轉。",
   "@applyFilterOnGenreChipTapSubtitle": {
@@ -2404,20 +2394,6 @@
   "@noReleaseDate": {
     "description": "Placeholder text if an item has no release date set."
   },
-  "preferHomeNetworkEnableSwitchTitle": "偏好使用家用網路",
-  "@preferHomeNetworkEnableSwitchTitle": {},
-  "preferHomeNetworkEnableSwitchDescription": "在家用網路中是否使用替代位址",
-  "@preferHomeNetworkEnableSwitchDescription": {},
-  "preferHomeNetworkPublicAddressSettingTitle": "公開位址",
-  "@preferHomeNetworkPublicAddressSettingTitle": {},
-  "preferHomeNetworkActiveAddressInfoText": "使用中的位址",
-  "@preferHomeNetworkActiveAddressInfoText": {
-    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
-  },
-  "preferHomeNetworkTargetAddressLocalSettingTitle": "家用網路位址",
-  "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
-  "preferHomeNetworkTargetAddressLocalSettingDescription": "Jellyfin 伺服器在家用網路內的連線位址",
-  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
   "defaultOrder": "預設排序方式",
   "@defaultOrder": {
     "description": "Default sorting order for playlists (server order)"

@@ -186,12 +186,8 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Τροποποίηση λίστας αναπαραγωγής",
-  "@editPlaylistNameTooltip": {},
   "downloadsDeleted": "Διαγράφτηκαν οι λήψεις.",
   "@downloadsDeleted": {},
-  "editPlaylistNameTitle": "Τροποποίηση ονόματος λίστας",
-  "@editPlaylistNameTitle": {},
   "updateButtonLabel": "Ανανέωση",
   "@updateButtonLabel": {},
   "transcoding": "Μετακωδικοποίηση",

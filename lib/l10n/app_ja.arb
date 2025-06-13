@@ -143,8 +143,6 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "プレイリスト名を編集",
-  "@editPlaylistNameTooltip": {},
   "updateButtonLabel": "更新",
   "@updateButtonLabel": {},
   "downloadsDeleted": "ダウンロードを削除しました。",
@@ -308,8 +306,6 @@
   },
   "shuffleButtonLabel": "シャッフル",
   "@shuffleButtonLabel": {},
-  "editPlaylistNameTitle": "プレイリスト名を編集",
-  "@editPlaylistNameTitle": {},
   "playlistUpdated": "プレイリスト名を更新しました。",
   "@playlistUpdated": {},
   "addDownloads": "ダウンロードを追加",

@@ -133,8 +133,6 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "플레이리스트 이름 수정",
-  "@editPlaylistNameTooltip": {},
   "required": "필수 항목",
   "@required": {},
   "updateButtonLabel": "업데이트",
@@ -368,8 +366,6 @@
   },
   "downloadsDeleted": "다운로드 항목을 삭제했습니다.",
   "@downloadsDeleted": {},
-  "editPlaylistNameTitle": "플레이리스트 이름 수정",
-  "@editPlaylistNameTitle": {},
   "playlistUpdated": "플레이리스트 이름을 갱신했습니다.",
   "@playlistUpdated": {},
   "addButtonLabel": "추가",

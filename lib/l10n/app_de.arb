@@ -181,8 +181,6 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Zufällig",
   "@shuffleButtonLabel": {},
-  "editPlaylistNameTitle": "Playlist bearbeiten",
-  "@editPlaylistNameTitle": {},
   "updateButtonLabel": "Aktualisieren",
   "@updateButtonLabel": {},
   "downloadsDeleted": "Downloads gelöscht.",
@@ -322,8 +320,6 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Playlist bearbeiten",
-  "@editPlaylistNameTooltip": {},
   "playlistUpdated": "Playlist aktualisiert.",
   "@playlistUpdated": {},
   "logsCopied": "Logs kopiert.",
@@ -2072,10 +2068,6 @@
   "@showFavoriteButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a favorite button."
   },
-  "preferHomeNetworkEnableSwitchDescription": "Ob eine andere Adresse verwendet werden soll, wenn du zuhause bist",
-  "@preferHomeNetworkEnableSwitchDescription": {},
-  "preferHomeNetworkPublicAddressSettingTitle": "Öffentliche Adresse",
-  "@preferHomeNetworkPublicAddressSettingTitle": {},
   "networkSettingsTitle": "Netzwerk",
   "@networkSettingsTitle": {
     "description": "Title for the network settings screen"
@@ -2160,18 +2152,6 @@
   "@genreScreen": {
     "description": "Name for the view/screen that shows genres"
   },
-  "preferHomeNetworkActiveAddressInfoText": "Aktive Adresse",
-  "@preferHomeNetworkActiveAddressInfoText": {
-    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
-  },
-  "preferHomeNetworkTargetAddressLocalSettingTitle": "Heimnetzwerk Adresse",
-  "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
-  "preferHomeNetworkPublicAddressSettingDescription": "Die primäre Adresse, die für die Verbindung zum Jellyfin Server verwendet wird",
-  "@preferHomeNetworkPublicAddressSettingDescription": {},
-  "preferHomeNetworkInfoBox": "Dieses Feature benötigt eine Ortungsdienst-Freigabe (und Ortungsdienste muss aktiviert sein), um den Netzwerknamen lesen zu können.",
-  "@preferHomeNetworkInfoBox": {
-    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
-  },
   "downloadPaused": "Downloads wurden pausiert, da das Gerät nicht über WLAN verbunden ist",
   "@downloadPaused": {
     "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
@@ -2230,8 +2210,6 @@
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
-  "preferHomeNetworkEnableSwitchTitle": "Heimnetzwerk bevorzugen",
-  "@preferHomeNetworkEnableSwitchTitle": {},
   "showShuffleButtonOnMediaNotificationSubtitle": "Legt fest, ob die Medienbenachrichtigung einen Zufällig-Button hat. Dadurch kannst du die Zufallswiedergabe aktivieren oder deaktivieren, ohne die App öffnen zu müssen.",
   "@showShuffleButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
@@ -2244,8 +2222,6 @@
   "@artistScreen": {
     "description": "Name for the view/screen that shows artists"
   },
-  "preferHomeNetworkTargetAddressLocalSettingDescription": "Zieladresse des Jellyfin Servers innerhalb deines Heimnetzwerks",
-  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
   "ping": "{status, select, true_true{Beide erreichbar} true_false{Lokale Adresse nicht erreichbar} false_true{Öffentliche Adresse nicht erreichbar} false_false{Beide Adressen nicht erreichbar} other{unbekannt}}",
   "@ping": {
     "description": "Gets shown in the Snackbar when using the Test Connection Button inside the Network Settings. true means reachable, false means unreachable. the first value is for the public address, the second value is fot the home address."

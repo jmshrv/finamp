@@ -119,10 +119,6 @@
       }
     }
   },
-  "editPlaylistNameTitle": "Muokkaa soittolistan nimeä",
-  "@editPlaylistNameTitle": {},
-  "editPlaylistNameTooltip": "Muokkaa soittolistan nimeä",
-  "@editPlaylistNameTooltip": {},
   "playlistUpdated": "Soittolistan nimi päivitetty.",
   "@playlistUpdated": {},
   "addDownloads": "Lisää lataukset",

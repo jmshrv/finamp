@@ -104,10 +104,6 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Oynatma listesi adını düzenle",
-  "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Oynatma Listesi Adını Düzenle",
-  "@editPlaylistNameTitle": {},
   "required": "Gerekli",
   "@required": {},
   "updateButtonLabel": "Güncelle",
