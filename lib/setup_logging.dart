@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -25,6 +26,10 @@ Future<void> setupLogging() async {
         event.loggerName != "Flutter" &&
         event.stackTrace != null) {
       debugPrintStack(stackTrace: event.stackTrace);
+    }
+    // Make sure asserts are extra visible when debugging
+    if(kDebugMode && event.object is AssertionError){
+      GlobalSnackbar.message((_)=>event.object.toString());
     }
     finampLogsHelper.addLog(event);
   });
