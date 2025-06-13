@@ -7,6 +7,7 @@ import 'package:chopper/chopper.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -229,7 +230,7 @@ class JellyfinApiHelper {
       return QueryResult_BaseItemDto(
           totalRecordCount: 0, startIndex: 0, items: []);
     }
-    assert(!FinampSettingsHelper.finampSettings.isOffline);
+    assert(_verifyCallable());
     assert(itemIds == null || parentItem == null);
     fields ??=
         defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
@@ -418,7 +419,7 @@ class JellyfinApiHelper {
       // use.
       return [];
     }
-    assert(!FinampSettingsHelper.finampSettings.isOffline);
+    assert(_verifyCallable());
     fields ??=
         defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
 
@@ -458,7 +459,7 @@ class JellyfinApiHelper {
     int? limit,
     String? fields,
   }) async {
-    assert(!FinampSettingsHelper.finampSettings.isOffline);
+    assert(_verifyCallable());
 
     fields ??= defaultFields;
 
@@ -629,7 +630,7 @@ class JellyfinApiHelper {
   /// Gets the playback info for an item, such as format and bitrate. Usually, I'd require a BaseItemDto as an argument
   /// but since this will be run inside of [MusicPlayerBackgroundTask], I've just set the raw id as an argument.
   Future<List<MediaSourceInfo>?> getPlaybackInfo(BaseItemId itemId) async {
-    assert(!FinampSettingsHelper.finampSettings.isOffline);
+    assert(_verifyCallable());
     var response = await jellyfinApi.getPlaybackInfo(
       id: itemId,
       userId: _finampUserHelper.currentUser!.id,
@@ -700,7 +701,7 @@ class JellyfinApiHelper {
 
   /// Gets an item from a user's library.
   Future<BaseItemDto> getItemById(BaseItemId itemId) async {
-    assert(!FinampSettingsHelper.finampSettings.isOffline);
+    assert(_verifyCallable());
     final response = await jellyfinApi.getItemById(
       userId: _finampUserHelper.currentUser!.id,
       itemId: itemId,
@@ -715,7 +716,7 @@ class JellyfinApiHelper {
   /// Gets an item from a user's library, batching with other request coming in around the same time.
   Future<BaseItemDto?> getItemByIdBatched(BaseItemId itemId,
       [String? fields]) async {
-    assert(!FinampSettingsHelper.finampSettings.isOffline);
+    assert(_verifyCallable());
     fields ??=
         defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
     _getItemByIdBatchedRequests.add(itemId);
@@ -817,7 +818,7 @@ class JellyfinApiHelper {
 
   /// Marks an item as a favorite.
   Future<UserItemDataDto> addFavorite(BaseItemId itemId) async {
-    assert(!FinampSettingsHelper.finampSettings.isOffline);
+    assert(_verifyCallable());
     final response = await jellyfinApi.addFavorite(
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
@@ -832,7 +833,7 @@ class JellyfinApiHelper {
 
   /// Unmarks item as a favorite.
   Future<UserItemDataDto> removeFavorite(BaseItemId itemId) async {
-    assert(!FinampSettingsHelper.finampSettings.isOffline);
+    assert(_verifyCallable());
     final response = await jellyfinApi.removeFavorite(
         userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
@@ -1187,4 +1188,24 @@ class JellyfinApiHelper {
       return false;
     });
   });
+}
+
+/// Verify that we are in an appropriate location to make API calls.
+/// This should only be called inside assert() to prevent running in release mode.
+bool _verifyCallable() {
+  if (FinampSettingsHelper.finampSettings.isOffline) {
+    return false;
+  }
+  // Verify that all calls to jellyfin occur either in background async calls,
+  // initState methods, or providers.
+  if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
+    return true;
+  }
+  var stack = StackTrace.current.toString();
+  if (stack.contains('ProviderContainer.readProviderElement') ||
+      stack.contains('initState') ||
+      stack.contains('didChangeDependencies')) {
+    return true;
+  }
+  return false;
 }

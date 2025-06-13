@@ -113,7 +113,7 @@ void main() async {
     _mainLog.info("Setup offline listen tracking");
     await _setupDownloadsHelper();
     _mainLog.info("Setup downloads service");
-    _setupProviders();
+    await _setupProviders();
     _mainLog.info("Setup providers");
     await _setupOSIntegration();
     _mainLog.info("Setup os integrations");
@@ -139,6 +139,12 @@ void main() async {
       }
       FlutterError.presentError(details);
       flutterLogger.severe(error, error, details.stack);
+    };
+
+    PlatformDispatcher.instance.onError = (error, stack) {
+      flutterLogger.severe(error, error, stack);
+      // We have not handled printing to console, flutter should still do that.
+      return false;
     };
 
     DartPluginRegistrant.ensureInitialized();
@@ -281,10 +287,12 @@ Future<void> setupHive() async {
   GetIt.instance.registerSingleton(isar);
 }
 
-void _setupProviders() {
-  var container = ProviderContainer();
+Future<void> _setupProviders() async {
+  var container = ProviderContainer(observers: [FinampProviderObserver()]);
   GetIt.instance.registerSingleton<ProviderContainer>(container);
+  // Make sure that finampSettingsProvider always has a value available
   container.listen(finampSettingsProvider, (_, __) {});
+  await container.read(finampSettingsProvider.future);
 
   DataSourceService.create();
   AutoOffline.startWatching();
@@ -877,5 +885,17 @@ class NoTransitionPageTransitionsBuilder extends PageTransitionsBuilder {
     Widget child,
   ) {
     return child;
+  }
+}
+
+class FinampProviderObserver extends ProviderObserver {
+  @override
+  void providerDidFail(
+    ProviderBase<Object?> provider,
+    Object error,
+    StackTrace stackTrace,
+    ProviderContainer container,
+  ) {
+    GlobalSnackbar.error(error);
   }
 }
