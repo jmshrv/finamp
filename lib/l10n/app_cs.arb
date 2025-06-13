@@ -240,7 +240,7 @@
   "@dark": {},
   "tabs": "Karty",
   "@tabs": {},
-  "setSleepTimer": "Nastavit časovač spánku",
+  "setSleepTimer": "Pozastavit přehrávání po",
   "@setSleepTimer": {},
   "invalidNumber": "Neplatné číslo",
   "@invalidNumber": {},
@@ -1307,7 +1307,7 @@
   "@timeFractionTooltip": {
     "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
   },
-  "sleepTimerRemainingTime": "Uspání za {time} minut",
+  "sleepTimerRemainingTime": "Uspání za {prefix}{time} {suffix}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -1697,7 +1697,7 @@
   "@confirmShuffleToQueue": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
   },
-  "playingFromType": "Přehrávání z {source, select, album{alba} playlist{seznamu skladeb} trackMix{mixu skladeb} artistMix{mixu umělců} albumMix{mixu alb} genreMix{mixu žánrů} favorites{oblíbených} allTracks{všech skladeb} filteredList{skladeb} genre{žánru} artist{umělce} track{skladby} nextUpAlbum{alba v dalších na řadě} nextUpPlaylist{playlistu v dalších na řadě} nextUpArtist{umělce v dalších na řadě} remoteClient{vzdáleného zařízení} other{}}",
+  "playingFromType": "Přehrávání z {source, select, album{alba} playlist{seznamu skladeb} trackMix{mixu skladeb} artistMix{mixu umělců} albumMix{mixu alb} genreMix{mixu žánrů} favorites{oblíbených} allTracks{všech skladeb} filteredList{skladeb} genre{žánru} artist{umělce} track{skladby} nextUpAlbum{alba v dalších na řadě} nextUpPlaylist{playlistu v dalších na řadě} nextUpArtist{umělce v dalších na řadě} nextUpGenre{žánru v dalších na řadě} remoteClient{vzdáleného zařízení} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -2395,5 +2395,25 @@
   "defaultOrder": "Výchozí pořadí",
   "@defaultOrder": {
     "description": "Default sorting order for playlists (server order)"
+  },
+  "playbackActionPagePlay": "Přehrát",
+  "@playbackActionPagePlay": {
+    "description": "Label for the playback action page that contains all actions related to playing in order"
+  },
+  "playbackActionPageShuffleAlbums": "Alba náhodně",
+  "@playbackActionPageShuffleAlbums": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+  },
+  "editItemTitle": "Upravit {itemType, select, playlist{seznam skladeb} other{}}",
+  "@editItemTitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
+  "playbackActionPageShuffle": "Náhodně",
+  "@playbackActionPageShuffle": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled"
   }
 }
