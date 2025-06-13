@@ -372,7 +372,7 @@ class _VolumeSliderState extends ConsumerState<VolumeSlider> {
                       thumbWidth: 2.0,
                       thumbHeight: 24.0,
                       borderRadius: 8.0,
-                      offsetLeft: -8.0,
+                      offsetLeft: -9.0,
                     ),
                     thumbColor: Colors.white,
                     activeTrackColor: themeColor,
