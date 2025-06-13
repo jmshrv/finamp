@@ -5,12 +5,14 @@ import 'dart:math';
 import 'package:clipboard/clipboard.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:finamp/services/censored_log.dart';
+import 'package:finamp/services/log.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:get_it/get_it.dart';
 
 class FinampLogsHelper {
   final List<LogRecord> logs = [];
@@ -60,6 +62,16 @@ class FinampLogsHelper {
 
   Future<String> getFullLogs() async {
     final fullLogsBuffer = StringBuffer();
+
+    // Get the Log instance and add its metadata at the top
+    final logMeta = await Log.create();
+
+    // Use the on-demand censored metadata, which fetches server info/version as needed
+    final censoredMeta = await logMeta.toCensoredJson();
+    
+    // Prepend this metadata to the logs
+    fullLogsBuffer.writeln(jsonEncode(censoredMeta));
+  
     if (_logFileWriter != null) {
       final basePath = (Platform.isAndroid || Platform.isIOS)
           ? await getApplicationDocumentsDirectory()
