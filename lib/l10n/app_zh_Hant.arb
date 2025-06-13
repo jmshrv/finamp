@@ -705,7 +705,7 @@
       }
     }
   },
-  "sleepTimerRemainingTime": "將於 {prefix}{time}{suffix} 後暫停播放",
+  "sleepTimerRemainingTime": "{prefix}{time} {suffix}後進入睡眠",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -1691,7 +1691,7 @@
   "@downloadSizeWarningCutoff": {
     "description": "Title for the setting controlling when to warn about a large download"
   },
-  "releaseDateFormatISO": "ISO 8601",
+  "releaseDateFormatISO": "ISO 8601 標準格式",
   "@releaseDateFormatISO": {
     "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
   },
@@ -1973,7 +1973,7 @@
   },
   "audioFadeInDurationSettingSubtitle": "音訊淡入的時間長度，以毫秒為單位。設為 0 以停用音訊淡入。",
   "@audioFadeInDurationSettingSubtitle": {},
-  "autoOfflineNotification": "自動 {state, select, enabled{啟用} disabled{停用} other{薛丁格}} 離線模式",
+  "autoOfflineNotification": "自動{state, select, enabled{啟用} disabled{停用} other{薛丁格}}離線模式",
   "@autoOfflineNotification": {
     "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
   },
@@ -2386,7 +2386,7 @@
   "@downloadPaused": {
     "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
   },
-  "ping": "{status, select, true_true{本地與公開位址皆可連線} true_false{無法連線至本地位址} false_true{無法連線至公開位址} false_false{無法連線至本地與公開位址} other{未知}}",
+  "ping": "{status, select,true_true {外部網路與區域網路位址皆可連線}true_false {外部網路可連線，但無法連線至區域網路位址}false_true {區域網路位址可連線，但無法連線至外部網路}false_false {外部網路與區域網路位址皆無法連線}other {未知}}",
   "@ping": {
     "description": "Gets shown in the Snackbar when using the Test Connection Button inside the Network Settings. true means reachable, false means unreachable. the first value is for the public address, the second value is fot the home address."
   },
@@ -2398,7 +2398,7 @@
   "@defaultOrder": {
     "description": "Default sorting order for playlists (server order)"
   },
-  "itemCountLoading": "{childType, select, track{歌曲} album{專輯} other{項目}}",
+  "itemCountLoading": "{childType, select, track{首歌曲} album{張專輯} other{項目}}",
   "@itemCountLoading": {
     "description": "Shown while the item count is being calculated.",
     "placeholders": {
@@ -2417,7 +2417,7 @@
   "@playbackActionPageShuffleAlbums": {
     "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
   },
-  "sleepTimerProjectedDuration": "約 {duration} 後自動暫停播放",
+  "sleepTimerProjectedDuration": "約 {duration} 後暫停播放",
   "@sleepTimerProjectedDuration": {
     "description": "Displays duration until playback is expected to be ended by the sleep timer (unless the queue is modified before). {duration} is a pre-formatted string.",
     "placeholders": {
@@ -2461,7 +2461,7 @@
   "@preferLocalNetworkActiveAddressInfoText": {
     "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
   },
-  "preferLocalNetworkTargetAddressLocalSettingTitle": "區域網路位置",
+  "preferLocalNetworkTargetAddressLocalSettingTitle": "區域網路",
   "@preferLocalNetworkTargetAddressLocalSettingTitle": {},
   "preferLocalNetworkEnableSwitchTitle": "優先使用區域網路",
   "@preferLocalNetworkEnableSwitchTitle": {},
@@ -2475,7 +2475,7 @@
   "@notImplementedYet": {
     "description": "Message shown when a feature is not implemented yet"
   },
-  "automaticOfflineModeOverrideActiveTitle": "已暫停自動切換",
+  "automaticOfflineModeOverrideActiveTitle": "自動切換已暫停",
   "@automaticOfflineModeOverrideActiveTitle": {
     "description": "Title for the label shown below the offline mode toggle when automatic offline mode switching is paused"
   },
@@ -2483,7 +2483,7 @@
   "@automaticOfflineModeOverrideActiveSubtitle": {
     "description": "Subtitle for the label shown below the offline mode toggle when automatic offline mode switching is paused"
   },
-  "sleepTimerFinishLastTrack": "播完整首歌曲再暫停？",
+  "sleepTimerFinishLastTrack": "播完後進入睡眠？",
   "@sleepTimerFinishLastTrack": {
     "description": "Option for the sleep timer that will finish the last track before stopping playback."
   },
@@ -2503,6 +2503,6 @@
   "@preferLocalNetworkInfoBox": {
     "description": "This is only shown on ios and android since desktop doesnt require location permissions"
   },
-  "preferLocalNetworkPublicAddressSettingTitle": "公開位置",
+  "preferLocalNetworkPublicAddressSettingTitle": "外部網路",
   "@preferLocalNetworkPublicAddressSettingTitle": {}
 }
