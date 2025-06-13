@@ -2429,7 +2429,7 @@
   },
   "itemCount": "{childType, select, track{{amount, plural, =1{1 track} other{{amount} tracks}}} album{{amount, plural, =1{1 album} other{{amount} albums}}} other{{amount, plural, =1{1 item} other{{amount} items}}}}",
   "@itemCount": {
-    "description": "Error shown when the library select screen fails to load.",
+    "description": "Amount of various child item, like artist albums, performing artist tracks, or genre albums. Shown for example in the menu headers.",
     "placeholders": {
       "childType": {
         "type": "String",
