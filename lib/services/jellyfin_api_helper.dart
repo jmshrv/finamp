@@ -1193,12 +1193,19 @@ class JellyfinApiHelper {
 /// Verify that we are in an appropriate location to make API calls.
 /// This should only be called inside assert() to prevent running in release mode.
 bool _verifyCallable() {
-  if(FinampSettingsHelper.finampSettings.isOffline) return false;
+  if (FinampSettingsHelper.finampSettings.isOffline) {
+    return false;
+  }
   // Verify that all calls to jellyfin occur either in background async calls,
   // initState methods, or providers.
-  if(SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) return true;
-  var stack=StackTrace.current
-      .toString();
-  if(stack.contains('ProviderContainer.readProviderElement')||stack.contains('initState')) return true;
+  if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
+    return true;
+  }
+  var stack = StackTrace.current.toString();
+  if (stack.contains('ProviderContainer.readProviderElement') ||
+      stack.contains('initState') ||
+      stack.contains('didChangeDependencies')) {
+    return true;
+  }
   return false;
 }

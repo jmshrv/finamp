@@ -141,7 +141,7 @@ void main() async {
       flutterLogger.severe(error, error, details.stack);
     };
 
-    PlatformDispatcher.instance.onError = (error,stack){
+    PlatformDispatcher.instance.onError = (error, stack) {
       flutterLogger.severe(error, error, stack);
       // We have not handled printing to console, flutter should still do that.
       return false;
@@ -888,14 +888,14 @@ class NoTransitionPageTransitionsBuilder extends PageTransitionsBuilder {
   }
 }
 
-class FinampProviderObserver extends ProviderObserver{
+class FinampProviderObserver extends ProviderObserver {
   @override
   void providerDidFail(
-      ProviderBase<Object?> provider,
-      Object error,
-      StackTrace stackTrace,
-      ProviderContainer container,
-      ) {
+    ProviderBase<Object?> provider,
+    Object error,
+    StackTrace stackTrace,
+    ProviderContainer container,
+  ) {
     GlobalSnackbar.error(error);
   }
 }

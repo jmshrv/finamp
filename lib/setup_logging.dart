@@ -28,8 +28,8 @@ Future<void> setupLogging() async {
       debugPrintStack(stackTrace: event.stackTrace);
     }
     // Make sure asserts are extra visible when debugging
-    if(kDebugMode && event.object is AssertionError){
-      GlobalSnackbar.message((_)=>event.object.toString());
+    if (kDebugMode && event.object is AssertionError) {
+      GlobalSnackbar.message((_) => event.object.toString());
     }
     finampLogsHelper.addLog(event);
   });
