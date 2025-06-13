@@ -2452,5 +2452,57 @@
         "type": "String"
       }
     }
-  }
+  },
+  "itemCountCalculating": "正在計算項目數量",
+  "@itemCountCalculating": {
+    "description": "Shown to screen readers while the item count is being calculated."
+  },
+  "preferLocalNetworkActiveAddressInfoText": "目前連線位置",
+  "@preferLocalNetworkActiveAddressInfoText": {
+    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+  },
+  "preferLocalNetworkTargetAddressLocalSettingTitle": "區域網路位置",
+  "@preferLocalNetworkTargetAddressLocalSettingTitle": {},
+  "preferLocalNetworkEnableSwitchTitle": "優先使用區域網路",
+  "@preferLocalNetworkEnableSwitchTitle": {},
+  "preferLocalNetworkPublicAddressSettingDescription": "連線至 Jellyfin 伺服器所使用的主要位址",
+  "@preferLocalNetworkPublicAddressSettingDescription": {},
+  "menuButtonLabel": "更多操作",
+  "@menuButtonLabel": {
+    "description": "Generic label for menu buttons shown throughout the app. Used for the album, artist, playlist, etc. menus"
+  },
+  "notImplementedYet": "功能尚未開放。",
+  "@notImplementedYet": {
+    "description": "Message shown when a feature is not implemented yet"
+  },
+  "automaticOfflineModeOverrideActiveTitle": "已暫停自動切換",
+  "@automaticOfflineModeOverrideActiveTitle": {
+    "description": "Title for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "automaticOfflineModeOverrideActiveSubtitle": "點擊此處恢復",
+  "@automaticOfflineModeOverrideActiveSubtitle": {
+    "description": "Subtitle for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "sleepTimerFinishLastTrack": "播完整首歌曲再暫停？",
+  "@sleepTimerFinishLastTrack": {
+    "description": "Option for the sleep timer that will finish the last track before stopping playback."
+  },
+  "sleepTimerAfterCurrentTrack": "播畢這首歌",
+  "@sleepTimerAfterCurrentTrack": {
+    "description": "Option for the sleep timer that will stop playback after the current track finishes."
+  },
+  "sleepTimerStartTimer": "開始計時",
+  "@sleepTimerStartTimer": {
+    "description": "Label for the button that starts the sleep timer"
+  },
+  "preferLocalNetworkEnableSwitchDescription": "是否在進入 Jellyfin 伺服器所在的區域網路時使用不同的位址",
+  "@preferLocalNetworkEnableSwitchDescription": {},
+  "preferLocalNetworkTargetAddressLocalSettingDescription": "Jellyfin 伺服器在區域網路內的連線位址",
+  "@preferLocalNetworkTargetAddressLocalSettingDescription": {},
+  "preferLocalNetworkInfoBox": "此功能需要位置權限（且需啟用定位功能）以讀取網路名稱。",
+  "@preferLocalNetworkInfoBox": {
+    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
+  },
+  "preferLocalNetworkPublicAddressSettingTitle": "公開位置",
+  "@preferLocalNetworkPublicAddressSettingTitle": {}
 }
