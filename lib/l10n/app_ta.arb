@@ -49,8 +49,6 @@
   "@name": {},
   "revenue": "வருவாய்",
   "@revenue": {},
-  "runtime": "இயக்க நேரம்",
-  "@runtime": {},
   "syncDownloadedPlaylists": "பதிவிறக்கம் செய்யப்பட்ட பிளேலிச்ட்கள் ஒத்திசைவு",
   "@syncDownloadedPlaylists": {},
   "downloadMissingImages": "காணாமல் போன படங்களை பதிவிறக்கவும்",
@@ -266,7 +264,7 @@
   "@aboutThanks": {
     "description": "Thank you message shown in the about screen."
   },
-  "about": "பொருள் பற்றி",
+  "about": "Finamp பற்றி சில தகவல்கள்",
   "@about": {
     "description": "Label for the about/info button on the settings screen"
   },
@@ -406,8 +404,6 @@
   },
   "clear": "தெளிவான",
   "@clear": {},
-  "favourites": "பிடித்தவை",
-  "@favourites": {},
   "shuffleAll": "அனைத்தையும் மாற்றவும்",
   "@shuffleAll": {},
   "downloads": "பதிவிறக்கங்கள்",
@@ -544,8 +540,6 @@
   "@updateButtonLabel": {},
   "playlistUpdated": "பிளேலிச்ட் பெயர் புதுப்பிக்கப்பட்டது.",
   "@playlistUpdated": {},
-  "favourite": "பிடித்த",
-  "@favourite": {},
   "downloadsDeleted": "பதிவிறக்கங்கள் நீக்கப்பட்டன.",
   "@downloadsDeleted": {},
   "addDownloads": "பதிவிறக்கங்களைச் சேர்க்கவும்",
@@ -852,10 +846,6 @@
   "@goToArtist": {},
   "goToGenre": "வகைக்குச் செல்லுங்கள்",
   "@goToGenre": {},
-  "removeFavourite": "பிடித்ததை அகற்று",
-  "@removeFavourite": {},
-  "addFavourite": "பிடித்ததைச் சேர்க்கவும்",
-  "@addFavourite": {},
   "confirmFavoriteAdded": "பிடித்தது சேர்க்கப்பட்டது",
   "@confirmFavoriteAdded": {},
   "confirmFavoriteRemoved": "பிடித்தது",
@@ -1798,5 +1788,17 @@
   "albumScreen": "ஆல்பம் திரை",
   "@albumScreen": {
     "description": "Name for the view/screen that shows albums"
+  },
+  "startupErrorCallToAction": "சிக்கலை விரைவில் தீர்க்க, கீழே உள்ள பட்டனைக் கிளிக் செய்து GitHub-இல் (github.com/jmshrv/finamp) ஒரு issue உருவாக்குங்கள். பிழைப்பட்ட பதிவுகள் மற்றும் திரைபடத்தையும் (screenshot) இணைக்கவும்...",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "startupErrorTitle": "துவக்கத்தின் போது ஒரு பிழை ஏற்பட்டுள்ளது.\nதயவுசெய்து மீண்டும் முயற்சிக்கவும்...",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorWorkaround": "தற்காலிகமாக சிக்கலை தீர்க்க, ஆப் தரவுகளை அழித்து மீண்டும் துவக்கலாம். இது உங்கள் அமைப்புகள் மற்றும் பதிவிறக்கங்களை நீக்கும் என்பதை தயவுசெய்து மனதில் வைத்துக் கொள்ளவும்.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
   }
 }

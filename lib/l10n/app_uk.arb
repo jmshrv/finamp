@@ -77,8 +77,6 @@
   "@instantMix": {},
   "goToAlbum": "До альбому",
   "@goToAlbum": {},
-  "removeFavourite": "Видалити з Обраного",
-  "@removeFavourite": {},
   "addedToQueue": "Додано в чергу.",
   "@addedToQueue": {},
   "queueReplaced": "Черга змінена.",
@@ -162,7 +160,7 @@
       }
     }
   },
-  "datePlayed": "Датою відтворення",
+  "datePlayed": "Дата останньої гри",
   "@datePlayed": {},
   "name": "Ім'ям",
   "@name": {},
@@ -311,8 +309,6 @@
   "@newPlaylist": {},
   "addToQueue": "Додати до черги",
   "@addToQueue": {},
-  "addFavourite": "Додати в Обране",
-  "@addFavourite": {},
   "responseError401": "{error} Код статусу {statusCode}. Можливо, це означає, що ви використали неправильне ім’я користувача/пароль або ваш клієнт не ввійшов в систему.",
   "@responseError401": {
     "placeholders": {
@@ -372,8 +368,6 @@
   "@music": {},
   "clear": "Очистити",
   "@clear": {},
-  "favourites": "Обране",
-  "@favourites": {},
   "shuffleAll": "Перемішати все",
   "@shuffleAll": {},
   "finamp": "Finamp",
@@ -392,8 +386,6 @@
   "@random": {},
   "revenue": "Доходом",
   "@revenue": {},
-  "runtime": "Тривалістю",
-  "@runtime": {},
   "downloadMissingImages": "Завантажити відсутні зображення",
   "@downloadMissingImages": {},
   "playButtonLabel": "Відтворити",
@@ -402,15 +394,13 @@
   "@shuffleButtonLabel": {},
   "playlistUpdated": "Ім'я плейлисту змінено.",
   "@playlistUpdated": {},
-  "favourite": "Улюблене",
-  "@favourite": {},
   "downloadsDeleted": "Завантаження видалено.",
   "@downloadsDeleted": {},
   "addDownloads": "Додати завантаження",
   "@addDownloads": {},
   "location": "Збережено в",
   "@location": {},
-  "downloadsQueued": "Завантаження підготоване, завантажую файли",
+  "downloadsQueued": "Завантаження файлів",
   "@downloadsQueued": {},
   "message": "Повідомлення",
   "@message": {},
@@ -1142,7 +1132,7 @@
   "@shuffleAlbums": {
     "description": "Label for action that shuffles all albums of an artist or genre"
   },
-  "periodicPlaybackSessionUpdateFrequencyDetails": "Якщо сервер Jellyfin не отримував ніяких оновлень статусу відтворення від клієнту останні 5 хвилин, сервер вирішить що відтворення було завершено. Тобто для композицій, які тривають довше 5 хвилин, можливе некоректне звітування про відтворення як про завершене, що зменшить якість даних звітів про відтворення.",
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Якщо сервер Jellyfin не отримував жодних оновлень від клієнта протягом останніх 5 хвилин, він вважатиме, що відтворення завершилося. Це означає, що для треків тривалістю понад 5 хвилин відтворення може бути неправильно позначено як завершене, що знижує якість даних звітів про відтворення.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1287,7 +1277,7 @@
   "@redownloadTitle": {
     "description": "Title for download transcode setting which redownloads tracks with higher allowed qualities"
   },
-  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ as {codec} @ {bitrate}}}{location, select, null{} other{ ({location})}}",
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ as {codec} @ {bitrate}}}{location, select, null{} other{ ({location})}}'",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -2082,15 +2072,15 @@
     },
     "description": "Label for the type of device in the output menu"
   },
-  "startupErrorTitle": "Щось пішло не так під час запуску програми!\nВибачте за це...",
+  "startupErrorTitle": "Щось пішло не так під час запуску програми!",
   "@startupErrorTitle": {
     "description": "The title for the error screen that shows when startup fails."
   },
-  "startupErrorCallToAction": "Будь ласка, створіть проблему на github.com/jmshrv/finamp із журналами (!) (скористайтеся кнопкою нижче) і знімком екрана цієї сторінки, щоб ми могли якнайшвидше її виправити.",
+  "startupErrorCallToAction": "Будь ласка, створіть проблему на \"github.com/jmshrv/finamp\" з логами (використовуйте кнопку нижче) та скріншотом цієї сторінки, щоб ми могли виправити її якомога швидше.",
   "@startupErrorCallToAction": {
     "description": "The subtitle / call to action for what to do after encountering a startup error"
   },
-  "startupErrorWorkaround": "Як обхідний шлях ви можете очистити дані програми, щоб скинути налаштування програми. Майте на увазі, що в цьому випадку всі ваші налаштування та завантаження будуть видалені.",
+  "startupErrorWorkaround": "Як тимчасове рішення помилки, ви можете очистити дані програми, щоб скинути її налаштування. Майте на увазі, що в цьому випадку всі ваші налаштування та завантаження будуть видалені.",
   "@startupErrorWorkaround": {
     "description": "The subtitle for how to manually recover from a startup error"
   },
@@ -2208,17 +2198,13 @@
   "@randomAlbums": {},
   "randomFavoritesFirst": "Випадково (спочатку уподобання)",
   "@randomFavoritesFirst": {},
-  "showArtistsTracksSectionSubtitle": "Чи показувати розділ із максимум п’ятьма треками. Якщо цю опцію ввімкнено, можна вибрати між Найчастіше відтворюваними, Улюбленими, Випадковими, Найновішими релізами та Нещодавно доданими треками.",
+  "showArtistsTracksSectionSubtitle": "Чи показувати розділ із максимум п’ятьма треками. Якщо ввімкнено, можна вибрати між Найчастіше відтворюваними, Улюбленими, Випадковими, Найновішими релізами, Нещодавно доданими та Нещодавно відтвореними треками.",
   "@showArtistsTracksSectionSubtitle": {},
   "latestAlbums": "Найновіші альбоми",
   "@latestAlbums": {},
-  "curatedItemsMostPlayedDisabledTooltip": "Ви ще не прослухали жодної композиції.",
-  "@curatedItemsMostPlayedDisabledTooltip": {
-    "description": "Tooltip for Most Played on Curated Items in Online Mode when not yet listened to any tracks."
-  },
   "recentlyAdded": "Нещодавно додані",
   "@recentlyAdded": {},
-  "genreListsInheritSortingSubtitle": "Якщо цю опцію ввімкнено, списки «Переглянути всі» успадкують сортування та фільтрацію з екрана жанрів. Якщо вимкнено, замість цього будуть використані налаштування з відповідної вкладки бібліотеки. Натискання на кількість у верхній частині екрана жанру завжди відкриватиме повний список із налаштуваннями сортування з вкладки бібліотеки.",
+  "genreListsInheritSortingSubtitle": "Якщо увімкнено, списки \"Переглянути всі\" успадкують сортування та фільтрацію з екрана \"Жанри\". Якщо вимкнено, натомість використовуватимуться налаштування з відповідної вкладки бібліотеки. Якщо натиснути на лічильник у верхній частині екрана жанрів або кнопку \"Переглянути плейлисти\", завжди буде відкрито повний список з параметрами сортування з вкладки бібліотеки.",
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
@@ -2236,8 +2222,6 @@
   "@genreItemSectionFilterChipOrderTitle": {
     "description": "Label for the setting that controls the order of item sections filter chips."
   },
-  "artistGenreChipsApplyFilterSubtitle": "Якщо цю функцію ввімкнено, натискання на жанр фільтруватиме виконавця за цим жанром. Ви все ще можете відкрити жанр довгим натисканням.",
-  "@artistGenreChipsApplyFilterSubtitle": {},
   "randomTracks": "Треки (випадковий вибір)",
   "@randomTracks": {},
   "mostPlayed": "Найпопулярніші",
@@ -2254,15 +2238,11 @@
   "@artistItemSectionFilterChipOrderTitle": {
     "description": "Label for the setting that controls the order of the tracks sections filter chips."
   },
-  "artistGenreChipsApplyFilterTitle": "Застосувати фільтр замість відкриття жанру",
-  "@artistGenreChipsApplyFilterTitle": {},
   "seeAll": "Дивитися все",
   "@seeAll": {
     "description": ""
   },
-  "newAlbums": "Нові альбоми",
-  "@newAlbums": {},
-  "genreFilterArtistScreensSubtitle": "Якщо цю функцію ввімкнено, на екранах виконавців (доступних через жанр) відображатимуться лише треки та альбоми, що відповідають жанру, який ви зараз переглядаєте. (Завжди можна вручну видалити фільтр жанрів, щоб відобразити всі треки та альбоми.)",
+  "genreFilterArtistScreensSubtitle": "Якщо увімкнено, у розділі \"Виконавці\" (доступ до якого здійснюється через жанр) відображатимуться лише композиції та альбоми, що відповідають жанру, який ви зараз переглядаєте. (Завжди можна вручну вимкнути фільтр за жанром, щоб показати всі композиції та альбоми.)",
   "@genreFilterArtistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
@@ -2278,8 +2258,6 @@
   "@curatedItemsMostPlayedOfflineTooltip": {
     "description": "Tooltip for Most Played on Curated Items in Offline Mode."
   },
-  "newTracks": "Нові треки",
-  "@newTracks": {},
   "randomArtists": "Виконавці (випадковий вибір)",
   "@randomArtists": {},
   "onlineMode": "Онлайн-режим",
@@ -2288,8 +2266,6 @@
   "@topAlbums": {},
   "topArtists": "Найкращі виконавці",
   "@topArtists": {},
-  "newArtists": "Нові виконавці",
-  "@newArtists": {},
   "latestTracks": "Найновіші треки",
   "@latestTracks": {},
   "latestReleases": "Останні релізи",
@@ -2298,7 +2274,7 @@
   "@artistItemSectionFilterChipOrderSubtitle": {
     "description": "Description of the setting that controls the order of the tracks sections filter chips."
   },
-  "genreFilterArtistScreens": "Фільтрувати екрани виконавців",
+  "genreFilterArtistScreens": "Фільтрувати виконавців",
   "@genreFilterArtistScreens": {
     "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
@@ -2306,20 +2282,144 @@
   "@genreListsInheritSorting": {
     "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
-  "curatedItemsFavoritesDisabledTooltip": "У вас ще немає улюблених.",
-  "@curatedItemsFavoritesDisabledTooltip": {
-    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet."
-  },
-  "artistGenreChipsApplyFilterPromptButton": "Відкритий жанр",
-  "@artistGenreChipsApplyFilterPromptButton": {
-    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
-  },
-  "artistGenreChipsApplyFilterPrompt": "Застосовано жанровий фільтр",
-  "@artistGenreChipsApplyFilterPrompt": {
-    "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
-  },
   "noReleaseDate": "Без дати випуску",
   "@noReleaseDate": {
     "description": "Placeholder text if an album has no release date set."
+  },
+  "formattedRelativeTime": "{type, select, just_now{щойно} minutes{{value} хвилин тому} hours{{value} год. тому} yesterday{вчора} days{{value, plural, =1{1 день тому} other{{value} днів тому}}} other{value}}",
+  "@formattedRelativeTime": {
+    "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
+    "placeholders": {
+      "type": {
+        "type": "String",
+        "description": "The category of time passed: one of 'just_now', 'minutes', 'hours', 'yesterday', or 'days'."
+      },
+      "value": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "notAvailable": "Недоступно",
+  "@notAvailable": {},
+  "recentlyAddedArtists": "Нещодавно додані виконавці",
+  "@recentlyAddedArtists": {
+    "description": "Label for the genre section that shows artists that were recently added to the library, sorted by the date they were added."
+  },
+  "duration": "Тривалість",
+  "@duration": {},
+  "removeFavorite": "Видалити з обраного",
+  "@removeFavorite": {},
+  "addFavorite": "Додати до обраного",
+  "@addFavorite": {},
+  "recentlyAddedAlbums": "Нещодавно додані альбоми",
+  "@recentlyAddedAlbums": {
+    "description": "Label for the genre section that shows albums that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyPlayedArtists": "Нещодавно відтворені виконавці",
+  "@recentlyPlayedArtists": {},
+  "recentlyPlayed": "Нещодавно зіграно",
+  "@recentlyPlayed": {},
+  "unknown": "Невідомо",
+  "@unknown": {},
+  "genreFilterPlaylistScreens": "Фільтрувати списки відтворення",
+  "@genreFilterPlaylistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "curatedItemsNotListenedYet": "Ви не прослухали жодних треків{itemType, select, artistGenreFilter{ цього художника в цьому жанрі} artist{ цим художником} genre{ у цьому жанрі} other{}}.",
+  "@curatedItemsNotListenedYet": {
+    "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "genreNoItems": "У вас немає жодного {itemType, select, playlists{списки відтворення} artists{митці} albums{альбом} tracks{треки} other{предмети}} для цього жанру.",
+  "@genreNoItems": {
+    "description": "Message for empty See All lists for a genre.",
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
+  "curatedItemsNoFavorites": "У вас немає улюблених{itemType, select, artistGenreFilter{ для цього виконавця в цьому жанрі} artist{ для цього художника} genre{ для цього жанру} other{}}.",
+  "@curatedItemsNoFavorites": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "downloadButtonDisabledGenreFilterTooltip": "Будь ласка, видаліть фільтр жанру, щоб увімкнути дії завантаження.",
+  "@downloadButtonDisabledGenreFilterTooltip": {
+    "description": "Tooltip shown when a download button is disabled because of an active genre filter."
+  },
+  "genreFilterNotAvailableForAlbums": "Жанрові фільтри недоступні для альбомів.",
+  "@genreFilterNotAvailableForAlbums": {
+    "description": "Message shown when the user tries to apply a genre filter to an album."
+  },
+  "genreNotFound": "The genre could not be found.{additionalInfo, select, offline{ Можливо, його не завантажено або він належить до іншої бібліотеки.} other{ Можливо, воно належить до іншої бібліотеки.}}",
+  "@genreNotFound": {
+    "placeholders": {
+      "additionalInfo": {
+        "type": "String"
+      }
+    },
+    "description": "Message shown when a genre filter or open-genre action fails because the genre item could not be found."
+  },
+  "applyFilterOnGenreChipTapTitle": "Застосувати фільтр на жанр, торкнувшись",
+  "@applyFilterOnGenreChipTapTitle": {
+    "description": "Title for the setting that controls if taps on genre chips should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "noDateLastPlayed": "Ще не грали",
+  "@noDateLastPlayed": {
+    "description": "Placeholder text if an item has no lastPlayedDate set."
+  },
+  "applyFilterOnGenreChipTapSubtitle": "За замовчуванням, натискання на жанр відкриває його, а тривале натискання фільтрує виконавця або список відтворення за цим жанром. Коли ввімкнено, ця поведінка інвертована.",
+  "@applyFilterOnGenreChipTapSubtitle": {
+    "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "noDateAdded": "Дата не додана",
+  "@noDateAdded": {
+    "description": "Placeholder text if an item has no dateAdded set."
+  },
+  "applyFilterOnGenreChipTapPrompt": "Застосовано жанровий фільтр",
+  "@applyFilterOnGenreChipTapPrompt": {
+    "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "genreFilterPlaylistScreensSubtitle": "Якщо цю функцію ввімкнено, у списках відтворення (доступних через жанр) відображатимуться лише треки, що відповідають жанру, який ви зараз переглядаєте. (Завжди можна вручну видалити фільтр жанрів, щоб відобразити всі треки.)",
+  "@genreFilterPlaylistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "performingArtist": "Виконавець",
+  "@performingArtist": {},
+  "recentlyPlayedTracks": "Нещодавно відтворені треки",
+  "@recentlyPlayedTracks": {},
+  "favorite": "Улюблене",
+  "@favorite": {},
+  "applyFilterOnGenreChipTapPromptButton": "Відкритий жанр",
+  "@applyFilterOnGenreChipTapPromptButton": {
+    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "browsePlaylists": "Переглянути списки відтворення",
+  "@browsePlaylists": {
+    "description": "Label for a button on the genre screen that brings you to a list of genre-filtered playlists."
+  },
+  "recentlyAddedTracks": "Нещодавно додані треки",
+  "@recentlyAddedTracks": {
+    "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyPlayedAlbums": "Нещодавно відтворені альбоми",
+  "@recentlyPlayedAlbums": {},
+  "defaultOrder": "Порядок за замовчуванням",
+  "@defaultOrder": {
+    "description": "Default sorting order for playlists (server order)"
   }
 }

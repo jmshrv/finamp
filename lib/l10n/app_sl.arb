@@ -145,8 +145,6 @@
   "@goToArtist": {},
   "goToGenre": "Pojdi na žanr",
   "@goToGenre": {},
-  "addFavourite": "Dodaj priljubljeno",
-  "@addFavourite": {},
   "confirmFavoriteAdded": "Priljubljeno dodano",
   "@confirmFavoriteAdded": {},
   "insertedIntoQueue": "Vstavljeno v čakalno vrsto.",
@@ -198,8 +196,6 @@
   "@emptyTopTracksList": {
     "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
   },
-  "removeFavourite": "Odstrani priljubljeno",
-  "@removeFavourite": {},
   "confirmAddedToPlaylist": "Dodano na seznam predvajanja.",
   "@confirmAddedToPlaylist": {
     "description": "Snackbar message that shows when the user successfully adds items to a playlist."
@@ -214,8 +210,6 @@
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
-  "favourites": "Priljubljene",
-  "@favourites": {},
   "logs": "Dnevnik napak",
   "@logs": {},
   "couldNotFindLibraries": "Ne najdem nobene knjižnice.",

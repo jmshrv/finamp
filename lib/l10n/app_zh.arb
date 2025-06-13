@@ -21,8 +21,6 @@
   "@playlists": {},
   "startMix": "生成合辑",
   "@startMix": {},
-  "favourites": "收藏夹",
-  "@favourites": {},
   "shuffleAll": "随机播放",
   "@shuffleAll": {},
   "sortOrder": "排序",
@@ -33,7 +31,7 @@
   "@budget": {},
   "sortBy": "排序方式",
   "@sortBy": {},
-  "premiereDate": "首映日期",
+  "premiereDate": "发布日期",
   "@premiereDate": {},
   "name": "名称",
   "@name": {},
@@ -153,8 +151,6 @@
   "@goToAlbum": {},
   "queueReplaced": "队列已被替换。",
   "@queueReplaced": {},
-  "removeFavourite": "移出收藏夹",
-  "@removeFavourite": {},
   "startingInstantMix": "生成速成合辑。",
   "@startingInstantMix": {},
   "anErrorHasOccured": "发生了一个错误。",
@@ -191,8 +187,6 @@
   "@addedToQueue": {},
   "addToQueue": "添加至队列",
   "@addToQueue": {},
-  "addFavourite": "加入收藏夹",
-  "@addFavourite": {},
   "addToPlaylistTooltip": "添加至播放列表",
   "@addToPlaylistTooltip": {},
   "addToPlaylistTitle": "添加至播放列表",
@@ -271,7 +265,7 @@
   "@downloads": {},
   "customLocationsBuggy": "自定义位置可能会有很多错误，在大多数情况下不建议使用。由于操作系统的限制，系统“Music”文件夹下无法保存专辑封面。",
   "@customLocationsBuggy": {},
-  "datePlayed": "播放日期",
+  "datePlayed": "上次播放日期",
   "@datePlayed": {},
   "dark": "深色",
   "@dark": {},
@@ -291,14 +285,12 @@
   "@downloadMissingImages": {},
   "hideTrackArtistsIfSameAsAlbumArtists": "如果歌曲艺术家与专辑艺术家相同，则隐藏歌曲艺术家",
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
-  "editPlaylistNameTooltip": "编辑播放列表名称",
+  "editPlaylistNameTooltip": "编辑播放列表",
   "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "编辑播放列表名称",
+  "editPlaylistNameTitle": "编辑播放列表",
   "@editPlaylistNameTitle": {},
   "failedToGetTrackFromDownloadId": "无法通过下载 ID 获取歌曲",
   "@failedToGetTrackFromDownloadId": {},
-  "favourite": "收藏夹",
-  "@favourite": {},
   "grid": "网格",
   "@grid": {},
   "finamp": "Finamp",
@@ -347,8 +339,6 @@
   "@useCoverAsBackground": {},
   "revenue": "收入",
   "@revenue": {},
-  "runtime": "运行时",
-  "@runtime": {},
   "settings": "设置",
   "@settings": {},
   "emptyServerUrl": "服务器 URL 不能为空",
@@ -2171,8 +2161,6 @@
   },
   "autoSwitchItemCurationTypeTitle": "自动切换项目管理类型",
   "@autoSwitchItemCurationTypeTitle": {},
-  "newAlbums": "新专辑",
-  "@newAlbums": {},
   "latestAlbums": "最新专辑",
   "@latestAlbums": {},
   "latestArtists": "最新艺术家",
@@ -2203,7 +2191,7 @@
   "@artistItemSectionFilterChipOrderSubtitle": {
     "description": "Description of the setting that controls the order of the tracks sections filter chips."
   },
-  "genreFilterArtistScreens": "筛选艺术家屏幕",
+  "genreFilterArtistScreens": "筛选艺术家",
   "@genreFilterArtistScreens": {
     "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
@@ -2231,19 +2219,15 @@
   "@topAlbums": {},
   "topArtists": "热门艺术家",
   "@topArtists": {},
-  "newTracks": "新歌曲",
-  "@newTracks": {},
-  "showArtistsTracksSectionSubtitle": "是否显示最多包含五首歌曲的版块。启用后，您可以在“最常播放”、“收藏”、“随机”、“最新发布”和“最近添加的曲目”之间进行选择。",
+  "showArtistsTracksSectionSubtitle": "是否显示最多包含五首曲目的版块。启用后，您可以在“最常播放”、“收藏”、“随机”、“最新发布”、“最近添加”和“最近播放”曲目之间进行选择。",
   "@showArtistsTracksSectionSubtitle": {},
   "latestTracks": "最新歌曲",
   "@latestTracks": {},
-  "newArtists": "新艺术家",
-  "@newArtists": {},
   "artistItemSectionFilterChipOrderTitle": "歌曲部分筛选器顺序",
   "@artistItemSectionFilterChipOrderTitle": {
     "description": "Label for the setting that controls the order of the tracks sections filter chips."
   },
-  "genreFilterArtistScreensSubtitle": "启用后，艺术家屏幕（通过流派访问）将仅显示与您当前浏览的流派匹配的歌曲和专辑。（您可以随时手动移除流派筛选器以显示所有歌曲和专辑。）",
+  "genreFilterArtistScreensSubtitle": "启用后，艺术家（通过流派访问）将仅显示与您当前浏览的流派匹配的歌曲和专辑。（您可以随时手动移除流派筛选器以显示所有歌曲和专辑。）",
   "@genreFilterArtistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
@@ -2260,5 +2244,67 @@
   "genreListsInheritSorting": "完整列表排序继承",
   "@genreListsInheritSorting": {
     "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "favorite": "收藏",
+  "@favorite": {},
+  "performingArtist": "表演艺术家",
+  "@performingArtist": {},
+  "duration": "持续时间",
+  "@duration": {},
+  "notAvailable": "无法使用",
+  "@notAvailable": {},
+  "removeFavorite": "删除收藏",
+  "@removeFavorite": {},
+  "addFavorite": "添加收藏",
+  "@addFavorite": {},
+  "recentlyPlayed": "最近播放",
+  "@recentlyPlayed": {},
+  "downloadButtonDisabledGenreFilterTooltip": "请删除类型筛选器以启用下载操作。",
+  "@downloadButtonDisabledGenreFilterTooltip": {
+    "description": "Tooltip shown when a download button is disabled because of an active genre filter."
+  },
+  "genreFilterNotAvailableForAlbums": "流派筛选器不适用于专辑。",
+  "@genreFilterNotAvailableForAlbums": {
+    "description": "Message shown when the user tries to apply a genre filter to an album."
+  },
+  "recentlyAddedArtists": "最近添加的艺术家",
+  "@recentlyAddedArtists": {
+    "description": "Label for the genre section that shows artists that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyPlayedAlbums": "最近播放的专辑",
+  "@recentlyPlayedAlbums": {},
+  "recentlyPlayedTracks": "最近播放的歌曲",
+  "@recentlyPlayedTracks": {},
+  "genreFilterPlaylistScreens": "筛选播放列表",
+  "@genreFilterPlaylistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "genreListsInheritSortingSubtitle": "启用后，“查看全部”列表将继承“类型”屏幕的排序和筛选设置。禁用后，将改用相应库选项卡中的设置。点击“类型”屏幕顶部的“计数”或“浏览播放列表”按钮将始终打开包含库选项卡中排序设置的完整列表。",
+  "@genreListsInheritSortingSubtitle": {
+    "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "unknown": "未知",
+  "@unknown": {},
+  "browsePlaylists": "浏览播放列表",
+  "@browsePlaylists": {
+    "description": "Label for a button on the genre screen that brings you to a list of genre-filtered playlists."
+  },
+  "recentlyAddedTracks": "最近添加的歌曲",
+  "@recentlyAddedTracks": {
+    "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedAlbums": "最近添加的专辑",
+  "@recentlyAddedAlbums": {
+    "description": "Label for the genre section that shows albums that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyPlayedArtists": "最近播放的艺术家",
+  "@recentlyPlayedArtists": {},
+  "genreFilterPlaylistScreensSubtitle": "启用后，播放列表（通过类型访问）将仅显示与您当前浏览的类型匹配的歌曲。（您也可以手动移除类型筛选器以显示所有歌曲。）",
+  "@genreFilterPlaylistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "curatedItemsMostPlayedOfflineTooltip": "在离线模式下不可用。",
+  "@curatedItemsMostPlayedOfflineTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Offline Mode."
   }
 }

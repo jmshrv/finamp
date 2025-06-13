@@ -85,8 +85,6 @@
   "@updateButtonLabel": {},
   "playlistUpdated": "Название плейлиста обновлено.",
   "@playlistUpdated": {},
-  "favourite": "Избранное",
-  "@favourite": {},
   "downloadsDeleted": "Загрузки удалены.",
   "@downloadsDeleted": {},
   "downloadsQueued": "Загрузка подготовлена, загружаем файлы",
@@ -237,16 +235,12 @@
   "@newPlaylist": {},
   "noAlbum": "Нет альбома",
   "@noAlbum": {},
-  "addFavourite": "Добавить в избранное",
-  "@addFavourite": {},
   "anErrorHasOccured": "Произошла ошибка.",
   "@anErrorHasOccured": {},
   "clear": "Очистить",
   "@clear": {},
   "settings": "Настройки",
   "@settings": {},
-  "removeFavourite": "Удалить из избранного",
-  "@removeFavourite": {},
   "addToMix": "Добавить в микс",
   "@addToMix": {},
   "downloadMissingImages": "Загрузить отсутствующие изображения",
@@ -287,8 +281,6 @@
   "@startMixNoTracksAlbum": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
   },
-  "favourites": "Избранное",
-  "@favourites": {},
   "shuffleAll": "Перемешать всё",
   "@shuffleAll": {},
   "downloads": "Загрузки",
@@ -299,8 +291,6 @@
   "@productionYear": {},
   "revenue": "Доход",
   "@revenue": {},
-  "runtime": "Длительность",
-  "@runtime": {},
   "downloadedMissingImages": "{count,plural, =0{Не найдено отсутствующих изображений} =1{Загружено {count} отсутствующее изображение} few{Загружено {count} отсутствующих изображения} other{Загружено {count} отсутствующих изображений}}",
   "@downloadedMissingImages": {
     "description": "Message that shows when the user downloads missing images",
@@ -494,7 +484,7 @@
   "@aboutThanks": {
     "description": "Thank you message shown in the about screen."
   },
-  "loginFlowWelcomeHeading": "Добро пожаловать",
+  "loginFlowWelcomeHeading": "Добро пожаловать {styledName}",
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
@@ -526,7 +516,7 @@
   "@serverUrlInfoButtonTooltip": {
     "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
   },
-  "connectingToServer": "Подключение к серверу...",
+  "connectingToServer": "Подключение к серверу…",
   "@connectingToServer": {
     "description": "Text shown while the connection to the specified server is attempted"
   },
@@ -2001,7 +1991,7 @@
   },
   "swipeLeftToRightActionSubtitle": "Действие, выполняемое при смахе трека из списка слева направо.",
   "@swipeLeftToRightActionSubtitle": {},
-  "albumArtists": "Исполнители альбома",
+  "albumArtists": "Исполнители Альбома",
   "@albumArtists": {},
   "swipeRightToLeftActionSubtitle": "Действие, выполняемое при смахе трека из списка справа налево.",
   "@swipeRightToLeftActionSubtitle": {},
@@ -2187,5 +2177,19 @@
   "showFavoriteButtonOnMediaNotificationTitle": "Показывать Кнопку Добавления в Избранное в Медиа-Уведомлении",
   "@showFavoriteButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a favorite button."
-  }
+  },
+  "favorite": "Любимые",
+  "@favorite": {},
+  "allLibraries": "Все Библиотеки",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
+  "noGenres": "Нет Жанров",
+  "@noGenres": {
+    "description": "Gets shown when there are no genres available for an album or artist"
+  },
+  "onlineMode": "Онлайн-Режим",
+  "@onlineMode": {},
+  "favorites": "Избранное",
+  "@favorites": {}
 }

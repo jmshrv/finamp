@@ -5,10 +5,8 @@
   "@artists": {},
   "clear": "Vymazat",
   "@clear": {},
-  "downloads": "Stažené",
+  "downloads": "Stahování",
   "@downloads": {},
-  "favourites": "Oblíbené",
-  "@favourites": {},
   "finamp": "Finamp",
   "@finamp": {},
   "album": "Album",
@@ -45,7 +43,7 @@
   },
   "dateAdded": "Datum přidání",
   "@dateAdded": {},
-  "datePlayed": "Datum přehrání",
+  "datePlayed": "Datum posledního přehrání",
   "@datePlayed": {},
   "discNumber": "Disk {number}",
   "@discNumber": {
@@ -79,8 +77,6 @@
   "@directoryMustBeEmpty": {},
   "downloadedTracksWillNotBeDeleted": "Stažené skladby nebudou odstraněny",
   "@downloadedTracksWillNotBeDeleted": {},
-  "favourite": "Oblíbené",
-  "@favourite": {},
   "gridCrossAxisCountSubtitle": "Počet položek mřížky na řádek {value}.",
   "@gridCrossAxisCountSubtitle": {
     "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
@@ -118,13 +114,11 @@
   },
   "addedToQueue": "Přidáno do fronty.",
   "@addedToQueue": {},
-  "addFavourite": "Přidat do oblíbených",
-  "@addFavourite": {},
   "addToMix": "Přidat do mixu",
   "@addToMix": {},
   "addToQueue": "Přidat do fronty",
   "@addToQueue": {},
-  "anErrorHasOccured": "Vyskytla se chyba.",
+  "anErrorHasOccured": "Došlo k chybě.",
   "@anErrorHasOccured": {},
   "goToAlbum": "Přejít na album",
   "@goToAlbum": {},
@@ -160,7 +154,7 @@
   "@emptyServerUrl": {
     "description": "Error message that shows when the user submits a login without a server URL"
   },
-  "selectMusicLibraries": "Vyberte hudební knihovny",
+  "selectMusicLibraries": "Vybrat hudební knihovny",
   "@selectMusicLibraries": {
     "description": "App bar title for library select screen"
   },
@@ -192,8 +186,6 @@
   "@premiereDate": {},
   "revenue": "Výnos",
   "@revenue": {},
-  "runtime": "Doba běhu",
-  "@runtime": {},
   "shuffleButtonLabel": "Náhodně",
   "@shuffleButtonLabel": {},
   "removedFromPlaylist": "Odebráno ze seznamu skladeb.",
@@ -272,8 +264,6 @@
   "@queue": {},
   "instantMix": "Okamžitý mix",
   "@instantMix": {},
-  "removeFavourite": "Odebrat z oblíbených",
-  "@removeFavourite": {},
   "queueReplaced": "Fronta nahrazena.",
   "@queueReplaced": {},
   "removeFromMix": "Odebrat z mixu",
@@ -663,7 +653,7 @@
   "@playbackModeDirectPlaying": {
     "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
   },
-  "downloadsQueued": "Stahování připraveno, stahování souborů",
+  "downloadsQueued": "Stahování souborů",
   "@downloadsQueued": {},
   "shown": "Zobrazené",
   "@shown": {
@@ -937,7 +927,7 @@
   "@repairDownloads": {
     "description": "Tooltip for downloads repair button."
   },
-  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Probíhající} failed{Selhané} syncFailed{Opakovaně nesynchronizované} enqueued{Do fronty zařazené} other{}} {itemCount, plural, =1{stahování} other{stahování}}",
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Probíhající} failed{Selhaná} syncFailed{Opakovaně nesynchronizovaná} enqueued{Do fronty zařazená} other{}} {itemCount, plural, =1{stahování} other{stahování}}",
   "@activeDownloadsListHeader": {
     "description": "Header text for lists of active downloads of a particular state.",
     "placeholders": {
@@ -1258,7 +1248,7 @@
   "@albumScreen": {
     "description": "Name for the view/screen that shows albums"
   },
-  "showCoversOnAlbumScreenTitle": "Zobrazit obaly alba u skladeb",
+  "showCoversOnAlbumScreenTitle": "Zobrazit obaly alb u skladeb",
   "@showCoversOnAlbumScreenTitle": {
     "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
   },
@@ -1432,7 +1422,7 @@
   "@playbackSpeedDecreaseLabel": {
     "description": "Label for the button in the speed menu that decreases the playback speed."
   },
-  "periodicPlaybackSessionUpdateFrequencyDetails": "Pokud server Jellyfin neobdrží od klienta za posledních 5 minut žádnou aktualizaci, předpokládá, že přehrávání skončilo. To znamená, že u skladeb delších než 5 minut by mohlo být toto přehrávání nesprávně hlášeno jako ukončené, což by snižovalo kvalitu dat hlášení přehrávání.",
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Pokud server Jellyfin neobdrží od klienta za posledních 5 minut žádnou aktualizaci, předpokládá, že přehrávání skončilo. To znamená, že u skladeb delších než 5 minut by mohlo být toto přehrávání nesprávně hlášeno jako ukončené, což snižuje kvalitu dat hlášení přehrávání.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1503,7 +1493,7 @@
   "@fontSizeOptionLarge": {
     "description": "Font size option for things like the lyrics view. Large means a larger font size."
   },
-  "finampCollectionNames": "{itemType, select, favorites{Oblíbené} allPlaylists{Všechny seznamy skladeb} fiveLatestAlbums{5 posledních alb} allPlaylistsMetadata{Metadata seznamu skladeb} collectionWithLibraryFilter{Sbírka s filtrem knihovny} other{{itemType}} }",
+  "finampCollectionNames": "{itemType, select, favorites{Oblíbené} allPlaylists{Všechny seznamy skladeb} fiveLatestAlbums{5 posledních alb} allPlaylistsMetadata{Metadata seznamů skladeb} collectionWithLibraryFilter{Sbírka s filtrem knihovny} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
@@ -2080,15 +2070,15 @@
     },
     "description": "Label for the type of device in the output menu"
   },
-  "startupErrorTitle": "Při spouštění aplikace se něco nepovedlo!\nZa to se omlouváme…",
+  "startupErrorTitle": "Při spouštění aplikace se něco nepovedlo!",
   "@startupErrorTitle": {
     "description": "The title for the error screen that shows when startup fails."
   },
-  "startupErrorCallToAction": "Vytvořte prosím problém na github.com/jmshrv/finamp i s protokoly(!) (použijte tlačítko níže) a snímkem této stránky, abychom chybu mohli opravit co nejrychleji to bude možné.",
+  "startupErrorCallToAction": "Vytvořte prosím problém na „github.com/jmshrv/finamp“ i s protokoly (použijte tlačítko níže) a snímkem této stránky, abychom chybu mohli opravit co nejrychleji to bude možné.",
   "@startupErrorCallToAction": {
     "description": "The subtitle / call to action for what to do after encountering a startup error"
   },
-  "startupErrorWorkaround": "Jako řešení můžete vymazat data aplikace a resetovat ji. Mějte na paměti, že v tomto případě budou odstraněna všechna vaše nastavení a stažené soubory.",
+  "startupErrorWorkaround": "Chybu můžete obejít vymazáním dat aplikace pro její resetování. Mějte na paměti, že v tomto případě budou odstraněna všechna vaše nastavení a stažené soubory.",
   "@startupErrorWorkaround": {
     "description": "The subtitle for how to manually recover from a startup error"
   },
@@ -2198,7 +2188,7 @@
   "@autoSwitchItemCurationTypeTitle": {},
   "showArtistsTracksSection": "Zobrazit sekci skladeb",
   "@showArtistsTracksSection": {},
-  "showArtistsTracksSectionSubtitle": "Zda zobrazit sekci s až pěti skladbami. Můžete si vybírat mezi nejpřehrávanějšími, oblíbenými,náhodnými, nejnovějšími vydáními a nedávno přidanými skladbami.",
+  "showArtistsTracksSectionSubtitle": "Zda zobrazit sekci s až pěti skladbami. Pokud je tato možnost povolena, můžete si vybrat mezi Nejpřehrávanější, Oblíbené, Náhodné, Nejnovější vydání, Nedávno přidané a Nedávno přehrané skladby.",
   "@showArtistsTracksSectionSubtitle": {},
   "randomAlbums": "Alba (náhodný výběr)",
   "@randomAlbums": {},
@@ -2230,13 +2220,9 @@
   "@genreListsInheritSorting": {
     "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
-  "genreListsInheritSortingSubtitle": "Seznamy „Zobrazit vše“ budou dědit řazení a filtrování z obrazovky Žánry. Pokud je zakázáno, budou místo toho použita nastavení z odpovídající karty knihovny. Klepnutím na Počty v horní části obrazovky Žánry vždy otevřete kompletní seznam s nastavením řazení z karty knihovny.",
+  "genreListsInheritSortingSubtitle": "Seznamy „Zobrazit vše“ budou dědit řazení a filtrování z obrazovky Žánry. Pokud je zakázáno, budou místo toho použita nastavení z odpovídající karty knihovny. Klepnutím na Počty v horní části obrazovky Žánry nebo na tlačítko „Procházet seznamy skladeb“ vždy otevřete kompletní seznam s nastavením řazení z karty knihovny.",
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
-  },
-  "curatedItemsFavoritesDisabledTooltip": "Zatím nemáte žádné oblíbené.",
-  "@curatedItemsFavoritesDisabledTooltip": {
-    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet."
   },
   "seeAll": "Zobrazit vše",
   "@seeAll": {
@@ -2245,12 +2231,6 @@
   "artistScreen": "Obrazovka umělce",
   "@artistScreen": {
     "description": "Name for the view/screen that shows artists"
-  },
-  "artistGenreChipsApplyFilterTitle": "Použít filtr namísto otevření žánru",
-  "@artistGenreChipsApplyFilterTitle": {},
-  "curatedItemsMostPlayedDisabledTooltip": "Zatím jste neposlouchali žádné skladby.",
-  "@curatedItemsMostPlayedDisabledTooltip": {
-    "description": "Tooltip for Most Played on Curated Items in Online Mode when not yet listened to any tracks."
   },
   "latestArtists": "Nejnovější umělci",
   "@latestArtists": {},
@@ -2266,38 +2246,30 @@
   "@latestAlbums": {},
   "favoriteAlbums": "Oblíbená alba",
   "@favoriteAlbums": {},
-  "newAlbums": "Nová alba",
-  "@newAlbums": {},
   "genreItemSectionFilterChipOrderTitle": "Pořadí filtrů sekcí položek",
   "@genreItemSectionFilterChipOrderTitle": {
     "description": "Label for the setting that controls the order of item sections filter chips."
   },
   "topAlbums": "Nejlepší alba",
   "@topAlbums": {},
-  "newArtists": "Noví umělci",
-  "@newArtists": {},
   "genreScreen": "Obrazovka žánrů",
   "@genreScreen": {
     "description": "Name for the view/screen that shows genres"
   },
-  "genreFilterArtistScreens": "Filtrovat obrazovky umělců",
+  "genreFilterArtistScreens": "Filtrovat umělce",
   "@genreFilterArtistScreens": {
     "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
   "favoriteArtists": "Oblíbení umělci",
   "@favoriteArtists": {},
-  "genreFilterArtistScreensSubtitle": "Obrazovky umělců (přistupované přes žánry) zobrazí pouze skladby a alba, která odpovídají žánru, který si aktuálně procházíte. (Vždy je možné ručně odebrat filtr žánrů pro zobrazení všech skladeb a alb.)",
+  "genreFilterArtistScreensSubtitle": "U umělců (přistupované přes žánry) budou zobrazeny pouze skladby a alba, která odpovídají žánru, který si aktuálně procházíte. (Vždy je možné ručně odebrat filtr žánrů pro zobrazení všech skladeb a alb.)",
   "@genreFilterArtistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
-  "artistGenreChipsApplyFilterSubtitle": "Klepnutím na žánr vyfiltrujete umělce podle daného žánru. Pro otevření žánru můžete stále dlouze podržet na položce.",
-  "@artistGenreChipsApplyFilterSubtitle": {},
   "topArtists": "Nejlepší umělci",
   "@topArtists": {},
   "autoSwitchItemCurationTypeSubtitle": "Sekce položek na obrazovkách umělců a žánrů se automaticky přepnou na jiný typ kurátorství, pokud nejsou dostupné žádné položky (např. žádné oblíbené u konkrétního umělce).",
   "@autoSwitchItemCurationTypeSubtitle": {},
-  "newTracks": "Nové skladby",
-  "@newTracks": {},
   "latestTracks": "Nejnovější skladby",
   "@latestTracks": {},
   "randomTracks": "Skladby (náhodný výběr)",
@@ -2312,12 +2284,140 @@
   "@noReleaseDate": {
     "description": "Placeholder text if an album has no release date set."
   },
-  "artistGenreChipsApplyFilterPrompt": "Filtr žánru použit",
-  "@artistGenreChipsApplyFilterPrompt": {
+  "removeFavorite": "Odebrat oblíbené",
+  "@removeFavorite": {},
+  "recentlyAddedTracks": "Nedávno přidané skladby",
+  "@recentlyAddedTracks": {
+    "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
+  },
+  "duration": "Délka",
+  "@duration": {},
+  "notAvailable": "Nedostupné",
+  "@notAvailable": {},
+  "addFavorite": "Přidat oblíbené",
+  "@addFavorite": {},
+  "favorite": "Oblíbené",
+  "@favorite": {},
+  "performingArtist": "Účinkující umělec",
+  "@performingArtist": {},
+  "recentlyAddedAlbums": "Nedávno přidaná alba",
+  "@recentlyAddedAlbums": {
+    "description": "Label for the genre section that shows albums that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyPlayed": "Nedávno přehráno",
+  "@recentlyPlayed": {},
+  "unknown": "Neznámé",
+  "@unknown": {},
+  "curatedItemsNotListenedYet": "Zatím jste neposlouchali žádné skladby{itemType, select, artistGenreFilter{ od tohoto autora v tomto žánru} artist{ od tohoto autora} genre{ v tomto žánru} other{}}.",
+  "@curatedItemsNotListenedYet": {
+    "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "curatedItemsNoFavorites": "Nemáte žádné oblíbené{itemType, select, artistGenreFilter{ u tohoto umělce v tomto žánru} artist{ u tohoto umělce} genre{ v tomto žánru} other{}}.",
+  "@curatedItemsNoFavorites": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "genreNoItems": "V tomto žánru nemáte žádné {itemType, select, playlists{seznamy skladeb} artists{umělce} albums{alba} tracks{skladby} other{položky}}.",
+  "@genreNoItems": {
+    "description": "Message for empty See All lists for a genre.",
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
+  "genreFilterNotAvailableForAlbums": "Filtry žánrů nejsou dostupné pro alba.",
+  "@genreFilterNotAvailableForAlbums": {
+    "description": "Message shown when the user tries to apply a genre filter to an album."
+  },
+  "applyFilterOnGenreChipTapPrompt": "Žánr filtrů použit",
+  "@applyFilterOnGenreChipTapPrompt": {
     "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
   },
-  "artistGenreChipsApplyFilterPromptButton": "Otevřít žánr",
-  "@artistGenreChipsApplyFilterPromptButton": {
+  "genreFilterPlaylistScreensSubtitle": "U seznamů skladeb (přistupované přes žánry) budou zobrazeny pouze skladby, které odpovídají žánru, který si aktuálně procházíte. (Vždy je možné ručně odebrat filtr žánrů pro zobrazení všech skladeb.)",
+  "@genreFilterPlaylistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "recentlyPlayedTracks": "Nedávno přehrané skladby",
+  "@recentlyPlayedTracks": {},
+  "browsePlaylists": "Procházet seznamy skladeb",
+  "@browsePlaylists": {
+    "description": "Label for a button on the genre screen that brings you to a list of genre-filtered playlists."
+  },
+  "downloadButtonDisabledGenreFilterTooltip": "Pro povolení akcí stahování prosím odstraňte filtr žánrů.",
+  "@downloadButtonDisabledGenreFilterTooltip": {
+    "description": "Tooltip shown when a download button is disabled because of an active genre filter."
+  },
+  "noDateLastPlayed": "Zatím nebylo přehráno",
+  "@noDateLastPlayed": {
+    "description": "Placeholder text if an item has no lastPlayedDate set."
+  },
+  "recentlyAddedArtists": "Nedávno přidaní umělci",
+  "@recentlyAddedArtists": {
+    "description": "Label for the genre section that shows artists that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyPlayedArtists": "Nedávno přehraní umělci",
+  "@recentlyPlayedArtists": {},
+  "genreFilterPlaylistScreens": "Filtrovat seznamy skladeb",
+  "@genreFilterPlaylistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "applyFilterOnGenreChipTapPromptButton": "Otevřít žánr",
+  "@applyFilterOnGenreChipTapPromptButton": {
     "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "applyFilterOnGenreChipTapSubtitle": "Ve výchozím nastavení se žánr po klepnutí otevře, zatímco dlouhé podržení vyfiltruje umělce nebo seznam skladeb podle daného žánru. Při povolení se toto chování obrátí.",
+  "@applyFilterOnGenreChipTapSubtitle": {
+    "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "formattedRelativeTime": "{type, select, just_now{právě teď} minutes{před {value} min} hours{před {value} h} yesterday{včera} days{{value, plural, =1{před 1 dnem} other{před {value} dny}}} other{value}}",
+  "@formattedRelativeTime": {
+    "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
+    "placeholders": {
+      "type": {
+        "type": "String",
+        "description": "The category of time passed: one of 'just_now', 'minutes', 'hours', 'yesterday', or 'days'."
+      },
+      "value": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "recentlyPlayedAlbums": "Nedávno přehraná alba",
+  "@recentlyPlayedAlbums": {},
+  "genreNotFound": "Žánr nebyl nalezen.{additionalInfo, select, offline{ Možná není stažen nebo patří do jiné knihovny.} other{ Možná patří do jiné knihovny.}}",
+  "@genreNotFound": {
+    "placeholders": {
+      "additionalInfo": {
+        "type": "String"
+      }
+    },
+    "description": "Message shown when a genre filter or open-genre action fails because the genre item could not be found."
+  },
+  "noDateAdded": "Nebylo přidáno žádné datum",
+  "@noDateAdded": {
+    "description": "Placeholder text if an item has no dateAdded set."
+  },
+  "applyFilterOnGenreChipTapTitle": "Po klepnutí na žánr použít filtr",
+  "@applyFilterOnGenreChipTapTitle": {
+    "description": "Title for the setting that controls if taps on genre chips should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "defaultOrder": "Výchozí pořadí",
+  "@defaultOrder": {
+    "description": "Default sorting order for playlists (server order)"
   }
 }

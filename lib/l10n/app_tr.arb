@@ -43,8 +43,6 @@
   "@music": {},
   "clear": "Temizle",
   "@clear": {},
-  "favourites": "Favoriler",
-  "@favourites": {},
   "downloads": "İndirilenler",
   "@downloads": {},
   "sortOrder": "Sıralama düzeni",
@@ -116,8 +114,6 @@
   "@updateButtonLabel": {},
   "playlistUpdated": "Oynatma listesinin adı güncellendi.",
   "@playlistUpdated": {},
-  "favourite": "Favori",
-  "@favourite": {},
   "downloadsDeleted": "İndirmeler silindi.",
   "@downloadsDeleted": {},
   "addDownloads": "İndirme Ekle",
@@ -329,8 +325,6 @@
   "@productionYear": {},
   "random": "Rastgele",
   "@random": {},
-  "runtime": "Oynatma süresi",
-  "@runtime": {},
   "dlFailed": "{count} tane başarısız",
   "@dlFailed": {
     "placeholders": {
@@ -397,10 +391,6 @@
   "@instantMix": {},
   "goToAlbum": "Albüme Git",
   "@goToAlbum": {},
-  "addFavourite": "Favoriye ekle",
-  "@addFavourite": {},
-  "removeFavourite": "Favoriden çıkart",
-  "@removeFavourite": {},
   "responseError401": "{error} Durum kodu {statusCode}. Bu muhtemelen yanlış kullanıcı adı/şifre kullandığınız veya istemcinizin oturuma izin vermediği anlamına gelir.",
   "@responseError401": {
     "placeholders": {
@@ -1606,5 +1596,27 @@
     "description": "Shown on the downloads screen for sections without any downloaded items."
   },
   "albumArtists": "Albüm Sanatçıları",
-  "@albumArtists": {}
+  "@albumArtists": {},
+  "favorite": "Favori",
+  "@favorite": {},
+  "duration": "Süre",
+  "@duration": {},
+  "notAvailable": "Mevcut değil",
+  "@notAvailable": {},
+  "startupErrorTitle": "Uygulama başlatılırken bir şeyler ters gitti!\nBunun için üzgünüm...",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "allLibraries": "Tüm Kütüphaneler",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
+  "onlineMode": "Çevrimiçi kip",
+  "@onlineMode": {},
+  "libraryDownloads": "Kütüphane indirmeleri",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "favorites": "Favoriler",
+  "@favorites": {}
 }

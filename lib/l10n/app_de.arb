@@ -53,8 +53,6 @@
   "@playlists": {},
   "tracks": "Tracks",
   "@tracks": {},
-  "favourites": "Favoriten",
-  "@favourites": {},
   "finamp": "Finamp",
   "@finamp": {},
   "settings": "Einstellungen",
@@ -103,14 +101,10 @@
   "@newPlaylist": {},
   "playlistCreated": "Playlist erstellt.",
   "@playlistCreated": {},
-  "removeFavourite": "Favorit entfernen",
-  "@removeFavourite": {},
   "unknownArtist": "Unbekannter Künstler",
   "@unknownArtist": {},
   "downloadedTracksWillNotBeDeleted": "Heruntergeladene Titel werden nicht gelöscht",
   "@downloadedTracksWillNotBeDeleted": {},
-  "favourite": "Favorit",
-  "@favourite": {},
   "name": "Name",
   "@name": {},
   "password": "Passwort",
@@ -139,8 +133,6 @@
   "@playCount": {},
   "revenue": "Einspielergebnis",
   "@revenue": {},
-  "runtime": "Dauer",
-  "@runtime": {},
   "downloadMissingImages": "Fehlende Bilder herunterladen",
   "@downloadMissingImages": {},
   "downloadCount": "{count,plural, =1{{count} Download} other{{count} Downloads}}",
@@ -293,8 +285,6 @@
   "@instantMix": {},
   "goToAlbum": "Gehe zu Album",
   "@goToAlbum": {},
-  "addFavourite": "Favorit hinzufügen",
-  "@addFavourite": {},
   "addedToQueue": "Zur Warteschlange hinzugefügt.",
   "@addedToQueue": {},
   "queueReplaced": "Warteschlange ausgetauscht.",
@@ -338,7 +328,7 @@
   "@playlistUpdated": {},
   "logsCopied": "Logs kopiert.",
   "@logsCopied": {},
-  "downloadsQueued": "Downloads hinzugefügt",
+  "downloadsQueued": "Dateien werden heruntergeladen",
   "@downloadsQueued": {},
   "addButtonLabel": "Hinzufügen",
   "@addButtonLabel": {},
@@ -484,7 +474,7 @@
   "@orDivider": {
     "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
   },
-  "loginFlowWelcomeHeading": "Willkommen bei  {styledName}",
+  "loginFlowWelcomeHeading": "Willkommen bei {styledName}",
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
@@ -1405,7 +1395,7 @@
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "periodicPlaybackSessionUpdateFrequencyDetails": "Nach 5 Minuten ohne Komunikation zwischen Client und Server wird der Server davon ausgehen, dass die Wiedergabe gestoppt wurde. Das heißt: für Tracks, die länger als 5 Minuten sind, könnte es zu fehlerhaften Wiedergabe-Meldungen führen, was die Qualität dieser Daten reduziert.",
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Nach 5 Minuten ohne Kommunikation zwischen Client und Server wird der Server davon ausgehen, dass die Wiedergabe gestoppt wurde. Das heißt: für Tracks, die länger als 5 Minuten sind, könnte es zu fehlerhaften Wiedergabe-Meldungen führen, was die Qualität dieser Daten reduziert.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -2110,15 +2100,11 @@
   "@topAlbums": {},
   "topArtists": "Top Künstler",
   "@topArtists": {},
-  "newTracks": "Neue Titel",
-  "@newTracks": {},
-  "newArtists": "Neue Künstler",
-  "@newArtists": {},
-  "latestTracks": "Kürzlich hinzugefügte Titel",
+  "latestTracks": "Neu veröffentlichte Titel",
   "@latestTracks": {},
-  "latestAlbums": "Kürzlich hinzugefügte Alben",
+  "latestAlbums": "Neu veröffentlichte Alben",
   "@latestAlbums": {},
-  "latestArtists": "Kürzlich hinzugefügte Künstler",
+  "latestArtists": "Neue Künstler",
   "@latestArtists": {},
   "favoriteTracks": "Lieblingstitel",
   "@favoriteTracks": {},
@@ -2142,7 +2128,7 @@
   "@recentlyAdded": {},
   "latestReleases": "Neu veröffentlicht",
   "@latestReleases": {},
-  "itemSectionsOrderSubtitle": "Legt die Reihenfolge der Item Sections fest.",
+  "itemSectionsOrderSubtitle": "Legt die Reihenfolge der Abschnitte fest.",
   "@itemSectionsOrderSubtitle": {
     "description": "Description of the setting that controls the order of item sections on the screens."
   },
@@ -2166,20 +2152,10 @@
   "@curatedItemsMostPlayedOfflineTooltip": {
     "description": "Tooltip for Most Played on Curated Items in Offline Mode."
   },
-  "curatedItemsMostPlayedDisabledTooltip": "Du hast noch keine Titel gehört.",
-  "@curatedItemsMostPlayedDisabledTooltip": {
-    "description": "Tooltip for Most Played on Curated Items in Online Mode when not yet listened to any tracks."
-  },
-  "curatedItemsFavoritesDisabledTooltip": "Du hast noch keine Favoriten.",
-  "@curatedItemsFavoritesDisabledTooltip": {
-    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet."
-  },
   "seeAll": "Alle",
   "@seeAll": {
     "description": ""
   },
-  "artistGenreChipsApplyFilterTitle": "Filter anwenden anstatt das Genre zu öffnen",
-  "@artistGenreChipsApplyFilterTitle": {},
   "genreScreen": "Genreseite",
   "@genreScreen": {
     "description": "Name for the view/screen that shows genres"
@@ -2218,33 +2194,31 @@
   "@noGenres": {
     "description": "Gets shown when there are no genres available for an album or artist"
   },
-  "startupErrorCallToAction": "Bitte erstelle einen Issue auf github.com/jmshrv/finamp mit den Logs(!) (nutze den Button unten) und hänge einen Screenshot dieser Seite an, so dass wir den Fehler so schnell wie möglich beheben können.",
+  "startupErrorCallToAction": "Bitte erstelle einen Issue auf \\\"github.com/jmshrv/finamp\\\" mit den Logs (nutze den Button unten) und hänge einen Screenshot dieser Seite an, so dass wir den Fehler so schnell wie möglich beheben können.",
   "@startupErrorCallToAction": {
     "description": "The subtitle / call to action for what to do after encountering a startup error"
   },
   "onlineMode": "Online Mode",
   "@onlineMode": {},
-  "newAlbums": "Neue Alben",
-  "@newAlbums": {},
-  "startupErrorTitle": "Beim Starten der App ist etwas schiefgegangen!\nEs tut uns leid…",
+  "startupErrorTitle": "Beim Starten der App ist etwas schiefgegangen!",
   "@startupErrorTitle": {
     "description": "The title for the error screen that shows when startup fails."
   },
-  "startupErrorWorkaround": "Als Workaround könntest du den App-Speicher löschen und die App zurücksetzen. Aber bedenke, dass dann alle Einstellungen und Downloads verloren gehen.",
+  "startupErrorWorkaround": "Als Workaround für den Fehler könntest du den App-Speicher löschen und die App zurücksetzen. Aber bedenke, dass dann alle Einstellungen und Downloads verloren gehen.",
   "@startupErrorWorkaround": {
     "description": "The subtitle for how to manually recover from a startup error"
   },
-  "showArtistsTracksSectionSubtitle": "Ob eine Section mit bis zu 5 Titel angezeigt werden soll. Wenn aktiviert, kannst du zwischen Oft gespielt, Favoriten, Zufällig, Neu veröffentlicht und Kürzlich hinzugefügt wechseln.",
+  "showArtistsTracksSectionSubtitle": "Ob eine Section mit bis zu 5 Titel angezeigt werden soll. Wenn aktiviert, kannst du zwischen Oft gespielt, Favoriten, Zufällig, Neu veröffentlicht, Kürzlich hinzugefügt und Kürzlich gehört wechseln.",
   "@showArtistsTracksSectionSubtitle": {},
   "genreFilterArtistScreensSubtitle": "Wenn aktiviert, werden in den Künstlerseiten (die durch ein Genre geöffnet wurden) nur die Titel und Alben angezeigt, die das entsprechende Genre aufweisen. (Der Genre Filter kann jederzeit manuell entfernt werden, um alle Titel und Alben anzuzeigen.)",
   "@genreFilterArtistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
-  "itemSectionsOrder": "Item Sections Reihenfolge",
+  "itemSectionsOrder": "Abschnitt-Reihenfolge",
   "@itemSectionsOrder": {
     "description": "Label for the setting that controls the order of item sections on the screens."
   },
-  "genreItemSectionFilterChipOrderTitle": "Item Sections Filter Reihenfolge",
+  "genreItemSectionFilterChipOrderTitle": "Abschnitt Filter Reihenfolge",
   "@genreItemSectionFilterChipOrderTitle": {
     "description": "Label for the setting that controls the order of item sections filter chips."
   },
@@ -2252,12 +2226,10 @@
   "@genreFilterArtistScreens": {
     "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
-  "genreListsInheritSortingSubtitle": "Wenn aktiviert, werden die „Alle“ Listen die Sortierung und den Filter von der Genreseite übernehmen. Wenn deaktiviert, werden die Einstellungen der Bibliothek-Tabs verwendet. Beim Tippen auf die Item-Zahlen ganz oben werden die Listen immer mit den Einstellungen der Bibliothek-Tabs geöffnet.",
+  "genreListsInheritSortingSubtitle": "Wenn aktiviert, werden die „Alle“ Listen die Sortierung und den Filter von der Genreseite übernehmen. Wenn deaktiviert, werden die Einstellungen der Bibliothek-Tabs verwendet. Beim Tippen auf die Item-Zahlen ganz oben oder auf den \\\"Playlists durchsuchen\\\" Button werden die Listen immer mit den Einstellungen der Bibliothek-Tabs geöffnet.",
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
-  "artistGenreChipsApplyFilterSubtitle": "Wenn diese Option aktiviert ist, wird durch Tippen auf ein Genre der Künstler nach diesem Genre gefiltert. Alternativ kann das Genre auch durch langes Drücken geöffnet werden.",
-  "@artistGenreChipsApplyFilterSubtitle": {},
   "preferHomeNetworkEnableSwitchTitle": "Heimnetzwerk bevorzugen",
   "@preferHomeNetworkEnableSwitchTitle": {},
   "showShuffleButtonOnMediaNotificationSubtitle": "Legt fest, ob die Medienbenachrichtigung einen Zufällig-Button hat. Dadurch kannst du die Zufallswiedergabe aktivieren oder deaktivieren, ohne die App öffnen zu müssen.",
@@ -2287,7 +2259,7 @@
       }
     }
   },
-  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks, plural, =1{1 Titel wird} other{{amountUndownloadedTracks} Titel werden}} von der Warteschlange entfernt, da {amountUndownloadedTracks, plural, =1{er nicht heruntergeladen wurde.} other{sie nicht heruntergeladen wurden.}}",
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks, plural, =1{1 Titel wird} other{{amountUndownloadedTracks} Titel werden}} von der Warteschlange entfernt, da {amountUndownloadedTracks, plural, =1{er nicht heruntergeladen wurde} other{sie nicht heruntergeladen wurden}}.",
   "@autoReloadPromptMissingTracks": {
     "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
     "placeholders": {
@@ -2304,12 +2276,140 @@
   "@noReleaseDate": {
     "description": "Placeholder text if an album has no release date set."
   },
-  "artistGenreChipsApplyFilterPrompt": "Genre Filter angewendet",
-  "@artistGenreChipsApplyFilterPrompt": {
+  "recentlyPlayed": "Zuletzt abgespielt",
+  "@recentlyPlayed": {},
+  "recentlyAddedTracks": "Kürzlich hinzugefügte Titel",
+  "@recentlyAddedTracks": {
+    "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyPlayedArtists": "Zuletzt gespielte Künstler",
+  "@recentlyPlayedArtists": {},
+  "recentlyAddedAlbums": "Kürzlich hinzugefügte Alben",
+  "@recentlyAddedAlbums": {
+    "description": "Label for the genre section that shows albums that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedArtists": "Kürzlich hinzugefügte Künstler",
+  "@recentlyAddedArtists": {
+    "description": "Label for the genre section that shows artists that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyPlayedTracks": "Zuletzt gespielte Titel",
+  "@recentlyPlayedTracks": {},
+  "recentlyPlayedAlbums": "Zuletzt gespielte Alben",
+  "@recentlyPlayedAlbums": {},
+  "unknown": "Unbekannt",
+  "@unknown": {},
+  "favorite": "Favorit",
+  "@favorite": {},
+  "duration": "Dauer",
+  "@duration": {},
+  "genreNoItems": "Du hast keine {itemType, select, playlists{Playlists} artists{Künstler} albums{Alben} tracks{Titel} other{Items}} aus diesem Genre.",
+  "@genreNoItems": {
+    "description": "Message for empty See All lists for a genre.",
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadButtonDisabledGenreFilterTooltip": "Bitte entferne den Genre Filter, um die Download-Aktionen verwenden zu können.",
+  "@downloadButtonDisabledGenreFilterTooltip": {
+    "description": "Tooltip shown when a download button is disabled because of an active genre filter."
+  },
+  "noDateLastPlayed": "Noch nicht gespielt",
+  "@noDateLastPlayed": {
+    "description": "Placeholder text if an item has no lastPlayedDate set."
+  },
+  "browsePlaylists": "Playlists durchsuchen",
+  "@browsePlaylists": {
+    "description": "Label for a button on the genre screen that brings you to a list of genre-filtered playlists."
+  },
+  "genreFilterPlaylistScreens": "Playlists filtern",
+  "@genreFilterPlaylistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "curatedItemsNotListenedYet": "Du hast noch keine Titel{itemType, select, artistGenreFilter{ von diesem Künstler aus diesem Genre} artist{ von diesem Künstler} genre{ aus diesem Genre} other{}} gehört.",
+  "@curatedItemsNotListenedYet": {
+    "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "curatedItemsNoFavorites": "Du hast keine Favoriten{itemType, select, artistGenreFilter{ von diesem Künstler aus diesem Genre} artist{ von diesem Künstler} genre{ aus diesem Genre} other{}}.",
+  "@curatedItemsNoFavorites": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "applyFilterOnGenreChipTapPromptButton": "Genre öffnen",
+  "@applyFilterOnGenreChipTapPromptButton": {
+    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "formattedRelativeTime": "{type, select, just_now{gerade eben} minutes{vor {value} min} hours{vor {value} h} yesterday{gestern} days{{value, plural, =1{vor 1 Tag} other{vor {value} Tagen}}} other{value}}",
+  "@formattedRelativeTime": {
+    "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
+    "placeholders": {
+      "type": {
+        "type": "String",
+        "description": "The category of time passed: one of 'just_now', 'minutes', 'hours', 'yesterday', or 'days'."
+      },
+      "value": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "genreFilterPlaylistScreensSubtitle": "Wenn aktiviert, werden in den Playlists (die durch ein Genre geöffnet wurden) nur die Titel angezeigt, die das entsprechende Genre aufweisen. (Der Genre Filter kann jederzeit manuell entfernt werden, um alle Titel anzuzeigen.)",
+  "@genreFilterPlaylistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "notAvailable": "Nicht verfügbar",
+  "@notAvailable": {},
+  "removeFavorite": "Favorit entfernen",
+  "@removeFavorite": {},
+  "addFavorite": "Favorit hinzufügen",
+  "@addFavorite": {},
+  "performingArtist": "Interpret",
+  "@performingArtist": {},
+  "noDateAdded": "Ohne Hinzufügedatum",
+  "@noDateAdded": {
+    "description": "Placeholder text if an item has no dateAdded set."
+  },
+  "genreFilterNotAvailableForAlbums": "Genre Filter sind für Alben nicht verfügbar.",
+  "@genreFilterNotAvailableForAlbums": {
+    "description": "Message shown when the user tries to apply a genre filter to an album."
+  },
+  "genreNotFound": "Das Genre konnte nicht gefunden werden.{additionalInfo, select, offline{ Es wurde möglicherweise nicht heruntergeladen oder stammt aus einer anderen Bibliothek.} other{ Möglicherweise stammt es aus einer anderen Bibliothek.}}",
+  "@genreNotFound": {
+    "placeholders": {
+      "additionalInfo": {
+        "type": "String"
+      }
+    },
+    "description": "Message shown when a genre filter or open-genre action fails because the genre item could not be found."
+  },
+  "applyFilterOnGenreChipTapPrompt": "Genre Filter angewendet",
+  "@applyFilterOnGenreChipTapPrompt": {
     "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
   },
-  "artistGenreChipsApplyFilterPromptButton": "Genre öffnen",
-  "@artistGenreChipsApplyFilterPromptButton": {
-    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  "applyFilterOnGenreChipTapTitle": "Genre Filter durch Tippen anwenden",
+  "@applyFilterOnGenreChipTapTitle": {
+    "description": "Title for the setting that controls if taps on genre chips should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "applyFilterOnGenreChipTapSubtitle": "Standardmäßig öffnet ein Tippen die entsprechende Genreseite, während ein Gedrückthalten die momentane Künstlerseite oder Playlist filtert. Ist diese Option aktiviert, wird das Verhalten umgekehrt.",
+  "@applyFilterOnGenreChipTapSubtitle": {
+    "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "defaultOrder": "Standard-Reihenfolge",
+  "@defaultOrder": {
+    "description": "Default sorting order for playlists (server order)"
   }
 }

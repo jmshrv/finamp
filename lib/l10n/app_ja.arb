@@ -49,8 +49,6 @@
   "@downloads": {},
   "startMix": "ミックス開始",
   "@startMix": {},
-  "favourites": "お気に入り",
-  "@favourites": {},
   "startMixNoTracksArtist": "アーティスト名を長押しすることでミックス対象に追加または削除できます",
   "@startMixNoTracksArtist": {
     "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
@@ -81,9 +79,9 @@
   "@dateAdded": {},
   "playCount": "再生回数",
   "@playCount": {},
-  "datePlayed": "再生日",
+  "datePlayed": "最後に再生した日",
   "@datePlayed": {},
-  "premiereDate": "公開日",
+  "premiereDate": "リリース日",
   "@premiereDate": {},
   "criticRating": "評論家評価",
   "@criticRating": {},
@@ -157,8 +155,6 @@
   "@shareLogs": {},
   "location": "場所",
   "@location": {},
-  "favourite": "お気に入り",
-  "@favourite": {},
   "downloadsQueued": "ダウンロードを追加しました。",
   "@downloadsQueued": {},
   "stackTrace": "スタックトレース",
@@ -273,10 +269,6 @@
   "@noArtist": {},
   "unknownArtist": "アーティスト不明",
   "@unknownArtist": {},
-  "removeFavourite": "お気に入りを削除",
-  "@removeFavourite": {},
-  "addFavourite": "お気に入りを追加",
-  "@addFavourite": {},
   "removedFromPlaylist": "プレイリストから外しました。",
   "@removedFromPlaylist": {},
   "startingInstantMix": "インスタント・ミックス開始。",
@@ -357,8 +349,6 @@
   },
   "bufferDurationSubtitle": "プレイヤーがバッファする容量（秒単位）。リスタートが必要です。",
   "@bufferDurationSubtitle": {},
-  "runtime": "再生時間",
-  "@runtime": {},
   "name": "曲名",
   "@name": {},
   "bufferDuration": "バッファ容量",
@@ -676,6 +666,126 @@
       "styledName": {
         "type": "String",
         "example": "Finamp"
+      }
+    }
+  },
+  "apply": "適用",
+  "@apply": {
+    "description": "Used for a button in the playback speed menu"
+  },
+  "startupErrorCallToAction": "できるだけ早く修正できるよう、ログ（下のボタンを使用）とこのページのスクリーンショットを添えて、「github.com/jmshrv/finamp」に問題を作成してください。",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "defaultOrder": "デフォルトの順序",
+  "@defaultOrder": {
+    "description": "Default sorting order for playlists (server order)"
+  },
+  "automatic": "自動",
+  "@automatic": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "libraryDownloads": "ダウンロードのライブラリ",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "favorite": "お気に入り",
+  "@favorite": {},
+  "onlineMode": "オンラインモード",
+  "@onlineMode": {},
+  "performingArtist": "出演アーティスト",
+  "@performingArtist": {},
+  "duration": "間隔",
+  "@duration": {},
+  "formattedRelativeTime": "{type, select, just_now{たった今} minutes{{value} 分前} hours{{value} 時間前} yesterday{昨日} days{{value, plural, =1{1 日前} other{{value} 日前}}} other{value}}",
+  "@formattedRelativeTime": {
+    "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
+    "placeholders": {
+      "type": {
+        "type": "String",
+        "description": "The category of time passed: one of 'just_now', 'minutes', 'hours', 'yesterday', or 'days'."
+      },
+      "value": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "deleteDownloadsConfirmButtonText": "削除",
+  "@deleteDownloadsConfirmButtonText": {
+    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+  },
+  "notAvailable": "利用できません",
+  "@notAvailable": {},
+  "playbackSpeedControlSettingSubtitle": "プレーヤー画面のメニューに再生速度コントロールを表示しますか",
+  "@playbackSpeedControlSettingSubtitle": {
+    "description": "Subtitle for the playback speed visibility setting"
+  },
+  "hidden": "非表示",
+  "@hidden": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "speed": "速さ",
+  "@speed": {
+    "description": "Used as a placeholder in the input of the playback speed menu"
+  },
+  "reset": "リセット",
+  "@reset": {
+    "description": "Used for buttons in the playback speed menu and the settings"
+  },
+  "appearsOnAlbums": "登場作品",
+  "@appearsOnAlbums": {},
+  "performingArtists": "出演アーティスト",
+  "@performingArtists": {},
+  "shown": "表示",
+  "@shown": {
+    "description": "Used as an option in the playback speed visibility settings"
+  },
+  "playbackReporting": "再生レポート",
+  "@playbackReporting": {},
+  "noItemsDownloaded": "ダウンロードされたアイテムはありません。",
+  "@noItemsDownloaded": {
+    "description": "Shown on the downloads screen for sections without any downloaded items."
+  },
+  "specialDownloads": "特別ダウンロード",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "allLibraries": "すべてのライブラリ",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
+  "noGenres": "ジャンルなし",
+  "@noGenres": {
+    "description": "Gets shown when there are no genres available for an album or artist"
+  },
+  "favorites": "お気に入り",
+  "@favorites": {},
+  "exportLogs": "ログを保存",
+  "@exportLogs": {},
+  "startupErrorTitle": "アプリの起動中に問題が発生しました！",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorWorkaround": "このエラーを回避するためにアプリデータを消去してアプリをリセットすることができます。この場合すべての設定とダウンロードが削除されることにご注意ください。",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
+  },
+  "playbackSpeedControlSettingDescription": "自動:\nFinamp は、再生中のトラックがポッドキャストかオーディオブック（の一部）かを識別しようとします。トラックの長さが {trackDuration} 分を超える場合、トラックのアルバムの長さが {albumDuration} 時間を超える場合、またはトラックに以下のジャンル（{genreList}）の少なくとも 1 つが割り当てられている場合、ポッドキャストまたはオーディオブックとみなされます。\n再生速度コントロールは、プレーヤー画面のメニューに表示されます。\n\n表示:\n再生速度コントロールは、プレーヤー画面のメニューに常に表示されます。\n\n非表示:\nプレーヤー画面のメニューの再生速度コントロールは常に非表示です。",
+  "@playbackSpeedControlSettingDescription": {
+    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+    "placeholders": {
+      "trackDuration": {
+        "type": "int",
+        "example": "30"
+      },
+      "albumDuration": {
+        "type": "int",
+        "example": "3"
+      },
+      "genreList": {
+        "type": "String",
+        "example": "Podcast, Audiobook"
       }
     }
   }

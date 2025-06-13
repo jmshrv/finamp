@@ -21,8 +21,6 @@
   "@music": {},
   "clear": "Limpar",
   "@clear": {},
-  "favourites": "Favoritos",
-  "@favourites": {},
   "shuffleAll": "Aleatório",
   "@shuffleAll": {},
   "finamp": "Finamp",
@@ -55,8 +53,6 @@
   "@random": {},
   "revenue": "Receita",
   "@revenue": {},
-  "runtime": "Tempo de execução",
-  "@runtime": {},
   "downloadMissingImages": "Baixar imagens ausentes",
   "@downloadMissingImages": {},
   "downloadedMissingImages": "{count,plural, =0{Nenhuma imagem ausente} =1{{count} imagem ausente baixada} other{{count} imagens ausentes baixadas}}",
@@ -174,8 +170,6 @@
   "@required": {},
   "playlistUpdated": "Nome da lista de reprodução atualizado.",
   "@playlistUpdated": {},
-  "favourite": "Favorito",
-  "@favourite": {},
   "addDownloads": "Adicionar transferências",
   "@addDownloads": {},
   "logOut": "Sair",
@@ -348,10 +342,6 @@
   "@list": {},
   "grid": "Grade",
   "@grid": {},
-  "removeFavourite": "Remover dos favoritos",
-  "@removeFavourite": {},
-  "addFavourite": "Adicionar aos favoritos",
-  "@addFavourite": {},
   "addedToQueue": "Adicionado à fila.",
   "@addedToQueue": {},
   "queueReplaced": "Fila substituída.",
@@ -1952,5 +1942,37 @@
   "startupErrorCallToAction": "Por favor, crie uma issue em github.com/jmshrv/finamp com o registro de logs (use o botão abaixo) e uma captura de tela desta página, para que possamos consertar o problema o mais rápido possível.",
   "@startupErrorCallToAction": {
     "description": "The subtitle / call to action for what to do after encountering a startup error"
-  }
+  },
+  "defaultOrder": "Ordem Padrão",
+  "@defaultOrder": {
+    "description": "Default sorting order for playlists (server order)"
+  },
+  "onlineMode": "Modo Online",
+  "@onlineMode": {},
+  "performingArtist": "Artista Performante",
+  "@performingArtist": {},
+  "duration": "Duração",
+  "@duration": {},
+  "favorite": "Favorito",
+  "@favorite": {},
+  "appearsOnAlbums": "Aparece Em",
+  "@appearsOnAlbums": {},
+  "albumArtists": "Artistas do Álbum",
+  "@albumArtists": {},
+  "allLibraries": "Todas as Bibliotecas",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
+  "noGenres": "Sem Gêneros",
+  "@noGenres": {
+    "description": "Gets shown when there are no genres available for an album or artist"
+  },
+  "performingArtists": "Artistas Performantes",
+  "@performingArtists": {},
+  "specialDownloads": "Downloads Especiais",
+  "@specialDownloads": {
+    "description": "Title for the special downloads section on the downloads screen."
+  },
+  "favorites": "Favoritos",
+  "@favorites": {}
 }

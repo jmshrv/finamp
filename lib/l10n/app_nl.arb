@@ -69,8 +69,6 @@
   },
   "clear": "Opschonen",
   "@clear": {},
-  "addFavourite": "Toevoegen aan favorieten",
-  "@addFavourite": {},
   "addToPlaylistTooltip": "Toevoegen aan afspeellijst",
   "@addToPlaylistTooltip": {},
   "gridCrossAxisCountSubtitle": "Hoeveelheid rijen te gebruiken in {value}-modus.",
@@ -165,8 +163,6 @@
   },
   "music": "Muziek",
   "@music": {},
-  "favourites": "Favorieten",
-  "@favourites": {},
   "shuffleAll": "Alles shufflen",
   "@shuffleAll": {},
   "settings": "Instellingen",
@@ -189,7 +185,7 @@
   "@datePlayed": {},
   "playCount": "Aantal keren afgespeeld",
   "@playCount": {},
-  "premiereDate": "Premieredatum",
+  "premiereDate": "Releasedatum",
   "@premiereDate": {},
   "productionYear": "Productiejaar",
   "@productionYear": {},
@@ -199,8 +195,6 @@
   "@random": {},
   "revenue": "Inkomsten",
   "@revenue": {},
-  "runtime": "Duur",
-  "@runtime": {},
   "downloadMissingImages": "Download ontbrekende plaatjes",
   "@downloadMissingImages": {},
   "downloadedMissingImages": "{count,plural, =0{Geen ontbrekende plaatjes gevonden} =1{{count} ontbrekend plaatje gedownloaded} other{{count} ontbrekende plaatjes gedownloaded}}",
@@ -234,9 +228,9 @@
   "@error": {},
   "playButtonLabel": "Afspelen",
   "@playButtonLabel": {},
-  "editPlaylistNameTooltip": "Pas de naam van de playlist aan",
+  "editPlaylistNameTooltip": "Wijzig Playlist",
   "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Pas de naam van de Playlist aan",
+  "editPlaylistNameTitle": "Wijzig Playlist",
   "@editPlaylistNameTitle": {},
   "shuffleButtonLabel": "Shuffle",
   "@shuffleButtonLabel": {},
@@ -244,8 +238,6 @@
   "@updateButtonLabel": {},
   "playlistUpdated": "De naam van de playlist is aangepast.",
   "@playlistUpdated": {},
-  "favourite": "Favoriet",
-  "@favourite": {},
   "downloadsDeleted": "Downloads verwijderd.",
   "@downloadsDeleted": {},
   "location": "Plaats",
@@ -346,8 +338,6 @@
   "@instantMix": {},
   "goToAlbum": "Ga naar album",
   "@goToAlbum": {},
-  "removeFavourite": "Verwijder favoriet",
-  "@removeFavourite": {},
   "queueReplaced": "Rij vervangen.",
   "@queueReplaced": {},
   "startingInstantMix": "Instantmix starten.",
@@ -1198,7 +1188,7 @@
   "@periodicPlaybackSessionUpdateFrequency": {
     "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "topTracks": "Meest Gespeeld",
+  "topTracks": "Top Nummers",
   "@topTracks": {},
   "queueRestoreButtonLabel": "Herstel",
   "@queueRestoreButtonLabel": {
@@ -1465,7 +1455,7 @@
   "@outputMenuOpenConnectionSettingsButtonTitle": {
     "description": "Button title for connecting to a device from the output menu"
   },
-  "autoOfflineOptionNetwork": "Netwerk",
+  "autoOfflineOptionNetwork": "Lokaal Netwerk",
   "@autoOfflineOptionNetwork": {
     "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
   },
@@ -1511,7 +1501,7 @@
   "@startupErrorCallToAction": {
     "description": "The subtitle / call to action for what to do after encountering a startup error"
   },
-  "autoOfflineSettingDescription": "Automatisch Offline Modus aanzetten\nUit: Zal niet automatisch Offline Modus aanzetten. Kan batterij besparen.\nNetwerk: Zet Offline Modus aan als er geen wifi-verbinding is.\nOffline: Zet Offline Modus aan als er helemaal geen internetverbinding is.\nJe kan altijd handmatig Offline Modus aanzetten. Dit stopt het automatiseren totdat je Offline Modus weer uit zet",
+  "autoOfflineSettingDescription": "Automatisch Offline Modus aanzetten\nUit: Zal niet automatisch Offline Modus aanzetten. Kan batterij besparen.\nLokaal Netwerk: Zet Offline Modus aan als er geen wifi-verbinding is.\nOffline: Zet Offline Modus aan als er helemaal geen internetverbinding is.\nJe kan altijd handmatig Offline Modus aanzetten. Dit stopt het automatiseren totdat je Offline Modus weer uit zet",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
@@ -1580,7 +1570,7 @@
   "@lyricsAlignmentSubtitle": {
     "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
   },
-  "showStopButtonOnMediaNotificationTitle": "Toon stopknop in mediamelding",
+  "showStopButtonOnMediaNotificationTitle": "Toon Stopknop in Mediamelding",
   "@showStopButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
@@ -1712,7 +1702,7 @@
   "@showProgressOnNowPlayingBarTitle": {
     "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar"
   },
-  "showStopButtonOnMediaNotificationSubtitle": "Stelt in of de mediamelding een stopknop heeft naast een pauzeknop. Dit zorgt ervoor dat je een nummer kan stoppen zonder de app te openen.",
+  "showStopButtonOnMediaNotificationSubtitle": "Bepaald of de mediamelding een stopknop heeft. Dit zorgt ervoor dat je een nummer kan stoppen zonder de app te openen.",
   "@showStopButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
@@ -1779,5 +1769,93 @@
     "description": "Used whenever item gets deleted from the device or server, message in snackbar"
   },
   "showArtistChipImage": "Toon foto naast artiestennaam",
-  "@showArtistChipImage": {}
+  "@showArtistChipImage": {},
+  "performingArtist": "Uitvoerende Artiest",
+  "@performingArtist": {},
+  "duration": "Duur",
+  "@duration": {},
+  "notAvailable": "Niet beschikbaar",
+  "@notAvailable": {},
+  "browsePlaylists": "Bekijk Playlists",
+  "@browsePlaylists": {
+    "description": "Label for a button on the genre screen that brings you to a list of genre-filtered playlists."
+  },
+  "addFavorite": "Favoriet Toevoegen",
+  "@addFavorite": {},
+  "removeFavorite": "Favoriet Verwijderen",
+  "@removeFavorite": {},
+  "topArtists": "Top Artiesten",
+  "@topArtists": {},
+  "recentlyAddedArtists": "Recent Toegevoegde Artiesten",
+  "@recentlyAddedArtists": {
+    "description": "Label for the genre section that shows artists that were recently added to the library, sorted by the date they were added."
+  },
+  "latestTracks": "Nieuwste Nummers",
+  "@latestTracks": {},
+  "latestAlbums": "Nieuwste Albums",
+  "@latestAlbums": {},
+  "latestArtists": "Nieuwste Artiesten",
+  "@latestArtists": {},
+  "recentlyPlayedTracks": "Laatst Gespeelde Nummers",
+  "@recentlyPlayedTracks": {},
+  "recentlyPlayedAlbums": "Laatst Gespeelde Albums",
+  "@recentlyPlayedAlbums": {},
+  "recentlyPlayedArtists": "Laatst Gespeelde Artiesten",
+  "@recentlyPlayedArtists": {},
+  "favoriteTracks": "Favoriete Nummers",
+  "@favoriteTracks": {},
+  "favoriteAlbums": "Favoriete Albums",
+  "@favoriteAlbums": {},
+  "favoriteArtists": "Favoriete Artiesten",
+  "@favoriteArtists": {},
+  "randomTracks": "Nummers (willekeurig)",
+  "@randomTracks": {},
+  "randomAlbums": "Albums (willekeurig)",
+  "@randomAlbums": {},
+  "randomArtists": "Artiesten (willekeurig)",
+  "@randomArtists": {},
+  "mostPlayed": "Meest Gespeeld",
+  "@mostPlayed": {},
+  "randomFavoritesFirst": "Random (Favorieten Eerst)",
+  "@randomFavoritesFirst": {},
+  "recentlyAdded": "Recent Toegevoegd",
+  "@recentlyAdded": {},
+  "recentlyPlayed": "Recent Afgespeeld",
+  "@recentlyPlayed": {},
+  "latestReleases": "Nieuwste Releases",
+  "@latestReleases": {},
+  "unknown": "Onbekend",
+  "@unknown": {},
+  "recentlyAddedAlbums": "Recent Toegevoegde Albums",
+  "@recentlyAddedAlbums": {
+    "description": "Label for the genre section that shows albums that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedTracks": "Recent Toegevoegde Nummers",
+  "@recentlyAddedTracks": {
+    "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
+  },
+  "showArtistsTracksSection": "Toon Nummer Sectie",
+  "@showArtistsTracksSection": {},
+  "stopAndClearQueue": "Stop afspelen en wis queue",
+  "@stopAndClearQueue": {
+    "description": "Label for a button that stops playback and removes all tracks from the queue."
+  },
+  "topAlbums": "Top Albums",
+  "@topAlbums": {},
+  "exportLogs": "Logs opslaan",
+  "@exportLogs": {},
+  "favorite": "Favoriet",
+  "@favorite": {},
+  "favorites": "Favorieten",
+  "@favorites": {},
+  "allLibraries": "Alle Bibliotheken",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
+  "noGenres": "Geen Genres",
+  "@noGenres": {
+    "description": "Gets shown when there are no genres available for an album or artist"
+  },
+  "onlineMode": "Onlinemodus",
+  "@onlineMode": {}
 }
