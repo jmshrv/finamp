@@ -304,7 +304,7 @@
   "@yesButtonLabel": {},
   "noButtonLabel": "否",
   "@noButtonLabel": {},
-  "setSleepTimer": "設置睡眠定時器",
+  "setSleepTimer": "多久後暫停播放",
   "@setSleepTimer": {},
   "minutes": "分鍾",
   "@minutes": {},
@@ -705,7 +705,7 @@
       }
     }
   },
-  "sleepTimerRemainingTime": "{time} 分鐘後進入睡眠",
+  "sleepTimerRemainingTime": "將於 {prefix}{time}{suffix} 後暫停播放",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -986,7 +986,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "playingFromType": "現正播放自{source, select, album{專輯} playlist{播放清單} trackMix{歌曲組合} artistMix{藝人組合} albumMix{專輯組合} genreMix{類型組合} favorites{收藏} allTracks{所有歌曲} filteredList{篩選} genre{類型} artist{藝人} track{歌曲} nextUpAlbum{即將播放中的專輯} nextUpPlaylist{即將播放中的播放清單} nextUpArtist{即將播放中的藝人} remoteClient{其他用戶端} other{}}",
+  "playingFromType": "現正播放自{source, select, album{專輯} playlist{播放清單} trackMix{歌曲組合} artistMix{藝人組合} albumMix{專輯組合} genreMix{類型組合} favorites{收藏} allTracks{所有歌曲} filteredList{篩選} genre{類型} artist{藝人} track{歌曲} nextUpAlbum{即將播放中的專輯} nextUpPlaylist{即將播放中的播放清單} nextUpArtist{即將播放中的藝人} nextUpGenre{即將播放中的類型} remoteClient{其他用戶端} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1041,7 +1041,7 @@
   },
   "resetToDefaults": "恢復預設值",
   "@resetToDefaults": {},
-  "couldNotLoad": "無法載入{source, select, album{專輯} playlist{播放清單} trackMix{歌曲組合} artistMix{藝人組合} albumMix{專輯組合} genreMix{類型組合} favorites{收藏} allTracks{所有歌曲} filteredList{篩選} genre{類型} artist{藝人} track{歌曲} nextUpAlbum{即將播放中的專輯} nextUpPlaylist{即將播放中的播放清單} nextUpArtist{即將播放中的藝人} other{}}",
+  "couldNotLoad": "無法載入{source, select, album{專輯} playlist{播放清單} trackMix{歌曲組合} artistMix{藝人組合} albumMix{專輯組合} genreMix{類型組合} favorites{收藏} allTracks{所有歌曲} filteredList{篩選} genre{類型} artist{藝人} track{歌曲} nextUpAlbum{即將播放中的專輯} nextUpPlaylist{即將播放中的播放清單} nextUpArtist{即將播放中的藝人} nextUpGenre{即將播放中的類型} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -2397,5 +2397,60 @@
   "defaultOrder": "預設排序方式",
   "@defaultOrder": {
     "description": "Default sorting order for playlists (server order)"
+  },
+  "itemCountLoading": "{childType, select, track{歌曲} album{專輯} other{項目}}",
+  "@itemCountLoading": {
+    "description": "Shown while the item count is being calculated.",
+    "placeholders": {
+      "childType": {
+        "type": "String",
+        "example": "album",
+        "description": "Options match BaseItemDtoType.name"
+      }
+    }
+  },
+  "playbackActionPagePlay": "播放",
+  "@playbackActionPagePlay": {
+    "description": "Label for the playback action page that contains all actions related to playing in order"
+  },
+  "playbackActionPageShuffleAlbums": "隨機播放專輯",
+  "@playbackActionPageShuffleAlbums": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+  },
+  "sleepTimerProjectedDuration": "約 {duration} 後自動暫停播放",
+  "@sleepTimerProjectedDuration": {
+    "description": "Displays duration until playback is expected to be ended by the sleep timer (unless the queue is modified before). {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "itemCount": "{childType, select,track{{amount, plural, =1{1 首歌曲} other{{amount} 首歌曲}}} album{{amount, plural, =1{1 張專輯} other{{amount} 張專輯}}} other{{amount, plural, =1{1 個項目} other{{amount} 個項目}}}}",
+  "@itemCount": {
+    "description": "Error shown when the library select screen fails to load.",
+    "placeholders": {
+      "childType": {
+        "type": "String",
+        "example": "album",
+        "description": "Options match BaseItemDtoType.name"
+      },
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "playbackActionPageShuffle": "隨機播放",
+  "@playbackActionPageShuffle": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled"
+  },
+  "editItemTitle": "編輯{itemType, select, playlist{播放清單} other{}}",
+  "@editItemTitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
   }
 }
