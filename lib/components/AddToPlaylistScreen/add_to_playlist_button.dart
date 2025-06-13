@@ -60,6 +60,12 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
               .read(isFavoriteProvider(widget.item).notifier)
               .updateFavorite(!isFav);
         },
+        onSecondaryTap: () async {
+          FeedbackHelper.feedback(FeedbackType.selection);
+          ref
+              .read(isFavoriteProvider(widget.item).notifier)
+              .updateFavorite(!isFav);
+        },
         child: IconButton(
             icon: Icon(
               isFav ? Icons.favorite : Icons.favorite_outline,

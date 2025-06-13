@@ -17,6 +17,7 @@ class SimpleButton extends StatelessWidget {
   final Color? textColor;
   final FontWeight? fontWeight;
   final void Function() onPressed;
+  final void Function()? onPressedSecondary;
   final bool disabled;
 
   /// fades the button out, while keeping it enabled
@@ -28,6 +29,7 @@ class SimpleButton extends StatelessWidget {
       required this.text,
       required this.icon,
       required this.onPressed,
+      this.onPressedSecondary,
       this.textColor,
       this.fontWeight,
       this.iconPosition = IconPosition.start,
@@ -63,10 +65,17 @@ class SimpleButton extends StatelessWidget {
     return Tooltip(
       message: disabled ? "$text (Disabled)" : text,
       child: GestureDetector(
-        onLongPress: () async {
-          final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-          FeedbackHelper.feedback(FeedbackType.selection);
-          await audioHandler.openBluetoothSettings();
+        onLongPress: () {
+          if (onPressedSecondary != null) {
+            FeedbackHelper.feedback(FeedbackType.selection);
+            onPressedSecondary!();
+          }
+        },
+        onSecondaryTap: () {
+          if (onPressedSecondary != null) {
+            FeedbackHelper.feedback(FeedbackType.selection);
+            onPressedSecondary!();
+          }
         },
         child: TextButton(
           onPressed: disabled ? null : onPressed,

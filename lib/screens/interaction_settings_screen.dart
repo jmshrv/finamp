@@ -2,6 +2,7 @@ import 'package:finamp/components/InteractionSettingsScreen/item_swipe_action_dr
 import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_dropdown_list_tile.dart';
 import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_while_charging_selector.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/screens/layout_settings_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,6 +36,7 @@ class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
           ItemSwipeRightToLeftActionDropdownListTile(),
           StartInstantMixForIndividualTracksSwitch(),
           ApplyFilterOnGenreChipTapSwitch(),
+          AutoSwitchItemCurationTypeToggle(),
           FastScrollSelector(),
           ShowDeleteFromServerOptionToggle(),
           DisableGestureSelector(),

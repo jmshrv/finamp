@@ -96,7 +96,6 @@ class _LayoutSettingsScreenState extends ConsumerState<LayoutSettingsScreen> {
           const ShowArtistChipImageToggle(),
           const AllowSplitScreenSwitch(),
           const ShowProgressOnNowPlayingBarToggle(),
-          const AutoSwitchItemCurationTypeToggle(),
         ],
       ),
     );

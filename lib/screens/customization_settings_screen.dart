@@ -42,7 +42,6 @@ class _CustomizationSettingsScreenState
           const ShowSeekControlsOnMediaNotificationToggle(),
           const OneLineMarqueeTextSwitch(),
           const ReleaseDateFormatDropdownListTile(),
-          const ShowAlbumReleaseDateOnPlayerScreenToggle(),
         ],
       ),
     );

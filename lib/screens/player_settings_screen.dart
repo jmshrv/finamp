@@ -1,3 +1,4 @@
+import 'package:finamp/screens/customization_settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,6 +26,7 @@ class _PlayerSettingsScreenState extends State<PlayerSettingsScreen> {
       body: ListView(
         children: const [
           ShowFeatureChipsToggle(),
+          ShowAlbumReleaseDateOnPlayerScreenToggle(),
           PlayerScreenMinimumCoverPaddingEditor(),
           SuppressPlayerPaddingSwitch(),
           PrioritizeCoverSwitch(),

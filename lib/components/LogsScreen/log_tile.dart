@@ -33,6 +33,13 @@ class _LogTileState extends State<LogTile> {
           errorSnackbar(e, context);
         }
       },
+      onSecondaryTap: () async {
+        try {
+          await FlutterClipboard.copy(widget.logRecord.censoredMessage);
+        } catch (e) {
+          errorSnackbar(e, context);
+        }
+      },
       child: Card(
         color: _logColor(widget.logRecord.level, context),
         child: ExpansionTile(

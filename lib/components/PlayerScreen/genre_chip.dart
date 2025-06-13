@@ -276,6 +276,8 @@ class _GenreChipContent extends ConsumerWidget {
           onTap: () => _handleGenreTap(context, ref),
           onLongPress: () =>
               _handleGenreTap(context, ref, alternativeAction: true),
+          onSecondaryTap: () =>
+              _handleGenreTap(context, ref, alternativeAction: true),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
             child: Text(
