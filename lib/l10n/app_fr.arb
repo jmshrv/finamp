@@ -1,5 +1,5 @@
 {
-  "downloadsQueued": "Téléchargements ajoutés.",
+  "downloadsQueued": "Téléchargement des fichiers",
   "@downloadsQueued": {},
   "grid": "Mosaïque",
   "@grid": {},
@@ -310,7 +310,7 @@
   "@yesButtonLabel": {},
   "noButtonLabel": "Non",
   "@noButtonLabel": {},
-  "setSleepTimer": "Configurer le minuteur de sommeil",
+  "setSleepTimer": "Pause après la lecture",
   "@setSleepTimer": {},
   "minutes": "Minutes",
   "@minutes": {},
@@ -430,7 +430,7 @@
   "@noMusicLibrariesBody": {},
   "refresh": "Rafraîchir",
   "@refresh": {},
-  "swipeInsertQueueNext": "Lire la chanson balayée en prochain",
+  "swipeInsertQueueNext": "Lire la chanson balayée à la suite",
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "Placer une chanson comme prochain élément de la file d'attente lorsqu'elle est balayée dans la liste des chansons, au lieu de l'ajouter à la fin de la liste.",
   "@swipeInsertQueueNextSubtitle": {},
@@ -585,7 +585,7 @@
   "@timeFractionTooltip": {
     "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
   },
-  "sleepTimerRemainingTime": "Arrêt de la lecture dans {time} minutes",
+  "sleepTimerRemainingTime": "Arrêt de la lecture dans {prefix}{time} {suffix}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -981,17 +981,17 @@
   "@bufferDisableSizeConstraintsSubtitle": {},
   "bufferSizeTitle": "Taille de la mémoire tampon",
   "@bufferSizeTitle": {},
-  "syncingDownloadSize": "Synchronisation...",
+  "syncingDownloadSize": "Synchronisation…",
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
   "bufferDisableSizeConstraintsTitle": "Ne pas limiter la taille de la mémoire tampon",
   "@bufferDisableSizeConstraintsTitle": {},
-  "activeDownloadSize": "Téléchargement...",
+  "activeDownloadSize": "Téléchargement…",
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
-  "missingDownloadSize": "Suppression...",
+  "missingDownloadSize": "Suppression…",
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
   },
@@ -1007,7 +1007,7 @@
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
   },
-  "reportQueueToServerSubtitle": "Lorsque cette option est activée, Finamp envoie la file d'attente actuelle au serveur. Il semble qu'il n'y ait actuellement que peu d'utilité à cela, à part augmenter la bande passante utilisée.",
+  "reportQueueToServerSubtitle": "Lorsque cette option est activée, Finamp envoie la file d'attente actuelle au serveur. Cela pourrait améliorer le contrôle à distance et permettre une restauration de la file d'attente côté serveur. Laisser cocher seulement si la fonctionnalité 'Play On' est active.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1529,7 +1529,7 @@
   "@albumArtists": {},
   "performingArtists": "Artistes",
   "@performingArtists": {},
-  "swipeRightToLeftAction": "Glissement à gauche",
+  "swipeRightToLeftAction": "Balayer vers la gauche",
   "@swipeRightToLeftAction": {},
   "swipeRightToLeftActionSubtitle": "Action déclenchée lors du glissement d'un morceau de droite à gauche dans la liste.",
   "@swipeRightToLeftActionSubtitle": {},
@@ -2058,7 +2058,7 @@
   "@latestReleases": {},
   "unknown": "Inconnu",
   "@unknown": {},
-  "itemSectionsOrderSubtitle": "Contrôle l'ordre de la section des",
+  "itemSectionsOrderSubtitle": "Contrôle l'ordre des sections de l'élément.",
   "@itemSectionsOrderSubtitle": {
     "description": "Description of the setting that controls the order of item sections on the screens."
   },
@@ -2271,5 +2271,52 @@
   "defaultOrder": "Ordre par défaut",
   "@defaultOrder": {
     "description": "Default sorting order for playlists (server order)"
+  },
+  "playbackActionPagePlay": "Lecture",
+  "@playbackActionPagePlay": {
+    "description": "Label for the playback action page that contains all actions related to playing in order"
+  },
+  "playbackActionPageShuffle": "Aléatoire",
+  "@playbackActionPageShuffle": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled"
+  },
+  "playbackActionPageShuffleAlbums": "Albums aléatoires",
+  "@playbackActionPageShuffleAlbums": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+  },
+  "curatedItemsNoFavorites": "Vous n'avez pas de favoris{itemType, select, artistGenreFilter{ pour cet artiste dans ce genre} artist{ pour cet artiste} genre{ pour ce genre} other{}}.",
+  "@curatedItemsNoFavorites": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "genreNoItems": "Vous n'avez aucun {itemType, select, playlists{playlists} artists{artists} albums{albums} tracks{tracks} other{items}} pour ce genre.",
+  "@genreNoItems": {
+    "description": "Message for empty See All lists for a genre.",
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
+  "sleepTimerStartTimer": "Démarrer la minuterie",
+  "@sleepTimerStartTimer": {
+    "description": "Label for the button that starts the sleep timer"
+  },
+  "curatedItemsNotListenedYet": "Vous n'avez écouté aucune tracks{itemType, select, artistGenreFilter{ de cet artiste dans ce genre} artist{ de cet artiste} genre{ dans ce genre} other{}}.",
+  "@curatedItemsNotListenedYet": {
+    "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
   }
 }
