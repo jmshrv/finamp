@@ -1,43 +1,113 @@
 ---
 name: Bug Report
 about: Use this template reporting bugs and unexpected behavior.
-title: "[FEATURE NAME]"
 labels: bug, needs triage
 ---
 
-<!-- You can keep text in these brackets since it wont be visible -->
+body:
+- type: markdown
+    attributes:
+        value: "# Bug Report"
 
-### Type:
-<!-- Enhancement or Accessibility :questionmark: Please use the Feature Request Template -->
+- type: markdown
+    attributes:
+        value: Thank you for opening a bug report! Please take the time to properly and thoughtfully fill |
+        out this form to make it easier for us ^^ thanks :)
 
-- [ ] Bug
-- [ ] Major Bug (makes the app unusable)
-- [ ] Other: <describe here>
+- type: markdown
+    attributes:
+        value: Final Info before you start filling everything out. |
+        If you are *not* using the Beta/Redesign already please only report **critical / app breaking** issues. |
+        This is because the beta version is likely to already have all the features and bug fixes you might be searching for.
 
-### What version of Finamp are you using?
-- [ ] Beta/Redesign: <replace this with the version, something like 0.9.x>
-- [ ] Stable: <replace this with the version, something like 0.6.x>
 
-### Affected Device/Platform
-<!-- Keep the minus if you dont know if the issue happens on that platform/device -->
-<!-- Remove the minus if you checked and the platform is not affected -->
-<!-- Replace the minus with an X if the bug is happening on that platform -->
+- type: checkboxes
+    id: type
+    attributes:
+        label: Type of Report
+        description: You can select multiple if applicable
+        options:
+            - label: The app is unusable
+            - label: Something isn't working
+            - label: Unexpected behavior
+            - label: Design feedback
+            - label: Accessibility
+            - label: "none of the above
+    validations:
+        required: true
 
-- [-] Android
-- [-] Android Auto
-- [-] iOS
-- [-] Linux
-- [-] Windows
-- [-] Mac
+- type: checkboxes
+    id: branch
+    attributes:
+        label: App Branch
+        options:
+            - label: Stable
+            - label: Redesign (beta)
+    validations:
+        required: true
 
-### Description & Steps to Reproduce
-<!-- roughly explain when this issue happend and if possibe also how to reproduce it step by step -->
-<!-- the easiest way to share a reproduction is by uploading a screen recording showing the issue! -->
+- type: input
+    id: version
+    attributes: 
+        label: The exact version of the app
+        description: You can find the app version inside the settings screen at the top right (the circle with the I)
+        placeholder: 0.9.18
+    validations:
+        required: true
 
-### Logs
-<!-- please open the side menu, click "Logs", and then use the *share* button at the top right to get the logs file. -->
-<!-- then upload that file here. it should be named "finamp-logs.txt" -->
-<!-- don't use the copy button, since that doesn't contain all logs! -->
+- type: checkboxes
+    id: affects
+    attributes:
+        label: Affected Devices/Platform
+        options:
+            - label: Android
+            - label: Android Auto
+            - label: iOS
+            - label: Linux
+            - label: MacOS
+            - label: Windows
+    validations:
+        required: true
 
-### Further information
-<!-- add any additional details here -->
+- type: input
+    id: device
+    attributes: 
+        label: Device
+        description: If you think the type of device you are using is part of the problem please fill this in
+
+- type: textarea
+    id: description
+    attributes:
+        label: Description & Steps to Reproduce
+        description: Please describe what the issue precisely is and if possible how to reproduce it
+  validations:
+    required: true
+
+- type: textarea
+    id: logs
+    attributes:
+        label: Logs
+        description: If necessary paste the relevant section of the logs here. |
+                     |
+                     Alternatively state the approximate/exact time of the issue here |
+                     and upload the log file as a comment on this issue. You may need to |
+                     put the text file into a .zip due to file size. |
+                     |
+                     To get the logs Open the side menu, click "Logs", and then use the |
+                     *share* button at the top right to get the log file. DO NOT use the copy
+                     button, since that doesn't contain all logs!
+
+- type: textarea
+    id: others
+    attributes:
+        label: Additional Information
+        description: If you want to add something which doesn't fit in the above categories feel free to add this here :)
+
+- type: checkboxes
+    id: updated
+    attributes:
+        label: Are you using the newest Version?
+        description: Did you make sure you are already using the newest version of Finamp?
+        options:
+            - label: Yes. This bug report is still valid
+              required: true
