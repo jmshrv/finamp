@@ -44,6 +44,8 @@ class _BitrateSelectorState extends ConsumerState<BitrateSelector> {
               onChangeEnd: (value) {
                 FinampSetters.setTranscodeBitrate((value * 1000).toInt());
               },
+              autofocus: false,
+              focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
             ),
             Text(
               AppLocalizations.of(context)!

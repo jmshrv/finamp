@@ -99,6 +99,8 @@ class _SpeedSliderState extends State<SpeedSlider> {
           label:
               (_dragValue ?? FinampSettingsHelper.finampSettings.playbackSpeed)
                   .toStringAsFixed(2),
+          autofocus: false,
+          focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
         ),
       ),
     );

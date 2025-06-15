@@ -237,6 +237,9 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                               });
                             },
                             label: '${(newSleepTimer.length / 60).round()} min',
+                            autofocus: false,
+                            focusNode: FocusNode(
+                                skipTraversal: true, canRequestFocus: false),
                           ),
                         ),
                       ),
@@ -427,6 +430,9 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                               });
                             },
                             label: '${newSleepTimer.length} tracks',
+                            autofocus: false,
+                            focusNode: FocusNode(
+                                skipTraversal: true, canRequestFocus: false),
                           ),
                         ),
                       ),

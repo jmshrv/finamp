@@ -46,8 +46,12 @@ Future<void> setupLogging() async {
     String deviceInfoString;
     if (Platform.isAndroid) {
       final androidInfo = await deviceInfo.androidInfo;
+      final isTV =
+          androidInfo.systemFeatures.contains('android.software.leanback');
+      final isWatch =
+          androidInfo.systemFeatures.contains('android.hardware.type.watch');
       deviceInfoString =
-          "Android ${androidInfo.version.release} on ${androidInfo.model} (${androidInfo.product})";
+          "Android ${androidInfo.version.release} on ${androidInfo.model} (${androidInfo.product})${isTV ? ' (TV)' : ''}${isWatch ? ' (Watch)' : ''}";
     } else if (Platform.isIOS) {
       final iosInfo = await deviceInfo.iosInfo;
       deviceInfoString = "${iosInfo.systemVersion} on ${iosInfo.model}";

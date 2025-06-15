@@ -69,6 +69,8 @@ class DownloadBitrateSelector extends ConsumerWidget {
               label: transcodeProfile.bitrateKbps,
               onChanged: (value) => FinampSetters.setDownloadTranscodeBitrate(
                   (value * 1000).toInt()),
+              autofocus: false,
+              focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
             ),
             Text(
               transcodeProfile.bitrateKbps,

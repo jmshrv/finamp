@@ -67,10 +67,13 @@ class _ProgressSliderState extends State<ProgressSlider> {
                   return widget.showPlaceholder
                       ? Column(
                           children: [
-                            const Slider(
+                            Slider(
                               value: 0,
                               max: 1,
                               onChanged: null,
+                              autofocus: false,
+                              focusNode: FocusNode(
+                                  skipTraversal: true, canRequestFocus: false),
                             ),
                             if (widget.showDuration)
                               const _ProgressSliderDuration(
@@ -292,6 +295,8 @@ class __PlaybackProgressSliderState
                 widget.onDrag(null);
               }
             : (_) {},
+        autofocus: false,
+        focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
       ),
     );
   }

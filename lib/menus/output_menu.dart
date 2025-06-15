@@ -399,6 +399,9 @@ class _VolumeSliderState extends ConsumerState<VolumeSlider> {
                         currentValue = value;
                       });
                     },
+                    autofocus: false,
+                    focusNode:
+                        FocusNode(skipTraversal: true, canRequestFocus: false),
                   ),
                 )),
             Positioned(

@@ -4,6 +4,7 @@ import 'package:finamp/components/AlbumScreen/download_button.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
@@ -206,6 +207,8 @@ class ConcurentDownloadsSelector extends ConsumerWidget {
                       .toString()),
               onChanged: (value) =>
                   FinampSetters.setMaxConcurrentDownloads(value.toInt()),
+              autofocus: false,
+              focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
             ),
             Text(
               AppLocalizations.of(context)!.maxConcurrentDownloadsLabel(ref
@@ -245,6 +248,8 @@ class DownloadWorkersSelector extends ConsumerWidget {
                   .downloadsWorkersSettingLabel(workers.toString()),
               onChanged: (value) =>
                   FinampSetters.setDownloadWorkers(value.toInt()),
+              autofocus: false,
+              focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
             ),
             Text(
               AppLocalizations.of(context)!
