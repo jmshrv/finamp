@@ -32,7 +32,7 @@ body:
             - label: Unexpected behavior
             - label: Design feedback
             - label: Accessibility
-            - label: "none of the above
+            - label: none of the above
     validations:
         required: true
 
@@ -73,7 +73,7 @@ body:
     id: device
     attributes: 
         label: Device
-        description: If you think the type of device you are using is part of the problem please fill this in
+        description: If you think the device you are using is part of the problem please fill give some details here
 
 - type: textarea
     id: description
