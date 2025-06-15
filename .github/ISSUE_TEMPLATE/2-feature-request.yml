@@ -45,8 +45,9 @@ body:
     attributes:
       label: Implementation Notes
       description: |
-        If you are able to please describe how this feature might
-        work behind the scenes, what needs to be done an so on
+        If you are able to, please describe how this feature might
+        work behind the scenes, what needs to be done, important logic
+        steps, and all these things
   
   - type: textarea
     id: others
