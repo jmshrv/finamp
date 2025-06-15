@@ -1,7 +1,7 @@
 {
   "serverUrl": "伺服器 URL",
   "@serverUrl": {},
-  "showTextOnGridViewSubtitle": "是否在音樂網格畫面中顯示文字（如標題、藝人等）。",
+  "showTextOnGridViewSubtitle": "是否在使用「網格瀏覽」時顯示文字（如曲名、藝人名稱等）。",
   "@showTextOnGridViewSubtitle": {},
   "internalExternalIpExplanation": "如果您希望能夠遠程訪問您的 Jellyfin 伺服器，則需要使用您的外部 IP。\n\n如果您的伺服器位於 HTTP 端口 (80/443) 上，則不必指定端口。 如果您的伺服器位於反向代理後面，則可能會出現這種情況。\n\n如果網址正確，輸入欄位下方應該會出現一些關於你的伺服器的相關資訊。",
   "@internalExternalIpExplanation": {
@@ -278,11 +278,11 @@
       }
     }
   },
-  "showTextOnGridView": "在網格檢視中顯示文字",
+  "showTextOnGridView": "在網格瀏覽中顯示文字",
   "@showTextOnGridView": {},
-  "useCoverAsBackground": "使用模糊的專輯圖作為播放器的背景",
+  "useCoverAsBackground": "使用模糊的專輯封面作為播放介面的背景",
   "@useCoverAsBackground": {},
-  "useCoverAsBackgroundSubtitle": "在播放介面中是否顯示模糊的專輯圖作為背景。",
+  "useCoverAsBackgroundSubtitle": "在播放介面中是否顯示模糊的專輯封面作為背景。",
   "@useCoverAsBackgroundSubtitle": {},
   "hideTrackArtistsIfSameAsAlbumArtists": "若與專輯藝人相同則隱藏歌曲藝人",
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
@@ -1616,7 +1616,7 @@
   "@hidePlayerBottomActions": {},
   "marqueeOrTruncateButtonSubtitle": "在較長的標題盡頭顯示 … 代替捲動文字",
   "@marqueeOrTruncateButtonSubtitle": {},
-  "showArtistChipImageSubtitle": "此設定會影響藝人圖片的縮圖顯示，例如播放介面中的顯示效果。",
+  "showArtistChipImageSubtitle": "此設定會影響藝人照片的縮圖顯示，例如播放介面中的顯示效果。",
   "@showArtistChipImageSubtitle": {},
   "fixedGridTileSizeEnum": "{size, select, small{小} medium{中} large{大} veryLarge{非常大} other{???}}",
   "@fixedGridTileSizeEnum": {
@@ -1637,7 +1637,7 @@
   "@fixedGridSizeSwitchTitle": {},
   "fixedGridSizeTitle": "網格大小",
   "@fixedGridSizeTitle": {},
-  "showArtistChipImage": "在名稱旁顯示藝人圖片",
+  "showArtistChipImage": "在藝人名稱旁顯示照片",
   "@showArtistChipImage": {},
   "defaultDownloadLocationButton": "設為預設下載位置。若停用，將可於每次下載時個別選擇位置。",
   "@defaultDownloadLocationButton": {
@@ -2299,7 +2299,7 @@
       }
     }
   },
-  "applyFilterOnGenreChipTapSubtitle": "預設情況下，點擊類型會開啟該類型介面，長按則會將藝人或播放清單篩選為該類型。啟用此設定後，這兩種操作將對調。",
+  "applyFilterOnGenreChipTapSubtitle": "在歌曲介面中，預設點擊類型標籤會開啟該類型介面，長按類型標籤則會依該類型篩選藝人或播放清單。啟用此設定後，這兩種操作將對調。",
   "@applyFilterOnGenreChipTapSubtitle": {
     "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
   },
