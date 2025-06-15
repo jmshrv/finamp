@@ -51,6 +51,7 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(KeepScreenOnOptionAdapter());
     registerAdapter(LyricDtoAdapter());
     registerAdapter(LyricLineAdapter());
+    registerAdapter(LyricLineCueAdapter());
     registerAdapter(LyricMetadataAdapter());
     registerAdapter(LyricsAlignmentAdapter());
     registerAdapter(LyricsFontSizeAdapter());
@@ -140,6 +141,7 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
     registerAdapter(KeepScreenOnOptionAdapter());
     registerAdapter(LyricDtoAdapter());
     registerAdapter(LyricLineAdapter());
+    registerAdapter(LyricLineCueAdapter());
     registerAdapter(LyricMetadataAdapter());
     registerAdapter(LyricsAlignmentAdapter());
     registerAdapter(LyricsFontSizeAdapter());

@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
+import 'package:finamp/extensions/string.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
@@ -16,6 +18,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
@@ -277,22 +280,25 @@ class _LyricsViewState extends ConsumerState<LyricsView>
         icon: TablerIcons.microphone_2_off,
       );
     } else {
+      // We have lyrics that we can display
+      final lyricLines = metadata.value!.lyrics!.lyrics ?? [];
+
       progressStateStreamSubscription?.cancel();
       progressStateStreamSubscription =
           progressStateStream.listen((state) async {
         currentPosition = state.position;
+        final currentMicros = state.position.inMicroseconds;
 
         if (!_isSynchronizedLyrics || !_isVisible) {
           return;
         }
 
-        // find the closest line to the current position, clamping to the first and last lines
+        // Find the closest line to the current position, clamping to the first and last lines
         int closestLineIndex = -1;
-        for (int i = 0; i < metadata.value!.lyrics!.lyrics!.length; i++) {
+        for (int i = 0; i < lyricLines.length; i++) {
           closestLineIndex = i;
-          final line = metadata.value!.lyrics!.lyrics![i];
-          if ((line.start ?? 0) ~/ 10 >
-              (currentPosition?.inMicroseconds ?? 0)) {
+          final line = lyricLines[i];
+          if (line.startMicros > currentMicros) {
             closestLineIndex = i - 1;
             break;
           }
@@ -303,26 +309,24 @@ class _LyricsViewState extends ConsumerState<LyricsView>
           setState(() {}); // Rebuild to update the current line
           if (autoScrollController.hasClients && isAutoScrollEnabled) {
             int clampedIndex = currentLineIndex ?? 0;
-            if (clampedIndex >= metadata.value!.lyrics!.lyrics!.length) {
-              clampedIndex = metadata.value!.lyrics!.lyrics!.length - 1;
+            if (clampedIndex >= lyricLines.length) {
+              clampedIndex = lyricLines.length - 1;
             }
-            // print("currentPosition: ${currentPosition?.inMicroseconds}, currentLineIndex: $currentLineIndex, line: ${metadata.value!.lyrics!.lyrics![clampedIndex].text}");
             if (clampedIndex < 0) {
               await autoScrollController.scrollToIndex(
                 -1,
                 preferPosition: AutoScrollPosition.middle,
                 duration: MediaQuery.of(context).disableAnimations
                     ? Duration.zero
-                    : const Duration(milliseconds: 500),
+                    : const Duration(milliseconds: 300),
               );
             } else {
               unawaited(autoScrollController.scrollToIndex(
-                clampedIndex.clamp(
-                    0, metadata.value!.lyrics!.lyrics!.length - 1),
+                clampedIndex.clamp(0, lyricLines.length - 1),
                 preferPosition: AutoScrollPosition.middle,
                 duration: MediaQuery.of(context).disableAnimations
                     ? Duration.zero
-                    : const Duration(milliseconds: 500),
+                    : const Duration(milliseconds: 300),
               ));
             }
           }
@@ -338,20 +342,17 @@ class _LyricsViewState extends ConsumerState<LyricsView>
               LyricsListMask(
                 child: ListView.builder(
                   controller: autoScrollController,
-                  itemCount: metadata.value!.lyrics!.lyrics?.length ?? 0,
+                  itemCount: lyricLines.length,
                   itemBuilder: (context, index) {
-                    final line = metadata.value!.lyrics!.lyrics![index];
-                    final nextLine =
-                        index < metadata.value!.lyrics!.lyrics!.length - 1
-                            ? metadata.value!.lyrics!.lyrics![index + 1]
-                            : null;
+                    final currentMicros = currentPosition?.inMicroseconds ?? 0;
+                    final line = lyricLines[index];
+                    final nextLine = index < lyricLines.length - 1
+                        ? lyricLines[index + 1]
+                        : null;
 
-                    final isCurrentLine =
-                        (currentPosition?.inMicroseconds ?? 0) >=
-                                (line.start ?? 0) ~/ 10 &&
-                            (nextLine == null ||
-                                (currentPosition?.inMicroseconds ?? 0) <
-                                    (nextLine.start ?? 0) ~/ 10);
+                    final isCurrentLine = currentMicros >= line.startMicros &&
+                        (nextLine == null ||
+                            currentMicros < nextLine.startMicros);
 
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -384,8 +385,8 @@ class _LyricsViewState extends ConsumerState<LyricsView>
                               isCurrentLine: isCurrentLine,
                               onTap: () async {
                                 // Seek to the start of the line
-                                await audioHandler.seek(Duration(
-                                    microseconds: (line.start ?? 0) ~/ 10));
+                                await audioHandler.seek(
+                                    Duration(microseconds: line.startMicros));
                                 setState(() {
                                   isAutoScrollEnabled = true;
                                 });
@@ -401,7 +402,7 @@ class _LyricsViewState extends ConsumerState<LyricsView>
                                 }
                               }),
                         ),
-                        if (index == metadata.value!.lyrics!.lyrics!.length - 1)
+                        if (index == lyricLines.length - 1)
                           SizedBox(height: constraints.maxHeight * 0.2),
                       ],
                     );
@@ -451,65 +452,133 @@ class _LyricLine extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lowlightLine = !isCurrentLine && line.start != null;
-    final isSynchronized = line.start != null;
-
+    final lyricsLineLogger = Logger("LyricsLine");
     final finampSettings = ref.watch(finampSettingsProvider).value;
+
+    final isSynchronized = line.start != null;
+    final showTimestamp = isSynchronized &&
+        !line.text.isNullOrBlank &&
+        (finampSettings?.showLyricsTimestamps ?? true);
+    final lowlightLine = isSynchronized && !isCurrentLine;
+
+    final textSpan = TextSpan(
+      children: [
+        // TODO: the timestamps currently crash the painter, they should probably be extracted to a Row anyways.
+        if (showTimestamp && false)
+          WidgetSpan(
+            alignment: PlaceholderAlignment.bottom,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Text(
+                "${Duration(microseconds: line.startMicros).inMinutes}:${(Duration(microseconds: line.startMicros).inSeconds % 60).toString().padLeft(2, '0')}",
+                style: TextStyle(
+                  color: lowlightLine
+                      ? Colors.grey
+                      : Theme.of(context).textTheme.bodyLarge!.color,
+                  fontSize: 16,
+                  height: 1.75 *
+                      (lyricsFontSizeToSize(finampSettings?.lyricsFontSize ??
+                              LyricsFontSize.medium) /
+                          26),
+                ),
+              ),
+            ),
+          ),
+        TextSpan(
+          text: line.text ?? "<missing lyric line>",
+          style: TextStyle(
+            color: lowlightLine
+                ? Colors.grey
+                : Theme.of(context).textTheme.bodyLarge!.color,
+            fontWeight: lowlightLine || !isSynchronized
+                ? FontWeight.normal
+                : FontWeight.w500,
+            // Keep text width consistent across the different weights
+            letterSpacing: lowlightLine || !isSynchronized ? 0.05 : -0.045,
+            fontSize: lyricsFontSizeToSize(
+                    finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) *
+                (isSynchronized ? 1.0 : 0.75),
+            height: 1.25,
+          ),
+        ),
+      ],
+    );
 
     return GestureDetector(
       onTap: isSynchronized ? onTap : null,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: isSynchronized ? 10.0 : 6.0),
-        child: Text.rich(
-          textAlign: lyricsAlignmentToTextAlign(
-              finampSettings?.lyricsAlignment ?? LyricsAlignment.start),
-          softWrap: true,
-          TextSpan(children: [
-            if (line.start != null &&
-                (line.text?.trim().isNotEmpty ?? false) &&
-                (finampSettings?.showLyricsTimestamps ?? true))
-              WidgetSpan(
-                alignment: PlaceholderAlignment.bottom,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Text(
-                    "${Duration(microseconds: (line.start ?? 0) ~/ 10).inMinutes}:${(Duration(microseconds: (line.start ?? 0) ~/ 10).inSeconds % 60).toString().padLeft(2, '0')}",
-                    style: TextStyle(
-                      color: lowlightLine
-                          ? Colors.grey
-                          : Theme.of(context).textTheme.bodyLarge!.color,
-                      fontSize: 16,
-                      height: 1.75 *
-                          (lyricsFontSizeToSize(
-                                  finampSettings?.lyricsFontSize ??
-                                      LyricsFontSize.medium) /
-                              26),
-                    ),
-                  ),
-                ),
-              ),
-            TextSpan(
-              text: line.text ?? "<missing lyric line>",
-              style: TextStyle(
-                color: lowlightLine
-                    ? Colors.grey
-                    : Theme.of(context).textTheme.bodyLarge!.color,
-                fontWeight: lowlightLine || !isSynchronized
-                    ? FontWeight.normal
-                    : FontWeight.w500,
-                // Keep text width consistent across the different weights
-                letterSpacing: lowlightLine || !isSynchronized ? 0.05 : -0.045,
-                fontSize: lyricsFontSizeToSize(finampSettings?.lyricsFontSize ??
-                        LyricsFontSize.medium) *
-                    (isSynchronized ? 1.0 : 0.75),
-                height: 1.25,
-              ),
-            ),
-          ]),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final linePainter = TextPainter(
+              text: textSpan,
+              textAlign: lyricsAlignmentToTextAlign(
+                  finampSettings?.lyricsAlignment ?? LyricsAlignment.start),
+              textDirection: TextDirection.ltr,
+            )..setPlaceholderDimensions([]);
+            linePainter.layout(
+              minWidth: constraints.minWidth,
+              maxWidth: constraints.maxWidth,
+            );
+            final text = line.text!;
+            lyricsLineLogger.info("Line: $text, ${text.length}");
+            final cues = line.cues ?? [];
+            for (int i = 0; i < cues.length - 1; i++) {
+              final cue = cues[i];
+              final nextCue = cues[i + 1];
+              final position = TextPosition(
+                offset: cue.position,
+                affinity: TextAffinity.downstream,
+              );
+              final endPosition = TextPosition(
+                offset: nextCue.position,
+                affinity: TextAffinity.upstream,
+              );
+              // TODO: use linePainter.computeLineMetrics(); if necessary
+              final offset = linePainter.getOffsetForCaret(position, Rect.zero);
+              final endOffset =
+                  linePainter.getOffsetForCaret(endPosition, Rect.zero);
+              // TODO: the min is required because server data is wrong…
+              final cueText = text.substring(cue.position, min(nextCue.position, text.length));
+              lyricsLineLogger.info("[${cue.position}:${nextCue.position}] $cueText: spans ${offset.dx}:${endOffset.dx} (${endOffset.dx - offset.dx})");
+            }
+            return CustomPaint(
+              size: Size(constraints.maxWidth, linePainter.height),
+              painter: LyricsLinePainter(linePainter),
+            );
+          },
         ),
       ),
     );
   }
+}
+
+class LyricsLinePainter extends ChangeNotifier implements CustomPainter {
+  final TextPainter textPainter;
+
+  LyricsLinePainter(this.textPainter);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    textPainter.paint(canvas, Offset.zero);
+  }
+
+  @override
+  bool shouldRepaint(LyricsLinePainter oldDelegate) {
+    return textPainter.text != oldDelegate.textPainter.text ||
+        textPainter.textAlign != oldDelegate.textPainter.textAlign;
+  }
+
+  @override
+  SemanticsBuilderCallback? get semanticsBuilder => null;
+
+  @override
+  bool shouldRebuildSemantics(covariant LyricsLinePainter oldDelegate) {
+    return shouldRepaint(oldDelegate);
+  }
+
+  @override
+  bool? hitTest(Offset position) => null;
 }
 
 class LyricsListMask extends StatelessWidget {

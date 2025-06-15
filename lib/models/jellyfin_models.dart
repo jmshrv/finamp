@@ -20,8 +20,10 @@ part 'jellyfin_models.g.dart';
 
 class BaseItemIdConverter extends JsonConverter<BaseItemId, String> {
   const BaseItemIdConverter();
+
   @override
   BaseItemId fromJson(String json) => BaseItemId(json);
+
   @override
   String toJson(BaseItemId object) => object.raw;
 }
@@ -30,6 +32,7 @@ extension type BaseItemId._(String raw) {
   /// Construct a BaseItemDto id from a raw string.  Please be sure you have a valid ID before using, and
   /// if you might not, consider the invalid ID's scope and if you can use an alternative, such as null
   BaseItemId(this.raw);
+
   String operator +(BaseItemId other) => raw + other.raw;
 }
 
@@ -134,6 +137,7 @@ class UserDto {
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>
       _$UserDtoFromJson(json);
+
   Map<String, dynamic> toJson() => _$UserDtoToJson(this);
 }
 
@@ -214,6 +218,7 @@ class UserConfiguration {
 
   factory UserConfiguration.fromJson(Map<String, dynamic> json) =>
       _$UserConfigurationFromJson(json);
+
   Map<String, dynamic> toJson() => _$UserConfigurationToJson(this);
 }
 
@@ -396,6 +401,7 @@ class UserPolicy {
 
   factory UserPolicy.fromJson(Map<String, dynamic> json) =>
       _$UserPolicyFromJson(json);
+
   Map<String, dynamic> toJson() => _$UserPolicyToJson(this);
 }
 
@@ -439,6 +445,7 @@ class AccessSchedule {
 
   factory AccessSchedule.fromJson(Map<String, dynamic> json) =>
       _$AccessScheduleFromJson(json);
+
   Map<String, dynamic> toJson() => _$AccessScheduleToJson(this);
 }
 
@@ -470,6 +477,7 @@ class AuthenticationResult {
 
   factory AuthenticationResult.fromJson(Map<String, dynamic> json) =>
       _$AuthenticationResultFromJson(json);
+
   Map<String, dynamic> toJson() => _$AuthenticationResultToJson(this);
 }
 
@@ -622,6 +630,7 @@ class SessionInfo {
 
   factory SessionInfo.fromJson(Map<String, dynamic> json) =>
       _$SessionInfoFromJson(json);
+
   Map<String, dynamic> toJson() => _$SessionInfoToJson(this);
 }
 
@@ -683,6 +692,7 @@ class TranscodingInfo {
 
   factory TranscodingInfo.fromJson(Map<String, dynamic> json) =>
       _$TranscodingInfoFromJson(json);
+
   Map<String, dynamic> toJson() => _$TranscodingInfoToJson(this);
 }
 
@@ -749,6 +759,7 @@ class PlayerStateInfo {
 
   factory PlayerStateInfo.fromJson(Map<String, dynamic> json) =>
       _$PlayerStateInfoFromJson(json);
+
   Map<String, dynamic> toJson() => _$PlayerStateInfoToJson(this);
 }
 
@@ -774,6 +785,7 @@ class SessionUserInfo {
 
   factory SessionUserInfo.fromJson(Map<String, dynamic> json) =>
       _$SessionUserInfoFromJson(json);
+
   Map<String, dynamic> toJson() => _$SessionUserInfoToJson(this);
 }
 
@@ -820,6 +832,7 @@ class ClientCapabilities {
 
   factory ClientCapabilities.fromJson(Map<String, dynamic> json) =>
       _$ClientCapabilitiesFromJson(json);
+
   Map<String, dynamic> toJson() => _$ClientCapabilitiesToJson(this);
 }
 
@@ -1031,6 +1044,7 @@ class DeviceProfile {
 
   factory DeviceProfile.fromJson(Map<String, dynamic> json) =>
       _$DeviceProfileFromJson(json);
+
   Map<String, dynamic> toJson() => _$DeviceProfileToJson(this);
 }
 
@@ -1091,6 +1105,7 @@ class DeviceIdentification {
 
   factory DeviceIdentification.fromJson(Map<String, dynamic> json) =>
       _$DeviceIdentificationFromJson(json);
+
   Map<String, dynamic> toJson() => _$DeviceIdentificationToJson(this);
 }
 
@@ -1119,6 +1134,7 @@ class HttpHeaderInfo {
 
   factory HttpHeaderInfo.fromJson(Map<String, dynamic> json) =>
       _$HttpHeaderInfoFromJson(json);
+
   Map<String, dynamic> toJson() => _$HttpHeaderInfoToJson(this);
 }
 
@@ -1142,6 +1158,7 @@ class XmlAttribute {
 
   factory XmlAttribute.fromJson(Map<String, dynamic> json) =>
       _$XmlAttributeFromJson(json);
+
   Map<String, dynamic> toJson() => _$XmlAttributeToJson(this);
 }
 
@@ -1174,6 +1191,7 @@ class DirectPlayProfile {
 
   factory DirectPlayProfile.fromJson(Map<String, dynamic> json) =>
       _$DirectPlayProfileFromJson(json);
+
   Map<String, dynamic> toJson() => _$DirectPlayProfileToJson(this);
 }
 
@@ -1254,6 +1272,7 @@ class TranscodingProfile {
 
   factory TranscodingProfile.fromJson(Map<String, dynamic> json) =>
       _$TranscodingProfileFromJson(json);
+
   Map<String, dynamic> toJson() => _$TranscodingProfileToJson(this);
 }
 
@@ -1282,6 +1301,7 @@ class ContainerProfile {
 
   factory ContainerProfile.fromJson(Map<String, dynamic> json) =>
       _$ContainerProfileFromJson(json);
+
   Map<String, dynamic> toJson() => _$ContainerProfileToJson(this);
 }
 
@@ -1320,6 +1340,7 @@ class ProfileCondition {
 
   factory ProfileCondition.fromJson(Map<String, dynamic> json) =>
       _$ProfileConditionFromJson(json);
+
   Map<String, dynamic> toJson() => _$ProfileConditionToJson(this);
 }
 
@@ -1356,6 +1377,7 @@ class CodecProfile {
 
   factory CodecProfile.fromJson(Map<String, dynamic> json) =>
       _$CodecProfileFromJson(json);
+
   Map<String, dynamic> toJson() => _$CodecProfileToJson(this);
 }
 
@@ -1400,6 +1422,7 @@ class ResponseProfile {
 
   factory ResponseProfile.fromJson(Map<String, dynamic> json) =>
       _$ResponseProfileFromJson(json);
+
   Map<String, dynamic> toJson() => _$ResponseProfileToJson(this);
 }
 
@@ -1436,6 +1459,7 @@ class SubtitleProfile {
 
   factory SubtitleProfile.fromJson(Map<String, dynamic> json) =>
       _$SubtitleProfileFromJson(json);
+
   Map<String, dynamic> toJson() => _$SubtitleProfileToJson(this);
 }
 
@@ -2274,6 +2298,7 @@ class BaseItemDto with RunTimeTickDuration {
 
   factory BaseItemDto.fromJson(Map<String, dynamic> json) =>
       _$BaseItemDtoFromJson(json);
+
   Map<String, dynamic> toJson({bool setOffline = true}) {
     var json = _$BaseItemDtoToJson(this);
     if (setOffline) {
@@ -2333,6 +2358,7 @@ class ExternalUrl {
 
   factory ExternalUrl.fromJson(Map<String, dynamic> json) =>
       _$ExternalUrlFromJson(json);
+
   Map<String, dynamic> toJson() => _$ExternalUrlToJson(this);
 }
 
@@ -2550,6 +2576,7 @@ class MediaSourceInfo with RunTimeTickDuration {
 
   factory MediaSourceInfo.fromJson(Map<String, dynamic> json) =>
       _$MediaSourceInfoFromJson(json);
+
   Map<String, dynamic> toJson() => _$MediaSourceInfoToJson(this);
 }
 
@@ -2794,6 +2821,7 @@ class MediaStream {
 
   factory MediaStream.fromJson(Map<String, dynamic> json) =>
       _$MediaStreamFromJson(json);
+
   Map<String, dynamic> toJson() => _$MediaStreamToJson(this);
 }
 
@@ -2812,6 +2840,7 @@ class MediaUrl {
 
   factory MediaUrl.fromJson(Map<String, dynamic> json) =>
       _$MediaUrlFromJson(json);
+
   Map<String, dynamic> toJson() => _$MediaUrlToJson(this);
 }
 
@@ -2851,6 +2880,7 @@ class BaseItemPerson {
 
   factory BaseItemPerson.fromJson(Map<String, dynamic> json) =>
       _$BaseItemPersonFromJson(json);
+
   Map<String, dynamic> toJson() => _$BaseItemPersonToJson(this);
 }
 
@@ -2875,6 +2905,7 @@ class NameLongIdPair {
 
   factory NameLongIdPair.fromJson(Map<String, dynamic> json) =>
       _$NameLongIdPairFromJson(json);
+
   Map<String, dynamic> toJson() => _$NameLongIdPairToJson(this);
 }
 
@@ -2948,6 +2979,7 @@ class UserItemDataDto {
 
   factory UserItemDataDto.fromJson(Map<String, dynamic> json) =>
       _$UserItemDataDtoFromJson(json);
+
   Map<String, dynamic> toJson() => _$UserItemDataDtoToJson(this);
 }
 
@@ -2971,6 +3003,7 @@ class NameIdPair {
 
   factory NameIdPair.fromJson(Map<String, dynamic> json) =>
       _$NameIdPairFromJson(json);
+
   Map<String, dynamic> toJson() => _$NameIdPairToJson(this);
 }
 
@@ -3005,6 +3038,7 @@ class ChapterInfo {
 
   factory ChapterInfo.fromJson(Map<String, dynamic> json) =>
       _$ChapterInfoFromJson(json);
+
   Map<String, dynamic> toJson() => _$ChapterInfoToJson(this);
 }
 
@@ -3032,6 +3066,7 @@ class QueryResult_BaseItemDto {
 
   factory QueryResult_BaseItemDto.fromJson(Map<String, dynamic> json) =>
       _$QueryResult_BaseItemDtoFromJson(json);
+
   Map<String, dynamic> toJson() => _$QueryResult_BaseItemDtoToJson(this);
 }
 
@@ -3059,6 +3094,7 @@ class PlaybackInfoResponse {
 
   factory PlaybackInfoResponse.fromJson(Map<String, dynamic> json) =>
       _$PlaybackInfoResponseFromJson(json);
+
   Map<String, dynamic> toJson() => _$PlaybackInfoResponseToJson(this);
 }
 
@@ -3156,6 +3192,7 @@ class PlaybackProgressInfo {
 
   factory PlaybackProgressInfo.fromJson(Map<String, dynamic> json) =>
       _$PlaybackProgressInfoFromJson(json);
+
   Map<String, dynamic> toJson() => _$PlaybackProgressInfoToJson(this);
 }
 
@@ -3224,6 +3261,7 @@ class ImageBlurHashes {
 
   factory ImageBlurHashes.fromJson(Map<String, dynamic> json) =>
       _$ImageBlurHashesFromJson(json);
+
   Map<String, dynamic> toJson() => _$ImageBlurHashesToJson(this);
 }
 
@@ -3274,6 +3312,7 @@ class MediaAttachment {
 
   factory MediaAttachment.fromJson(Map<String, dynamic> json) =>
       _$MediaAttachmentFromJson(json);
+
   Map<String, dynamic> toJson() => _$MediaAttachmentToJson(this);
 }
 
@@ -3334,6 +3373,7 @@ class BaseItem {
 
   factory BaseItem.fromJson(Map<String, dynamic> json) =>
       _$BaseItemFromJson(json);
+
   Map<String, dynamic> toJson() => _$BaseItemToJson(this);
 }
 
@@ -3357,6 +3397,7 @@ class QueueItem {
 
   factory QueueItem.fromJson(Map<String, dynamic> json) =>
       _$QueueItemFromJson(json);
+
   Map<String, dynamic> toJson() => _$QueueItemToJson(this);
 }
 
@@ -3380,7 +3421,7 @@ class NewPlaylist {
   String? name;
 
   /// Gets or sets item ids to add to the playlist.
-  List<BaseItemId>?ids;
+  List<BaseItemId>? ids;
 
   /// Gets or sets the user id. Required when creating playlists, but not adding
   /// to them.
@@ -3394,6 +3435,7 @@ class NewPlaylist {
 
   factory NewPlaylist.fromJson(Map<String, dynamic> json) =>
       _$NewPlaylistFromJson(json);
+
   Map<String, dynamic> toJson() => _$NewPlaylistToJson(this);
 }
 
@@ -3411,6 +3453,7 @@ class NewPlaylistResponse {
 
   factory NewPlaylistResponse.fromJson(Map<String, dynamic> json) =>
       _$NewPlaylistResponseFromJson(json);
+
   Map<String, dynamic> toJson() => _$NewPlaylistResponseToJson(this);
 }
 
@@ -3419,56 +3462,39 @@ class NewPlaylistResponse {
 enum SortBy {
   @HiveField(0)
   album,
-
   @HiveField(1)
   albumArtist,
-
   @HiveField(2)
   artist,
-
   @HiveField(3)
   budget,
-
   @HiveField(4)
   communityRating,
-
   @HiveField(5)
   criticRating,
-
   @HiveField(6)
   dateCreated,
-
   @HiveField(7)
   datePlayed,
-
   @HiveField(8)
   playCount,
-
   @HiveField(9)
   premiereDate,
-
   @HiveField(10)
   productionYear,
-
   @HiveField(11)
   sortName,
-
   @HiveField(12)
   random,
-
   @HiveField(13)
   revenue,
-
   @HiveField(14)
   runtime,
-
   @HiveField(15)
   defaultOrder;
 
-  static List<SortBy> defaultsFor({
-    required TabContentType type, 
-    bool includeDefaultOrder = false
-  }) {
+  static List<SortBy> defaultsFor(
+      {required TabContentType type, bool includeDefaultOrder = false}) {
     List<SortBy> options;
 
     switch (type) {
@@ -3768,7 +3794,6 @@ enum SortBy {
 enum SortOrder {
   @HiveField(0)
   ascending,
-
   @HiveField(1)
   descending;
 
@@ -3829,6 +3854,7 @@ class PublicSystemInfoResult {
 
   factory PublicSystemInfoResult.fromJson(Map<String, dynamic> json) =>
       _$PublicSystemInfoResultFromJson(json);
+
   Map<String, dynamic> toJson() => _$PublicSystemInfoResultToJson(this);
 }
 
@@ -3884,6 +3910,7 @@ class QuickConnectState {
 
   factory QuickConnectState.fromJson(Map<String, dynamic> json) =>
       _$QuickConnectStateFromJson(json);
+
   Map<String, dynamic> toJson() => _$QuickConnectStateToJson(this);
 }
 
@@ -3975,6 +4002,7 @@ class LyricMetadata {
 
   factory LyricMetadata.fromJson(Map<String, dynamic> json) =>
       _$LyricMetadataFromJson(json);
+
   Map<String, dynamic> toJson() => _$LyricMetadataToJson(this);
 }
 
@@ -3989,6 +4017,7 @@ class LyricLine {
   LyricLine({
     this.text,
     this.start,
+    this.cues,
   });
 
   /// Gets the text of this lyric line.
@@ -3999,8 +4028,15 @@ class LyricLine {
   @HiveField(1)
   int? start;
 
+  /// Gets the time-aligned cues for the song's lyrics.
+  @HiveField(2)
+  List<LyricLineCue>? cues;
+
+  int get startMicros => start != null ? start! ~/ 10 : 0;
+
   factory LyricLine.fromJson(Map<String, dynamic> json) =>
       _$LyricLineFromJson(json);
+
   Map<String, dynamic> toJson() => _$LyricLineToJson(this);
 }
 
@@ -4027,5 +4063,41 @@ class LyricDto {
 
   factory LyricDto.fromJson(Map<String, dynamic> json) =>
       _$LyricDtoFromJson(json);
+
   Map<String, dynamic> toJson() => _$LyricDtoToJson(this);
+}
+
+@JsonSerializable(
+  fieldRename: FieldRename.pascal,
+  explicitToJson: true,
+  anyMap: true,
+)
+@HiveType(typeId: 98)
+class LyricLineCue {
+  LyricLineCue({
+    required this.position,
+    required this.start,
+    this.end,
+  });
+
+  /// Gets the character index of the lyric.
+  @HiveField(0)
+  int position;
+
+  /// Gets the timestamp the lyric is synced to in ticks.
+  @HiveField(1)
+  int start;
+
+  /// Gets the end timestamp the lyric is synced to in ticks.
+  @HiveField(2)
+  int? end;
+
+  int get startMicros => start ~/ 10;
+
+  int get endMicros => end != null ? end! ~/ 10 : 0;
+
+  factory LyricLineCue.fromJson(Map<String, dynamic> json) =>
+      _$LyricLineCueFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LyricLineCueToJson(this);
 }
