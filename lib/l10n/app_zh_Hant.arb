@@ -296,7 +296,7 @@
   "@light": {},
   "dark": "深色",
   "@dark": {},
-  "tabs": "選項卡",
+  "tabs": "分頁",
   "@tabs": {},
   "cancelSleepTimer": "取消睡眠定時器？",
   "@cancelSleepTimer": {},
@@ -1056,7 +1056,7 @@
   },
   "close": "關閉",
   "@close": {},
-  "volumeNormalizationSwitchSubtitle": "使用增益資訊來標準化歌曲的音量（「重放增益」）",
+  "volumeNormalizationSwitchSubtitle": "依據音量分析結果，讓每首歌曲播放時音量保持一致 (音量標準化)",
   "@volumeNormalizationSwitchSubtitle": {
     "description": "Subtitle for the switch that toggles replay gain"
   },
@@ -1190,7 +1190,7 @@
   "@volumeNormalizationSwitchTitle": {
     "description": "Title for the switch that toggles replay gain"
   },
-  "volumeNormalizationModeSelectorSubtitle": "音量正規化的適用時機與方法",
+  "volumeNormalizationModeSelectorSubtitle": "音量標準化的適用時機與方法",
   "@volumeNormalizationModeSelectorSubtitle": {
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
@@ -1284,7 +1284,7 @@
     },
     "description": "Tooltip for the album artwork on the player screen"
   },
-  "volumeNormalizationIOSBaseGainEditorSubtitle": "在 iOS 上，音量標準化的實作方式是透過調整播放音量來模擬增益變化。由於無法將音量提高超過 100%，我們預設會先降低音量，使較安靜的音軌在需要時能夠獲得額外的音量提升。該數值以分貝（dB）為單位，-10 dB 對應約 30% 音量，-4.5 dB 對應約 60% 音量，而 -2 dB 對應約 80% 音量。",
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "在 iOS 系統上，目前的音量標準化功能是透過調整播放音量來模擬增益變化。由於無法將音量提高超過 100%，因此系統預設會先將整體音量降低，這樣在遇到音量較小的曲目時，才有空間可以將其放大。這項設定的單位是分貝（dB），例如：設為 -10 dB，大約相當於 30% 的實際音量；設為 -4.5 dB，約為 60%；而 -2 dB 則接近 80% 音量。",
   "@volumeNormalizationIOSBaseGainEditorSubtitle": {
     "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
@@ -1296,7 +1296,7 @@
   "@volumeNormalizationModeTrackBased": {
     "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
   },
-  "startInstantMixForIndividualTracksSwitchSubtitle": "開啟此功能後，在「歌曲」標籤頁點擊某首歌曲時，系統將會立即產生該歌曲的隨機組合，而非僅播放該歌曲本身。",
+  "startInstantMixForIndividualTracksSwitchSubtitle": "啟用後，在「歌曲」分頁點選單一歌曲時，將會自動播放該歌曲的隨機組合，而非僅播放該歌曲本身。",
   "@startInstantMixForIndividualTracksSwitchSubtitle": {},
   "repairComplete": "下載項目已成功修復。",
   "@repairComplete": {
@@ -1682,7 +1682,7 @@
   "@downloadSizeWarningCutoff": {
     "description": "Title for the setting controlling when to warn about a large download"
   },
-  "releaseDateFormatISO": "ISO 8601 標準格式",
+  "releaseDateFormatISO": "ISO 8601 格式",
   "@releaseDateFormatISO": {
     "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
   },
@@ -2189,7 +2189,7 @@
   "@testConnectionButtonLabel": {
     "description": "Button to test the public and local url inside the network settings tab"
   },
-  "genreFilterPlaylistScreensSubtitle": "啟用後，透過類型進入的播放清單僅會顯示符合目前所瀏覽音樂類型的歌曲。（你仍可手動移除類型篩選，以顯示所有歌曲。）",
+  "genreFilterPlaylistScreensSubtitle": "啟用後，透過類型進入的播放清單將僅顯示符合目前所瀏覽類型的歌曲。(你仍可手動移除「類型篩選器」，以查看該播放清單中的所有歌曲。)",
   "@genreFilterPlaylistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
   },
@@ -2271,13 +2271,13 @@
   },
   "randomTracks": "隨機推薦的歌曲",
   "@randomTracks": {},
-  "showArtistsTracksSectionSubtitle": "是否顯示最多五首歌曲的區域。啟用後可選擇顯示「經常播放」、「收藏」、「隨機」、「最新發行」、「最近新增」或「最近播放」的歌曲。",
+  "showArtistsTracksSectionSubtitle": "是否顯示最多五首歌曲的區域。啟用後，您可以在「經常播放」、「收藏」、「隨機」、「最新發行」、「最近新增」與「最近播放」之間選擇要顯示的內容。",
   "@showArtistsTracksSectionSubtitle": {},
   "itemSectionsOrder": "項目區域顯示順序",
   "@itemSectionsOrder": {
     "description": "Label for the setting that controls the order of item sections on the screens."
   },
-  "genreFilterArtistScreensSubtitle": "啟用後，透過類型進入的藝人介面，僅會顯示符合該音樂類型的歌曲與專輯。（你仍然可以手動移除類型篩選，以顯示所有歌曲與專輯。）",
+  "genreFilterArtistScreensSubtitle": "啟用後，透過類型進入的藝人介面將僅顯示符合目前所瀏覽類型的歌曲與專輯。(你仍可手動移除「類型篩選器」，以查看該藝人的所有歌曲與專輯。)",
   "@genreFilterArtistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
@@ -2299,11 +2299,11 @@
       }
     }
   },
-  "applyFilterOnGenreChipTapSubtitle": "預設情況下，點擊類型會開啟該類型介面，長按則會以該類型篩選藝人或播放清單。啟用此選項後，行為將會反轉。",
+  "applyFilterOnGenreChipTapSubtitle": "預設情況下，點擊類型會開啟該類型介面，長按則會將藝人或播放清單篩選為該類型。啟用此設定後，這兩種操作將對調。",
   "@applyFilterOnGenreChipTapSubtitle": {
     "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
   },
-  "genreListsInheritSortingSubtitle": "啟用後，「查看全部」清單將繼承類型畫面中的排序與篩選設定。若停用，則會改用對應音樂庫分頁的設定。點擊類型畫面上方的數量統計或「瀏覽播放清單」按鈕時，將一律開啟使用音樂庫分頁排序設定的完整清單。",
+  "genreListsInheritSortingSubtitle": "啟用後，「查看全部」清單將繼承類型畫面的排序與篩選設定。若停用，則會改用對應音樂庫的排序與篩選方式。點選類型畫面上方的數量統計或「瀏覽播放清單」按鈕時，將一律使用音樂庫的排序來顯示完整清單。",
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
@@ -2345,11 +2345,11 @@
   "@itemSectionsOrderSubtitle": {
     "description": "Description of the setting that controls the order of item sections on the screens."
   },
-  "genreItemSectionFilterChipOrderTitle": "項目區域篩選順序",
+  "genreItemSectionFilterChipOrderTitle": "項目區域篩選器順序",
   "@genreItemSectionFilterChipOrderTitle": {
     "description": "Label for the setting that controls the order of item sections filter chips."
   },
-  "artistItemSectionFilterChipOrderTitle": "歌曲區域篩選順序",
+  "artistItemSectionFilterChipOrderTitle": "歌曲區域篩選器順序",
   "@artistItemSectionFilterChipOrderTitle": {
     "description": "Label for the setting that controls the order of the tracks sections filter chips."
   },
