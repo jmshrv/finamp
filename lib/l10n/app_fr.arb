@@ -2318,5 +2318,81 @@
         "example": "artistGenreFilter, artist or genre"
       }
     }
+  },
+  "sleepTimerProjectedDuration": "La lecture sera interrompue dans ~{duration}",
+  "@sleepTimerProjectedDuration": {
+    "description": "Displays duration until playback is expected to be ended by the sleep timer (unless the queue is modified before). {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "itemCountCalculating": "Calcul du nombre d'articles",
+  "@itemCountCalculating": {
+    "description": "Shown to screen readers while the item count is being calculated."
+  },
+  "preferLocalNetworkActiveAddressInfoText": "Adresse active",
+  "@preferLocalNetworkActiveAddressInfoText": {
+    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+  },
+  "preferLocalNetworkPublicAddressSettingTitle": "Adresse publique",
+  "@preferLocalNetworkPublicAddressSettingTitle": {},
+  "menuButtonLabel": "Plus d'actions",
+  "@menuButtonLabel": {
+    "description": "Generic label for menu buttons shown throughout the app. Used for the album, artist, playlist, etc. menus"
+  },
+  "notImplementedYet": "Pas encore implémenté.",
+  "@notImplementedYet": {
+    "description": "Message shown when a feature is not implemented yet"
+  },
+  "automaticOfflineModeOverrideActiveTitle": "Commutation automatique en pause",
+  "@automaticOfflineModeOverrideActiveTitle": {
+    "description": "Title for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "automaticOfflineModeOverrideActiveSubtitle": "Appuyez ici pour reprendre",
+  "@automaticOfflineModeOverrideActiveSubtitle": {
+    "description": "Subtitle for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "sleepTimerFinishLastTrack": "Terminer le dernier morceau ?",
+  "@sleepTimerFinishLastTrack": {
+    "description": "Option for the sleep timer that will finish the last track before stopping playback."
+  },
+  "sleepTimerAfterCurrentTrack": "Après la piste actuelle",
+  "@sleepTimerAfterCurrentTrack": {
+    "description": "Option for the sleep timer that will stop playback after the current track finishes."
+  },
+  "preferLocalNetworkEnableSwitchDescription": "Utiliser ou non une adresse différente lorsque vous êtes sur le réseau local de votre serveur Jellyfin",
+  "@preferLocalNetworkEnableSwitchDescription": {},
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks, plural, =1{1 track} autres{{amountUndownloadedTracks} pistes}} seront supprimées de la file d'attente car elles ne sont pas téléchargées.",
+  "@autoReloadPromptMissingTracks": {
+    "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
+    "placeholders": {
+      "amountUndownloadedTracks": {
+        "type": "int"
+      }
+    }
+  },
+  "preferLocalNetworkEnableSwitchTitle": "Préférer le réseau local",
+  "@preferLocalNetworkEnableSwitchTitle": {},
+  "preferLocalNetworkInfoBox": "Cette fonctionnalité nécessite des autorisations de localisation (et la localisation doit être activée) pour lire le nom du réseau.",
+  "@preferLocalNetworkInfoBox": {
+    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
+  },
+  "preferLocalNetworkTargetAddressLocalSettingDescription": "Adresse cible du serveur Jellyfin dans votre réseau local",
+  "@preferLocalNetworkTargetAddressLocalSettingDescription": {},
+  "preferLocalNetworkTargetAddressLocalSettingTitle": "Adresse du réseau local",
+  "@preferLocalNetworkTargetAddressLocalSettingTitle": {},
+  "preferLocalNetworkPublicAddressSettingDescription": "L'adresse principale utilisée pour se connecter à votre serveur Jellyfin",
+  "@preferLocalNetworkPublicAddressSettingDescription": {},
+  "autoReloadPrompt": "Recharger la file d'attente pour appliquer un nouveau {type, select, network{network settings} transcoding{transcoding settings} other{settings}}",
+  "@autoReloadPrompt": {
+    "description": "Prompt shown when the queue needs to be reloaded after changing network settings",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
   }
 }
