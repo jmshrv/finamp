@@ -612,7 +612,7 @@
   "@resetSettingsPromptGlobalConfirm": {
     "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
   },
-  "playbackSpeedControlSettingDescription": "自動：\nFinamp 會根據音軌是否符合以下條件，自動判斷其為podcast或有聲書的一部分：音軌時長超過 {trackDuration} 分鐘、專輯總時長超過 {albumDuration} 小時，或類型包含以下任一項：{genreList}。\n播放速度控制選單將會顯示於播放介面中。\n\n顯示:\n播放介面選單中的播放速度控制功能將一律保持顯示。\n\n隱藏：\n播放介面選單中的播放速度控制功能將一律保持隱藏。",
+  "playbackSpeedControlSettingDescription": "自動：\nFinamp 會根據音軌是否符合以下條件，自動判斷其為podcast或audiobook的一部分：音軌時長超過 {trackDuration} 分鐘、專輯總時長超過 {albumDuration} 小時，或類型包含以下任一項：{genreList}。\n播放速度控制選單將會顯示於播放介面中。\n\n顯示:\n播放介面選單中的播放速度控制功能將一律保持顯示。\n\n隱藏：\n播放介面選單中的播放速度控制功能將一律保持隱藏。",
   "@playbackSpeedControlSettingDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
     "placeholders": {
@@ -2299,7 +2299,7 @@
       }
     }
   },
-  "applyFilterOnGenreChipTapSubtitle": "在歌曲介面中，預設點擊類型標籤會開啟該類型介面，長按類型標籤則會依該類型篩選藝人或播放清單。啟用此設定後，這兩種操作將對調。",
+  "applyFilterOnGenreChipTapSubtitle": "預設的情況下，點擊類型標籤會開啟該類型介面，長按類型標籤則會依該類型篩選藝人或播放清單。啟用此設定後，這兩種操作將會對調。",
   "@applyFilterOnGenreChipTapSubtitle": {
     "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
   },
