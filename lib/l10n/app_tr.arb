@@ -1614,5 +1614,83 @@
     "description": "Title for the library downloads section on the downloads screen."
   },
   "favorites": "Favoriler",
-  "@favorites": {}
+  "@favorites": {},
+  "recentlyAddedArtists": "Son zamanlarda eklenen sanatçılar",
+  "@recentlyAddedArtists": {
+    "description": "Label for the genre section that shows artists that were recently added to the library, sorted by the date they were added."
+  },
+  "mostPlayed": "En çok oynatılan",
+  "@mostPlayed": {},
+  "genreFilterPlaylistScreens": "Çalma listelerini süz",
+  "@genreFilterPlaylistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "showAlbumReleaseDateOnPlayerScreenTitle": "Oynatıcı ekranında albüm çıkış tarihini göster",
+  "@showAlbumReleaseDateOnPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "releaseDateFormatTitle": "Çıkış tarihi biçimi",
+  "@releaseDateFormatTitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "recentlyPlayedTracks": "Son zamanlarda oynatılan parçalar",
+  "@recentlyPlayedTracks": {},
+  "favoriteAlbums": "Gözde albümler",
+  "@favoriteAlbums": {},
+  "favoriteArtists": "Gözde sanatçılar",
+  "@favoriteArtists": {},
+  "randomTracks": "Parçalar (rastgele seçimler)",
+  "@randomTracks": {},
+  "recentlyPlayedAlbums": "Son zamanlarda oynatılan albümler",
+  "@recentlyPlayedAlbums": {},
+  "recentlyPlayedArtists": "Son zamanlarda oynatılan sanatçılar",
+  "@recentlyPlayedArtists": {},
+  "randomAlbums": "Albümler (rastgele seçimler)",
+  "@randomAlbums": {},
+  "randomArtists": "Sanatçılar (rastgele seçimler)",
+  "@randomArtists": {},
+  "releaseDateFormatMonthYear": "Ay ve Yıl",
+  "@releaseDateFormatMonthYear": {
+    "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
+  },
+  "releaseDateFormatMonthDayYear": "Ay, Gün ve Yıl",
+  "@releaseDateFormatMonthDayYear": {
+    "description": "Date format option for the release date of an album, showing the year and month and day/date. Example: March 2, 2022"
+  },
+  "releaseDateFormatISO": "ISO 8601",
+  "@releaseDateFormatISO": {
+    "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
+  },
+  "releaseDateFormatYear": "Yıl",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
+  },
+  "noDateLastPlayed": "Henüz oynamadı",
+  "@noDateLastPlayed": {
+    "description": "Placeholder text if an item has no lastPlayedDate set."
+  },
+  "latestArtists": "Son sanatçılar",
+  "@latestArtists": {},
+  "favoriteTracks": "Gözde parçalar",
+  "@favoriteTracks": {},
+  "latestTracks": "Son parçalar",
+  "@latestTracks": {},
+  "noReleaseDate": "Çıkış tarihi yok",
+  "@noReleaseDate": {
+    "description": "Placeholder text if an item has no release date set."
+  },
+  "latestAlbums": "Son albümler",
+  "@latestAlbums": {},
+  "genreFilterArtistScreens": "Sanatçıları süz",
+  "@genreFilterArtistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "autoOfflineOptionNetwork": "Yerel ağ",
+  "@autoOfflineOptionNetwork": {
+    "description": "This is shown when the autoOffline feature is set to \"local Network\", this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
+  },
+  "confirmShuffleToQueue": "Sırayı karıştır",
+  "@confirmShuffleToQueue": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
+  }
 }
