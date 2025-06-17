@@ -1022,11 +1022,11 @@
       }
     }
   },
-  "reportQueueToServerSubtitle": "傳送目前佇列至伺服器，以改善遠端控制與佇列還原。「遠端播放」功能啟用時此選項將自動開啟。",
+  "reportQueueToServerSubtitle": "啟用後，Finamp 會將目前的播放佇列傳送至伺服器。這可改善遠端控制體驗，並支援伺服器端的佇列還原功能。若啟用「遠端播放」功能，此功能將自動啟用。",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "periodicPlaybackSessionUpdateFrequencySubtitle": "設定向 Jellyfin 伺服器回報當前播放狀態頻率（秒）的進階細節。設定向伺服器回報當前播放狀態的頻率（以秒計算）。此數值應小於 5 分鐘（300 秒），以防止會話逾時。",
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "設定每隔幾秒向伺服器回報當前的播放狀態。建議值低於 5 分鐘（300 秒），以避免播放階段逾時失效。",
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
     "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1060,7 +1060,7 @@
   "@volumeNormalizationSwitchSubtitle": {
     "description": "Subtitle for the switch that toggles replay gain"
   },
-  "periodicPlaybackSessionUpdateFrequency": "播放狀態更新頻率",
+  "periodicPlaybackSessionUpdateFrequency": "播放狀態回報頻率",
   "@periodicPlaybackSessionUpdateFrequency": {
     "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1990,23 +1990,23 @@
       }
     }
   },
-  "playOnStaleDelay": "「遠端播放」會話逾時",
+  "playOnStaleDelay": "「遠端播放」連線逾時",
   "@playOnStaleDelay": {
     "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
   },
-  "playOnStaleDelaySubtitle": "設定遠端播放會話在接收到指令後保持活躍的時間。活躍期間會提高回報頻率，可能增加頻寬使用。",
+  "playOnStaleDelaySubtitle": "指令觸發後的「遠端播放」會保持啟動狀態，期間播放狀態回報頻率提升，可能導致頻寬消耗增加。",
   "@playOnStaleDelaySubtitle": {
     "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
   },
-  "enablePlayonSubtitle": "啟用 Jellyfin 的「遠端播放」功能（允許從其他用戶端遠端控制 Finamp 的播放）。若您的反向代理或伺服器不支援 WebSocket，請停用此功能。",
+  "enablePlayonSubtitle": "啟用 Jellyfin 的「遠端播放」功能，可從其他用戶端遠端控制 Finamp。若你的反向代理或伺服器不支援 WebSocket，請停用此功能。",
   "@enablePlayonSubtitle": {
     "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
   },
-  "playOnReconnectionDelay": "「遠端播放」會話重新連線延遲",
+  "playOnReconnectionDelay": "「遠端播放」重新連線間隔",
   "@playOnReconnectionDelay": {
     "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
   },
-  "playOnReconnectionDelaySubtitle": "控制遠端播放 WebSocket 連線中斷後，重新嘗試連線之間的延遲時間（秒）。延遲時間越短，頻寬使用量越高。",
+  "playOnReconnectionDelaySubtitle": "設定「遠端播放」WebSocket 斷線後的重連間隔（秒）。間隔越短，頻寬耗用越多。",
   "@playOnReconnectionDelaySubtitle": {
     "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
   },
