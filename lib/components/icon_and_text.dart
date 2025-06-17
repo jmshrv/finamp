@@ -16,8 +16,8 @@ class IconAndText extends StatelessWidget {
   Widget build(BuildContext context) {
     final effectiveIconColor = iconColor ??
         Theme.of(context).iconTheme.color?.withOpacity(
-          Theme.of(context).brightness == Brightness.light ? 0.38 : 0.5,
-        );
+              Theme.of(context).brightness == Brightness.light ? 0.38 : 0.5,
+            );
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),

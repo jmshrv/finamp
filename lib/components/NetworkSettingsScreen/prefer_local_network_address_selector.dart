@@ -9,13 +9,12 @@ import 'package:get_it/get_it.dart';
 
 class LocalNetworkAddressSelector extends ConsumerStatefulWidget {
   const LocalNetworkAddressSelector({super.key});
-  
+
   @override
   ConsumerState<LocalNetworkAddressSelector> createState() => _LocalNetworkAddressSelector();
 }
 
 class _LocalNetworkAddressSelector extends ConsumerState<LocalNetworkAddressSelector> {
-
   TextEditingController? _controller;
   @override
   void dispose() {
@@ -29,8 +28,7 @@ class _LocalNetworkAddressSelector extends ConsumerState<LocalNetworkAddressSele
     String address = user?.localAddress ?? DefaultSettings.localNetworkAddress;
     bool featureEnabled = user?.preferLocalNetwork ?? DefaultSettings.preferLocalNetwork;
 
-    _controller ??= TextEditingController(
-      text: address);
+    _controller ??= TextEditingController(text: address);
 
     return ListTile(
       enabled: featureEnabled,
@@ -45,8 +43,7 @@ class _LocalNetworkAddressSelector extends ConsumerState<LocalNetworkAddressSele
           keyboardType: TextInputType.url,
           onSubmitted: (value) async {
             if (!value.startsWith("http")) {
-              return GlobalSnackbar.message((context) =>
-                  AppLocalizations.of(context)!.missingSchemaError);
+              return GlobalSnackbar.message((context) => AppLocalizations.of(context)!.missingSchemaError);
             }
             GetIt.instance<FinampUserHelper>().currentUser?.update(newLocalAddress: value);
             await changeTargetUrl();

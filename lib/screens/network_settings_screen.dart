@@ -1,4 +1,3 @@
-
 import 'package:finamp/components/NetworkSettingsScreen/active_network_display.dart';
 import 'package:finamp/components/NetworkSettingsScreen/auto_offline_selector.dart';
 import 'package:finamp/components/NetworkSettingsScreen/prefer_local_network_address_selector.dart';
@@ -26,8 +25,7 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.networkSettingsTitle),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-              context, FinampSettingsHelper.resetNetworkSettings)
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetNetworkSettings)
         ],
       ),
       body: ListView(
@@ -39,15 +37,16 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
           LocalNetworkSelector(),
           LocalNetworkAddressSelector(),
           TextButton(
-            onPressed: () async {
-              final [public, private] = await Future.wait([
-                GetIt.instance<JellyfinApiHelper>().pingPublicServer(),
-                GetIt.instance<JellyfinApiHelper>().pingLocalServer()
-              ]);
+              onPressed: () async {
+                final [public, private] = await Future.wait([
+                  GetIt.instance<JellyfinApiHelper>().pingPublicServer(),
+                  GetIt.instance<JellyfinApiHelper>().pingLocalServer()
+                ]);
 
-              GlobalSnackbar.message((context) => AppLocalizations.of(context)!.ping("${public.toString()}_${private.toString()}"));
-            },
-            child: Text(AppLocalizations.of(context)!.testConnectionButtonLabel))
+                GlobalSnackbar.message(
+                    (context) => AppLocalizations.of(context)!.ping("${public.toString()}_${private.toString()}"));
+              },
+              child: Text(AppLocalizations.of(context)!.testConnectionButtonLabel))
         ],
       ),
     );

@@ -17,9 +17,7 @@ class LoginSplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final placeholder = "FINAMP_PLACEHOLDER";
-    final welcomeString = AppLocalizations.of(context)!
-        .loginFlowWelcomeHeading(placeholder)
-        .split(placeholder);
+    final welcomeString = AppLocalizations.of(context)!.loginFlowWelcomeHeading(placeholder).split(placeholder);
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 32.0),
@@ -44,10 +42,7 @@ class LoginSplashPage extends StatelessWidget {
                     TextSpan(text: welcomeString[0]),
                     TextSpan(
                         text: "Finamp",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium!
-                            .copyWith(
+                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                               // color: Theme.of(context).colorScheme.secondary,
                               fontWeight: FontWeight.w600,
                             )),
@@ -60,8 +55,7 @@ class LoginSplashPage extends StatelessWidget {
               const SizedBox(
                 height: 60,
               ),
-              Text(AppLocalizations.of(context)!.loginFlowSlogan,
-                  style: Theme.of(context).textTheme.bodyLarge),
+              Text(AppLocalizations.of(context)!.loginFlowSlogan, style: Theme.of(context).textTheme.bodyLarge),
               const SizedBox(
                 height: 80,
               ),

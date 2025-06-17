@@ -13,11 +13,8 @@ class OfflineModeSwitchListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
-    AutoOfflineOption automation =
-        ref.watch(finampSettingsProvider.autoOffline);
-    bool overrideActive =
-        !ref.watch(finampSettingsProvider.autoOfflineListenerActive);
+    AutoOfflineOption automation = ref.watch(finampSettingsProvider.autoOffline);
+    bool overrideActive = !ref.watch(finampSettingsProvider.autoOfflineListenerActive);
     int activeDelays = ref.watch(autoOfflineStatusProvider);
 
     IconData getCurrentIcon() {
@@ -34,14 +31,10 @@ class OfflineModeSwitchListTile extends ConsumerWidget {
 
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.offlineMode),
-      secondary: Padding(
-        padding: const EdgeInsets.only(right: 16),
-          child: Icon(getCurrentIcon())
-      ),
+      secondary: Padding(padding: const EdgeInsets.only(right: 16), child: Icon(getCurrentIcon())),
       inactiveTrackColor: Colors.transparent,
       value: ref.watch(finampSettingsProvider.isOffline),
       onChanged: (value) {
-
         AutoOfflineOption automationStatus = FinampSettingsHelper.finampSettings.autoOffline;
 
         if (automationStatus != AutoOfflineOption.disabled) {

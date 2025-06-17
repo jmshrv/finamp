@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
-class DeleteFromDeviceMenuEntry extends ConsumerWidget
-    implements HideableMenuEntry {
+class DeleteFromDeviceMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final DownloadStub downloadStub;
 
   const DeleteFromDeviceMenuEntry({
@@ -20,22 +19,18 @@ class DeleteFromDeviceMenuEntry extends ConsumerWidget
   Widget build(BuildContext context, WidgetRef ref) {
     final downloadsService = GetIt.instance<DownloadsService>();
 
-    final DownloadItemStatus downloadStatus =
-        ref.watch(downloadsService.statusProvider((downloadStub, null)));
+    final DownloadItemStatus downloadStatus = ref.watch(downloadsService.statusProvider((downloadStub, null)));
 
     return Visibility(
         visible: downloadStatus.isRequired,
         child: MenuEntry(
             icon: Icons.delete_outlined,
-            title: AppLocalizations.of(context)!
-                .deleteFromTargetConfirmButton("device"),
+            title: AppLocalizations.of(context)!.deleteFromTargetConfirmButton("device"),
             onTap: () async {
               await askBeforeDeleteDownloadFromDevice(context, downloadStub);
             }));
   }
 
   @override
-  bool get isVisible => GetIt.instance<DownloadsService>()
-      .getStatus(downloadStub, null)
-      .isRequired;
+  bool get isVisible => GetIt.instance<DownloadsService>().getStatus(downloadStub, null).isRequired;
 }

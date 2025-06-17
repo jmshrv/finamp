@@ -101,8 +101,7 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> authenticateWithQuickConnect(
-      Map<String, String> quickConnectInfo) async {
+  Future<dynamic> authenticateWithQuickConnect(Map<String, String> quickConnectInfo) async {
     final Uri $url = Uri.parse('/Users/AuthenticateWithQuickConnect');
     final $body = quickConnectInfo;
     final Request $request = Request(
@@ -120,8 +119,7 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> authenticateViaName(
-      Map<String, String> usernameAndPassword) async {
+  Future<dynamic> authenticateViaName(Map<String, String> usernameAndPassword) async {
     final Uri $url = Uri.parse('/Users/AuthenticateByName');
     final $body = usernameAndPassword;
     final Request $request = Request(
@@ -394,8 +392,7 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> updateCapabilitiesFull(
-      ClientCapabilities clientCapabilities) async {
+  Future<dynamic> updateCapabilitiesFull(ClientCapabilities clientCapabilities) async {
     final Uri $url = Uri.parse('/Sessions/Capabilities/Full');
     final $body = clientCapabilities;
     final Request $request = Request(
@@ -412,8 +409,7 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> startPlayback(
-      PlaybackProgressInfo playbackProgressInfo) async {
+  Future<dynamic> startPlayback(PlaybackProgressInfo playbackProgressInfo) async {
     final Uri $url = Uri.parse('/Sessions/Playing');
     final $body = playbackProgressInfo;
     final Request $request = Request(
@@ -430,8 +426,7 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> playbackStatusUpdate(
-      PlaybackProgressInfo playbackProgressInfo) async {
+  Future<dynamic> playbackStatusUpdate(PlaybackProgressInfo playbackProgressInfo) async {
     final Uri $url = Uri.parse('/Sessions/Playing/Progress');
     final $body = playbackProgressInfo;
     final Request $request = Request(
@@ -448,8 +443,7 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> playbackStatusStopped(
-      PlaybackProgressInfo playbackProgressInfo) async {
+  Future<dynamic> playbackStatusStopped(PlaybackProgressInfo playbackProgressInfo) async {
     final Uri $url = Uri.parse('/Sessions/Playing/Stopped');
     final $body = playbackProgressInfo;
     final Request $request = Request(
@@ -543,9 +537,7 @@ final class _$JellyfinApi extends JellyfinApi {
     String? entryIds,
   }) {
     final Uri $url = Uri.parse('/Playlists/${playlistId}/Items');
-    final Map<String, dynamic> $params = <String, dynamic>{
-      'entryIds': entryIds
-    };
+    final Map<String, dynamic> $params = <String, dynamic>{'entryIds': entryIds};
     final Request $request = Request(
       'DELETE',
       $url,

@@ -22,14 +22,12 @@ class _PublicAddressSelector extends ConsumerState<PublicAddressSelector> {
     _controller?.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     String? publicAddress = ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.publicAddress;
 
-    _controller ??= TextEditingController(
-        text: publicAddress.toString());
-    
+    _controller ??= TextEditingController(text: publicAddress.toString());
+
     return ListTile(
       title: Text(AppLocalizations.of(context)!.preferLocalNetworkPublicAddressSettingTitle),
       subtitle: Text(AppLocalizations.of(context)!.preferLocalNetworkPublicAddressSettingDescription),
@@ -39,14 +37,11 @@ class _PublicAddressSelector extends ConsumerState<PublicAddressSelector> {
           controller: _controller,
           textAlign: TextAlign.center,
           keyboardType: TextInputType.url,
-          onSubmitted: (value)  async {
+          onSubmitted: (value) async {
             if (!value.startsWith("http")) {
-              return GlobalSnackbar.message((context) =>
-                  AppLocalizations.of(context)!.missingSchemaError);
+              return GlobalSnackbar.message((context) => AppLocalizations.of(context)!.missingSchemaError);
             }
-            GetIt.instance<FinampUserHelper>()
-                .currentUser
-                ?.update(newPublicAddress: value);
+            GetIt.instance<FinampUserHelper>().currentUser?.update(newPublicAddress: value);
             await changeTargetUrl();
           },
         ),

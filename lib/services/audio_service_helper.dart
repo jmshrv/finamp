@@ -34,50 +34,40 @@ class AudioServiceHelper {
               viewFilter: _finampUserHelper.currentUser?.currentView?.id,
               genreFilter: genreFilter,
               onlyFavorites: onlyShowFavorites,
-              nullableViewFilters: FinampSettingsHelper
-                  .finampSettings.showDownloadsWithUnknownLibrary))
+              nullableViewFilters: FinampSettingsHelper.finampSettings.showDownloadsWithUnknownLibrary))
           .map((e) => e.baseItem!)
           .toList();
       items.shuffle();
-      if (items.length - 1 >
-          FinampSettingsHelper.finampSettings.trackShuffleItemCount) {
-        items = items.sublist(
-            0, FinampSettingsHelper.finampSettings.trackShuffleItemCount);
+      if (items.length - 1 > FinampSettingsHelper.finampSettings.trackShuffleItemCount) {
+        items = items.sublist(0, FinampSettingsHelper.finampSettings.trackShuffleItemCount);
       }
     } else {
       // If online, get all audio items from the user's view
       items = await _jellyfinApiHelper.getItems(
-        parentItem: _finampUserHelper.currentUser!.currentView,
-        includeItemTypes: "Audio",
-        filters: onlyShowFavorites ? "IsFavorite" : null,
-        limit: FinampSettingsHelper.finampSettings.trackShuffleItemCount,
-        sortBy: "Random",
-        genreFilter: genreFilter
-      );
+          parentItem: _finampUserHelper.currentUser!.currentView,
+          includeItemTypes: "Audio",
+          filters: onlyShowFavorites ? "IsFavorite" : null,
+          limit: FinampSettingsHelper.finampSettings.trackShuffleItemCount,
+          sortBy: "Random",
+          genreFilter: genreFilter);
     }
 
     if (items != null) {
       QueueItemSource source = (genreFilter != null)
-        ? QueueItemSource(
-          type: QueueItemSourceType.genre,
-          name: QueueItemSourceName(
-              type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: genreFilter.name
-          ),
-          id: genreFilter.id,
-          item: genreFilter,
-        )
-        : QueueItemSource.rawId(
-          type: onlyShowFavorites
-              ? QueueItemSourceType.favorites
-              : QueueItemSourceType.allTracks,
-          name: QueueItemSourceName(
-            type: onlyShowFavorites
-                ? QueueItemSourceNameType.yourLikes
-                : QueueItemSourceNameType.shuffleAll,
-          ),
-          id: "shuffleAll",
-        );
+          ? QueueItemSource(
+              type: QueueItemSourceType.genre,
+              name:
+                  QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: genreFilter.name),
+              id: genreFilter.id,
+              item: genreFilter,
+            )
+          : QueueItemSource.rawId(
+              type: onlyShowFavorites ? QueueItemSourceType.favorites : QueueItemSourceType.allTracks,
+              name: QueueItemSourceName(
+                type: onlyShowFavorites ? QueueItemSourceNameType.yourLikes : QueueItemSourceNameType.shuffleAll,
+              ),
+              id: "shuffleAll",
+            );
 
       await _queueService.startPlayback(
         items: items,
@@ -99,9 +89,7 @@ class AudioServiceHelper {
           source: QueueItemSource(
               type: QueueItemSourceType.trackMix,
               name: QueueItemSourceName(
-                type: item.name != null
-                    ? QueueItemSourceNameType.mix
-                    : QueueItemSourceNameType.instantMix,
+                type: item.name != null ? QueueItemSourceNameType.mix : QueueItemSourceNameType.instantMix,
                 localizationParameter: item.name ?? "",
               ),
               id: item.id),
@@ -120,16 +108,14 @@ class AudioServiceHelper {
     List<jellyfin_models.BaseItemDto>? items;
 
     try {
-      items = await _jellyfinApiHelper
-          .getArtistMix(artists.map((e) => e.id).toList());
+      items = await _jellyfinApiHelper.getArtistMix(artists.map((e) => e.id).toList());
       if (items != null) {
         await _queueService.startPlayback(
           items: items,
           source: QueueItemSource(
             type: QueueItemSourceType.artistMix,
             name: QueueItemSourceName(
-                type: QueueItemSourceNameType.mix,
-                localizationParameter: artists.map((e) => e.name).join(" & ")),
+                type: QueueItemSourceNameType.mix, localizationParameter: artists.map((e) => e.name).join(" & ")),
             id: artists.first.id,
             item: artists.first,
           ),
@@ -149,16 +135,14 @@ class AudioServiceHelper {
     List<jellyfin_models.BaseItemDto>? items;
 
     try {
-      items = await _jellyfinApiHelper
-          .getAlbumMix(albums.map((e) => e.id).toList());
+      items = await _jellyfinApiHelper.getAlbumMix(albums.map((e) => e.id).toList());
       if (items != null) {
         await _queueService.startPlayback(
           items: items,
           source: QueueItemSource(
             type: QueueItemSourceType.albumMix,
             name: QueueItemSourceName(
-                type: QueueItemSourceNameType.mix,
-                localizationParameter: albums.map((e) => e.name).join(" & ")),
+                type: QueueItemSourceNameType.mix, localizationParameter: albums.map((e) => e.name).join(" & ")),
             id: albums.first.id,
             item: albums.first,
           ),
@@ -178,16 +162,14 @@ class AudioServiceHelper {
     List<jellyfin_models.BaseItemDto>? items;
 
     try {
-      items = await _jellyfinApiHelper
-          .getGenreMix(genres.map((e) => e.id).toList());
+      items = await _jellyfinApiHelper.getGenreMix(genres.map((e) => e.id).toList());
       if (items != null) {
         await _queueService.startPlayback(
           items: items,
           source: QueueItemSource(
             type: QueueItemSourceType.genreMix,
             name: QueueItemSourceName(
-                type: QueueItemSourceNameType.mix,
-                localizationParameter: genres.map((e) => e.name).join(" & ")),
+                type: QueueItemSourceNameType.mix, localizationParameter: genres.map((e) => e.name).join(" & ")),
             id: genres.first.id,
             item: genres.first,
           ),

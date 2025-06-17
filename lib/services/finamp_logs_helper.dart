@@ -23,8 +23,7 @@ class FinampLogsHelper {
         : await getApplicationSupportDirectory();
     final logFile = File(path_helper.join(basePath.path, "finamp-logs.txt"));
     if (logFile.existsSync() && logFile.lengthSync() >= 1024 * 1024 * 10) {
-      logFile
-          .renameSync(path_helper.join(basePath.path, "finamp-logs-old.txt"));
+      logFile.renameSync(path_helper.join(basePath.path, "finamp-logs-old.txt"));
     }
     _logFileWriter = logFile.openWrite(mode: FileMode.writeOnlyAppend);
   }
@@ -64,8 +63,7 @@ class FinampLogsHelper {
       final basePath = (Platform.isAndroid || Platform.isIOS)
           ? await getApplicationDocumentsDirectory()
           : await getApplicationSupportDirectory();
-      var oldLogs =
-          File(path_helper.join(basePath.path, "finamp-logs-old.txt"));
+      var oldLogs = File(path_helper.join(basePath.path, "finamp-logs-old.txt"));
       var newLogs = File(path_helper.join(basePath.path, "finamp-logs.txt"));
       if (oldLogs.existsSync()) {
         fullLogsBuffer.write(await oldLogs.readAsString());
@@ -79,8 +77,7 @@ class FinampLogsHelper {
     return fullLogsBuffer.toString();
   }
 
-  Future<void> copyLogs() async =>
-      await FlutterClipboard.copy(getSanitisedLogs());
+  Future<void> copyLogs() async => await FlutterClipboard.copy(getSanitisedLogs());
 
   /// Write logs to a file and share the file
   Future<void> shareLogs() async {

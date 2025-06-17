@@ -28,7 +28,7 @@ int activeDelayCounter = 0;
 /// This stream receives update when autoOffline enters/exists the 7 second confirmation/validation timeout
 final autoOfflineStatusStream = StreamController<int>.broadcast();
 final autoOfflineStatusProvider = StreamProvider((ref) {
-    return autoOfflineStatusStream.stream;
+  return autoOfflineStatusStream.stream;
 }).select((v) => v.valueOrNull ?? 0);
 
 final StreamSubscription<List<ConnectivityResult>> _listener =
@@ -40,8 +40,7 @@ class AutoOffline extends _$AutoOffline {
     ProviderContainer container = GetIt.instance<ProviderContainer>();
 
     container.listen(autoOfflineProvider, (_, automationEnabled) {
-      _networkAutomationLogger
-          .info("${automationEnabled ? "Enabled" : "Paused"} Automation");
+      _networkAutomationLogger.info("${automationEnabled ? "Enabled" : "Paused"} Automation");
 
       if (automationEnabled) {
         _listener.resume();
@@ -55,25 +54,19 @@ class AutoOffline extends _$AutoOffline {
 
   @override
   bool build() {
-    bool autoOfflineEnabled = ref.watch(finampSettingsProvider.autoOffline) !=
-        AutoOfflineOption.disabled;
+    bool autoOfflineEnabled = ref.watch(finampSettingsProvider.autoOffline) != AutoOfflineOption.disabled;
 
     // false = user overwrote offline mode
-    bool autoOfflineActive =
-        ref.watch(finampSettingsProvider.autoOfflineListenerActive);
+    bool autoOfflineActive = ref.watch(finampSettingsProvider.autoOfflineListenerActive);
 
-    bool autoServerSwitch = ref
-            .watch(FinampUserHelper.finampCurrentUserProvider)
-            .valueOrNull
-            ?.preferLocalNetwork ??
+    bool autoServerSwitch = ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.preferLocalNetwork ??
         DefaultSettings.preferLocalNetwork;
 
     return (autoOfflineEnabled && autoOfflineActive) || autoServerSwitch;
   }
 }
 
-Future<void> _onConnectivityChange(
-    List<ConnectivityResult>? connections) async {
+Future<void> _onConnectivityChange(List<ConnectivityResult>? connections) async {
   _networkAutomationLogger.finest(
       "Network Change: ${connections?.map((element) => element.toString()).join(", ") ?? "None (likely a manual function call)"}");
   connections ??= await Connectivity().checkConnectivity();
@@ -88,8 +81,7 @@ Future<void> _onConnectivityChange(
 }
 
 bool featureEnabled() {
-  return FinampSettingsHelper.finampSettings.autoOffline !=
-          AutoOfflineOption.disabled &&
+  return FinampSettingsHelper.finampSettings.autoOffline != AutoOfflineOption.disabled &&
       FinampSettingsHelper.finampSettings.autoOfflineListenerActive;
 }
 
@@ -119,16 +111,14 @@ Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
   // skip if state changed during the delay because the function should be triggered by the change again
   // skip if target state is already the active offline-mode state to prevent unessesary snackbar messages
   // check if feature is enabled was already done after the delay
-  if (state1 != state2 ||
-      FinampSettingsHelper.finampSettings.isOffline == state2) {
+  if (state1 != state2 || FinampSettingsHelper.finampSettings.isOffline == state2) {
     return FinampSettingsHelper.finampSettings.isOffline;
   }
 
-  GlobalSnackbar.message((context) => AppLocalizations.of(context)!
-      .autoOfflineNotification(state2 ? "enabled" : "disabled"));
+  GlobalSnackbar.message(
+      (context) => AppLocalizations.of(context)!.autoOfflineNotification(state2 ? "enabled" : "disabled"));
 
-  _autoOfflineLogger
-      .info("Automatically ${state2 ? "Enabled" : "Disabled"} Offline Mode");
+  _autoOfflineLogger.info("Automatically ${state2 ? "Enabled" : "Disabled"} Offline Mode");
 
   FinampSetters.setIsOffline(state2);
   return state2;
@@ -141,8 +131,7 @@ bool _shouldBeOffline(List<ConnectivityResult> connections) {
           !connections.contains(ConnectivityResult.ethernet) &&
           !connections.contains(ConnectivityResult.wifi);
     case AutoOfflineOption.network:
-      return !connections.contains(ConnectivityResult.ethernet) &&
-          !connections.contains(ConnectivityResult.wifi);
+      return !connections.contains(ConnectivityResult.ethernet) && !connections.contains(ConnectivityResult.wifi);
     default:
       return false;
   }
@@ -153,8 +142,7 @@ Future<bool> changeTargetUrl({bool? isLocal}) async {
   if (user == null) return false;
 
   if (isLocal != null && isLocal != user.isLocal) {
-    _networKSwitcherLogger.info(
-        "Changed active network to ${isLocal ? "local" : "public"} address");
+    _networKSwitcherLogger.info("Changed active network to ${isLocal ? "local" : "public"} address");
     GetIt.instance<FinampUserHelper>().currentUser?.update(newIsLocal: isLocal);
     return true;
   }
@@ -176,21 +164,17 @@ int _getDownloads() {
   downloadsService.updateDownloadCounts();
 
   final nodesSyncing = downloadsService.downloadCounts["sync"]!;
-  final downloadingEnqueued =
-      downloadsService.downloadStatuses[DownloadItemState.enqueued]!;
-  final downloadingRunning =
-      downloadsService.downloadStatuses[DownloadItemState.downloading]!;
+  final downloadingEnqueued = downloadsService.downloadStatuses[DownloadItemState.enqueued]!;
+  final downloadingRunning = downloadsService.downloadStatuses[DownloadItemState.downloading]!;
 
-  final activeDownloads =
-      nodesSyncing + downloadingEnqueued + downloadingRunning;
+  final activeDownloads = nodesSyncing + downloadingEnqueued + downloadingRunning;
   return activeDownloads;
 }
 
 void _notifyOfPausedDownloads(List<ConnectivityResult> connections) async {
   if (connections.contains(ConnectivityResult.none)) {
     if (_getDownloads() == 0) return;
-    GlobalSnackbar.message(
-        (context) => AppLocalizations.of(context)!.downloadPaused);
+    GlobalSnackbar.message((context) => AppLocalizations.of(context)!.downloadPaused);
     return;
   }
 
@@ -203,8 +187,7 @@ void _notifyOfPausedDownloads(List<ConnectivityResult> connections) async {
 
     if (_getDownloads() == 0) return;
 
-    GlobalSnackbar.message(
-        (context) => AppLocalizations.of(context)!.downloadPaused);
+    GlobalSnackbar.message((context) => AppLocalizations.of(context)!.downloadPaused);
   }
 }
 

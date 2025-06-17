@@ -39,8 +39,7 @@ class _PlaylistEditDialogState extends State<PlaylistEditDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(AppLocalizations.of(context)!
-          .editItemTitle(BaseItemDtoType.fromItem(widget.playlist).name)),
+      title: Text(AppLocalizations.of(context)!.editItemTitle(BaseItemDtoType.fromItem(widget.playlist).name)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         spacing: 8,
@@ -49,8 +48,7 @@ class _PlaylistEditDialogState extends State<PlaylistEditDialog> {
             key: _formKey,
             child: TextFormField(
               initialValue: _name,
-              decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.name),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.name),
               textInputAction: TextInputAction.done,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -95,8 +93,7 @@ class _PlaylistEditDialogState extends State<PlaylistEditDialog> {
 
   Future<void> _fetchPublicVisibility() async {
     if (_publicVisibility != null) return;
-    final resultPlaylist =
-        await _jellyfinApiHelper.getPlaylist(widget.playlist.id!);
+    final resultPlaylist = await _jellyfinApiHelper.getPlaylist(widget.playlist.id!);
     setState(() {
       _publicVisibility = resultPlaylist['OpenAccess'] as bool;
     });

@@ -26,8 +26,7 @@ class PlaybackActionRow extends ConsumerWidget {
           child: PageView(
             controller: controller,
             // animation speed can't be changed directly, so we use a custom ScrollPhysics (source: https://stackoverflow.com/questions/65325496/flutter-pageview-how-to-make-faster-animations-on-swipe)
-            physics: const FasterPageViewScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
+            physics: const FasterPageViewScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             allowImplicitScrolling: true,
             scrollDirection: Axis.horizontal,
             children: playbackActionPages.values.toList(),

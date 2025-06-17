@@ -31,9 +31,7 @@ class InstantMixMenuEntry extends ConsumerWidget implements HideableMenuEntry {
           Navigator.pop(context); // close menu
           await audioServiceHelper.startInstantMixForItem(baseItem);
 
-          GlobalSnackbar.message(
-              (context) => AppLocalizations.of(context)!.startingInstantMix,
-              isConfirmation: true);
+          GlobalSnackbar.message((context) => AppLocalizations.of(context)!.startingInstantMix, isConfirmation: true);
         },
       );
     }
@@ -64,8 +62,7 @@ class InstantMixMenuEntry extends ConsumerWidget implements HideableMenuEntry {
                   jellyfinApiHelper.removeGenreFromMixBuilderList(baseItem);
                   break;
                 default:
-                  GlobalSnackbar.message((context) =>
-                      AppLocalizations.of(context)!.notImplementedYet);
+                  GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notImplementedYet);
               }
             },
           )
@@ -85,8 +82,7 @@ class InstantMixMenuEntry extends ConsumerWidget implements HideableMenuEntry {
                   jellyfinApiHelper.addGenreToMixBuilderList(baseItem);
                   break;
                 default:
-                  GlobalSnackbar.message((context) =>
-                      AppLocalizations.of(context)!.notImplementedYet);
+                  GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notImplementedYet);
               }
             },
           );

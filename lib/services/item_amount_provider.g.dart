@@ -67,16 +67,14 @@ class ItemAmountFamily extends Family<AsyncValue<(int, BaseItemDtoType)>> {
   static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies => _allTransitiveDependencies;
 
   @override
   String? get name => r'itemAmountProvider';
 }
 
 /// See also [itemAmount].
-class ItemAmountProvider
-    extends AutoDisposeFutureProvider<(int, BaseItemDtoType)> {
+class ItemAmountProvider extends AutoDisposeFutureProvider<(int, BaseItemDtoType)> {
   /// See also [itemAmount].
   ItemAmountProvider({
     required BaseItemDto baseItem,
@@ -89,13 +87,9 @@ class ItemAmountProvider
           ),
           from: itemAmountProvider,
           name: r'itemAmountProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$itemAmountHash,
+          debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$itemAmountHash,
           dependencies: ItemAmountFamily._dependencies,
-          allTransitiveDependencies:
-              ItemAmountFamily._allTransitiveDependencies,
+          allTransitiveDependencies: ItemAmountFamily._allTransitiveDependencies,
           baseItem: baseItem,
           showTrackCountForArtists: showTrackCountForArtists,
         );
@@ -165,16 +159,13 @@ mixin ItemAmountRef on AutoDisposeFutureProviderRef<(int, BaseItemDtoType)> {
   bool get showTrackCountForArtists;
 }
 
-class _ItemAmountProviderElement
-    extends AutoDisposeFutureProviderElement<(int, BaseItemDtoType)>
-    with ItemAmountRef {
+class _ItemAmountProviderElement extends AutoDisposeFutureProviderElement<(int, BaseItemDtoType)> with ItemAmountRef {
   _ItemAmountProviderElement(super.provider);
 
   @override
   BaseItemDto get baseItem => (origin as ItemAmountProvider).baseItem;
   @override
-  bool get showTrackCountForArtists =>
-      (origin as ItemAmountProvider).showTrackCountForArtists;
+  bool get showTrackCountForArtists => (origin as ItemAmountProvider).showTrackCountForArtists;
 }
 
 String _$childItemTypeHash() => r'c65893697d022dbe49bb11327dd9d9df3cbdfc49';
@@ -214,8 +205,7 @@ class ChildItemTypeFamily extends Family<BaseItemDtoType> {
   static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies => _allTransitiveDependencies;
 
   @override
   String? get name => r'childItemTypeProvider';
@@ -233,13 +223,9 @@ class ChildItemTypeProvider extends AutoDisposeProvider<BaseItemDtoType> {
           ),
           from: childItemTypeProvider,
           name: r'childItemTypeProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$childItemTypeHash,
+          debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$childItemTypeHash,
           dependencies: ChildItemTypeFamily._dependencies,
-          allTransitiveDependencies:
-              ChildItemTypeFamily._allTransitiveDependencies,
+          allTransitiveDependencies: ChildItemTypeFamily._allTransitiveDependencies,
           item: item,
         );
 
@@ -299,8 +285,7 @@ mixin ChildItemTypeRef on AutoDisposeProviderRef<BaseItemDtoType> {
   BaseItemDto get item;
 }
 
-class _ChildItemTypeProviderElement
-    extends AutoDisposeProviderElement<BaseItemDtoType> with ChildItemTypeRef {
+class _ChildItemTypeProviderElement extends AutoDisposeProviderElement<BaseItemDtoType> with ChildItemTypeRef {
   _ChildItemTypeProviderElement(super.provider);
 
   @override

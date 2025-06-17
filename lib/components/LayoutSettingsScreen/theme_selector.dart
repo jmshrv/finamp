@@ -5,11 +5,9 @@ import 'package:hive_ce/hive.dart';
 import '../../services/theme_mode_helper.dart';
 
 extension LocalisedName on ThemeMode {
-  String toLocalisedString(BuildContext context) =>
-      _humanReadableLocalisedName(this, context);
+  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
 
-  String _humanReadableLocalisedName(
-      ThemeMode themeMode, BuildContext context) {
+  String _humanReadableLocalisedName(ThemeMode themeMode, BuildContext context) {
     switch (themeMode) {
       case ThemeMode.system:
         return AppLocalizations.of(context)!.system;

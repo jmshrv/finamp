@@ -28,15 +28,11 @@ extension CensoredMessage on LogRecord {
       if (user != null) {
         var useLocal = user.isLocal && user.preferLocalNetwork;
         workingLogString = workingLogString.replaceAll(
-            CaseInsensitivePattern(user.localAddress),
-            "HOMEURL${!useLocal ? "(INACTIVE)" : ""}");
+            CaseInsensitivePattern(user.localAddress), "HOMEURL${!useLocal ? "(INACTIVE)" : ""}");
         workingLogString = workingLogString.replaceAll(
-            CaseInsensitivePattern(user.publicAddress),
-            "PUBLICURL${useLocal ? "(INACTIVE)" : ""}");
-        workingLogString = workingLogString.replaceAll(
-            CaseInsensitivePattern(user.accessToken), "TOKEN");
-        workingLogString = workingLogString.replaceAll(
-            CaseInsensitivePattern(user.id), "USER_ID");
+            CaseInsensitivePattern(user.publicAddress), "PUBLICURL${useLocal ? "(INACTIVE)" : ""}");
+        workingLogString = workingLogString.replaceAll(CaseInsensitivePattern(user.accessToken), "TOKEN");
+        workingLogString = workingLogString.replaceAll(CaseInsensitivePattern(user.id), "USER_ID");
       }
     }
 
@@ -48,20 +44,16 @@ extension CensoredMessage on LogRecord {
       if (jellyfinApiHelper.baseUrlTemp != null) {
         // Replace the temporary base URL with BASEURL
         final tempUriMatcher = jellyfinApiHelper.baseUrlTemp!;
-        tempUriMatcher.replace(
-            scheme:
-                ""); // don't replace the scheme, it might be important for diagnosing issues
-        workingLogString = workingLogString.replaceAll(
-            CaseInsensitivePattern(tempUriMatcher.toString()), "TEMP_BASEURL");
+        tempUriMatcher.replace(scheme: ""); // don't replace the scheme, it might be important for diagnosing issues
+        workingLogString =
+            workingLogString.replaceAll(CaseInsensitivePattern(tempUriMatcher.toString()), "TEMP_BASEURL");
 
         // remove anything between the quotes in "Failed host lookup: ''"
-        workingLogString = workingLogString.replaceAll(
-            CaseInsensitivePattern(tempUriMatcher.host.toString()),
-            "TEMP_HOST");
+        workingLogString =
+            workingLogString.replaceAll(CaseInsensitivePattern(tempUriMatcher.host.toString()), "TEMP_HOST");
 
         // remove anything between the quotes in "Failed host lookup: ''"
-        workingLogString = workingLogString.replaceAll(
-            RegExp(r"host: [^,]+, port: \d+"), "HOST");
+        workingLogString = workingLogString.replaceAll(RegExp(r"host: [^,]+, port: \d+"), "HOST");
       }
     }
 

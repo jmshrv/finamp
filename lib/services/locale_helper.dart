@@ -5,8 +5,7 @@ import 'package:hive_ce_flutter/hive_flutter.dart';
 class LocaleHelper {
   static const boxName = "Locale";
 
-  static ValueListenable<Box<Locale?>> get localeListener =>
-      Hive.box<Locale?>(boxName).listenable();
+  static ValueListenable<Box<Locale?>> get localeListener => Hive.box<Locale?>(boxName).listenable();
 
   static Locale? get locale => Hive.box<Locale?>(boxName).get(boxName);
 

@@ -17,8 +17,7 @@ class DownloadsLocationScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () => Navigator.of(context)
-            .pushNamed(AddDownloadLocationScreen.routeName),
+        onPressed: () => Navigator.of(context).pushNamed(AddDownloadLocationScreen.routeName),
       ),
       body: const DownloadLocationList(),
     );

@@ -27,27 +27,21 @@ Future<(int, BaseItemDtoType)> itemAmount(
 
   switch (itemType) {
     case BaseItemDtoType.artist:
-      showTrackCountForArtists = showTrackCountForArtists ||
-          ref.watch(finampSettingsProvider.defaultArtistType) ==
-              ArtistType.artist;
+      showTrackCountForArtists =
+          showTrackCountForArtists || ref.watch(finampSettingsProvider.defaultArtistType) == ArtistType.artist;
       if (ref.watch(finampSettingsProvider.isOffline)) {
         var items = await (showTrackCountForArtists
             ? ref.watch(getArtistAlbumsProvider(baseItem, library, null).future)
-            : ref.watch(
-                getPerformingArtistTracksProvider(baseItem, library, null)
-                    .future));
+            : ref.watch(getPerformingArtistTracksProvider(baseItem, library, null).future));
         itemCount = items.length;
       } else {
         var items = await jellyfinApiHelper.getItemsWithTotalRecordCount(
             libraryFilter: library,
             parentItem: baseItem,
-            includeItemTypes: showTrackCountForArtists
-                ? BaseItemDtoType.track.idString
-                : BaseItemDtoType.album.idString,
+            includeItemTypes:
+                showTrackCountForArtists ? BaseItemDtoType.track.idString : BaseItemDtoType.album.idString,
             limit: 1,
-            artistType: showTrackCountForArtists
-                ? ArtistType.artist
-                : ArtistType.albumArtist);
+            artistType: showTrackCountForArtists ? ArtistType.artist : ArtistType.albumArtist);
         itemCount = items.totalRecordCount;
       }
       if (itemCount == 0) {
@@ -59,19 +53,14 @@ Future<(int, BaseItemDtoType)> itemAmount(
           ).future);
         }
       }
-      return (
-        itemCount,
-        showTrackCountForArtists ? BaseItemDtoType.track : BaseItemDtoType.album
-      );
+      return (itemCount, showTrackCountForArtists ? BaseItemDtoType.track : BaseItemDtoType.album);
     case BaseItemDtoType.genre:
       if (ref.watch(finampSettingsProvider.isOffline)) {
         var items = await downloadsService.getAllCollections(
             baseTypeFilter: BaseItemDtoType.album,
-            fullyDownloaded:
-                ref.watch(finampSettingsProvider.onlyShowFullyDownloaded),
+            fullyDownloaded: ref.watch(finampSettingsProvider.onlyShowFullyDownloaded),
             viewFilter: library?.id,
-            nullableViewFilters: ref
-                .watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
+            nullableViewFilters: ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
             genreFilter: baseItem);
         itemCount = items.nonNulls.length;
       } else {
@@ -96,11 +85,9 @@ Future<(int, BaseItemDtoType)> itemAmount(
 BaseItemDtoType childItemType(Ref ref, BaseItemDto item) {
   return switch (BaseItemDtoType.fromItem(item)) {
     BaseItemDtoType.album => BaseItemDtoType.track,
-    BaseItemDtoType.artist =>
-      ref.watch(finampSettingsProvider.defaultArtistType) ==
-              ArtistType.albumArtist
-          ? BaseItemDtoType.album
-          : BaseItemDtoType.track,
+    BaseItemDtoType.artist => ref.watch(finampSettingsProvider.defaultArtistType) == ArtistType.albumArtist
+        ? BaseItemDtoType.album
+        : BaseItemDtoType.track,
     BaseItemDtoType.genre => BaseItemDtoType.album,
     BaseItemDtoType.playlist => BaseItemDtoType.track,
     _ => BaseItemDtoType.unknown,

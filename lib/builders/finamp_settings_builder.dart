@@ -30,8 +30,7 @@ class _FinampSettingsGenerator extends Generator {
     }
     ClassElement? settings;
     for (var import in library.element.definingCompilationUnit.libraryImports) {
-      settings =
-          LibraryReader(import.importedLibrary!).findType("FinampSettings");
+      settings = LibraryReader(import.importedLibrary!).findType("FinampSettings");
       if (settings != null) break;
     }
     if (settings == null) {
@@ -43,25 +42,20 @@ class _FinampSettingsGenerator extends Generator {
     var selectorsCode = "";
     for (var property in settings.accessors) {
       if (!property.nonSynthetic.hasDeprecated &&
-          TypeChecker.fromRuntime(SettingsHelperIgnore)
-                  .firstAnnotationOfExact(property.nonSynthetic) ==
-              null) {
-        final mapAnnotationObj = TypeChecker.fromRuntime(SettingsHelperMap)
-            .firstAnnotationOfExact(property.nonSynthetic);
+          TypeChecker.fromRuntime(SettingsHelperIgnore).firstAnnotationOfExact(property.nonSynthetic) == null) {
+        final mapAnnotationObj =
+            TypeChecker.fromRuntime(SettingsHelperMap).firstAnnotationOfExact(property.nonSynthetic);
 
         if (property.isSetter) {
           if (property.parameters.length != 1) {
-            log.warning(
-                "Unexpected param count for ${property.displayName}: ${property.parameters.length}");
+            log.warning("Unexpected param count for ${property.displayName}: ${property.parameters.length}");
           }
           var typeArg = _typeName(property.parameters.first.type);
           // setter name with first letter uppercase for adding prefixes to
-          var paramName =
-              "${property.displayName.substring(0, 1).toUpperCase()}${property.displayName.substring(1)}";
+          var paramName = "${property.displayName.substring(0, 1).toUpperCase()}${property.displayName.substring(1)}";
 
           if (mapAnnotationObj != null) {
-            final mapAnnotation = SettingsHelperMap(
-                mapAnnotationObj.getField("keyName")!.toStringValue()!,
+            final mapAnnotation = SettingsHelperMap(mapAnnotationObj.getField("keyName")!.toStringValue()!,
                 mapAnnotationObj.getField("valueName")!.toStringValue()!);
             final mapType = property.parameters.first.type as ParameterizedType;
             final keyType = _typeName(mapType.typeArguments[0]);
@@ -85,8 +79,7 @@ class _FinampSettingsGenerator extends Generator {
 
         if (property.isGetter) {
           if (mapAnnotationObj != null) {
-            final mapAnnotation = SettingsHelperMap(
-                mapAnnotationObj.getField("keyName")!.toStringValue()!,
+            final mapAnnotation = SettingsHelperMap(mapAnnotationObj.getField("keyName")!.toStringValue()!,
                 mapAnnotationObj.getField("valueName")!.toStringValue()!);
             final mapType = property.returnType as ParameterizedType;
             final keyType = _typeName(mapType.typeArguments[0]);
@@ -97,8 +90,7 @@ class _FinampSettingsGenerator extends Generator {
             finampSettingsProvider.select((value) => value.requireValue.${property.displayName}[${mapAnnotation.keyName}]);
         ''';
           } else {
-            selectorsCode +=
-                '''ProviderListenable<${_typeName(property.returnType)}> get ${property.displayName} => 
+            selectorsCode += '''ProviderListenable<${_typeName(property.returnType)}> get ${property.displayName} => 
             finampSettingsProvider.select((value) => value.requireValue.${property.displayName});
         ''';
           }
@@ -126,8 +118,7 @@ class _FinampSettingsGenerator extends Generator {
   static String _typeName(DartType type) {
     var typeArg = type.element!.displayName;
     if (type is ParameterizedType && type.typeArguments.isNotEmpty) {
-      typeArg =
-          "$typeArg<${type.typeArguments.map((x) => _typeName(x)).join(",")}>";
+      typeArg = "$typeArg<${type.typeArguments.map((x) => _typeName(x)).join(",")}>";
     }
     if (type.nullabilitySuffix == NullabilitySuffix.question) {
       typeArg = "$typeArg?";

@@ -36,14 +36,12 @@ class TrackNameContent extends StatelessWidget {
 
         final currentTrack = snapshot.data!.currentTrack!;
 
-        final jellyfin_models.BaseItemDto? trackBaseItemDto =
-            currentTrack.baseItem;
+        final jellyfin_models.BaseItemDto? trackBaseItemDto = currentTrack.baseItem;
 
         return LayoutBuilder(builder: (context, constraints) {
           double padding = ((constraints.maxWidth - 260) / 4).clamp(0, 20);
           return Padding(
-              padding:
-                  EdgeInsets.only(left: padding, right: padding, bottom: 4.0),
+              padding: EdgeInsets.only(left: padding, right: padding, bottom: 4.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -53,28 +51,23 @@ class TrackNameContent extends StatelessWidget {
                       constraints: const BoxConstraints(maxWidth: 280),
                       child: Semantics.fromProperties(
                         properties: SemanticsProperties(
-                          label:
-                              "${currentTrack.item.title} (${AppLocalizations.of(context)!.title})",
+                          label: "${currentTrack.item.title} (${AppLocalizations.of(context)!.title})",
                         ),
                         excludeSemantics: true,
                         container: true,
                         child: Consumer(
                           builder: (context, ref, _) {
                             final text = currentTrack.item.title;
-                            final isTwoLineMode = controller
-                                .shouldShow(PlayerHideable.twoLineTitle);
+                            final isTwoLineMode = controller.shouldShow(PlayerHideable.twoLineTitle);
 
                             final textStyle = TextStyle(
                               fontSize: 20,
                               height: 1.2,
-                              fontWeight: Theme.of(context).brightness ==
-                                      Brightness.light
-                                  ? FontWeight.w500
-                                  : FontWeight.w600,
+                              fontWeight:
+                                  Theme.of(context).brightness == Brightness.light ? FontWeight.w500 : FontWeight.w600,
                             );
 
-                            final textSpan =
-                                TextSpan(text: text, style: textStyle);
+                            final textSpan = TextSpan(text: text, style: textStyle);
                             final textPainter = TextPainter(
                               text: textSpan,
                               textDirection: TextDirection.ltr,
@@ -101,8 +94,7 @@ class TrackNameContent extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                 );
                               } else {
-                                if (ref.watch(finampSettingsProvider
-                                    .oneLineMarqueeTextButton)) {
+                                if (ref.watch(finampSettingsProvider.oneLineMarqueeTextButton)) {
                                   return SizedBox(
                                     width: 280,
                                     height: 30,
@@ -133,13 +125,11 @@ class TrackNameContent extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      PlayerButtonsMore(
-                          item: trackBaseItemDto, queueItem: currentTrack),
+                      PlayerButtonsMore(item: trackBaseItemDto, queueItem: currentTrack),
                       Flexible(
                         child: ArtistChips(
                           baseItem: trackBaseItemDto,
-                          backgroundColor:
-                              IconTheme.of(context).color!.withOpacity(0.1),
+                          backgroundColor: IconTheme.of(context).color!.withOpacity(0.1),
                         ),
                       ),
                       AddToPlaylistButton(
@@ -153,11 +143,8 @@ class TrackNameContent extends StatelessWidget {
                     constraints: const BoxConstraints(maxWidth: 280),
                     child: AlbumChips(
                       baseItem: trackBaseItemDto!,
-                      backgroundColor:
-                          IconTheme.of(context).color!.withOpacity(0.1),
-                      key: trackBaseItemDto.album == null
-                          ? null
-                          : ValueKey("${trackBaseItemDto.album}-album"),
+                      backgroundColor: IconTheme.of(context).color!.withOpacity(0.1),
+                      key: trackBaseItemDto.album == null ? null : ValueKey("${trackBaseItemDto.album}-album"),
                     ),
                   ))
                 ],

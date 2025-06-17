@@ -19,7 +19,6 @@ class GenreScreen extends ConsumerStatefulWidget {
   /// The genre to show. Can also be provided as an argument in a named route
   final BaseItemDto? widgetGenre;
 
-
   @override
   _GenreScreenState createState() => _GenreScreenState();
 }
@@ -30,28 +29,26 @@ class _GenreScreenState extends ConsumerState<GenreScreen> {
 
   Future<void> _refresh() async {
     ref.invalidate(genreCuratedItemsProvider);
-     setState(() {
+    setState(() {
       _contentKey = UniqueKey();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final BaseItemDto genre = widget.widgetGenre ??
-        ModalRoute.of(context)!.settings.arguments as BaseItemDto;
+    final BaseItemDto genre = widget.widgetGenre ?? ModalRoute.of(context)!.settings.arguments as BaseItemDto;
 
     return Scaffold(
       extendBody: true,
       body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: _refresh,
-          child: GenreScreenContent(
-            key: _contentKey,
-            parent: genre,
-            library: _finampUserHelper.currentUser?.currentView,
-          ),
-        )
-      ),
+          child: RefreshIndicator(
+        onRefresh: _refresh,
+        child: GenreScreenContent(
+          key: _contentKey,
+          parent: genre,
+          library: _finampUserHelper.currentUser?.currentView,
+        ),
+      )),
       bottomNavigationBar: const NowPlayingBar(),
     );
   }

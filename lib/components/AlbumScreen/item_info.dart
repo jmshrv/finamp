@@ -30,27 +30,18 @@ class ItemInfo extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isOffline = ref.watch(finampSettingsProvider.isOffline);
     final itemTracksCount = itemTracks.length;
-    final trackCountString = (itemTracks.length == item.childCount ||
-            !isOffline)
+    final trackCountString = (itemTracks.length == item.childCount || !isOffline)
         ? AppLocalizations.of(context)!.trackCount(itemTracksCount)
-        : AppLocalizations.of(context)!
-            .offlineTrackCount(item.childCount!, itemTracksCount);
-    final trackDurationString = (genreFilter == null && 
-            (itemTracks.length == item.childCount))
+        : AppLocalizations.of(context)!.offlineTrackCount(item.childCount!, itemTracksCount);
+    final trackDurationString = (genreFilter == null && (itemTracks.length == item.childCount))
         ? "$trackCountString (${printDuration(item.runTimeTicksDuration())})"
-        : "$trackCountString (${printDuration(
-            itemTracks
-              .map((t) => t.runTimeTicksDuration())
-              .whereType<Duration>()
-              .fold<Duration>(Duration.zero, (sum, dur) => sum + dur)
-          )})";
-
+        : "$trackCountString (${printDuration(itemTracks.map((t) => t.runTimeTicksDuration()).whereType<Duration>().fold<Duration>(Duration.zero, (sum, dur) => sum + dur))})";
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // We display the title of a playlist here, 
+        // We display the title of a playlist here,
         // because we have too many actions in the AppBar
         if (item.type == "Playlist")
           Padding(
@@ -58,10 +49,10 @@ class ItemInfo extends ConsumerWidget {
             child: Text(
               item.name ?? "Unknown Playlist",
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontSize: Theme.of(context).textTheme.titleMedium!.fontSize! + 1,
-              ),
+                    fontSize: Theme.of(context).textTheme.titleMedium!.fontSize! + 1,
+                  ),
               maxLines: 2,
-              overflow: TextOverflow.ellipsis, 
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         if (item.type != "Playlist")
@@ -78,8 +69,7 @@ class ItemInfo extends ConsumerWidget {
           IconAndText(
               iconData: Icons.event,
               textSpan: TextSpan(
-                text: ReleaseDateHelper.autoFormat(item) ??
-                    AppLocalizations.of(context)!.noReleaseDate,
+                text: ReleaseDateHelper.autoFormat(item) ?? AppLocalizations.of(context)!.noReleaseDate,
               )),
         Row(
           children: [

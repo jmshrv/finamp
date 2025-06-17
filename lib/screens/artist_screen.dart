@@ -36,8 +36,7 @@ class _ArtistScreenState extends ConsumerState<ArtistScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final BaseItemDto artist = widget.widgetArtist ??
-        ModalRoute.of(context)!.settings.arguments as BaseItemDto;
+    final BaseItemDto artist = widget.widgetArtist ?? ModalRoute.of(context)!.settings.arguments as BaseItemDto;
 
     return Scaffold(
       extendBody: true,

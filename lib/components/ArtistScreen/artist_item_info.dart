@@ -35,8 +35,7 @@ class ArtistItemInfo extends ConsumerWidget {
             iconData: Icons.music_note,
             textSpan: TextSpan(
               text: ref.watch(finampSettingsProvider.isOffline)
-                  ? AppLocalizations.of(context)!
-                      .offlineTrackCountArtist(itemTracks)
+                  ? AppLocalizations.of(context)!.offlineTrackCountArtist(itemTracks)
                   : AppLocalizations.of(context)!.trackCount(itemTracks),
             )),
         IconAndText(
@@ -44,14 +43,8 @@ class ArtistItemInfo extends ConsumerWidget {
             textSpan: TextSpan(
               text: AppLocalizations.of(context)!.albumCount(itemAlbums),
             )),
-        if (item.type != "MusicGenre" &&
-            updateGenreFilter != null &&
-            item.genreItems != null)
-          GenreIconAndText(
-              parent: item,
-              genreFilter: genreFilter,
-              updateGenreFilter: updateGenreFilter!
-          )
+        if (item.type != "MusicGenre" && updateGenreFilter != null && item.genreItems != null)
+          GenreIconAndText(parent: item, genreFilter: genreFilter, updateGenreFilter: updateGenreFilter!)
       ],
     );
   }

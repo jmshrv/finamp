@@ -19,8 +19,7 @@ import '../services/finamp_settings_helper.dart';
 
 typedef SliverBuilder = (double, List<Widget>) Function(BuildContext);
 
-typedef WrapperBuilder = Widget Function(
-    BuildContext, DraggableScrollableController, ScrollBuilder);
+typedef WrapperBuilder = Widget Function(BuildContext, DraggableScrollableController, ScrollBuilder);
 typedef ScrollBuilder = Widget Function(double, List<Widget>);
 
 Future<void> showThemedBottomSheet({
@@ -42,19 +41,14 @@ Future<void> showThemedBottomSheet({
   }
   await showModalBottomSheet(
     context: context,
-    backgroundColor: (Theme.of(context).brightness == Brightness.light
-            ? Colors.white
-            : Colors.black)
-        .withOpacity(0.9),
+    backgroundColor: (Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black).withOpacity(0.9),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
     ),
     isScrollControlled: true,
     clipBehavior: Clip.hardEdge,
     constraints: BoxConstraints(
-        maxWidth: (Platform.isIOS || Platform.isAndroid)
-            ? 500
-            : min(500, MediaQuery.sizeOf(context).width * 0.9)),
+        maxWidth: (Platform.isIOS || Platform.isAndroid) ? 500 : min(500, MediaQuery.sizeOf(context).width * 0.9)),
     isDismissible: true,
     enableDrag: true,
     useSafeArea: true,
@@ -66,13 +60,9 @@ Future<void> showThemedBottomSheet({
     builder: (BuildContext context) {
       return ProviderScope(
         overrides: [
-          if (themeImage != null)
-            localImageProvider.overrideWithValue(themeImage),
-          if (themeImage != null)
-            localThemeInfoProvider.overrideWithValue(themeInfo),
-          if (themeImage == null)
-            localThemeInfoProvider
-                .overrideWithValue(ThemeInfo(item, useIsolate: false))
+          if (themeImage != null) localImageProvider.overrideWithValue(themeImage),
+          if (themeImage != null) localThemeInfoProvider.overrideWithValue(themeInfo),
+          if (themeImage == null) localThemeInfoProvider.overrideWithValue(ThemeInfo(item, useIsolate: false))
         ],
         child: ThemedBottomSheet(
           key: ValueKey(item.id.raw + routeName),
@@ -110,9 +100,7 @@ class ThemedBottomSheet extends ConsumerStatefulWidget {
     stackHeight += menuEntries.where((element) => element.isVisible).length *
         (Theme.of(context).visualDensity == VisualDensity.compact ? 48 : 56);
     stackHeight += extraHeight ?? 0.0;
-    stackHeight += includePlaybackrow
-        ? (playActionPageIndicatorHeight + playActionRowHeight)
-        : 0;
+    stackHeight += includePlaybackrow ? (playActionPageIndicatorHeight + playActionRowHeight) : 0;
     return stackHeight;
   }
 
@@ -135,8 +123,7 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
         child: Builder(
           builder: (BuildContext context) {
             if (widget.buildWrapper != null) {
-              return widget.buildWrapper!(context, dragController,
-                  (height, slivers) => buildInternal(height, slivers));
+              return widget.buildWrapper!(context, dragController, (height, slivers) => buildInternal(height, slivers));
             } else {
               var (height, slivers) = widget.buildSlivers!(context);
               return buildInternal(height, slivers);
@@ -152,16 +139,14 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
       stackHeight += 32;
       stackHeight += MediaQuery.paddingOf(context).bottom;
       if (Platform.isIOS || Platform.isAndroid) {
-        var size = (stackHeight / constraints.maxHeight)
-            .clamp(widget.minDraggableHeight, 1.0);
+        var size = (stackHeight / constraints.maxHeight).clamp(widget.minDraggableHeight, 1.0);
         return DraggableScrollableSheet(
           controller: dragController,
           snap: true,
           initialChildSize: size,
           minChildSize: size * 0.75,
           expand: false,
-          builder: (context, scrollController) =>
-              menu(scrollController, slivers),
+          builder: (context, scrollController) => menu(scrollController, slivers),
         );
       } else {
         var minSize = widget.minDraggableHeight * constraints.maxHeight;
@@ -182,16 +167,14 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
     );
     return Stack(
       children: [
-        if (ref.watch(finampSettingsProvider.useCoverAsBackground))
-          const BlurredPlayerScreenBackground(),
+        if (ref.watch(finampSettingsProvider.useCoverAsBackground)) const BlurredPlayerScreenBackground(),
         widget.showDragHandle
             ? Column(
                 children: [
                   Padding(
                       padding: const EdgeInsets.only(top: 16.0, bottom: 10.0),
                       child: Builder(builder: (context) {
-                        var textColor =
-                            Theme.of(context).textTheme.bodySmall!.color!;
+                        var textColor = Theme.of(context).textTheme.bodySmall!.color!;
                         return Container(
                           width: 40,
                           height: 3.5,
@@ -232,8 +215,7 @@ class MenuMask extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(
-      BuildContext context, RenderTrackMenuMask renderObject) {
+  void updateRenderObject(BuildContext context, RenderTrackMenuMask renderObject) {
     renderObject.updateHeight(height.raw);
     super.updateRenderObject(context, renderObject);
   }
@@ -261,10 +243,10 @@ class RenderTrackMenuMask extends RenderProxySliver {
   void paint(PaintingContext context, Offset offset) {
     if (child != null) {
       layer ??= ShaderMaskLayer(
-          shader: const LinearGradient(colors: [
-            Color.fromARGB(0, 255, 255, 255),
-            Color.fromARGB(255, 255, 255, 255)
-          ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
+          shader: const LinearGradient(
+                  colors: [Color.fromARGB(0, 255, 255, 255), Color.fromARGB(255, 255, 255, 255)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter)
               .createShader(Rect.fromLTWH(0, height, 0, 10)),
           blendMode: BlendMode.modulate,
           maskRect: Rect.fromLTWH(0, 0, 99999, height + 15));

@@ -9,12 +9,7 @@ class CTAMedium extends StatelessWidget {
   final void Function() onPressed;
   final double? minWidth;
 
-  const CTAMedium(
-      {super.key,
-      required this.text,
-      required this.icon,
-      required this.onPressed,
-      this.minWidth});
+  const CTAMedium({super.key, required this.text, required this.icon, required this.onPressed, this.minWidth});
 
   @override
   Widget build(BuildContext context) {
@@ -36,23 +31,15 @@ class CTAMedium extends StatelessWidget {
           ),
         ),
         padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-          EdgeInsets.only(
-              left: 8 + paddingHorizontal,
-              right: 8,
-              top: paddingVertical,
-              bottom: paddingVertical),
+          EdgeInsets.only(left: 8 + paddingHorizontal, right: 8, top: paddingVertical, bottom: paddingVertical),
         ),
         backgroundColor: WidgetStateProperty.all<Color>(
-          Theme.of(context).brightness == Brightness.dark
-              ? accentColor.withOpacity(0.3)
-              : accentColor,
+          Theme.of(context).brightness == Brightness.dark ? accentColor.withOpacity(0.3) : accentColor,
         ),
       ),
       child: Container(
         constraints: BoxConstraints(minWidth: minWidth + paddingHorizontal),
-        padding: EdgeInsets.only(
-            right:
-                paddingHorizontal), // this is to center the content when a minWidth is set
+        padding: EdgeInsets.only(right: paddingHorizontal), // this is to center the content when a minWidth is set
         alignment: Alignment.center,
         child: Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
@@ -60,9 +47,7 @@ class CTAMedium extends StatelessWidget {
             Icon(
               icon,
               size: 24,
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? accentColor
-                  : Colors.white,
+              color: Theme.of(context).brightness == Brightness.dark ? accentColor : Colors.white,
               weight: 1.5,
             ),
             const SizedBox(
@@ -83,10 +68,8 @@ class CTAMedium extends StatelessWidget {
   }
 
   static double predictedHeight(BuildContext context) {
-    final densityAdj =
-        VisualDensity.adaptivePlatformDensity.baseSizeAdjustment.dy;
+    final densityAdj = VisualDensity.adaptivePlatformDensity.baseSizeAdjustment.dy;
     return max(
-        MediaQuery.sizeOf(context).height * 0.03 + 24 + densityAdj + densityAdj,
-        kMinInteractiveDimension + densityAdj);
+        MediaQuery.sizeOf(context).height * 0.03 + 24 + densityAdj + densityAdj, kMinInteractiveDimension + densityAdj);
   }
 }

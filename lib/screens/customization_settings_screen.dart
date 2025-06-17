@@ -15,12 +15,10 @@ class CustomizationSettingsScreen extends StatefulWidget {
   static const routeName = "/settings/customization";
 
   @override
-  State<CustomizationSettingsScreen> createState() =>
-      _CustomizationSettingsScreenState();
+  State<CustomizationSettingsScreen> createState() => _CustomizationSettingsScreenState();
 }
 
-class _CustomizationSettingsScreenState
-    extends State<CustomizationSettingsScreen> {
+class _CustomizationSettingsScreenState extends State<CustomizationSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,10 +33,8 @@ class _CustomizationSettingsScreenState
         children: [
           const PlaybackSpeedControlVisibilityDropdownListTile(),
           if (!Platform.isIOS) const ShowStopButtonOnMediaNotificationToggle(),
-          if (!Platform.isIOS)
-            const ShowShuffleButtonOnMediaNotificationToggle(),
-          if (!Platform.isIOS)
-            const ShowFavoriteButtonOnMediaNotificationToggle(),
+          if (!Platform.isIOS) const ShowShuffleButtonOnMediaNotificationToggle(),
+          if (!Platform.isIOS) const ShowFavoriteButtonOnMediaNotificationToggle(),
           const ShowSeekControlsOnMediaNotificationToggle(),
           const OneLineMarqueeTextSwitch(),
           const ReleaseDateFormatDropdownListTile(),
@@ -55,8 +51,7 @@ class OneLineMarqueeTextSwitch extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.oneLineMarqueeTextButton),
-      subtitle:
-          Text(AppLocalizations.of(context)!.oneLineMarqueeTextButtonSubtitle),
+      subtitle: Text(AppLocalizations.of(context)!.oneLineMarqueeTextButtonSubtitle),
       value: ref.watch(finampSettingsProvider.oneLineMarqueeTextButton),
       onChanged: FinampSetters.setOneLineMarqueeTextButton,
     );
@@ -69,16 +64,12 @@ class ShowStopButtonOnMediaNotificationToggle extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
-      title: Text(
-          AppLocalizations.of(context)!.showStopButtonOnMediaNotificationTitle),
-      subtitle: Text(AppLocalizations.of(context)!
-          .showStopButtonOnMediaNotificationSubtitle),
-      value:
-          ref.watch(finampSettingsProvider.showStopButtonOnMediaNotification),
+      title: Text(AppLocalizations.of(context)!.showStopButtonOnMediaNotificationTitle),
+      subtitle: Text(AppLocalizations.of(context)!.showStopButtonOnMediaNotificationSubtitle),
+      value: ref.watch(finampSettingsProvider.showStopButtonOnMediaNotification),
       onChanged: (value) {
         FinampSetters.setShowStopButtonOnMediaNotification(value);
-        GetIt.instance<MusicPlayerBackgroundTask>()
-            .refreshPlaybackStateAndMediaNotification();
+        GetIt.instance<MusicPlayerBackgroundTask>().refreshPlaybackStateAndMediaNotification();
       },
     );
   }
@@ -90,16 +81,12 @@ class ShowShuffleButtonOnMediaNotificationToggle extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
-      title: Text(AppLocalizations.of(context)!
-          .showShuffleButtonOnMediaNotificationTitle),
-      subtitle: Text(AppLocalizations.of(context)!
-          .showShuffleButtonOnMediaNotificationSubtitle),
-      value: ref
-          .watch(finampSettingsProvider.showShuffleButtonOnMediaNotification),
+      title: Text(AppLocalizations.of(context)!.showShuffleButtonOnMediaNotificationTitle),
+      subtitle: Text(AppLocalizations.of(context)!.showShuffleButtonOnMediaNotificationSubtitle),
+      value: ref.watch(finampSettingsProvider.showShuffleButtonOnMediaNotification),
       onChanged: (value) {
         FinampSetters.setShowShuffleButtonOnMediaNotification(value);
-        GetIt.instance<MusicPlayerBackgroundTask>()
-            .refreshPlaybackStateAndMediaNotification();
+        GetIt.instance<MusicPlayerBackgroundTask>().refreshPlaybackStateAndMediaNotification();
       },
     );
   }
@@ -111,16 +98,12 @@ class ShowFavoriteButtonOnMediaNotificationToggle extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
-      title: Text(AppLocalizations.of(context)!
-          .showFavoriteButtonOnMediaNotificationTitle),
-      subtitle: Text(AppLocalizations.of(context)!
-          .showFavoriteButtonOnMediaNotificationSubtitle),
-      value: ref
-          .watch(finampSettingsProvider.showFavoriteButtonOnMediaNotification),
+      title: Text(AppLocalizations.of(context)!.showFavoriteButtonOnMediaNotificationTitle),
+      subtitle: Text(AppLocalizations.of(context)!.showFavoriteButtonOnMediaNotificationSubtitle),
+      value: ref.watch(finampSettingsProvider.showFavoriteButtonOnMediaNotification),
       onChanged: (value) {
         FinampSetters.setShowFavoriteButtonOnMediaNotification(value);
-        GetIt.instance<MusicPlayerBackgroundTask>()
-            .refreshPlaybackStateAndMediaNotification();
+        GetIt.instance<MusicPlayerBackgroundTask>().refreshPlaybackStateAndMediaNotification();
       },
     );
   }
@@ -132,16 +115,12 @@ class ShowSeekControlsOnMediaNotificationToggle extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
-      title: Text(AppLocalizations.of(context)!
-          .showSeekControlsOnMediaNotificationTitle),
-      subtitle: Text(AppLocalizations.of(context)!
-          .showSeekControlsOnMediaNotificationSubtitle),
-      value:
-          ref.watch(finampSettingsProvider.showSeekControlsOnMediaNotification),
+      title: Text(AppLocalizations.of(context)!.showSeekControlsOnMediaNotificationTitle),
+      subtitle: Text(AppLocalizations.of(context)!.showSeekControlsOnMediaNotificationSubtitle),
+      value: ref.watch(finampSettingsProvider.showSeekControlsOnMediaNotification),
       onChanged: (value) {
         FinampSetters.setShowSeekControlsOnMediaNotification(value);
-        GetIt.instance<MusicPlayerBackgroundTask>()
-            .refreshPlaybackStateAndMediaNotification();
+        GetIt.instance<MusicPlayerBackgroundTask>().refreshPlaybackStateAndMediaNotification();
       },
     );
   }
@@ -153,12 +132,9 @@ class ShowAlbumReleaseDateOnPlayerScreenToggle extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
-      title: Text(AppLocalizations.of(context)!
-          .showAlbumReleaseDateOnPlayerScreenTitle),
-      subtitle: Text(AppLocalizations.of(context)!
-          .showAlbumReleaseDateOnPlayerScreenSubtitle),
-      value:
-          ref.watch(finampSettingsProvider.showAlbumReleaseDateOnPlayerScreen),
+      title: Text(AppLocalizations.of(context)!.showAlbumReleaseDateOnPlayerScreenTitle),
+      subtitle: Text(AppLocalizations.of(context)!.showAlbumReleaseDateOnPlayerScreenSubtitle),
+      value: ref.watch(finampSettingsProvider.showAlbumReleaseDateOnPlayerScreen),
       onChanged: FinampSetters.setShowAlbumReleaseDateOnPlayerScreen,
     );
   }

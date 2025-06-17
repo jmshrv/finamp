@@ -38,28 +38,21 @@ class DownloadDialog extends ConsumerStatefulWidget {
   /// if there is more than one location.  A transcode setting dropdown will be shown
   /// if transcode downloads is set to ask.  If neither is needed, the
   /// download is initiated immediately with no dialog.
-  static Future<void> show(
-      BuildContext context, DownloadStub item, BaseItemId? viewId,
-      {int? trackCount}) async {
+  static Future<void> show(BuildContext context, DownloadStub item, BaseItemId? viewId, {int? trackCount}) async {
     if (viewId == null) {
       final finampUserHelper = GetIt.instance<FinampUserHelper>();
       viewId = finampUserHelper.currentUser!.currentViewId;
     }
     bool needTranscode =
-        FinampSettingsHelper.finampSettings.shouldTranscodeDownloads ==
-                TranscodeDownloadsSetting.ask &&
+        FinampSettingsHelper.finampSettings.shouldTranscodeDownloads == TranscodeDownloadsSetting.ask &&
             (item.finampCollection?.type.hasAudio ?? true);
-    String? downloadLocation =
-        FinampSettingsHelper.finampSettings.defaultDownloadLocation;
-    if (!FinampSettingsHelper.finampSettings.downloadLocationsMap
-        .containsKey(downloadLocation)) {
+    String? downloadLocation = FinampSettingsHelper.finampSettings.defaultDownloadLocation;
+    if (!FinampSettingsHelper.finampSettings.downloadLocationsMap.containsKey(downloadLocation)) {
       downloadLocation = null;
     }
     if (downloadLocation == null) {
-      var locations = FinampSettingsHelper
-          .finampSettings.downloadLocationsMap.values
-          .where((element) =>
-              element.baseDirectory != DownloadLocationType.internalDocuments);
+      var locations = FinampSettingsHelper.finampSettings.downloadLocationsMap.values
+          .where((element) => element.baseDirectory != DownloadLocationType.internalDocuments);
       if (locations.length == 1) {
         downloadLocation = locations.first.id;
       }
@@ -70,25 +63,21 @@ class DownloadDialog extends ConsumerStatefulWidget {
     // where this can be determined in one query.
     JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     List<BaseItemDto>? children;
-    if ((item.baseItemType == BaseItemDtoType.album ||
-            item.baseItemType == BaseItemDtoType.playlist) &&
+    if ((item.baseItemType == BaseItemDtoType.album || item.baseItemType == BaseItemDtoType.playlist) &&
         (needTranscode || trackCount == null)) {
       children = await jellyfinApiHelper.getItems(
           parentItem: item.baseItem!,
           includeItemTypes: BaseItemDtoType.track.idString,
-          fields:
-              "${jellyfinApiHelper.defaultFields},MediaSources,MediaStreams");
+          fields: "${jellyfinApiHelper.defaultFields},MediaSources,MediaStreams");
       trackCount = children?.length;
-    } else if ((item.baseItemType == BaseItemDtoType.artist ||
-            item.baseItemType == BaseItemDtoType.genre) &&
+    } else if ((item.baseItemType == BaseItemDtoType.artist || item.baseItemType == BaseItemDtoType.genre) &&
         trackCount == null) {
       // Only track children are expected by dialog, so do not save album children.
       List<BaseItemDto>? artistChildren = await jellyfinApiHelper.getItems(
         parentItem: item.baseItem!,
         includeItemTypes: BaseItemDtoType.album.idString,
       );
-      trackCount = artistChildren?.fold<int>(
-          0, (count, item) => count + (item.childCount ?? 0));
+      trackCount = artistChildren?.fold<int>(0, (count, item) => count + (item.childCount ?? 0));
     } else if (item.baseItemType == BaseItemDtoType.track) {
       children = [await jellyfinApiHelper.getItemById(BaseItemId(item.id))];
       trackCount = 1;
@@ -96,25 +85,19 @@ class DownloadDialog extends ConsumerStatefulWidget {
 
     if (!needTranscode &&
         downloadLocation != null &&
-        (trackCount ?? 0) <
-            FinampSettingsHelper.finampSettings.downloadSizeWarningCutoff) {
+        (trackCount ?? 0) < FinampSettingsHelper.finampSettings.downloadSizeWarningCutoff) {
       final downloadsService = GetIt.instance<DownloadsService>();
-      var profile = FinampSettingsHelper
-                  .finampSettings.shouldTranscodeDownloads ==
-              TranscodeDownloadsSetting.always
+      var profile = FinampSettingsHelper.finampSettings.shouldTranscodeDownloads == TranscodeDownloadsSetting.always
           ? FinampSettingsHelper.finampSettings.downloadTranscodingProfile
           : DownloadProfile(transcodeCodec: FinampTranscodingCodec.original);
       profile.downloadLocationId = downloadLocation;
 
       FinampSetters.setLastUsedDownloadLocationId(profile.downloadLocationId);
-      GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!.confirmDownloadStarted,
-          isConfirmation: true);
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmDownloadStarted, isConfirmation: true);
       unawaited(downloadsService
           .addDownload(stub: item, viewId: viewId!, transcodeProfile: profile)
           // TODO only show the enqueued confirmation if the enqueuing took longer than ~10 seconds
-          .then((value) => GlobalSnackbar.message(
-              (scaffold) => AppLocalizations.of(scaffold)!.downloadsQueued)));
+          .then((value) => GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.downloadsQueued)));
     } else {
       if (!context.mounted) return;
       await showDialog(
@@ -138,20 +121,16 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
 
   @override
   Widget build(BuildContext context) {
-    assert(widget.children?.every((child) =>
-            BaseItemDtoType.fromItem(child) == BaseItemDtoType.track) ??
-        true);
+    assert(widget.children?.every((child) => BaseItemDtoType.fromItem(child) == BaseItemDtoType.track) ?? true);
     String originalDescription = "null";
     String transcodeDescription = "null";
-    var transcodeProfile =
-        FinampSettingsHelper.finampSettings.downloadTranscodingProfile;
-    var originalProfile =
-        DownloadProfile(transcodeCodec: FinampTranscodingCodec.original);
+    var transcodeProfile = FinampSettingsHelper.finampSettings.downloadTranscodingProfile;
+    var originalProfile = DownloadProfile(transcodeCodec: FinampTranscodingCodec.original);
 
     if (widget.children != null) {
       final transcodedFileSize = widget.children!
-          .map((e) => e.mediaSources?.first.transcodedSize(FinampSettingsHelper
-              .finampSettings.downloadTranscodingProfile.bitrateChannels))
+          .map((e) => e.mediaSources?.first
+              .transcodedSize(FinampSettingsHelper.finampSettings.downloadTranscodingProfile.bitrateChannels))
           .fold(0, (a, b) => a + (b ?? 0));
 
       transcodeDescription = FileSize.getSize(
@@ -159,9 +138,7 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
         precision: PrecisionValue.None,
       );
 
-      final originalFileSize = widget.children!
-          .map((e) => e.mediaSources?.first.size ?? 0)
-          .fold(0, (a, b) => a + b);
+      final originalFileSize = widget.children!.map((e) => e.mediaSources?.first.size ?? 0).fold(0, (a, b) => a + b);
 
       final originalFileSizeFormatted = FileSize.getSize(
         originalFileSize,
@@ -170,9 +147,7 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
 
       originalDescription = originalFileSizeFormatted;
 
-      final formats = widget.children!
-          .map((e) => e.mediaSources?.first.mediaStreams.first.codec)
-          .toSet();
+      final formats = widget.children!.map((e) => e.mediaSources?.first.mediaStreams.first.codec).toSet();
 
       if (formats.length == 1 && formats.first != null) {
         originalDescription += " ${formats.first!.toUpperCase()}";
@@ -181,18 +156,15 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
 
     DownloadLocation? getFirstSelectedLocation() {
       FinampSettings settings = FinampSettingsHelper.finampSettings;
-      selectedDownloadLocation ??= settings
-              .downloadLocationsMap[widget.downloadLocationId] ??
+      selectedDownloadLocation ??= settings.downloadLocationsMap[widget.downloadLocationId] ??
           settings.downloadLocationsMap[settings.lastUsedDownloadLocationId] ??
           FinampSettingsHelper.finampSettings.internalTrackDir;
 
       return selectedDownloadLocation;
     }
 
-    final userSelectableDownloadLocations = FinampSettingsHelper
-        .finampSettings.downloadLocationsMap.values
-        .where((element) =>
-            element.baseDirectory != DownloadLocationType.internalDocuments);
+    final userSelectableDownloadLocations = FinampSettingsHelper.finampSettings.downloadLocationsMap.values
+        .where((element) => element.baseDirectory != DownloadLocationType.internalDocuments);
 
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.addDownloads),
@@ -210,8 +182,7 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
                     }),
                 value: getFirstSelectedLocation(),
                 items: userSelectableDownloadLocations
-                    .map((downloadLocation) =>
-                        DropdownMenuItem<DownloadLocation>(
+                    .map((downloadLocation) => DropdownMenuItem<DownloadLocation>(
                           value: downloadLocation,
                           child: Text(downloadLocation.name),
                         ))
@@ -228,22 +199,17 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
                   DropdownMenuItem<bool>(
                     value: true,
                     child: Text(AppLocalizations.of(context)!.doTranscode(
-                        transcodeProfile.bitrateKbps,
-                        transcodeProfile.codec.name.toUpperCase(),
-                        transcodeDescription)),
+                        transcodeProfile.bitrateKbps, transcodeProfile.codec.name.toUpperCase(), transcodeDescription)),
                   ),
                   DropdownMenuItem<bool>(
                     value: false,
-                    child: Text(AppLocalizations.of(context)!
-                        .dontTranscode(originalDescription)),
+                    child: Text(AppLocalizations.of(context)!.dontTranscode(originalDescription)),
                   )
                 ]),
-          if ((widget.trackCount ?? 0) >=
-              FinampSettingsHelper.finampSettings.downloadSizeWarningCutoff)
+          if ((widget.trackCount ?? 0) >= FinampSettingsHelper.finampSettings.downloadSizeWarningCutoff)
             Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                child: Text(AppLocalizations.of(context)!
-                    .largeDownloadWarning(widget.trackCount!)))
+                child: Text(AppLocalizations.of(context)!.largeDownloadWarning(widget.trackCount!)))
         ],
       ),
       actions: [
@@ -252,8 +218,7 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
-          onPressed: (selectedDownloadLocation == null &&
-                      widget.downloadLocationId == null) ||
+          onPressed: (selectedDownloadLocation == null && widget.downloadLocationId == null) ||
                   (transcode == null && widget.needsTranscode)
               ? null
               : () async {
@@ -261,27 +226,19 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
                   final downloadsService = GetIt.instance<DownloadsService>();
                   var profile = (widget.needsTranscode
                           ? transcode
-                          : FinampSettingsHelper
-                                  .finampSettings.shouldTranscodeDownloads ==
+                          : FinampSettingsHelper.finampSettings.shouldTranscodeDownloads ==
                               TranscodeDownloadsSetting.always)!
                       ? transcodeProfile
                       : originalProfile;
-                  profile.downloadLocationId =
-                      selectedDownloadLocation?.id ?? widget.downloadLocationId;
+                  profile.downloadLocationId = selectedDownloadLocation?.id ?? widget.downloadLocationId;
 
                   // We've selected to download, so lets set this as the default for next time
-                  FinampSetters.setLastUsedDownloadLocationId(
-                      profile.downloadLocationId);
+                  FinampSetters.setLastUsedDownloadLocationId(profile.downloadLocationId);
                   await downloadsService
-                      .addDownload(
-                          stub: widget.item,
-                          viewId: widget.viewId,
-                          transcodeProfile: profile)
-                      .onError(
-                          (error, stackTrace) => GlobalSnackbar.error(error));
+                      .addDownload(stub: widget.item, viewId: widget.viewId, transcodeProfile: profile)
+                      .onError((error, stackTrace) => GlobalSnackbar.error(error));
 
-                  GlobalSnackbar.message((scaffold) =>
-                      AppLocalizations.of(scaffold)!.downloadsQueued);
+                  GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.downloadsQueued);
                 },
           child: Text(AppLocalizations.of(context)!.addButtonLabel),
         )

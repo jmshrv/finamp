@@ -11,7 +11,7 @@ class OfflineModeStatusLabel extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {    
+  Widget build(BuildContext context, WidgetRef ref) {
     AutoOfflineOption automation = ref.watch(finampSettingsProvider.autoOffline);
 
     if (automation == AutoOfflineOption.disabled) {
@@ -28,18 +28,14 @@ class OfflineModeStatusLabel extends ConsumerWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
+          contentPadding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
           tileColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
           autofocus: false,
-          title: Text(AppLocalizations.of(context)!
-              .automaticOfflineModeOverrideActiveTitle),
-          subtitle: Text(AppLocalizations.of(context)!
-              .automaticOfflineModeOverrideActiveSubtitle),
+          title: Text(AppLocalizations.of(context)!.automaticOfflineModeOverrideActiveTitle),
+          subtitle: Text(AppLocalizations.of(context)!.automaticOfflineModeOverrideActiveSubtitle),
           onTap: () {
             FinampSetters.setAutoOfflineListenerActive(true);
-          }
-      ),
+          }),
     );
   }
 }

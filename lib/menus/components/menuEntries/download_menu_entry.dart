@@ -21,12 +21,10 @@ class DownloadMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   Widget build(BuildContext context, WidgetRef ref) {
     final downloadsService = GetIt.instance<DownloadsService>();
 
-    final DownloadItemStatus? downloadStatus =
-        ref.watch(downloadsService.statusProvider((downloadStub, null)));
+    final DownloadItemStatus? downloadStatus = ref.watch(downloadsService.statusProvider((downloadStub, null)));
 
     return Visibility(
-        visible: !ref.watch(finampSettingsProvider.isOffline) &&
-            downloadStatus == DownloadItemStatus.notNeeded,
+        visible: !ref.watch(finampSettingsProvider.isOffline) && downloadStatus == DownloadItemStatus.notNeeded,
         child: MenuEntry(
             icon: TablerIcons.download,
             title: AppLocalizations.of(context)!.downloadItem,
@@ -40,7 +38,6 @@ class DownloadMenuEntry extends ConsumerWidget implements HideableMenuEntry {
 
   @override
   bool get isVisible =>
-      GetIt.instance<DownloadsService>().getStatus(downloadStub, null) ==
-          DownloadItemStatus.notNeeded &&
+      GetIt.instance<DownloadsService>().getStatus(downloadStub, null) == DownloadItemStatus.notNeeded &&
       !FinampSettingsHelper.finampSettings.isOffline;
 }

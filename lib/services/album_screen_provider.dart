@@ -58,39 +58,32 @@ Future<(List<BaseItemDto>, List<BaseItemDto>)> getSortedPlaylistTracks(
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
   List<BaseItemDto> playlistAllTracksSorted;
   List<BaseItemDto> playlistPlayableTracksSorted;
-  SortOrder playlistSortOrder =
-      ref.watch(finampSettingsProvider.playlistTracksSortOrder);
-  SortBy playlistSortBySetting =
-      ref.watch(finampSettingsProvider.playlistTracksSortBy);
-  final playlistSortBy = (isOffline &&
-          (playlistSortBySetting == SortBy.datePlayed ||
-              playlistSortBySetting == SortBy.playCount))
-      ? SortBy.defaultOrder
-      : playlistSortBySetting;
+  SortOrder playlistSortOrder = ref.watch(finampSettingsProvider.playlistTracksSortOrder);
+  SortBy playlistSortBySetting = ref.watch(finampSettingsProvider.playlistTracksSortBy);
+  final playlistSortBy =
+      (isOffline && (playlistSortBySetting == SortBy.datePlayed || playlistSortBySetting == SortBy.playCount))
+          ? SortBy.defaultOrder
+          : playlistSortBySetting;
 
   // Get Playlist Items
-  final result =
-      await ref.watch(getAlbumOrPlaylistTracksProvider(parent).future);
+  final result = await ref.watch(getAlbumOrPlaylistTracksProvider(parent).future);
   final playlistAllTracks = result.$1;
   final playlistPlayableTracks = result.$2;
 
   if (playlistSortBy == SortBy.defaultOrder) {
-    playlistAllTracksSorted = (playlistSortOrder == SortOrder.descending)
-        ? playlistAllTracks.reversed.toList()
-        : playlistAllTracks;
+    playlistAllTracksSorted =
+        (playlistSortOrder == SortOrder.descending) ? playlistAllTracks.reversed.toList() : playlistAllTracks;
   } else {
     // Unfortunately, the Jellyfin API does not support "sortBy"
     // for the "/Playlists/{playlistId}/Items" endpoint, so we
     // use our own sortItems function for both online and offline
     final playlistAllTracksCopy = List<BaseItemDto>.from(playlistAllTracks);
-    playlistAllTracksSorted =
-        sortItems(playlistAllTracksCopy, playlistSortBy, playlistSortOrder);
+    playlistAllTracksSorted = sortItems(playlistAllTracksCopy, playlistSortBy, playlistSortOrder);
   }
 
   // The playlist api endpoint and fully downloaded playlists do not allow
   // to filter by genre, so we have to do that manually on device
-  if (genreFilter != null &&
-      BaseItemDtoType.fromItem(parent) == BaseItemDtoType.playlist) {
+  if (genreFilter != null && BaseItemDtoType.fromItem(parent) == BaseItemDtoType.playlist) {
     playlistAllTracksSorted = playlistAllTracksSorted.where((track) {
       return track.genreItems?.any((g) => g.id == genreFilter.id) ?? false;
     }).toList();
@@ -99,9 +92,7 @@ Future<(List<BaseItemDto>, List<BaseItemDto>)> getSortedPlaylistTracks(
   // We now have to re-create a sorted playableItems from the new items order,
   // because if we would sort both separately, they would diverge for SortBy.random
   final playlistPlayableTracksSet = playlistPlayableTracks.toSet();
-  playlistPlayableTracksSorted = playlistAllTracksSorted
-      .where((x) => playlistPlayableTracksSet.contains(x))
-      .toList();
+  playlistPlayableTracksSorted = playlistAllTracksSorted.where((x) => playlistPlayableTracksSet.contains(x)).toList();
 
   return (playlistAllTracksSorted, playlistPlayableTracksSorted);
 }

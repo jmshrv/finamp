@@ -12,8 +12,7 @@ import 'album_image_provider.dart';
 /// Used on the player screen to sync up loading the blurred background.
 /// Use ListenableImage as output to allow directly overriding localImageProvider
 final currentAlbumImageProvider = Provider<ThemeImage>((ref) {
-  final List<FinampQueueItem> precacheItems =
-      GetIt.instance<QueueService>().peekQueue(next: 3, previous: 1);
+  final List<FinampQueueItem> precacheItems = GetIt.instance<QueueService>().peekQueue(next: 3, previous: 1);
   for (final itemToPrecache in precacheItems) {
     BaseItemDto? base = itemToPrecache.baseItem;
     if (base != null) {
@@ -21,8 +20,7 @@ final currentAlbumImageProvider = Provider<ThemeImage>((ref) {
       var image = ref.watch(albumImageProvider(request));
       if (image != null) {
         // Cache the returned image
-        var stream =
-            image.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
+        var stream = image.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
         var listener = ImageStreamListener((image, synchronousCall) {});
         ref.onDispose(() {
           stream.removeListener(listener);
@@ -45,5 +43,4 @@ final currentAlbumImageProvider = Provider<ThemeImage>((ref) {
   return ThemeImage.empty();
 });
 
-final currentTrackProvider = StreamProvider(
-    (_) => GetIt.instance<QueueService>().getCurrentTrackStream());
+final currentTrackProvider = StreamProvider((_) => GetIt.instance<QueueService>().getCurrentTrackStream());

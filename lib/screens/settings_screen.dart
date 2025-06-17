@@ -41,8 +41,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.settings),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-              context, FinampSettingsHelper.resetAllSettings,
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetAllSettings,
               isGlobal: true),
           Semantics.fromProperties(
             properties: SemanticsProperties(
@@ -55,8 +54,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               icon: const Icon(Icons.info),
               onPressed: () async {
                 final localizations = AppLocalizations.of(context)!;
-                final applicationLegalese =
-                    AppLocalizations.of(context)!.applicationLegalese(repoLink);
+                final applicationLegalese = AppLocalizations.of(context)!.applicationLegalese(repoLink);
                 PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
                 ThemeData theme = Theme.of(context);
@@ -83,14 +81,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
-                          style: TextStyle(
-                              color: theme.textTheme.bodyMedium!.color),
+                          style: TextStyle(color: theme.textTheme.bodyMedium!.color),
                           children: [
                             TextSpan(
                               text: localizations.finampTagline,
-                              style: const TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  fontWeight: FontWeight.w500),
+                              style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w500),
                             ),
                             const TextSpan(
                               text: '\n\n',
@@ -145,8 +140,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                             ),
                             TextSpan(
                               text: localizations.aboutThanks,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
+                              style: const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -162,52 +156,41 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ListTile(
             leading: const Icon(Icons.compress),
             title: Text(AppLocalizations.of(context)!.transcoding),
-            onTap: () => Navigator.of(context)
-                .pushNamed(TranscodingSettingsScreen.routeName),
+            onTap: () => Navigator.of(context).pushNamed(TranscodingSettingsScreen.routeName),
           ),
           ListTile(
             leading: const Icon(Icons.download),
             title: Text(AppLocalizations.of(context)!.downloadSettings),
-            onTap: () => Navigator.of(context)
-                .pushNamed(DownloadsSettingsScreen.routeName),
+            onTap: () => Navigator.of(context).pushNamed(DownloadsSettingsScreen.routeName),
           ),
           ListTile(
-            leading: const Icon(Icons.wifi),
-            title: Text(AppLocalizations.of(context)!.networkSettingsTitle),
-            onTap: () => Navigator.of(context)
-                .pushNamed(NetworkSettingsScreen.routeName)
-          ),
+              leading: const Icon(Icons.wifi),
+              title: Text(AppLocalizations.of(context)!.networkSettingsTitle),
+              onTap: () => Navigator.of(context).pushNamed(NetworkSettingsScreen.routeName)),
           ListTile(
             leading: const Icon(Icons.music_note),
             title: Text(AppLocalizations.of(context)!.audioService),
-            onTap: () => Navigator.of(context)
-                .pushNamed(AudioServiceSettingsScreen.routeName),
+            onTap: () => Navigator.of(context).pushNamed(AudioServiceSettingsScreen.routeName),
           ),
           ListTile(
             leading: const Icon(TablerIcons.cast),
-            title: Text(
-                AppLocalizations.of(context)!.playbackReportingSettingsTitle),
-            onTap: () => Navigator.of(context)
-                .pushNamed(PlaybackReportingSettingsScreen.routeName),
+            title: Text(AppLocalizations.of(context)!.playbackReportingSettingsTitle),
+            onTap: () => Navigator.of(context).pushNamed(PlaybackReportingSettingsScreen.routeName),
           ),
           ListTile(
             leading: const Icon(Icons.equalizer_rounded),
-            title: Text(
-                AppLocalizations.of(context)!.volumeNormalizationSettingsTitle),
-            onTap: () => Navigator.of(context)
-                .pushNamed(VolumeNormalizationSettingsScreen.routeName),
+            title: Text(AppLocalizations.of(context)!.volumeNormalizationSettingsTitle),
+            onTap: () => Navigator.of(context).pushNamed(VolumeNormalizationSettingsScreen.routeName),
           ),
           ListTile(
             leading: const Icon(Icons.gesture),
             title: Text(AppLocalizations.of(context)!.interactions),
-            onTap: () => Navigator.of(context)
-                .pushNamed(InteractionSettingsScreen.routeName),
+            onTap: () => Navigator.of(context).pushNamed(InteractionSettingsScreen.routeName),
           ),
           ListTile(
             leading: const Icon(Icons.widgets),
             title: Text(AppLocalizations.of(context)!.layoutAndTheme),
-            onTap: () =>
-                Navigator.of(context).pushNamed(LayoutSettingsScreen.routeName),
+            onTap: () => Navigator.of(context).pushNamed(LayoutSettingsScreen.routeName),
           ),
           ListTile(
             leading: const Icon(Icons.library_music),
@@ -216,16 +199,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ? Text(AppLocalizations.of(context)!.notAvailableInOfflineMode)
                 : null,
             enabled: !ref.watch(finampSettingsProvider.isOffline),
-            onTap: () =>
-                Navigator.of(context).pushNamed(ViewSelector.routeName),
+            onTap: () => Navigator.of(context).pushNamed(ViewSelector.routeName),
           ),
           ListTile(
             leading: const Icon(Icons.language),
             title: Text(AppLocalizations.of(context)!.language),
-            subtitle: Text(LocaleHelper.locale?.nativeDisplayLanguage ??
-                AppLocalizations.of(context)!.system),
-            onTap: () => Navigator.of(context)
-                .pushNamed(LanguageSelectionScreen.routeName),
+            subtitle: Text(LocaleHelper.locale?.nativeDisplayLanguage ?? AppLocalizations.of(context)!.system),
+            onTap: () => Navigator.of(context).pushNamed(LanguageSelectionScreen.routeName),
           ),
           const LogoutListTile(),
         ],

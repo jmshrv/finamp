@@ -35,10 +35,7 @@ Widget buildCountColumn({
           const SizedBox(height: 2),
           Text(
             label,
-            style: TextStyle(
-              fontSize: 12,
-              color: subtitleColor ?? Colors.grey
-            ),
+            style: TextStyle(fontSize: 12, color: subtitleColor ?? Colors.grey),
           ),
         ],
       ),

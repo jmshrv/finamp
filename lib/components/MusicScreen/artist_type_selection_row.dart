@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
-Widget buildArtistTypeSelectionRow(BuildContext context, TabContentType tabType,
-    ArtistType defaultArtistType, Function(TabContentType) refreshTab) {
+Widget buildArtistTypeSelectionRow(
+    BuildContext context, TabContentType tabType, ArtistType defaultArtistType, Function(TabContentType) refreshTab) {
   if (tabType == TabContentType.artists) {
     double screenWidth = MediaQuery.of(context).size.width;
     bool alignLeft = screenWidth > 600;
@@ -23,8 +23,7 @@ Widget buildArtistTypeSelectionRow(BuildContext context, TabContentType tabType,
           height: 48,
           width: double.infinity,
           child: Row(
-            mainAxisAlignment:
-                alignLeft ? MainAxisAlignment.start : MainAxisAlignment.center,
+            mainAxisAlignment: alignLeft ? MainAxisAlignment.start : MainAxisAlignment.center,
             children: [
               FilterChip(
                 label: Text(AppLocalizations.of(context)!.albumArtists),

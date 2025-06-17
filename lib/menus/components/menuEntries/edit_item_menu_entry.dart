@@ -19,14 +19,12 @@ class EditItemMenuEntry extends ConsumerWidget implements HideableMenuEntry {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final itemIsEditable =
-        [BaseItemDtoType.playlist].contains(BaseItemDtoType.fromItem(baseItem));
+    final itemIsEditable = [BaseItemDtoType.playlist].contains(BaseItemDtoType.fromItem(baseItem));
     return Visibility(
         visible: itemIsEditable && !ref.watch(finampSettingsProvider.isOffline),
         child: MenuEntry(
           icon: TablerIcons.edit,
-          title: AppLocalizations.of(context)!
-              .editItemTitle(BaseItemDtoType.fromItem(baseItem).name),
+          title: AppLocalizations.of(context)!.editItemTitle(BaseItemDtoType.fromItem(baseItem).name),
           onTap: () {
             Navigator.pop(context); // close menu
             switch (BaseItemDtoType.fromItem(baseItem)) {
@@ -37,8 +35,7 @@ class EditItemMenuEntry extends ConsumerWidget implements HideableMenuEntry {
                 );
                 break;
               default:
-                GlobalSnackbar.message((context) =>
-                    AppLocalizations.of(context)!.notImplementedYet);
+                GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notImplementedYet);
             }
           },
         ));
