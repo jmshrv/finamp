@@ -1327,7 +1327,7 @@
   "@useCoverAsBackgroundSubtitle": {},
   "hours": "Tuntia",
   "@hours": {},
-  "shuffleToQueue": "Sekotia jonoon",
+  "shuffleToQueue": "Sekoita jonoon",
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
@@ -1992,7 +1992,7 @@
   },
   "playbackReporting": "Toiston raportointi",
   "@playbackReporting": {},
-  "currentVolumeFeatureText": "{volume}% äänenvoimakkuus",
+  "currentVolumeFeatureText": "{volume}% taso",
   "@currentVolumeFeatureText": {
     "description": "Label for the feature chip that is shown if the volume is not 100%",
     "placeholders": {
@@ -2103,7 +2103,7 @@
   "@favorites": {},
   "removeFavorite": "Poista suosikki",
   "@removeFavorite": {},
-  "addFavorite": "Lisää suosikki",
+  "addFavorite": "Lisää suosikiksi",
   "@addFavorite": {},
   "stopAndClearQueue": "Pysäytä toisto ja tyhjennä jono",
   "@stopAndClearQueue": {
