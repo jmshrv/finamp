@@ -126,7 +126,7 @@
   },
   "playlistUpdated": "Se actualizó el nombre de la lista.",
   "@playlistUpdated": {},
-  "downloadsQueued": "Descarga preparada, descargando archivos",
+  "downloadsQueued": "Descargando archivos",
   "@downloadsQueued": {},
   "applicationLegalese": "Licenciado con la Mozilla Public License 2.0.\nCódigo fuente disponible en {sourceCodeLink}.",
   "@applicationLegalese": {},
@@ -220,7 +220,7 @@
   "@sortBy": {},
   "sortOrder": "Ordenar",
   "@sortOrder": {},
-  "datePlayed": "Fecha de reproducción",
+  "datePlayed": "Fecha de última reproducción",
   "@datePlayed": {},
   "settings": "Ajustes",
   "@settings": {},
@@ -294,7 +294,7 @@
   "@theme": {},
   "system": "Sistema",
   "@system": {},
-  "setSleepTimer": "Ajustar temporizador de sueño",
+  "setSleepTimer": "Pausar reproducción después de",
   "@setSleepTimer": {},
   "sleepTimerTooltip": "Temporizador de sueño",
   "@sleepTimerTooltip": {},
@@ -1821,7 +1821,7 @@
   "@shareOfflineListens": {
     "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
   },
-  "sleepTimerRemainingTime": "Durmiendo en {time} minutos",
+  "sleepTimerRemainingTime": "Durmiendo en {prefix}{time} {suffix}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -1912,7 +1912,7 @@
   "@shuffleAlbumsToQueue": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
   },
-  "playingFromType": "Reproduciendo Desde {source, select, album{Álbum} playlist{Lista de Reproducción} trackMix{Mix de Pista} artistMix{Mix de Artista} albumMix{Mix de Álbum} genreMix{Mix de Género} favorites{Favoritos} allTracks{Todas las Pistas} filteredList{Pistas} genre{Género} artist{Artista} track{Pista} nextUpAlbum{Álbum en \"A Continuación\"} nextUpPlaylist{Lista de Reproducción en \"A Continuación\"} nextUpArtist{Artista en \"A Continuación\"} other{}}",
+  "playingFromType": "Reproduciendo desde {source, select, album{álbum} playlist{lista de reproducción} trackMix{mix de Pista} artistMix{mix de artista} albumMix{mix de Álbum} genreMix{mix de género} favorites{favoritos} allTracks{todas las canciones} filteredList{canciones} genre{género} artist{artista} track{canción} nextUpAlbum{álbum en \"A continuación\"} nextUpPlaylist{lista de Reproducción en \"A continuación\"} nextUpArtist{artista en \"A continuación\"} nextUpGenre{género en \"A continuación\"} remoteClient{cliente remoto}  other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1981,11 +1981,11 @@
   "@favorite": {},
   "randomAlbums": "Álbumes (Selección aleatoria)",
   "@randomAlbums": {},
-  "startupErrorTitle": "Algo salió mal al iniciar la aplicación.\nUna disculpa...",
+  "startupErrorTitle": "Algo salió mal al iniciar la aplicación.",
   "@startupErrorTitle": {
     "description": "The title for the error screen that shows when startup fails."
   },
-  "startupErrorWorkaround": "Como solución provisional, puede reiniciar la aplicación limpiando la información de la misma. Recuerde que todas las descargas y ajustes serán eliminados.",
+  "startupErrorWorkaround": "Como una solución provisional para el error, puede reiniciar la aplicación limpiando la información de la misma. Recuerde que todas las descargas y ajustes serán eliminados.",
   "@startupErrorWorkaround": {
     "description": "The subtitle for how to manually recover from a startup error"
   },
@@ -1996,5 +1996,173 @@
   "onlineMode": "Modo en línea",
   "@onlineMode": {},
   "favorites": "Favoritos",
-  "@favorites": {}
+  "@favorites": {},
+  "playbackReporting": "Informes de reproducción",
+  "@playbackReporting": {},
+  "currentVolumeFeatureText": "Volumen al {volume}%",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
+      }
+    }
+  },
+  "playOnStaleDelay": "Tiempo de espera de sesión para \"Reproducir en\"",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "browsePlaylists": "Explorar listas de reproducción",
+  "@browsePlaylists": {
+    "description": "Label for a button on the genre screen that brings you to a list of genre-filtered playlists."
+  },
+  "removeFavorite": "Eliminar de favoritos",
+  "@removeFavorite": {},
+  "addFavorite": "Añadir a favoritos",
+  "@addFavorite": {},
+  "playOnReconnectionDelaySubtitle": "Controla el retraso (en segundos) entre intentos de reconexión al websocket de \"Reproducir en\" cuando ocurre una desconexión. Un tiempo menor aumenta el consumo de ancho de banda.",
+  "@playOnReconnectionDelaySubtitle": {
+    "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "recentlyAddedTracks": "Canciones añadidas recientemente",
+  "@recentlyAddedTracks": {
+    "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
+  },
+  "latestTracks": "Canciones recientes",
+  "@latestTracks": {},
+  "recentlyPlayedArtists": "Artistas reproducidos recientemente",
+  "@recentlyPlayedArtists": {},
+  "favoriteTracks": "Canciones favoritas",
+  "@favoriteTracks": {},
+  "favoriteArtists": "Artistas favoritos",
+  "@favoriteArtists": {},
+  "latestReleases": "Últimos lanzamientos",
+  "@latestReleases": {},
+  "genreFilterPlaylistScreens": "Filtrar listas de reproducción",
+  "@genreFilterPlaylistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "playbackActionPagePlay": "Reproducir",
+  "@playbackActionPagePlay": {
+    "description": "Label for the playback action page that contains all actions related to playing in order"
+  },
+  "playbackActionPageShuffle": "Aleatorio",
+  "@playbackActionPageShuffle": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled"
+  },
+  "playOnReconnectionDelay": "Retraso de reconexión de \"Reproducir en\"",
+  "@playOnReconnectionDelay": {
+    "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "topArtists": "Mejores artistas",
+  "@topArtists": {},
+  "recentlyAddedArtists": "Artistas añadidos recientemente",
+  "@recentlyAddedArtists": {
+    "description": "Label for the genre section that shows artists that were recently added to the library, sorted by the date they were added."
+  },
+  "latestAlbums": "Álbumes recientes",
+  "@latestAlbums": {},
+  "latestArtists": "Artistas recientes",
+  "@latestArtists": {},
+  "randomTracks": "Canciones (Escogidas aleatoriamente)",
+  "@randomTracks": {},
+  "unknown": "Desconocido",
+  "@unknown": {},
+  "genreItemSectionFilterChipOrderTitle": "Orden de filtros de secciones de elementos",
+  "@genreItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of item sections filter chips."
+  },
+  "genreItemSectionFilterChipOrderSubtitle": "Controla el orden de los filtros de secciones de elementos.",
+  "@genreItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections filter chips."
+  },
+  "genreFilterPlaylistScreensSubtitle": "Cuando está activado, las listas de reproducción a las que accedas a través de un género solamente mostrarán las canciones que coincidan con el género que estés explorando actualmente. (Siempre es posible desactivar este filtro manualmente para mostrar todas las canciones.)",
+  "@genreFilterPlaylistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "curatedItemsMostPlayedOfflineTooltip": "No disponible en modo sin conexión.",
+  "@curatedItemsMostPlayedOfflineTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Offline Mode."
+  },
+  "startupErrorCallToAction": "Por favor crea una incidencia en \"github.com/jmshrv/finamp\" con los registros (utiliza el botón de abajo) y una captura de pantalla de esta página para que podamos resolverlo lo más rápido posible.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "allLibraries": "Todas las bibliotecas",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
+  "topAlbums": "Mejores álbumes",
+  "@topAlbums": {},
+  "favoriteAlbums": "Álbumes favoritos",
+  "@favoriteAlbums": {},
+  "itemSectionsOrderSubtitle": "Controla el orden de secciones de elementos.",
+  "@itemSectionsOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections on the screens."
+  },
+  "recentlyPlayedAlbums": "Álbumes reproducidos recientemente",
+  "@recentlyPlayedAlbums": {},
+  "enablePlayonSubtitle": "Activa la característica \"Reproducir en\" de Jellyfin (controlar remotamente Finamp desde otro cliente). Desactiva esto si tu proxy inverso o servidor no soporta websockets.",
+  "@enablePlayonSubtitle": {
+    "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "genreFilterArtistScreens": "Filtrar artistas",
+  "@genreFilterArtistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "recentlyAddedAlbums": "Álbumes añadidos recientemente",
+  "@recentlyAddedAlbums": {
+    "description": "Label for the genre section that shows albums that were recently added to the library, sorted by the date they were added."
+  },
+  "artistItemSectionFilterChipOrderSubtitle": "Controla el orden de los filtros de secciones de canciones.",
+  "@artistItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of the tracks sections filter chips."
+  },
+  "genreFilterArtistScreensSubtitle": "Cuando está activado, los artistas a los que accedas a través de un género solamente mostrarán las canciones y los álbumes que coincidan con el género que estés explorando actualmente. (Siempre es posible desactivar este filtro manualmente para mostrar todas las canciones y los álbumes.)",
+  "@genreFilterArtistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "curatedItemsNotListenedYet": "No has escuchado ninguna canción{itemType, select, artistGenreFilter{ de este artista en este género} artist{ de este artista} genre{ de este género} other{}}.",
+  "@curatedItemsNotListenedYet": {
+    "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "defaultOrder": "Orden por defecto",
+  "@defaultOrder": {
+    "description": "Default sorting order for playlists (server order)"
+  },
+  "playOnStaleDelaySubtitle": "Cuanto tiempo se considera activa una sesión de \"Reproducir en\" después de recibir un comando. Cuando se considera activa, el estado de reproducción se informa con más frecuencia, lo que puede llevar a más consumo de banda ancha.",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "artistItemSectionFilterChipOrderTitle": "Orden de filtros de sección de canciones",
+  "@artistItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of the tracks sections filter chips."
+  },
+  "recentlyPlayedTracks": "Canciones reproducidas recientemente",
+  "@recentlyPlayedTracks": {},
+  "itemSectionsOrder": "Orden de secciones de elementos",
+  "@itemSectionsOrder": {
+    "description": "Label for the setting that controls the order of item sections on the screens."
+  },
+  "curatedItemsNoFavorites": "No tienes ningún favorito{itemType, select, artistGenreFilter{ para este artista en este género} artist{ para este artista} genre{ para este género} other{}}.",
+  "@curatedItemsNoFavorites": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "exportLogs": "Guardar registros",
+  "@exportLogs": {}
 }
