@@ -97,7 +97,7 @@ If you're experiencing software bugs or other issues with Finamp, be sure to tak
 
 Finamp is a community-driven project and relies on people like **you** and their contributions. To learn how you could help out with making Finamp even better, take a look at our [Contribution Guidelines](CONTRIBUTING.md)
 
-### Tranlations
+### Translations
 
 You can also contribute by helping to translate Finamp! This is done through our Weblate instance here: <https://hosted.weblate.org/engage/finamp/>. The current translation status is this:
 
