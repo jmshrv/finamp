@@ -31,17 +31,11 @@ class PlaybackActionPageIndicator extends StatelessWidget {
                 },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 4.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                   decoration: BoxDecoration(
-                    color: (pageController.page ?? pageController.initialPage)
-                                .round() ==
-                            index
+                    color: (pageController.page ?? pageController.initialPage).round() == index
                         ? Theme.of(context).colorScheme.primary.withOpacity(0.8)
-                        : Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withOpacity(0.3),
+                        : Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
                     borderRadius: BorderRadius.circular(9999.0),
                   ),
                   child: Text(

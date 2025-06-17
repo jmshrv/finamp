@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
-class ToggleFavoriteMenuEntry extends ConsumerWidget
-    implements HideableMenuEntry {
+class ToggleFavoriteMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final BaseItemDto baseItem;
 
   const ToggleFavoriteMenuEntry({
@@ -24,13 +23,9 @@ class ToggleFavoriteMenuEntry extends ConsumerWidget
         visible: !ref.watch(finampSettingsProvider.isOffline),
         child: MenuEntry(
             icon: isFav ? TablerIcons.heart_filled : TablerIcons.heart,
-            title: isFav
-                ? AppLocalizations.of(context)!.removeFavorite
-                : AppLocalizations.of(context)!.addFavorite,
+            title: isFav ? AppLocalizations.of(context)!.removeFavorite : AppLocalizations.of(context)!.addFavorite,
             onTap: () async {
-              ref
-                  .read(isFavoriteProvider(baseItem).notifier)
-                  .updateFavorite(!isFav);
+              ref.read(isFavoriteProvider(baseItem).notifier).updateFavorite(!isFav);
               if (context.mounted) Navigator.pop(context);
             }));
   }

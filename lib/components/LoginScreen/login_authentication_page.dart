@@ -26,13 +26,11 @@ class LoginAuthenticationPage extends StatefulWidget {
   });
 
   @override
-  State<LoginAuthenticationPage> createState() =>
-      _LoginAuthenticationPageState();
+  State<LoginAuthenticationPage> createState() => _LoginAuthenticationPageState();
 }
 
 class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
-  static final _loginAuthenticationPageLogger =
-      Logger("LoginAuthenticationPage");
+  static final _loginAuthenticationPageLogger = Logger("LoginAuthenticationPage");
 
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
@@ -68,8 +66,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
                 ),
               ),
               Text(AppLocalizations.of(context)!.loginFlowAuthenticationHeading,
-                  style: Theme.of(context).textTheme.headlineMedium,
-                  textAlign: TextAlign.center),
+                  style: Theme.of(context).textTheme.headlineMedium, textAlign: TextAlign.center),
               Padding(
                 padding: const EdgeInsets.only(top: 20.0, bottom: 12.0),
                 child: Align(
@@ -111,8 +108,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
       return InputDecoration(
         filled: true,
         fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
         label: Text(placeholder),
         floatingLabelBehavior: FloatingLabelBehavior.never,
         border: OutlineInputBorder(
@@ -130,8 +126,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-                padding:
-                    const EdgeInsets.only(top: 8.0, bottom: 2.0, left: 8.0),
+                padding: const EdgeInsets.only(top: 8.0, bottom: 2.0, left: 8.0),
                 child: Text(
                   AppLocalizations.of(context)!.username,
                   textAlign: TextAlign.start,
@@ -140,23 +135,20 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
               autocorrect: false,
               keyboardType: TextInputType.text,
               autofillHints: const [AutofillHints.username],
-              decoration: inputFieldDecoration(
-                  AppLocalizations.of(context)!.usernameHint),
+              decoration: inputFieldDecoration(AppLocalizations.of(context)!.usernameHint),
               textInputAction: TextInputAction.next,
               onEditingComplete: () => node.nextFocus(),
               initialValue: username,
               onSaved: (newValue) => username = newValue,
               validator: (value) {
                 if (value?.isEmpty == true) {
-                  return AppLocalizations.of(context)!
-                      .usernameValidationMissingUsername;
+                  return AppLocalizations.of(context)!.usernameValidationMissingUsername;
                 }
                 return null;
               },
             ),
             Padding(
-                padding:
-                    const EdgeInsets.only(top: 8.0, bottom: 2.0, left: 8.0),
+                padding: const EdgeInsets.only(top: 8.0, bottom: 2.0, left: 8.0),
                 child: Text(
                   AppLocalizations.of(context)!.password,
                   textAlign: TextAlign.start,
@@ -166,8 +158,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
               obscureText: true,
               keyboardType: TextInputType.visiblePassword,
               autofillHints: const [AutofillHints.password],
-              decoration: inputFieldDecoration(
-                  AppLocalizations.of(context)!.passwordHint),
+              decoration: inputFieldDecoration(AppLocalizations.of(context)!.passwordHint),
               textInputAction: TextInputAction.done,
               onFieldSubmitted: (_) async => await sendForm(),
               onSaved: (newValue) => password = newValue,
@@ -179,10 +170,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
   }
 
   /// Function to handle logging in for Widgets, including a snackbar for errors.
-  Future<void> loginHelper(
-      {required String username,
-      String? password,
-      required BuildContext context}) async {
+  Future<void> loginHelper({required String username, String? password, required BuildContext context}) async {
     JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
     try {

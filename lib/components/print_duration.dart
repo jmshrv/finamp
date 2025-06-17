@@ -14,13 +14,10 @@ String printDuration(
 
   String durationString;
   if (duration.inHours >= 1) {
-    String paddedHours = leadingZeroes
-        ? twoDigits(duration.inHours)
-        : duration.inHours.toString();
+    String paddedHours = leadingZeroes ? twoDigits(duration.inHours) : duration.inHours.toString();
     durationString = "$paddedHours:${twoDigits(minutes)}:$twoDigitSeconds";
   } else {
-    String paddedMinutes =
-        leadingZeroes ? twoDigits(minutes) : minutes.toString();
+    String paddedMinutes = leadingZeroes ? twoDigits(minutes) : minutes.toString();
     durationString = "$paddedMinutes:$twoDigitSeconds";
   }
 

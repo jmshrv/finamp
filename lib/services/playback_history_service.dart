@@ -27,8 +27,7 @@ class PlaybackHistoryService {
 
   // internal state
 
-  final List<FinampHistoryItem> _history =
-      []; // contains **all** items that have been played, including "next up"
+  final List<FinampHistoryItem> _history = []; // contains **all** items that have been played, including "next up"
   FinampHistoryItem? _currentTrack; // the currently playing track
 
   PlaybackState? _previousPlaybackState;
@@ -37,8 +36,7 @@ class PlaybackHistoryService {
   bool _wasOfflineBefore = false;
   FinampQueueItem?
       _lastReportedTrackStarted; // used to check if playback has already reported as "started" at some point for the current track
-  FinampQueueItem?
-      _lastReportedTrackStopped; // used to prevent reporting a track as stopped multiple times
+  FinampQueueItem? _lastReportedTrackStopped; // used to prevent reporting a track as stopped multiple times
 
   final _historyStream = BehaviorSubject<List<FinampHistoryItem>>.seeded(
     List.empty(growable: true),
@@ -54,8 +52,7 @@ class PlaybackHistoryService {
       if (![AudioProcessingState.idle, AudioProcessingState.completed]
           .contains(_audioService.playbackState.valueOrNull?.processingState)) {
         updateCurrentTrack(currentTrack);
-      } else if (_audioService.playbackState.valueOrNull?.processingState ==
-              AudioProcessingState.completed ||
+      } else if (_audioService.playbackState.valueOrNull?.processingState == AudioProcessingState.completed ||
           currentTrack == null) {
         _playbackHistoryServiceLogger.info("Handling playback stop event");
         _reportPlaybackStopped();
@@ -81,8 +78,7 @@ class PlaybackHistoryService {
       final currentItem = _queueService.getCurrentTrack();
 
       if (_playOnService.isControlled) {
-        _playbackHistoryServiceLogger.fine(
-            "Handling playbackState event as controlled by a remote session");
+        _playbackHistoryServiceLogger.fine("Handling playbackState event as controlled by a remote session");
         // If the session is being remote controlled, report playback agressively
         _updatePlaybackInfo();
       } else {
@@ -93,23 +89,20 @@ class PlaybackHistoryService {
               // add to playback history if playback was stopped before
               updateCurrentTrack(currentItem, forceNewTrack: true);
             }
-            if (currentState.processingState !=
-                    AudioProcessingState.completed &&
-                (currentState.queueIndex != prevState?.queueIndex ||
-                    currentState.position != prevState?.position)) {
-              _playbackHistoryServiceLogger.fine(
-                  "Handling track change event from ${prevItem?.item.title} to ${currentItem.item.title}");
+            if (currentState.processingState != AudioProcessingState.completed &&
+                (currentState.queueIndex != prevState?.queueIndex || currentState.position != prevState?.position)) {
+              _playbackHistoryServiceLogger
+                  .fine("Handling track change event from ${prevItem?.item.title} to ${currentItem.item.title}");
               //TODO handle reporting track changes based on history changes, as that is more reliable
-              onTrackChanged(currentItem, currentState, prevItem, prevState,
-                  currentIndex > (prevState?.queueIndex ?? 0));
+              onTrackChanged(
+                  currentItem, currentState, prevItem, prevState, currentIndex > (prevState?.queueIndex ?? 0));
             }
           }
           // handle events that don't change the current track (e.g. loop, pause, seek, etc.)
 
           // handle play/pause events
           else if (currentState.playing != prevState?.playing) {
-            _playbackHistoryServiceLogger.fine(
-                "Handling play/pause event for ${currentItem.item.title}");
+            _playbackHistoryServiceLogger.fine("Handling play/pause event for ${currentItem.item.title}");
             onPlaybackStateChanged(currentItem, currentState, prevState);
           }
           // handle seeking (changes updateTime (= last abnormal position change))
@@ -117,10 +110,7 @@ class PlaybackHistoryService {
               prevState != null &&
               // comparing the updateTime timestamps directly is unreliable, as they might just have different microsecond values
               // instead, compare the difference in milliseconds, with a small margin of error
-              (currentState.position.inMilliseconds -
-                          prevState.position.inMilliseconds)
-                      .abs() >
-                  1500) {
+              (currentState.position.inMilliseconds - prevState.position.inMilliseconds).abs() > 1500) {
             bool isSeekEvent = true;
 
             // detect rewinding & looping a single track
@@ -129,21 +119,16 @@ class PlaybackHistoryService {
                 prevItem?.id == currentItem.id &&
                     // current position is close to the beginning of the track
                     currentState.position.inMilliseconds <= 1000 * 10) {
-              if ((prevState.position.inMilliseconds) >=
-                  ((prevItem?.item.duration?.inMilliseconds ?? 0) -
-                      1000 * 10)) {
+              if ((prevState.position.inMilliseconds) >= ((prevItem?.item.duration?.inMilliseconds ?? 0) - 1000 * 10)) {
                 // looping a single track
                 // last position was close to the end of the track
-                updateCurrentTrack(currentItem,
-                    forceNewTrack: true); // add to playback history
+                updateCurrentTrack(currentItem, forceNewTrack: true); // add to playback history
                 //TODO handle reporting track changes based on history changes, as that is more reliable
-                onTrackChanged(
-                    currentItem, currentState, prevItem, prevState, true);
+                onTrackChanged(currentItem, currentState, prevItem, prevState, true);
                 isSeekEvent = false; // don't report seek event
               } else {
                 // rewinding
-                updateCurrentTrack(currentItem,
-                    forceNewTrack: true); // add to playback history
+                updateCurrentTrack(currentItem, forceNewTrack: true); // add to playback history
                 // don't return, report seek event
                 isSeekEvent = true;
               }
@@ -152,12 +137,9 @@ class PlaybackHistoryService {
             if (isSeekEvent) {
               // rate limit updates (only send update after no changes for 3 seconds) and if the track is still the same
               Future.delayed(const Duration(seconds: 3, milliseconds: 500), () {
-                if (_lastPositionUpdate
-                        .add(const Duration(seconds: 3))
-                        .isBefore(DateTime.now()) &&
+                if (_lastPositionUpdate.add(const Duration(seconds: 3)).isBefore(DateTime.now()) &&
                     currentItem.id == _queueService.getCurrentTrack()?.id) {
-                  _playbackHistoryServiceLogger.fine(
-                      "Handling seek event for ${currentItem.item.title}");
+                  _playbackHistoryServiceLogger.fine("Handling seek event for ${currentItem.item.title}");
                   onPlaybackStateChanged(currentItem, currentState, prevState);
                 }
                 _lastPositionUpdate = DateTime.now();
@@ -193,16 +175,13 @@ class PlaybackHistoryService {
     _periodicUpdateTimer?.cancel(); // remove old timer
 
     _periodicUpdateTimer = Timer.periodic(
-        Duration(
-            seconds: FinampSettingsHelper.finampSettings
-                .periodicPlaybackSessionUpdateFrequencySeconds), (timer) {
+        Duration(seconds: FinampSettingsHelper.finampSettings.periodicPlaybackSessionUpdateFrequencySeconds), (timer) {
       _reportPeriodicSessionStatus();
     });
   }
 
   /// method that converts history into a list grouped by date
-  List<MapEntry<DateTime, List<FinampHistoryItem>>>
-      getHistoryGroupedDynamically() {
+  List<MapEntry<DateTime, List<FinampHistoryItem>>> getHistoryGroupedDynamically() {
     DateTime byDateGroupingConstructor(FinampHistoryItem element) {
       final now = DateTime.now();
       if (now.year == element.startTime.year &&
@@ -312,9 +291,8 @@ class PlaybackHistoryService {
     if (_currentTrack != null) {
       // update end time of previous track
       _currentTrack!.endTime = DateTime.now();
-      previousTrackTotalPlayTimeInMilliseconds = _currentTrack!.endTime!
-          .difference(_currentTrack!.startTime)
-          .inMilliseconds;
+      previousTrackTotalPlayTimeInMilliseconds =
+          _currentTrack!.endTime!.difference(_currentTrack!.startTime).inMilliseconds;
     }
 
     if (previousTrackTotalPlayTimeInMilliseconds < 1000) {
@@ -329,8 +307,7 @@ class PlaybackHistoryService {
       item: currentTrack,
       startTime: DateTime.now(),
     );
-    _history.add(
-        _currentTrack!); // current track is always the last item in the history
+    _history.add(_currentTrack!); // current track is always the last item in the history
 
     _historyStream.add(_history);
 
@@ -352,8 +329,7 @@ class PlaybackHistoryService {
     final shouldReportPreviousTrack = previousItem != null &&
         previousState != null &&
         // don't submit stop events for idle tracks (at position 0 and not playing)
-        (previousState.playing ||
-            previousState.updatePosition != Duration.zero);
+        (previousState.playing || previousState.updatePosition != Duration.zero);
 
     if (FinampSettingsHelper.finampSettings.isOffline) {
       if (shouldReportPreviousTrack) {
@@ -382,14 +358,12 @@ class PlaybackHistoryService {
 
     //!!! always submit a "start" **AFTER** a "stop" to that Jellyfin knows there's still something playing
     if (previousTrackPlaybackData != null) {
-      _playbackHistoryServiceLogger
-          .info("Stopping playback progress for ${previousItem?.item.title}");
+      _playbackHistoryServiceLogger.info("Stopping playback progress for ${previousItem?.item.title}");
       try {
         _resetPeriodicUpdates(); // delay next periodic update to avoid race conditions with old data
         //!!! allow reporting the same track here to skipping after looping a single track is reported correctly
         _lastReportedTrackStopped = previousItem;
-        await _jellyfinApiHelper
-            .stopPlaybackProgress(previousTrackPlaybackData);
+        await _jellyfinApiHelper.stopPlaybackProgress(previousTrackPlaybackData);
         //TODO also mark the track as played in the user data: https://api.jellyfin.org/openapi/api.html#tag/Playstate/operation/MarkPlayedItem
       } catch (e) {
         _playbackHistoryServiceLogger.warning(e);
@@ -399,8 +373,7 @@ class PlaybackHistoryService {
       }
     }
     if (newTrackplaybackData != null) {
-      _playbackHistoryServiceLogger
-          .info("Starting playback progress for ${currentItem.item.title}");
+      _playbackHistoryServiceLogger.info("Starting playback progress for ${currentItem.item.title}");
       try {
         _resetPeriodicUpdates(); // delay next periodic update to avoid race conditions with old data
         //!!! allow reporting the same track here to ensure loop one reports correctly
@@ -429,14 +402,11 @@ class PlaybackHistoryService {
     );
 
     if (playbackData != null) {
-      if (![AudioProcessingState.completed, AudioProcessingState.idle]
-          .contains(currentState.processingState)) {
-        _playbackHistoryServiceLogger
-            .info("Updating playback state for ${currentItem.item.title}");
+      if (![AudioProcessingState.completed, AudioProcessingState.idle].contains(currentState.processingState)) {
+        _playbackHistoryServiceLogger.info("Updating playback state for ${currentItem.item.title}");
         await _updatePlaybackInfo(playbackData: playbackData);
       } else {
-        _playbackHistoryServiceLogger
-            .info("Stopping playback progress for ${currentItem.item.title}");
+        _playbackHistoryServiceLogger.info("Stopping playback progress for ${currentItem.item.title}");
         try {
           _resetPeriodicUpdates(); // delay next periodic update to avoid race conditions with old data
           if (_lastReportedTrackStopped?.id != currentItem.id) {
@@ -463,12 +433,9 @@ class PlaybackHistoryService {
       // always consider as unmuted
       isMuted: false,
       // ensure the (extrapolated) position doesn't exceed the duration
-      playerPosition: duration != null && state.position > duration
-          ? duration
-          : state.position,
+      playerPosition: duration != null && state.position > duration ? duration : state.position,
       includeNowPlayingQueue:
-          FinampSettingsHelper.finampSettings.enablePlayon ||
-              FinampSettingsHelper.finampSettings.reportQueueToServer,
+          FinampSettingsHelper.finampSettings.enablePlayon || FinampSettingsHelper.finampSettings.reportQueueToServer,
     );
   }
 
@@ -480,22 +447,19 @@ class PlaybackHistoryService {
         if (_lastReportedTrackStopped?.id != _currentTrack?.item.id) {
           _lastReportedTrackStopped = _currentTrack?.item;
           if (FinampSettingsHelper.finampSettings.isOffline) {
-            await _offlineListenLogHelper
-                .logOfflineListen(_currentTrack!.item.item);
+            await _offlineListenLogHelper.logOfflineListen(_currentTrack!.item.item);
           } else {
             await _jellyfinApiHelper.stopPlaybackProgress(playbackInfo);
           }
         }
       } catch (e) {
         _playbackHistoryServiceLogger.warning(e);
-        await _offlineListenLogHelper
-            .logOfflineListen(_currentTrack!.item.item);
+        await _offlineListenLogHelper.logOfflineListen(_currentTrack!.item.item);
       }
     }
   }
 
-  Future<void> _updatePlaybackInfo(
-      {jellyfin_models.PlaybackProgressInfo? playbackData}) async {
+  Future<void> _updatePlaybackInfo({jellyfin_models.PlaybackProgressInfo? playbackData}) async {
     if (FinampSettingsHelper.finampSettings.isOffline) {
       return;
     }
@@ -520,8 +484,7 @@ class PlaybackHistoryService {
     if (FinampSettingsHelper.finampSettings.isOffline) {
       return;
     }
-    final playbackInfo = generateGenericPlaybackProgressInfo(
-        includeNowPlayingQueue: true, force: true);
+    final playbackInfo = generateGenericPlaybackProgressInfo(includeNowPlayingQueue: true, force: true);
     if (playbackInfo != null) {
       try {
         await _jellyfinApiHelper.updatePlaybackProgress(playbackInfo);
@@ -558,20 +521,12 @@ class PlaybackHistoryService {
         isPaused: isPaused,
         isMuted: isMuted,
         positionTicks: playerPosition.inMicroseconds * 10,
-        playbackStartTimeTicks:
-            _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10,
-        volumeLevel:
-            (FinampSettingsHelper.finampSettings.currentVolume * 100).round(),
+        playbackStartTimeTicks: _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10,
+        volumeLevel: (FinampSettingsHelper.finampSettings.currentVolume * 100).round(),
         repeatMode: _toJellyfinRepeatMode(_queueService.loopMode),
-        playMethod: item.item.extras?["shouldTranscode"] as bool? ?? false
-            ? "Transcode"
-            : "DirectPlay",
-        playbackOrder:
-            _queueService.playbackOrder == FinampPlaybackOrder.shuffled
-                ? "Shuffle"
-                : "Default",
-        nowPlayingQueue:
-            getQueueToReport(includeNowPlayingQueue: includeNowPlayingQueue),
+        playMethod: item.item.extras?["shouldTranscode"] as bool? ?? false ? "Transcode" : "DirectPlay",
+        playbackOrder: _queueService.playbackOrder == FinampPlaybackOrder.shuffled ? "Shuffle" : "Default",
+        nowPlayingQueue: getQueueToReport(includeNowPlayingQueue: includeNowPlayingQueue),
         playlistItemId: _queueService.getQueue().source.id,
       );
     } catch (e) {
@@ -603,22 +558,13 @@ class PlaybackHistoryService {
         isPaused: _audioService.paused,
         isMuted: _audioService.volume == 0.0,
         positionTicks: _audioService.playbackPosition.inMicroseconds * 10,
-        playbackStartTimeTicks: _currentTrack != null
-            ? _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10
-            : null,
-        volumeLevel:
-            (FinampSettingsHelper.finampSettings.currentVolume * 100).round(),
-        playMethod:
-            currentTrack.item.extras!["shouldTranscode"] as bool? ?? false
-                ? "Transcode"
-                : "DirectPlay",
-        playbackOrder:
-            _queueService.playbackOrder == FinampPlaybackOrder.shuffled
-                ? "Shuffle"
-                : "Default",
+        playbackStartTimeTicks:
+            _currentTrack != null ? _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10 : null,
+        volumeLevel: (FinampSettingsHelper.finampSettings.currentVolume * 100).round(),
+        playMethod: currentTrack.item.extras!["shouldTranscode"] as bool? ?? false ? "Transcode" : "DirectPlay",
+        playbackOrder: _queueService.playbackOrder == FinampPlaybackOrder.shuffled ? "Shuffle" : "Default",
         repeatMode: _toJellyfinRepeatMode(_queueService.loopMode),
-        nowPlayingQueue:
-            getQueueToReport(includeNowPlayingQueue: includeNowPlayingQueue),
+        nowPlayingQueue: getQueueToReport(includeNowPlayingQueue: includeNowPlayingQueue),
         playlistItemId: _queueService.getQueue().source.id,
       );
     } catch (e) {
@@ -627,11 +573,9 @@ class PlaybackHistoryService {
     }
   }
 
-  List<jellyfin_models.QueueItem>? getQueueToReport(
-      {bool? includeNowPlayingQueue}) {
+  List<jellyfin_models.QueueItem>? getQueueToReport({bool? includeNowPlayingQueue}) {
     if ((includeNowPlayingQueue ?? false) &&
-        (FinampSettingsHelper.finampSettings.enablePlayon ||
-            FinampSettingsHelper.finampSettings.reportQueueToServer)) {
+        (FinampSettingsHelper.finampSettings.enablePlayon || FinampSettingsHelper.finampSettings.reportQueueToServer)) {
       final queue = _queueService
           .peekQueue(next: _maxQueueLengthToReport)
           .map((e) => jellyfin_models.QueueItem(

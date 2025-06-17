@@ -40,15 +40,12 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
   void waitForQuickConnect() async {
     await Future.doWhile(() async {
       await Future.delayed(const Duration(seconds: 1));
-      final quickConnectState = await jellyfinApiHelper
-          .updateQuickConnect(widget.connectionState.quickConnectState!);
+      final quickConnectState = await jellyfinApiHelper.updateQuickConnect(widget.connectionState.quickConnectState!);
       widget.connectionState.quickConnectState = quickConnectState;
-      _quickConnectLogger
-          .fine("Quick connect state: ${quickConnectState.toString()}");
+      _quickConnectLogger.fine("Quick connect state: ${quickConnectState.toString()}");
       return !(quickConnectState?.authenticated ?? false) && mounted;
     });
-    await jellyfinApiHelper.authenticateWithQuickConnect(
-        widget.connectionState.quickConnectState!);
+    await jellyfinApiHelper.authenticateWithQuickConnect(widget.connectionState.quickConnectState!);
 
     if (!mounted) return;
     widget.onAuthenticated?.call();
@@ -73,11 +70,8 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
                   height: 75,
                 ),
               ),
-              Text(
-                  AppLocalizations.of(context)!
-                      .loginFlowAccountSelectionHeading,
-                  style: Theme.of(context).textTheme.headlineMedium,
-                  textAlign: TextAlign.center),
+              Text(AppLocalizations.of(context)!.loginFlowAccountSelectionHeading,
+                  style: Theme.of(context).textTheme.headlineMedium, textAlign: TextAlign.center),
               Padding(
                 padding: const EdgeInsets.only(top: 20.0, bottom: 12.0),
                 child: Align(
@@ -96,21 +90,18 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
                 builder: (context, snapshot) {
                   final quickConnectAvailable = snapshot.data ?? false;
                   if (snapshot.hasData && quickConnectAvailable) {
-                    _quickConnectLogger
-                        .info("Quick connect available, initiating...");
+                    _quickConnectLogger.info("Quick connect available, initiating...");
                     widget.connectionState.quickConnectState = null;
                     return FutureBuilder<QuickConnectState>(
                       future: jellyfinApiHelper.initiateQuickConnect(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          widget.connectionState.quickConnectState =
-                              snapshot.data;
+                          widget.connectionState.quickConnectState = snapshot.data;
                           widget.connectionState.isConnected = true;
-                          _quickConnectLogger.info(
-                              "Quick connect state: ${widget.connectionState.quickConnectState.toString()}");
-                          waitForQuickConnect();
                           _quickConnectLogger
-                              .info("Waiting for quick connect...");
+                              .info("Quick connect state: ${widget.connectionState.quickConnectState.toString()}");
+                          waitForQuickConnect();
+                          _quickConnectLogger.info("Waiting for quick connect...");
                           return QuickConnectSection(
                             connectionState: widget.connectionState,
                             onAuthenticated: widget.onAuthenticated,
@@ -118,8 +109,7 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
                         } else {
                           widget.connectionState.isConnected = false;
                           return QuickConnectSection(
-                              connectionState: widget.connectionState,
-                              onAuthenticated: widget.onAuthenticated);
+                              connectionState: widget.connectionState, onAuthenticated: widget.onAuthenticated);
                         }
                       },
                     );
@@ -130,8 +120,7 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
                     return Padding(
                       padding: const EdgeInsets.only(top: 16.0, bottom: 12.0),
                       child: Text(
-                        AppLocalizations.of(context)!
-                            .loginFlowQuickConnectDisabled,
+                        AppLocalizations.of(context)!.loginFlowQuickConnectDisabled,
                         textAlign: TextAlign.center,
                       ),
                     );
@@ -139,8 +128,7 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
                 },
               ),
               Padding(
-                padding: const EdgeInsets.only(
-                    left: 8.0, right: 8.0, top: 0, bottom: 8.0),
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 0, bottom: 8.0),
                 child: Text(
                   AppLocalizations.of(context)!.loginFlowSelectAUser,
                   textAlign: TextAlign.center,
@@ -225,31 +213,23 @@ class QuickConnectSection extends StatelessWidget {
                         fontFamily: "monospace",
                         letterSpacing: 5.0,
                       ),
-                  semanticsLabel: connectionState.quickConnectState?.code
-                      ?.split("")
-                      .join(" "),
+                  semanticsLabel: connectionState.quickConnectState?.code?.split("").join(" "),
                   textAlign: TextAlign.center,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
-                  AppLocalizations.of(context)!
-                      .loginFlowQuickConnectInstructions,
+                  AppLocalizations.of(context)!.loginFlowQuickConnectInstructions,
                   style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         fontWeight: FontWeight.w300,
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .color!
-                            .withOpacity(0.9),
+                        color: Theme.of(context).textTheme.bodySmall!.color!.withOpacity(0.9),
                       ),
                   textAlign: TextAlign.center,
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
                 child: Text(
                   "- ${AppLocalizations.of(context)!.orDivider} -",
                   style: Theme.of(context).textTheme.bodyLarge,
@@ -282,10 +262,7 @@ class JellyfinUserWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final avatarUrl = user != null
-        ? JellyfinApiHelper()
-            .getUserImageUrl(
-                baseUrl: jellyfinApiHelper.baseUrlTemp!, user: user!)
-            ?.toString()
+        ? JellyfinApiHelper().getUserImageUrl(baseUrl: jellyfinApiHelper.baseUrlTemp!, user: user!)?.toString()
         : null;
 
     const double avatarSize = 72.0;
@@ -301,9 +278,7 @@ class JellyfinUserWidget extends StatelessWidget {
         } else {
           return Container(
             decoration: BoxDecoration(
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.white
-                  : Colors.black,
+              color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
             ),
             child: Image.asset(
               'images/finamp.png',

@@ -24,8 +24,7 @@ Map<String, Widget> getPlaybackActionPages({
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             PlayPlaybackAction(baseItem: baseItem),
-            if (queueService.getQueue().nextUp.isNotEmpty)
-              PlayNextPlaybackAction(baseItem: baseItem),
+            if (queueService.getQueue().nextUp.isNotEmpty) PlayNextPlaybackAction(baseItem: baseItem),
             AddToNextUpPlaybackAction(baseItem: baseItem),
             AddToQueuePlaybackAction(baseItem: baseItem),
           ],
@@ -35,8 +34,7 @@ Map<String, Widget> getPlaybackActionPages({
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ShufflePlaybackAction(baseItem: baseItem),
-            if (queueService.getQueue().nextUp.isNotEmpty)
-              ShuffleNextPlaybackAction(baseItem: baseItem),
+            if (queueService.getQueue().nextUp.isNotEmpty) ShuffleNextPlaybackAction(baseItem: baseItem),
             ShuffleToNextUpPlaybackAction(baseItem: baseItem),
             ShuffleToQueuePlaybackAction(baseItem: baseItem),
           ],
@@ -46,8 +44,7 @@ Map<String, Widget> getPlaybackActionPages({
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ShuffleAlbumsAction(baseItem: baseItem),
-            if (queueService.getQueue().nextUp.isNotEmpty)
-              ShuffleAlbumsNextPlaybackAction(baseItem: baseItem),
+            if (queueService.getQueue().nextUp.isNotEmpty) ShuffleAlbumsNextPlaybackAction(baseItem: baseItem),
             ShuffleAlbumsToNextUpPlaybackAction(baseItem: baseItem),
             ShuffleAlbumsToQueuePlaybackAction(baseItem: baseItem),
           ],
@@ -60,8 +57,7 @@ Map<String, Widget> getPlaybackActionPages({
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             PlayPlaybackAction(baseItem: baseItem),
-            if (queueService.getQueue().nextUp.isNotEmpty)
-              PlayNextPlaybackAction(baseItem: baseItem),
+            if (queueService.getQueue().nextUp.isNotEmpty) PlayNextPlaybackAction(baseItem: baseItem),
             AddToNextUpPlaybackAction(baseItem: baseItem),
             AddToQueuePlaybackAction(baseItem: baseItem),
           ],
@@ -72,8 +68,7 @@ Map<String, Widget> getPlaybackActionPages({
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ShufflePlaybackAction(baseItem: baseItem),
-            if (queueService.getQueue().nextUp.isNotEmpty)
-              ShuffleNextPlaybackAction(baseItem: baseItem),
+            if (queueService.getQueue().nextUp.isNotEmpty) ShuffleNextPlaybackAction(baseItem: baseItem),
             ShuffleToNextUpPlaybackAction(baseItem: baseItem),
             ShuffleToQueuePlaybackAction(baseItem: baseItem),
           ],
@@ -108,8 +103,7 @@ class PlayPlaybackAction extends ConsumerWidget {
         );
 
         GlobalSnackbar.message(
-            (scaffold) => AppLocalizations.of(scaffold)!
-                .confirmPlayNext(BaseItemDtoType.fromItem(baseItem).name),
+            (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(BaseItemDtoType.fromItem(baseItem).name),
             isConfirmation: true);
         Navigator.pop(context);
       },
@@ -140,18 +134,15 @@ class PlayNextPlaybackAction extends ConsumerWidget {
                   baseItem: baseItem,
                 ) ??
                 [],
-            source: QueueItemSource.fromBaseItem(baseItem,
-                type: QueueItemSourceType.nextUpAlbum),
+            source: QueueItemSource.fromBaseItem(baseItem, type: QueueItemSourceType.nextUpAlbum),
           );
 
           GlobalSnackbar.message(
-              (scaffold) => AppLocalizations.of(scaffold)!
-                  .confirmPlayNext(BaseItemDtoType.fromItem(baseItem).name),
+              (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(BaseItemDtoType.fromItem(baseItem).name),
               isConfirmation: true);
           Navigator.pop(context);
         },
-        iconColor:
-            Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+        iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
       ),
     );
   }
@@ -177,13 +168,11 @@ class AddToNextUpPlaybackAction extends ConsumerWidget {
                 baseItem: baseItem,
               ) ??
               [],
-          source: QueueItemSource.fromBaseItem(baseItem,
-              type: QueueItemSourceType.nextUpAlbum),
+          source: QueueItemSource.fromBaseItem(baseItem, type: QueueItemSourceType.nextUpAlbum),
         );
 
         GlobalSnackbar.message(
-            (scaffold) => AppLocalizations.of(scaffold)!
-                .confirmAddToNextUp(BaseItemDtoType.fromItem(baseItem).name),
+            (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp(BaseItemDtoType.fromItem(baseItem).name),
             isConfirmation: true);
         Navigator.pop(context);
       },
@@ -216,8 +205,7 @@ class AddToQueuePlaybackAction extends ConsumerWidget {
         );
 
         GlobalSnackbar.message(
-            (scaffold) => AppLocalizations.of(scaffold)!
-                .confirmAddToQueue(BaseItemDtoType.fromItem(baseItem).name),
+            (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue(BaseItemDtoType.fromItem(baseItem).name),
             isConfirmation: true);
         Navigator.pop(context);
       },
@@ -280,17 +268,13 @@ class ShuffleNextPlaybackAction extends ConsumerWidget {
                 ) ??
                 [])
               ..shuffle(),
-            source: QueueItemSource.fromBaseItem(baseItem,
-                type: QueueItemSourceType.nextUpAlbum),
+            source: QueueItemSource.fromBaseItem(baseItem, type: QueueItemSourceType.nextUpAlbum),
           );
 
-          GlobalSnackbar.message(
-              (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext,
-              isConfirmation: true);
+          GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext, isConfirmation: true);
           Navigator.pop(context);
         },
-        iconColor:
-            Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+        iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
       ),
     );
   }
@@ -317,12 +301,10 @@ class ShuffleToNextUpPlaybackAction extends ConsumerWidget {
               ) ??
               [])
             ..shuffle(),
-          source: QueueItemSource.fromBaseItem(baseItem,
-              type: QueueItemSourceType.nextUpAlbum),
+          source: QueueItemSource.fromBaseItem(baseItem, type: QueueItemSourceType.nextUpAlbum),
         );
 
-        GlobalSnackbar.message(
-            (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
+        GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
             isConfirmation: true);
         Navigator.pop(context);
       },
@@ -355,8 +337,7 @@ class ShuffleToQueuePlaybackAction extends ConsumerWidget {
           source: QueueItemSource.fromBaseItem(baseItem),
         );
 
-        GlobalSnackbar.message(
-            (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue,
+        GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue,
             isConfirmation: true);
         Navigator.pop(context);
       },
@@ -387,8 +368,7 @@ class ShuffleAlbumsAction extends ConsumerWidget {
                 manuallyShuffle: true,
               ) ??
               []),
-          source: QueueItemSource.fromBaseItem(baseItem,
-              type: QueueItemSourceType.nextUpAlbum),
+          source: QueueItemSource.fromBaseItem(baseItem, type: QueueItemSourceType.nextUpAlbum),
         );
 
         Navigator.pop(context);
@@ -422,17 +402,13 @@ class ShuffleAlbumsNextPlaybackAction extends ConsumerWidget {
                   manuallyShuffle: true,
                 ) ??
                 []),
-            source: QueueItemSource.fromBaseItem(baseItem,
-                type: QueueItemSourceType.nextUpAlbum),
+            source: QueueItemSource.fromBaseItem(baseItem, type: QueueItemSourceType.nextUpAlbum),
           );
 
-          GlobalSnackbar.message(
-              (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext,
-              isConfirmation: true);
+          GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext, isConfirmation: true);
           Navigator.pop(context);
         },
-        iconColor:
-            Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+        iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
       ),
     );
   }
@@ -460,12 +436,10 @@ class ShuffleAlbumsToNextUpPlaybackAction extends ConsumerWidget {
                 manuallyShuffle: true,
               ) ??
               []),
-          source: QueueItemSource.fromBaseItem(baseItem,
-              type: QueueItemSourceType.nextUpAlbum),
+          source: QueueItemSource.fromBaseItem(baseItem, type: QueueItemSourceType.nextUpAlbum),
         );
 
-        GlobalSnackbar.message(
-            (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
+        GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
             isConfirmation: true);
         Navigator.pop(context);
       },
@@ -499,8 +473,7 @@ class ShuffleAlbumsToQueuePlaybackAction extends ConsumerWidget {
           source: QueueItemSource.fromBaseItem(baseItem),
         );
 
-        GlobalSnackbar.message(
-            (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue,
+        GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue,
             isConfirmation: true);
         Navigator.pop(context);
       },

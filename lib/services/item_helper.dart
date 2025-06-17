@@ -45,9 +45,8 @@ Future<List<BaseItemDto>?> loadChildTracks({
             .then((value) => value.$2); // get playable tracks
         break;
       case BaseItemDtoType.artist:
-        newItemsFuture = ref.read(getArtistTracksProvider(baseItem,
-                finampUserHelper.currentUser?.currentView, genreFilter)
-            .future);
+        newItemsFuture =
+            ref.read(getArtistTracksProvider(baseItem, finampUserHelper.currentUser?.currentView, genreFilter).future);
         break;
       case BaseItemDtoType.genre:
         newItemsFuture = jellyfinApiHelper.getItems(
@@ -66,8 +65,7 @@ Future<List<BaseItemDto>?> loadChildTracks({
           includeItemTypes: [
             BaseItemDtoType.track.idString,
           ].join(","),
-          sortBy: sortBy?.jellyfinName(null) ??
-              "ParentIndexNumber,IndexNumber,SortName",
+          sortBy: sortBy?.jellyfinName(null) ?? "ParentIndexNumber,IndexNumber,SortName",
           sortOrder: sortOrder?.toString(),
           // filters: settings.onlyShowFavorites ? "IsFavorite" : null,
         );
@@ -77,8 +75,8 @@ Future<List<BaseItemDto>?> loadChildTracks({
   newItems = await newItemsFuture;
 
   if (newItems == null) {
-    GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!
-        .couldNotLoad(BaseItemDtoType.fromItem(baseItem).name));
+    GlobalSnackbar.message(
+        (scaffold) => AppLocalizations.of(scaffold)!.couldNotLoad(BaseItemDtoType.fromItem(baseItem).name));
     return [];
   }
 
@@ -119,10 +117,8 @@ Future<List<BaseItemDto>?> loadChildTracksOffline({
           .toList();
       break;
     case BaseItemDtoType.artist:
-      items = await GetIt.instance<ProviderContainer>().read(
-          getArtistTracksProvider(baseItem,
-                  finampUserHelper.currentUser?.currentView, genreFilter)
-              .future);
+      items = await GetIt.instance<ProviderContainer>()
+          .read(getArtistTracksProvider(baseItem, finampUserHelper.currentUser?.currentView, genreFilter).future);
       break;
     default:
       items = await downloadsService.getCollectionTracks(

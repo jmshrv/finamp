@@ -35,12 +35,9 @@ class GoToGenreMenuEntry extends ConsumerWidget implements HideableMenuEntry {
           try {
             if (FinampSettingsHelper.finampSettings.isOffline) {
               final downloadsService = GetIt.instance<DownloadsService>();
-              genre = (await downloadsService.getCollectionInfo(
-                      id: baseItem.genreItems!.first.id))!
-                  .baseItem!;
+              genre = (await downloadsService.getCollectionInfo(id: baseItem.genreItems!.first.id))!.baseItem!;
             } else {
-              genre = await jellyfinApiHelper
-                  .getItemById(baseItem.genreItems!.first.id);
+              genre = await jellyfinApiHelper.getItemById(baseItem.genreItems!.first.id);
             }
           } catch (e) {
             GlobalSnackbar.error(e);
@@ -48,8 +45,7 @@ class GoToGenreMenuEntry extends ConsumerWidget implements HideableMenuEntry {
           }
           if (context.mounted) {
             Navigator.pop(context);
-            await Navigator.of(context)
-                .pushNamed(GenreScreen.routeName, arguments: genre);
+            await Navigator.of(context).pushNamed(GenreScreen.routeName, arguments: genre);
           }
         },
       ),

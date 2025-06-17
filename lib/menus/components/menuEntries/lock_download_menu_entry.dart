@@ -8,8 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
-class LockDownloadMenuEntry extends ConsumerWidget
-    implements HideableMenuEntry {
+class LockDownloadMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final DownloadStub downloadStub;
 
   const LockDownloadMenuEntry({
@@ -21,23 +20,19 @@ class LockDownloadMenuEntry extends ConsumerWidget
   Widget build(BuildContext context, WidgetRef ref) {
     final downloadsService = GetIt.instance<DownloadsService>();
 
-    final DownloadItemStatus? downloadStatus =
-        ref.watch(downloadsService.statusProvider((downloadStub, null)));
+    final DownloadItemStatus? downloadStatus = ref.watch(downloadsService.statusProvider((downloadStub, null)));
 
     String? parentTooltip;
     if (downloadStatus?.isIncidental ?? false) {
       var parent = downloadsService.getFirstRequiringItem(downloadStub);
       if (parent != null) {
-        var parentName = AppLocalizations.of(context)!
-            .itemTypeSubtitle(parent.baseItemType.name, parent.name);
-        parentTooltip =
-            AppLocalizations.of(context)!.incidentalDownloadTooltip(parentName);
+        var parentName = AppLocalizations.of(context)!.itemTypeSubtitle(parent.baseItemType.name, parent.name);
+        parentTooltip = AppLocalizations.of(context)!.incidentalDownloadTooltip(parentName);
       }
     }
 
     return Visibility(
-        visible: !ref.watch(finampSettingsProvider.isOffline) &&
-            (downloadStatus?.isIncidental ?? false),
+        visible: !ref.watch(finampSettingsProvider.isOffline) && (downloadStatus?.isIncidental ?? false),
         child: Tooltip(
           message: parentTooltip ?? "Widget shouldn't be visible",
           child: MenuEntry(
@@ -54,8 +49,6 @@ class LockDownloadMenuEntry extends ConsumerWidget
 
   @override
   bool get isVisible =>
-      GetIt.instance<DownloadsService>()
-          .getStatus(downloadStub, null)
-          .isIncidental &&
+      GetIt.instance<DownloadsService>().getStatus(downloadStub, null).isIncidental &&
       !FinampSettingsHelper.finampSettings.isOffline;
 }

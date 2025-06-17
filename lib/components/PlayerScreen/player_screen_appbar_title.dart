@@ -13,8 +13,7 @@ class PlayerScreenAppBarTitle extends StatefulWidget {
   final int maxLines;
 
   @override
-  State<PlayerScreenAppBarTitle> createState() =>
-      _PlayerScreenAppBarTitleState();
+  State<PlayerScreenAppBarTitle> createState() => _PlayerScreenAppBarTitleState();
 }
 
 class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
@@ -42,8 +41,7 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
             child: Column(
               children: [
                 Text(
-                  AppLocalizations.of(context)!
-                      .playingFromType(queueItem.source.type.name),
+                  AppLocalizations.of(context)!.playingFromType(queueItem.source.type.name),
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w300,
@@ -59,9 +57,8 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
                   queueItem.source.name.getLocalized(context),
                   style: TextStyle(
                     fontSize: 14,
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
-                        : Colors.black.withOpacity(0.9),
+                    color:
+                        Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black.withOpacity(0.9),
                   ),
                   maxLines: widget.maxLines,
                   textAlign: TextAlign.center,

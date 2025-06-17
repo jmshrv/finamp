@@ -13,12 +13,10 @@ class CustomDownloadLocationForm extends StatefulWidget {
   final Key formKey;
 
   @override
-  State<CustomDownloadLocationForm> createState() =>
-      _CustomDownloadLocationFormState();
+  State<CustomDownloadLocationForm> createState() => _CustomDownloadLocationFormState();
 }
 
-class _CustomDownloadLocationFormState
-    extends State<CustomDownloadLocationForm> {
+class _CustomDownloadLocationFormState extends State<CustomDownloadLocationForm> {
   Directory? selectedDirectory;
 
   @override
@@ -45,18 +43,12 @@ class _CustomDownloadLocationFormState
                             Expanded(
                               child: Text(
                                 selectedDirectory == null
-                                    ? AppLocalizations.of(context)!
-                                        .selectDirectory
-                                    : selectedDirectory!.path.replaceFirst(
-                                        "${selectedDirectory!.parent.path}/",
-                                        ""),
+                                    ? AppLocalizations.of(context)!.selectDirectory
+                                    : selectedDirectory!.path.replaceFirst("${selectedDirectory!.parent.path}/", ""),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: selectedDirectory == null
-                                    ? Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(
+                                    ? Theme.of(context).textTheme.titleMedium?.copyWith(
                                           color: Theme.of(context).hintColor,
                                         )
                                     : Theme.of(context).textTheme.titleMedium,
@@ -65,8 +57,7 @@ class _CustomDownloadLocationFormState
                             IconButton(
                                 icon: const Icon(Icons.folder),
                                 onPressed: () async {
-                                  String? newPath = await FilePicker.platform
-                                      .getDirectoryPath();
+                                  String? newPath = await FilePicker.platform.getDirectoryPath();
 
                                   if (newPath != null) {
                                     setState(() {
@@ -83,10 +74,9 @@ class _CustomDownloadLocationFormState
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
                       child: Text(
-                        field.errorText ??
-                            AppLocalizations.of(context)!.unknownError,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.error),
+                        field.errorText ?? AppLocalizations.of(context)!.unknownError,
+                        style:
+                            Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.error),
                       ),
                     ),
                 ],
@@ -101,22 +91,19 @@ class _CustomDownloadLocationFormState
               // checked if selectedDirectory is null we should be fine.
 
               if (selectedDirectory!.path == "/") {
-                return AppLocalizations.of(context)!
-                    .pathReturnSlashErrorMessage;
+                return AppLocalizations.of(context)!.pathReturnSlashErrorMessage;
               }
 
               return null;
             },
             onSaved: (_) {
               if (selectedDirectory != null) {
-                context.read<NewDownloadLocation>().path =
-                    selectedDirectory!.path;
+                context.read<NewDownloadLocation>().path = selectedDirectory!.path;
               }
             },
           ),
           TextFormField(
-            decoration:
-                InputDecoration(labelText: AppLocalizations.of(context)!.name),
+            decoration: InputDecoration(labelText: AppLocalizations.of(context)!.name),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return AppLocalizations.of(context)!.required;
@@ -132,8 +119,7 @@ class _CustomDownloadLocationFormState
           const Padding(padding: EdgeInsets.all(8.0)),
           if (Platform.isIOS || Platform.isAndroid)
             Text(AppLocalizations.of(context)!.customLocationsBuggy,
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.red)),
+                textAlign: TextAlign.center, style: const TextStyle(color: Colors.red)),
         ],
       ),
     );

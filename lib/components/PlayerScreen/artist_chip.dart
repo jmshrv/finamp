@@ -26,9 +26,7 @@ Future<BaseItemDto> artistItem(Ref ref, BaseItemId id) async {
   final isarDownloader = GetIt.instance<DownloadsService>();
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
   return isOffline
-      ? isarDownloader
-          .getCollectionInfo(id: id)
-          .then((value) => value!.baseItem!)
+      ? isarDownloader.getCollectionInfo(id: id).then((value) => value!.baseItem!)
       : jellyfinApiHelper.getItemById(id);
 }
 
@@ -48,12 +46,8 @@ class ArtistChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final artists = ((artistType == ArtistType.albumArtist)
-            ? baseItem?.albumArtists
-            : baseItem?.artistItems) ??
-        [];
-    final filteredArtists =
-        {for (var artist in artists) artist.id: artist}.values.toList();
+    final artists = ((artistType == ArtistType.albumArtist) ? baseItem?.albumArtists : baseItem?.artistItems) ?? [];
+    final filteredArtists = {for (var artist in artists) artist.id: artist}.values.toList();
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -107,13 +101,10 @@ class ArtistChip extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final localBackgroundColor = backgroundColor ?? _defaultBackgroundColour;
-    final localColor =
-        color ?? Theme.of(context).textTheme.bodySmall?.color ?? Colors.white;
+    final localColor = color ?? Theme.of(context).textTheme.bodySmall?.color ?? Colors.white;
     final BaseItemDto? localArtist;
-    if (artist != null &&
-        ref.watch(finampSettingsProvider.showArtistChipImage)) {
-      localArtist =
-          ref.watch(artistItemProvider(artist!.id)).valueOrNull ?? artist;
+    if (artist != null && ref.watch(finampSettingsProvider.showArtistChipImage)) {
+      localArtist = ref.watch(artistItemProvider(artist!.id)).valueOrNull ?? artist;
     } else {
       localArtist = artist;
     }
@@ -141,9 +132,7 @@ class _ArtistChipContent extends StatelessWidget {
     // We do this so that we can pass the track item here to show an actual value
     // instead of empty
     bool isArtist = item?.isArtist ?? false;
-    final name = isArtist
-        ? item?.name
-        : (item?.artists?.firstOrNull ?? item?.albumArtist);
+    final name = isArtist ? item?.name : (item?.artists?.firstOrNull ?? item?.albumArtist);
 
     return Semantics.fromProperties(
       properties: SemanticsProperties(
@@ -158,10 +147,7 @@ class _ArtistChipContent extends StatelessWidget {
           borderRadius: _borderRadius,
           child: InkWell(
             // We shouldn't click through to artists if not passed one
-            onTap: !isArtist
-                ? null
-                : () => Navigator.of(context)
-                    .pushNamed(ArtistScreen.routeName, arguments: item),
+            onTap: !isArtist ? null : () => Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: item),
             borderRadius: _borderRadius,
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -179,8 +165,7 @@ class _ArtistChipContent extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 6),
                     child: Text(
                       name ?? AppLocalizations.of(context)!.unknownArtist,
-                      style: TextStyle(
-                          color: color, overflow: TextOverflow.ellipsis),
+                      style: TextStyle(color: color, overflow: TextOverflow.ellipsis),
                       softWrap: false,
                       overflow: TextOverflow.ellipsis,
                     ),

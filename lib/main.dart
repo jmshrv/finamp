@@ -161,16 +161,14 @@ void main() async {
 Future<void> _setupEdgeToEdgeOverlayStyle() async {
   if (Platform.isAndroid) {
     unawaited(SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge));
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.transparent));
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent));
     final binding = WidgetsFlutterBinding.ensureInitialized();
     binding.addObserver(UIOverlaySetterObserver());
   } else if (Platform.isIOS) {
     // On iOS, the status bar will have black icons by default on the login
     // screen as it does not have an AppBar. To fix this, we set the
     // brightness to dark manually on startup.
-    SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark));
   }
 }
 
@@ -183,9 +181,8 @@ void _setupOfflineListenLogHelper() {
 }
 
 Future<void> _setupDownloadsHelper() async {
-  await Future.wait(FinampSettingsHelper
-      .finampSettings.downloadLocationsMap.values
-      .map((element) => element.updateCurrentPath()));
+  await Future.wait(
+      FinampSettingsHelper.finampSettings.downloadLocationsMap.values.map((element) => element.updateCurrentPath()));
   FileDownloader(persistentStorage: IsarPersistentStorage());
   await FileDownloader().ready;
   WidgetsFlutterBinding.ensureInitialized();
@@ -193,34 +190,26 @@ Future<void> _setupDownloadsHelper() async {
   GetIt.instance.registerSingleton(DownloadsService());
   final downloadsService = GetIt.instance<DownloadsService>();
 
-  if (!FinampSettingsHelper
-      .finampSettings.hasCompletedDownloadsServiceMigration) {
+  if (!FinampSettingsHelper.finampSettings.hasCompletedDownloadsServiceMigration) {
     await downloadsService.migrateFromHive();
     FinampSetters.setHasCompletedDownloadsServiceMigration(true);
   } else {
     // Some users may have missed migration due to a bug in the flag setting and
     // are therefore missing an internal directory
     if (FinampSettingsHelper.finampSettings.downloadLocationsMap.values
-        .where((element) =>
-            element.baseDirectory ==
-            DownloadLocationType.platformDefaultDirectory)
+        .where((element) => element.baseDirectory == DownloadLocationType.platformDefaultDirectory)
         .isEmpty) {
-      _mainLog
-          .info("Internal Storage download location is missing.  Recreating.");
+      _mainLog.info("Internal Storage download location is missing.  Recreating.");
       final downloadLocation = await DownloadLocation.create(
-          name: DownloadLocation.internalStorageName,
-          baseDirectory: DownloadLocationType.platformDefaultDirectory);
+          name: DownloadLocation.internalStorageName, baseDirectory: DownloadLocationType.platformDefaultDirectory);
       FinampSettingsHelper.addDownloadLocation(downloadLocation);
       // There may be old downloads present due to skipping the migration
       // Run a repair to make sure they all get cleaned up.
-      unawaited(downloadsService
-          .repairAllDownloads()
-          .then((value) => null, onError: GlobalSnackbar.error));
+      unawaited(downloadsService.repairAllDownloads().then((value) => null, onError: GlobalSnackbar.error));
     }
   }
 
-  await FileDownloader()
-      .configure(globalConfig: (Config.checkAvailableSpace, 1024));
+  await FileDownloader().configure(globalConfig: (Config.checkAvailableSpace, 1024));
   await FileDownloader().resumeFromBackground();
   await downloadsService.startQueues();
 
@@ -266,8 +255,7 @@ Future<void> setupHive() async {
   // If the settings box is empty, we add an initial settings value here.
   Box<FinampSettings> finampSettingsBox = Hive.box("FinampSettings");
   if (finampSettingsBox.isEmpty) {
-    await finampSettingsBox.put(
-        "FinampSettings", await FinampSettings.create());
+    await finampSettingsBox.put("FinampSettings", await FinampSettings.create());
   }
 
   // If no ThemeMode is set, we set it to the default (system)
@@ -275,12 +263,7 @@ Future<void> setupHive() async {
   if (themeModeBox.isEmpty) ThemeModeHelper.setThemeMode(DefaultSettings.theme);
 
   final isar = await Isar.open(
-    [
-      DownloadItemSchema,
-      IsarTaskDataSchema,
-      FinampUserSchema,
-      DownloadedLyricsSchema
-    ],
+    [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema, DownloadedLyricsSchema],
     directory: dir.path,
     name: isarDatabaseName,
   );
@@ -312,13 +295,11 @@ Future<void> _setupOSIntegration() async {
       titleBarStyle: TitleBarStyle.normal,
       minimumSize: Size(400, 250),
     );
-    unawaited(
-        WindowManager.instance.waitUntilReadyToShow(windowOptions, () async {
+    unawaited(WindowManager.instance.waitUntilReadyToShow(windowOptions, () async {
       if (screenSize != null) {
         await windowManager.setPosition(screenSize.location);
       }
-      GetIt.instance<ProviderContainer>()
-          .listen(brightnessProvider, fireImmediately: true, (_, brightness) {
+      GetIt.instance<ProviderContainer>().listen(brightnessProvider, fireImmediately: true, (_, brightness) {
         windowManager.setBrightness(brightness);
       });
       await windowManager.show();
@@ -328,12 +309,10 @@ Future<void> _setupOSIntegration() async {
 
   // Load the album image from assets and save it to the documents directory for use in Android Auto
   final applicationSupportDirectory = await getApplicationSupportDirectory();
-  final albumImageFile = File(path_helper.join(
-      applicationSupportDirectory.absolute.path,
-      Assets.images.albumWhite.path));
+  final albumImageFile =
+      File(path_helper.join(applicationSupportDirectory.absolute.path, Assets.images.albumWhite.path));
   if (!(await albumImageFile.exists())) {
-    final albumImageBytes =
-        await rootBundle.load(Assets.images.albumWhite.path);
+    final albumImageBytes = await rootBundle.load(Assets.images.albumWhite.path);
     final albumBuffer = albumImageBytes.buffer;
     await albumImageFile.create(recursive: true);
     await albumImageFile.writeAsBytes(
@@ -357,8 +336,7 @@ Future<void> _setupPlaybackServices() async {
   final audioHandler = await AudioService.init(
     builder: () => MusicPlayerBackgroundTask(),
     config: AudioServiceConfig(
-        androidStopForegroundOnPause:
-            FinampSettingsHelper.finampSettings.androidStopForegroundOnPause,
+        androidStopForegroundOnPause: FinampSettingsHelper.finampSettings.androidStopForegroundOnPause,
         androidNotificationChannelName: "Finamp",
         androidNotificationIcon: "mipmap/white",
         androidNotificationChannelId: "com.unicornsonlsd.finamp.audio",
@@ -370,15 +348,9 @@ Future<void> _setupPlaybackServices() async {
           "android.media.browse.SEARCH_SUPPORTED": true,
           // see https://developer.android.com/reference/androidx/media/utils/MediaConstants#DESCRIPTION_EXTRAS_VALUE_CONTENT_STYLE_GRID_ITEM()
           "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT":
-              FinampSettingsHelper.finampSettings.contentViewType ==
-                      ContentViewType.list
-                  ? 1
-                  : 2,
+              FinampSettingsHelper.finampSettings.contentViewType == ContentViewType.list ? 1 : 2,
           "android.media.browse.CONTENT_STYLE_PLAYABLE_HINT":
-              FinampSettingsHelper.finampSettings.contentViewType ==
-                      ContentViewType.list
-                  ? 1
-                  : 2,
+              FinampSettingsHelper.finampSettings.contentViewType == ContentViewType.list ? 1 : 2,
         }),
   );
 
@@ -389,9 +361,7 @@ Future<void> _setupPlaybackServices() async {
   GetIt.instance.registerSingleton(AudioServiceHelper());
 
   // Begin to restore queue
-  unawaited(queueService
-      .performInitialQueueLoad()
-      .catchError((dynamic x) => GlobalSnackbar.error(x)));
+  unawaited(queueService.performInitialQueueLoad().catchError((dynamic x) => GlobalSnackbar.error(x)));
 }
 
 /// Migrates the old DownloadLocations list to a map
@@ -489,11 +459,9 @@ class _FinampState extends State<Finamp> with WindowListener {
       child: GestureDetector(
         onTap: () {
           // Never rebuild FinampApp context, it breaks ProviderScope
-          FocusScopeNode currentFocus =
-              FocusScope.of(context, createDependency: false);
+          FocusScopeNode currentFocus = FocusScope.of(context, createDependency: false);
 
-          if (!currentFocus.hasPrimaryFocus &&
-              currentFocus.focusedChild != null) {
+          if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
             FocusManager.instance.primaryFocus?.unfocus();
           }
         },
@@ -504,15 +472,13 @@ class _FinampState extends State<Finamp> with WindowListener {
             child: ValueListenableBuilder(
                 valueListenable: LocaleHelper.localeListener,
                 builder: (_, __, ___) {
-                  final transitionBuilder = MediaQuery.of(context)
-                          .disableAnimations
+                  final transitionBuilder = MediaQuery.of(context).disableAnimations
                       ? PageTransitionsTheme(
                           // Disable page transitions on all platforms if [disableAnimations] is true, otherwise use default transitions
                           builders: TargetPlatform.values.fold(
                               <TargetPlatform, PageTransitionsBuilder>{},
-                              (previousValue, element) => previousValue
-                                ..[element] =
-                                    const NoTransitionPageTransitionsBuilder()))
+                              (previousValue, element) =>
+                                  previousValue..[element] = const NoTransitionPageTransitionsBuilder()))
                       : null;
 
                   return ValueListenableBuilder<Box<ThemeMode>>(
@@ -521,79 +487,44 @@ class _FinampState extends State<Finamp> with WindowListener {
                         return MaterialApp(
                           title: "Finamp",
                           routes: {
-                            SplashScreen.routeName: (context) =>
-                                const SplashScreen(),
-                            LoginScreen.routeName: (context) =>
-                                const LoginScreen(),
-                            ViewSelector.routeName: (context) =>
-                                const ViewSelector(),
-                            MusicScreen.routeName: (context) =>
-                                const MusicScreen(),
-                            AlbumScreen.routeName: (context) =>
-                                const AlbumScreen(),
-                            ArtistScreen.routeName: (context) =>
-                                const ArtistScreen(),
-                            GenreScreen.routeName: (context) =>
-                                const GenreScreen(),
+                            SplashScreen.routeName: (context) => const SplashScreen(),
+                            LoginScreen.routeName: (context) => const LoginScreen(),
+                            ViewSelector.routeName: (context) => const ViewSelector(),
+                            MusicScreen.routeName: (context) => const MusicScreen(),
+                            AlbumScreen.routeName: (context) => const AlbumScreen(),
+                            ArtistScreen.routeName: (context) => const ArtistScreen(),
+                            GenreScreen.routeName: (context) => const GenreScreen(),
                             PlayerScreen.routeName: (context) =>
-                                const PlayerScreen(
-                                    key: ValueKey(PlayerScreen.routeName)),
-                            DownloadsScreen.routeName: (context) =>
-                                const DownloadsScreen(),
-                            ActiveDownloadsScreen.routeName: (context) =>
-                                const ActiveDownloadsScreen(),
-                            PlaybackHistoryScreen.routeName: (context) =>
-                                const PlaybackHistoryScreen(),
-                            LogsScreen.routeName: (context) =>
-                                const LogsScreen(),
-                            QueueRestoreScreen.routeName: (context) =>
-                                const QueueRestoreScreen(),
-                            SettingsScreen.routeName: (context) =>
-                                const SettingsScreen(),
-                            TranscodingSettingsScreen.routeName: (context) =>
-                                const TranscodingSettingsScreen(),
-                            DownloadsLocationScreen.routeName: (context) =>
-                                const DownloadsLocationScreen(),
-                            DownloadsSettingsScreen.routeName: (context) =>
-                                const DownloadsSettingsScreen(),
-                            AddDownloadLocationScreen.routeName: (context) =>
-                                const AddDownloadLocationScreen(),
-                            PlaybackReportingSettingsScreen.routeName:
-                                (context) =>
-                                    const PlaybackReportingSettingsScreen(),
-                            AudioServiceSettingsScreen.routeName: (context) =>
-                                const AudioServiceSettingsScreen(),
-                            VolumeNormalizationSettingsScreen.routeName:
-                                (context) =>
-                                    const VolumeNormalizationSettingsScreen(),
-                            InteractionSettingsScreen.routeName: (context) =>
-                                const InteractionSettingsScreen(),
-                            TabsSettingsScreen.routeName: (context) =>
-                                const TabsSettingsScreen(),
-                            LayoutSettingsScreen.routeName: (context) =>
-                                const LayoutSettingsScreen(),
-                            CustomizationSettingsScreen.routeName: (context) =>
-                                const CustomizationSettingsScreen(),
-                            PlayerSettingsScreen.routeName: (context) =>
-                                const PlayerSettingsScreen(),
-                            LyricsSettingsScreen.routeName: (context) =>
-                                const LyricsSettingsScreen(),
-                            LanguageSelectionScreen.routeName: (context) =>
-                                const LanguageSelectionScreen(),
-                            AlbumSettingsScreen.routeName: (context) =>
-                                const AlbumSettingsScreen(),
-                            ArtistSettingsScreen.routeName: (context) =>
-                                const ArtistSettingsScreen(),
-                            GenreSettingsScreen.routeName: (context) =>
-                                const GenreSettingsScreen(),
-                            NetworkSettingsScreen.routeName: (context) =>
-                                const NetworkSettingsScreen(),
+                                const PlayerScreen(key: ValueKey(PlayerScreen.routeName)),
+                            DownloadsScreen.routeName: (context) => const DownloadsScreen(),
+                            ActiveDownloadsScreen.routeName: (context) => const ActiveDownloadsScreen(),
+                            PlaybackHistoryScreen.routeName: (context) => const PlaybackHistoryScreen(),
+                            LogsScreen.routeName: (context) => const LogsScreen(),
+                            QueueRestoreScreen.routeName: (context) => const QueueRestoreScreen(),
+                            SettingsScreen.routeName: (context) => const SettingsScreen(),
+                            TranscodingSettingsScreen.routeName: (context) => const TranscodingSettingsScreen(),
+                            DownloadsLocationScreen.routeName: (context) => const DownloadsLocationScreen(),
+                            DownloadsSettingsScreen.routeName: (context) => const DownloadsSettingsScreen(),
+                            AddDownloadLocationScreen.routeName: (context) => const AddDownloadLocationScreen(),
+                            PlaybackReportingSettingsScreen.routeName: (context) =>
+                                const PlaybackReportingSettingsScreen(),
+                            AudioServiceSettingsScreen.routeName: (context) => const AudioServiceSettingsScreen(),
+                            VolumeNormalizationSettingsScreen.routeName: (context) =>
+                                const VolumeNormalizationSettingsScreen(),
+                            InteractionSettingsScreen.routeName: (context) => const InteractionSettingsScreen(),
+                            TabsSettingsScreen.routeName: (context) => const TabsSettingsScreen(),
+                            LayoutSettingsScreen.routeName: (context) => const LayoutSettingsScreen(),
+                            CustomizationSettingsScreen.routeName: (context) => const CustomizationSettingsScreen(),
+                            PlayerSettingsScreen.routeName: (context) => const PlayerSettingsScreen(),
+                            LyricsSettingsScreen.routeName: (context) => const LyricsSettingsScreen(),
+                            LanguageSelectionScreen.routeName: (context) => const LanguageSelectionScreen(),
+                            AlbumSettingsScreen.routeName: (context) => const AlbumSettingsScreen(),
+                            ArtistSettingsScreen.routeName: (context) => const ArtistSettingsScreen(),
+                            GenreSettingsScreen.routeName: (context) => const GenreSettingsScreen(),
+                            NetworkSettingsScreen.routeName: (context) => const NetworkSettingsScreen(),
                           },
                           initialRoute: SplashScreen.routeName,
-                          navigatorObservers: [
-                            SplitScreenNavigatorObserver(),
-                            KeepScreenOnObserver()
-                          ],
+                          navigatorObservers: [SplitScreenNavigatorObserver(), KeepScreenOnObserver()],
                           builder: buildPlayerSplitScreenScaffold,
                           theme: ThemeData(
                             brightness: Brightness.light,
@@ -602,8 +533,7 @@ class _FinampState extends State<Finamp> with WindowListener {
                               systemOverlayStyle: SystemUiOverlayStyle(
                                 statusBarBrightness: Brightness.light,
                                 statusBarIconBrightness: Brightness.dark,
-                                systemNavigationBarIconBrightness:
-                                    Brightness.dark,
+                                systemNavigationBarIconBrightness: Brightness.dark,
                               ),
                             ),
                             snackBarTheme: const SnackBarThemeData(
@@ -611,8 +541,7 @@ class _FinampState extends State<Finamp> with WindowListener {
                               // behavior: SnackBarBehavior.floating,
                               elevation: 10.0,
                               shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12.0)),
+                                borderRadius: BorderRadius.all(Radius.circular(12.0)),
                               ),
                               // insetPadding: EdgeInsets.symmetric(
                               //   horizontal: 12.0,
@@ -630,8 +559,7 @@ class _FinampState extends State<Finamp> with WindowListener {
                               // behavior: SnackBarBehavior.floating,
                               elevation: 10.0,
                               shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12.0)),
+                                borderRadius: BorderRadius.all(Radius.circular(12.0)),
                               ),
                               // insetPadding: EdgeInsets.symmetric(
                               //   horizontal: 12.0,
@@ -653,15 +581,10 @@ class _FinampState extends State<Finamp> with WindowListener {
                           // We awkwardly put English as the first supported locale so
                           // that basicLocaleListResolution falls back to it instead of
                           // the first language in supportedLocales (Arabic as of writing)
-                          localeListResolutionCallback:
-                              (locales, supportedLocales) =>
-                                  basicLocaleListResolution(
-                                      locales,
-                                      [const Locale("en")]
-                                          .followedBy(supportedLocales)),
+                          localeListResolutionCallback: (locales, supportedLocales) =>
+                              basicLocaleListResolution(locales, [const Locale("en")].followedBy(supportedLocales)),
                           locale: LocaleHelper.locale,
-                          scaffoldMessengerKey:
-                              GlobalSnackbar.materialAppScaffoldKey,
+                          scaffoldMessengerKey: GlobalSnackbar.materialAppScaffoldKey,
                           navigatorKey: GlobalSnackbar.materialAppNavigatorKey,
                         );
                       });
@@ -677,8 +600,7 @@ class _FinampState extends State<Finamp> with WindowListener {
     windowManagerLogger.finer("[WindowManager] onWindowEvent: $eventName");
 
     if (eventName == "moved" || eventName == "resized") {
-      FinampSetters.setScreenSize(ScreenSize.from(
-          await windowManager.getSize(), await windowManager.getPosition()));
+      FinampSetters.setScreenSize(ScreenSize.from(await windowManager.getSize(), await windowManager.getPosition()));
       windowManagerLogger.finer("Saved window size and position");
     }
   }
@@ -782,22 +704,19 @@ class ErrorScreen extends StatelessWidget {
                                 ? await getApplicationDocumentsDirectory()
                                 : await getApplicationSupportDirectory();
 
-                            await Hive.deleteBoxFromDisk("FinampSettings",
-                                path: dir.path);
+                            await Hive.deleteBoxFromDisk("FinampSettings", path: dir.path);
                           },
                         ),
                       )),
                     TextSpan(
-                      text:
-                          "\n\n${AppLocalizations.of(context)!.startupErrorCallToAction}",
+                      text: "\n\n${AppLocalizations.of(context)!.startupErrorCallToAction}",
                       style: const TextStyle(
                         fontSize: 14.0,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     TextSpan(
-                      text:
-                          "\n\n${AppLocalizations.of(context)!.startupErrorWorkaround}",
+                      text: "\n\n${AppLocalizations.of(context)!.startupErrorWorkaround}",
                       style: const TextStyle(
                         fontSize: 10.0,
                       ),
@@ -811,8 +730,7 @@ class ErrorScreen extends StatelessWidget {
                     text: AppLocalizations.of(context)!.exportLogs,
                     icon: TablerIcons.file_download,
                     onPressed: () async {
-                      final finampLogsHelper =
-                          GetIt.instance<FinampLogsHelper>();
+                      final finampLogsHelper = GetIt.instance<FinampLogsHelper>();
                       await finampLogsHelper.exportLogs();
                     },
                   ),
@@ -853,8 +771,7 @@ class FinampScrollBehavior extends MaterialScrollBehavior {
   final bool scrollbars;
 
   @override
-  Widget buildScrollbar(
-      BuildContext context, Widget child, ScrollableDetails details) {
+  Widget buildScrollbar(BuildContext context, Widget child, ScrollableDetails details) {
     if (!scrollbars) {
       return child;
     }

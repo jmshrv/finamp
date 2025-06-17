@@ -15,8 +15,7 @@ class LogsView extends StatelessWidget {
       itemCount: finampLogsHelper.logs.length,
       reverse: true,
       itemBuilder: (context, index) {
-        return LogTile(
-            logRecord: finampLogsHelper.logs.reversed.elementAt(index));
+        return LogTile(logRecord: finampLogsHelper.logs.reversed.elementAt(index));
       },
     );
   }

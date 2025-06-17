@@ -19,12 +19,9 @@ Future<void> setupLogging() async {
 
     // We don't want to print log messages from the Flutter logger since Flutter prints logs by itself
     if (kDebugMode && event.loggerName != "Flutter") {
-      debugPrint(
-          "[${event.loggerName}/${event.level.name}] ${event.time}: ${event.message}");
+      debugPrint("[${event.loggerName}/${event.level.name}] ${event.time}: ${event.message}");
     }
-    if (kDebugMode &&
-        event.loggerName != "Flutter" &&
-        event.stackTrace != null) {
+    if (kDebugMode && event.loggerName != "Flutter" && event.stackTrace != null) {
       debugPrintStack(stackTrace: event.stackTrace);
     }
     // Make sure asserts are extra visible when debugging
@@ -46,10 +43,8 @@ Future<void> setupLogging() async {
     String deviceInfoString;
     if (Platform.isAndroid) {
       final androidInfo = await deviceInfo.androidInfo;
-      final isTV =
-          androidInfo.systemFeatures.contains('android.software.leanback');
-      final isWatch =
-          androidInfo.systemFeatures.contains('android.hardware.type.watch');
+      final isTV = androidInfo.systemFeatures.contains('android.software.leanback');
+      final isWatch = androidInfo.systemFeatures.contains('android.hardware.type.watch');
       deviceInfoString =
           "Android ${androidInfo.version.release} on ${androidInfo.model} (${androidInfo.product})${isTV ? ' (TV)' : ''}${isWatch ? ' (Watch)' : ''}";
     } else if (Platform.isIOS) {
@@ -64,12 +59,10 @@ Future<void> setupLogging() async {
       deviceInfoString = "${linuxInfo.version} on ${linuxInfo.id}";
     } else if (Platform.isWindows) {
       final windowsInfo = await deviceInfo.windowsInfo;
-      deviceInfoString =
-          "Windows ${windowsInfo.displayVersion} on ${windowsInfo.deviceId}";
+      deviceInfoString = "Windows ${windowsInfo.displayVersion} on ${windowsInfo.deviceId}";
     } else {
       final webInfo = await deviceInfo.webBrowserInfo;
-      deviceInfoString =
-          "Web browser ${webInfo.userAgent} on ${webInfo.platform}";
+      deviceInfoString = "Web browser ${webInfo.userAgent} on ${webInfo.platform}";
     }
     startupLogger.info("Running on $deviceInfoString.");
   } catch (e) {

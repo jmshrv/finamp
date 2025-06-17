@@ -15,8 +15,7 @@ import 'package:flutter/material.dart';
 
 import 'components/menuEntries/menu_entry.dart';
 
-const Duration playlistMenuDefaultAnimationDuration =
-    Duration(milliseconds: 750);
+const Duration playlistMenuDefaultAnimationDuration = Duration(milliseconds: 750);
 const Curve playlistMenuDefaultInCurve = Curves.easeOutCubic;
 const Curve playlistMenuDefaultOutCurve = Curves.easeInCubic;
 const playlistMenuRouteName = "/playlist-menu";

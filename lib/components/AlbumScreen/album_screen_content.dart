@@ -60,20 +60,16 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
 
   @override
   Widget build(BuildContext context) {
-    final downloadStub = DownloadStub.fromItem(
-        type: DownloadItemType.collection, item: widget.parent);
+    final downloadStub = DownloadStub.fromItem(type: DownloadItemType.collection, item: widget.parent);
     final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
-    SortBy playlistSortBySetting =
-        ref.watch(finampSettingsProvider.playlistTracksSortBy);
-    final playlistSortBy = (isOffline &&
-            (playlistSortBySetting == SortBy.datePlayed ||
-                playlistSortBySetting == SortBy.playCount))
-        ? SortBy.defaultOrder
-        : playlistSortBySetting;
+    SortBy playlistSortBySetting = ref.watch(finampSettingsProvider.playlistTracksSortBy);
+    final playlistSortBy =
+        (isOffline && (playlistSortBySetting == SortBy.datePlayed || playlistSortBySetting == SortBy.playCount))
+            ? SortBy.defaultOrder
+            : playlistSortBySetting;
 
     final tracksAsync = (widget.parent.type == "Playlist")
-        ? ref.watch(getSortedPlaylistTracksProvider(widget.parent,
-            genreFilter: currentGenreFilter))
+        ? ref.watch(getSortedPlaylistTracksProvider(widget.parent, genreFilter: currentGenreFilter))
         : ref.watch(getAlbumOrPlaylistTracksProvider(widget.parent));
     final (allTracks, playableTracks) = tracksAsync.valueOrNull ?? (null, null);
     final isLoading = allTracks == null;
@@ -105,8 +101,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
         displayChildren[0].parentIndexNumber != null) {
       int? lastDiscNumber;
       for (var child in displayChildren) {
-        if (child.parentIndexNumber != null &&
-            child.parentIndexNumber != lastDiscNumber) {
+        if (child.parentIndexNumber != null && child.parentIndexNumber != lastDiscNumber) {
           lastDiscNumber = child.parentIndexNumber;
           childrenPerDisc.add([]);
         }
@@ -118,8 +113,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
       slivers: [
         SliverLayoutBuilder(builder: (context, constraints) {
           final actions = [
-            if (widget.parent.type == "Playlist" &&
-                !ref.watch(finampSettingsProvider.isOffline))
+            if (widget.parent.type == "Playlist" && !ref.watch(finampSettingsProvider.isOffline))
               PlaylistNameEditButton(playlist: widget.parent),
             if (widget.parent.type == "Playlist")
               SortOrderButton(
@@ -140,8 +134,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                 children: displayChildren,
                 downloadDisabled: (currentGenreFilter != null),
                 customTooltip: (currentGenreFilter != null)
-                    ? AppLocalizations.of(context)!
-                        .downloadButtonDisabledGenreFilterTooltip
+                    ? AppLocalizations.of(context)!.downloadButtonDisabledGenreFilterTooltip
                     : null,
               ),
           ];
@@ -149,12 +142,10 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
           return SliverAppBar(
             title: (widget.parent.type != "Playlist")
                 ? Text(
-                    widget.parent.name ??
-                        AppLocalizations.of(context)!.unknownName,
+                    widget.parent.name ?? AppLocalizations.of(context)!.unknownName,
                   )
                 : null,
-            expandedHeight:
-                kToolbarHeight + 125 + 18 + CTAMedium.predictedHeight(context),
+            expandedHeight: kToolbarHeight + 125 + 18 + CTAMedium.predictedHeight(context),
             // collapsedHeight: kToolbarHeight + 125 + 80,
             pinned: true,
             centerTitle: false,
@@ -171,8 +162,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
         }),
         if (!isLoading &&
             displayChildren.length > 1 &&
-            childrenPerDisc.length >
-                1) // show headers only for multi disc albums
+            childrenPerDisc.length > 1) // show headers only for multi disc albums
           for (var childrenOfThisDisc in childrenPerDisc)
             SliverStickyHeader(
               header: Container(
@@ -182,8 +172,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                 ),
                 color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 child: Text(
-                  AppLocalizations.of(context)!
-                      .discNumber(childrenOfThisDisc[0].parentIndexNumber!),
+                  AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
                   style: const TextStyle(fontSize: 20.0),
                 ),
               ),
@@ -192,16 +181,11 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                 childrenForQueue: queueChildren,
                 parent: widget.parent,
                 onRemoveFromList: onDelete,
-                showDateAdded: (widget.parent.type == "Playlist" &&
-                    playlistSortBy == SortBy.dateCreated),
-                showPlayCount: (widget.parent.type == "Playlist" &&
-                    playlistSortBy == SortBy.playCount),
-                showDateLastPlayed: (widget.parent.type == "Playlist" &&
-                    playlistSortBy == SortBy.datePlayed),
-                showReleaseDate: (widget.parent.type == "Playlist" &&
-                    playlistSortBy == SortBy.premiereDate),
-                forceAlbumArtists: (widget.parent.type == "Playlist" &&
-                    playlistSortBy == SortBy.albumArtist),
+                showDateAdded: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.dateCreated),
+                showPlayCount: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.playCount),
+                showDateLastPlayed: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.datePlayed),
+                showReleaseDate: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.premiereDate),
+                forceAlbumArtists: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.albumArtist),
               ),
             )
         else if (!isLoading && displayChildren.isNotEmpty)
@@ -210,16 +194,11 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             childrenForQueue: queueChildren,
             parent: widget.parent,
             onRemoveFromList: onDelete,
-            showDateAdded: (widget.parent.type == "Playlist" &&
-                playlistSortBy == SortBy.dateCreated),
-            showPlayCount: (widget.parent.type == "Playlist" &&
-                playlistSortBy == SortBy.playCount),
-            showDateLastPlayed: (widget.parent.type == "Playlist" &&
-                playlistSortBy == SortBy.datePlayed),
-            showReleaseDate: (widget.parent.type == "Playlist" &&
-                playlistSortBy == SortBy.premiereDate),
-            forceAlbumArtists: (widget.parent.type == "Playlist" &&
-                playlistSortBy == SortBy.albumArtist),
+            showDateAdded: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.dateCreated),
+            showPlayCount: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.playCount),
+            showDateLastPlayed: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.datePlayed),
+            showReleaseDate: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.premiereDate),
+            forceAlbumArtists: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.albumArtist),
           )
         else
           SliverFillRemaining(
@@ -265,8 +244,7 @@ class TracksSliverList extends ConsumerStatefulWidget {
 }
 
 class _TracksSliverListState extends ConsumerState<TracksSliverList> {
-  final GlobalKey<SliverAnimatedListState> sliverListKey =
-      GlobalKey<SliverAnimatedListState>();
+  final GlobalKey<SliverAnimatedListState> sliverListKey = GlobalKey<SliverAnimatedListState>();
 
   @override
   void initState() {
@@ -288,8 +266,7 @@ class _TracksSliverListState extends ConsumerState<TracksSliverList> {
       );
     }
     return SliverFixedExtentList(
-      itemExtent: TrackListItemTile.defaultTileHeight +
-          TrackListItemTile.defaultTitleGap,
+      itemExtent: TrackListItemTile.defaultTileHeight + TrackListItemTile.defaultTitleGap,
       // return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -297,8 +274,7 @@ class _TracksSliverListState extends ConsumerState<TracksSliverList> {
           // incorrect and track with the same index on first disc is played instead.
           // Adding this offset ensures playback starts for nth track on correct disc.
           final indexOffset =
-              widget.childrenForQueue.indexWhere(
-                  (element) => element.id == widget.childrenForList[index].id);
+              widget.childrenForQueue.indexWhere((element) => element.id == widget.childrenForList[index].id);
 
           final BaseItemDto item = widget.childrenForList[index];
 
@@ -317,8 +293,7 @@ class _TracksSliverListState extends ConsumerState<TracksSliverList> {
             children: widget.childrenForQueue,
             index: indexOffset,
             showIndex: item.albumId == widget.parent.id,
-            showCover: item.albumId != widget.parent.id ||
-                ref.watch(finampSettingsProvider.showCoversOnAlbumScreen),
+            showCover: item.albumId != widget.parent.id || ref.watch(finampSettingsProvider.showCoversOnAlbumScreen),
             parentItem: widget.parent,
             onRemoveFromList: () {
               final item = removeItem();

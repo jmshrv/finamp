@@ -11,13 +11,11 @@ final displayFeaturesProvider = StateProvider<List<DisplayFeature>>((ref) {
 
 final brightnessProvider = StateProvider((ref) => Brightness.dark);
 
-final halfOpenFoldableProvider = Provider((ref) => ref.watch(
-    displayFeaturesProvider.select((x) => x.any((d) =>
-        (d.type == DisplayFeatureType.fold ||
-            d.type == DisplayFeatureType.hinge) &&
-        // Flip-style foldable, top == bottom, height == 0
-        d.bounds.height == 0 &&
-        d.state == DisplayFeatureState.postureHalfOpened))));
+final halfOpenFoldableProvider = Provider((ref) => ref.watch(displayFeaturesProvider.select((x) => x.any((d) =>
+    (d.type == DisplayFeatureType.fold || d.type == DisplayFeatureType.hinge) &&
+    // Flip-style foldable, top == bottom, height == 0
+    d.bounds.height == 0 &&
+    d.state == DisplayFeatureState.postureHalfOpened))));
 
 class FinampProviderBuilder extends ConsumerStatefulWidget {
   const FinampProviderBuilder({required this.child, super.key});
@@ -25,12 +23,10 @@ class FinampProviderBuilder extends ConsumerStatefulWidget {
   final Widget child;
 
   @override
-  ConsumerState<FinampProviderBuilder> createState() =>
-      _FinampProviderBuilderState();
+  ConsumerState<FinampProviderBuilder> createState() => _FinampProviderBuilderState();
 }
 
-class _FinampProviderBuilderState extends ConsumerState<FinampProviderBuilder>
-    with WidgetsBindingObserver {
+class _FinampProviderBuilderState extends ConsumerState<FinampProviderBuilder> with WidgetsBindingObserver {
   bool _initialized = false;
 
   @override
@@ -48,15 +44,12 @@ class _FinampProviderBuilderState extends ConsumerState<FinampProviderBuilder>
   }
 
   @override
-  Widget build(BuildContext context) =>
-      _initialized ? widget.child : SizedBox.shrink();
+  Widget build(BuildContext context) => _initialized ? widget.child : SizedBox.shrink();
 
   @override
   void didChangePlatformBrightness() {
     var theme = switch (Hive.box<ThemeMode>("ThemeMode").get("ThemeMode")) {
-      null ||
-      ThemeMode.system =>
-        View.of(context).platformDispatcher.platformBrightness,
+      null || ThemeMode.system => View.of(context).platformDispatcher.platformBrightness,
       ThemeMode.light => Brightness.light,
       ThemeMode.dark => Brightness.dark,
     };
@@ -65,15 +58,13 @@ class _FinampProviderBuilderState extends ConsumerState<FinampProviderBuilder>
 
   @override
   void didChangeMetrics() {
-    ref.read(displayFeaturesProvider.notifier).state =
-        View.of(context).displayFeatures;
+    ref.read(displayFeaturesProvider.notifier).state = View.of(context).displayFeatures;
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    ThemeModeHelper.themeModeListener
-        .removeListener(didChangePlatformBrightness);
+    ThemeModeHelper.themeModeListener.removeListener(didChangePlatformBrightness);
     super.dispose();
   }
 }

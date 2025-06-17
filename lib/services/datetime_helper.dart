@@ -12,9 +12,7 @@ class ReleaseDateHelper {
   static String? autoFormat(BaseItemDto? baseItem) {
     final format = FinampSettingsHelper.finampSettings.releaseDateFormat;
 
-    final premiereDate = baseItem?.premiereDate != null
-        ? DateTime.parse(baseItem!.premiereDate!)
-        : null;
+    final premiereDate = baseItem?.premiereDate != null ? DateTime.parse(baseItem!.premiereDate!) : null;
     if (premiereDate == null) {
       return null;
     }
@@ -36,24 +34,17 @@ class DateTimeHelper {
     final now = DateTime.now();
     final locale = LocaleHelper.localeString;
 
-    final isSameDay = dateTime.year == now.year &&
-        dateTime.month == now.month &&
-        dateTime.day == now.day;
+    final isSameDay = dateTime.year == now.year && dateTime.month == now.month && dateTime.day == now.day;
 
     if (isSameDay) {
       final formatted = DateFormat.jm(locale).format(dateTime);
-      final is12HourClock =
-          formatted.toLowerCase().contains(RegExp(r'am|pm'));
+      final is12HourClock = formatted.toLowerCase().contains(RegExp(r'am|pm'));
 
-      return is12HourClock
-          ? formatted
-          : (formatted.contains(':') ? formatted : '$formatted:00');
+      return is12HourClock ? formatted : (formatted.contains(':') ? formatted : '$formatted:00');
     }
 
     final isSameYear = dateTime.year == now.year;
-    final format = isSameYear
-        ? DateFormat.MMMMd(locale)
-        : DateFormat.yMMMd(locale);
+    final format = isSameYear ? DateFormat.MMMMd(locale) : DateFormat.yMMMd(locale);
 
     return format.format(dateTime);
   }
@@ -70,8 +61,8 @@ class DateTimeHelper {
   }
 
   static String formatRelativeTime({
-    required BuildContext context, 
-    required DateTime dateTime, 
+    required BuildContext context,
+    required DateTime dateTime,
     bool includeStaticDateTime = false,
   }) {
     final now = DateTime.now();
@@ -89,11 +80,8 @@ class DateTimeHelper {
     }
     if (diff.inMinutes < 60) {
       return wrap('minutes', diff.inMinutes);
-    } 
-    if (diff.inHours < 24 &&
-        now.day == dateTime.day &&
-        now.month == dateTime.month &&
-        now.year == dateTime.year) {
+    }
+    if (diff.inHours < 24 && now.day == dateTime.day && now.month == dateTime.month && now.year == dateTime.year) {
       return wrap('hours', diff.inHours);
     }
 
@@ -112,15 +100,13 @@ class DateTimeHelper {
 
     final isSameYear = dateTime.year == now.year;
     final locale = LocaleHelper.localeString;
-    final format = isSameYear
-        ? DateFormat.MMMMd(locale)
-        : DateFormat.yMMMd(locale);
+    final format = isSameYear ? DateFormat.MMMMd(locale) : DateFormat.yMMMd(locale);
 
     return format.format(dateTime);
   }
 
   static String? formatRelativeTimeFromString({
-    required BuildContext context, 
+    required BuildContext context,
     String? dateString,
     bool includeStaticDateTime = false,
   }) {
@@ -128,18 +114,13 @@ class DateTimeHelper {
 
     try {
       final parsed = DateTime.parse(dateString);
-      return formatRelativeTime(
-        context: context, 
-        dateTime: parsed,
-        includeStaticDateTime: includeStaticDateTime
-      );
+      return formatRelativeTime(context: context, dateTime: parsed, includeStaticDateTime: includeStaticDateTime);
     } catch (e) {
       return null;
     }
   }
 
-  static Stream<DateTime> get minuteTicker =>
-      Stream.periodic(const Duration(minutes: 1), (_) => DateTime.now());
+  static Stream<DateTime> get minuteTicker => Stream.periodic(const Duration(minutes: 1), (_) => DateTime.now());
 }
 
 class RelativeDateTimeText extends StatelessWidget {
@@ -163,12 +144,9 @@ class RelativeDateTimeText extends StatelessWidget {
       initialData: DateTime.now(),
       builder: (context, snapshot) {
         final text = DateTimeHelper.formatRelativeTime(
-          context: context, 
-          dateTime: dateTime,
-          includeStaticDateTime: includeStaticDateTime
-        );
+            context: context, dateTime: dateTime, includeStaticDateTime: includeStaticDateTime);
         return Text(
-          text, 
+          text,
           style: style,
           textScaler: disableTextScaling ? TextScaler.noScaling : null,
         );
@@ -201,19 +179,18 @@ class RelativeDateTimeTextFromString extends StatelessWidget {
       parsed = DateTime.parse(dateString!);
     } catch (_) {}
 
-    final String fallbackText =
-        fallback ?? AppLocalizations.of(context)!.unknown;
+    final String fallbackText = fallback ?? AppLocalizations.of(context)!.unknown;
 
     if (parsed == null) {
       return Text(
-        fallbackText, 
+        fallbackText,
         style: style,
         textScaler: disableTextScaling ? TextScaler.noScaling : null,
       );
     }
 
     return RelativeDateTimeText(
-      dateTime: parsed, 
+      dateTime: parsed,
       style: style,
       includeStaticDateTime: includeStaticDateTime,
       disableTextScaling: disableTextScaling,

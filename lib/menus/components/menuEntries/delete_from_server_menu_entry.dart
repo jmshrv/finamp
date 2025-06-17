@@ -11,8 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
-class DeleteFromServerMenuEntry extends ConsumerWidget
-    implements HideableMenuEntry {
+class DeleteFromServerMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final BaseItemDto baseItem;
 
   const DeleteFromServerMenuEntry({
@@ -24,15 +23,13 @@ class DeleteFromServerMenuEntry extends ConsumerWidget
   Widget build(BuildContext context, WidgetRef ref) {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
-    final canDelete =
-        ref.watch(jellyfinApiHelper.canDeleteFromServerProvider(baseItem));
+    final canDelete = ref.watch(jellyfinApiHelper.canDeleteFromServerProvider(baseItem));
 
     return Visibility(
       visible: canDelete,
       child: MenuEntry(
         icon: TablerIcons.trash_x,
-        title: AppLocalizations.of(context)!
-            .deleteFromTargetConfirmButton("server"),
+        title: AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server"),
         onTap: () async {
           var item = DownloadStub.fromItem(
               type: BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.track
@@ -54,8 +51,7 @@ class DeleteFromServerMenuEntry extends ConsumerWidget
     }
     var itemType = BaseItemDtoType.fromItem(baseItem);
     var isPlaylist = itemType == BaseItemDtoType.playlist;
-    bool deleteEnabled =
-        FinampSettingsHelper.finampSettings.allowDeleteFromServer;
+    bool deleteEnabled = FinampSettingsHelper.finampSettings.allowDeleteFromServer;
 
     // always check if a playlist is deletable
     if (!deleteEnabled && !isPlaylist) {
@@ -63,11 +59,7 @@ class DeleteFromServerMenuEntry extends ConsumerWidget
     }
 
     // do not bother checking server for item types known to not be deletable
-    if (![
-      BaseItemDtoType.album,
-      BaseItemDtoType.playlist,
-      BaseItemDtoType.track
-    ].contains(itemType)) {
+    if (![BaseItemDtoType.album, BaseItemDtoType.playlist, BaseItemDtoType.track].contains(itemType)) {
       return false;
     }
     return baseItem.canDelete ?? true;

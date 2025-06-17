@@ -50,8 +50,7 @@ class _LogTileState extends State<LogTile> {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             text: TextSpan(
-              text:
-                  "[${widget.logRecord.loggerName}]\n${widget.logRecord.time}",
+              text: "[${widget.logRecord.loggerName}]\n${widget.logRecord.time}",
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -86,8 +85,7 @@ class _LogTileState extends State<LogTile> {
                 AppLocalizations.of(context)!.stackTrace,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-            if (widget.logRecord.stackTrace != null)
-              _LogMessageContent(widget.logRecord.stackTrace.toString()),
+            if (widget.logRecord.stackTrace != null) _LogMessageContent(widget.logRecord.stackTrace.toString()),
           ],
           onExpansionChanged: (value) async {
             if (value && !hasConfirmed && widget.logRecord.containsLogin) {
@@ -99,13 +97,11 @@ class _LogTileState extends State<LogTile> {
                 builder: (context) {
                   return AlertDialog(
                     title: Text(AppLocalizations.of(context)!.confirm),
-                    content: Text(
-                        AppLocalizations.of(context)!.showUncensoredLogMessage),
+                    content: Text(AppLocalizations.of(context)!.showUncensoredLogMessage),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(false),
-                        child: Text(MaterialLocalizations.of(context)
-                            .cancelButtonLabel),
+                        child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
                       ),
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(true),

@@ -49,9 +49,7 @@ class IsFavorite extends _$IsFavorite {
       }
       // The favorites status in offline items is unreliable, use isFavorite instead
       // if possible.
-      return GetIt.instance<DownloadsService>().isFavorite(item) ??
-          item.userData?.isFavorite ??
-          false;
+      return GetIt.instance<DownloadsService>().isFavorite(item) ?? item.userData?.isFavorite ?? false;
     } else {
       return item.userData?.isFavorite ?? false;
     }
@@ -65,8 +63,7 @@ class IsFavorite extends _$IsFavorite {
     final queueService = GetIt.instance<QueueService>();
     if (isOffline) {
       FeedbackHelper.feedback(FeedbackType.error);
-      GlobalSnackbar.message(
-          (context) => AppLocalizations.of(context)!.notAvailableInOfflineMode);
+      GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notAvailableInOfflineMode);
       return state;
     }
 

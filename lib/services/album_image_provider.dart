@@ -42,14 +42,12 @@ class AlbumImageRequest {
 
 final Map<String?, AlbumImageRequest> albumRequestsCache = {};
 
-final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest>
-    albumImageProvider = Provider.autoDispose
-        .family<ImageProvider?, AlbumImageRequest>((ref, request) {
+final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest> albumImageProvider =
+    Provider.autoDispose.family<ImageProvider?, AlbumImageRequest>((ref, request) {
   String? requestCacheKey = request.item.blurHash ?? request.item.imageId;
 
   if (albumRequestsCache.containsKey(requestCacheKey)) {
-    if ((request.maxHeight ?? 999999) >
-        (albumRequestsCache[requestCacheKey]!.maxHeight ?? 999999)) {
+    if ((request.maxHeight ?? 999999) > (albumRequestsCache[requestCacheKey]!.maxHeight ?? 999999)) {
       albumRequestsCache[requestCacheKey] = request;
     }
   } else {
@@ -70,8 +68,7 @@ final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest>
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final isardownloader = GetIt.instance<DownloadsService>();
 
-  DownloadItem? downloadedImage =
-      isardownloader.getImageDownload(item: request.item);
+  DownloadItem? downloadedImage = isardownloader.getImageDownload(item: request.item);
 
   if (downloadedImage?.file == null) {
     if (ref.watch(finampSettingsProvider.isOffline)) {
@@ -90,9 +87,7 @@ final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest>
 
     String? key;
     if (request.item.blurHash != null) {
-      key = request.item.blurHash! +
-          request.maxWidth.toString() +
-          request.maxHeight.toString();
+      key = request.item.blurHash! + request.maxWidth.toString() + request.maxHeight.toString();
     }
     // Allow drawing albums up to 4X intrinsic size by setting scale
     return CachedImage(NetworkImage(imageUrl.toString(), scale: 0.25), key);
@@ -136,18 +131,13 @@ class CachedImage extends ImageProvider<CachedImage> {
       };
 
   @override
-  ImageStreamCompleter loadBuffer(
-          CachedImage key, DecoderBufferCallback decode) =>
-      _base.loadBuffer(key._base, decode);
+  ImageStreamCompleter loadBuffer(CachedImage key, DecoderBufferCallback decode) => _base.loadBuffer(key._base, decode);
 
   @override
-  ImageStreamCompleter loadImage(
-          CachedImage key, ImageDecoderCallback decode) =>
-      _base.loadImage(key._base, decode);
+  ImageStreamCompleter loadImage(CachedImage key, ImageDecoderCallback decode) => _base.loadImage(key._base, decode);
 
   @override
-  Future<CachedImage> obtainKey(ImageConfiguration configuration) =>
-      SynchronousFuture<CachedImage>(this);
+  Future<CachedImage> obtainKey(ImageConfiguration configuration) => SynchronousFuture<CachedImage>(this);
 
   @override
   bool operator ==(Object other) {
@@ -155,19 +145,14 @@ class CachedImage extends ImageProvider<CachedImage> {
       return false;
     }
     if (cacheKey != null) {
-      return other is CachedImage &&
-          other.cacheKey == cacheKey &&
-          other.scale == scale;
+      return other is CachedImage && other.cacheKey == cacheKey && other.scale == scale;
     }
-    return other is CachedImage &&
-        other.location == location &&
-        other.scale == scale;
+    return other is CachedImage && other.location == location && other.scale == scale;
   }
 
   @override
   int get hashCode => Object.hash(cacheKey ?? location, scale);
 
   @override
-  String toString() =>
-      'CachedImage("$location", scale: ${scale.toStringAsFixed(1)})';
+  String toString() => 'CachedImage("$location", scale: ${scale.toStringAsFixed(1)})';
 }

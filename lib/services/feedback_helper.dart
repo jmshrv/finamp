@@ -9,8 +9,7 @@ enum FeedbackType { success, error, warning, selection, heavy, medium, light }
 class FeedbackHelper {
   static void feedback(FeedbackType feedbackType) {
     try {
-      if (FinampSettingsHelper.finampSettings.enableVibration &&
-          (Platform.isIOS || Platform.isAndroid)) {
+      if (FinampSettingsHelper.finampSettings.enableVibration && (Platform.isIOS || Platform.isAndroid)) {
         switch (feedbackType) {
           case FeedbackType.selection:
             Gaimon.selection();

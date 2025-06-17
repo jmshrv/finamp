@@ -8,10 +8,10 @@ import 'process_artist.dart';
 
 /// Creates the subtitle text used on ItemCollectionListTile and ItemCollectionCard
 String? generateSubtitle({
-    required BuildContext context,
-    required BaseItemDto item,
-    String? parentType,
-    ArtistType? artistType,
+  required BuildContext context,
+  required BaseItemDto item,
+  String? parentType,
+  ArtistType? artistType,
 }) {
   // If the parentType is MusicArtist, this is being called by an ItemCollectionListTile in an AlbumView of an artist.
   if (parentType == "MusicArtist") {
@@ -22,11 +22,8 @@ String? generateSubtitle({
     case BaseItemDtoType.album:
       return item.albumArtists != null &&
               item.albumArtists!.isNotEmpty &&
-              (item.albumArtists!.length > 1 ||
-                  item.albumArtists?.first.name != item.albumArtist)
-          ? item.albumArtists
-              ?.map((e) => processArtist(e.name, context))
-              .join(", ")
+              (item.albumArtists!.length > 1 || item.albumArtists?.first.name != item.albumArtist)
+          ? item.albumArtists?.map((e) => processArtist(e.name, context)).join(", ")
           : processArtist(item.albumArtist, context);
     case BaseItemDtoType.playlist:
       return AppLocalizations.of(context)!.trackCount(item.childCount!);

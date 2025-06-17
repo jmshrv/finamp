@@ -9,8 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
-class AddToPlaylistMenuEntry extends ConsumerWidget
-    implements HideableMenuEntry {
+class AddToPlaylistMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final BaseItemDto baseItem;
   final FinampQueueItem? queueItem;
 

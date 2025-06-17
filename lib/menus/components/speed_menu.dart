@@ -50,13 +50,11 @@ class _SpeedSliderState extends State<SpeedSlider> {
         thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 24 / 2.0),
         trackHeight: 24.0,
         inactiveTrackColor: widget.iconColor.withOpacity(0.3),
-        activeTrackColor:
-            FinampSettingsHelper.finampSettings.playbackSpeed > speedSliderMax
-                ? widget.iconColor.withOpacity(0.4)
-                : widget.iconColor.withOpacity(0.6),
+        activeTrackColor: FinampSettingsHelper.finampSettings.playbackSpeed > speedSliderMax
+            ? widget.iconColor.withOpacity(0.4)
+            : widget.iconColor.withOpacity(0.6),
         showValueIndicator: ShowValueIndicator.always,
-        valueIndicatorColor:
-            Color.lerp(Theme.of(context).cardColor, widget.iconColor, 0.6),
+        valueIndicatorColor: Color.lerp(Theme.of(context).cardColor, widget.iconColor, 0.6),
         valueIndicatorTextStyle: Theme.of(context).textTheme.labelLarge,
         valueIndicatorShape: const RectangularSliderValueIndicatorShape(),
         tickMarkShape: const RoundSliderTickMarkShape(tickMarkRadius: 1.5),
@@ -68,8 +66,7 @@ class _SpeedSliderState extends State<SpeedSlider> {
           min: speedSliderMin,
           max: speedSliderMax,
           value: _dragValue ??
-              clampDouble(FinampSettingsHelper.finampSettings.playbackSpeed,
-                  speedSliderMin, speedSliderMax),
+              clampDouble(FinampSettingsHelper.finampSettings.playbackSpeed, speedSliderMin, speedSliderMax),
           // divisions: ((speedSliderMax - speedSliderMin) / speedSliderStep / 2).round(),
           onChanged: (value) {
             value = ((value / speedSliderStep).round() * speedSliderStep);
@@ -96,9 +93,7 @@ class _SpeedSliderState extends State<SpeedSlider> {
             widget.saveSpeedInput(value);
             FeedbackHelper.feedback(FeedbackType.selection);
           },
-          label:
-              (_dragValue ?? FinampSettingsHelper.finampSettings.playbackSpeed)
-                  .toStringAsFixed(2),
+          label: (_dragValue ?? FinampSettingsHelper.finampSettings.playbackSpeed).toStringAsFixed(2),
           autofocus: false,
           focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
         ),
@@ -122,15 +117,13 @@ class SpeedMenu extends StatefulWidget {
 }
 
 class _SpeedMenuState extends State<SpeedMenu> {
-  final _textController = TextEditingController(
-      text: FinampSettingsHelper.finampSettings.playbackSpeed.toString());
+  final _textController = TextEditingController(text: FinampSettingsHelper.finampSettings.playbackSpeed.toString());
 
   InputDecoration inputFieldDecoration() {
     return InputDecoration(
       filled: true,
       fillColor: widget.iconColor.withValues(alpha: 0.1),
-      contentPadding:
-          const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       label: Center(child: Text(AppLocalizations.of(context)!.speed)),
       floatingLabelBehavior: FloatingLabelBehavior.never,
       constraints: const BoxConstraints(
@@ -155,8 +148,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
   }
 
   void refreshInputText() {
-    _textController.text =
-        FinampSettingsHelper.finampSettings.playbackSpeed.toString();
+    _textController.text = FinampSettingsHelper.finampSettings.playbackSpeed.toString();
   }
 
   @override
@@ -170,8 +162,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
       padding: const EdgeInsets.only(top: 10.0, bottom: 6.0),
       child: Consumer(
         builder: (BuildContext builder, ref, _) {
-          _textController.text =
-              ref.watch(finampSettingsProvider.playbackSpeed).toString();
+          _textController.text = ref.watch(finampSettingsProvider.playbackSpeed).toString();
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -184,37 +175,30 @@ class _SpeedMenuState extends State<SpeedMenu> {
                     defaultValue: 1.0,
                     prefix: "x",
                     showAsDouble: true,
-                    activeValue:
-                        ref.watch(finampSettingsProvider.playbackSpeed),
+                    activeValue: ref.watch(finampSettingsProvider.playbackSpeed),
                   )),
               Padding(
-                padding: const EdgeInsets.only(
-                    top: 4.0, left: 12.0, right: 12.0, bottom: 2.0),
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                padding: const EdgeInsets.only(top: 4.0, left: 12.0, right: 12.0, bottom: 2.0),
+                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   IconButton(
                     icon: Icon(
                       TablerIcons.minus,
                       color: widget.iconColor,
                     ),
                     onPressed: () {
-                      final currentSpeed =
-                          FinampSettingsHelper.finampSettings.playbackSpeed;
+                      final currentSpeed = FinampSettingsHelper.finampSettings.playbackSpeed;
 
                       if (currentSpeed > speedSliderMin) {
                         FeedbackHelper.feedback(FeedbackType.selection);
-                        _queueService.playbackSpeed = max(
-                            speedSliderMin,
-                            double.parse((currentSpeed - speedButtonStep)
-                                .toStringAsFixed(2)));
+                        _queueService.playbackSpeed =
+                            max(speedSliderMin, double.parse((currentSpeed - speedButtonStep).toStringAsFixed(2)));
                         setState(() {});
                       } else {
                         FeedbackHelper.feedback(FeedbackType.error);
                       }
                     },
                     visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-                    tooltip: AppLocalizations.of(context)!
-                        .playbackSpeedDecreaseLabel,
+                    tooltip: AppLocalizations.of(context)!.playbackSpeedDecreaseLabel,
                   ),
                   Expanded(
                     child: SpeedSlider(
@@ -228,23 +212,19 @@ class _SpeedMenuState extends State<SpeedMenu> {
                       color: widget.iconColor,
                     ),
                     onPressed: () {
-                      final currentSpeed =
-                          FinampSettingsHelper.finampSettings.playbackSpeed;
+                      final currentSpeed = FinampSettingsHelper.finampSettings.playbackSpeed;
 
                       if (currentSpeed < speedSliderMax) {
                         FeedbackHelper.feedback(FeedbackType.selection);
-                        _queueService.playbackSpeed = min(
-                            speedSliderMax,
-                            double.parse((currentSpeed + speedButtonStep)
-                                .toStringAsFixed(2)));
+                        _queueService.playbackSpeed =
+                            min(speedSliderMax, double.parse((currentSpeed + speedButtonStep).toStringAsFixed(2)));
                         setState(() {});
                       } else {
                         FeedbackHelper.feedback(FeedbackType.error);
                       }
                     },
                     visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-                    tooltip: AppLocalizations.of(context)!
-                        .playbackSpeedIncreaseLabel,
+                    tooltip: AppLocalizations.of(context)!.playbackSpeedIncreaseLabel,
                   ),
                   const SizedBox(width: 12),
                   SizedBox(
@@ -257,19 +237,15 @@ class _SpeedMenuState extends State<SpeedMenu> {
                       decoration: InputDecoration(
                         isDense: true,
                         contentPadding: const EdgeInsets.symmetric(vertical: 4),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide.none),
+                        border:
+                            OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                         filled: true,
                         fillColor: widget.iconColor.withOpacity(0.08),
                       ),
-                      keyboardType:
-                          TextInputType.numberWithOptions(decimal: true),
+                      keyboardType: TextInputType.numberWithOptions(decimal: true),
                       onFieldSubmitted: (val) {
                         final parsed = double.tryParse(val);
-                        if (parsed != null &&
-                            parsed >= speedSliderMin &&
-                            parsed <= speedSliderMax) {
+                        if (parsed != null && parsed >= speedSliderMin && parsed <= speedSliderMax) {
                           saveSpeedInput(parsed);
                         } else {
                           refreshInputText();
@@ -277,9 +253,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
                       },
                       onChanged: (val) {
                         final parsed = double.tryParse(val);
-                        if (parsed != null &&
-                            parsed >= speedSliderMin &&
-                            parsed <= speedSliderMax) {
+                        if (parsed != null && parsed >= speedSliderMin && parsed <= speedSliderMax) {
                           saveSpeedInput(parsed);
                         }
                       },

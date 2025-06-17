@@ -41,8 +41,8 @@ class _FavoriteButtonState extends ConsumerState<FavoriteButton> {
 
     bool isFav = ref.watch(isFavoriteProvider(widget.item));
     if (widget.onlyIfFav) {
-      if (isFav && (!widget.showFavoriteIconOnlyWhenFilterDisabled || 
-          !ref.watch(finampSettingsProvider.onlyShowFavorites))) {
+      if (isFav &&
+          (!widget.showFavoriteIconOnlyWhenFilterDisabled || !ref.watch(finampSettingsProvider.onlyShowFavorites))) {
         return Icon(
           Icons.favorite,
           color: Colors.red,
@@ -59,16 +59,13 @@ class _FavoriteButtonState extends ConsumerState<FavoriteButton> {
           size: widget.size ?? 24.0,
         ),
         color: widget.color ?? IconTheme.of(context).color,
-        disabledColor:
-            (widget.color ?? IconTheme.of(context).color)!.withOpacity(0.3),
+        disabledColor: (widget.color ?? IconTheme.of(context).color)!.withOpacity(0.3),
         visualDensity: widget.visualDensity ?? VisualDensity.compact,
         tooltip: AppLocalizations.of(context)!.favorite,
         onPressed: isOffline
             ? null
             : () {
-                ref
-                    .read(isFavoriteProvider(widget.item).notifier)
-                    .updateFavorite(!isFav);
+                ref.read(isFavoriteProvider(widget.item).notifier).updateFavorite(!isFav);
               },
       );
     }
