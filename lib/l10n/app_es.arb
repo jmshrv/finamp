@@ -2204,5 +2204,13 @@
   "autoOfflineOptionNetwork": "Red local",
   "@autoOfflineOptionNetwork": {
     "description": "This is shown when the autoOffline feature is set to \"local Network\", this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
+  },
+  "autoOfflineOptionDisconnected": "Desconectado",
+  "@autoOfflineOptionDisconnected": {
+    "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
+  },
+  "autoOfflineSettingDescription": "Activar automáticamente el modo offline.\nDesactivado: No activará automáticamente el modo offline. Puede ahorrar batería.\nRed: Activar el modo offline cuando no esté conectado a Wi-Fi o Ethernet.\nDesconectado: Activar el modo offline cuando no esté conectado a ninguna red.\nSiempre puede activar manualmente el modo offline, lo que pausará la automatización hasta que vuelva a desactivar el modo offline.",
+  "@autoOfflineSettingDescription": {
+    "description": "Setting description. Make sure the Mode names match the translations."
   }
 }
