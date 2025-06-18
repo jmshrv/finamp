@@ -2498,6 +2498,14 @@
   "@autoReloadQueueSubtitle": {
     "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
   },
+  "ignoreExternalStopTitle": "Ignore External Stop",
+  "@ignoreExternalStopTitle": {
+    "description": "Title for the setting that controls if external stop commands are ignored."
+  },
+  "ignoreExternalStopSubtitle": "Ignore audio 'stop' commands sent by the OS.  Only in-app gestures will stop playback and clear the queue.",
+  "@ignoreExternalStopSubtitle": {
+    "description": "Subtitle for the setting that controls if external stop commands are ignored."
+  },
   "autoReloadPrompt": "Reload queue to apply new {type, select, network{network settings} transcoding{transcoding settings} other{settings}}",
   "@autoReloadPrompt": {
     "description": "Prompt shown when the queue needs to be reloaded after changing network settings",

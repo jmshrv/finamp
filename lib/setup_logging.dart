@@ -1,11 +1,12 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/services/censored_log.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 
 import 'services/finamp_logs_helper.dart';
 
@@ -21,8 +22,8 @@ Future<void> setupLogging() async {
     if (kDebugMode && event.loggerName != "Flutter") {
       debugPrint("[${event.loggerName}/${event.level.name}] ${event.time}: ${event.message}");
     }
-    if (kDebugMode && event.loggerName != "Flutter" && event.stackTrace != null) {
-      debugPrintStack(stackTrace: event.stackTrace);
+    if (kDebugMode && event.loggerName != "Flutter" && event.getStack != null) {
+      debugPrintStack(stackTrace: event.getStack);
     }
     // Make sure asserts are extra visible when debugging
     if (kDebugMode && event.object is AssertionError) {

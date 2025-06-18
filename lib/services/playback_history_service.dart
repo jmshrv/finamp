@@ -69,6 +69,8 @@ class PlaybackHistoryService {
       _wasOfflineBefore = FinampSettingsHelper.finampSettings.isOffline;
     });
 
+    bool throttleRemoteSessionReporting = false;
+
     _audioService.playbackState.listen((event) {
       final prevState = _previousPlaybackState;
       final prevItem = _currentTrack?.item;
@@ -77,8 +79,12 @@ class PlaybackHistoryService {
 
       final currentItem = _queueService.getCurrentTrack();
 
-      if (_playOnService.isControlled) {
+      if (_playOnService.isControlled && !throttleRemoteSessionReporting) {
         _playbackHistoryServiceLogger.fine("Handling playbackState event as controlled by a remote session");
+        throttleRemoteSessionReporting = true;
+        Future.delayed(Duration(seconds: 1), () {
+          throttleRemoteSessionReporting = false;
+        });
         // If the session is being remote controlled, report playback agressively
         _updatePlaybackInfo();
       } else {
@@ -521,7 +527,8 @@ class PlaybackHistoryService {
         isPaused: isPaused,
         isMuted: isMuted,
         positionTicks: playerPosition.inMicroseconds * 10,
-        playbackStartTimeTicks: _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10,
+        playbackStartTimeTicks:
+            _currentTrack != null ? _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10 : null,
         volumeLevel: (FinampSettingsHelper.finampSettings.currentVolume * 100).round(),
         repeatMode: _toJellyfinRepeatMode(_queueService.loopMode),
         playMethod: item.item.extras?["shouldTranscode"] as bool? ?? false ? "Transcode" : "DirectPlay",

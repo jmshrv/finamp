@@ -269,20 +269,6 @@ class PlayOnService {
       var request = jsonDecode(value as String);
 
       if (request['MessageType'] != 'ForceKeepAlive' && request['MessageType'] != 'KeepAlive') {
-        // Because the Jellyfin server doesn't notify remote client connection/disconnection,
-        // we mark the remote controlling as stale after 5 minutes without input as a workaround.
-        // This is particularly useful to stop agressively reporting playback when it's not needed
-        await _isControlledSubscription?.cancel();
-        isControlled = true;
-        _isControlledSubscription =
-            Stream.periodic(Duration(seconds: FinampSettingsHelper.finampSettings.playOnStaleDelay), (count) {
-          return count;
-        }).listen((event) {
-          _playOnServiceLogger.info("Mark remote controlling as stale");
-          isControlled = false;
-          _isControlledSubscription?.cancel();
-        });
-
         switch (request['MessageType']) {
           case "GeneralCommand":
             switch (request['Data']['Name']) {
@@ -311,6 +297,18 @@ class PlayOnService {
                 .updateState(item.userData!.isFavorite);
             break;
           default:
+            // Because the Jellyfin server doesn't notify remote client connection/disconnection,
+            // we mark the remote controlling as stale after 90 seconds without input as a workaround.
+            // This is particularly useful to stop agressively reporting playback when it's not needed
+            await _isControlledSubscription?.cancel();
+            isControlled = true;
+            _isControlledSubscription = Stream.periodic(
+                    Duration(seconds: FinampSettingsHelper.finampSettings.playOnStaleDelay), (count) => count)
+                .listen((event) {
+              _playOnServiceLogger.info("Mark remote controlling as stale");
+              isControlled = false;
+              _isControlledSubscription?.cancel();
+            });
             switch (request['Data']['Command']) {
               case "Stop":
                 await _audioHandler.stop();

@@ -47,6 +47,7 @@ class _AudioServiceSettingsScreenState extends State<AudioServiceSettingsScreen>
           BufferDisableSizeConstraintsSelector(key: _updateChildren),
           const LoadQueueOnStartupSelector(),
           const AutoReloadQueueToggle(),
+          const IgnoreExternalStopToggle(),
         ],
       ),
     );
@@ -186,6 +187,20 @@ class AutoReloadQueueToggle extends ConsumerWidget {
       subtitle: Text(AppLocalizations.of(context)!.autoReloadQueueSubtitle),
       value: ref.watch(finampSettingsProvider.autoReloadQueue),
       onChanged: FinampSetters.setAutoReloadQueue,
+    );
+  }
+}
+
+class IgnoreExternalStopToggle extends ConsumerWidget {
+  const IgnoreExternalStopToggle({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.ignoreExternalStopTitle),
+      subtitle: Text(AppLocalizations.of(context)!.ignoreExternalStopSubtitle),
+      value: ref.watch(finampSettingsProvider.ignoreExternalStopCommands),
+      onChanged: FinampSetters.setIgnoreExternalStopCommands,
     );
   }
 }

@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:chopper/chopper.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:logging/logging.dart';
 
 @Deprecated("Use GlobalSnackbar.error(dynamic error) instead")
@@ -83,9 +83,6 @@ class GlobalSnackbar {
   static void error(dynamic event) => _enqueue(() => _error(event));
   static void _error(dynamic event) {
     _logger.warning("Displaying error: $event", event);
-    if (event is Error && event.stackTrace != null) {
-      _logger.warning(event.stackTrace);
-    }
     BuildContext context = materialAppNavigatorKey.currentContext!;
     String errorText;
     if (event is Response) {

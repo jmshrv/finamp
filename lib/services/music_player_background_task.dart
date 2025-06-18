@@ -550,19 +550,12 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<void> stop() async {
     try {
-      _audioServiceBackgroundTaskLogger.info("Stopping audio service");
+      _audioServiceBackgroundTaskLogger.info("Audio service received stop command");
+
+      if (FinampSettingsHelper.finampSettings.ignoreExternalStopCommands) return;
 
       final queueService = GetIt.instance<QueueService>();
       await queueService.stopPlayback();
-      // await _player.seek(_player.duration);
-
-      // await handleEndOfQueue();
-
-      // TODO: Do we want to actually cancel the sleep timer if we stop the music?
-      _timer.value?.cancel();
-      _timer.value = null;
-
-      await super.stop();
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -571,6 +564,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   Future<void> stopPlayback() async {
     try {
+      // TODO: Do we want to actually cancel the sleep timer if we stop the music?
+      _timer.value?.cancel();
+      _timer.value = null;
+
       await _player.stop();
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);

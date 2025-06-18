@@ -212,6 +212,7 @@ class DefaultSettings {
   static const playlistTracksSortBy = SortBy.defaultOrder;
   static const playlistTracksSortOrder = SortOrder.ascending;
   static const genreFilterPlaylists = false;
+  static const ignoreExternalStopCommands = false;
 }
 
 @HiveType(typeId: 28)
@@ -327,6 +328,7 @@ class FinampSettings {
     this.playlistTracksSortBy = DefaultSettings.playlistTracksSortBy,
     this.playlistTracksSortOrder = DefaultSettings.playlistTracksSortOrder,
     this.genreFilterPlaylists = DefaultSettings.genreFilterPlaylists,
+    this.ignoreExternalStopCommands = DefaultSettings.ignoreExternalStopCommands,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -688,6 +690,9 @@ class FinampSettings {
 
   @HiveField(116)
   SleepTimer? sleepTimer;
+
+  @HiveField(117, defaultValue: DefaultSettings.ignoreExternalStopCommands)
+  bool ignoreExternalStopCommands;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
