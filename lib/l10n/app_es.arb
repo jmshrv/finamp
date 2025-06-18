@@ -2198,5 +2198,7 @@
   "transcodingStreamingFormatTitle": "Seleccionar formato de transcodificación",
   "@transcodingStreamingFormatTitle": {
     "description": "Title for the dropdown that selects the format for transcoded streams"
-  }
+  },
+  "transcodingStreamingFormatSubtitle": "Selecciona el formato a utilizar al transmitir audio transcodificado. Las pistas ya en cola no se verán afectadas.",
+  "@transcodingStreamingFormatSubtitle": {}
 }
