@@ -995,7 +995,7 @@
   "@playbackOrderShuffledButtonLabel": {
     "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
   },
-  "reset": "Restaurar",
+  "reset": "Reiniciar",
   "@reset": {
     "description": "Used for buttons in the playback speed menu and the settings"
   },
@@ -1912,7 +1912,7 @@
   "@shuffleAlbumsToQueue": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
   },
-  "playingFromType": "Reproduciendo desde {source, select, album{álbum} playlist{lista de reproducción} trackMix{mix de Pista} artistMix{mix de artista} albumMix{mix de Álbum} genreMix{mix de género} favorites{favoritos} allTracks{todas las canciones} filteredList{canciones} genre{género} artist{artista} track{canción} nextUpAlbum{álbum en \"A continuación\"} nextUpPlaylist{lista de Reproducción en \"A continuación\"} nextUpArtist{artista en \"A continuación\"} nextUpGenre{género en \"A continuación\"} remoteClient{cliente remoto}  other{}}",
+  "playingFromType": "Reproduciendo desde {source, select, album{álbum} playlist{lista de reproducción} trackMix{mix de canción} artistMix{mix de artista} albumMix{mix de álbum} genreMix{mix de género} favorites{favoritos} allTracks{todas las canciones} filteredList{canciones} genre{género} artist{artista} track{canción} nextUpAlbum{álbum en \"A continuación\"} nextUpPlaylist{lista de Reproducción en \"A continuación\"} nextUpArtist{artista en \"A continuación\"} nextUpGenre{género en \"A continuación\"} remoteClient{cliente remoto} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1981,7 +1981,7 @@
   "@favorite": {},
   "randomAlbums": "Álbumes (Selección aleatoria)",
   "@randomAlbums": {},
-  "startupErrorTitle": "Algo salió mal al iniciar la aplicación.",
+  "startupErrorTitle": "¡Algo salió mal al iniciar la aplicación!",
   "@startupErrorTitle": {
     "description": "The title for the error screen that shows when startup fails."
   },
@@ -2164,5 +2164,35 @@
     }
   },
   "exportLogs": "Guardar registros",
-  "@exportLogs": {}
+  "@exportLogs": {},
+  "playbackActionPageShuffleAlbums": "Álbumes aleatorios",
+  "@playbackActionPageShuffleAlbums": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+  },
+  "editItemTitle": "Editar {itemType, select, playlist{lista de reproducción} other{}}",
+  "@editItemTitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
+  "showArtistsTracksSection": "Mostrar sección de canciones",
+  "@showArtistsTracksSection": {},
+  "formattedRelativeTime": "{type, select, just_now{ahora mismo} minutes{hace {value} min} hours{{value,plural,=1{hace 1 hora} other{hace {value} horas}}} yesterday{ayer} days{{value, plural, =1{hace 1 día} other{hace {value} días}}} other{value}}",
+  "@formattedRelativeTime": {
+    "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
+    "placeholders": {
+      "type": {
+        "type": "String",
+        "description": "The category of time passed: one of 'just_now', 'minutes', 'hours', 'yesterday', or 'days'."
+      },
+      "value": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "showArtistsTracksSectionSubtitle": "Mostrar o no una sección con hasta cinco canciones. Cuando está activado, puedes elegir entre Más reproducidas, Favoritas, Aleatorio, Últimos lanzamientos, Añadidas recientemente y Canciones reproducidas recientemente.",
+  "@showArtistsTracksSectionSubtitle": {}
 }
