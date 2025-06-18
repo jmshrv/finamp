@@ -268,7 +268,7 @@
   "@unknownError": {},
   "enterLowPriorityStateOnPause": "Entrar en estado de baja prioridad al pausar",
   "@enterLowPriorityStateOnPause": {},
-  "pathReturnSlashErrorMessage": "No se pueden utilizar ubicaciones que devuelvan \"/\"",
+  "pathReturnSlashErrorMessage": "No se pueden usar rutas que devuelvan \"/\"",
   "@pathReturnSlashErrorMessage": {},
   "grid": "Cuadrícula",
   "@grid": {},
@@ -2194,5 +2194,9 @@
     }
   },
   "showArtistsTracksSectionSubtitle": "Mostrar o no una sección con hasta cinco canciones. Cuando está activado, puedes elegir entre Más reproducidas, Favoritas, Aleatorio, Últimos lanzamientos, Añadidas recientemente y Canciones reproducidas recientemente.",
-  "@showArtistsTracksSectionSubtitle": {}
+  "@showArtistsTracksSectionSubtitle": {},
+  "transcodingStreamingFormatTitle": "Seleccionar formato de transcodificación",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
+  }
 }
