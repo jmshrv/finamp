@@ -2199,6 +2199,10 @@
   "@transcodingStreamingFormatTitle": {
     "description": "Title for the dropdown that selects the format for transcoded streams"
   },
-  "transcodingStreamingFormatSubtitle": "Selecciona el formato a utilizar al transmitir audio transcodificado. Las pistas ya en cola no se verán afectadas.",
-  "@transcodingStreamingFormatSubtitle": {}
+  "transcodingStreamingFormatSubtitle": "Selecciona el formato a utilizar al transmitir audio transcodificado. Las canciones que estén actualmente en la cola no se verán afectadas.",
+  "@transcodingStreamingFormatSubtitle": {},
+  "autoOfflineOptionNetwork": "Red local",
+  "@autoOfflineOptionNetwork": {
+    "description": "This is shown when the autoOffline feature is set to \"local Network\", this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
+  }
 }
