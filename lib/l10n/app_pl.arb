@@ -1704,5 +1704,23 @@
   "itemDeletedSnackbar": "{itemType, select, album{Album} playlist{Lista odtwarzania} artist{Artysta} genre{Gatunek} track{Utwór} library{Biblioteka} other{Element}} został usunięty z {deviceType, select, device{urządzenia} server{serwera} other{unknown}}",
   "@itemDeletedSnackbar": {
     "description": "Used whenever item gets deleted from the device or server, message in snackbar"
+  },
+  "favorite": "Ulubione",
+  "@favorite": {},
+  "favoriteArtists": "Ulubieni Artyści",
+  "@favoriteArtists": {},
+  "allLibraries": "Wszystkie biblioteki",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
+  "onlineMode": "Tryb online",
+  "@onlineMode": {},
+  "favoriteAlbums": "Ulubione Albumy",
+  "@favoriteAlbums": {},
+  "favorites": "Ulubione",
+  "@favorites": {},
+  "startupErrorTitle": "Coś poszło nie tak podczas startu aplikacji!",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
   }
 }
