@@ -552,10 +552,13 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       _audioServiceBackgroundTaskLogger.info("Audio service received stop command");
 
-      if (FinampSettingsHelper.finampSettings.ignoreExternalStopCommands) return;
-
-      final queueService = GetIt.instance<QueueService>();
-      await queueService.stopPlayback();
+      if (FinampSettingsHelper.finampSettings.ignoreExternalStopCommands) {
+        // If ignore external stop commands is set, stop the player to release native assets but
+        // do not clear queue or reset playback state
+        await stopPlayback();
+      } else {
+        await GetIt.instance<QueueService>().stopPlayback();
+      }
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -759,22 +762,26 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     return [
       MediaItem(
         id: MediaItemId(contentType: TabContentType.albums, parentType: MediaItemParentType.rootCollection).toString(),
+        // ignore: deprecated_member_use_from_same_package
         title: _appLocalizations?.albums ?? TabContentType.albums.toString(),
         playable: false,
       ),
       MediaItem(
         id: MediaItemId(contentType: TabContentType.artists, parentType: MediaItemParentType.rootCollection).toString(),
+        // ignore: deprecated_member_use_from_same_package
         title: _appLocalizations?.artists ?? TabContentType.artists.toString(),
         playable: false,
       ),
       MediaItem(
         id: MediaItemId(contentType: TabContentType.playlists, parentType: MediaItemParentType.rootCollection)
             .toString(),
+        // ignore: deprecated_member_use_from_same_package
         title: _appLocalizations?.playlists ?? TabContentType.playlists.toString(),
         playable: false,
       ),
       MediaItem(
         id: MediaItemId(contentType: TabContentType.genres, parentType: MediaItemParentType.rootCollection).toString(),
+        // ignore: deprecated_member_use_from_same_package
         title: _appLocalizations?.genres ?? TabContentType.genres.toString(),
         playable: false,
       )

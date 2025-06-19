@@ -2502,7 +2502,7 @@
   "@ignoreExternalStopTitle": {
     "description": "Title for the setting that controls if external stop commands are ignored."
   },
-  "ignoreExternalStopSubtitle": "Ignore audio 'stop' commands sent by the OS.  Only in-app gestures will stop playback and clear the queue.",
+  "ignoreExternalStopSubtitle": "Maintain player and queue state when a 'stop' command is received from the OS.  Only in-app gestures close the player and clear the queue.",
   "@ignoreExternalStopSubtitle": {
     "description": "Subtitle for the setting that controls if external stop commands are ignored."
   },
