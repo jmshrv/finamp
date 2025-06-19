@@ -2334,5 +2334,34 @@
   "audioFadeOutDurationSettingSubtitle": "La duración del fundido de audio en milisegundos.",
   "@audioFadeOutDurationSettingSubtitle": {
     "description": "Subtitle for the audio fade-out duration setting. Set to 0 to disable fade-out."
+  },
+  "outputMenuButtonTitle": "Salida",
+  "@outputMenuButtonTitle": {
+    "description": "Button title for opening the output menu/panel"
+  },
+  "outputMenuOpenConnectionSettingsButtonTitle": "Conectar a un dispositivo",
+  "@outputMenuOpenConnectionSettingsButtonTitle": {
+    "description": "Button title for connecting to a device from the output menu"
+  },
+  "outputMenuDevicesSectionTitle": "Dispositivos disponibles",
+  "@outputMenuDevicesSectionTitle": {
+    "description": "Title for the available devices section in the output menu"
+  },
+  "outputMenuVolumeSectionTitle": "Volumen",
+  "@outputMenuVolumeSectionTitle": {
+    "description": "Title for the volume section in the output menu"
+  },
+  "outputMenuTitle": "Cambiar salida",
+  "@outputMenuTitle": {
+    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  },
+  "deviceType": "{type, select, speaker{Altavoces del dispositivo} tv{TV} bluetooth{Bluetooth} other{Desconocido}}",
+  "@deviceType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    },
+    "description": "Label for the type of device in the output menu"
   }
 }
