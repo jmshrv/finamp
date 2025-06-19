@@ -1160,7 +1160,7 @@
   "@playbackOrderShuffledButtonLabel": {
     "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
   },
-  "playbackOrderLinearButtonTooltip": "目前為依序播放。點擊切換隨機播放。",
+  "playbackOrderLinearButtonTooltip": "目前為依序播放，點擊切換隨機播放。",
   "@playbackOrderLinearButtonTooltip": {
     "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
   },
