@@ -2306,7 +2306,7 @@
   "@noReleaseDate": {
     "description": "Placeholder text if an item has no release date set."
   },
-  "audioFadeOutDurationSettingTitle": "Duración del fundido de audio",
+  "audioFadeOutDurationSettingTitle": "Duración del fundido de salida de audio",
   "@audioFadeOutDurationSettingTitle": {
     "description": "Title for the audio fade-out duration setting."
   },
@@ -2331,7 +2331,7 @@
   "@showShuffleButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a shuffle button."
   },
-  "audioFadeOutDurationSettingSubtitle": "La duración del fundido de audio en milisegundos.",
+  "audioFadeOutDurationSettingSubtitle": "La duración del fundido de salida de audio en milisegundos.",
   "@audioFadeOutDurationSettingSubtitle": {
     "description": "Subtitle for the audio fade-out duration setting. Set to 0 to disable fade-out."
   },
@@ -2363,5 +2363,17 @@
       }
     },
     "description": "Label for the type of device in the output menu"
+  },
+  "desktopShuffleWarning": "La opción de aleatorizar no está disponible actualmente en la app de escritorio.",
+  "@desktopShuffleWarning": {
+    "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
+  },
+  "audioFadeInDurationSettingTitle": "Duración del fundido de entrada de audio",
+  "@audioFadeInDurationSettingTitle": {
+    "description": "Title for the audio fade-in duration setting."
+  },
+  "audioFadeInDurationSettingSubtitle": "La duración del fundido de entrada de audio en milisegundos. Establezca en 0 para desactivar el fundido de entrada.",
+  "@audioFadeInDurationSettingSubtitle": {
+    "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
   }
 }
