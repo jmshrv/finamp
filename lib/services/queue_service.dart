@@ -585,7 +585,7 @@ class QueueService {
     }
   }
 
-  Future<void> stopPlayback() async {
+  Future<void> stopAndClearQueue() async {
     queueServiceLogger.info("Stopping playback");
 
     archiveSavedQueue();

@@ -175,10 +175,15 @@ class FinampSettingsHelper {
 
   static void resetAudioServiceSettings() {
     FinampSetters.setAndroidStopForegroundOnPause(DefaultSettings.androidStopForegroundOnPause);
-    FinampSetters.setTrackShuffleItemCount(DefaultSettings.trackShuffleItemCount); // DOES NOT update UI
-    FinampSetters.setBufferDuration(Duration(seconds: DefaultSettings.bufferDurationSeconds)); // DOES NOT update UI
+    FinampSetters.setTrackShuffleItemCount(DefaultSettings.trackShuffleItemCount);
+    FinampSetters.setAudioFadeInDuration(DefaultSettings.audioFadeInDuration);
+    FinampSetters.setAudioFadeOutDuration(DefaultSettings.audioFadeOutDuration);
+    FinampSetters.setBufferSizeMegabytes(DefaultSettings.bufferSizeMegabytes);
+    FinampSetters.setBufferDuration(Duration(seconds: DefaultSettings.bufferDurationSeconds));
+    FinampSetters.setBufferDisableSizeConstraints(DefaultSettings.bufferDisableSizeConstraints);
     FinampSetters.setAutoloadLastQueueOnStartup(DefaultSettings.autoLoadLastQueueOnStartup);
     FinampSetters.setAutoReloadQueue(DefaultSettings.autoReloadQueue);
+    FinampSetters.setClearQueueOnStop(DefaultSettings.clearQueueOnStop);
   }
 
   static void resetPlaybackReportingSettings() {

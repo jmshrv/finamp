@@ -649,9 +649,9 @@ extension FinampSetters on FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings").put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setIgnoreExternalStopCommands(bool newIgnoreExternalStopCommands) {
+  static void setClearQueueOnStop(bool newClearQueueOnStop) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.ignoreExternalStopCommands = newIgnoreExternalStopCommands;
+    finampSettingsTemp.clearQueueOnStop = newClearQueueOnStop;
     Hive.box<FinampSettings>("FinampSettings").put("FinampSettings", finampSettingsTemp);
   }
 
@@ -875,8 +875,8 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       finampSettingsProvider.select((value) => value.requireValue.genreFilterPlaylists);
   ProviderListenable<SleepTimer?> get sleepTimer =>
       finampSettingsProvider.select((value) => value.requireValue.sleepTimer);
-  ProviderListenable<bool> get ignoreExternalStopCommands =>
-      finampSettingsProvider.select((value) => value.requireValue.ignoreExternalStopCommands);
+  ProviderListenable<bool> get clearQueueOnStop =>
+      finampSettingsProvider.select((value) => value.requireValue.clearQueueOnStop);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider.select((value) => value.requireValue.downloadTranscodingProfile);
   ProviderListenable<DownloadLocation> get internalTrackDir =>

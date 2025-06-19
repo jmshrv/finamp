@@ -186,7 +186,7 @@ class NowPlayingBar extends StatelessWidget {
             confirmDismiss: (direction) async {
               if (direction == DismissDirection.down) {
                 FeedbackHelper.feedback(FeedbackType.success);
-                await queueService.stopPlayback();
+                await queueService.stopAndClearQueue();
               } else {
                 await openPlayerScreen();
               }
