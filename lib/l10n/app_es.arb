@@ -1446,7 +1446,7 @@
   "@downloadBitrateSubtitle": {
     "description": "subtitle for Download Bitrate settings slider"
   },
-  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transcodificado}}",
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transcodificado}}{location, select, null{} other{ ({location})}}",
   "@downloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1466,7 +1466,7 @@
   },
   "allowSplitScreenSubtitle": "El reproductor sera mostrado junto a otras ventanas en pantallas más grandes.",
   "@allowSplitScreenSubtitle": {},
-  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ como {codec} @ {bitrate}}}",
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ como {codec} @ {bitrate}}}{location, select, null{} other{ ({location})}}",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1619,7 +1619,7 @@
       }
     }
   },
-  "finampCollectionNames": "{itemType, select, favorites{Favoritos} allPlaylists{Todas las Listas de Reproducción} fiveLatestAlbums{Los Últimos 5 Álbumes} allPlaylistsMetadata{Metadatos de la Lista de Reproducción} other{{itemType}} }",
+  "finampCollectionNames": "{itemType, select, favorites{Favoritos} allPlaylists{Todas las listas de reproducción} fiveLatestAlbums{Últimos 5 álbumes} allPlaylistsMetadata{Metadatos de lista de reproducción} collectionWithLibraryFilter{Colección con filtro de biblioteca} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
@@ -1852,7 +1852,7 @@
   "@lockDownload": {
     "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
   },
-  "showSeekControlsOnMediaNotificationTitle": "Muestra controles de posición en la notificación multimedia",
+  "showSeekControlsOnMediaNotificationTitle": "Permitir cambiar la posición de reproducción en la notificación multimedia",
   "@showSeekControlsOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a seekable progress bar."
   },
@@ -1892,7 +1892,7 @@
   "@prioritizePlayerCoverSubtitle": {},
   "suppressPlayerPadding": "Ignorar el margen de los controles del reproductor",
   "@suppressPlayerPadding": {},
-  "showStopButtonOnMediaNotificationSubtitle": "Controla que la notificación multimedia tenga un botón de detener además del botón de pausa. Esto detendrá la reproducción sin abrir la aplicación.",
+  "showStopButtonOnMediaNotificationSubtitle": "Controla que la notificación multimedia tenga un botón de detener reproducción. Esto te permitirá detener la reproducción sin tener que abrir la aplicación.",
   "@showStopButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
@@ -1921,7 +1921,7 @@
       }
     }
   },
-  "couldNotLoad": "No fue posible cargar {source, select, album{álbum} playlist{lista de reproducción} trackMix{mix de pista} artistMix{mix de artista} albumMix{mix de álbum} genreMix{mix de género} favorites{favoritos} allTracks{todas las pistas} filteredList{pistas} genre{género} artist{artista} track{pista} nextUpAlbum{álbum en \"a continuación\"} nextUpPlaylist{lista de reproducción en \"a continuación\"} nextUpArtist{artista en \"a continuación\"} other{}}",
+  "couldNotLoad": "No fue posible cargar {source, select, album{el álbum} playlist{la lista de reproducción} trackMix{el mix de pista} artistMix{el mix de artista} albumMix{el mix de álbum} genreMix{el mix de género} favorites{los favoritos} allTracks{todas las canciones} filteredList{las canciones} genre{el género} artist{el artista} track{la canción} nextUpAlbum{el álbum en \"A continuación\"} nextUpPlaylist{la lista de reproducción en \"A continuación\"} nextUpArtist{el artista en \"A continuación\"} nextUpGenre{el género en \"A continuación\"} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -2209,10 +2209,130 @@
   "@autoOfflineOptionDisconnected": {
     "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
   },
-  "autoOfflineSettingDescription": "Activar automáticamente el modo offline.\nDesactivado: No activará automáticamente el modo offline. Puede ahorrar batería.\nRed: Activar el modo offline cuando no esté conectado a Wi-Fi o Ethernet.\nDesconectado: Activar el modo offline cuando no esté conectado a ninguna red.\nSiempre puede activar manualmente el modo offline, lo que pausará la automatización hasta que vuelva a desactivar el modo offline",
+  "autoOfflineSettingDescription": "Activar automáticamente el modo sin conexión.\nDesactivado: No activará automáticamente el modo sin conexión. Puede ahorrar batería.\nRed: Activar el modo sin conexión cuando no esté conectado a Wi-Fi o Ethernet.\nDesconectado: Activar el modo sin conexión cuando no esté conectado a ninguna red.\nSiempre puede activar manualmente el modo sin conexión, lo que pausará la automatización hasta que vuelva a desactivar el modo sin conexión",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
-  "autoOfflineSettingTitle": "Modo offline automatizado",
-  "@autoOfflineSettingTitle": {}
+  "autoOfflineSettingTitle": "Modo sin conexión automático",
+  "@autoOfflineSettingTitle": {},
+  "lyricsScreenButtonTitle": "Letras",
+  "@lyricsScreenButtonTitle": {
+    "description": "Label for the button for opening the lyrics screen"
+  },
+  "noDateAdded": "Sin fecha de añadido",
+  "@noDateAdded": {
+    "description": "Placeholder text if an item has no dateAdded set."
+  },
+  "genreListsInheritSorting": "Heredar opciones de ordenado en listas completas",
+  "@genreListsInheritSorting": {
+    "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "downloadButtonDisabledGenreFilterTooltip": "Por favor desactiva el filtro de géneros para activar las acciones de descarga.",
+  "@downloadButtonDisabledGenreFilterTooltip": {
+    "description": "Tooltip shown when a download button is disabled because of an active genre filter."
+  },
+  "artistScreen": "Pantalla del artista",
+  "@artistScreen": {
+    "description": "Name for the view/screen that shows artists"
+  },
+  "seeAll": "Mostrar todos",
+  "@seeAll": {
+    "description": ""
+  },
+  "applyFilterOnGenreChipTapPrompt": "Filtro de género aplicado",
+  "@applyFilterOnGenreChipTapPrompt": {
+    "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "noDateLastPlayed": "No se ha reproducido todavía",
+  "@noDateLastPlayed": {
+    "description": "Placeholder text if an item has no lastPlayedDate set."
+  },
+  "genreNoItems": "No tienes {itemType, select, playlists{ninguna lista de reproducción} artists{ningún artista} albums{ningún álbum} tracks{ninguna canción} other{ningún elemento}} para este género.",
+  "@genreNoItems": {
+    "description": "Message for empty See All lists for a genre.",
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
+  "playbackReportingSettingsTitle": "Informe de reproducción y Reproducir en",
+  "@playbackReportingSettingsTitle": {
+    "description": "Title for the playback reporting settings screen"
+  },
+  "genreFilterNotAvailableForAlbums": "Los filtros de géneros no están disponibles para los álbumes.",
+  "@genreFilterNotAvailableForAlbums": {
+    "description": "Message shown when the user tries to apply a genre filter to an album."
+  },
+  "sleepTimerProjectedDuration": "La reproducción se pausará en ~{duration}",
+  "@sleepTimerProjectedDuration": {
+    "description": "Displays duration until playback is expected to be ended by the sleep timer (unless the queue is modified before). {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "showShuffleButtonOnMediaNotificationSubtitle": "Controla que la notificación multimedia tenga un botón de modo aleatorio. Esto te permitirá cambiar el modo aleatorio sin tener que abrir la aplicación.",
+  "@showShuffleButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
+  },
+  "showFavoriteButtonOnMediaNotificationTitle": "Mostrar botón de favorito en notificación multimedia",
+  "@showFavoriteButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a favorite button."
+  },
+  "applyFilterOnGenreChipTapTitle": "Aplicar filtro al pulsar en un género",
+  "@applyFilterOnGenreChipTapTitle": {
+    "description": "Title for the setting that controls if taps on genre chips should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "applyFilterOnGenreChipTapSubtitle": "Por defecto, al pulsar en un género lo abre, mientras que mantenerlo pulsado filtra el artista o lista de reproducción actual según el género. Cuando esta opción está activada, se invierte este comportamiento.",
+  "@applyFilterOnGenreChipTapSubtitle": {
+    "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "applyFilterOnGenreChipTapPromptButton": "Abrir género",
+  "@applyFilterOnGenreChipTapPromptButton": {
+    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "autoOfflineNotification": "{state, select, enabled{Activa} disabled{Desactiva} other{Establece la posición cuántica}} automáticamente el modo sin conexión",
+  "@autoOfflineNotification": {
+    "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
+  },
+  "genreScreen": "Pantalla de género",
+  "@genreScreen": {
+    "description": "Name for the view/screen that shows genres"
+  },
+  "noReleaseDate": "Sin fecha de lanzamiento",
+  "@noReleaseDate": {
+    "description": "Placeholder text if an item has no release date set."
+  },
+  "audioFadeOutDurationSettingTitle": "Duración del fundido de audio",
+  "@audioFadeOutDurationSettingTitle": {
+    "description": "Title for the audio fade-out duration setting."
+  },
+  "genreListsInheritSortingSubtitle": "Cuando esté activado, las listas de \"Ver todos\" heredará las opciones de ordenado y filtrado de la pantalla de género. Si se desactiva, se utilizarán los ajustes de la pestaña de biblioteca correspondiente. Pulsar en los contadores que hay en la parte de arriba de la pantalla de género o el botón de \"Explorar listas de reproducción\" siempre abrirá una lista con los ajustes de ordenado de la pestaña de biblioteca.",
+  "@genreListsInheritSortingSubtitle": {
+    "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Controla que la notificación multimedia tenga un botón de favorito. Esto te permitirá añadir/quitar la canción actual de favoritos sin tener que abrir la aplicación.",
+  "@showFavoriteButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a favorite button."
+  },
+  "genreNotFound": "No se ha podido encontrar el género.{additionalInfo, select, offline{ Puede que no se haya descargado o que pertenezca a una biblioteca diferente.} other{ Puede que pertenezca a una biblioteca diferente.}}",
+  "@genreNotFound": {
+    "placeholders": {
+      "additionalInfo": {
+        "type": "String"
+      }
+    },
+    "description": "Message shown when a genre filter or open-genre action fails because the genre item could not be found."
+  },
+  "showShuffleButtonOnMediaNotificationTitle": "Mostrar botón de modo aleatorio en notificación multimedia",
+  "@showShuffleButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a shuffle button."
+  },
+  "audioFadeOutDurationSettingSubtitle": "La duración del fundido de audio en milisegundos.",
+  "@audioFadeOutDurationSettingSubtitle": {
+    "description": "Subtitle for the audio fade-out duration setting. Set to 0 to disable fade-out."
+  }
 }
