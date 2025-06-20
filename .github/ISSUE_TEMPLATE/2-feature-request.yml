@@ -1,14 +1,13 @@
 name: Feature Request
-description: Use this template requesting new functionality. Please keep it reasonable :)
-labels: feature, needs triage
+description: Use this template to suggest new functionality while keeping it reasonable :)
+labels: feature
 body:  
   - type: markdown
     attributes:
       value: |
         # Feature Request
         Thank you for opening a feature Request! Please take the time to properly and thoughtfully fill
-        out this form to make it easier for us to work with it
-       
+        out this form to make it easier for us to work with you :)
         If you notice you cant fully express your feature in this template, you can always open a
         blank template with all the creative freedom you'll need
         
@@ -17,49 +16,55 @@ body:
         will only be added to the Redesign version of the app
   
   - type: checkboxes
+    id: updated
+    attributes:
+      label: Are you using the newest Version?
+      description: Did you make sure you are already using the [newest version of Finamp](https://github.com/jmshrv/finamp/releases) and there isn't an feature request about this already?
+      options:
+        - label: Yes, the feature is still missing on the newest version
+          required: true
+        - label: No, there aren't any open request about this. I checked!
+          required: true
+
+  - type: checkboxes
     id: type
     attributes:
       label: Type of Feature
       description: You can select multiple if applicable
       options:
         - label: Something new
-        - label: Extension of a feature
         - label: Improvement of a feature
-        - label: Accessibility
         - label: None of the above
   
   - type: textarea
     id: description
     attributes:
       label: Description
-      description: Please describe in detail what the feature is
+      description: Please describe in detail what the feature is and how it should act facing the user.
   
   - type: textarea
     id: reason
     attributes:
       label: Reasoning
-      description: Please describe why this feature would benefit Finamp
-  
+      description: Please describe why you would like to have this feature and why it benefits Finamp as a whole.
+
   - type: textarea
     id: implementation
     attributes:
       label: Implementation Notes
       description: |
-        If you are able to, please describe how this feature might
-        work behind the scenes, what needs to be done, important logic
-        steps, and all these things
-  
+        Please give some technical notes like the logic of this feature (when and what should happen and in which order)
+
+        If you have more technical knowledge please try to give more information like
+        - what needs to be done behind the scenes
+        - potential problems with existing/missing systems
+        - Packages that might help (from https://pub.dev)
+        - Packages that may restrict this feature
+        - Examples how/which other apps are doing this (including screenshots)
+        - Jellyfin limitations or API endpoints
+
   - type: textarea
     id: others
     attributes:
       label: Additional Information
       description: If you want to add something which doesn't fit in the above categories feel free to add this here :)
-  
-  - type: checkboxes
-    id: updated
-    attributes:
-      label: Are you using the newest Version?
-      description: Did you make sure you are already using the newest beta version of Finamp?
-      options:
-        - label: Yes and This feature request is still valid
-          required: true
