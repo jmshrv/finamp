@@ -44,6 +44,7 @@ body:
       label: The exact version of the app
       description: You can find the app version inside the settings screen at the top right (the circle with the i)
       placeholder: 0.9.18 (beta)
+    validations:
       required: true
   
   - type: checkboxes
@@ -87,6 +88,7 @@ body:
         To get the logs Open the side menu, click "Logs", and then use the
         *share* button at the top right to get the log file. DO NOT use the copy
         button, since that doesn't contain all logs!
+    validations:
       required: true
   
   - type: markdown
