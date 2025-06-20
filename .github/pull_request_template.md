@@ -3,10 +3,8 @@ You also do **not** need to use this template. You can remove and modify anythin
 Its just a suggestion :)
 -->
 
-
-
 ## Changes
-<!-- Please describe what this Pull request adds or changes. Possibly with  images -->
+<!-- Please describe what this Pull request adds or changes. Possibly with images -->
 
 ## Todo before merging
 <!-- Add custom todos if deemed necessary to give others an overview on how far this PR is progressing -->

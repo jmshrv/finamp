@@ -8,8 +8,9 @@ body:
         # Bug Report
         Thank you for opening a bug report! Please take the time to properly and thoughtfully fill
         out this form to make it easier for us to work with you :)
-        If you notice you cant fully express your issue in this template, you can always open a
-        blank template with all the creative freedom you'll need
+        If you notice you cant fully express your issue in this template, you can always
+        [open a blank template](https://github.com/flloschy/finamp/issues/new?template=BLANK_ISSUE)
+        with all the creative freedom you'll need
         
         ⚠️ One Info before you start filling everything out. ⚠️
         If you are *not* using the Beta/Redesign already please only report **critical / app breaking** issues.
@@ -84,7 +85,6 @@ body:
         Please state the approximate/exact time of the issue here
         and upload the log file. You may need to put the text file into a
         .zip due to file size.
-        
         To get the logs Open the side menu, click "Logs", and then use the
         *share* button at the top right to get the log file.
     validations:

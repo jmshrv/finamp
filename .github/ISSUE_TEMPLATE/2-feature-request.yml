@@ -8,9 +8,9 @@ body:
         # Feature Request
         Thank you for opening a feature Request! Please take the time to properly and thoughtfully fill
         out this form to make it easier for us to work with you :)
-        If you notice you cant fully express your feature in this template, you can always open a
-        blank template with all the creative freedom you'll need
-        
+        If you notice you cant fully express your feature in this template, you can always
+        [open a blank template](https://github.com/flloschy/finamp/issues/new?template=BLANK_ISSUE)
+        with all the creative freedom you'll need
         ⚠️ One more Info before you start filling everything out. ⚠️
         If you are *not* using the Beta/Redesign already please do **not** open a feature request. New features
         will only be added to the Redesign version of the app
@@ -54,7 +54,6 @@ body:
       label: Implementation Notes
       description: |
         Please give some technical notes like the logic of this feature (when and what should happen and in which order)
-
         If you have more technical knowledge please try to give more information like
         - what needs to be done behind the scenes
         - potential problems with existing/missing systems
