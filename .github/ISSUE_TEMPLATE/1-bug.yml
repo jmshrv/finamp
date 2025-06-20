@@ -86,8 +86,7 @@ body:
         .zip due to file size.
         
         To get the logs Open the side menu, click "Logs", and then use the
-        *share* button at the top right to get the log file. DO NOT use the copy
-        button, since that doesn't contain all logs!
+        *share* button at the top right to get the log file.
     validations:
       required: true
   
