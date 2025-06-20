@@ -566,9 +566,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   Future<void> stopPlayback() async {
     try {
-      // TODO: Do we want to actually cancel the sleep timer if we stop the music?
-      _timer.value?.cancel();
-      _timer.value = null;
+      clearSleepTimer();
 
       await _player.stop();
     } catch (e) {
@@ -973,31 +971,33 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
   }
 
-  void sleepTimerActions() {
-    clearSleepTimer();
-  }
-
-  /// Starts the new sleep timer
-  Timer? startSleepTimer(SleepTimer newSleepTimer) {
-    _timer.value = newSleepTimer;
-    sleepTimer?.start(() => sleepTimerActions());
-    return _timer.value!.timer;
-  }
-
-  /// Cancels the sleep timer and clears it.
-  void clearSleepTimer() {
+  /// Handles a sleep timer triggering, pausing play and clearing the timer
+  void completeSleepTimer() {
     // This was a timer and we want to finish this track, convert it to a tracks timer with 0
     if (sleepTimer?.type == SleepTimerType.duration && (sleepTimer?.finishTrack ?? false)) {
       sleepTimer?.type = SleepTimerType.tracks;
       sleepTimer?.length = 1;
       // restart the timer
-      sleepTimer?.start(() => sleepTimerActions());
+      sleepTimer?.start(completeSleepTimer);
       return;
     }
 
     // _sleepTimerDuration = Duration.zero;
     // sleepTimer.remainingLength = 0;
     pause();
+    _timer.value?.cancel();
+    _timer.value = null;
+  }
+
+  /// Starts the new sleep timer
+  Timer? startSleepTimer(SleepTimer newSleepTimer) {
+    _timer.value = newSleepTimer;
+    sleepTimer?.start(completeSleepTimer);
+    return _timer.value!.timer;
+  }
+
+  /// Cancels the sleep timer and clears it.
+  void clearSleepTimer() {
     _timer.value?.cancel();
     _timer.value = null;
   }
