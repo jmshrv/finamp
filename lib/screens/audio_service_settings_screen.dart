@@ -219,10 +219,10 @@ class ClearQueueOnStopToggle extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
-      title: Text(AppLocalizations.of(context)!.clearQueueOnStopTitle),
-      subtitle: Text(AppLocalizations.of(context)!.clearQueueOnStopSubtitle),
-      value: ref.watch(finampSettingsProvider.clearQueueOnStop),
-      onChanged: FinampSetters.setClearQueueOnStop,
+      title: Text(AppLocalizations.of(context)!.clearQueueOnStopEventTitle),
+      subtitle: Text(AppLocalizations.of(context)!.clearQueueOnStopEventSubtitle),
+      value: ref.watch(finampSettingsProvider.clearQueueOnStopEvent),
+      onChanged: FinampSetters.setClearQueueOnStopEvent,
     );
   }
 }

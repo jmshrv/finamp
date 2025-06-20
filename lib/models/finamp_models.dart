@@ -212,7 +212,7 @@ class DefaultSettings {
   static const playlistTracksSortBy = SortBy.defaultOrder;
   static const playlistTracksSortOrder = SortOrder.ascending;
   static const genreFilterPlaylists = false;
-  static const clearQueueOnStop = false;
+  static const clearQueueOnStopEvent = false;
 }
 
 @HiveType(typeId: 28)
@@ -328,7 +328,7 @@ class FinampSettings {
     this.playlistTracksSortBy = DefaultSettings.playlistTracksSortBy,
     this.playlistTracksSortOrder = DefaultSettings.playlistTracksSortOrder,
     this.genreFilterPlaylists = DefaultSettings.genreFilterPlaylists,
-    this.clearQueueOnStop = DefaultSettings.clearQueueOnStop,
+    this.clearQueueOnStopEvent = DefaultSettings.clearQueueOnStopEvent,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -691,8 +691,8 @@ class FinampSettings {
   @HiveField(116)
   SleepTimer? sleepTimer;
 
-  @HiveField(117, defaultValue: DefaultSettings.clearQueueOnStop)
-  bool clearQueueOnStop;
+  @HiveField(117, defaultValue: DefaultSettings.clearQueueOnStopEvent)
+  bool clearQueueOnStopEvent;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

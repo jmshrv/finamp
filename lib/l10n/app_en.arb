@@ -2498,12 +2498,12 @@
   "@autoReloadQueueSubtitle": {
     "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
   },
-  "clearQueueOnStopTitle": "Clear Queue On External Stop",
-  "@clearQueueOnStopTitle": {
+  "clearQueueOnStopEventTitle": "Clear Queue On External Stop",
+  "@clearQueueOnStopEventTitle": {
     "description": "Title for the setting that controls if OS stop commands clear the queue."
   },
-  "clearQueueOnStopSubtitle": "Clear the queue and close the player if a 'stop' command is received from the OS.  In-app stop gestures will always close the player and clear the queue.",
-  "@clearQueueOnStopSubtitle": {
+  "clearQueueOnStopEventSubtitle": "Clear the queue and close the player if a 'stop' command is received from the OS. In-app stop gestures will always close the player and clear the queue.",
+  "@clearQueueOnStopEventSubtitle": {
     "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
   },
   "autoReloadPrompt": "Reload queue to apply new {type, select, network{network settings} transcoding{transcoding settings} other{settings}}",

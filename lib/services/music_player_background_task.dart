@@ -552,7 +552,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       _audioServiceBackgroundTaskLogger.info("Audio service received stop command");
 
-      if (FinampSettingsHelper.finampSettings.clearQueueOnStop) {
+      if (FinampSettingsHelper.finampSettings.clearQueueOnStopEvent) {
         await GetIt.instance<QueueService>().stopAndClearQueue();
       } else {
         // stop the player to release native assets but do not clear queue or reset playback state

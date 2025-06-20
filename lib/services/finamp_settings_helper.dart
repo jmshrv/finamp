@@ -183,7 +183,7 @@ class FinampSettingsHelper {
     FinampSetters.setBufferDisableSizeConstraints(DefaultSettings.bufferDisableSizeConstraints);
     FinampSetters.setAutoloadLastQueueOnStartup(DefaultSettings.autoLoadLastQueueOnStartup);
     FinampSetters.setAutoReloadQueue(DefaultSettings.autoReloadQueue);
-    FinampSetters.setClearQueueOnStop(DefaultSettings.clearQueueOnStop);
+    FinampSetters.setClearQueueOnStopEvent(DefaultSettings.clearQueueOnStopEvent);
   }
 
   static void resetPlaybackReportingSettings() {
