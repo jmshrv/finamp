@@ -345,26 +345,17 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     });
 
     mediaItem.listen((currentTrack) {
-      if (sleepTimer != null && sleepTimer?.type == SleepTimerType.tracks && sleepTimer?.startTime != null) {
-        // Listen for events if it's the next track, and it's a tracks timer, reduce the length
-        sleepTimer?.remainingLength--;
-
-        if ((sleepTimer?.remainingLength ?? 0) <= 0) {
-          sleepTimer?.callback();
-          return;
-        }
-      }
+      sleepTimer?.trackCompleted();
 
       _applyVolumeNormalization(currentTrack);
     });
 
-    // trigger sleep timer if we're almost at the end of the final track
+    // trigger sleep timer early if we're almost at the end of the final track
     _player.positionStream.listen((position) {
-      if ((sleepTimer?.remainingLength ?? 0) <= 1 &&
+      if (sleepTimer?.remainingTracks == 1 &&
           ((mediaItem.value?.duration ?? Duration.zero) - position) <=
               FinampSettingsHelper.finampSettings.audioFadeOutDuration) {
-        sleepTimer?.callback();
-        return;
+        sleepTimer?.trackCompleted();
       }
     });
 
@@ -973,27 +964,15 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   /// Handles a sleep timer triggering, pausing play and clearing the timer
   void completeSleepTimer() {
-    // This was a timer and we want to finish this track, convert it to a tracks timer with 0
-    if (sleepTimer?.type == SleepTimerType.duration && (sleepTimer?.finishTrack ?? false)) {
-      sleepTimer?.type = SleepTimerType.tracks;
-      sleepTimer?.length = 1;
-      // restart the timer
-      sleepTimer?.start(completeSleepTimer);
-      return;
-    }
-
-    // _sleepTimerDuration = Duration.zero;
-    // sleepTimer.remainingLength = 0;
     pause();
     _timer.value?.cancel();
     _timer.value = null;
   }
 
   /// Starts the new sleep timer
-  Timer? startSleepTimer(SleepTimer newSleepTimer) {
+  void startSleepTimer(SleepTimer newSleepTimer) {
     _timer.value = newSleepTimer;
     sleepTimer?.start(completeSleepTimer);
-    return _timer.value!.timer;
   }
 
   /// Cancels the sleep timer and clears it.

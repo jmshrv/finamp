@@ -742,7 +742,7 @@
   "@invalidNumber": {},
   "sleepTimerTooltip": "Sleep timer",
   "@sleepTimerTooltip": {},
-  "sleepTimerRemainingTime": "Sleeping in {prefix}{time} {suffix}",
+  "sleepTimerRemainingTime": "Sleeping in {prefix}{time,plural,=1{1 Minute} other{{time} minutes}}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -755,7 +755,16 @@
       },
       "suffix": {
         "type": "String",
-        "example": "minutes or tracks"
+        "example": "minutes"
+      }
+    }
+  },
+  "sleepTimerRemainingTracks": "Sleeping {time,plural,=1{at end of track} other{in {time} tracks}}",
+  "@sleepTimerRemainingTracks": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
       }
     }
   },

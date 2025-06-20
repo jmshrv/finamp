@@ -117,7 +117,6 @@ class DefaultSettings {
   static const contentGridViewCrossAxisCountLandscape = 3;
   static const showTextOnGridView = true;
   static const sleepTimerDurationSeconds = 60 * 30;
-  static const sleepTimerType = SleepTimerType.duration;
   static const useCoverAsBackground = true;
   static const playerScreenCoverMinimumPadding = 1.5;
   static const showArtistsTracksSection = true;
@@ -3174,101 +3173,112 @@ enum ArtistItemSections {
 
 @HiveType(typeId: 98)
 class SleepTimer {
-  @HiveField(0, defaultValue: DefaultSettings.sleepTimerType)
-  SleepTimerType type;
+  /// Length of the timer, in seconds
+  @HiveField(1, defaultValue: 0)
+  int secondsLength;
 
-  @HiveField(1, defaultValue: DefaultSettings.sleepTimerDurationSeconds)
-  int length;
+  // Hive fields 0, 2 & 3 used on removed fields, do not re-use
 
-  @HiveField(2)
-  DateTime? startTime;
+  /// Length of the timer, in track count
+  @HiveField(4, defaultValue: 0)
+  int tracksLength;
 
-  @HiveField(3, defaultValue: DefaultSettings.sleepTimerDurationSeconds)
-  int remainingLength = DefaultSettings.sleepTimerDurationSeconds;
+  Timer? _timer;
+  int? _tracksRemaining;
 
-  // Used in conjunction with duration timer
-  bool finishTrack = false;
-  Timer? timer;
+  DateTime? _startTime;
+  Function? _callback;
 
-  Function callback;
-
-  final ValueNotifier<int> remainingNotifier = ValueNotifier<int>(0);
+  /// Amount of time remaining.  Either track count or seconds, depending on timer type
+  final ValueNotifier<int> remainingNotifier = ValueNotifier(0);
 
   final sleepTimerLogger = Logger("SleepTimer");
 
-  SleepTimer(this.type, this.length)
-      : remainingLength = length,
-        callback = (() {});
+  SleepTimer(this.secondsLength, this.tracksLength);
 
   Future<void> start(Function callback) async {
-    remainingLength = length;
-    startTime = DateTime.now();
-    this.callback = callback;
+    assert(_timer == null && _tracksRemaining == null && _startTime == null && _timer == null);
+    _startTime = DateTime.now();
+    _callback = callback;
 
-    // TODO: Implement this regardless of type, so that the text updates
-    // Immediately update remaining
-    remainingNotifier.value = remainingLength;
+    remainingNotifier.value = secondsLength + tracksLength;
 
-    if (type == SleepTimerType.duration) {
-      timer = Timer.periodic(const Duration(seconds: 1), (t) async {
+    if (secondsLength > 0) {
+      _timer = Timer.periodic(const Duration(seconds: 1), (t) async {
         final secondsLeft = remainingDuration.inSeconds;
 
-        remainingNotifier.value = secondsLeft;
+        remainingNotifier.value = secondsLeft + tracksLength;
 
         if (secondsLeft <= 0) {
           t.cancel();
-          sleepTimerLogger.info("Sleep timer finished");
-          await this.callback();
+          _timer = null;
+          if (tracksLength > 0) {
+            sleepTimerLogger.info("Sleep timer switching to track count");
+            _tracksRemaining = tracksLength;
+          } else {
+            sleepTimerLogger.info("Sleep timer duration finished");
+            await _callback!();
+          }
         }
       });
+    } else {
+      _tracksRemaining = tracksLength;
     }
 
-    sleepTimerLogger.info(
-        "Sleep timer started for ${type == SleepTimerType.duration ? Duration(seconds: length) : "$length tracks"}, finishTrack: $finishTrack");
+    sleepTimerLogger.info("Sleep timer started for ${Duration(seconds: secondsLength)}, $tracksLength tracks");
+  }
+
+  void trackCompleted() {
+    if (_tracksRemaining == null) return;
+    assert(_startTime != null && _callback != null);
+    _tracksRemaining = _tracksRemaining! - 1;
+    remainingNotifier.value = _tracksRemaining!;
+    if (_tracksRemaining! <= 0) {
+      _tracksRemaining = null;
+      sleepTimerLogger.info("Sleep timer tracks finished");
+      _callback!();
+    }
   }
 
   void cancel() {
-    remainingLength = 0;
-    startTime = null;
-    timer?.cancel();
-    timer = null;
+    _startTime = null;
+    _timer?.cancel();
+    _timer = null;
+    _tracksRemaining = null;
     remainingNotifier.value = 0;
     sleepTimerLogger.info("Sleep timer cancelled");
   }
 
-  Duration get totalDuration => Duration(seconds: length);
+  Duration get totalDuration => Duration(seconds: secondsLength);
 
   Duration get remainingDuration {
-    if (startTime == null) return Duration.zero;
-    final diff = startTime!.add(totalDuration).difference(DateTime.now());
+    if (_startTime == null) return Duration.zero;
+    final diff = _startTime!.add(totalDuration).difference(DateTime.now());
     // we want to make sure playback ends when specified, so we need to be done fading by then
     final remaining = diff - FinampSettingsHelper.finampSettings.audioFadeOutDuration;
     return diff.isNegative ? Duration.zero : remaining;
   }
 
-  String asString(BuildContext context) {
-    final minutes = type == SleepTimerType.duration ? (remainingDuration.inSeconds / 60).ceil() : remainingLength;
-    final durationPrefix = type == SleepTimerType.duration && minutes == 1 ? "<" : "";
-    final durationSuffix = type == SleepTimerType.duration
-        ? AppLocalizations.of(context)!.minutes.toLowerCase()
-        : AppLocalizations.of(context)!.tracks.toLowerCase();
+  int get remainingTracks => _tracksRemaining ?? 0;
 
-    return AppLocalizations.of(context)!.sleepTimerRemainingTime(minutes, durationPrefix, durationSuffix);
+  String asString(BuildContext context) {
+    if (_tracksRemaining == null) {
+      final minutes = (remainingDuration.inSeconds / 60).ceil();
+      final prefix = minutes == 1 ? "<" : "";
+      final suffix = AppLocalizations.of(context)!.minutes.toLowerCase();
+      return AppLocalizations.of(context)!.sleepTimerRemainingTime(minutes, prefix, suffix);
+    } else {
+      return AppLocalizations.of(context)!.sleepTimerRemainingTracks(_tracksRemaining ?? 0);
+    }
   }
 }
 
 @HiveType(typeId: 99)
+@Deprecated("Removed in sleep timer refactor.  Class retained for hive.")
 enum SleepTimerType {
   @HiveField(0)
-  duration("Duration"), // TODO: Use localizations?
+  duration,
 
   @HiveField(1)
-  tracks("Tracks");
-
-  final String _display;
-
-  const SleepTimerType(this._display);
-
-  @override
-  String toString() => _display;
+  tracks;
 }
