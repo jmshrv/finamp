@@ -11,7 +11,6 @@ body:
         If you notice you cant fully express your issue in this template, you can always
         [open a blank template](https://github.com/flloschy/finamp/issues/new?template=BLANK_ISSUE)
         with all the creative freedom you'll need
-        
         ⚠️ One Info before you start filling everything out. ⚠️
         If you are *not* using the Beta/Redesign already please only report **critical / app breaking** issues.
         This is because the beta version is likely to already have all the features and bug fixes you might be searching for.
@@ -71,7 +70,7 @@ body:
     id: description
     attributes:
       label: Description & Steps to Reproduce
-      description: Please describe what the issue precisely is and if possible how you can reproduce it. Additionally a screen-recoding is always welcome!
+      description: Please describe what the issue precisely is and if possible how you can reproduce it. Additionally a screen-recoding is always welcome! (for legal reasons preferably without audio)
 
   - type: markdown
     attributes:
