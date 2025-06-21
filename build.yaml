@@ -9,6 +9,9 @@ targets:
             - deprecated_member_use_from_same_package
           preamble: |
             // dart format off
+      flutter_gen_runner:
+        options:
+          line_length: 120
 
 builders:
   finamp_settings_generator:
