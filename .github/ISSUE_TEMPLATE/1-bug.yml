@@ -72,10 +72,6 @@ body:
       label: Description & Steps to Reproduce
       description: Please describe what the issue precisely is and if possible how you can reproduce it. Additionally a screen-recoding is always welcome! (for legal reasons preferably without audio)
 
-  - type: markdown
-    attributes:
-      value: ""  
-
   - type: textarea
     id: logs
     attributes:
