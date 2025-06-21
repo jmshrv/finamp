@@ -9,7 +9,5 @@ class NewPageProgressIndicator extends StatelessWidget {
   const NewPageProgressIndicator({super.key});
 
   @override
-  Widget build(BuildContext context) => const FooterTile(
-        child: CircularProgressIndicator.adaptive(),
-      );
+  Widget build(BuildContext context) => const FooterTile(child: CircularProgressIndicator.adaptive());
 }

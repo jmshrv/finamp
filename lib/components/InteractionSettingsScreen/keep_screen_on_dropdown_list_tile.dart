@@ -16,10 +16,7 @@ class KeepScreenOnDropdownListTile extends ConsumerWidget {
       trailing: DropdownButton<KeepScreenOnOption>(
         value: ref.watch(finampSettingsProvider.keepScreenOnOption),
         items: KeepScreenOnOption.values
-            .map((e) => DropdownMenuItem<KeepScreenOnOption>(
-                  value: e,
-                  child: Text(e.toLocalisedString(context)),
-                ))
+            .map((e) => DropdownMenuItem<KeepScreenOnOption>(value: e, child: Text(e.toLocalisedString(context))))
             .toList(),
         onChanged: (value) {
           if (value != null) {

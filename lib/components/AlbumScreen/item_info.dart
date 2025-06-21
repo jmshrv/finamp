@@ -12,20 +12,14 @@ import '../icon_and_text.dart';
 import '../print_duration.dart';
 
 class ItemInfo extends ConsumerWidget {
-  const ItemInfo({
-    super.key,
-    required this.item,
-    required this.itemTracks,
-    this.genreFilter,
-    this.updateGenreFilter,
-  });
+  const ItemInfo({super.key, required this.item, required this.itemTracks, this.genreFilter, this.updateGenreFilter});
 
   final BaseItemDto item;
   final List<BaseItemDto> itemTracks;
   final BaseItemDto? genreFilter;
   final void Function(BaseItemDto?)? updateGenreFilter;
 
-// TODO: see if there's a way to expand this column to the row that it's in
+  // TODO: see if there's a way to expand this column to the row that it's in
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isOffline = ref.watch(finampSettingsProvider.isOffline);
@@ -48,37 +42,27 @@ class ItemInfo extends ConsumerWidget {
             padding: EdgeInsets.only(left: 6, right: 6, top: 0, bottom: 6),
             child: Text(
               item.name ?? "Unknown Playlist",
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontSize: Theme.of(context).textTheme.titleMedium!.fontSize! + 1,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontSize: Theme.of(context).textTheme.titleMedium!.fontSize! + 1),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
           ),
-        if (item.type != "Playlist")
-          ArtistChips(
-            baseItem: item,
-            artistType: ArtistType.albumArtist,
-          ),
+        if (item.type != "Playlist") ArtistChips(baseItem: item, artistType: ArtistType.albumArtist),
         IconAndText(
-            iconData: Icons.music_note,
-            textSpan: TextSpan(
-              text: trackDurationString,
-            )),
+          iconData: Icons.music_note,
+          textSpan: TextSpan(text: trackDurationString),
+        ),
         if (item.type != "Playlist")
           IconAndText(
-              iconData: Icons.event,
-              textSpan: TextSpan(
-                text: ReleaseDateHelper.autoFormat(item) ?? AppLocalizations.of(context)!.noReleaseDate,
-              )),
+            iconData: Icons.event,
+            textSpan: TextSpan(text: ReleaseDateHelper.autoFormat(item) ?? AppLocalizations.of(context)!.noReleaseDate),
+          ),
         Row(
           children: [
             Expanded(
-              child: GenreIconAndText(
-                parent: item,
-                genreFilter: genreFilter,
-                updateGenreFilter: updateGenreFilter,
-              ),
+              child: GenreIconAndText(parent: item, genreFilter: genreFilter, updateGenreFilter: updateGenreFilter),
             ),
           ],
         ),

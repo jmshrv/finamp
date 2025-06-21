@@ -96,9 +96,10 @@ class FinampLogsHelper {
   /// Write logs to a file and save to user-picked directory
   Future<void> exportLogs() async {
     await FilePicker.platform.saveFile(
-        fileName: "finamp-logs.txt",
-        // initialDirectory is ignored on mobile
-        initialDirectory: (await getApplicationDocumentsDirectory()).path,
-        bytes: utf8.encode(await getFullLogs()));
+      fileName: "finamp-logs.txt",
+      // initialDirectory is ignored on mobile
+      initialDirectory: (await getApplicationDocumentsDirectory()).path,
+      bytes: utf8.encode(await getFullLogs()),
+    );
   }
 }

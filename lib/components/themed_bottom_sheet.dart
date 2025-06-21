@@ -42,13 +42,12 @@ Future<void> showThemedBottomSheet({
   await showModalBottomSheet(
     context: context,
     backgroundColor: (Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black).withOpacity(0.9),
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-    ),
+    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20.0))),
     isScrollControlled: true,
     clipBehavior: Clip.hardEdge,
     constraints: BoxConstraints(
-        maxWidth: (Platform.isIOS || Platform.isAndroid) ? 500 : min(500, MediaQuery.sizeOf(context).width * 0.9)),
+      maxWidth: (Platform.isIOS || Platform.isAndroid) ? 500 : min(500, MediaQuery.sizeOf(context).width * 0.9),
+    ),
     isDismissible: true,
     enableDrag: true,
     useSafeArea: true,
@@ -62,7 +61,7 @@ Future<void> showThemedBottomSheet({
         overrides: [
           if (themeImage != null) localImageProvider.overrideWithValue(themeImage),
           if (themeImage != null) localThemeInfoProvider.overrideWithValue(themeInfo),
-          if (themeImage == null) localThemeInfoProvider.overrideWithValue(ThemeInfo(item, useIsolate: false))
+          if (themeImage == null) localThemeInfoProvider.overrideWithValue(ThemeInfo(item, useIsolate: false)),
         ],
         child: ThemedBottomSheet(
           key: ValueKey(item.id.raw + routeName),
@@ -97,7 +96,8 @@ class ThemedBottomSheet extends ConsumerStatefulWidget {
     bool includePlaybackrow = true,
   }) {
     double stackHeight = infoHeaderFullExtent;
-    stackHeight += menuEntries.where((element) => element.isVisible).length *
+    stackHeight +=
+        menuEntries.where((element) => element.isVisible).length *
         (Theme.of(context).visualDensity == VisualDensity.compact ? 48 : 56);
     stackHeight += extraHeight ?? 0.0;
     stackHeight += includePlaybackrow ? (playActionPageIndicatorHeight + playActionRowHeight) : 0;
@@ -119,52 +119,52 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
     assert(widget.buildSlivers == null || widget.buildWrapper == null);
     assert(widget.buildSlivers != null || widget.buildWrapper != null);
     return Theme(
-        data: ThemeData(colorScheme: ref.watch(localThemeProvider)),
-        child: Builder(
-          builder: (BuildContext context) {
-            if (widget.buildWrapper != null) {
-              return widget.buildWrapper!(context, dragController, (height, slivers) => buildInternal(height, slivers));
-            } else {
-              var (height, slivers) = widget.buildSlivers!(context);
-              return buildInternal(height, slivers);
-            }
-          },
-        ));
+      data: ThemeData(colorScheme: ref.watch(localThemeProvider)),
+      child: Builder(
+        builder: (BuildContext context) {
+          if (widget.buildWrapper != null) {
+            return widget.buildWrapper!(context, dragController, (height, slivers) => buildInternal(height, slivers));
+          } else {
+            var (height, slivers) = widget.buildSlivers!(context);
+            return buildInternal(height, slivers);
+          }
+        },
+      ),
+    );
   }
 
   Widget buildInternal(double stackHeight, List<Widget> slivers) {
-    return LayoutBuilder(builder: (context, constraints) {
-      stackHeight += widget.showDragHandle ? 29.5 : 0;
-      // Account for bottom padding in PaddedCustomscrollview
-      stackHeight += 32;
-      stackHeight += MediaQuery.paddingOf(context).bottom;
-      if (Platform.isIOS || Platform.isAndroid) {
-        var size = (stackHeight / constraints.maxHeight).clamp(widget.minDraggableHeight, 1.0);
-        return DraggableScrollableSheet(
-          controller: dragController,
-          snap: true,
-          initialChildSize: size,
-          minChildSize: size * 0.75,
-          expand: false,
-          builder: (context, scrollController) => menu(scrollController, slivers),
-        );
-      } else {
-        var minSize = widget.minDraggableHeight * constraints.maxHeight;
-        return SizedBox(
-          // This is an overestimate of stack height on desktop, but this widget
-          // needs some bottom padding on large displays anyway.
-          height: max(minSize, stackHeight),
-          child: menu(_controller, slivers),
-        );
-      }
-    });
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        stackHeight += widget.showDragHandle ? 29.5 : 0;
+        // Account for bottom padding in PaddedCustomscrollview
+        stackHeight += 32;
+        stackHeight += MediaQuery.paddingOf(context).bottom;
+        if (Platform.isIOS || Platform.isAndroid) {
+          var size = (stackHeight / constraints.maxHeight).clamp(widget.minDraggableHeight, 1.0);
+          return DraggableScrollableSheet(
+            controller: dragController,
+            snap: true,
+            initialChildSize: size,
+            minChildSize: size * 0.75,
+            expand: false,
+            builder: (context, scrollController) => menu(scrollController, slivers),
+          );
+        } else {
+          var minSize = widget.minDraggableHeight * constraints.maxHeight;
+          return SizedBox(
+            // This is an overestimate of stack height on desktop, but this widget
+            // needs some bottom padding on large displays anyway.
+            height: max(minSize, stackHeight),
+            child: menu(_controller, slivers),
+          );
+        }
+      },
+    );
   }
 
   Widget menu(ScrollController scrollController, List<Widget> slivers) {
-    var scrollview = PaddedCustomScrollview(
-      controller: scrollController,
-      slivers: slivers,
-    );
+    var scrollview = PaddedCustomScrollview(controller: scrollController, slivers: slivers);
     return Stack(
       children: [
         if (ref.watch(finampSettingsProvider.useCoverAsBackground)) const BlurredPlayerScreenBackground(),
@@ -172,19 +172,19 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
             ? Column(
                 children: [
                   Padding(
-                      padding: const EdgeInsets.only(top: 16.0, bottom: 10.0),
-                      child: Builder(builder: (context) {
+                    padding: const EdgeInsets.only(top: 16.0, bottom: 10.0),
+                    child: Builder(
+                      builder: (context) {
                         var textColor = Theme.of(context).textTheme.bodySmall!.color!;
                         return Container(
                           width: 40,
                           height: 3.5,
-                          decoration: BoxDecoration(
-                            color: textColor,
-                            borderRadius: BorderRadius.circular(3.5),
-                          ),
+                          decoration: BoxDecoration(color: textColor, borderRadius: BorderRadius.circular(3.5)),
                         );
-                      })),
-                  Expanded(child: scrollview)
+                      },
+                    ),
+                  ),
+                  Expanded(child: scrollview),
                 ],
               )
             : scrollview,
@@ -201,11 +201,7 @@ extension type MenuMaskHeight._(double raw) {
 }
 
 class MenuMask extends SingleChildRenderObjectWidget {
-  const MenuMask({
-    super.key,
-    super.child,
-    required this.height,
-  });
+  const MenuMask({super.key, super.child, required this.height});
 
   final MenuMaskHeight height;
 
@@ -243,13 +239,14 @@ class RenderTrackMenuMask extends RenderProxySliver {
   void paint(PaintingContext context, Offset offset) {
     if (child != null) {
       layer ??= ShaderMaskLayer(
-          shader: const LinearGradient(
-                  colors: [Color.fromARGB(0, 255, 255, 255), Color.fromARGB(255, 255, 255, 255)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter)
-              .createShader(Rect.fromLTWH(0, height, 0, 10)),
-          blendMode: BlendMode.modulate,
-          maskRect: Rect.fromLTWH(0, 0, 99999, height + 15));
+        shader: const LinearGradient(
+          colors: [Color.fromARGB(0, 255, 255, 255), Color.fromARGB(255, 255, 255, 255)],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ).createShader(Rect.fromLTWH(0, height, 0, 10)),
+        blendMode: BlendMode.modulate,
+        maskRect: Rect.fromLTWH(0, 0, 99999, height + 15),
+      );
 
       context.pushLayer(layer!, super.paint, offset);
     } else {

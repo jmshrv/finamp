@@ -18,16 +18,14 @@ class CTALarge extends StatelessWidget {
       },
       style: ButtonStyle(
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
-        padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-          const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        padding: WidgetStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.symmetric(horizontal: 24, vertical: 20)),
+        backgroundColor: WidgetStateProperty.all<Color>(
+          Theme.of(context).brightness == Brightness.dark
+              ? accentColor.withOpacity(0.3)
+              : Color.alphaBlend(accentColor.withOpacity(0.8), Colors.white),
         ),
-        backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).brightness == Brightness.dark
-            ? accentColor.withOpacity(0.3)
-            : Color.alphaBlend(accentColor.withOpacity(0.8), Colors.white)),
       ),
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
@@ -38,16 +36,10 @@ class CTALarge extends StatelessWidget {
             color: Theme.of(context).brightness == Brightness.dark ? accentColor : Colors.white,
             weight: 1.5,
           ),
-          const SizedBox(
-            width: 12,
-          ),
+          const SizedBox(width: 12),
           Text(
             text,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ],
       ),

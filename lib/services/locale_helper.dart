@@ -13,8 +13,8 @@ class LocaleHelper {
     final locale = LocaleHelper.locale;
     return locale != null
         ? (locale.countryCode != null
-            ? "${locale.languageCode.toLowerCase()}_${locale.countryCode?.toUpperCase()}"
-            : locale.toString())
+              ? "${locale.languageCode.toLowerCase()}_${locale.countryCode?.toUpperCase()}"
+              : locale.toString())
         : null;
   }
 

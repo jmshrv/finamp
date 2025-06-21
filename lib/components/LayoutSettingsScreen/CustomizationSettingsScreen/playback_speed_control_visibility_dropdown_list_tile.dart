@@ -25,31 +25,32 @@ class PlaybackSpeedControlVisibilityDropdownListTile extends ConsumerWidget {
             // tappable "more info" text
             TextSpan(
               text: AppLocalizations.of(context)!.moreInfo,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-                fontWeight: FontWeight.w500,
-              ),
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w500),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
                   showGeneralDialog(
-                      context: context,
-                      pageBuilder: (context, anim1, anim2) {
-                        return AlertDialog(
-                          title: Text(AppLocalizations.of(context)!.playbackSpeedControlSetting),
-                          content: Text(AppLocalizations.of(context)!.playbackSpeedControlSettingDescription(
-                              MetadataProvider.speedControlLongTrackDuration.inMinutes,
-                              MetadataProvider.speedControlLongAlbumDuration.inHours,
-                              MetadataProvider.speedControlGenres.join(", "))),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(AppLocalizations.of(context)!.close),
-                            ),
-                          ],
-                        );
-                      });
+                    context: context,
+                    pageBuilder: (context, anim1, anim2) {
+                      return AlertDialog(
+                        title: Text(AppLocalizations.of(context)!.playbackSpeedControlSetting),
+                        content: Text(
+                          AppLocalizations.of(context)!.playbackSpeedControlSettingDescription(
+                            MetadataProvider.speedControlLongTrackDuration.inMinutes,
+                            MetadataProvider.speedControlLongAlbumDuration.inHours,
+                            MetadataProvider.speedControlGenres.join(", "),
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(AppLocalizations.of(context)!.close),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
             ),
           ],
@@ -58,10 +59,7 @@ class PlaybackSpeedControlVisibilityDropdownListTile extends ConsumerWidget {
       trailing: DropdownButton<PlaybackSpeedVisibility>(
         value: ref.watch(finampSettingsProvider.playbackSpeedVisibility),
         items: PlaybackSpeedVisibility.values
-            .map((e) => DropdownMenuItem<PlaybackSpeedVisibility>(
-                  value: e,
-                  child: Text(e.toLocalisedString(context)),
-                ))
+            .map((e) => DropdownMenuItem<PlaybackSpeedVisibility>(value: e, child: Text(e.toLocalisedString(context))))
             .toList(),
         onChanged: (value) {
           if (value != null) {

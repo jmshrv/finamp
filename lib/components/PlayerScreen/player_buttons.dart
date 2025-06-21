@@ -24,92 +24,94 @@ class PlayerButtons extends StatelessWidget {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
 
     return StreamBuilder<MediaState>(
-        stream: mediaStateStream,
-        initialData: MediaState(
-            audioHandler.mediaItem.valueOrNull, audioHandler.playbackState.value, audioHandler.fadeState.value),
-        builder: (context, snapshot) {
-          final mediaState = snapshot.data!;
-          final playbackState = mediaState.playbackState;
-          final fadeState = mediaState.fadeState;
+      stream: mediaStateStream,
+      initialData: MediaState(
+        audioHandler.mediaItem.valueOrNull,
+        audioHandler.playbackState.value,
+        audioHandler.fadeState.value,
+      ),
+      builder: (context, snapshot) {
+        final mediaState = snapshot.data!;
+        final playbackState = mediaState.playbackState;
+        final fadeState = mediaState.fadeState;
 
-          return Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            textDirection: TextDirection.ltr,
-            children: [
-              if (controller.shouldShow(PlayerHideable.loopShuffleButtons)) PlayerButtonsRepeating(),
-              Semantics.fromProperties(
-                properties: SemanticsProperties(
-                  label: AppLocalizations.of(context)!.skipToPreviousTrackButtonTooltip,
-                  button: true,
-                ),
-                container: true,
-                excludeSemantics: true,
-                child: IconButton(
-                  icon: const Icon(TablerIcons.player_skip_back),
-                  onPressed: () async {
-                    FeedbackHelper.feedback(FeedbackType.light);
-                    await audioHandler.skipToPrevious();
-                  },
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          textDirection: TextDirection.ltr,
+          children: [
+            if (controller.shouldShow(PlayerHideable.loopShuffleButtons)) PlayerButtonsRepeating(),
+            Semantics.fromProperties(
+              properties: SemanticsProperties(
+                label: AppLocalizations.of(context)!.skipToPreviousTrackButtonTooltip,
+                button: true,
+              ),
+              container: true,
+              excludeSemantics: true,
+              child: IconButton(
+                icon: const Icon(TablerIcons.player_skip_back),
+                onPressed: () async {
+                  FeedbackHelper.feedback(FeedbackType.light);
+                  await audioHandler.skipToPrevious();
+                },
+              ),
+            ),
+            Semantics.fromProperties(
+              properties: SemanticsProperties(
+                label: AppLocalizations.of(context)!.togglePlaybackButtonTooltip,
+                button: true,
+              ),
+              container: true,
+              excludeSemantics: true,
+              child: _RoundedIconButton(
+                width: controller.shouldShow(PlayerHideable.bigPlayButton) ? 62 : 48,
+                height: controller.shouldShow(PlayerHideable.bigPlayButton) ? 62 : 48,
+                borderRadius: BorderRadius.circular(controller.shouldShow(PlayerHideable.bigPlayButton) ? 16 : 12),
+                onTap: () {
+                  FeedbackHelper.feedback(FeedbackType.light);
+                  unawaited(audioHandler.togglePlayback());
+                },
+                icon: AudioFadeProgressVisualizerContainer(
+                  key: const Key("PlayerButtonAudioFadeProgressVisualizer"),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(controller.shouldShow(PlayerHideable.bigPlayButton) ? 16 : 12),
+                  ),
+                  child: Icon(
+                    playbackState.playing
+                        ? fadeState.fadeDirection != FadeDirection.fadeOut
+                              ? TablerIcons.player_pause
+                              : TablerIcons.player_play
+                        : TablerIcons.player_play,
+                    size: 32,
+                  ),
                 ),
               ),
-              Semantics.fromProperties(
-                properties: SemanticsProperties(
-                  label: AppLocalizations.of(context)!.togglePlaybackButtonTooltip,
-                  button: true,
-                ),
-                container: true,
-                excludeSemantics: true,
-                child: _RoundedIconButton(
-                    width: controller.shouldShow(PlayerHideable.bigPlayButton) ? 62 : 48,
-                    height: controller.shouldShow(PlayerHideable.bigPlayButton) ? 62 : 48,
-                    borderRadius: BorderRadius.circular(controller.shouldShow(PlayerHideable.bigPlayButton) ? 16 : 12),
-                    onTap: () {
-                      FeedbackHelper.feedback(FeedbackType.light);
-                      unawaited(audioHandler.togglePlayback());
-                    },
-                    icon: AudioFadeProgressVisualizerContainer(
-                        key: const Key("PlayerButtonAudioFadeProgressVisualizer"),
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(controller.shouldShow(PlayerHideable.bigPlayButton) ? 16 : 12)),
-                        child: Icon(
-                            playbackState.playing
-                                ? fadeState.fadeDirection != FadeDirection.fadeOut
-                                    ? TablerIcons.player_pause
-                                    : TablerIcons.player_play
-                                : TablerIcons.player_play,
-                            size: 32))),
+            ),
+            Semantics.fromProperties(
+              properties: SemanticsProperties(
+                label: AppLocalizations.of(context)!.skipToNextTrackButtonTooltip,
+                button: true,
               ),
-              Semantics.fromProperties(
-                properties: SemanticsProperties(
-                  label: AppLocalizations.of(context)!.skipToNextTrackButtonTooltip,
-                  button: true,
-                ),
-                container: true,
-                excludeSemantics: true,
-                child: IconButton(
-                  icon: const Icon(TablerIcons.player_skip_forward),
-                  onPressed: () async {
-                    FeedbackHelper.feedback(FeedbackType.light);
-                    await audioHandler.skipToNext();
-                  },
-                ),
+              container: true,
+              excludeSemantics: true,
+              child: IconButton(
+                icon: const Icon(TablerIcons.player_skip_forward),
+                onPressed: () async {
+                  FeedbackHelper.feedback(FeedbackType.light);
+                  await audioHandler.skipToNext();
+                },
               ),
-              if (controller.shouldShow(PlayerHideable.loopShuffleButtons)) PlayerButtonsShuffle()
-            ],
-          );
-        });
+            ),
+            if (controller.shouldShow(PlayerHideable.loopShuffleButtons)) PlayerButtonsShuffle(),
+          ],
+        );
+      },
+    );
   }
 }
 
 class _RoundedIconButton extends StatelessWidget {
-  const _RoundedIconButton({
-    required this.icon,
-    this.borderRadius,
-    this.width = 48,
-    this.height = 48,
-    this.onTap,
-  });
+  const _RoundedIconButton({required this.icon, this.borderRadius, this.width = 48, this.height = 48, this.onTap});
 
   final Widget icon;
   final BorderRadius? borderRadius;
@@ -126,13 +128,14 @@ class _RoundedIconButton extends StatelessWidget {
       semanticLabel: icon.semanticLabel,
       size: icon.size,
       textDirection: icon.textDirection,
-      shadows: icon.shadows ??
+      shadows:
+          icon.shadows ??
           [
             BoxShadow(
               blurRadius: 2,
               offset: const Offset(0, 2),
               color: (icon.color ?? IconTheme.of(context).color)!.withOpacity(0.25),
-            )
+            ),
           ],
     );
   }
@@ -147,11 +150,7 @@ class _RoundedIconButton extends StatelessWidget {
       child: Material(
         borderRadius: actualBorderRadius,
         color: IconTheme.of(context).color!.withOpacity(0.15),
-        child: InkWell(
-          borderRadius: actualBorderRadius,
-          onTap: onTap,
-          child: actualIcon,
-        ),
+        child: InkWell(borderRadius: actualBorderRadius, onTap: onTap, child: actualIcon),
       ),
     );
   }

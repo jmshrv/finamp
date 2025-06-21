@@ -45,14 +45,15 @@ class DownloadDialog extends ConsumerStatefulWidget {
     }
     bool needTranscode =
         FinampSettingsHelper.finampSettings.shouldTranscodeDownloads == TranscodeDownloadsSetting.ask &&
-            (item.finampCollection?.type.hasAudio ?? true);
+        (item.finampCollection?.type.hasAudio ?? true);
     String? downloadLocation = FinampSettingsHelper.finampSettings.defaultDownloadLocation;
     if (!FinampSettingsHelper.finampSettings.downloadLocationsMap.containsKey(downloadLocation)) {
       downloadLocation = null;
     }
     if (downloadLocation == null) {
-      var locations = FinampSettingsHelper.finampSettings.downloadLocationsMap.values
-          .where((element) => element.baseDirectory != DownloadLocationType.internalDocuments);
+      var locations = FinampSettingsHelper.finampSettings.downloadLocationsMap.values.where(
+        (element) => element.baseDirectory != DownloadLocationType.internalDocuments,
+      );
       if (locations.length == 1) {
         downloadLocation = locations.first.id;
       }
@@ -66,9 +67,10 @@ class DownloadDialog extends ConsumerStatefulWidget {
     if ((item.baseItemType == BaseItemDtoType.album || item.baseItemType == BaseItemDtoType.playlist) &&
         (needTranscode || trackCount == null)) {
       children = await jellyfinApiHelper.getItems(
-          parentItem: item.baseItem!,
-          includeItemTypes: BaseItemDtoType.track.idString,
-          fields: "${jellyfinApiHelper.defaultFields},MediaSources,MediaStreams");
+        parentItem: item.baseItem!,
+        includeItemTypes: BaseItemDtoType.track.idString,
+        fields: "${jellyfinApiHelper.defaultFields},MediaSources,MediaStreams",
+      );
       trackCount = children?.length;
     } else if ((item.baseItemType == BaseItemDtoType.artist || item.baseItemType == BaseItemDtoType.genre) &&
         trackCount == null) {
@@ -94,10 +96,12 @@ class DownloadDialog extends ConsumerStatefulWidget {
 
       FinampSetters.setLastUsedDownloadLocationId(profile.downloadLocationId);
       GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmDownloadStarted, isConfirmation: true);
-      unawaited(downloadsService
-          .addDownload(stub: item, viewId: viewId!, transcodeProfile: profile)
-          // TODO only show the enqueued confirmation if the enqueuing took longer than ~10 seconds
-          .then((value) => GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.downloadsQueued)));
+      unawaited(
+        downloadsService
+            .addDownload(stub: item, viewId: viewId!, transcodeProfile: profile)
+            // TODO only show the enqueued confirmation if the enqueuing took longer than ~10 seconds
+            .then((value) => GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.downloadsQueued)),
+      );
     } else {
       if (!context.mounted) return;
       await showDialog(
@@ -129,21 +133,18 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
 
     if (widget.children != null) {
       final transcodedFileSize = widget.children!
-          .map((e) => e.mediaSources?.first
-              .transcodedSize(FinampSettingsHelper.finampSettings.downloadTranscodingProfile.bitrateChannels))
+          .map(
+            (e) => e.mediaSources?.first.transcodedSize(
+              FinampSettingsHelper.finampSettings.downloadTranscodingProfile.bitrateChannels,
+            ),
+          )
           .fold(0, (a, b) => a + (b ?? 0));
 
-      transcodeDescription = FileSize.getSize(
-        transcodedFileSize,
-        precision: PrecisionValue.None,
-      );
+      transcodeDescription = FileSize.getSize(transcodedFileSize, precision: PrecisionValue.None);
 
       final originalFileSize = widget.children!.map((e) => e.mediaSources?.first.size ?? 0).fold(0, (a, b) => a + b);
 
-      final originalFileSizeFormatted = FileSize.getSize(
-        originalFileSize,
-        precision: PrecisionValue.None,
-      );
+      final originalFileSizeFormatted = FileSize.getSize(originalFileSize, precision: PrecisionValue.None);
 
       originalDescription = originalFileSizeFormatted;
 
@@ -156,15 +157,17 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
 
     DownloadLocation? getFirstSelectedLocation() {
       FinampSettings settings = FinampSettingsHelper.finampSettings;
-      selectedDownloadLocation ??= settings.downloadLocationsMap[widget.downloadLocationId] ??
+      selectedDownloadLocation ??=
+          settings.downloadLocationsMap[widget.downloadLocationId] ??
           settings.downloadLocationsMap[settings.lastUsedDownloadLocationId] ??
           FinampSettingsHelper.finampSettings.internalTrackDir;
 
       return selectedDownloadLocation;
     }
 
-    final userSelectableDownloadLocations = FinampSettingsHelper.finampSettings.downloadLocationsMap.values
-        .where((element) => element.baseDirectory != DownloadLocationType.internalDocuments);
+    final userSelectableDownloadLocations = FinampSettingsHelper.finampSettings.downloadLocationsMap.values.where(
+      (element) => element.baseDirectory != DownloadLocationType.internalDocuments,
+    );
 
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.addDownloads),
@@ -175,41 +178,49 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
           // Only show if there are multiple download locations
           if (userSelectableDownloadLocations.length > 1)
             DropdownButton<DownloadLocation>(
-                hint: Text(AppLocalizations.of(context)!.location),
-                isExpanded: true,
-                onChanged: (value) => setState(() {
-                      selectedDownloadLocation = value;
-                    }),
-                value: getFirstSelectedLocation(),
-                items: userSelectableDownloadLocations
-                    .map((downloadLocation) => DropdownMenuItem<DownloadLocation>(
-                          value: downloadLocation,
-                          child: Text(downloadLocation.name),
-                        ))
-                    .toList()),
+              hint: Text(AppLocalizations.of(context)!.location),
+              isExpanded: true,
+              onChanged: (value) => setState(() {
+                selectedDownloadLocation = value;
+              }),
+              value: getFirstSelectedLocation(),
+              items: userSelectableDownloadLocations
+                  .map(
+                    (downloadLocation) =>
+                        DropdownMenuItem<DownloadLocation>(value: downloadLocation, child: Text(downloadLocation.name)),
+                  )
+                  .toList(),
+            ),
           if (widget.needsTranscode)
             DropdownButton<bool>(
-                hint: Text(AppLocalizations.of(context)!.transcodeHint),
-                isExpanded: true,
-                onChanged: (value) => setState(() {
-                      transcode = value;
-                    }),
-                value: transcode,
-                items: [
-                  DropdownMenuItem<bool>(
-                    value: true,
-                    child: Text(AppLocalizations.of(context)!.doTranscode(
-                        transcodeProfile.bitrateKbps, transcodeProfile.codec.name.toUpperCase(), transcodeDescription)),
+              hint: Text(AppLocalizations.of(context)!.transcodeHint),
+              isExpanded: true,
+              onChanged: (value) => setState(() {
+                transcode = value;
+              }),
+              value: transcode,
+              items: [
+                DropdownMenuItem<bool>(
+                  value: true,
+                  child: Text(
+                    AppLocalizations.of(context)!.doTranscode(
+                      transcodeProfile.bitrateKbps,
+                      transcodeProfile.codec.name.toUpperCase(),
+                      transcodeDescription,
+                    ),
                   ),
-                  DropdownMenuItem<bool>(
-                    value: false,
-                    child: Text(AppLocalizations.of(context)!.dontTranscode(originalDescription)),
-                  )
-                ]),
+                ),
+                DropdownMenuItem<bool>(
+                  value: false,
+                  child: Text(AppLocalizations.of(context)!.dontTranscode(originalDescription)),
+                ),
+              ],
+            ),
           if ((widget.trackCount ?? 0) >= FinampSettingsHelper.finampSettings.downloadSizeWarningCutoff)
             Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                child: Text(AppLocalizations.of(context)!.largeDownloadWarning(widget.trackCount!)))
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+              child: Text(AppLocalizations.of(context)!.largeDownloadWarning(widget.trackCount!)),
+            ),
         ],
       ),
       actions: [
@@ -218,16 +229,18 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
-          onPressed: (selectedDownloadLocation == null && widget.downloadLocationId == null) ||
+          onPressed:
+              (selectedDownloadLocation == null && widget.downloadLocationId == null) ||
                   (transcode == null && widget.needsTranscode)
               ? null
               : () async {
                   Navigator.of(context).pop();
                   final downloadsService = GetIt.instance<DownloadsService>();
-                  var profile = (widget.needsTranscode
+                  var profile =
+                      (widget.needsTranscode
                           ? transcode
                           : FinampSettingsHelper.finampSettings.shouldTranscodeDownloads ==
-                              TranscodeDownloadsSetting.always)!
+                                TranscodeDownloadsSetting.always)!
                       ? transcodeProfile
                       : originalProfile;
                   profile.downloadLocationId = selectedDownloadLocation?.id ?? widget.downloadLocationId;
@@ -241,7 +254,7 @@ class _DownloadDialogState extends ConsumerState<DownloadDialog> {
                   GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.downloadsQueued);
                 },
           child: Text(AppLocalizations.of(context)!.addButtonLabel),
-        )
+        ),
       ],
     );
   }

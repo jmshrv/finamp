@@ -71,10 +71,7 @@ class OfflineListenLogHelper {
       'album': listen.album,
       'track_mbid': listen.trackMbid,
       'user_id': listen.userId,
-      'device': {
-        'name': listen.deviceInfo?.name,
-        'id': listen.deviceInfo?.id,
-      },
+      'device': {'name': listen.deviceInfo?.name, 'id': listen.deviceInfo?.id},
     };
     final content = json.encode(data) + Platform.lineTerminator;
 

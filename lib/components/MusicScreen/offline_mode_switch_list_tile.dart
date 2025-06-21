@@ -7,9 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 class OfflineModeSwitchListTile extends ConsumerWidget {
-  const OfflineModeSwitchListTile({
-    super.key,
-  });
+  const OfflineModeSwitchListTile({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

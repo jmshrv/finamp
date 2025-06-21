@@ -7,13 +7,7 @@ class MenuEntry extends ConsumerWidget {
   final VoidCallback onTap;
   final bool enabled;
 
-  const MenuEntry({
-    super.key,
-    required this.title,
-    required this.icon,
-    required this.onTap,
-    this.enabled = true,
-  });
+  const MenuEntry({super.key, required this.title, required this.icon, required this.onTap, this.enabled = true});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,10 +15,7 @@ class MenuEntry extends ConsumerWidget {
 
     return ListTile(
       enabled: enabled,
-      leading: Icon(
-        icon,
-        color: iconColor,
-      ),
+      leading: Icon(icon, color: iconColor),
       title: Text(title),
       onTap: onTap,
     );

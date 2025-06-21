@@ -32,10 +32,7 @@ class ThemeSelector extends StatelessWidget {
           trailing: DropdownButton<ThemeMode>(
             value: box.get("ThemeMode"),
             items: ThemeMode.values
-                .map((e) => DropdownMenuItem<ThemeMode>(
-                      value: e,
-                      child: Text(e.toLocalisedString(context)),
-                    ))
+                .map((e) => DropdownMenuItem<ThemeMode>(value: e, child: Text(e.toLocalisedString(context))))
                 .toList(),
             onChanged: (value) {
               if (value != null) {

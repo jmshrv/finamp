@@ -51,18 +51,13 @@ class _LogTileState extends State<LogTile> {
             overflow: TextOverflow.ellipsis,
             text: TextSpan(
               text: "[${widget.logRecord.loggerName}]\n${widget.logRecord.time}",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
           subtitle: RichText(
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            text: TextSpan(
-              text: widget.logRecord.loginCensoredMessage,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+            text: TextSpan(text: widget.logRecord.loginCensoredMessage, style: Theme.of(context).textTheme.bodyMedium),
           ),
           expandedAlignment: Alignment.centerLeft,
           expandedCrossAxisAlignment: CrossAxisAlignment.start,
@@ -74,17 +69,11 @@ class _LogTileState extends State<LogTile> {
           shape: const Border(),
           childrenPadding: const EdgeInsets.all(8.0),
           children: [
-            Text(
-              AppLocalizations.of(context)!.message,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            Text(AppLocalizations.of(context)!.message, style: Theme.of(context).textTheme.titleLarge),
             _LogMessageContent(widget.logRecord.message),
             const SizedBox(height: 16.0),
             if (widget.logRecord.stackTrace != null)
-              Text(
-                AppLocalizations.of(context)!.stackTrace,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+              Text(AppLocalizations.of(context)!.stackTrace, style: Theme.of(context).textTheme.titleLarge),
             if (widget.logRecord.stackTrace != null) _LogMessageContent(widget.logRecord.stackTrace.toString()),
           ],
           onExpansionChanged: (value) async {
@@ -173,12 +162,6 @@ class _LogMessageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      content,
-      style: const TextStyle(
-        fontSize: 12.0,
-        fontFamily: "monospace",
-      ),
-    );
+    return Text(content, style: const TextStyle(fontSize: 12.0, fontFamily: "monospace"));
   }
 }

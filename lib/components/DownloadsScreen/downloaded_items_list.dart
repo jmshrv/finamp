@@ -21,10 +21,7 @@ class DownloadedItemsTitle extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.only(left: 16, top: 12, right: 16, bottom: 4),
-        child: Text(
-          title,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
-        ),
+        child: Text(title, style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500)),
       ),
     );
   }
@@ -44,48 +41,47 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
 
   @override
   Widget build(BuildContext context) {
-    return ref.watch(_downloadsService.userDownloadedItemsProvider(widget.type)).when(
+    return ref
+        .watch(_downloadsService.userDownloadedItemsProvider(widget.type))
+        .when(
           data: (items) => items.isNotEmpty
               ? SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      DownloadStub stub = items.elementAt(index);
-                      return ExpansionTile(
-                        key: PageStorageKey(stub.id),
-                        leading: (stub.type == DownloadItemType.finampCollection)
-                            ? AlbumImage(item: stub.finampCollection?.item)
-                            : AlbumImage(item: stub.baseItem),
-                        title: Text(stub.baseItem?.name ?? stub.name),
-                        subtitle: buildDownloadedItemSubtitle(context, stub),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if ((!(stub.baseItemType == BaseItemDtoType.album ||
-                                    stub.baseItemType == BaseItemDtoType.track)) &&
-                                !ref.watch(finampSettingsProvider.isOffline))
-                              IconButton(
-                                icon: const Icon(Icons.sync),
-                                onPressed: () {
-                                  _downloadsService.resync(stub, null);
-                                },
-                              ),
-                            IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () => askBeforeDeleteDownloadFromDevice(context, stub),
-                            ),
-                          ],
-                        ),
-                        tilePadding: const EdgeInsets.symmetric(horizontal: 16),
-                        shape: LinearBorder(),
-                        collapsedShape: LinearBorder(),
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    DownloadStub stub = items.elementAt(index);
+                    return ExpansionTile(
+                      key: PageStorageKey(stub.id),
+                      leading: (stub.type == DownloadItemType.finampCollection)
+                          ? AlbumImage(item: stub.finampCollection?.item)
+                          : AlbumImage(item: stub.baseItem),
+                      title: Text(stub.baseItem?.name ?? stub.name),
+                      subtitle: buildDownloadedItemSubtitle(context, stub),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          if (stub.type == DownloadItemType.finampCollection || stub.baseItemType.hasChildren)
-                            DownloadedChildrenList(parent: stub)
+                          if ((!(stub.baseItemType == BaseItemDtoType.album ||
+                                  stub.baseItemType == BaseItemDtoType.track)) &&
+                              !ref.watch(finampSettingsProvider.isOffline))
+                            IconButton(
+                              icon: const Icon(Icons.sync),
+                              onPressed: () {
+                                _downloadsService.resync(stub, null);
+                              },
+                            ),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () => askBeforeDeleteDownloadFromDevice(context, stub),
+                          ),
                         ],
-                      );
-                    },
-                    childCount: items.length,
-                  ),
+                      ),
+                      tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+                      shape: LinearBorder(),
+                      collapsedShape: LinearBorder(),
+                      children: [
+                        if (stub.type == DownloadItemType.finampCollection || stub.baseItemType.hasChildren)
+                          DownloadedChildrenList(parent: stub),
+                      ],
+                    );
+                  }, childCount: items.length),
                 )
               : SliverToBoxAdapter(
                   child: Padding(
@@ -96,9 +92,7 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
           loading: () => const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.only(top: 8, bottom: 16),
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: Center(child: CircularProgressIndicator()),
             ),
           ),
           error: (error, stack) => SliverToBoxAdapter(
@@ -154,32 +148,36 @@ class _DownloadedChildrenListState extends ConsumerState<DownloadedChildrenList>
 
     return Container(
       color: Theme.of(context).colorScheme.surfaceContainerHighest,
-      child: Column(children: [
-        // TODO use a list builder here
-        for (final stub in items)
-          ListTile(
-            title: Text(stub.baseItem?.name ?? stub.name),
-            leading: AlbumImage(item: stub.baseItem),
-            subtitle: ItemFileSize(stub: stub),
-            trailing: ref.watch(_downloadsService.statusProvider((stub, null))).isRequired
-                ? IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () => askBeforeDeleteDownloadFromDevice(context, stub),
-                  )
-                : null,
-          )
-      ]),
+      child: Column(
+        children: [
+          // TODO use a list builder here
+          for (final stub in items)
+            ListTile(
+              title: Text(stub.baseItem?.name ?? stub.name),
+              leading: AlbumImage(item: stub.baseItem),
+              subtitle: ItemFileSize(stub: stub),
+              trailing: ref.watch(_downloadsService.statusProvider((stub, null))).isRequired
+                  ? IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () => askBeforeDeleteDownloadFromDevice(context, stub),
+                    )
+                  : null,
+            ),
+        ],
+      ),
     );
   }
 }
 
 Column buildDownloadedItemSubtitle(BuildContext context, DownloadStub stub) {
   String? libraryName;
-  final isLegacyAllLibrariesDownload = stub.type == DownloadItemType.collection &&
+  final isLegacyAllLibrariesDownload =
+      stub.type == DownloadItemType.collection &&
       (BaseItemDtoType.fromItem(stub.baseItem!) == BaseItemDtoType.artist ||
           BaseItemDtoType.fromItem(stub.baseItem!) == BaseItemDtoType.genre);
 
-  final isCollectionWithLibraryFilter = !isLegacyAllLibrariesDownload &&
+  final isCollectionWithLibraryFilter =
+      !isLegacyAllLibrariesDownload &&
       (stub.type == DownloadItemType.finampCollection &&
           stub.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter);
 
@@ -191,14 +189,17 @@ Column buildDownloadedItemSubtitle(BuildContext context, DownloadStub stub) {
     libraryName = stub.finampCollection?.library?.name;
   }
 
-  return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    if (showLibraryName && libraryName != null)
-      Text(
-        libraryName,
-        style: TextStyle(
-          color: isLegacyAllLibrariesDownload ? Colors.orange : Theme.of(context).textTheme.bodyMedium?.color,
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      if (showLibraryName && libraryName != null)
+        Text(
+          libraryName,
+          style: TextStyle(
+            color: isLegacyAllLibrariesDownload ? Colors.orange : Theme.of(context).textTheme.bodyMedium?.color,
+          ),
         ),
-      ),
-    ItemFileSize(stub: stub),
-  ]);
+      ItemFileSize(stub: stub),
+    ],
+  );
 }

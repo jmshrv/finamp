@@ -10,9 +10,7 @@ const _borderRadius = BorderRadius.all(_radius);
 final _defaultBackgroundColour = Colors.white.withOpacity(0.1);
 const _spacing = 8.0;
 
-enum PresetTypes {
-  speed,
-}
+enum PresetTypes { speed }
 
 class PresetChips extends StatefulWidget {
   const PresetChips({
@@ -62,15 +60,9 @@ class _PresetChipsState extends State<PresetChips> {
       _controller = ScrollController(initialScrollOffset: offset);
     } else {
       if (MediaQuery.of(context).disableAnimations) {
-        _controller!.jumpTo(
-          offset,
-        );
+        _controller!.jumpTo(offset);
       } else {
-        _controller!.animateTo(
-          offset,
-          duration: const Duration(milliseconds: 350),
-          curve: Curves.easeOutCubic,
-        );
+        _controller!.animateTo(offset, duration: const Duration(milliseconds: 350), curve: Curves.easeOutCubic);
       }
     }
   }
@@ -85,11 +77,13 @@ class _PresetChipsState extends State<PresetChips> {
 
     return PresetChip(
       value: stringValue,
-      backgroundColour: widget.mainColour?.withOpacity(value == widget.activeValue
-          ? 0.6
-          : (value == widget.defaultValue)
-              ? 0.3
-              : 0.1),
+      backgroundColour: widget.mainColour?.withOpacity(
+        value == widget.activeValue
+            ? 0.6
+            : (value == widget.defaultValue)
+            ? 0.3
+            : 0.1,
+      ),
       isSelected: value == widget.activeValue,
       isPresetDefault: value == widget.defaultValue,
       width: widget.chipWidth,
@@ -109,24 +103,26 @@ class _PresetChipsState extends State<PresetChips> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      // Create preset list to before scrollView to allow the scrollController
-      // initial offset to be calculated first.
-      var list = List.generate(widget.values.length, (index) => generatePresetChip(widget.values[index], constraints));
-      // assert(_controller != null);
-      // Allow drag scrolling on desktop
-      return ScrollConfiguration(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Create preset list to before scrollView to allow the scrollController
+        // initial offset to be calculated first.
+        var list = List.generate(
+          widget.values.length,
+          (index) => generatePresetChip(widget.values[index], constraints),
+        );
+        // assert(_controller != null);
+        // Allow drag scrolling on desktop
+        return ScrollConfiguration(
           behavior: ScrollConfiguration.of(context).copyWith(dragDevices: PointerDeviceKind.values.toSet()),
           child: SingleChildScrollView(
             controller: _controller,
             scrollDirection: Axis.horizontal,
-            child: Wrap(
-              spacing: _spacing,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: list,
-            ),
-          ));
-    });
+            child: Wrap(spacing: _spacing, crossAxisAlignment: WrapCrossAlignment.center, children: list),
+          ),
+        );
+      },
+    );
   }
 }
 

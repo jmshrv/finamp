@@ -11,8 +11,9 @@ class PlayerScreenMinimumCoverPaddingEditor extends StatefulWidget {
 }
 
 class _PlayerScreenMinimumCoverPaddingEditorState extends State<PlayerScreenMinimumCoverPaddingEditor> {
-  final _controller =
-      TextEditingController(text: FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding.toString());
+  final _controller = TextEditingController(
+    text: FinampSettingsHelper.finampSettings.playerScreenCoverMinimumPadding.toString(),
+  );
 
   @override
   Widget build(BuildContext context) {

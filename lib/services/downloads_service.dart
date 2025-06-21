@@ -134,48 +134,48 @@ class DownloadsService {
 
   /// Provider for user-downloaded items of a specific category.
   /// Used to show and group downloaded items on the downloads screen.
-  late final userDownloadedItemsProvider =
-      StreamProvider.family.autoDispose<List<DownloadStub>, DownloadsScreenCategory>((ref, category) {
-    final query = _isar.downloadItems
-        .where()
-        .filter()
-        .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
-        .sortByName()
-        .build()
-        .watch(fireImmediately: true);
+  late final userDownloadedItemsProvider = StreamProvider.family
+      .autoDispose<List<DownloadStub>, DownloadsScreenCategory>((ref, category) {
+        final query = _isar.downloadItems
+            .where()
+            .filter()
+            .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
+            .sortByName()
+            .build()
+            .watch(fireImmediately: true);
 
-    return query.map((allItems) {
-      switch (category) {
-        case DownloadsScreenCategory.special:
-          return allItems.where((item) {
-            return (item.type == category.type) &&
-                item.finampCollection?.type != FinampCollectionType.collectionWithLibraryFilter;
-          }).toList();
+        return query.map((allItems) {
+          switch (category) {
+            case DownloadsScreenCategory.special:
+              return allItems.where((item) {
+                return (item.type == category.type) &&
+                    item.finampCollection?.type != FinampCollectionType.collectionWithLibraryFilter;
+              }).toList();
 
-        case DownloadsScreenCategory.artists:
-          return allItems.where((item) {
-            return (item.type == category.type &&
-                    (category.baseItemType == null || item.baseItemType == category.baseItemType)) ||
-                (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
-                    BaseItemDtoType.fromItem(item.finampCollection!.item!) == BaseItemDtoType.artist);
-          }).toList();
+            case DownloadsScreenCategory.artists:
+              return allItems.where((item) {
+                return (item.type == category.type &&
+                        (category.baseItemType == null || item.baseItemType == category.baseItemType)) ||
+                    (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
+                        BaseItemDtoType.fromItem(item.finampCollection!.item!) == BaseItemDtoType.artist);
+              }).toList();
 
-        case DownloadsScreenCategory.genres:
-          return allItems.where((item) {
-            return (item.type == category.type &&
-                    (category.baseItemType == null || item.baseItemType == category.baseItemType)) ||
-                (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
-                    BaseItemDtoType.fromItem(item.finampCollection!.item!) == BaseItemDtoType.genre);
-          }).toList();
+            case DownloadsScreenCategory.genres:
+              return allItems.where((item) {
+                return (item.type == category.type &&
+                        (category.baseItemType == null || item.baseItemType == category.baseItemType)) ||
+                    (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
+                        BaseItemDtoType.fromItem(item.finampCollection!.item!) == BaseItemDtoType.genre);
+              }).toList();
 
-        default:
-          return allItems.where((item) {
-            return item.type == category.type &&
-                (category.baseItemType == null || item.baseItemType == category.baseItemType);
-          }).toList();
-      }
-    });
-  });
+            default:
+              return allItems.where((item) {
+                return item.type == category.type &&
+                    (category.baseItemType == null || item.baseItemType == category.baseItemType);
+              }).toList();
+          }
+        });
+      });
 
   /// Constructs the service.  startQueues should also be called to complete initialization.
   DownloadsService() {
@@ -185,15 +185,20 @@ class DownloadsService {
     for (var state in DownloadItemState.values) {
       downloadStatuses[state] = _isar.downloadItems
           .where()
-          .optional(state != DownloadItemState.syncFailed,
-              (q) => q.typeEqualTo(DownloadItemType.track).or().typeEqualTo(DownloadItemType.image))
+          .optional(
+            state != DownloadItemState.syncFailed,
+            (q) => q.typeEqualTo(DownloadItemType.track).or().typeEqualTo(DownloadItemType.image),
+          )
           .filter()
           .stateEqualTo(state)
           .countSync();
     }
 
-    downloadStatusesStream = _downloadStatusesStreamController.stream
-        .throttleTime(const Duration(milliseconds: 200), leading: false, trailing: true);
+    downloadStatusesStream = _downloadStatusesStreamController.stream.throttleTime(
+      const Duration(milliseconds: 200),
+      leading: false,
+      trailing: true,
+    );
     offlineDeletesStream = _offlineDeletesStreamController.stream;
     downloadCountsStream = _downloadCountsStreamController.stream;
 
@@ -235,17 +240,20 @@ class DownloadsService {
                 }
                 Future.sync(() async {
                   assert(
-                      listener.file?.path == await event.task.filePath() ||
-                          (extension != null &&
-                              listener.file?.path.replaceFirst(RegExp(r'\.image$'), extension) ==
-                                  await event.task.filePath()),
-                      "${listener.name} ${listener.path} ${listener.fileDownloadLocation?.baseDirectory} ${listener.file?.path} ${await event.task.filePath()} $extension");
+                    listener.file?.path == await event.task.filePath() ||
+                        (extension != null &&
+                            listener.file?.path.replaceFirst(RegExp(r'\.image$'), extension) ==
+                                await event.task.filePath()),
+                    "${listener.name} ${listener.path} ${listener.fileDownloadLocation?.baseDirectory} ${listener.file?.path} ${await event.task.filePath()} $extension",
+                  );
                 });
                 if (extension != null && listener.file!.path.endsWith(".image")) {
                   // Do not wait for file move to complete to prevent slowing isar write
-                  unawaited(File(listener.file!.path)
-                      .rename(listener.file!.path.replaceFirst(RegExp(r'\.image$'), extension))
-                      .then((_) => null, onError: (e) => GlobalSnackbar.error(e)));
+                  unawaited(
+                    File(listener.file!.path)
+                        .rename(listener.file!.path.replaceFirst(RegExp(r'\.image$'), extension))
+                        .then((_) => null, onError: (e) => GlobalSnackbar.error(e)),
+                  );
                   listener.path = listener.path!.replaceFirst(RegExp(r'\.image$'), extension);
                 }
               }
@@ -278,8 +286,9 @@ class DownloadsService {
                 updateItemState(listener, newState, alwaysPut: event.status == TaskStatus.complete);
               }
             } else {
-              _downloadsLogger
-                  .info("Received status event ${event.status} for finalized download ${listener.name}.  Ignoring.");
+              _downloadsLogger.info(
+                "Received status event ${event.status} for finalized download ${listener.name}.  Ignoring.",
+              );
             }
           } else {
             _downloadsLogger.severe("Could not determine item for id ${event.task.taskId}, event:${event.toString()}");
@@ -290,30 +299,36 @@ class DownloadsService {
 
     // Sometimes we temporarily lose connection while the screen is locked.
     // Try to restart downloads when the user begins interacting again
-    AppLifecycleListener(onRestart: () {
-      _downloadsLogger.info("App returning from background, restarting downloads.");
-      // If app is in background for more than 5 hours, treat it like a restart
-      // and potentially resync all items
-      if (FinampSettingsHelper.finampSettings.resyncOnStartup &&
-          _appPauseTime != null &&
-          DateTime.now().difference(_appPauseTime!).inHours > 5) {
-        _isar.writeTxnSync(() {
-          syncBuffer.addAll([_anchor.isarId], [], null);
-        });
-      }
-      _appPauseTime = null;
-      restartDownloads();
-    }, onHide: () {
-      _showConnectionMessage = false;
-    }, onShow: () {
-      _showConnectionMessage = true;
-    }, onPause: () {
-      _downloadsLogger.info("App is being paused by OS.");
-      _appPauseTime = DateTime.now();
-    });
+    AppLifecycleListener(
+      onRestart: () {
+        _downloadsLogger.info("App returning from background, restarting downloads.");
+        // If app is in background for more than 5 hours, treat it like a restart
+        // and potentially resync all items
+        if (FinampSettingsHelper.finampSettings.resyncOnStartup &&
+            _appPauseTime != null &&
+            DateTime.now().difference(_appPauseTime!).inHours > 5) {
+          _isar.writeTxnSync(() {
+            syncBuffer.addAll([_anchor.isarId], [], null);
+          });
+        }
+        _appPauseTime = null;
+        restartDownloads();
+      },
+      onHide: () {
+        _showConnectionMessage = false;
+      },
+      onShow: () {
+        _showConnectionMessage = true;
+      },
+      onPause: () {
+        _downloadsLogger.info("App is being paused by OS.");
+        _appPauseTime = DateTime.now();
+      },
+    );
 
     FileDownloader().requireWiFi(
-        FinampSettingsHelper.finampSettings.requireWifiForDownloads ? RequireWiFi.forAllTasks : RequireWiFi.forNoTasks);
+      FinampSettingsHelper.finampSettings.requireWifiForDownloads ? RequireWiFi.forAllTasks : RequireWiFi.forNoTasks,
+    );
 
     bool oldOffline = FinampSettingsHelper.finampSettings.isOffline;
     bool oldRequireWifi = FinampSettingsHelper.finampSettings.requireWifiForDownloads;
@@ -370,32 +385,36 @@ class DownloadsService {
     await downloadTaskQueue.initializeQueue();
 
     // Wait a few seconds to not slow initial library load
-    unawaited(Future.delayed(const Duration(seconds: 10), () async {
-      try {
-        await syncBuffer.executeSyncs();
-        await deleteBuffer.executeDeletes();
-        await downloadTaskQueue.executeDownloads();
-      } catch (e) {
-        _downloadsLogger.severe("Error $e while restarting download/delete queues on startup.");
-      }
-    }));
+    unawaited(
+      Future.delayed(const Duration(seconds: 10), () async {
+        try {
+          await syncBuffer.executeSyncs();
+          await deleteBuffer.executeDeletes();
+          await downloadTaskQueue.executeDownloads();
+        } catch (e) {
+          _downloadsLogger.severe("Error $e while restarting download/delete queues on startup.");
+        }
+      }),
+    );
   }
 
   /// Attempt to resume syncing/downloading.  Called when leaving offline mode,
   /// coming out of background, and switching to downloads screen
   void restartDownloads() {
     if (!FinampSettingsHelper.finampSettings.isOffline) {
-      unawaited(Future.sync(() async {
-        try {
-          resetConnectionErrors();
-          _downloadsLogger.info("Attempting to restart queues.");
-          await syncBuffer.executeSyncs();
-          await deleteBuffer.executeDeletes();
-          await downloadTaskQueue.executeDownloads();
-        } catch (e) {
-          _downloadsLogger.severe("Error $e while restarting syncs/downloads while gaining focus");
-        }
-      }));
+      unawaited(
+        Future.sync(() async {
+          try {
+            resetConnectionErrors();
+            _downloadsLogger.info("Attempting to restart queues.");
+            await syncBuffer.executeSyncs();
+            await deleteBuffer.executeDeletes();
+            await downloadTaskQueue.executeDownloads();
+          } catch (e) {
+            _downloadsLogger.severe("Error $e while restarting syncs/downloads while gaining focus");
+          }
+        }),
+      );
     }
   }
 
@@ -551,22 +570,29 @@ class DownloadsService {
     // other nodes.
     _isar.writeTxnSync(() {
       List<
-          (
-            DownloadItemType,
-            QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> Function(
-                QueryBuilder<DownloadItem, DownloadItem, QFilterCondition>)?
-          )> requireFilters = [
+        (
+          DownloadItemType,
+          QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> Function(
+            QueryBuilder<DownloadItem, DownloadItem, QFilterCondition>,
+          )?,
+        )
+      >
+      requireFilters = [
         (DownloadItemType.anchor, null),
         (DownloadItemType.finampCollection, null),
         (
           DownloadItemType.collection,
-          (q) => q.allOf(
-              [BaseItemDtoType.album, BaseItemDtoType.playlist], (q, element) => q.not().baseItemTypeEqualTo(element))
+          (q) => q.allOf([
+            BaseItemDtoType.album,
+            BaseItemDtoType.playlist,
+          ], (q, element) => q.not().baseItemTypeEqualTo(element)),
         ),
         (
           DownloadItemType.collection,
-          (q) =>
-              q.anyOf([BaseItemDtoType.album, BaseItemDtoType.playlist], (q, element) => q.baseItemTypeEqualTo(element))
+          (q) => q.anyOf([
+            BaseItemDtoType.album,
+            BaseItemDtoType.playlist,
+          ], (q, element) => q.baseItemTypeEqualTo(element)),
         ),
         (DownloadItemType.track, null),
         (DownloadItemType.image, null),
@@ -579,8 +605,12 @@ class DownloadsService {
             .typeEqualTo(requireFilters[i].$1)
             .filter()
             .optional(requireFilters[i].$2 != null, (q) => requireFilters[i].$2!(q))
-            .requires((q) => q.anyOf(requireFilters.slice(0, i + 1),
-                (q, element) => q.typeEqualTo(element.$1).optional(element.$2 != null, (q) => element.$2!(q))))
+            .requires(
+              (q) => q.anyOf(
+                requireFilters.slice(0, i + 1),
+                (q, element) => q.typeEqualTo(element.$1).optional(element.$2 != null, (q) => element.$2!(q)),
+              ),
+            )
             .findAllSync();
         for (var item in items) {
           _downloadsLogger.severe("Unlinking invalid requires on node ${item.name}.");
@@ -590,22 +620,29 @@ class DownloadsService {
       }
 
       List<
-          (
-            DownloadItemType,
-            QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> Function(
-                QueryBuilder<DownloadItem, DownloadItem, QFilterCondition>)?
-          )> infoFilters = [
+        (
+          DownloadItemType,
+          QueryBuilder<DownloadItem, DownloadItem, QAfterFilterCondition> Function(
+            QueryBuilder<DownloadItem, DownloadItem, QFilterCondition>,
+          )?,
+        )
+      >
+      infoFilters = [
         (DownloadItemType.anchor, null),
         (DownloadItemType.finampCollection, null),
         (
           DownloadItemType.collection,
-          (q) =>
-              q.anyOf([BaseItemDtoType.album, BaseItemDtoType.playlist], (q, element) => q.baseItemTypeEqualTo(element))
+          (q) => q.anyOf([
+            BaseItemDtoType.album,
+            BaseItemDtoType.playlist,
+          ], (q, element) => q.baseItemTypeEqualTo(element)),
         ),
         (
           DownloadItemType.collection,
-          (q) => q.allOf(
-              [BaseItemDtoType.album, BaseItemDtoType.playlist], (q, element) => q.not().baseItemTypeEqualTo(element))
+          (q) => q.allOf([
+            BaseItemDtoType.album,
+            BaseItemDtoType.playlist,
+          ], (q, element) => q.not().baseItemTypeEqualTo(element)),
         ),
         (DownloadItemType.track, null),
         (DownloadItemType.image, null),
@@ -620,8 +657,12 @@ class DownloadsService {
             .filter()
             .requiredByIsEmpty()
             .optional(infoFilters[i].$2 != null, (q) => infoFilters[i].$2!(q))
-            .info((q) => q.anyOf(infoFilters.slice(0, i + 1),
-                (q, element) => q.typeEqualTo(element.$1).optional(element.$2 != null, (q) => element.$2!(q))))
+            .info(
+              (q) => q.anyOf(
+                infoFilters.slice(0, i + 1),
+                (q, element) => q.typeEqualTo(element.$1).optional(element.$2 != null, (q) => element.$2!(q)),
+              ),
+            )
             .findAllSync();
         for (var item in items) {
           _downloadsLogger.severe("Unlinking invalid requires on node ${item.name}.");
@@ -750,9 +791,10 @@ class DownloadsService {
     var filePaths = await imageFilePaths.toSet();
     // This cleans FINAMP_BASE_DOWNLOAD_DIRECTORY in internalSupport
     // and internalDocuments
-    for (var trackBasePath in FinampSettingsHelper.finampSettings.downloadLocationsMap.values
-        .where((element) => !element.baseDirectory.needsPath)
-        .map((e) => e.currentPath)) {
+    for (var trackBasePath
+        in FinampSettingsHelper.finampSettings.downloadLocationsMap.values
+            .where((element) => !element.baseDirectory.needsPath)
+            .map((e) => e.currentPath)) {
       var trackFilePaths = Directory(path_helper.join(trackBasePath, FINAMP_BASE_DOWNLOAD_DIRECTORY))
           .list()
           .handleError((e) => _downloadsLogger.info("Error while cleaning track directories: $e"))
@@ -760,14 +802,15 @@ class DownloadsService {
           .map((event) => path_helper.canonicalize(event.path));
       filePaths.addAll(await trackFilePaths.toSet());
     }
-    for (var item in _isar.downloadItems
-        .where()
-        .typeEqualTo(DownloadItemType.track)
-        .or()
-        .typeEqualTo(DownloadItemType.image)
-        .filter()
-        .stateEqualTo(DownloadItemState.complete)
-        .findAllSync()) {
+    for (var item
+        in _isar.downloadItems
+            .where()
+            .typeEqualTo(DownloadItemType.track)
+            .or()
+            .typeEqualTo(DownloadItemType.image)
+            .filter()
+            .stateEqualTo(DownloadItemState.complete)
+            .findAllSync()) {
       if (item.file != null) {
         filePaths.remove(path_helper.canonicalize(item.file!.path));
       }
@@ -865,14 +908,16 @@ class DownloadsService {
     Set<DownloadItemState> childStates = {};
     if (item.baseItemType == BaseItemDtoType.album || item.baseItemType == BaseItemDtoType.playlist) {
       // Use full list of tracks in info links for album/playlist
-      childStates.addAll(item.info
-          .filter()
-          .typeEqualTo(DownloadItemType.track)
-          .or()
-          .typeEqualTo(DownloadItemType.image)
-          .distinctByState()
-          .stateProperty()
-          .findAllSync());
+      childStates.addAll(
+        item.info
+            .filter()
+            .typeEqualTo(DownloadItemType.track)
+            .or()
+            .typeEqualTo(DownloadItemType.image)
+            .distinctByState()
+            .stateProperty()
+            .findAllSync(),
+      );
     } else {
       // Non-required artists/genres have unknown children and should never be considered downloaded.
       if (item.requiredBy.filter().countSync() == 0) {
@@ -929,8 +974,9 @@ class DownloadsService {
     }
 
     // Prioritize original quality if allowed, otherwise choose highest quality approximation
-    DownloadProfile? bestProfile =
-        transcodeProfiles.nonNulls.sorted((i, j) => ((j.quality - i.quality) * 1000).toInt()).firstOrNull;
+    DownloadProfile? bestProfile = transcodeProfiles.nonNulls
+        .sorted((i, j) => ((j.quality - i.quality) * 1000).toInt())
+        .firstOrNull;
     if (doNullUpdate ??
         (!transcodeProfiles.nonNulls.contains(item.syncTranscodingProfile) ||
             (bestProfile!.quality > (item.syncTranscodingProfile!.quality + 2000) &&
@@ -1000,7 +1046,9 @@ class DownloadsService {
         .where((element) => element.baseDirectory == DownloadLocationType.platformDefaultDirectory)
         .isEmpty) {
       final downloadLocation = await DownloadLocation.create(
-          name: DownloadLocation.internalStorageName, baseDirectory: DownloadLocationType.platformDefaultDirectory);
+        name: DownloadLocation.internalStorageName,
+        baseDirectory: DownloadLocationType.platformDefaultDirectory,
+      );
       FinampSettingsHelper.addDownloadLocation(downloadLocation);
     }
     await Future.wait([
@@ -1014,11 +1062,20 @@ class DownloadsService {
     _migrateImages();
     _migrateTracks();
     _migrateParents();
-    unawaited(repairAllDownloads().then((value) => null, onError: (error) {
-      _downloadsLogger.severe("Error $error in hive migration downloads repair.");
-      GlobalSnackbar.show((scaffold) => SnackBar(
-          content: Text(AppLocalizations.of(scaffold)!.runRepairWarning), duration: const Duration(seconds: 20)));
-    }));
+    unawaited(
+      repairAllDownloads().then(
+        (value) => null,
+        onError: (error) {
+          _downloadsLogger.severe("Error $error in hive migration downloads repair.");
+          GlobalSnackbar.show(
+            (scaffold) => SnackBar(
+              content: Text(AppLocalizations.of(scaffold)!.runRepairWarning),
+              duration: const Duration(seconds: 20),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   /// Substep 1 of [migrateFromHive].
@@ -1049,9 +1106,12 @@ class DownloadsService {
         }
       }
 
-      var isarItem = DownloadStub.fromItem(type: DownloadItemType.image, item: baseItem)
-          .asItem(DownloadProfile(downloadLocationId: image.downloadLocationId));
-      isarItem.path = (image.downloadLocationId ==
+      var isarItem = DownloadStub.fromItem(
+        type: DownloadItemType.image,
+        item: baseItem,
+      ).asItem(DownloadProfile(downloadLocationId: image.downloadLocationId));
+      isarItem.path =
+          (image.downloadLocationId ==
               FinampSettingsHelper.finampSettings.downloadLocationsMap.values
                   .where((element) => element.baseDirectory == DownloadLocationType.internalDocuments)
                   .first
@@ -1080,15 +1140,18 @@ class DownloadsService {
     for (final track in downloadedItemsBox.values) {
       var baseItem = track.track;
       baseItem.mediaSources = [track.mediaSourceInfo];
-      var isarItem = DownloadStub.fromItem(type: DownloadItemType.track, item: baseItem).asItem(DownloadProfile(
-          transcodeCodec: FinampTranscodingCodec.original, downloadLocationId: track.downloadLocationId));
+      var isarItem = DownloadStub.fromItem(type: DownloadItemType.track, item: baseItem).asItem(
+        DownloadProfile(transcodeCodec: FinampTranscodingCodec.original, downloadLocationId: track.downloadLocationId),
+      );
       String? newPath;
       if (track.downloadLocationId == null) {
         for (MapEntry<String, DownloadLocation> entry
             in FinampSettingsHelper.finampSettings.downloadLocationsMap.entries) {
           if (track.path.contains(entry.value.currentPath)) {
-            isarItem.fileTranscodingProfile =
-                DownloadProfile(transcodeCodec: FinampTranscodingCodec.original, downloadLocationId: entry.key);
+            isarItem.fileTranscodingProfile = DownloadProfile(
+              transcodeCodec: FinampTranscodingCodec.original,
+              downloadLocationId: entry.key,
+            );
             newPath = path_helper.relative(track.path, from: entry.value.currentPath);
             break;
           }
@@ -1099,7 +1162,9 @@ class DownloadsService {
         }
       } else {
         isarItem.fileTranscodingProfile = DownloadProfile(
-            transcodeCodec: FinampTranscodingCodec.original, downloadLocationId: track.downloadLocationId);
+          transcodeCodec: FinampTranscodingCodec.original,
+          downloadLocationId: track.downloadLocationId,
+        );
         if (track.downloadLocationId ==
             FinampSettingsHelper.finampSettings.downloadLocationsMap.values
                 .where((element) => element.baseDirectory == DownloadLocationType.internalDocuments)
@@ -1121,8 +1186,9 @@ class DownloadsService {
       _isar.downloadItems.putAllSync(nodes);
       for (var node in nodes) {
         if (node.baseItem?.blurHash != null) {
-          var image =
-              _isar.downloadItems.getSync(DownloadStub.getHash(node.baseItem!.blurHash!, DownloadItemType.image));
+          var image = _isar.downloadItems.getSync(
+            DownloadStub.getHash(node.baseItem!.blurHash!, DownloadItemType.image),
+          );
           if (image != null) {
             node.requires.updateSync(link: [image]);
           }
@@ -1151,10 +1217,13 @@ class DownloadsService {
         _downloadsLogger.severe("Could not find item associated with parent during migration to isar.");
         continue;
       }
-      var isarItem = DownloadStub.fromItem(type: DownloadItemType.collection, item: parent.item).asItem(DownloadProfile(
-          transcodeCodec: FinampTranscodingCodec.original, downloadLocationId: track.downloadLocationId));
+      var isarItem = DownloadStub.fromItem(type: DownloadItemType.collection, item: parent.item).asItem(
+        DownloadProfile(transcodeCodec: FinampTranscodingCodec.original, downloadLocationId: track.downloadLocationId),
+      );
       isarItem.userTranscodingProfile = DownloadProfile(
-          transcodeCodec: FinampTranscodingCodec.original, downloadLocationId: track.downloadLocationId);
+        transcodeCodec: FinampTranscodingCodec.original,
+        downloadLocationId: track.downloadLocationId,
+      );
       // This should only be used for IDs/links and does not need real download items.
       List<DownloadItem> required = parent.downloadedChildren.values
           .map((e) => DownloadStub.fromItem(type: DownloadItemType.track, item: e).asItem(null))
@@ -1251,17 +1320,21 @@ class DownloadsService {
         .filter()
         .infoFor((q) => q.isarIdEqualTo(id))
         .optional(
-            playable,
-            (q) => q.group((q) => q
-                .stateEqualTo(DownloadItemState.complete)
-                .or()
-                .stateEqualTo(DownloadItemState.needsRedownloadComplete)))
+          playable,
+          (q) => q.group(
+            (q) =>
+                q.stateEqualTo(DownloadItemState.complete).or().stateEqualTo(DownloadItemState.needsRedownloadComplete),
+          ),
+        )
         .optional(onlyFavorites, (q) => q.anyOf(favoriteIds, (q, v) => q.isarIdEqualTo(v)))
         // Returns items that have a certain genreId assigned
         .optional(
-            genreFilter != null,
-            (q) => q.infoFor((q) => q
-                .info((q) => q.isarIdEqualTo(DownloadStub.getHash(genreFilter!.id.raw, DownloadItemType.collection)))));
+          genreFilter != null,
+          (q) => q.infoFor(
+            (q) =>
+                q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(genreFilter!.id.raw, DownloadItemType.collection))),
+          ),
+        );
 
     var canonItem = _isar.downloadItems.getSync(stub.isarId);
     if (canonItem?.orderedChildren == null) {
@@ -1280,13 +1353,14 @@ class DownloadsService {
   /// + relatedTo - only return tracks which have relatedTo as their artist, album, or genre.
   /// + viewFilter - only return tracks in the given library.
   /// + genreFiter - only return tracks that have the provided genreID assigned
-  Future<List<DownloadStub>> getAllTracks(
-      {String? nameFilter,
-      BaseItemDto? relatedTo,
-      BaseItemId? viewFilter,
-      bool nullableViewFilters = true,
-      bool onlyFavorites = false,
-      BaseItemDto? genreFilter}) {
+  Future<List<DownloadStub>> getAllTracks({
+    String? nameFilter,
+    BaseItemDto? relatedTo,
+    BaseItemId? viewFilter,
+    bool nullableViewFilters = true,
+    bool onlyFavorites = false,
+    BaseItemDto? genreFilter,
+  }) {
     List<int> favoriteIds = [];
     if (onlyFavorites) {
       favoriteIds = _getFavoriteIds() ?? [];
@@ -1295,22 +1369,29 @@ class DownloadsService {
         .where()
         .typeEqualTo(DownloadItemType.track)
         .filter()
-        .group((q) =>
-            q.stateEqualTo(DownloadItemState.complete).or().stateEqualTo(DownloadItemState.needsRedownloadComplete))
+        .group(
+          (q) =>
+              q.stateEqualTo(DownloadItemState.complete).or().stateEqualTo(DownloadItemState.needsRedownloadComplete),
+        )
         .optional(onlyFavorites, (q) => q.anyOf(favoriteIds, (q, v) => q.isarIdEqualTo(v)))
         .optional(nameFilter != null, (q) => q.nameContains(nameFilter!, caseSensitive: false))
-        .optional(relatedTo != null,
-            (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(relatedTo!.id.raw, DownloadItemType.collection))))
+        .optional(
+          relatedTo != null,
+          (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(relatedTo!.id.raw, DownloadItemType.collection))),
+        )
         // Returns items that have a certain genreId assigned
         .optional(
-            genreFilter != null,
-            (q) =>
-                q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(genreFilter!.id.raw, DownloadItemType.collection))))
+          genreFilter != null,
+          (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(genreFilter!.id.raw, DownloadItemType.collection))),
+        )
         .optional(
-            viewFilter != null,
-            (q) => q.group((q) => q
+          viewFilter != null,
+          (q) => q.group(
+            (q) => q
                 .isarViewIdEqualTo(viewFilter?.raw)
-                .optional(nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null))))
+                .optional(nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null)),
+          ),
+        )
         .findAll();
   }
 
@@ -1322,11 +1403,14 @@ class DownloadsService {
         .filter()
         .userTranscodingProfile((q) => q.downloadLocationIdEqualTo(downloadLocationId))
         .optional(
-            checkFiles,
-            (q) => q.or().group((q) => q
+          checkFiles,
+          (q) => q.or().group(
+            (q) => q
                 .fileTranscodingProfile((q) => q.downloadLocationIdEqualTo(downloadLocationId))
                 .not()
-                .stateEqualTo(DownloadItemState.notDownloaded)))
+                .stateEqualTo(DownloadItemState.notDownloaded),
+          ),
+        )
         .findAllSync();
   }
 
@@ -1371,11 +1455,15 @@ class DownloadsService {
           .not()
           .stateEqualTo(DownloadItemState.notDownloaded)
           .findAllSync()
-          .where((collection) =>
-              collection.finampCollection!.type == FinampCollectionType.collectionWithLibraryFilter &&
-              collection.finampCollection!.library?.id == libraryId)
-          .map((collection) =>
-              DownloadStub.getHash(collection.finampCollection!.item!.id.raw, DownloadItemType.collection))
+          .where(
+            (collection) =>
+                collection.finampCollection!.type == FinampCollectionType.collectionWithLibraryFilter &&
+                collection.finampCollection!.library?.id == libraryId,
+          )
+          .map(
+            (collection) =>
+                DownloadStub.getHash(collection.finampCollection!.item!.id.raw, DownloadItemType.collection),
+          )
           .toList();
     }
 
@@ -1388,39 +1476,59 @@ class DownloadsService {
         // If allPlaylists is info downloaded, we may have info for empty
         // playlists.  We should only return playlists with at least 1 required
         // track in them.
-        .optional(baseTypeFilter == BaseItemDtoType.playlist,
-            (q) => q.info((q) => q.typeEqualTo(DownloadItemType.track).requiredByIsNotEmpty()))
+        .optional(
+          baseTypeFilter == BaseItemDtoType.playlist,
+          (q) => q.info((q) => q.typeEqualTo(DownloadItemType.track).requiredByIsNotEmpty()),
+        )
         // Returns albums where the artist (relatedTo) is an Album Artist
-        .optional(artistType == ArtistType.albumArtist && relatedTo != null,
-            (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(relatedTo!.id.raw, DownloadItemType.collection))))
+        .optional(
+          artistType == ArtistType.albumArtist && relatedTo != null,
+          (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(relatedTo!.id.raw, DownloadItemType.collection))),
+        )
         // Returns albums related to the performing artist or genre
         .optional(
-            artistType != ArtistType.albumArtist && relatedTo != null,
-            (q) => q.infoFor((q) =>
-                q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(relatedTo!.id.raw, DownloadItemType.collection)))))
+          artistType != ArtistType.albumArtist && relatedTo != null,
+          (q) => q.infoFor(
+            (q) => q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(relatedTo!.id.raw, DownloadItemType.collection))),
+          ),
+        )
         // Returns items that have a certain genreId assigned
         .optional(
-            genreFilter != null,
-            (q) => q.infoFor((q) =>
-                q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(genreFilter!.id.raw, DownloadItemType.collection)))))
+          genreFilter != null,
+          (q) => q.infoFor(
+            (q) =>
+                q.info((q) => q.isarIdEqualTo(DownloadStub.getHash(genreFilter!.id.raw, DownloadItemType.collection))),
+          ),
+        )
         .optional(
-            fullyDownloaded,
-            (q) => q.group((q) => q
+          fullyDownloaded,
+          (q) => q.group(
+            (q) => q
                 .not()
                 .stateEqualTo(DownloadItemState.notDownloaded)
                 .or()
-                .anyOf(libraryFilteredIds, (q, v) => q.isarIdEqualTo(v))))
+                .anyOf(libraryFilteredIds, (q, v) => q.isarIdEqualTo(v)),
+          ),
+        )
         .optional(onlyFavorites, (q) => q.anyOf(favoriteIds, (q, v) => q.isarIdEqualTo(v)))
         .optional(
-            viewFilter != null,
-            (q) => q.group((q) => q
+          viewFilter != null,
+          (q) => q.group(
+            (q) => q
                 .isarViewIdEqualTo(viewFilter?.raw)
-                .optional(nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null))))
+                .optional(nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null)),
+          ),
+        )
         .optional(
-            childViewFilter != null,
-            (q) => q.infoFor((q) => q.group((q) => q
-                .isarViewIdEqualTo(childViewFilter?.raw)
-                .optional(nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null)))))
+          childViewFilter != null,
+          (q) => q.infoFor(
+            (q) => q.group(
+              (q) => q
+                  .isarViewIdEqualTo(childViewFilter?.raw)
+                  .optional(nullableViewFilters, (q) => q.or().isarViewIdEqualTo(null)),
+            ),
+          ),
+        )
         .optional(infoForType != null, (q) => q.infoFor((q) => q.baseItemTypeEqualTo(infoForType!)))
         .findAll();
   }
@@ -1492,8 +1600,10 @@ class DownloadsService {
   Stream<List<DownloadStub>> getDownloadList(DownloadItemState? state) {
     return _isar.downloadItems
         .where()
-        .optional(state != DownloadItemState.syncFailed,
-            (q) => q.typeEqualTo(DownloadItemType.track).or().typeEqualTo(DownloadItemType.image))
+        .optional(
+          state != DownloadItemState.syncFailed,
+          (q) => q.typeEqualTo(DownloadItemType.track).or().typeEqualTo(DownloadItemType.image),
+        )
         .filter()
         .optional(state != null, (q) => q.stateEqualTo(state!))
         .watch(fireImmediately: true);
@@ -1605,7 +1715,8 @@ class DownloadsService {
     } else {
       childCount = item.requires.filter().not().typeEqualTo(DownloadItemType.image).countSync();
     }
-    var outdated = (children != null && childCount != children) ||
+    var outdated =
+        (children != null && childCount != children) ||
         item.state == DownloadItemState.failed ||
         item.state == DownloadItemState.notDownloaded;
     if (item.requiredBy.filter().isarIdEqualTo(_anchor.isarId).countSync() > 0) {

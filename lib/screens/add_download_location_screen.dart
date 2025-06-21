@@ -42,31 +42,17 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen> w
   Widget build(BuildContext context) {
     final tabs = Platform.isAndroid
         ? [
-            Tab(
-              text: AppLocalizations.of(context)!.customLocation.toUpperCase(),
-            ),
-            Tab(
-              text: AppLocalizations.of(context)!.appDirectory.toUpperCase(),
-            ),
+            Tab(text: AppLocalizations.of(context)!.customLocation.toUpperCase()),
+            Tab(text: AppLocalizations.of(context)!.appDirectory.toUpperCase()),
           ]
-        : [
-            Tab(
-              text: AppLocalizations.of(context)!.customLocation.toUpperCase(),
-            ),
-          ];
+        : [Tab(text: AppLocalizations.of(context)!.customLocation.toUpperCase())];
     return Provider<NewDownloadLocation>(
-      create: (_) => NewDownloadLocation(
-        name: null,
-        baseDirectory: DownloadLocationType.none,
-      ),
+      create: (_) => NewDownloadLocation(name: null, baseDirectory: DownloadLocationType.none),
       builder: (context, _) {
         return Scaffold(
           appBar: AppBar(
             title: Text(AppLocalizations.of(context)!.addDownloadLocation),
-            bottom: TabBar(
-              controller: _tabController,
-              tabs: tabs,
-            ),
+            bottom: TabBar(controller: _tabController, tabs: tabs),
           ),
           floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.check),
@@ -116,9 +102,7 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen> w
               Center(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: CustomDownloadLocationForm(
-                    formKey: customLocationFormKey,
-                  ),
+                  child: CustomDownloadLocationForm(formKey: customLocationFormKey),
                 ),
               ),
               if (Platform.isAndroid)

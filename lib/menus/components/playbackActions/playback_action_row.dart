@@ -7,11 +7,7 @@ final double playActionRowHeight = 96.0;
 final double playActionPageIndicatorHeight = 31.0;
 
 class PlaybackActionRow extends ConsumerWidget {
-  const PlaybackActionRow({
-    super.key,
-    required this.controller,
-    required this.playbackActionPages,
-  });
+  const PlaybackActionRow({super.key, required this.controller, required this.playbackActionPages});
 
   final PageController controller;
   final Map<String, Widget> playbackActionPages;
@@ -32,10 +28,7 @@ class PlaybackActionRow extends ConsumerWidget {
             children: playbackActionPages.values.toList(),
           ),
         ),
-        PlaybackActionPageIndicator(
-          pages: playbackActionPages,
-          pageController: controller,
-        ),
+        PlaybackActionPageIndicator(pages: playbackActionPages, pageController: controller),
       ],
     );
   }
@@ -46,10 +39,6 @@ class FasterPageViewScrollPhysics extends ScrollPhysics {
 
   @override
   SpringDescription get spring {
-    return const SpringDescription(
-      mass: 40,
-      stiffness: 100,
-      damping: 1,
-    );
+    return const SpringDescription(mass: 40, stiffness: 100, damping: 1);
   }
 }

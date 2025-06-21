@@ -12,12 +12,8 @@ import 'annotations.dart';
 // within the actual app or the launch will fail while trying to import dart:mirrors
 // It should also not import any non-builder classes to avoid importing dart:ui
 
-Builder getFinampSettingsGenerator(BuilderOptions options) => SharedPartBuilder(
-      [
-        _FinampSettingsGenerator(),
-      ],
-      'finamp_settings_builder',
-    );
+Builder getFinampSettingsGenerator(BuilderOptions options) =>
+    SharedPartBuilder([_FinampSettingsGenerator()], 'finamp_settings_builder');
 
 /// Generate setters and providers for all fields in FinampSettings.  The generated
 /// code is part of finamp_settings_helper.dart.  Fields annotated with
@@ -43,8 +39,9 @@ class _FinampSettingsGenerator extends Generator {
     for (var property in settings.accessors) {
       if (!property.nonSynthetic.hasDeprecated &&
           TypeChecker.fromRuntime(SettingsHelperIgnore).firstAnnotationOfExact(property.nonSynthetic) == null) {
-        final mapAnnotationObj =
-            TypeChecker.fromRuntime(SettingsHelperMap).firstAnnotationOfExact(property.nonSynthetic);
+        final mapAnnotationObj = TypeChecker.fromRuntime(
+          SettingsHelperMap,
+        ).firstAnnotationOfExact(property.nonSynthetic);
 
         if (property.isSetter) {
           if (property.parameters.length != 1) {
@@ -55,8 +52,10 @@ class _FinampSettingsGenerator extends Generator {
           var paramName = "${property.displayName.substring(0, 1).toUpperCase()}${property.displayName.substring(1)}";
 
           if (mapAnnotationObj != null) {
-            final mapAnnotation = SettingsHelperMap(mapAnnotationObj.getField("keyName")!.toStringValue()!,
-                mapAnnotationObj.getField("valueName")!.toStringValue()!);
+            final mapAnnotation = SettingsHelperMap(
+              mapAnnotationObj.getField("keyName")!.toStringValue()!,
+              mapAnnotationObj.getField("valueName")!.toStringValue()!,
+            );
             final mapType = property.parameters.first.type as ParameterizedType;
             final keyType = _typeName(mapType.typeArguments[0]);
             final valueType = _typeName(mapType.typeArguments[1]);
@@ -68,7 +67,8 @@ class _FinampSettingsGenerator extends Generator {
         }
         ''';
           } else {
-            settersCode += '''static void set$paramName($typeArg new$paramName){
+            settersCode +=
+                '''static void set$paramName($typeArg new$paramName){
           FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
           finampSettingsTemp.${property.displayName}=new$paramName;
           Hive.box<FinampSettings>("FinampSettings").put("FinampSettings", finampSettingsTemp);
@@ -79,8 +79,10 @@ class _FinampSettingsGenerator extends Generator {
 
         if (property.isGetter) {
           if (mapAnnotationObj != null) {
-            final mapAnnotation = SettingsHelperMap(mapAnnotationObj.getField("keyName")!.toStringValue()!,
-                mapAnnotationObj.getField("valueName")!.toStringValue()!);
+            final mapAnnotation = SettingsHelperMap(
+              mapAnnotationObj.getField("keyName")!.toStringValue()!,
+              mapAnnotationObj.getField("valueName")!.toStringValue()!,
+            );
             final mapType = property.returnType as ParameterizedType;
             final keyType = _typeName(mapType.typeArguments[0]);
             final valueType = _typeName(mapType.typeArguments[1]);
@@ -90,7 +92,8 @@ class _FinampSettingsGenerator extends Generator {
             finampSettingsProvider.select((value) => value.requireValue.${property.displayName}[${mapAnnotation.keyName}]);
         ''';
           } else {
-            selectorsCode += '''ProviderListenable<${_typeName(property.returnType)}> get ${property.displayName} => 
+            selectorsCode +=
+                '''ProviderListenable<${_typeName(property.returnType)}> get ${property.displayName} => 
             finampSettingsProvider.select((value) => value.requireValue.${property.displayName});
         ''';
           }

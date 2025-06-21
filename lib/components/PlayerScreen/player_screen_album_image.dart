@@ -18,9 +18,7 @@ import '../../menus/track_menu.dart';
 import '../album_image.dart';
 
 class PlayerScreenAlbumImage extends ConsumerWidget {
-  const PlayerScreenAlbumImage({
-    super.key,
-  });
+  const PlayerScreenAlbumImage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,15 +29,14 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           // show loading indicator
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Center(child: CircularProgressIndicator());
         }
         final currentTrack = snapshot.data!.currentTrack;
 
         return Semantics(
-          label: AppLocalizations.of(context)!
-              .playerAlbumArtworkTooltip(currentTrack?.item.title ?? AppLocalizations.of(context)!.unknownName),
+          label: AppLocalizations.of(
+            context,
+          )!.playerAlbumArtworkTooltip(currentTrack?.item.title ?? AppLocalizations.of(context)!.unknownName),
           excludeSemantics: true, // replace child semantics with custom semantics
           container: true,
           child: GestureDetector(
@@ -82,34 +79,29 @@ class PlayerScreenAlbumImage extends ConsumerWidget {
                   }
                 }
               },
-              child: LayoutBuilder(builder: (context, constraints) {
-                //print(
-                //    "control height is ${MediaQuery.sizeOf(context).height - 53.0 - constraints.maxHeight - 24}");
-                final minPadding = ref.watch(finampSettingsProvider.playerScreenCoverMinimumPadding);
-                final horizontalPadding = constraints.maxWidth * (minPadding / 100.0);
-                final verticalPadding = constraints.maxHeight * (minPadding / 100.0);
-                return Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: horizontalPadding,
-                    vertical: verticalPadding,
-                  ),
-                  child: AlbumImage(
-                    imageListenable: currentAlbumImageProvider,
-                    borderRadius: BorderRadius.circular(8.0),
-                    // Load player cover at max size to allow more seamless scaling
-                    autoScale: false,
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 24,
-                          offset: const Offset(0, 4),
-                          color: Colors.black.withOpacity(0.3),
-                        )
-                      ],
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  //print(
+                  //    "control height is ${MediaQuery.sizeOf(context).height - 53.0 - constraints.maxHeight - 24}");
+                  final minPadding = ref.watch(finampSettingsProvider.playerScreenCoverMinimumPadding);
+                  final horizontalPadding = constraints.maxWidth * (minPadding / 100.0);
+                  final verticalPadding = constraints.maxHeight * (minPadding / 100.0);
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
+                    child: AlbumImage(
+                      imageListenable: currentAlbumImageProvider,
+                      borderRadius: BorderRadius.circular(8.0),
+                      // Load player cover at max size to allow more seamless scaling
+                      autoScale: false,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(blurRadius: 24, offset: const Offset(0, 4), color: Colors.black.withOpacity(0.3)),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                },
+              ),
             ),
           ),
         );

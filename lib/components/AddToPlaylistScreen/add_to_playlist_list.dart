@@ -21,11 +21,7 @@ import 'new_playlist_dialog.dart';
 import '../../menus/playlist_actions_menu.dart';
 
 class AddToPlaylistList extends StatefulWidget {
-  const AddToPlaylistList({
-    super.key,
-    required this.itemToAdd,
-    required this.playlistsFuture,
-  });
+  const AddToPlaylistList({super.key, required this.itemToAdd, required this.playlistsFuture});
 
   final BaseItemDto itemToAdd;
   final Future<List<BaseItemDto>> playlistsFuture;
@@ -51,36 +47,32 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return SliverList(
-              delegate: SliverChildBuilderDelegate(
-            (context, index) {
+            delegate: SliverChildBuilderDelegate((context, index) {
               if (index == snapshot.data!.length) {
                 return createNewPlaylistButton(context);
               }
               final (playlist, isLoading, playListItemId) = snapshot.data![index];
               return AddToPlaylistTile(
-                  playlist: playlist, track: widget.itemToAdd, playlistItemId: playListItemId, isLoading: isLoading);
-            },
-            childCount: snapshot.data!.length + 1,
-          ));
+                playlist: playlist,
+                track: widget.itemToAdd,
+                playlistItemId: playListItemId,
+                isLoading: isLoading,
+              );
+            }, childCount: snapshot.data!.length + 1),
+          );
         } else if (snapshot.hasError) {
           GlobalSnackbar.error(snapshot.error);
-          return const SliverToBoxAdapter(
-            child: Center(
-              heightFactor: 3.0,
-              child: Icon(Icons.error, size: 64),
-            ),
-          );
+          return const SliverToBoxAdapter(child: Center(heightFactor: 3.0, child: Icon(Icons.error, size: 64)));
         } else {
           return SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-            if (index == 1) {
-              return createNewPlaylistButton(context);
-            } else {
-              return const Center(
-                child: CircularProgressIndicator.adaptive(),
-              );
-            }
-          }, childCount: 2));
+            delegate: SliverChildBuilderDelegate((context, index) {
+              if (index == 1) {
+                return createNewPlaylistButton(context);
+              } else {
+                return const Center(child: CircularProgressIndicator.adaptive());
+              }
+            }, childCount: 2),
+          );
         }
       },
     );
@@ -105,7 +97,7 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                 var oldFuture = playlistsFuture;
                 setState(() {
                   var loadingItem = [
-                    (BaseItemDto(id: BaseItemId("pending"), name: dialogResult.$2), true, null as String?)
+                    (BaseItemDto(id: BaseItemId("pending"), name: dialogResult.$2), true, null as String?),
                   ];
                   playlistsFuture = oldFuture.then((value) => value + loadingItem);
                 });
@@ -143,8 +135,13 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
 }
 
 class AddToPlaylistTile extends ConsumerStatefulWidget {
-  const AddToPlaylistTile(
-      {super.key, required this.playlist, this.playlistItemId, required this.track, this.isLoading = false});
+  const AddToPlaylistTile({
+    super.key,
+    required this.playlist,
+    this.playlistItemId,
+    required this.track,
+    this.isLoading = false,
+  });
 
   final BaseItemDto playlist;
   final BaseItemDto track;
@@ -224,8 +221,13 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
             }
           }
           // part of playlist, remove
-          bool removed =
-              await removeFromPlaylist(context, widget.track, widget.playlist, playlistItemId!, confirm: false);
+          bool removed = await removeFromPlaylist(
+            context,
+            widget.track,
+            widget.playlist,
+            playlistItemId!,
+            confirm: false,
+          );
           if (removed) {
             setState(() {
               childCount = childCount == null ? null : childCount! - 1;
@@ -242,18 +244,20 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
               "MusicArtist" => "artist",
               "MusicGenre" => "genre",
               "Playlist" => "playlist",
-              _ => "unknown"
+              _ => "unknown",
             };
             await showDialog(
-                context: context,
-                builder: (context) => ConfirmationPromptDialog(
-                      promptText: AppLocalizations.of(context)!
-                          .confirmAddAlbumToPlaylist(itemType, widget.track.name ?? "Unknown"),
-                      confirmButtonText: AppLocalizations.of(context)!.addButtonLabel,
-                      abortButtonText: MaterialLocalizations.of(context).cancelButtonLabel,
-                      onConfirmed: () => confirmed = true,
-                      onAborted: () {},
-                    ));
+              context: context,
+              builder: (context) => ConfirmationPromptDialog(
+                promptText: AppLocalizations.of(
+                  context,
+                )!.confirmAddAlbumToPlaylist(itemType, widget.track.name ?? "Unknown"),
+                confirmButtonText: AppLocalizations.of(context)!.addButtonLabel,
+                abortButtonText: MaterialLocalizations.of(context).cancelButtonLabel,
+                onConfirmed: () => confirmed = true,
+                onAborted: () {},
+              ),
+            );
             if (!confirmed || !context.mounted) return false;
           }
           bool added = await addItemToPlaylist(context, widget.track, widget.playlist);

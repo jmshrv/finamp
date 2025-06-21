@@ -18,7 +18,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 0.9.18+118
 
 environment:
-  sdk: ">=3.3.0 <4.0.0"
+  sdk: ^3.8.0
 
 dependencies:
   flutter:
@@ -78,13 +78,12 @@ dependencies:
       url: https://github.com/MrLittleWhite/isar_flutter_libs.git
 
   path: ^1.9.0
-  intl: ">=0.18.1 < 1.0.0"
+  intl: # pinned by flutter version
   auto_size_text: ^3.0.0
   marquee: ^2.3.0
   palette_generator:
     git:
       url: https://github.com/jmshrv/packages.git
-      branch: pallete-generator-isolates
       ref: 4992c3b
       path: packages/palette_generator
   flutter_tabler_icons: ^1.43.0

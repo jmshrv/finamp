@@ -19,7 +19,7 @@ class _LyricsSettingsScreenState extends State<LyricsSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.lyricsScreen),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetLyricsSettings)
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetLyricsSettings),
         ],
       ),
       body: ListView(
@@ -59,10 +59,7 @@ class LyricsAlignmentSelector extends ConsumerWidget {
       trailing: DropdownButton<LyricsAlignment>(
         value: ref.watch(finampSettingsProvider.lyricsAlignment),
         items: LyricsAlignment.values
-            .map((e) => DropdownMenuItem<LyricsAlignment>(
-                  value: e,
-                  child: Text(e.toLocalisedString(context)),
-                ))
+            .map((e) => DropdownMenuItem<LyricsAlignment>(value: e, child: Text(e.toLocalisedString(context))))
             .toList(),
         onChanged: FinampSetters.setLyricsAlignment.ifNonNull,
       ),
@@ -81,10 +78,7 @@ class LyricsFontSizeSelector extends ConsumerWidget {
       trailing: DropdownButton<LyricsFontSize>(
         value: ref.watch(finampSettingsProvider.lyricsFontSize),
         items: LyricsFontSize.values
-            .map((e) => DropdownMenuItem<LyricsFontSize>(
-                  value: e,
-                  child: Text(e.toLocalisedString(context)),
-                ))
+            .map((e) => DropdownMenuItem<LyricsFontSize>(value: e, child: Text(e.toLocalisedString(context))))
             .toList(),
         onChanged: FinampSetters.setLyricsFontSize.ifNonNull,
       ),

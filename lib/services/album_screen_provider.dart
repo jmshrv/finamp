@@ -15,10 +15,7 @@ part 'album_screen_provider.g.dart';
 
 // Get the Tracks of an Album or Playlist
 @riverpod
-Future<(List<BaseItemDto>, List<BaseItemDto>)> getAlbumOrPlaylistTracks(
-  Ref ref,
-  BaseItemDto parent,
-) async {
+Future<(List<BaseItemDto>, List<BaseItemDto>)> getAlbumOrPlaylistTracks(Ref ref, BaseItemDto parent) async {
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
   List<BaseItemDto> allTracks;
@@ -26,16 +23,11 @@ Future<(List<BaseItemDto>, List<BaseItemDto>)> getAlbumOrPlaylistTracks(
 
   if (isOffline) {
     final downloadsService = GetIt.instance<DownloadsService>();
-    allTracks = await downloadsService.getCollectionTracks(
-      parent,
-      playable: false,
-    );
-    playableTracks = await downloadsService.getCollectionTracks(
-      parent,
-      playable: true,
-    );
+    allTracks = await downloadsService.getCollectionTracks(parent, playable: false);
+    playableTracks = await downloadsService.getCollectionTracks(parent, playable: true);
   } else {
-    allTracks = await jellyfinApiHelper.getItems(
+    allTracks =
+        await jellyfinApiHelper.getItems(
           parentItem: parent,
           sortBy: "ParentIndexNumber,IndexNumber,SortName",
           includeItemTypes: "Audio",
@@ -62,8 +54,8 @@ Future<(List<BaseItemDto>, List<BaseItemDto>)> getSortedPlaylistTracks(
   SortBy playlistSortBySetting = ref.watch(finampSettingsProvider.playlistTracksSortBy);
   final playlistSortBy =
       (isOffline && (playlistSortBySetting == SortBy.datePlayed || playlistSortBySetting == SortBy.playCount))
-          ? SortBy.defaultOrder
-          : playlistSortBySetting;
+      ? SortBy.defaultOrder
+      : playlistSortBySetting;
 
   // Get Playlist Items
   final result = await ref.watch(getAlbumOrPlaylistTracksProvider(parent).future);
@@ -71,8 +63,9 @@ Future<(List<BaseItemDto>, List<BaseItemDto>)> getSortedPlaylistTracks(
   final playlistPlayableTracks = result.$2;
 
   if (playlistSortBy == SortBy.defaultOrder) {
-    playlistAllTracksSorted =
-        (playlistSortOrder == SortOrder.descending) ? playlistAllTracks.reversed.toList() : playlistAllTracks;
+    playlistAllTracksSorted = (playlistSortOrder == SortOrder.descending)
+        ? playlistAllTracks.reversed.toList()
+        : playlistAllTracks;
   } else {
     // Unfortunately, the Jellyfin API does not support "sortBy"
     // for the "/Playlists/{playlistId}/Items" endpoint, so we

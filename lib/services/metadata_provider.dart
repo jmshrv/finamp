@@ -60,8 +60,8 @@ class MetadataProvider {
   bool get hasLyrics => mediaSourceInfo.mediaStreams.any((e) => e.type == "Lyric");
 }
 
-final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest> metadataProvider =
-    FutureProvider.autoDispose.family<MetadataProvider?, MetadataRequest>((ref, request) async {
+final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest>
+metadataProvider = FutureProvider.autoDispose.family<MetadataProvider?, MetadataRequest>((ref, request) async {
   // watch settings to trigger re-fetching metadata when offline mode changes
   ref.watch(finampSettingsProvider.isOffline);
 
@@ -128,7 +128,8 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest> metada
   } else {
     // fetch from server in online mode
     metadataProviderLogger.fine(
-        "Fetching metadata for '${request.item.name}' (${request.item.id}) from server due to missing attributes");
+      "Fetching metadata for '${request.item.name}' (${request.item.id}) from server due to missing attributes",
+    );
     try {
       playbackInfo = (await jellyfinApiHelper.getPlaybackInfo(request.item.id))?.first;
     } catch (e) {
@@ -186,8 +187,9 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest> metada
             }
           } catch (e) {
             metadataProviderLogger.warning(
-                "Failed to check if '${request.item.name}' (${request.item.id}) qualifies for playback speed controls",
-                e);
+              "Failed to check if '${request.item.name}' (${request.item.id}) qualifies for playback speed controls",
+              e,
+            );
           }
         }
       }
@@ -209,19 +211,20 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest> metada
     } else {
       metadataProviderLogger.fine("Fetching lyrics for '${request.item.name}' (${request.item.id})");
       try {
-        final lyrics = await jellyfinApiHelper.getLyrics(
-          itemId: request.item.id,
-        );
+        final lyrics = await jellyfinApiHelper.getLyrics(itemId: request.item.id);
         metadata.lyrics = lyrics;
       } catch (e) {
         metadataProviderLogger.warning(
-            "Failed to fetch lyrics for '${request.item.name}' (${request.item.id}). Metadata might be stale", e);
+          "Failed to fetch lyrics for '${request.item.name}' (${request.item.id}). Metadata might be stale",
+          e,
+        );
       }
     }
   }
 
   metadataProviderLogger.fine(
-      "Fetched metadata for '${request.item.name}' (${request.item.id}): ${metadata.lyrics} ${metadata.hasLyrics}");
+    "Fetched metadata for '${request.item.name}' (${request.item.id}): ${metadata.lyrics} ${metadata.hasLyrics}",
+  );
 
   return metadata;
 });

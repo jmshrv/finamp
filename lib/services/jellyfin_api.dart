@@ -21,85 +21,47 @@ const String defaultFields = "ChildCount,DateCreated,DateLastMediaAdded,Etag,Gen
 
 @ChopperApi()
 abstract class JellyfinApi extends ChopperService {
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Get(path: "/System/Info/Public")
   Future<dynamic> getPublicServerInfo();
 
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Get(path: "/Users/Public")
   Future<dynamic> getPublicUsers();
 
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Get(path: "/QuickConnect/Enabled")
   Future<dynamic> getQuickConnectState();
 
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Get(path: "/QuickConnect/Initiate")
   Future<dynamic> initiateQuickConnect();
 
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Get(path: "/QuickConnect/Connect")
-  Future<dynamic> updateQuickConnect({
-    @Query("Secret") required String secret,
-  });
+  Future<dynamic> updateQuickConnect({@Query("Secret") required String secret});
 
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Post(path: "/Users/AuthenticateWithQuickConnect")
   Future<dynamic> authenticateWithQuickConnect(@Body() Map<String, String> quickConnectInfo);
 
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Post(path: "/Users/AuthenticateByName")
   Future<dynamic> authenticateViaName(@Body() Map<String, String> usernameAndPassword);
 
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Get(path: "/Items/{id}/Images/Primary")
-  Future<dynamic> getAlbumPrimaryImage({
-    @Path() required BaseItemId id,
-    @Query() String format = "webp",
-  });
+  Future<dynamic> getAlbumPrimaryImage({@Path() required BaseItemId id, @Query() String format = "webp"});
 
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Get(path: "/Users/{id}/Views")
   Future<dynamic> getViews(@Path() String id);
 
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Delete(path: "/Items/{id}")
   Future<dynamic> deleteItem(@Path() BaseItemId id);
 
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Get(path: "/Users/{userId}/Items")
   Future<dynamic> getItems({
     /// The user id supplied as query parameter.
@@ -193,10 +155,7 @@ abstract class JellyfinApi extends ChopperService {
     @Query("CollapseBoxSetItems") bool? collapseMultiDiscAlbums,
   });
 
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Get(path: "/Users/{userId}/Items/Latest")
   Future<dynamic> getLatestItems({
     /// The user id supplied as query parameter.
@@ -234,10 +193,7 @@ abstract class JellyfinApi extends ChopperService {
     @Query("GroupItems") bool? groupItems,
   });
 
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Get(path: "/Items/{id}/InstantMix")
   Future<dynamic> getInstantMix({
     @Path() required BaseItemId id,
@@ -245,10 +201,7 @@ abstract class JellyfinApi extends ChopperService {
     @Query() required int limit,
   });
 
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Get(path: "/Users/{userId}/Items/{itemId}")
   Future<dynamic> getItemById({
     /// User id.
@@ -258,19 +211,11 @@ abstract class JellyfinApi extends ChopperService {
     @Path() required BaseItemId itemId,
   });
 
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Get(path: "/Items/{id}/PlaybackInfo")
-  Future<dynamic> getPlaybackInfo({
-    @Path() required BaseItemId id,
-    @Query() required String userId,
-  });
+  Future<dynamic> getPlaybackInfo({@Path() required BaseItemId id, @Query() required String userId});
 
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory)
   @Post(path: "/Items/{itemId}")
   Future<dynamic> updateItem({
     /// The item id.
@@ -306,10 +251,7 @@ abstract class JellyfinApi extends ChopperService {
   @Post(path: "/Sessions/Playing/Stopped")
   Future<dynamic> playbackStatusStopped(@Body() PlaybackProgressInfo playbackProgressInfo);
 
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Get(path: "/Playlists/{playlistId}/Items")
   Future<dynamic> getPlaylistItems({
     @Path() required BaseItemId playlistId,
@@ -321,10 +263,7 @@ abstract class JellyfinApi extends ChopperService {
   });
 
   /// Creates a new playlist.
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Post(path: "/Playlists")
   Future<dynamic> createNewPlaylist({
     /// The create playlist payload.
@@ -359,21 +298,13 @@ abstract class JellyfinApi extends ChopperService {
   /// updates or gets propertys of a Playlist
   @FactoryConverter(request: JsonConverter.requestFactory)
   @Post(path: "/Playlists/{playlistId}")
-  Future<dynamic> updatePlaylist({
-    @Path() required BaseItemId playlistId,
-    @Body() required NewPlaylist playlist,
-  });
+  Future<dynamic> updatePlaylist({@Path() required BaseItemId playlistId, @Body() required NewPlaylist playlist});
 
   @FactoryConverter(response: JsonConverter.responseFactory)
   @Get(path: "/Playlists/{playlistId}")
-  Future<dynamic> getPlaylist({
-    @Path() required BaseItemId playlistId,
-  });
+  Future<dynamic> getPlaylist({@Path() required BaseItemId playlistId});
 
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Get(path: "/Artists")
   Future<dynamic> getArtists({
     /// Specify this to localize the search to a specific item or folder. Omit
@@ -432,10 +363,7 @@ abstract class JellyfinApi extends ChopperService {
     @Query("isFavorite") bool? isFavorite,
   });
 
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Get(path: "/Artists/AlbumArtists")
   Future<dynamic> getAlbumArtists({
     @Query("IncludeItemTypes") String? includeItemTypes,
@@ -480,10 +408,7 @@ abstract class JellyfinApi extends ChopperService {
   });
 
   /// Gets all genres from a given item, folder, or the entire library.
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Get(path: "/Genres")
   Future<dynamic> getGenres({
     /// Optional. If specified, results will be filtered based on the item type.
@@ -535,10 +460,7 @@ abstract class JellyfinApi extends ChopperService {
   });
 
   /// Marks an item as a favorite.
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Post(path: "/Users/{userId}/FavoriteItems/{itemId}", optionalBody: true)
   Future<dynamic> addFavorite({
     /// User id.
@@ -549,10 +471,7 @@ abstract class JellyfinApi extends ChopperService {
   });
 
   /// Unmarks item as a favorite.
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Delete(path: "/Users/{userId}/FavoriteItems/{itemId}")
   Future<dynamic> removeFavorite({
     /// User id.
@@ -563,10 +482,7 @@ abstract class JellyfinApi extends ChopperService {
   });
 
   /// Requests lyrics for a track.
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-    response: JsonConverter.responseFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Get(path: "/Audio/{itemId}/Lyrics")
   Future<dynamic> getLyrics({
     /// The item id.
@@ -574,9 +490,7 @@ abstract class JellyfinApi extends ChopperService {
   });
 
   /// Reports that a session has ended.
-  @FactoryConverter(
-    request: JsonConverter.requestFactory,
-  )
+  @FactoryConverter(request: JsonConverter.requestFactory)
   @Post(path: "/Sessions/Logout", optionalBody: true)
   Future<Response<dynamic>> logout();
 
@@ -587,11 +501,12 @@ abstract class JellyfinApi extends ChopperService {
     final chopperHttpLogLevel = Level.body; //TODO allow changing the log level in settings (and a debug config file?)
 
     final client = ChopperClient(
-      client: http.IOClient(HttpClient()
-            ..connectionTimeout = const Duration(
-                seconds:
-                    10) // if we don't get a response by then, it's probably not worth it to wait any longer. this prevents the server connection test from taking too long
-          ),
+      client: http.IOClient(
+        HttpClient()
+          ..connectionTimeout = const Duration(
+            seconds: 10,
+          ), // if we don't get a response by then, it's probably not worth it to wait any longer. this prevents the server connection test from taking too long
+      ),
       // The first part of the URL is now here
       services: [
         // The generated implementation
@@ -638,13 +553,7 @@ class JellyfinInterceptor implements Interceptor {
     // Add the request path on to the baseUrl
     baseUri = baseUri.replace(pathSegments: baseUri.pathSegments.followedBy(request.uri.pathSegments));
 
-    return request.copyWith(
-      uri: baseUri,
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": authHeader,
-      },
-    );
+    return request.copyWith(uri: baseUri, headers: {"Content-Type": "application/json", "Authorization": authHeader});
   }
 }
 
@@ -667,10 +576,7 @@ class JellyfinSpecificInterceptor implements Interceptor {
 
     return request.copyWith(
       uri: baseUri,
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": finampUserHelper.authorizationHeader,
-      },
+      headers: {"Content-Type": "application/json", "Authorization": finampUserHelper.authorizationHeader},
     );
   }
 }
@@ -712,43 +618,28 @@ Future<DeviceInfo> getDeviceInfo() async {
   String idExtension = kDebugMode
       ? "debug"
       : kProfileMode
-          ? "profile"
-          : "";
+      ? "profile"
+      : "";
   if (Platform.isAndroid) {
     AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
     final appSetId = await AppSetId().getIdentifier();
-    info = DeviceInfo(
-      name: androidDeviceInfo.model,
-      id: "$appSetId-$idExtension",
-    );
+    info = DeviceInfo(name: androidDeviceInfo.model, id: "$appSetId-$idExtension");
   } else if (Platform.isIOS) {
     IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
     final appSetId = await AppSetId().getIdentifier();
-    info = DeviceInfo(
-      name: iosDeviceInfo.name,
-      id: "$appSetId-$idExtension",
-    );
+    info = DeviceInfo(name: iosDeviceInfo.name, id: "$appSetId-$idExtension");
   } else if (Platform.isWindows) {
     WindowsDeviceInfo windowsDeviceInfo = await deviceInfo.windowsInfo;
     final windowsId = windowsDeviceInfo.deviceId;
-    info = DeviceInfo(
-      name: windowsDeviceInfo.computerName,
-      id: "$windowsId-$idExtension",
-    );
+    info = DeviceInfo(name: windowsDeviceInfo.computerName, id: "$windowsId-$idExtension");
   } else if (Platform.isLinux) {
     LinuxDeviceInfo linuxDeviceInfo = await deviceInfo.linuxInfo;
     final linuxId = linuxDeviceInfo.machineId;
-    info = DeviceInfo(
-      name: linuxDeviceInfo.name,
-      id: "$linuxId-$idExtension",
-    );
+    info = DeviceInfo(name: linuxDeviceInfo.name, id: "$linuxId-$idExtension");
   } else if (Platform.isMacOS) {
     MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
     final macId = macOsDeviceInfo.systemGUID;
-    info = DeviceInfo(
-      name: macOsDeviceInfo.computerName,
-      id: "$macId-$idExtension",
-    );
+    info = DeviceInfo(name: macOsDeviceInfo.computerName, id: "$macId-$idExtension");
   } else {
     throw Exception("Unsupported platform");
   }

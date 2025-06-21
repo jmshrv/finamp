@@ -23,7 +23,7 @@ class _PlayOnStaleDelayEditorState extends State<PlayOnStaleDelayEditor> {
             TextSpan(
               text: AppLocalizations.of(context)!.playOnStaleDelaySubtitle,
               style: Theme.of(context).textTheme.bodyMedium,
-            )
+            ),
           ],
         ),
       ),

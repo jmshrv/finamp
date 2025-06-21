@@ -17,8 +17,9 @@ class ProgressState {
 Stream<ProgressState> get progressStateStream {
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   return Rx.combineLatest3<MediaItem?, PlaybackState, Duration, ProgressState>(
-      audioHandler.mediaItem,
-      audioHandler.playbackState,
-      AudioService.position.startWith(audioHandler.playbackState.value.position),
-      (mediaItem, playbackState, position) => ProgressState(mediaItem, playbackState, position));
+    audioHandler.mediaItem,
+    audioHandler.playbackState,
+    AudioService.position.startWith(audioHandler.playbackState.value.position),
+    (mediaItem, playbackState, position) => ProgressState(mediaItem, playbackState, position),
+  );
 }

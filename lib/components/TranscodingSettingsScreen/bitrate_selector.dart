@@ -49,9 +49,9 @@ class _BitrateSelectorState extends ConsumerState<BitrateSelector> {
             Text(
               AppLocalizations.of(context)!.kiloBitsPerSecondLabel(currentBitrate ~/ 1000),
               style: Theme.of(context).textTheme.titleLarge,
-            )
+            ),
           ],
-        )
+        ),
       ],
     );
   }

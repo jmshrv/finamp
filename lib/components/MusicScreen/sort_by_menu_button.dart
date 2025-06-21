@@ -31,7 +31,8 @@ class SortByMenuButton extends ConsumerWidget {
             ...rawSortOptions.where((s) => s == SortBy.playCount || s == SortBy.datePlayed),
           ]
         : rawSortOptions;
-    var selectedSortBy = (sortByOverride ??
+    var selectedSortBy =
+        (sortByOverride ??
         (forPlaylistTracks
             ? ref.watch(finampSettingsProvider.playlistTracksSortBy)
             : ref.watch(finampSettingsProvider.tabSortBy(tabType))));
@@ -41,51 +42,55 @@ class SortByMenuButton extends ConsumerWidget {
       selectedSortBy = forPlaylistTracks ? SortBy.defaultOrder : SortBy.sortName;
     }
     return PopupMenuButton<SortBy>(
-        icon: const Icon(Icons.sort),
-        tooltip: AppLocalizations.of(context)!.sortBy,
-        itemBuilder: (context) => [
-              for (SortBy sortBy in sortOptions)
-                PopupMenuItem(
-                  value: sortBy,
-                  child: Opacity(
-                    opacity: (isOffline && ((sortBy == SortBy.playCount || sortBy == SortBy.datePlayed))) ? 0.3 : 1,
-                    child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                      SizedBox(
-                        width: 20,
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Icon(
-                            sortBy.getIcon(),
-                            size: 18,
-                            color: ((selectedSortBy == sortBy) ? Theme.of(context).colorScheme.secondary : null),
-                          ),
-                        ),
+      icon: const Icon(Icons.sort),
+      tooltip: AppLocalizations.of(context)!.sortBy,
+      itemBuilder: (context) => [
+        for (SortBy sortBy in sortOptions)
+          PopupMenuItem(
+            value: sortBy,
+            child: Opacity(
+              opacity: (isOffline && ((sortBy == SortBy.playCount || sortBy == SortBy.datePlayed))) ? 0.3 : 1,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 20,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Icon(
+                        sortBy.getIcon(),
+                        size: 18,
+                        color: ((selectedSortBy == sortBy) ? Theme.of(context).colorScheme.secondary : null),
                       ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          sortBy.toLocalisedString(context),
-                          style: TextStyle(
-                            color: ((selectedSortBy == sortBy) ? Theme.of(context).colorScheme.secondary : null),
-                          ),
-                        ),
-                      ),
-                    ]),
+                    ),
                   ),
-                )
-            ],
-        onSelected: (value) {
-          if (isOffline && ((value == SortBy.playCount || value == SortBy.datePlayed))) {
-            GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notAvailableInOfflineMode);
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      sortBy.toLocalisedString(context),
+                      style: TextStyle(
+                        color: ((selectedSortBy == sortBy) ? Theme.of(context).colorScheme.secondary : null),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+      ],
+      onSelected: (value) {
+        if (isOffline && ((value == SortBy.playCount || value == SortBy.datePlayed))) {
+          GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notAvailableInOfflineMode);
+        } else {
+          if (sortByOverride != null && onOverrideChanged != null) {
+            onOverrideChanged!(value);
+          } else if (forPlaylistTracks) {
+            FinampSetters.setPlaylistTracksSortBy(value);
           } else {
-            if (sortByOverride != null && onOverrideChanged != null) {
-              onOverrideChanged!(value);
-            } else if (forPlaylistTracks) {
-              FinampSetters.setPlaylistTracksSortBy(value);
-            } else {
-              FinampSetters.setTabSortBy(tabType, value);
-            }
+            FinampSetters.setTabSortBy(tabType, value);
           }
-        });
+        }
+      },
+    );
   }
 }

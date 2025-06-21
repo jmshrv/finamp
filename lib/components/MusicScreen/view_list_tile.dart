@@ -18,14 +18,12 @@ class ViewListTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
 
-    var currentViewId =
-        ref.watch(FinampUserHelper.finampCurrentUserProvider.select((value) => value.valueOrNull?.currentViewId));
+    var currentViewId = ref.watch(
+      FinampUserHelper.finampCurrentUserProvider.select((value) => value.valueOrNull?.currentViewId),
+    );
 
     return Semantics.fromProperties(
-      properties: SemanticsProperties(
-        label: view.name,
-        selected: currentViewId == view.id,
-      ),
+      properties: SemanticsProperties(label: view.name, selected: currentViewId == view.id),
       container: true,
       child: ListTile(
         leading: Padding(
@@ -38,9 +36,7 @@ class ViewListTile extends ConsumerWidget {
         title: Text(
           view.name ?? "Unknown Name",
           semanticsLabel: "", // covered by SemanticsProperties
-          style: TextStyle(
-            color: currentViewId == view.id ? Theme.of(context).colorScheme.primary : null,
-          ),
+          style: TextStyle(color: currentViewId == view.id ? Theme.of(context).colorScheme.primary : null),
         ),
         onTap: () => finampUserHelper.setCurrentUserCurrentViewId(view.id),
         trailing: DownloadButton(

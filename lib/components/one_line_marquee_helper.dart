@@ -8,30 +8,18 @@ class OneLineMarqueeHelper extends ConsumerWidget {
   final String text;
   final TextStyle style;
 
-  const OneLineMarqueeHelper({
-    super.key,
-    required this.text,
-    required this.style,
-  });
+  const OneLineMarqueeHelper({super.key, required this.text, required this.style});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (!ref.watch(finampSettingsProvider.oneLineMarqueeTextButton)) {
-      return Text(
-        text,
-        style: style,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-      );
+      return Text(text, style: style, overflow: TextOverflow.ellipsis, maxLines: 1);
     }
 
     return LayoutBuilder(
       builder: (context, constraints) {
         final textPainter = TextPainter(
-          text: TextSpan(
-            text: text,
-            style: style,
-          ),
+          text: TextSpan(text: text, style: style),
           maxLines: 1,
           textDirection: TextDirection.ltr,
         )..layout(maxWidth: constraints.maxWidth);
@@ -61,20 +49,8 @@ class OneLineMarqueeHelper extends ConsumerWidget {
                     textDirection: TextDirection.ltr,
                   ),
                 ),
-                Positioned(
-                  left: 0,
-                  child: Container(
-                    width: 20,
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  child: Container(
-                    width: 20,
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                  ),
-                ),
+                Positioned(left: 0, child: Container(width: 20, color: Theme.of(context).scaffoldBackgroundColor)),
+                Positioned(right: 0, child: Container(width: 20, color: Theme.of(context).scaffoldBackgroundColor)),
               ],
             ),
           );

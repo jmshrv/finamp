@@ -56,22 +56,17 @@ class ItemCollectionListTile extends ConsumerWidget {
         : null;
     final itemDownloadStub = isArtistOrGenre
         ? DownloadStub.fromFinampCollection(
-            FinampCollection(type: FinampCollectionType.collectionWithLibraryFilter, library: library, item: item))
+            FinampCollection(type: FinampCollectionType.collectionWithLibraryFilter, library: library, item: item),
+          )
         : DownloadStub.fromItem(type: DownloadItemType.collection, item: item);
     final downloadedIndicator = DownloadedIndicator(
       item: itemDownloadStub,
       size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 1,
     );
-    final titleText = Text(
-      item.name ?? AppLocalizations.of(context)!.unknownName,
-      overflow: TextOverflow.ellipsis,
-    );
+    final titleText = Text(item.name ?? AppLocalizations.of(context)!.unknownName, overflow: TextOverflow.ellipsis);
 
     final sortIconMeta = {
-      SortBy.runtime: (
-        icon: TablerIcons.stopwatch,
-        offset: isOnDesktop ? Offset(-1.5, 1.2) : Offset(-1.5, 0.5),
-      ),
+      SortBy.runtime: (icon: TablerIcons.stopwatch, offset: isOnDesktop ? Offset(-1.5, 1.2) : Offset(-1.5, 0.5)),
       SortBy.dateCreated: (
         icon: TablerIcons.calendar_plus,
         offset: isOnDesktop ? Offset(-1.5, 1.0) : Offset(-1.5, 0.2),
@@ -93,11 +88,7 @@ class ItemCollectionListTile extends ConsumerWidget {
           padding: const EdgeInsets.only(right: 3),
           child: Transform.translate(
             offset: meta.offset,
-            child: Icon(
-              meta.icon,
-              size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 1,
-              color: color,
-            ),
+            child: Icon(meta.icon, size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 1, color: color),
           ),
         ),
       );
@@ -111,18 +102,14 @@ class ItemCollectionListTile extends ConsumerWidget {
           showAdditionalInfoForSortBy == SortBy.premiereDate) {
         return TextSpan(
           text: ReleaseDateHelper.autoFormat(item) ?? l10n.noReleaseDate,
-          style: TextStyle(
-            color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
-          ),
+          style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7)),
         );
       }
       switch (showAdditionalInfoForSortBy) {
         case SortBy.runtime:
           return TextSpan(
             text: printDuration(item.runTimeTicksDuration()),
-            style: TextStyle(
-              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
-            ),
+            style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7)),
           );
         case SortBy.dateCreated:
           return WidgetSpan(
@@ -131,9 +118,7 @@ class ItemCollectionListTile extends ConsumerWidget {
             child: RelativeDateTimeTextFromString(
               dateString: item.dateCreated,
               fallback: l10n.noDateAdded,
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
-              ),
+              style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7)),
               disableTextScaling: true,
             ),
           );
@@ -142,7 +127,8 @@ class ItemCollectionListTile extends ConsumerWidget {
       }
     })();
 
-    final showSubtitle = (subtitle != null ||
+    final showSubtitle =
+        (subtitle != null ||
         (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) ||
         (additionalInfo != null) ||
         downloadedIndicator.isVisible(ref));
@@ -168,8 +154,8 @@ class ItemCollectionListTile extends ConsumerWidget {
               text: (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead)
                   ? " · ${printDuration(item.runTimeTicksDuration())}"
                   : (subtitle != null)
-                      ? " · $subtitle"
-                      : null,
+                  ? " · $subtitle"
+                  : null,
               style: TextStyle(color: Theme.of(context).disabledColor),
             ),
           ] else ...[
@@ -186,10 +172,7 @@ class ItemCollectionListTile extends ConsumerWidget {
     return ListTile(
       // This widget is used on the add to playlist screen, so we allow a custom
       // onTap to be passed as an argument.
-      contentPadding: EdgeInsets.symmetric(
-        horizontal: 16.0,
-        vertical: !showSubtitle ? 8.0 : 0.0,
-      ),
+      contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: !showSubtitle ? 8.0 : 0.0),
       onTap: onTap,
       leading: AlbumImage(item: item),
       title: titleText,
@@ -201,15 +184,15 @@ class ItemCollectionListTile extends ConsumerWidget {
           if ((itemType == BaseItemDtoType.artist
                   ? jellyfinApiHelper.selectedMixArtists
                   : (itemType == BaseItemDtoType.genre)
-                      ? jellyfinApiHelper.selectedMixGenres
-                      : jellyfinApiHelper.selectedMixAlbums)
+                  ? jellyfinApiHelper.selectedMixGenres
+                  : jellyfinApiHelper.selectedMixAlbums)
               .contains(item))
             const Icon(Icons.explore),
           FavoriteButton(
             item: item,
             onlyIfFav: true,
             showFavoriteIconOnlyWhenFilterDisabled: showFavoriteIconOnlyWhenFilterDisabled,
-          )
+          ),
         ],
       ),
     );

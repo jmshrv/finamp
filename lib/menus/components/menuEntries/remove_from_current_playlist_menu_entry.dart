@@ -24,23 +24,29 @@ class RemoveFromCurrentPlaylistMenuEntry extends ConsumerWidget implements Hidea
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Visibility(
-        visible: parentItem != null && !ref.watch(finampSettingsProvider.isOffline),
-        child: MenuEntry(
-          icon: TablerIcons.playlist_x,
-          title: AppLocalizations.of(context)!.removeFromPlaylistTitle,
-          enabled: parentItem != null,
-          onTap: () async {
-            Navigator.pop(context); // close menu
-            var removed =
-                await removeFromPlaylist(context, baseItem, parentItem!, baseItem.playlistItemId!, confirm: true);
-            if (removed) {
-              onRemove?.call();
-              if (context.mounted) {
-                Navigator.pop(context);
-              }
+      visible: parentItem != null && !ref.watch(finampSettingsProvider.isOffline),
+      child: MenuEntry(
+        icon: TablerIcons.playlist_x,
+        title: AppLocalizations.of(context)!.removeFromPlaylistTitle,
+        enabled: parentItem != null,
+        onTap: () async {
+          Navigator.pop(context); // close menu
+          var removed = await removeFromPlaylist(
+            context,
+            baseItem,
+            parentItem!,
+            baseItem.playlistItemId!,
+            confirm: true,
+          );
+          if (removed) {
+            onRemove?.call();
+            if (context.mounted) {
+              Navigator.pop(context);
             }
-          },
-        ));
+          }
+        },
+      ),
+    );
   }
 
   @override

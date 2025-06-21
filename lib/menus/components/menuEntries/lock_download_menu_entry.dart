@@ -11,10 +11,7 @@ import 'package:get_it/get_it.dart';
 class LockDownloadMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final DownloadStub downloadStub;
 
-  const LockDownloadMenuEntry({
-    super.key,
-    required this.downloadStub,
-  });
+  const LockDownloadMenuEntry({super.key, required this.downloadStub});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,19 +29,21 @@ class LockDownloadMenuEntry extends ConsumerWidget implements HideableMenuEntry 
     }
 
     return Visibility(
-        visible: !ref.watch(finampSettingsProvider.isOffline) && (downloadStatus?.isIncidental ?? false),
-        child: Tooltip(
-          message: parentTooltip ?? "Widget shouldn't be visible",
-          child: MenuEntry(
-              icon: Icons.lock_outlined,
-              title: AppLocalizations.of(context)!.lockDownload,
-              onTap: () async {
-                await DownloadDialog.show(context, downloadStub, null);
-                if (context.mounted) {
-                  Navigator.pop(context);
-                }
-              }),
-        ));
+      visible: !ref.watch(finampSettingsProvider.isOffline) && (downloadStatus?.isIncidental ?? false),
+      child: Tooltip(
+        message: parentTooltip ?? "Widget shouldn't be visible",
+        child: MenuEntry(
+          icon: Icons.lock_outlined,
+          title: AppLocalizations.of(context)!.lockDownload,
+          onTap: () async {
+            await DownloadDialog.show(context, downloadStub, null);
+            if (context.mounted) {
+              Navigator.pop(context);
+            }
+          },
+        ),
+      ),
+    );
   }
 
   @override

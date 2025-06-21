@@ -8,11 +8,7 @@ import '../../services/downloads_service.dart';
 import '../global_snackbar.dart';
 
 class DownloadedIndicator extends ConsumerWidget {
-  const DownloadedIndicator({
-    super.key,
-    required this.item,
-    this.size,
-  });
+  const DownloadedIndicator({super.key, required this.item, this.size});
 
   final DownloadStub item;
   final double? size;
@@ -22,9 +18,9 @@ class DownloadedIndicator extends ConsumerWidget {
     final status = ref.watch(downloadsService.stateProvider(item));
     return switch (status) {
       AsyncData(:final value) => switch (value) {
-          null || DownloadItemState.notDownloaded => false,
-          _ => true,
-        },
+        null || DownloadItemState.notDownloaded => false,
+        _ => true,
+      },
       _ => false,
     };
   }
@@ -48,18 +44,10 @@ class DownloadedIndicator extends ConsumerWidget {
           );
         case DownloadItemState.failed:
         case DownloadItemState.syncFailed:
-          return Icon(
-            TablerIcons.download_off,
-            color: Colors.red,
-            size: size,
-          );
+          return Icon(TablerIcons.download_off, color: Colors.red, size: size);
         case DownloadItemState.complete:
         case DownloadItemState.needsRedownloadComplete:
-          return Icon(
-            TablerIcons.device_sd_card,
-            color: Theme.of(context).textTheme.bodyMedium!.color,
-            size: size,
-          );
+          return Icon(TablerIcons.device_sd_card, color: Theme.of(context).textTheme.bodyMedium!.color, size: size);
       }
     } else if (status.hasError) {
       GlobalSnackbar.error(status.error);

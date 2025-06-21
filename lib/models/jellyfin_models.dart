@@ -48,11 +48,7 @@ mixin RunTimeTickDuration {
   abstract int? runTimeTicks;
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 9)
 class UserDto {
   UserDto({
@@ -135,11 +131,7 @@ class UserDto {
   Map<String, dynamic> toJson() => _$UserDtoToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 11)
 class UserConfiguration {
   UserConfiguration({
@@ -214,11 +206,7 @@ class UserConfiguration {
   Map<String, dynamic> toJson() => _$UserConfigurationToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 12)
 class UserPolicy {
   UserPolicy({
@@ -395,11 +383,7 @@ class UserPolicy {
   Map<String, dynamic> toJson() => _$UserPolicyToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 13)
 class AccessSchedule {
   AccessSchedule({
@@ -437,19 +421,10 @@ class AccessSchedule {
   Map<String, dynamic> toJson() => _$AccessScheduleToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 7)
 class AuthenticationResult {
-  AuthenticationResult({
-    this.user,
-    this.sessionInfo,
-    this.accessToken,
-    this.serverId,
-  });
+  AuthenticationResult({this.user, this.sessionInfo, this.accessToken, this.serverId});
 
   @HiveField(0)
   UserDto? user;
@@ -467,11 +442,7 @@ class AuthenticationResult {
   Map<String, dynamic> toJson() => _$AuthenticationResultToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 10)
 class SessionInfo {
   SessionInfo({
@@ -618,11 +589,7 @@ class SessionInfo {
   Map<String, dynamic> toJson() => _$SessionInfoToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 class TranscodingInfo {
   TranscodingInfo({
     this.audioCodec,
@@ -678,11 +645,7 @@ class TranscodingInfo {
   Map<String, dynamic> toJson() => _$TranscodingInfoToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 14)
 class PlayerStateInfo {
   PlayerStateInfo({
@@ -743,17 +706,10 @@ class PlayerStateInfo {
   Map<String, dynamic> toJson() => _$PlayerStateInfoToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 15)
 class SessionUserInfo {
-  SessionUserInfo({
-    required this.userId,
-    this.userName,
-  });
+  SessionUserInfo({required this.userId, this.userName});
 
   /// Gets or sets the user identifier.
   @HiveField(0)
@@ -767,11 +723,7 @@ class SessionUserInfo {
   Map<String, dynamic> toJson() => _$SessionUserInfoToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 16)
 class ClientCapabilities {
   ClientCapabilities({
@@ -812,11 +764,7 @@ class ClientCapabilities {
   Map<String, dynamic> toJson() => _$ClientCapabilitiesToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 17)
 class DeviceProfile {
   DeviceProfile({
@@ -1022,11 +970,7 @@ class DeviceProfile {
   Map<String, dynamic> toJson() => _$DeviceProfileToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 18)
 class DeviceIdentification {
   DeviceIdentification({
@@ -1081,18 +1025,10 @@ class DeviceIdentification {
   Map<String, dynamic> toJson() => _$DeviceIdentificationToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 19)
 class HttpHeaderInfo {
-  HttpHeaderInfo({
-    this.name,
-    this.value,
-    required this.match,
-  });
+  HttpHeaderInfo({this.name, this.value, required this.match});
 
   @HiveField(0)
   String? name;
@@ -1108,17 +1044,10 @@ class HttpHeaderInfo {
   Map<String, dynamic> toJson() => _$HttpHeaderInfoToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 20)
 class XmlAttribute {
-  XmlAttribute({
-    this.name,
-    this.value,
-  });
+  XmlAttribute({this.name, this.value});
 
   @HiveField(0)
   String? name;
@@ -1130,19 +1059,10 @@ class XmlAttribute {
   Map<String, dynamic> toJson() => _$XmlAttributeToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 21)
 class DirectPlayProfile {
-  DirectPlayProfile({
-    this.container,
-    this.audioCodec,
-    this.videoCodec,
-    required this.type,
-  });
+  DirectPlayProfile({this.container, this.audioCodec, this.videoCodec, required this.type});
 
   @HiveField(0)
   String? container;
@@ -1161,11 +1081,7 @@ class DirectPlayProfile {
   Map<String, dynamic> toJson() => _$DirectPlayProfileToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 22)
 class TranscodingProfile {
   TranscodingProfile({
@@ -1240,18 +1156,10 @@ class TranscodingProfile {
   Map<String, dynamic> toJson() => _$TranscodingProfileToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 23)
 class ContainerProfile {
-  ContainerProfile({
-    required this.type,
-    this.conditions,
-    this.container,
-  });
+  ContainerProfile({required this.type, this.conditions, this.container});
 
   /// Enum: "Audio" "Video" "Photo"
   @HiveField(0)
@@ -1267,19 +1175,10 @@ class ContainerProfile {
   Map<String, dynamic> toJson() => _$ContainerProfileToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 24)
 class ProfileCondition {
-  ProfileCondition({
-    required this.condition,
-    required this.property,
-    this.value,
-    required this.isRequired,
-  });
+  ProfileCondition({required this.condition, required this.property, this.value, required this.isRequired});
 
   /// Enum: "Equals" "NotEquals" "LessThanEqual" "GreaterThanEqual" "EqualsAny"
   @HiveField(0)
@@ -1304,20 +1203,10 @@ class ProfileCondition {
   Map<String, dynamic> toJson() => _$ProfileConditionToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 25)
 class CodecProfile {
-  CodecProfile({
-    required this.type,
-    this.conditions,
-    this.applyConditions,
-    this.codec,
-    this.container,
-  });
+  CodecProfile({required this.type, this.conditions, this.applyConditions, this.codec, this.container});
 
   /// Enum: "Video" "VideoAudio" "Audio"
   @HiveField(0)
@@ -1339,11 +1228,7 @@ class CodecProfile {
   Map<String, dynamic> toJson() => _$CodecProfileToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 26)
 class ResponseProfile {
   ResponseProfile({
@@ -1382,20 +1267,10 @@ class ResponseProfile {
   Map<String, dynamic> toJson() => _$ResponseProfileToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 27)
 class SubtitleProfile {
-  SubtitleProfile({
-    this.format,
-    required this.method,
-    this.didlMode,
-    this.language,
-    this.container,
-  });
+  SubtitleProfile({this.format, required this.method, this.didlMode, this.language, this.container});
 
   @HiveField(0)
   String? format;
@@ -1418,11 +1293,12 @@ class SubtitleProfile {
 }
 
 @JsonSerializable(
-    fieldRename: FieldRename.pascal,
-    explicitToJson: true,
-    anyMap: true,
-    includeIfNull: false,
-    converters: [BaseItemIdConverter()])
+  fieldRename: FieldRename.pascal,
+  explicitToJson: true,
+  anyMap: true,
+  includeIfNull: false,
+  converters: [BaseItemIdConverter()],
+)
 @HiveType(typeId: 0)
 class BaseItemDto with RunTimeTickDuration {
   BaseItemDto({
@@ -2288,17 +2164,10 @@ class BaseItemDto with RunTimeTickDuration {
   int get hashCode => id.hashCode;
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 29)
 class ExternalUrl {
-  ExternalUrl({
-    this.name,
-    this.url,
-  });
+  ExternalUrl({this.name, this.url});
 
   @HiveField(0)
   String? name;
@@ -2523,12 +2392,7 @@ class MediaSourceInfo with RunTimeTickDuration {
   Map<String, dynamic> toJson() => _$MediaSourceInfoToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-  includeIfNull: false,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true, includeIfNull: false)
 @HiveType(typeId: 6)
 class MediaStream {
   MediaStream({
@@ -2766,11 +2630,7 @@ class MediaStream {
   Map<String, dynamic> toJson() => _$MediaStreamToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 47)
 class MediaUrl {
   MediaUrl({this.url, this.name});
@@ -2791,13 +2651,7 @@ class MediaUrl {
 )
 @HiveType(typeId: 48)
 class BaseItemPerson {
-  BaseItemPerson({
-    this.name,
-    this.id,
-    this.role,
-    this.type,
-    this.primaryImageTag,
-  });
+  BaseItemPerson({this.name, this.id, this.role, this.type, this.primaryImageTag});
 
   /// Gets or sets the name.
   String? name;
@@ -2829,10 +2683,7 @@ class BaseItemPerson {
 )
 @HiveType(typeId: 30)
 class NameLongIdPair {
-  NameLongIdPair({
-    this.name,
-    required this.id,
-  });
+  NameLongIdPair({this.name, required this.id});
 
   @HiveField(0)
   String? name;
@@ -2844,12 +2695,7 @@ class NameLongIdPair {
   Map<String, dynamic> toJson() => _$NameLongIdPairToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-  includeIfNull: false,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true, includeIfNull: false)
 @HiveType(typeId: 1)
 class UserItemDataDto {
   UserItemDataDto({
@@ -2917,13 +2763,14 @@ class UserItemDataDto {
 }
 
 @JsonSerializable(
-    fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true, converters: [BaseItemIdConverter()])
+  fieldRename: FieldRename.pascal,
+  explicitToJson: true,
+  anyMap: true,
+  converters: [BaseItemIdConverter()],
+)
 @HiveType(typeId: 2)
 class NameIdPair {
-  NameIdPair({
-    this.name,
-    required this.id,
-  });
+  NameIdPair({this.name, required this.id});
 
   @HiveField(0)
   String? name;
@@ -2935,11 +2782,7 @@ class NameIdPair {
   Map<String, dynamic> toJson() => _$NameIdPairToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 class ChapterInfo {
   ChapterInfo({
     required this.startPositionTicks,
@@ -2968,18 +2811,10 @@ class ChapterInfo {
   Map<String, dynamic> toJson() => _$ChapterInfoToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 // ignore: camel_case_types
 class QueryResult_BaseItemDto {
-  QueryResult_BaseItemDto({
-    this.items,
-    required this.totalRecordCount,
-    required this.startIndex,
-  });
+  QueryResult_BaseItemDto({this.items, required this.totalRecordCount, required this.startIndex});
 
   /// Gets or sets the items.
   List<BaseItemDto>? items;
@@ -2994,17 +2829,9 @@ class QueryResult_BaseItemDto {
   Map<String, dynamic> toJson() => _$QueryResult_BaseItemDtoToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 class PlaybackInfoResponse {
-  PlaybackInfoResponse({
-    this.mediaSources,
-    this.playSessionId,
-    this.errorCode,
-  });
+  PlaybackInfoResponse({this.mediaSources, this.playSessionId, this.errorCode});
 
   /// Gets or sets the media sources.
   List<MediaSourceInfo>? mediaSources;
@@ -3117,12 +2944,7 @@ class PlaybackProgressInfo {
 }
 
 @HiveType(typeId: 32)
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-  includeIfNull: false,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true, includeIfNull: false)
 class ImageBlurHashes {
   ImageBlurHashes({
     this.primary,
@@ -3184,11 +3006,7 @@ class ImageBlurHashes {
 }
 
 @HiveType(typeId: 33)
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 class MediaAttachment {
   MediaAttachment({
     this.codec,
@@ -3233,11 +3051,7 @@ class MediaAttachment {
 }
 
 @HiveType(typeId: 34)
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 class BaseItem {
   BaseItem({
     this.size,
@@ -3292,16 +3106,9 @@ class BaseItem {
 }
 
 @HiveType(typeId: 35)
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 class QueueItem {
-  QueueItem({
-    required this.id,
-    this.playlistItemId,
-  });
+  QueueItem({required this.id, this.playlistItemId});
 
   @HiveField(0)
   String id;
@@ -3321,13 +3128,7 @@ class QueueItem {
   converters: [BaseItemIdConverter()],
 )
 class NewPlaylist {
-  NewPlaylist({
-    this.name,
-    this.ids,
-    this.userId,
-    this.mediaType,
-    this.isPublic,
-  });
+  NewPlaylist({this.name, this.ids, this.userId, this.mediaType, this.isPublic});
 
   /// Gets or sets the name of the new playlist.
   String? name;
@@ -3457,11 +3258,7 @@ enum SortBy {
           SortBy.random,
         ];
       case TabContentType.genres:
-        options = [
-          SortBy.sortName,
-          SortBy.dateCreated,
-          SortBy.random,
-        ];
+        options = [SortBy.sortName, SortBy.dateCreated, SortBy.random];
     }
     if (includeDefaultOrder) {
       options.insert(0, SortBy.defaultOrder);
@@ -3737,11 +3534,7 @@ enum SortOrder {
   }
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 class PublicSystemInfoResult {
   PublicSystemInfoResult({
     this.localAddress,
@@ -3779,19 +3572,13 @@ class PublicSystemInfoResult {
 }
 
 class PublicUsersResponse {
-  PublicUsersResponse({
-    required this.users,
-  });
+  PublicUsersResponse({required this.users});
 
   @HiveField(0)
   List<UserDto> users;
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 class QuickConnectState {
   QuickConnectState({
     required this.authenticated,
@@ -3832,18 +3619,9 @@ class QuickConnectState {
   Map<String, dynamic> toJson() => _$QuickConnectStateToJson(this);
 }
 
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 class ClientDiscoveryResponse {
-  ClientDiscoveryResponse({
-    this.address,
-    this.id,
-    this.name,
-    this.endpointAddress,
-  });
+  ClientDiscoveryResponse({this.address, this.id, this.name, this.endpointAddress});
 
   String? address;
 
@@ -3857,11 +3635,7 @@ class ClientDiscoveryResponse {
 }
 
 /// LyricMetadata model.
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 44)
 class LyricMetadata {
   LyricMetadata({
@@ -3922,17 +3696,10 @@ class LyricMetadata {
 }
 
 /// Lyric model.
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 45)
 class LyricLine {
-  LyricLine({
-    this.text,
-    this.start,
-  });
+  LyricLine({this.text, this.start});
 
   /// Gets the text of this lyric line.
   @HiveField(0)
@@ -3947,17 +3714,10 @@ class LyricLine {
 }
 
 /// LyricResponse model.
-@JsonSerializable(
-  fieldRename: FieldRename.pascal,
-  explicitToJson: true,
-  anyMap: true,
-)
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 46)
 class LyricDto {
-  LyricDto({
-    this.metadata,
-    this.lyrics,
-  });
+  LyricDto({this.metadata, this.lyrics});
 
   /// Gets or sets Metadata for the lyrics.
   @HiveField(0)

@@ -21,11 +21,7 @@ import '../AlbumScreen/download_button.dart';
 import '../padded_custom_scrollview.dart';
 
 class GenreScreenContent extends ConsumerStatefulWidget {
-  const GenreScreenContent({
-    super.key,
-    required this.parent,
-    this.library,
-  });
+  const GenreScreenContent({super.key, required this.parent, this.library});
 
   final BaseItemDto parent;
   final BaseItemDto? library;
@@ -195,199 +191,193 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
     final countsBorderColor = Theme.of(context).colorScheme.onSurface.withOpacity(0.2);
     final countsBackgroundColor = Theme.of(context).colorScheme.surface;
 
-    return PaddedCustomScrollview(slivers: <Widget>[
-      SliverAppBar(
-        title: Text(widget.parent.name ?? AppLocalizations.of(context)!.unknownName),
-        pinned: true,
-        centerTitle: false,
-        actions: [
-          FavoriteButton(item: widget.parent),
-          if (!isLoading)
-            DownloadButton(
-                item: DownloadStub.fromFinampCollection(FinampCollection(
-                  type: FinampCollectionType.collectionWithLibraryFilter,
-                  library: library,
-                  item: widget.parent,
-                )),
-                childrenCount: albumCount)
-        ],
-      ),
-      SliverToBoxAdapter(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 6, bottom: 8, left: 10, right: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 4),
-                  child: buildCountColumn(
-                    count: albumCount,
-                    label: AppLocalizations.of(context)!.albums,
-                    onTap: () {
-                      openSeeAll(TabContentType.albums, doOverride: false);
-                    },
-                    textColor: countsTextColor,
-                    subtitleColor: countsSubtitleColor,
-                    borderColor: countsBorderColor,
-                    backgroundColor: countsBackgroundColor,
+    return PaddedCustomScrollview(
+      slivers: <Widget>[
+        SliverAppBar(
+          title: Text(widget.parent.name ?? AppLocalizations.of(context)!.unknownName),
+          pinned: true,
+          centerTitle: false,
+          actions: [
+            FavoriteButton(item: widget.parent),
+            if (!isLoading)
+              DownloadButton(
+                item: DownloadStub.fromFinampCollection(
+                  FinampCollection(
+                    type: FinampCollectionType.collectionWithLibraryFilter,
+                    library: library,
+                    item: widget.parent,
                   ),
                 ),
+                childrenCount: albumCount,
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: buildCountColumn(
-                    count: trackCount,
-                    label: AppLocalizations.of(context)!.tracks,
-                    onTap: () {
-                      openSeeAll(TabContentType.tracks, doOverride: false);
-                    },
-                    textColor: countsTextColor,
-                    subtitleColor: countsSubtitleColor,
-                    borderColor: countsBorderColor,
-                    backgroundColor: countsBackgroundColor,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 4),
-                  child: buildCountColumn(
-                    count: artistCount,
-                    label: (ref.read(finampSettingsProvider.defaultArtistType) == ArtistType.albumArtist)
-                        ? AppLocalizations.of(context)!.albumArtists
-                        : AppLocalizations.of(context)!.performingArtists,
-                    onTap: () {
-                      openSeeAll(TabContentType.artists, doOverride: false);
-                    },
-                    textColor: countsTextColor,
-                    subtitleColor: countsSubtitleColor,
-                    borderColor: countsBorderColor,
-                    backgroundColor: countsBackgroundColor,
-                  ),
-                ),
-              ),
-            ],
-          ),
+          ],
         ),
-      ),
-      // TODO:
-      // Once we have a better handling of large queues (maybe with lazy-loading/adding?)
-      // and once we redesigned the play/shuffle buttons, they should get added here
-      if (!isLoading)
-        ...genreItemSectionsOrder.map((type) {
-          switch (type) {
-            case GenreItemSections.tracks:
-              return SliverPadding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                sliver: TracksSection(
-                  parent: widget.parent,
-                  tracks: tracks,
-                  childrenForQueue: tracks,
-                  tracksText: (genreCuratedItemSelectionTypeTracks != null)
-                      ? genreCuratedItemSelectionTypeTracks.toLocalisedSectionTitle(context, BaseItemDtoType.track)
-                      : loc.tracks,
-                  isOnGenreScreen: true,
-                  seeAllCallbackFunction: () => openSeeAll(
-                    TabContentType.tracks,
-                    itemSelectionType: genreCuratedItemSelectionTypeTracks,
-                  ),
-                  includeFilterRow: true,
-                  customFilterOrder: genreCuratedItemSectionFilterOrder,
-                  selectedFilter: genreCuratedItemSelectionTypeTracks,
-                  disabledFilters: _disabledTrackFilters.toList(),
-                  onFilterSelected: (type) {
-                    // We store the clicked type locally in addition to changing the setting,
-                    // because we don't know if the provider might auto-switch to something else
-                    // because of an empty result-list, but we want to show a message in that case.
-                    clickedCuratedItemSelectionTypeTracks = type;
-                    FinampSetters.setGenreCuratedItemSelectionTypeTracks(type);
-                  },
-                ),
-              );
-            case GenreItemSections.albums:
-              return SliverPadding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                sliver: CollectionsSection(
-                  parent: widget.parent,
-                  itemsText: (genreCuratedItemSelectionTypeAlbums != null)
-                      ? genreCuratedItemSelectionTypeAlbums.toLocalisedSectionTitle(context, BaseItemDtoType.album)
-                      : loc.albums,
-                  items: albums,
-                  seeAllCallbackFunction: () => openSeeAll(
-                    TabContentType.albums,
-                    itemSelectionType: genreCuratedItemSelectionTypeAlbums,
-                  ),
-                  includeFilterRowFor: BaseItemDtoType.album,
-                  customFilterOrder: genreCuratedItemSectionFilterOrder,
-                  selectedFilter: genreCuratedItemSelectionTypeAlbums,
-                  disabledFilters: _disabledAlbumFilters.toList(),
-                  onFilterSelected: (type) {
-                    clickedCuratedItemSelectionTypeAlbums = type;
-                    FinampSetters.setGenreCuratedItemSelectionTypeAlbums(type);
-                  },
-                ),
-              );
-            case GenreItemSections.artists:
-              return SliverPadding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                sliver: CollectionsSection(
-                  parent: widget.parent,
-                  itemsText: (genreCuratedItemSelectionTypeArtists != null)
-                      ? genreCuratedItemSelectionTypeArtists.toLocalisedSectionTitle(context, BaseItemDtoType.artist)
-                      : loc.artists,
-                  items: artists,
-                  seeAllCallbackFunction: () => openSeeAll(
-                    TabContentType.artists,
-                    itemSelectionType: genreCuratedItemSelectionTypeArtists,
-                  ),
-                  genreFilter: widget.parent,
-                  includeFilterRowFor: BaseItemDtoType.artist,
-                  customFilterOrder: genreCuratedItemSectionFilterOrder,
-                  selectedFilter: genreCuratedItemSelectionTypeArtists,
-                  disabledFilters: _disabledArtistFilters.toList(),
-                  onFilterSelected: (type) {
-                    clickedCuratedItemSelectionTypeArtists = type;
-                    FinampSetters.setGenreCuratedItemSelectionTypeArtists(type);
-                  },
-                ),
-              );
-          }
-        }),
-      if (!isLoading)
         SliverToBoxAdapter(
           child: Padding(
-            padding: EdgeInsets.only(top: 32),
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SimpleButton(
-                    text: AppLocalizations.of(context)!.browsePlaylists.toUpperCase(),
-                    textColor: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w500,
-                    icon: Icons.chevron_right,
-                    iconPosition: IconPosition.end,
-                    onPressed: () => openSeeAll(
-                      TabContentType.playlists,
-                      doOverride: false,
+            padding: const EdgeInsets.only(top: 6, bottom: 8, left: 10, right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 4),
+                    child: buildCountColumn(
+                      count: albumCount,
+                      label: AppLocalizations.of(context)!.albums,
+                      onTap: () {
+                        openSeeAll(TabContentType.albums, doOverride: false);
+                      },
+                      textColor: countsTextColor,
+                      subtitleColor: countsSubtitleColor,
+                      borderColor: countsBorderColor,
+                      backgroundColor: countsBackgroundColor,
                     ),
                   ),
-                ],
-              ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: buildCountColumn(
+                      count: trackCount,
+                      label: AppLocalizations.of(context)!.tracks,
+                      onTap: () {
+                        openSeeAll(TabContentType.tracks, doOverride: false);
+                      },
+                      textColor: countsTextColor,
+                      subtitleColor: countsSubtitleColor,
+                      borderColor: countsBorderColor,
+                      backgroundColor: countsBackgroundColor,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4),
+                    child: buildCountColumn(
+                      count: artistCount,
+                      label: (ref.read(finampSettingsProvider.defaultArtistType) == ArtistType.albumArtist)
+                          ? AppLocalizations.of(context)!.albumArtists
+                          : AppLocalizations.of(context)!.performingArtists,
+                      onTap: () {
+                        openSeeAll(TabContentType.artists, doOverride: false);
+                      },
+                      textColor: countsTextColor,
+                      subtitleColor: countsSubtitleColor,
+                      borderColor: countsBorderColor,
+                      backgroundColor: countsBackgroundColor,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
-      if (isLoading)
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-            child: Center(
-              child: CircularProgressIndicator.adaptive(),
+        // TODO:
+        // Once we have a better handling of large queues (maybe with lazy-loading/adding?)
+        // and once we redesigned the play/shuffle buttons, they should get added here
+        if (!isLoading)
+          ...genreItemSectionsOrder.map((type) {
+            switch (type) {
+              case GenreItemSections.tracks:
+                return SliverPadding(
+                  padding: const EdgeInsets.only(bottom: 12.0),
+                  sliver: TracksSection(
+                    parent: widget.parent,
+                    tracks: tracks,
+                    childrenForQueue: tracks,
+                    tracksText: (genreCuratedItemSelectionTypeTracks != null)
+                        ? genreCuratedItemSelectionTypeTracks.toLocalisedSectionTitle(context, BaseItemDtoType.track)
+                        : loc.tracks,
+                    isOnGenreScreen: true,
+                    seeAllCallbackFunction: () =>
+                        openSeeAll(TabContentType.tracks, itemSelectionType: genreCuratedItemSelectionTypeTracks),
+                    includeFilterRow: true,
+                    customFilterOrder: genreCuratedItemSectionFilterOrder,
+                    selectedFilter: genreCuratedItemSelectionTypeTracks,
+                    disabledFilters: _disabledTrackFilters.toList(),
+                    onFilterSelected: (type) {
+                      // We store the clicked type locally in addition to changing the setting,
+                      // because we don't know if the provider might auto-switch to something else
+                      // because of an empty result-list, but we want to show a message in that case.
+                      clickedCuratedItemSelectionTypeTracks = type;
+                      FinampSetters.setGenreCuratedItemSelectionTypeTracks(type);
+                    },
+                  ),
+                );
+              case GenreItemSections.albums:
+                return SliverPadding(
+                  padding: const EdgeInsets.only(bottom: 12.0),
+                  sliver: CollectionsSection(
+                    parent: widget.parent,
+                    itemsText: (genreCuratedItemSelectionTypeAlbums != null)
+                        ? genreCuratedItemSelectionTypeAlbums.toLocalisedSectionTitle(context, BaseItemDtoType.album)
+                        : loc.albums,
+                    items: albums,
+                    seeAllCallbackFunction: () =>
+                        openSeeAll(TabContentType.albums, itemSelectionType: genreCuratedItemSelectionTypeAlbums),
+                    includeFilterRowFor: BaseItemDtoType.album,
+                    customFilterOrder: genreCuratedItemSectionFilterOrder,
+                    selectedFilter: genreCuratedItemSelectionTypeAlbums,
+                    disabledFilters: _disabledAlbumFilters.toList(),
+                    onFilterSelected: (type) {
+                      clickedCuratedItemSelectionTypeAlbums = type;
+                      FinampSetters.setGenreCuratedItemSelectionTypeAlbums(type);
+                    },
+                  ),
+                );
+              case GenreItemSections.artists:
+                return SliverPadding(
+                  padding: const EdgeInsets.only(bottom: 12.0),
+                  sliver: CollectionsSection(
+                    parent: widget.parent,
+                    itemsText: (genreCuratedItemSelectionTypeArtists != null)
+                        ? genreCuratedItemSelectionTypeArtists.toLocalisedSectionTitle(context, BaseItemDtoType.artist)
+                        : loc.artists,
+                    items: artists,
+                    seeAllCallbackFunction: () =>
+                        openSeeAll(TabContentType.artists, itemSelectionType: genreCuratedItemSelectionTypeArtists),
+                    genreFilter: widget.parent,
+                    includeFilterRowFor: BaseItemDtoType.artist,
+                    customFilterOrder: genreCuratedItemSectionFilterOrder,
+                    selectedFilter: genreCuratedItemSelectionTypeArtists,
+                    disabledFilters: _disabledArtistFilters.toList(),
+                    onFilterSelected: (type) {
+                      clickedCuratedItemSelectionTypeArtists = type;
+                      FinampSetters.setGenreCuratedItemSelectionTypeArtists(type);
+                    },
+                  ),
+                );
+            }
+          }),
+        if (!isLoading)
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(top: 32),
+              child: Center(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SimpleButton(
+                      text: AppLocalizations.of(context)!.browsePlaylists.toUpperCase(),
+                      textColor: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.w500,
+                      icon: Icons.chevron_right,
+                      iconPosition: IconPosition.end,
+                      onPressed: () => openSeeAll(TabContentType.playlists, doOverride: false),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
-        )
-    ]);
+        if (isLoading)
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              child: Center(child: CircularProgressIndicator.adaptive()),
+            ),
+          ),
+      ],
+    );
   }
 }

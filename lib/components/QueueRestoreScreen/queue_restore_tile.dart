@@ -39,36 +39,45 @@ class QueueRestoreTile extends StatelessWidget {
       // Shrink trailing padding from 24 to 16
       contentPadding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
       child: ListTile(
-        title:
-            Text(AppLocalizations.of(context)!.queueRestoreTitle(DateTime.fromMillisecondsSinceEpoch(info.creation))),
+        title: Text(
+          AppLocalizations.of(context)!.queueRestoreTitle(DateTime.fromMillisecondsSinceEpoch(info.creation)),
+        ),
         leading: Padding(
           padding: const EdgeInsets.only(right: 16),
           child: FutureBuilder<BaseItemDto?>(
-              future: track, builder: (context, snapshot) => AlbumImage(item: snapshot.data)),
+            future: track,
+            builder: (context, snapshot) => AlbumImage(item: snapshot.data),
+          ),
         ),
         isThreeLine: true,
         //dense: true,
         subtitle: FutureBuilder<BaseItemDto?>(
-            future: track,
-            initialData: null,
-            builder: (context, snapshot) => Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: ((snapshot.data?.name == null)
-                        ? <Text>[]
-                        : [
-                            // exclude subtitle line 1 if track name is null
-                            Text(AppLocalizations.of(context)!.queueRestoreSubtitle1(snapshot.data!.name!),
-                                overflow: TextOverflow.ellipsis)
-                          ]) +
-                    [Text(AppLocalizations.of(context)!.queueRestoreSubtitle2(info.trackCount, remainingTracks))])),
+          future: track,
+          initialData: null,
+          builder: (context, snapshot) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children:
+                ((snapshot.data?.name == null)
+                    ? <Text>[]
+                    : [
+                        // exclude subtitle line 1 if track name is null
+                        Text(
+                          AppLocalizations.of(context)!.queueRestoreSubtitle1(snapshot.data!.name!),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ]) +
+                [Text(AppLocalizations.of(context)!.queueRestoreSubtitle2(info.trackCount, remainingTracks))],
+          ),
+        ),
         trailing: IconButton(
-            icon: const Icon(Icons.arrow_circle_right_outlined),
-            onPressed: () {
-              queueService.archiveSavedQueue();
-              unawaited(queueService.loadSavedQueue(info).catchError(GlobalSnackbar.error));
-              Navigator.of(context).popUntil((route) => route.isFirst && !route.willHandlePopInternally);
-            }),
+          icon: const Icon(Icons.arrow_circle_right_outlined),
+          onPressed: () {
+            queueService.archiveSavedQueue();
+            unawaited(queueService.loadSavedQueue(info).catchError(GlobalSnackbar.error));
+            Navigator.of(context).popUntil((route) => route.isFirst && !route.willHandlePopInternally);
+          },
+        ),
       ),
     );
   }

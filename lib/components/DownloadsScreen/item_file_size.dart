@@ -42,15 +42,23 @@ class ItemFileSize extends ConsumerWidget {
               codec = item.fileTranscodingProfile?.codec.name ?? "";
               bitrate = item.fileTranscodingProfile?.bitrateKbps ?? "null";
             }
-            return isarDownloader.getFileSize(item).then((value) => AppLocalizations.of(context)!.downloadInfo(
-                bitrate,
-                codec.toUpperCase(),
-                FileSize.getSize(value),
-                // only show name if there is more than one location
-                (FinampSettingsHelper.finampSettings.downloadLocationsMap.length > 1
-                        ? FinampSettingsHelper.finampSettings.downloadLocationsMap[item.fileDownloadLocation?.id]?.name
-                        : null) ??
-                    "null"));
+            return isarDownloader
+                .getFileSize(item)
+                .then(
+                  (value) => AppLocalizations.of(context)!.downloadInfo(
+                    bitrate,
+                    codec.toUpperCase(),
+                    FileSize.getSize(value),
+                    // only show name if there is more than one location
+                    (FinampSettingsHelper.finampSettings.downloadLocationsMap.length > 1
+                            ? FinampSettingsHelper
+                                  .finampSettings
+                                  .downloadLocationsMap[item.fileDownloadLocation?.id]
+                                  ?.name
+                            : null) ??
+                        "null",
+                  ),
+                );
           } else {
             var profile = item.userTranscodingProfile ?? item.syncTranscodingProfile;
             //Suppress codec display on downloads without audio files
@@ -58,17 +66,23 @@ class ItemFileSize extends ConsumerWidget {
               profile = null;
             }
             var codec = profile?.codec.name ?? FinampTranscodingCodec.original.name;
-            return isarDownloader.getFileSize(item).then((value) => AppLocalizations.of(context)!
-                .collectionDownloadInfo(
+            return isarDownloader
+                .getFileSize(item)
+                .then(
+                  (value) => AppLocalizations.of(context)!.collectionDownloadInfo(
                     profile?.bitrateKbps ?? "null",
                     codec.toUpperCase(),
                     FileSize.getSize(value),
                     // only show name if there is more than one location
                     (FinampSettingsHelper.finampSettings.downloadLocationsMap.length > 1
                             ? FinampSettingsHelper
-                                .finampSettings.downloadLocationsMap[item.syncDownloadLocation?.id]?.name
+                                  .finampSettings
+                                  .downloadLocationsMap[item.syncDownloadLocation?.id]
+                                  ?.name
                             : null) ??
-                        "null"));
+                        "null",
+                  ),
+                );
           }
         case DownloadItemState.downloading:
         case DownloadItemState.enqueued:
@@ -79,12 +93,13 @@ class ItemFileSize extends ConsumerWidget {
       }
     });
     return FutureBuilder(
-        future: sizeText,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Text(snapshot.data!);
-          }
-          return const Text("");
-        });
+      future: sizeText,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Text(snapshot.data!);
+        }
+        return const Text("");
+      },
+    );
   }
 }

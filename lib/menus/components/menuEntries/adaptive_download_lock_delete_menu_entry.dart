@@ -15,10 +15,7 @@ import 'menu_entry.dart';
 class AdaptiveDownloadLockDeleteMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final BaseItemDto baseItem;
 
-  const AdaptiveDownloadLockDeleteMenuEntry({
-    super.key,
-    required this.baseItem,
-  });
+  const AdaptiveDownloadLockDeleteMenuEntry({super.key, required this.baseItem});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,11 +40,9 @@ class AdaptiveDownloadLockDeleteMenuEntry extends ConsumerWidget implements Hide
     final library = GetIt.instance<FinampUserHelper>().currentUser?.currentView;
     return switch (BaseItemDtoType.fromItem(baseItem)) {
       BaseItemDtoType.track => DownloadStub.fromItem(type: DownloadItemType.track, item: baseItem),
-      BaseItemDtoType.artist || BaseItemDtoType.genre => DownloadStub.fromFinampCollection(FinampCollection(
-          type: FinampCollectionType.collectionWithLibraryFilter,
-          library: library,
-          item: baseItem,
-        )),
+      BaseItemDtoType.artist || BaseItemDtoType.genre => DownloadStub.fromFinampCollection(
+        FinampCollection(type: FinampCollectionType.collectionWithLibraryFilter, library: library, item: baseItem),
+      ),
       _ => DownloadStub.fromItem(type: DownloadItemType.collection, item: baseItem),
     };
   }

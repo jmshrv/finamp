@@ -12,9 +12,7 @@ class LanguageSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.language),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.language)),
       body: const LanguageList(),
     );
   }

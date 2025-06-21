@@ -26,14 +26,9 @@ class PlayerButtonsMore extends ConsumerWidget {
       excludeSemantics: true, // replace child semantics with custom semantics
       container: true,
       child: IconTheme(
-        data: IconThemeData(
-          color: IconTheme.of(context).color,
-          size: 24,
-        ),
+        data: IconThemeData(color: IconTheme.of(context).color, size: 24),
         child: IconButton(
-          icon: const Icon(
-            TablerIcons.menu_2,
-          ),
+          icon: const Icon(TablerIcons.menu_2),
           visualDensity: VisualDensity.compact,
           onPressed: () async {
             if (item == null) return;

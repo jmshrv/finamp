@@ -13,31 +13,28 @@ class AddToPlaylistMenuEntry extends ConsumerWidget implements HideableMenuEntry
   final BaseItemDto baseItem;
   final FinampQueueItem? queueItem;
 
-  const AddToPlaylistMenuEntry({
-    super.key,
-    required this.baseItem,
-    this.queueItem,
-  });
+  const AddToPlaylistMenuEntry({super.key, required this.baseItem, this.queueItem});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Visibility(
-        visible: !ref.watch(finampSettingsProvider.isOffline),
-        child: MenuEntry(
-          icon: TablerIcons.playlist_add,
-          title: queueItemInPlaylist(queueItem)
-              ? AppLocalizations.of(context)!.addToMorePlaylistsTitle
-              : AppLocalizations.of(context)!.addToPlaylistTitle,
-          onTap: () {
-            Navigator.pop(context); // close menu
-            bool inPlaylist = queueItemInPlaylist(queueItem);
-            showPlaylistActionsMenu(
-              context: context,
-              item: baseItem,
-              parentPlaylist: inPlaylist ? queueItem!.source.item : null,
-            );
-          },
-        ));
+      visible: !ref.watch(finampSettingsProvider.isOffline),
+      child: MenuEntry(
+        icon: TablerIcons.playlist_add,
+        title: queueItemInPlaylist(queueItem)
+            ? AppLocalizations.of(context)!.addToMorePlaylistsTitle
+            : AppLocalizations.of(context)!.addToPlaylistTitle,
+        onTap: () {
+          Navigator.pop(context); // close menu
+          bool inPlaylist = queueItemInPlaylist(queueItem);
+          showPlaylistActionsMenu(
+            context: context,
+            item: baseItem,
+            parentPlaylist: inPlaylist ? queueItem!.source.item : null,
+          );
+        },
+      ),
+    );
   }
 
   @override

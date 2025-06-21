@@ -12,10 +12,7 @@ import 'package:get_it/get_it.dart';
 class DownloadMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final DownloadStub downloadStub;
 
-  const DownloadMenuEntry({
-    super.key,
-    required this.downloadStub,
-  });
+  const DownloadMenuEntry({super.key, required this.downloadStub});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,16 +21,18 @@ class DownloadMenuEntry extends ConsumerWidget implements HideableMenuEntry {
     final DownloadItemStatus? downloadStatus = ref.watch(downloadsService.statusProvider((downloadStub, null)));
 
     return Visibility(
-        visible: !ref.watch(finampSettingsProvider.isOffline) && downloadStatus == DownloadItemStatus.notNeeded,
-        child: MenuEntry(
-            icon: TablerIcons.download,
-            title: AppLocalizations.of(context)!.downloadItem,
-            onTap: () async {
-              await DownloadDialog.show(context, downloadStub, null);
-              if (context.mounted) {
-                Navigator.pop(context);
-              }
-            }));
+      visible: !ref.watch(finampSettingsProvider.isOffline) && downloadStatus == DownloadItemStatus.notNeeded,
+      child: MenuEntry(
+        icon: TablerIcons.download,
+        title: AppLocalizations.of(context)!.downloadItem,
+        onTap: () async {
+          await DownloadDialog.show(context, downloadStub, null);
+          if (context.mounted) {
+            Navigator.pop(context);
+          }
+        },
+      ),
+    );
   }
 
   @override

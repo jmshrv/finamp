@@ -30,9 +30,7 @@ Future<List<BaseItemDto>?> loadChildTracks({
   List<BaseItemDto>? newItems;
 
   if (settings.isOffline) {
-    newItemsFuture = loadChildTracksOffline(
-      baseItem: baseItem,
-    );
+    newItemsFuture = loadChildTracksOffline(baseItem: baseItem);
   } else {
     switch (BaseItemDtoType.fromItem(baseItem)) {
       case BaseItemDtoType.track:
@@ -45,15 +43,14 @@ Future<List<BaseItemDto>?> loadChildTracks({
             .then((value) => value.$2); // get playable tracks
         break;
       case BaseItemDtoType.artist:
-        newItemsFuture =
-            ref.read(getArtistTracksProvider(baseItem, finampUserHelper.currentUser?.currentView, genreFilter).future);
+        newItemsFuture = ref.read(
+          getArtistTracksProvider(baseItem, finampUserHelper.currentUser?.currentView, genreFilter).future,
+        );
         break;
       case BaseItemDtoType.genre:
         newItemsFuture = jellyfinApiHelper.getItems(
           parentItem: finampUserHelper.currentUser?.currentView,
-          includeItemTypes: [
-            BaseItemDtoType.track.idString,
-          ].join(","),
+          includeItemTypes: [BaseItemDtoType.track.idString].join(","),
           sortBy: sortBy?.jellyfinName(null) ?? SortBy.album.jellyfinName(null),
           sortOrder: sortOrder?.toString(),
           genreFilter: baseItem,
@@ -62,9 +59,7 @@ Future<List<BaseItemDto>?> loadChildTracks({
       default:
         newItemsFuture = jellyfinApiHelper.getItems(
           parentItem: baseItem,
-          includeItemTypes: [
-            BaseItemDtoType.track.idString,
-          ].join(","),
+          includeItemTypes: [BaseItemDtoType.track.idString].join(","),
           sortBy: sortBy?.jellyfinName(null) ?? "ParentIndexNumber,IndexNumber,SortName",
           sortOrder: sortOrder?.toString(),
           // filters: settings.onlyShowFavorites ? "IsFavorite" : null,
@@ -76,7 +71,8 @@ Future<List<BaseItemDto>?> loadChildTracks({
 
   if (newItems == null) {
     GlobalSnackbar.message(
-        (scaffold) => AppLocalizations.of(scaffold)!.couldNotLoad(BaseItemDtoType.fromItem(baseItem).name));
+      (scaffold) => AppLocalizations.of(scaffold)!.couldNotLoad(BaseItemDtoType.fromItem(baseItem).name),
+    );
     return [];
   }
 
@@ -111,20 +107,15 @@ Future<List<BaseItemDto>?> loadChildTracksOffline({
         viewFilter: finampUserHelper.currentUser?.currentViewId,
         nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
         genreFilter: baseItem,
-      ))
-          .map((e) => e.baseItem)
-          .nonNulls
-          .toList();
+      )).map((e) => e.baseItem).nonNulls.toList();
       break;
     case BaseItemDtoType.artist:
-      items = await GetIt.instance<ProviderContainer>()
-          .read(getArtistTracksProvider(baseItem, finampUserHelper.currentUser?.currentView, genreFilter).future);
+      items = await GetIt.instance<ProviderContainer>().read(
+        getArtistTracksProvider(baseItem, finampUserHelper.currentUser?.currentView, genreFilter).future,
+      );
       break;
     default:
-      items = await downloadsService.getCollectionTracks(
-        baseItem,
-        playable: true,
-      );
+      items = await downloadsService.getCollectionTracks(baseItem, playable: true);
       break;
   }
 

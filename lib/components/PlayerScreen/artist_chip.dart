@@ -31,13 +31,7 @@ Future<BaseItemDto> artistItem(Ref ref, BaseItemId id) async {
 }
 
 class ArtistChips extends StatelessWidget {
-  const ArtistChips({
-    super.key,
-    this.backgroundColor,
-    this.color,
-    this.baseItem,
-    this.artistType = ArtistType.artist,
-  });
+  const ArtistChips({super.key, this.backgroundColor, this.color, this.baseItem, this.artistType = ArtistType.artist});
 
   final BaseItemDto? baseItem;
   final Color? backgroundColor;
@@ -58,25 +52,14 @@ class ArtistChips extends StatelessWidget {
           runSpacing: 4.0,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: filteredArtists.isEmpty
-              ? [
-                  ArtistChip(
-                    backgroundColor: backgroundColor,
-                    color: color,
-                    artist: null,
-                    key: const ValueKey(null),
-                  )
-                ]
+              ? [ArtistChip(backgroundColor: backgroundColor, color: color, artist: null, key: const ValueKey(null))]
               : List.generate(filteredArtists.length, (index) {
                   final currentArtist = filteredArtists[index];
 
                   return ArtistChip(
                     backgroundColor: backgroundColor,
                     color: color,
-                    artist: BaseItemDto(
-                      id: currentArtist.id,
-                      name: currentArtist.name,
-                      type: "MusicArtist",
-                    ),
+                    artist: BaseItemDto(id: currentArtist.id, name: currentArtist.name, type: "MusicArtist"),
                     key: ValueKey(currentArtist.id),
                   );
                 }),
@@ -87,12 +70,7 @@ class ArtistChips extends StatelessWidget {
 }
 
 class ArtistChip extends ConsumerWidget {
-  const ArtistChip({
-    super.key,
-    this.backgroundColor,
-    this.color,
-    this.artist,
-  });
+  const ArtistChip({super.key, this.backgroundColor, this.color, this.artist});
 
   final BaseItemDto? artist;
   final Color? backgroundColor;
@@ -108,20 +86,12 @@ class ArtistChip extends ConsumerWidget {
     } else {
       localArtist = artist;
     }
-    return _ArtistChipContent(
-      item: localArtist,
-      backgroundColor: localBackgroundColor,
-      color: localColor,
-    );
+    return _ArtistChipContent(item: localArtist, backgroundColor: localBackgroundColor, color: localColor);
   }
 }
 
 class _ArtistChipContent extends StatelessWidget {
-  const _ArtistChipContent({
-    required this.item,
-    required this.backgroundColor,
-    required this.color,
-  });
+  const _ArtistChipContent({required this.item, required this.backgroundColor, required this.color});
 
   final BaseItemDto? item;
   final Color backgroundColor;
@@ -135,10 +105,7 @@ class _ArtistChipContent extends StatelessWidget {
     final name = isArtist ? item?.name : (item?.artists?.firstOrNull ?? item?.albumArtist);
 
     return Semantics.fromProperties(
-      properties: SemanticsProperties(
-        label: "$name (${AppLocalizations.of(context)!.artist})",
-        button: true,
-      ),
+      properties: SemanticsProperties(label: "$name (${AppLocalizations.of(context)!.artist})", button: true),
       container: true,
       child: SizedBox(
         height: _height,
@@ -155,10 +122,7 @@ class _ArtistChipContent extends StatelessWidget {
                 if (isArtist && item?.imageId != null)
                   AlbumImage(
                     item: item,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: _radius,
-                      bottomLeft: _radius,
-                    ),
+                    borderRadius: const BorderRadius.only(topLeft: _radius, bottomLeft: _radius),
                   ),
                 Center(
                   child: Padding(
@@ -170,7 +134,7 @@ class _ArtistChipContent extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

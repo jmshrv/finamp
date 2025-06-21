@@ -23,10 +23,7 @@ import 'package:logging/logging.dart';
 
 const outputMenuRouteName = "/output-menu";
 
-Future<void> showOutputMenu({
-  required BuildContext context,
-  bool usePlayerTheme = true,
-}) async {
+Future<void> showOutputMenu({required BuildContext context, bool usePlayerTheme = true}) async {
   final outputPanelLogger = Logger("OutputPanel");
 
   final queueService = GetIt.instance<QueueService>();
@@ -34,19 +31,20 @@ Future<void> showOutputMenu({
   FeedbackHelper.feedback(FeedbackType.selection);
 
   await showThemedBottomSheet(
-      context: context,
-      item: (queueService.getCurrentTrack()?.baseItem)!, //TODO fix this
-      routeName: outputMenuRouteName,
-      minDraggableHeight: 0.2,
-      buildSlivers: (context) {
-        var themeColor = Theme.of(context).colorScheme.primary;
+    context: context,
+    item: (queueService.getCurrentTrack()?.baseItem)!, //TODO fix this
+    routeName: outputMenuRouteName,
+    minDraggableHeight: 0.2,
+    buildSlivers: (context) {
+      var themeColor = Theme.of(context).colorScheme.primary;
 
-        final menuEntries = [
-          // SongInfo.condensed(
-          //   item: item,
-          //   useThemeImage: usePlayerTheme,
-          // ),
-          Consumer(builder: (context, ref, child) {
+      final menuEntries = [
+        // SongInfo.condensed(
+        //   item: item,
+        //   useThemeImage: usePlayerTheme,
+        // ),
+        Consumer(
+          builder: (context, ref, child) {
             return VolumeSlider(
               initialValue: (ref.watch(finampSettingsProvider.currentVolume) * 100).floor() / 100.0,
               onChange: (double currentValue) async {
@@ -56,55 +54,55 @@ Future<void> showOutputMenu({
               },
               forceLoading: true,
             );
-          }),
-          const SizedBox(height: 10),
-        ];
+          },
+        ),
+        const SizedBox(height: 10),
+      ];
 
-        var menu = [
-          SliverStickyHeader(
-            header: const OutputMenuHeader(),
-            sliver: SliverToBoxAdapter(
-              child: SizedBox.shrink(),
+      var menu = [
+        SliverStickyHeader(
+          header: const OutputMenuHeader(),
+          sliver: SliverToBoxAdapter(child: SizedBox.shrink()),
+        ),
+        SliverStickyHeader(
+          header: Padding(
+            padding: const EdgeInsets.only(top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
+            child: Text(
+              AppLocalizations.of(context)!.outputMenuVolumeSectionTitle,
+              // AppLocalizations.of(context)!.outputMenuVolumeSectionTitle,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
+          sliver: MenuMask(
+            height: OutputMenuHeader.defaultHeight,
+            child: SliverList(delegate: SliverChildListDelegate.fixed(menuEntries)),
+          ),
+        ),
+        if (Platform.isAndroid)
           SliverStickyHeader(
             header: Padding(
               padding: const EdgeInsets.only(top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
-              child: Text(AppLocalizations.of(context)!.outputMenuVolumeSectionTitle,
-                  // AppLocalizations.of(context)!.outputMenuVolumeSectionTitle,
-                  style: Theme.of(context).textTheme.titleMedium),
+              child: Text(
+                AppLocalizations.of(context)!.outputMenuDevicesSectionTitle,
+                // AppLocalizations.of(context)!.outputMenuDevicesSectionTitle,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
             ),
             sliver: MenuMask(
-                height: OutputMenuHeader.defaultHeight,
-                child: SliverList(
-                    delegate: SliverChildListDelegate.fixed(
-                  menuEntries,
-                ))),
-          ),
-          if (Platform.isAndroid)
-            SliverStickyHeader(
-              header: Padding(
-                padding: const EdgeInsets.only(top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
-                child: Text(AppLocalizations.of(context)!.outputMenuDevicesSectionTitle,
-                    // AppLocalizations.of(context)!.outputMenuDevicesSectionTitle,
-                    style: Theme.of(context).textTheme.titleMedium),
-              ),
-              sliver: MenuMask(
-                height: OutputMenuHeader.defaultHeight,
-                child: OutputTargetList(), // Pass the outputRoutes
-              ),
+              height: OutputMenuHeader.defaultHeight,
+              child: OutputTargetList(), // Pass the outputRoutes
             ),
-        ];
-        // TODO better estimate, how to deal with lag getting playlists?
-        var stackHeight = MediaQuery.sizeOf(context).height * (Platform.isAndroid ? 0.65 : 0.4);
-        return (stackHeight, menu);
-      });
+          ),
+      ];
+      // TODO better estimate, how to deal with lag getting playlists?
+      var stackHeight = MediaQuery.sizeOf(context).height * (Platform.isAndroid ? 0.65 : 0.4);
+      return (stackHeight, menu);
+    },
+  );
 }
 
 class OutputMenuHeader extends ConsumerWidget {
-  const OutputMenuHeader({
-    super.key,
-  });
+  const OutputMenuHeader({super.key});
 
   static MenuMaskHeight defaultHeight = MenuMaskHeight(36.0);
 
@@ -120,10 +118,15 @@ class OutputMenuHeader extends ConsumerWidget {
             width: 38,
           ),
           Center(
-            child: Text(AppLocalizations.of(context)!.outputMenuTitle,
-                // AppLocalizations.of(context)!.outputMenuTitle,
-                style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyLarge!.color!, fontSize: 18, fontWeight: FontWeight.w400)),
+            child: Text(
+              AppLocalizations.of(context)!.outputMenuTitle,
+              // AppLocalizations.of(context)!.outputMenuTitle,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge!.color!,
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
           ),
           if (Platform.isIOS)
             Padding(
@@ -131,14 +134,16 @@ class OutputMenuHeader extends ConsumerWidget {
               child: AnimatedSwitcher(
                 duration: MediaQuery.of(context).disableAnimations ? Duration.zero : const Duration(milliseconds: 1000),
                 switchOutCurve: const Threshold(0.0),
-                child: Consumer(builder: (context, ref, child) {
-                  return AirPlayRoutePickerView(
-                    key: ValueKey(ref.watch(localThemeProvider).primary),
-                    tintColor: ref.watch(localThemeProvider).primary,
-                    activeTintColor: jellyfinBlueColor,
-                    onShowPickerView: () => FeedbackHelper.feedback(FeedbackType.selection),
-                  );
-                }),
+                child: Consumer(
+                  builder: (context, ref, child) {
+                    return AirPlayRoutePickerView(
+                      key: ValueKey(ref.watch(localThemeProvider).primary),
+                      tintColor: ref.watch(localThemeProvider).primary,
+                      activeTintColor: jellyfinBlueColor,
+                      onShowPickerView: () => FeedbackHelper.feedback(FeedbackType.selection),
+                    );
+                  },
+                ),
               ),
             ),
           if (Platform.isAndroid)
@@ -160,9 +165,7 @@ class OutputMenuHeader extends ConsumerWidget {
 }
 
 class OutputTargetList extends StatefulWidget {
-  const OutputTargetList({
-    super.key,
-  });
+  const OutputTargetList({super.key});
 
   @override
   State<OutputTargetList> createState() => _OutputTargetListState();
@@ -179,39 +182,32 @@ class _OutputTargetListState extends State<OutputTargetList> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return SliverList(
-              delegate: SliverChildBuilderDelegate(
-            (context, index) {
+            delegate: SliverChildBuilderDelegate((context, index) {
               if (index == snapshot.data!.length) {
                 return openOsOutputOptionsButton(context);
               }
               final route = snapshot.data![index];
               return OutputSelectorTile(
-                  routeInfo: route,
-                  onSelect: () {
-                    setState(() {});
-                  });
-            },
-            childCount: snapshot.data!.length + 1,
-          ));
+                routeInfo: route,
+                onSelect: () {
+                  setState(() {});
+                },
+              );
+            }, childCount: snapshot.data!.length + 1),
+          );
         } else if (snapshot.hasError) {
           GlobalSnackbar.error(snapshot.error);
-          return const SliverToBoxAdapter(
-            child: Center(
-              heightFactor: 3.0,
-              child: Icon(Icons.error, size: 64),
-            ),
-          );
+          return const SliverToBoxAdapter(child: Center(heightFactor: 3.0, child: Icon(Icons.error, size: 64)));
         } else {
           return SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-            if (index == 1) {
-              return openOsOutputOptionsButton(context);
-            } else {
-              return const Center(
-                child: CircularProgressIndicator.adaptive(),
-              );
-            }
-          }, childCount: 2));
+            delegate: SliverChildBuilderDelegate((context, index) {
+              if (index == 1) {
+                return openOsOutputOptionsButton(context);
+              } else {
+                return const Center(child: CircularProgressIndicator.adaptive());
+              }
+            }, childCount: 2),
+          );
         }
       },
     );
@@ -274,9 +270,11 @@ class OutputSelectorTile extends StatelessWidget {
       onToggle: (bool currentState) async {
         final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
         await audioHandler.setOutputToRoute(routeInfo);
-        unawaited(Future<Duration>.delayed(const Duration(milliseconds: 1250)).then((_) {
-          onSelect?.call();
-        }));
+        unawaited(
+          Future<Duration>.delayed(const Duration(milliseconds: 1250)).then((_) {
+            onSelect?.call();
+          }),
+        );
         return true;
       },
       enabled: true,
@@ -327,59 +325,59 @@ class _VolumeSliderState extends ConsumerState<VolumeSlider> {
     return Padding(
       padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0, bottom: 4.0),
       child: Container(
-          decoration: ShapeDecoration(
-            color: themeColor.withOpacity(0.3),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          clipBehavior: Clip.antiAlias,
-          padding: EdgeInsets.zero,
-          child: Stack(children: [
+        decoration: ShapeDecoration(
+          color: themeColor.withOpacity(0.3),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+        clipBehavior: Clip.antiAlias,
+        padding: EdgeInsets.zero,
+        child: Stack(
+          children: [
             SizedBox(
-                height: sliderHeight,
-                width: double.infinity,
-                child: SliderTheme(
-                  data: SliderThemeData(
-                    trackHeight: sliderHeight, // Same as container height
-                    padding: EdgeInsets.zero,
+              height: sliderHeight,
+              width: double.infinity,
+              child: SliderTheme(
+                data: SliderThemeData(
+                  trackHeight: sliderHeight, // Same as container height
+                  padding: EdgeInsets.zero,
 
-                    trackShape: RoundedRectangleTrackShape(),
-                    thumbShape: VerticalSliderThumbShape(
-                      thumbWidth: 2.0,
-                      thumbHeight: 24.0,
-                      borderRadius: 8.0,
-                      offsetLeft: -9.0,
-                    ),
-                    thumbColor: Colors.white,
-                    activeTrackColor: themeColor,
-                    inactiveTrackColor: themeColor.withOpacity(0.3),
-                    overlayShape: SliderComponentShape.noOverlay,
+                  trackShape: RoundedRectangleTrackShape(),
+                  thumbShape: VerticalSliderThumbShape(
+                    thumbWidth: 2.0,
+                    thumbHeight: 24.0,
+                    borderRadius: 8.0,
+                    offsetLeft: -9.0,
                   ),
-                  child: Slider(
-                    value: currentValue,
-                    onChanged: (value) {
-                      setState(() {
-                        currentValue = value;
-                      });
-                      if (debounce?.isActive ?? false) debounce!.cancel();
-                      debounce = Timer(const Duration(milliseconds: 100), () {
-                        widget.onChange(value);
-                      });
-                    },
-                    onChangeEnd: (value) async {
-                      unawaited(widget.onChange(value));
-                      if (widget.feedback) {
-                        FeedbackHelper.feedback(FeedbackType.selection);
-                      }
-                      setState(() {
-                        currentValue = value;
-                      });
-                    },
-                    autofocus: false,
-                    focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
-                  ),
-                )),
+                  thumbColor: Colors.white,
+                  activeTrackColor: themeColor,
+                  inactiveTrackColor: themeColor.withOpacity(0.3),
+                  overlayShape: SliderComponentShape.noOverlay,
+                ),
+                child: Slider(
+                  value: currentValue,
+                  onChanged: (value) {
+                    setState(() {
+                      currentValue = value;
+                    });
+                    if (debounce?.isActive ?? false) debounce!.cancel();
+                    debounce = Timer(const Duration(milliseconds: 100), () {
+                      widget.onChange(value);
+                    });
+                  },
+                  onChangeEnd: (value) async {
+                    unawaited(widget.onChange(value));
+                    if (widget.feedback) {
+                      FeedbackHelper.feedback(FeedbackType.selection);
+                    }
+                    setState(() {
+                      currentValue = value;
+                    });
+                  },
+                  autofocus: false,
+                  focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
+                ),
+              ),
+            ),
             Positioned(
               top: 0,
               bottom: 0,
@@ -388,14 +386,15 @@ class _VolumeSliderState extends ConsumerState<VolumeSlider> {
               child: Center(
                 child: Text(
                   "${(currentValue * 100).floor()}%",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600, color: Colors.white),
                 ),
               ),
-            )
-          ])),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -449,32 +448,18 @@ class RoundedRectangleTrackShape extends RoundedRectSliderTrackShape {
     );
 
     // Inactive track
-    final inactiveRect = Rect.fromLTRB(
-      thumbCenter.dx,
-      trackRect.top,
-      trackRect.right,
-      trackRect.bottom,
-    );
+    final inactiveRect = Rect.fromLTRB(thumbCenter.dx, trackRect.top, trackRect.right, trackRect.bottom);
 
     final Paint activePaint = Paint()..color = sliderTheme.activeTrackColor!;
     final Paint inactivePaint = Paint()..color = sliderTheme.inactiveTrackColor!;
 
     final radius = Radius.circular(12.0);
 
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        trackRect,
-        radius,
-      ),
-      inactivePaint,
-    );
+    canvas.drawRRect(RRect.fromRectAndRadius(trackRect, radius), inactivePaint);
 
     final activeRRect = RRect.fromRectAndRadius(activeRect, radius);
 
-    canvas.drawRRect(
-      activeRRect,
-      activePaint,
-    );
+    canvas.drawRRect(activeRRect, activePaint);
   }
 }
 
@@ -521,10 +506,7 @@ class VerticalSliderThumbShape extends SliderComponentShape {
       height: getPreferredSize(true, true).height,
     );
 
-    final RRect thumbRRect = RRect.fromRectAndRadius(
-      thumbRect,
-      Radius.circular(borderRadius),
-    );
+    final RRect thumbRRect = RRect.fromRectAndRadius(thumbRect, Radius.circular(borderRadius));
 
     context.canvas.drawRRect(thumbRRect, paint);
   }

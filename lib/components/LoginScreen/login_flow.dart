@@ -26,9 +26,7 @@ class LoginFlow extends StatefulWidget {
 final loginNavigatorKey = GlobalKey<NavigatorState>();
 
 class _LoginFlowState extends State<LoginFlow> {
-  ServerState serverState = ServerState(
-    discoveredServers: {},
-  );
+  ServerState serverState = ServerState(discoveredServers: {});
   ConnectionState connectionState = ConnectionState();
 
   @override
@@ -55,116 +53,126 @@ class _LoginFlowState extends State<LoginFlow> {
           Route route;
 
           Route createRoute(Widget page) => PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) => page,
-                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                  if (MediaQuery.of(context).disableAnimations) {
-                    return child;
-                  }
-                  final pushingNext = secondaryAnimation.status == AnimationStatus.forward;
-                  final poppingNext = secondaryAnimation.status == AnimationStatus.reverse;
-                  final pushingOrPoppingNext = pushingNext || poppingNext;
-                  late final Tween<Offset> offsetTween = pushingOrPoppingNext
-                      ? Tween<Offset>(begin: const Offset(0.0, 0.0), end: const Offset(-1.0, 0.0))
-                      : Tween<Offset>(begin: const Offset(1.0, 0.0), end: const Offset(0.0, 0.0));
+            pageBuilder: (context, animation, secondaryAnimation) => page,
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              if (MediaQuery.of(context).disableAnimations) {
+                return child;
+              }
+              final pushingNext = secondaryAnimation.status == AnimationStatus.forward;
+              final poppingNext = secondaryAnimation.status == AnimationStatus.reverse;
+              final pushingOrPoppingNext = pushingNext || poppingNext;
+              late final Tween<Offset> offsetTween = pushingOrPoppingNext
+                  ? Tween<Offset>(begin: const Offset(0.0, 0.0), end: const Offset(-1.0, 0.0))
+                  : Tween<Offset>(begin: const Offset(1.0, 0.0), end: const Offset(0.0, 0.0));
 
-                  final curveOffsetTween = offsetTween.chain(CurveTween(curve: Curves.ease));
+              final curveOffsetTween = offsetTween.chain(CurveTween(curve: Curves.ease));
 
-                  late final Animation<Offset> slidingAnimation = pushingOrPoppingNext
-                      ? curveOffsetTween.animate(secondaryAnimation)
-                      : curveOffsetTween.animate(animation);
-                  return SlideTransition(position: slidingAnimation, child: child);
-                },
-              );
+              late final Animation<Offset> slidingAnimation = pushingOrPoppingNext
+                  ? curveOffsetTween.animate(secondaryAnimation)
+                  : curveOffsetTween.animate(animation);
+              return SlideTransition(position: slidingAnimation, child: child);
+            },
+          );
 
           switch (settings.name) {
             case LoginSplashPage.routeName:
-              route = createRoute(LoginSplashPage(
-                onGetStartedPressed: () =>
-                    loginNavigatorKey.currentState!.pushNamed(LoginServerSelectionPage.routeName),
-              ));
+              route = createRoute(
+                LoginSplashPage(
+                  onGetStartedPressed: () =>
+                      loginNavigatorKey.currentState!.pushNamed(LoginServerSelectionPage.routeName),
+                ),
+              );
               break;
             case LoginServerSelectionPage.routeName:
-              route = createRoute(LoginServerSelectionPage(
-                serverState: serverState,
-                onServerSelected: (PublicSystemInfoResult server, String baseUrl) {
-                  serverState.selectedServer = server;
-                  serverState.baseUrl = baseUrl;
-                  serverState.clientDiscoveryHandler.dispose();
-                  loginNavigatorKey.currentState!.pushNamed(LoginUserSelectionPage.routeName);
-                },
-              ));
+              route = createRoute(
+                LoginServerSelectionPage(
+                  serverState: serverState,
+                  onServerSelected: (PublicSystemInfoResult server, String baseUrl) {
+                    serverState.selectedServer = server;
+                    serverState.baseUrl = baseUrl;
+                    serverState.clientDiscoveryHandler.dispose();
+                    loginNavigatorKey.currentState!.pushNamed(LoginUserSelectionPage.routeName);
+                  },
+                ),
+              );
               break;
             case LoginUserSelectionPage.routeName:
-              route = createRoute(LoginUserSelectionPage(
-                serverState: serverState,
-                connectionState: connectionState,
-                onUserSelected: (UserDto? user) {
-                  connectionState.selectedUser = user;
-                  loginNavigatorKey.currentState!.pushNamed(LoginAuthenticationPage.routeName);
-                },
-                onAuthenticated: () {
-                  Navigator.of(context).popAndPushNamed(ViewSelector.routeName);
-                },
-              ));
+              route = createRoute(
+                LoginUserSelectionPage(
+                  serverState: serverState,
+                  connectionState: connectionState,
+                  onUserSelected: (UserDto? user) {
+                    connectionState.selectedUser = user;
+                    loginNavigatorKey.currentState!.pushNamed(LoginAuthenticationPage.routeName);
+                  },
+                  onAuthenticated: () {
+                    Navigator.of(context).popAndPushNamed(ViewSelector.routeName);
+                  },
+                ),
+              );
               break;
             case LoginAuthenticationPage.routeName:
-              route = createRoute(LoginAuthenticationPage(
-                connectionState: connectionState,
-                onAuthenticated: () {
-                  Navigator.of(context).popAndPushNamed(ViewSelector.routeName);
-                  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-                  jellyfinApiHelper.updateCapabilities(ClientCapabilities(
-                    supportsMediaControl: true,
-                    supportsPersistentIdentifier: true,
-                    playableMediaTypes: ["Audio"],
-                    supportedCommands: [
-                      "MoveUp",
-                      "MoveDown",
-                      "MoveLeft",
-                      "MoveRight",
-                      "PageUp",
-                      "PageDown",
-                      "PreviousLetter",
-                      "NextLetter",
-                      "ToggleOsd",
-                      "ToggleContextMenu",
-                      "Select",
-                      "Back",
-                      "TakeScreenshot",
-                      "SendKey",
-                      "SendString",
-                      "GoHome",
-                      "GoToSettings",
-                      "VolumeUp",
-                      "VolumeDown",
-                      "Mute",
-                      "Unmute",
-                      "ToggleMute",
-                      "SetVolume",
-                      "SetAudioStreamIndex",
-                      "SetSubtitleStreamIndex",
-                      "ToggleFullscreen",
-                      "DisplayContent",
-                      "GoToSearch",
-                      "DisplayMessage",
-                      "SetRepeatMode",
-                      "ChannelUp",
-                      "ChannelDown",
-                      "Guide",
-                      "ToggleStats",
-                      "PlayMediaSource",
-                      "PlayTrailers",
-                      "SetShuffleQueue",
-                      "PlayState",
-                      "PlayNext",
-                      "ToggleOsdMenu",
-                      "Play",
-                      "SetMaxStreamingBitrate",
-                      "SetPlaybackOrder"
-                    ],
-                  ));
-                },
-              ));
+              route = createRoute(
+                LoginAuthenticationPage(
+                  connectionState: connectionState,
+                  onAuthenticated: () {
+                    Navigator.of(context).popAndPushNamed(ViewSelector.routeName);
+                    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+                    jellyfinApiHelper.updateCapabilities(
+                      ClientCapabilities(
+                        supportsMediaControl: true,
+                        supportsPersistentIdentifier: true,
+                        playableMediaTypes: ["Audio"],
+                        supportedCommands: [
+                          "MoveUp",
+                          "MoveDown",
+                          "MoveLeft",
+                          "MoveRight",
+                          "PageUp",
+                          "PageDown",
+                          "PreviousLetter",
+                          "NextLetter",
+                          "ToggleOsd",
+                          "ToggleContextMenu",
+                          "Select",
+                          "Back",
+                          "TakeScreenshot",
+                          "SendKey",
+                          "SendString",
+                          "GoHome",
+                          "GoToSettings",
+                          "VolumeUp",
+                          "VolumeDown",
+                          "Mute",
+                          "Unmute",
+                          "ToggleMute",
+                          "SetVolume",
+                          "SetAudioStreamIndex",
+                          "SetSubtitleStreamIndex",
+                          "ToggleFullscreen",
+                          "DisplayContent",
+                          "GoToSearch",
+                          "DisplayMessage",
+                          "SetRepeatMode",
+                          "ChannelUp",
+                          "ChannelDown",
+                          "Guide",
+                          "ToggleStats",
+                          "PlayMediaSource",
+                          "PlayTrailers",
+                          "SetShuffleQueue",
+                          "PlayState",
+                          "PlayNext",
+                          "ToggleOsdMenu",
+                          "Play",
+                          "SetMaxStreamingBitrate",
+                          "SetPlaybackOrder",
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              );
               break;
             default:
               throw Exception('Invalid route: ${settings.name}');
@@ -298,12 +306,7 @@ class ConnectionState {
   QuickConnectState? quickConnectState;
   UserDto? selectedUser;
 
-  ConnectionState({
-    this.isConnected = false,
-    this.isAuthenticating = false,
-    this.quickConnectState,
-    this.selectedUser,
-  });
+  ConnectionState({this.isConnected = false, this.isAuthenticating = false, this.quickConnectState, this.selectedUser});
 }
 
 /// Used for discovering Jellyfin servers on the local network
@@ -331,8 +334,9 @@ class JellyfinServerClientDiscovery {
         final datagram = _socket?.receive();
         if (datagram != null) {
           _clientDiscoveryLogger.finest("Received datagram: ${utf8.decode(datagram.data)}");
-          final response =
-              ClientDiscoveryResponse.fromJson(jsonDecode(utf8.decode(datagram.data)) as Map<String, dynamic>);
+          final response = ClientDiscoveryResponse.fromJson(
+            jsonDecode(utf8.decode(datagram.data)) as Map<String, dynamic>,
+          );
           onServerFound(response);
         }
       }

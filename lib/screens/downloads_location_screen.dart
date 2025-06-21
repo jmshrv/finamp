@@ -12,9 +12,7 @@ class DownloadsLocationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.downloadLocations),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.downloadLocations)),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () => Navigator.of(context).pushNamed(AddDownloadLocationScreen.routeName),

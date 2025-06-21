@@ -12,33 +12,31 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 class EditItemMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final BaseItemDto baseItem;
 
-  const EditItemMenuEntry({
-    super.key,
-    required this.baseItem,
-  });
+  const EditItemMenuEntry({super.key, required this.baseItem});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final itemIsEditable = [BaseItemDtoType.playlist].contains(BaseItemDtoType.fromItem(baseItem));
     return Visibility(
-        visible: itemIsEditable && !ref.watch(finampSettingsProvider.isOffline),
-        child: MenuEntry(
-          icon: TablerIcons.edit,
-          title: AppLocalizations.of(context)!.editItemTitle(BaseItemDtoType.fromItem(baseItem).name),
-          onTap: () {
-            Navigator.pop(context); // close menu
-            switch (BaseItemDtoType.fromItem(baseItem)) {
-              case BaseItemDtoType.playlist:
-                showDialog<PlaylistEditDialog>(
-                  context: context,
-                  builder: (context) => PlaylistEditDialog(playlist: baseItem),
-                );
-                break;
-              default:
-                GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notImplementedYet);
-            }
-          },
-        ));
+      visible: itemIsEditable && !ref.watch(finampSettingsProvider.isOffline),
+      child: MenuEntry(
+        icon: TablerIcons.edit,
+        title: AppLocalizations.of(context)!.editItemTitle(BaseItemDtoType.fromItem(baseItem).name),
+        onTap: () {
+          Navigator.pop(context); // close menu
+          switch (BaseItemDtoType.fromItem(baseItem)) {
+            case BaseItemDtoType.playlist:
+              showDialog<PlaylistEditDialog>(
+                context: context,
+                builder: (context) => PlaylistEditDialog(playlist: baseItem),
+              );
+              break;
+            default:
+              GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notImplementedYet);
+          }
+        },
+      ),
+    );
   }
 
   @override

@@ -9,10 +9,7 @@ import '../components/now_playing_bar.dart';
 import '../models/jellyfin_models.dart';
 
 class GenreScreen extends ConsumerStatefulWidget {
-  const GenreScreen({
-    super.key,
-    this.widgetGenre,
-  });
+  const GenreScreen({super.key, this.widgetGenre});
 
   static const routeName = "/music/genre";
 
@@ -41,14 +38,15 @@ class _GenreScreenState extends ConsumerState<GenreScreen> {
     return Scaffold(
       extendBody: true,
       body: SafeArea(
-          child: RefreshIndicator(
-        onRefresh: _refresh,
-        child: GenreScreenContent(
-          key: _contentKey,
-          parent: genre,
-          library: _finampUserHelper.currentUser?.currentView,
+        child: RefreshIndicator(
+          onRefresh: _refresh,
+          child: GenreScreenContent(
+            key: _contentKey,
+            parent: genre,
+            library: _finampUserHelper.currentUser?.currentView,
+          ),
         ),
-      )),
+      ),
       bottomNavigationBar: const NowPlayingBar(),
     );
   }

@@ -67,19 +67,20 @@ class PlayerScreen extends ConsumerWidget {
 
     return PlayerScreenTheme(
       child: StreamBuilder<FinampQueueInfo?>(
-          stream: queueService.getQueueStream(),
-          initialData: queueService.getQueue(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData && snapshot.data!.saveState == SavedQueueState.loading) {
-              return buildLoadingScreen(context, null);
-            } else if (snapshot.hasData && snapshot.data!.saveState == SavedQueueState.failed) {
-              return buildLoadingScreen(context, queueService.retryQueueLoad);
-            } else if (snapshot.hasData && snapshot.data!.currentTrack != null) {
-              return _PlayerScreenContent(playerScreen: this);
-            } else {
-              return const SizedBox.shrink();
-            }
-          }),
+        stream: queueService.getQueueStream(),
+        initialData: queueService.getQueue(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data!.saveState == SavedQueueState.loading) {
+            return buildLoadingScreen(context, null);
+          } else if (snapshot.hasData && snapshot.data!.saveState == SavedQueueState.failed) {
+            return buildLoadingScreen(context, queueService.retryQueueLoad);
+          } else if (snapshot.hasData && snapshot.data!.currentTrack != null) {
+            return _PlayerScreenContent(playerScreen: this);
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
+      ),
     );
   }
 
@@ -90,36 +91,35 @@ class PlayerScreen extends ConsumerWidget {
       onTap: retryCallback,
       child: Scaffold(
         backgroundColor: Color.alphaBlend(
-            Theme.of(context).brightness == Brightness.dark
-                ? IconTheme.of(context).color!.withOpacity(0.35)
-                : IconTheme.of(context).color!.withOpacity(0.5),
-            Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white),
+          Theme.of(context).brightness == Brightness.dark
+              ? IconTheme.of(context).color!.withOpacity(0.35)
+              : IconTheme.of(context).color!.withOpacity(0.5),
+          Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white,
+        ),
         // Required for sleep timer input
         resizeToAvoidBottomInset: false,
         extendBodyBehindAppBar: true,
         body: SafeArea(
           minimum: const EdgeInsets.only(top: _defaultToolbarHeight),
           child: SizedBox.expand(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-              const Spacer(),
-              (retryCallback != null)
-                  ? Icon(
-                      Icons.refresh,
-                      size: imageSize,
-                    )
-                  : SizedBox(width: imageSize, height: imageSize, child: const CircularProgressIndicator.adaptive()),
-              const Spacer(),
-              BalancedText(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Spacer(),
+                (retryCallback != null)
+                    ? Icon(Icons.refresh, size: imageSize)
+                    : SizedBox(width: imageSize, height: imageSize, child: const CircularProgressIndicator.adaptive()),
+                const Spacer(),
+                BalancedText(
                   (retryCallback != null)
                       ? AppLocalizations.of(context)!.queueRetryMessage
                       : AppLocalizations.of(context)!.queueLoadingMessage,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    height: 26 / 20,
-                  )),
-              const Spacer(flex: 2),
-            ]),
+                  style: const TextStyle(fontSize: 20, height: 26 / 20),
+                ),
+                const Spacer(flex: 2),
+              ],
+            ),
           ),
         ),
       ),
@@ -149,7 +149,8 @@ class _PlayerScreenContent extends ConsumerWidget {
     final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
 
     final isLyricsLoading = metadata.isLoading || metadata.isRefreshing;
-    final isLyricsAvailable = (metadata.valueOrNull?.hasLyrics ?? false) &&
+    final isLyricsAvailable =
+        (metadata.valueOrNull?.hasLyrics ?? false) &&
         (metadata.valueOrNull?.lyrics != null || metadata.isLoading) &&
         !metadata.hasError;
 
@@ -171,8 +172,13 @@ class _PlayerScreenContent extends ConsumerWidget {
         if (direction == SwipeDirection.left && isLyricsAvailable) {
           if (!FinampSettingsHelper.finampSettings.disableGesture ||
               !controller.shouldShow(PlayerHideable.bottomActions)) {
-            Navigator.of(context).push(_buildSlideRouteTransition(playerScreen, const LyricsScreen(),
-                routeSettings: const RouteSettings(name: LyricsScreen.routeName)));
+            Navigator.of(context).push(
+              _buildSlideRouteTransition(
+                playerScreen,
+                const LyricsScreen(),
+                routeSettings: const RouteSettings(name: LyricsScreen.routeName),
+              ),
+            );
           }
         }
       },
@@ -180,23 +186,19 @@ class _PlayerScreenContent extends ConsumerWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           systemOverlayStyle: SystemUiOverlayStyle(
-              // this is needed to ensure the player screen stays in full screen mode WITHOUT having contrast issues in the status bar
-              systemNavigationBarColor: Colors.transparent,
-              systemStatusBarContrastEnforced: false,
-              statusBarIconBrightness:
-                  Theme.of(context).brightness == Brightness.dark ? Brightness.light : Brightness.dark),
+            // this is needed to ensure the player screen stays in full screen mode WITHOUT having contrast issues in the status bar
+            systemNavigationBarColor: Colors.transparent,
+            systemStatusBarContrastEnforced: false,
+            statusBarIconBrightness: Theme.of(context).brightness == Brightness.dark
+                ? Brightness.light
+                : Brightness.dark,
+          ),
           elevation: 0,
           scrolledUnderElevation: 0.0, // disable tint/shadow when content is scrolled under the app bar
           centerTitle: true,
           toolbarHeight: toolbarHeight,
-          title: PlayerScreenAppBarTitle(
-            maxLines: maxToolbarLines,
-          ),
-          leading: usingPlayerSplitScreen
-              ? null
-              : FinampAppBarButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
+          title: PlayerScreenAppBarTitle(maxLines: maxToolbarLines),
+          leading: usingPlayerSplitScreen ? null : FinampAppBarButton(onPressed: () => Navigator.of(context).pop()),
           actions: [],
         ),
         // Required for sleep timer input
@@ -207,86 +209,86 @@ class _PlayerScreenContent extends ConsumerWidget {
             if (ref.watch(finampSettingsProvider.useCoverAsBackground)) const BlurredPlayerScreenBackground(),
             SafeArea(
               minimum: EdgeInsets.only(top: toolbarHeight),
-              child: LayoutBuilder(builder: (context, constraints) {
-                controller.setSize(Size(constraints.maxWidth, constraints.maxHeight), screenOrientation, ref);
-                if (controller.useLandscape) {
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: controller.albumSize.width,
-                        height: controller.albumSize.height,
-                        child: Padding(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  controller.setSize(Size(constraints.maxWidth, constraints.maxHeight), screenOrientation, ref);
+                  if (controller.useLandscape) {
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: controller.albumSize.width,
+                          height: controller.albumSize.height,
+                          child: Padding(
                             padding: EdgeInsets.only(
-                                left: constraints.maxHeight * 0.03,
-                                top: constraints.maxHeight * 0.03,
-                                bottom: constraints.maxHeight * 0.03,
-                                right: max(0, constraints.maxHeight * 0.03 - 20)),
-                            child: const PlayerScreenAlbumImage()),
-                      ),
-                      const Spacer(),
-                      SizedBox(
-                        width: controller.controlsSize.width,
-                        height: controller.controlsSize.height,
-                        child: Column(
-                          children: [
-                            const Spacer(flex: 4),
-                            TrackNameContent(controller),
-                            const Spacer(flex: 4),
-                            ControlArea(controller),
-                            if (controller.shouldShow(PlayerHideable.bottomActions)) const Spacer(flex: 10),
-                            if (controller.shouldShow(PlayerHideable.bottomActions))
-                              _buildBottomActions(
-                                context,
-                                controller,
-                                isLyricsLoading: isLyricsLoading,
-                                isLyricsAvailable: isLyricsAvailable,
-                              ),
-                            const Spacer(
-                              flex: 4,
+                              left: constraints.maxHeight * 0.03,
+                              top: constraints.maxHeight * 0.03,
+                              bottom: constraints.maxHeight * 0.03,
+                              right: max(0, constraints.maxHeight * 0.03 - 20),
                             ),
-                          ],
+                            child: const PlayerScreenAlbumImage(),
+                          ),
                         ),
-                      ),
-                      const Spacer(),
-                    ],
-                  );
-                } else {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
+                        const Spacer(),
+                        SizedBox(
+                          width: controller.controlsSize.width,
+                          height: controller.controlsSize.height,
+                          child: Column(
+                            children: [
+                              const Spacer(flex: 4),
+                              TrackNameContent(controller),
+                              const Spacer(flex: 4),
+                              ControlArea(controller),
+                              if (controller.shouldShow(PlayerHideable.bottomActions)) const Spacer(flex: 10),
+                              if (controller.shouldShow(PlayerHideable.bottomActions))
+                                _buildBottomActions(
+                                  context,
+                                  controller,
+                                  isLyricsLoading: isLyricsLoading,
+                                  isLyricsAvailable: isLyricsAvailable,
+                                ),
+                              const Spacer(flex: 4),
+                            ],
+                          ),
+                        ),
+                        const Spacer(),
+                      ],
+                    );
+                  } else {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
                           height: controller.albumSize.height,
                           width: controller.albumSize.width,
-                          child: const PlayerScreenAlbumImage()),
-                      SizedBox(
-                        height: controller.controlsSize.height,
-                        width: controller.controlsSize.width,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            TrackNameContent(controller),
-                            ControlArea(controller),
-                            if (controller.shouldShow(PlayerHideable.bottomActions))
-                              _buildBottomActions(
-                                context,
-                                controller,
-                                isLyricsLoading: isLyricsLoading,
-                                isLyricsAvailable: isLyricsAvailable,
-                              ),
-                            if (!controller.shouldShow(PlayerHideable.bottomActions))
-                              const SizedBox(
-                                height: 5,
-                              )
-                          ],
+                          child: const PlayerScreenAlbumImage(),
                         ),
-                      ),
-                    ],
-                  );
-                }
-              }),
+                        SizedBox(
+                          height: controller.controlsSize.height,
+                          width: controller.controlsSize.width,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              TrackNameContent(controller),
+                              ControlArea(controller),
+                              if (controller.shouldShow(PlayerHideable.bottomActions))
+                                _buildBottomActions(
+                                  context,
+                                  controller,
+                                  isLyricsLoading: isLyricsLoading,
+                                  isLyricsAvailable: isLyricsAvailable,
+                                ),
+                              if (!controller.shouldShow(PlayerHideable.bottomActions)) const SizedBox(height: 5),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                },
+              ),
             ),
           ],
         ),
@@ -315,21 +317,12 @@ class _PlayerScreenContent extends ConsumerWidget {
 
         final tweenEnter = Tween(begin: beginEnter, end: endEnter);
         final tweenExit = Tween(begin: beginExit, end: endExit);
-        final curvedAnimation = CurvedAnimation(
-          parent: animation,
-          curve: curve.flipped,
-        );
+        final curvedAnimation = CurvedAnimation(parent: animation, curve: curve.flipped);
 
         return Stack(
           children: [
-            SlideTransition(
-              position: tweenExit.animate(curvedAnimation),
-              child: sourceWidget,
-            ),
-            SlideTransition(
-              position: tweenEnter.animate(curvedAnimation),
-              child: child,
-            ),
+            SlideTransition(position: tweenExit.animate(curvedAnimation), child: sourceWidget),
+            SlideTransition(position: tweenEnter.animate(curvedAnimation), child: child),
           ],
         );
       },
@@ -353,9 +346,7 @@ class _PlayerScreenContent extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Spacer(
-          flex: 1,
-        ),
+        const Spacer(flex: 1),
         Expanded(
           flex: 16,
           child: Row(
@@ -383,17 +374,20 @@ class _PlayerScreenContent extends ConsumerWidget {
                   text: AppLocalizations.of(context)!.lyricsScreenButtonTitle,
                   icon: getLyricsIcon(),
                   onPressed: () {
-                    Navigator.of(context).push(_buildSlideRouteTransition(playerScreen, const LyricsScreen(),
-                        routeSettings: const RouteSettings(name: LyricsScreen.routeName)));
+                    Navigator.of(context).push(
+                      _buildSlideRouteTransition(
+                        playerScreen,
+                        const LyricsScreen(),
+                        routeSettings: const RouteSettings(name: LyricsScreen.routeName),
+                      ),
+                    );
                   },
                 ),
               ),
             ],
           ),
         ),
-        const Spacer(
-          flex: 1,
-        ),
+        const Spacer(flex: 1),
       ],
     );
   }
@@ -434,7 +428,7 @@ class PlayerHideableController {
     PlayerHideable.controlsPaddingSmall,
     PlayerHideable.features,
     PlayerHideable.twoLineTitle,
-    PlayerHideable.progressSlider
+    PlayerHideable.progressSlider,
   ];
 
   List<PlayerHideable> _visible = [];
@@ -455,7 +449,8 @@ class PlayerHideableController {
     for (var element in verticalHideOrder) {
       // Allow shrinking album by up to (element.maxShrink)% of screen width per side beyond the user specified minimum value
       // if it allows us to show more controls.  Allow shrinking by greater amounts as album size grows.
-      var maxDesiredPadding = minAlbumPadding +
+      var maxDesiredPadding =
+          minAlbumPadding +
           element.maxShrink *
               ref.watch(finampSettingsProvider.prioritizeCoverFactor) *
               ((maxAlbumSize - 300) / 300.0).clamp(1.0, 3.0);
@@ -535,7 +530,9 @@ class PlayerHideableController {
     assert(_target == null && _album == null && _useLandscape == null);
     // Estimate control height as average of min and max
     var controlsSize = Size(
-        PlayerHideable.unhideableElements.width, (PlayerHideable.unhideableElements.height + _getSize().height) / 2.0);
+      PlayerHideable.unhideableElements.width,
+      (PlayerHideable.unhideableElements.height + _getSize().height) / 2.0,
+    );
     var landscapeWidth = max(controlsSize.width, size.width / 2.0);
     var landscapeAlbum = min(size.width - landscapeWidth, size.height);
     var portraitAlbum = min(size.width, size.height - controlsSize.height);

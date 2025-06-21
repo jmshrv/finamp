@@ -9,10 +9,7 @@ import '../../services/jellyfin_api_helper.dart';
 import '../global_snackbar.dart';
 
 class PlaylistEditDialog extends StatefulWidget {
-  const PlaylistEditDialog({
-    super.key,
-    required this.playlist,
-  });
+  const PlaylistEditDialog({super.key, required this.playlist});
 
   final BaseItemDto playlist;
 
@@ -60,22 +57,22 @@ class _PlaylistEditDialogState extends State<PlaylistEditDialog> {
               onSaved: (newValue) => _name = newValue,
             ),
           ),
-          FormField<bool>(builder: (state) {
-            _fetchPublicVisibility();
-            return CheckboxListTile(
+          FormField<bool>(
+            builder: (state) {
+              _fetchPublicVisibility();
+              return CheckboxListTile(
                 value: _publicVisibility ?? false,
-                title: Text(
-                  AppLocalizations.of(context)!.publiclyVisiblePlaylist,
-                  textAlign: TextAlign.left,
-                ),
+                title: Text(AppLocalizations.of(context)!.publiclyVisiblePlaylist, textAlign: TextAlign.left),
                 contentPadding: EdgeInsets.zero,
                 onChanged: (value) {
                   state.didChange(value);
                   setState(() {
                     _publicVisibility = value!;
                   });
-                });
-          }),
+                },
+              );
+            },
+          ),
         ],
       ),
       actions: [
@@ -111,19 +108,18 @@ class _PlaylistEditDialogState extends State<PlaylistEditDialog> {
         BaseItemDto playlistTemp = widget.playlist;
         playlistTemp.name = _name;
         await _jellyfinApiHelper.updatePlaylist(
-            newPlaylist: NewPlaylist(
-                isPublic: _publicVisibility,
-                userId: GetIt.instance<FinampUserHelper>().currentUserId,
-                ids: null,
-                name: _name),
-            itemId: widget.playlist.id);
+          newPlaylist: NewPlaylist(
+            isPublic: _publicVisibility,
+            userId: GetIt.instance<FinampUserHelper>().currentUserId,
+            ids: null,
+            name: _name,
+          ),
+          itemId: widget.playlist.id,
+        );
 
         if (!mounted) return;
 
-        GlobalSnackbar.message(
-          (context) => AppLocalizations.of(context)!.playlistUpdated,
-          isConfirmation: true,
-        );
+        GlobalSnackbar.message((context) => AppLocalizations.of(context)!.playlistUpdated, isConfirmation: true);
         Navigator.of(context).pop();
       } catch (e) {
         errorSnackbar(e, context);

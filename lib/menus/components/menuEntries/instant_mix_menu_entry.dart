@@ -14,10 +14,7 @@ import 'package:get_it/get_it.dart';
 class InstantMixMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final BaseItemDto baseItem;
 
-  const InstantMixMenuEntry({
-    super.key,
-    required this.baseItem,
-  });
+  const InstantMixMenuEntry({super.key, required this.baseItem});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,9 +39,7 @@ class InstantMixMenuEntry extends ConsumerWidget implements HideableMenuEntry {
       BaseItemDtoType.album => jellyfinApiHelper.selectedMixAlbums,
       BaseItemDtoType.genre => jellyfinApiHelper.selectedMixGenres,
       _ => <BaseItemDto>[],
-    })
-        .map((e) => e.id)
-        .contains(baseItem.id);
+    }).map((e) => e.id).contains(baseItem.id);
     return alreadyInMixBuilder
         ? MenuEntry(
             icon: TablerIcons.compass_off,

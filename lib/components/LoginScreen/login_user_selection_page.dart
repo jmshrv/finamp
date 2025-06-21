@@ -64,14 +64,13 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 32.0, bottom: 20.0),
-                child: SvgPicture.asset(
-                  'images/finamp_cropped.svg',
-                  width: 75,
-                  height: 75,
-                ),
+                child: SvgPicture.asset('images/finamp_cropped.svg', width: 75, height: 75),
               ),
-              Text(AppLocalizations.of(context)!.loginFlowAccountSelectionHeading,
-                  style: Theme.of(context).textTheme.headlineMedium, textAlign: TextAlign.center),
+              Text(
+                AppLocalizations.of(context)!.loginFlowAccountSelectionHeading,
+                style: Theme.of(context).textTheme.headlineMedium,
+                textAlign: TextAlign.center,
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 20.0, bottom: 12.0),
                 child: Align(
@@ -98,8 +97,9 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
                         if (snapshot.hasData) {
                           widget.connectionState.quickConnectState = snapshot.data;
                           widget.connectionState.isConnected = true;
-                          _quickConnectLogger
-                              .info("Quick connect state: ${widget.connectionState.quickConnectState.toString()}");
+                          _quickConnectLogger.info(
+                            "Quick connect state: ${widget.connectionState.quickConnectState.toString()}",
+                          );
                           waitForQuickConnect();
                           _quickConnectLogger.info("Waiting for quick connect...");
                           return QuickConnectSection(
@@ -109,7 +109,9 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
                         } else {
                           widget.connectionState.isConnected = false;
                           return QuickConnectSection(
-                              connectionState: widget.connectionState, onAuthenticated: widget.onAuthenticated);
+                            connectionState: widget.connectionState,
+                            onAuthenticated: widget.onAuthenticated,
+                          );
                         }
                       },
                     );
@@ -129,10 +131,7 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 0, bottom: 8.0),
-                child: Text(
-                  AppLocalizations.of(context)!.loginFlowSelectAUser,
-                  textAlign: TextAlign.center,
-                ),
+                child: Text(AppLocalizations.of(context)!.loginFlowSelectAUser, textAlign: TextAlign.center),
               ),
               FutureBuilder(
                 future: jellyfinApiHelper.loadPublicUsers(),
@@ -187,11 +186,7 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
 }
 
 class QuickConnectSection extends StatelessWidget {
-  const QuickConnectSection({
-    super.key,
-    required this.connectionState,
-    required this.onAuthenticated,
-  });
+  const QuickConnectSection({super.key, required this.connectionState, required this.onAuthenticated});
 
   final ConnectionState connectionState;
   final void Function()? onAuthenticated;
@@ -201,18 +196,14 @@ class QuickConnectSection extends StatelessWidget {
     return connectionState.quickConnectState != null
         ? Column(
             children: [
-              Text(
-                AppLocalizations.of(context)!.loginFlowQuickConnectPrompt,
-                textAlign: TextAlign.center,
-              ),
+              Text(AppLocalizations.of(context)!.loginFlowQuickConnectPrompt, textAlign: TextAlign.center),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: SelectableText(
                   connectionState.quickConnectState?.code ?? "",
-                  style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                        fontFamily: "monospace",
-                        letterSpacing: 5.0,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.displaySmall!.copyWith(fontFamily: "monospace", letterSpacing: 5.0),
                   semanticsLabel: connectionState.quickConnectState?.code?.split("").join(" "),
                   textAlign: TextAlign.center,
                 ),
@@ -222,9 +213,9 @@ class QuickConnectSection extends StatelessWidget {
                 child: Text(
                   AppLocalizations.of(context)!.loginFlowQuickConnectInstructions,
                   style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        fontWeight: FontWeight.w300,
-                        color: Theme.of(context).textTheme.bodySmall!.color!.withOpacity(0.9),
-                      ),
+                    fontWeight: FontWeight.w300,
+                    color: Theme.of(context).textTheme.bodySmall!.color!.withOpacity(0.9),
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -235,15 +226,12 @@ class QuickConnectSection extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyLarge,
                   textAlign: TextAlign.center,
                 ),
-              )
+              ),
             ],
           )
         : Padding(
             padding: const EdgeInsets.only(top: 16.0, bottom: 12.0),
-            child: Text(
-              AppLocalizations.of(context)!.loginFlowQuickConnectDisabled,
-              textAlign: TextAlign.center,
-            ),
+            child: Text(AppLocalizations.of(context)!.loginFlowQuickConnectDisabled, textAlign: TextAlign.center),
           );
   }
 }
@@ -253,11 +241,7 @@ class JellyfinUserWidget extends StatelessWidget {
   final UserDto? user;
   final VoidCallback? onPressed;
 
-  JellyfinUserWidget({
-    super.key,
-    this.user,
-    this.onPressed,
-  });
+  JellyfinUserWidget({super.key, this.user, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -270,21 +254,13 @@ class JellyfinUserWidget extends StatelessWidget {
     Widget getUserImage() {
       if (user != null) {
         if (avatarUrl != null) {
-          return Image.network(
-            avatarUrl,
-            width: avatarSize,
-            height: avatarSize,
-          );
+          return Image.network(avatarUrl, width: avatarSize, height: avatarSize);
         } else {
           return Container(
             decoration: BoxDecoration(
               color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
             ),
-            child: Image.asset(
-              'images/finamp.png',
-              width: avatarSize,
-              height: avatarSize,
-            ),
+            child: Image.asset('images/finamp.png', width: avatarSize, height: avatarSize),
           );
         }
       } else {
@@ -293,15 +269,12 @@ class JellyfinUserWidget extends StatelessWidget {
           height: avatarSize,
           decoration: BoxDecoration(
             border: Border.all(
-                color: Theme.of(context).textTheme.bodyMedium!.color!,
-                width: Theme.of(context).brightness == Brightness.dark ? 1 : 2),
+              color: Theme.of(context).textTheme.bodyMedium!.color!,
+              width: Theme.of(context).brightness == Brightness.dark ? 1 : 2,
+            ),
             borderRadius: BorderRadius.circular(16),
           ),
-          child: Icon(
-            TablerIcons.plus,
-            size: 50,
-            color: Theme.of(context).textTheme.bodyMedium!.color!,
-          ),
+          child: Icon(TablerIcons.plus, size: 50, color: Theme.of(context).textTheme.bodyMedium!.color!),
         );
       }
     }
@@ -322,18 +295,12 @@ class JellyfinUserWidget extends StatelessWidget {
         child: Column(
           children: [
             Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: getUserImage()),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+              clipBehavior: Clip.antiAlias,
+              child: getUserImage(),
+            ),
             const SizedBox(height: 4),
-            Text(
-              getUserNameText(),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            )
+            Text(getUserNameText(), textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis),
           ],
         ),
       );
@@ -351,8 +318,6 @@ class JellyfinUserWidget extends StatelessWidget {
             onPressed: onPressed,
             child: buildContent(),
           )
-        : Container(
-            child: buildContent(),
-          );
+        : Container(child: buildContent());
   }
 }

@@ -44,15 +44,16 @@ Widget buildCuratedItemFilterRow({
                     final colorScheme = Theme.of(context).colorScheme;
                     double leftPadding = index == 0 ? 8.0 : 0.0;
                     double rightPadding = index == CuratedItemSelectionType.values.length - 1 ? 8.0 : 6.0;
-                    final String? tooltipMessage = (isOffline &&
+                    final String? tooltipMessage =
+                        (isOffline &&
                             (type == CuratedItemSelectionType.mostPlayed ||
                                 type == CuratedItemSelectionType.recentlyPlayed))
                         ? AppLocalizations.of(context)!.notAvailableInOfflineMode
                         : (disabledFiltersList.contains(type)
-                            ? (type == CuratedItemSelectionType.favorites
-                                ? AppLocalizations.of(context)!.curatedItemsNoFavorites('other')
-                                : AppLocalizations.of(context)!.curatedItemsNotListenedYet('other'))
-                            : null);
+                              ? (type == CuratedItemSelectionType.favorites
+                                    ? AppLocalizations.of(context)!.curatedItemsNoFavorites('other')
+                                    : AppLocalizations.of(context)!.curatedItemsNotListenedYet('other'))
+                              : null);
                     final chip = FilterChip(
                       label: Text(type.toLocalisedString(context)),
                       onSelected: disabledFiltersList.contains(type)
@@ -66,21 +67,14 @@ Widget buildCuratedItemFilterRow({
                       showCheckmark: false,
                       selectedColor: colorScheme.primary,
                       backgroundColor: colorScheme.surface,
-                      labelStyle: TextStyle(
-                        color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
-                      ),
+                      labelStyle: TextStyle(color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface),
                       shape: const StadiumBorder(),
                     );
 
                     return [
                       Padding(
                         padding: EdgeInsets.only(left: leftPadding, right: rightPadding),
-                        child: tooltipMessage != null
-                            ? Tooltip(
-                                message: tooltipMessage,
-                                child: chip,
-                              )
-                            : chip,
+                        child: tooltipMessage != null ? Tooltip(message: tooltipMessage, child: chip) : chip,
                       ),
                     ];
                   }).toList(),
@@ -95,21 +89,26 @@ Widget buildCuratedItemFilterRow({
 }
 
 List<CuratedItemSelectionType> _getAvailableSelectionTypes(
-    BaseItemDtoType filterListFor, List<CuratedItemSelectionType>? customFilterOrder) {
+  BaseItemDtoType filterListFor,
+  List<CuratedItemSelectionType>? customFilterOrder,
+) {
   var filteredList = customFilterOrder ?? CuratedItemSelectionType.values;
 
   switch (filterListFor) {
     case BaseItemDtoType.album:
       return filteredList
           .where(
-              (type) => type != CuratedItemSelectionType.mostPlayed && type != CuratedItemSelectionType.recentlyPlayed)
+            (type) => type != CuratedItemSelectionType.mostPlayed && type != CuratedItemSelectionType.recentlyPlayed,
+          )
           .toList();
     case BaseItemDtoType.artist:
       return filteredList
-          .where((type) =>
-              type != CuratedItemSelectionType.mostPlayed &&
-              type != CuratedItemSelectionType.recentlyPlayed &&
-              type != CuratedItemSelectionType.latestReleases)
+          .where(
+            (type) =>
+                type != CuratedItemSelectionType.mostPlayed &&
+                type != CuratedItemSelectionType.recentlyPlayed &&
+                type != CuratedItemSelectionType.latestReleases,
+          )
           .toList();
     default:
       return filteredList;
@@ -142,11 +141,12 @@ CuratedItemSelectionType getFallbackFilterOption({
   } else {
     // Use the first one that is not favorites (or most played in offline)
     fallbackOption = filteredFilterOrder.firstWhere(
-        (type) =>
-            type != currentType &&
-            (!isOffline ||
-                (type != CuratedItemSelectionType.mostPlayed && type != CuratedItemSelectionType.recentlyPlayed)),
-        orElse: () => CuratedItemSelectionType.random);
+      (type) =>
+          type != currentType &&
+          (!isOffline ||
+              (type != CuratedItemSelectionType.mostPlayed && type != CuratedItemSelectionType.recentlyPlayed)),
+      orElse: () => CuratedItemSelectionType.random,
+    );
   }
 
   return fallbackOption;
@@ -175,8 +175,9 @@ CuratedItemSelectionType handleOfflineFallbackOption({
     } else {
       // Use the first one that is not mostPlayed
       newFilter = filteredFilterOrder.firstWhere(
-          (type) => type != CuratedItemSelectionType.mostPlayed && type != CuratedItemSelectionType.recentlyPlayed,
-          orElse: () => CuratedItemSelectionType.random);
+        (type) => type != CuratedItemSelectionType.mostPlayed && type != CuratedItemSelectionType.recentlyPlayed,
+        orElse: () => CuratedItemSelectionType.random,
+      );
     }
   }
 

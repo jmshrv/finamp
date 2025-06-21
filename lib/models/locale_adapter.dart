@@ -15,19 +15,11 @@ class LocaleAdapter extends TypeAdapter<Locale> {
     final scriptCode = localeList[1] == "" ? null : localeList[1];
     final countryCode = localeList[2] == "" ? null : localeList[2];
 
-    return Locale.fromSubtags(
-      languageCode: languageCode,
-      scriptCode: scriptCode,
-      countryCode: countryCode,
-    );
+    return Locale.fromSubtags(languageCode: languageCode, scriptCode: scriptCode, countryCode: countryCode);
   }
 
   @override
   void write(BinaryWriter writer, Locale obj) {
-    writer.writeStringList([
-      obj.languageCode,
-      obj.scriptCode ?? "",
-      obj.countryCode ?? "",
-    ]);
+    writer.writeStringList([obj.languageCode, obj.scriptCode ?? "", obj.countryCode ?? ""]);
   }
 }

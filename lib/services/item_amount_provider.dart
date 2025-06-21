@@ -36,32 +36,30 @@ Future<(int, BaseItemDtoType)> itemAmount(
         itemCount = items.length;
       } else {
         var items = await jellyfinApiHelper.getItemsWithTotalRecordCount(
-            libraryFilter: library,
-            parentItem: baseItem,
-            includeItemTypes:
-                showTrackCountForArtists ? BaseItemDtoType.track.idString : BaseItemDtoType.album.idString,
-            limit: 1,
-            artistType: showTrackCountForArtists ? ArtistType.artist : ArtistType.albumArtist);
+          libraryFilter: library,
+          parentItem: baseItem,
+          includeItemTypes: showTrackCountForArtists ? BaseItemDtoType.track.idString : BaseItemDtoType.album.idString,
+          limit: 1,
+          artistType: showTrackCountForArtists ? ArtistType.artist : ArtistType.albumArtist,
+        );
         itemCount = items.totalRecordCount;
       }
       if (itemCount == 0) {
         if (!showTrackCountForArtists) {
           // If artist has 0 albums, try counting tracks instead
-          return await ref.watch(itemAmountProvider(
-            baseItem: baseItem,
-            showTrackCountForArtists: true,
-          ).future);
+          return await ref.watch(itemAmountProvider(baseItem: baseItem, showTrackCountForArtists: true).future);
         }
       }
       return (itemCount, showTrackCountForArtists ? BaseItemDtoType.track : BaseItemDtoType.album);
     case BaseItemDtoType.genre:
       if (ref.watch(finampSettingsProvider.isOffline)) {
         var items = await downloadsService.getAllCollections(
-            baseTypeFilter: BaseItemDtoType.album,
-            fullyDownloaded: ref.watch(finampSettingsProvider.onlyShowFullyDownloaded),
-            viewFilter: library?.id,
-            nullableViewFilters: ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
-            genreFilter: baseItem);
+          baseTypeFilter: BaseItemDtoType.album,
+          fullyDownloaded: ref.watch(finampSettingsProvider.onlyShowFullyDownloaded),
+          viewFilter: library?.id,
+          nullableViewFilters: ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
+          genreFilter: baseItem,
+        );
         itemCount = items.nonNulls.length;
       } else {
         var items = await jellyfinApiHelper.getItemsWithTotalRecordCount(
@@ -85,9 +83,10 @@ Future<(int, BaseItemDtoType)> itemAmount(
 BaseItemDtoType childItemType(Ref ref, BaseItemDto item) {
   return switch (BaseItemDtoType.fromItem(item)) {
     BaseItemDtoType.album => BaseItemDtoType.track,
-    BaseItemDtoType.artist => ref.watch(finampSettingsProvider.defaultArtistType) == ArtistType.albumArtist
-        ? BaseItemDtoType.album
-        : BaseItemDtoType.track,
+    BaseItemDtoType.artist =>
+      ref.watch(finampSettingsProvider.defaultArtistType) == ArtistType.albumArtist
+          ? BaseItemDtoType.album
+          : BaseItemDtoType.track,
     BaseItemDtoType.genre => BaseItemDtoType.album,
     BaseItemDtoType.playlist => BaseItemDtoType.track,
     _ => BaseItemDtoType.unknown,

@@ -9,11 +9,7 @@ import '../services/jellyfin_api_helper.dart';
 import '../services/music_player_background_task.dart';
 
 class AlbumScreen extends ConsumerStatefulWidget {
-  const AlbumScreen({
-    super.key,
-    this.parent,
-    this.genreFilter,
-  });
+  const AlbumScreen({super.key, this.parent, this.genreFilter});
 
   static const routeName = "/music/album";
 
@@ -39,10 +35,7 @@ class _AlbumScreenState extends ConsumerState<AlbumScreen> {
     return Scaffold(
       extendBody: true,
       body: SafeArea(
-        child: AlbumScreenContent(
-          parent: parent,
-          genreFilter: widget.genreFilter,
-        ),
+        child: AlbumScreenContent(parent: parent, genreFilter: widget.genreFilter),
       ),
       bottomNavigationBar: const NowPlayingBar(),
     );

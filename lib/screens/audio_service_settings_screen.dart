@@ -18,10 +18,6 @@ class AudioServiceSettingsScreen extends StatefulWidget {
 }
 
 class _AudioServiceSettingsScreenState extends State<AudioServiceSettingsScreen> {
-  // Overwriting this value causes the childrens to update
-  // this is a required workaround because some input fields
-  // might not update when resetting to defaults
-  Key _updateChildren = UniqueKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,22 +27,22 @@ class _AudioServiceSettingsScreenState extends State<AudioServiceSettingsScreen>
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, () {
             setState(() {
               FinampSettingsHelper.resetAudioServiceSettings();
-              _updateChildren = UniqueKey(); // Trigger rebuilding of Children
             });
-          })
+          }),
         ],
       ),
       body: ListView(
         children: [
-          if (Platform.isAndroid) StopForegroundSelector(key: _updateChildren),
-          TrackShuffleItemCountEditor(key: _updateChildren),
-          AudioFadeInDurationListTile(key: _updateChildren),
-          AudioFadeOutDurationListTile(key: _updateChildren),
-          if (Platform.isAndroid) BufferSizeListTile(key: _updateChildren),
-          BufferDurationListTile(key: _updateChildren),
-          BufferDisableSizeConstraintsSelector(key: _updateChildren),
+          if (Platform.isAndroid) const StopForegroundSelector(),
+          const TrackShuffleItemCountEditor(),
+          const AudioFadeInDurationListTile(),
+          const AudioFadeOutDurationListTile(),
+          if (Platform.isAndroid) const BufferSizeListTile(),
+          const BufferDurationListTile(),
+          const BufferDisableSizeConstraintsSelector(),
           const LoadQueueOnStartupSelector(),
           const AutoReloadQueueToggle(),
+          const ClearQueueOnStopToggle(),
         ],
       ),
     );
@@ -67,15 +63,26 @@ class BufferDisableSizeConstraintsSelector extends ConsumerWidget {
   }
 }
 
-class BufferSizeListTile extends StatefulWidget {
+class BufferSizeListTile extends ConsumerStatefulWidget {
   const BufferSizeListTile({super.key});
 
   @override
-  State<BufferSizeListTile> createState() => _BufferSizeListTileState();
+  ConsumerState<BufferSizeListTile> createState() => _BufferSizeListTileState();
 }
 
-class _BufferSizeListTileState extends State<BufferSizeListTile> {
-  final _controller = TextEditingController(text: FinampSettingsHelper.finampSettings.bufferSizeMegabytes.toString());
+class _BufferSizeListTileState extends ConsumerState<BufferSizeListTile> {
+  final _controller = TextEditingController();
+
+  @override
+  void initState() {
+    ref.listenManual(finampSettingsProvider.bufferSizeMegabytes, (_, value) {
+      var newText = value.toString();
+      if (_controller.text != newText) {
+        _controller.text = newText;
+      }
+    }, fireImmediately: true);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,16 +113,24 @@ class _BufferSizeListTileState extends State<BufferSizeListTile> {
   }
 }
 
-class AudioFadeInDurationListTile extends StatefulWidget {
+class AudioFadeInDurationListTile extends ConsumerStatefulWidget {
   const AudioFadeInDurationListTile({super.key});
 
   @override
-  State<AudioFadeInDurationListTile> createState() => _AudioFadeInDurationListTileState();
+  ConsumerState<AudioFadeInDurationListTile> createState() => _AudioFadeInDurationListTileState();
 }
 
-class _AudioFadeInDurationListTileState extends State<AudioFadeInDurationListTile> {
-  final _controller =
-      TextEditingController(text: FinampSettingsHelper.finampSettings.audioFadeInDuration.inMilliseconds.toString());
+class _AudioFadeInDurationListTileState extends ConsumerState<AudioFadeInDurationListTile> {
+  final _controller = TextEditingController();
+
+  @override
+  void initState() {
+    ref.listenManual(finampSettingsProvider.audioFadeInDuration, (_, value) {
+      var newText = value.inMilliseconds.toString();
+      if (_controller.text != newText) _controller.text = newText;
+    }, fireImmediately: true);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,16 +156,24 @@ class _AudioFadeInDurationListTileState extends State<AudioFadeInDurationListTil
   }
 }
 
-class AudioFadeOutDurationListTile extends StatefulWidget {
+class AudioFadeOutDurationListTile extends ConsumerStatefulWidget {
   const AudioFadeOutDurationListTile({super.key});
 
   @override
-  State<AudioFadeOutDurationListTile> createState() => _AudioFadeOutDurationListTileState();
+  ConsumerState<AudioFadeOutDurationListTile> createState() => _AudioFadeOutDurationListTileState();
 }
 
-class _AudioFadeOutDurationListTileState extends State<AudioFadeOutDurationListTile> {
-  final _controller =
-      TextEditingController(text: FinampSettingsHelper.finampSettings.audioFadeOutDuration.inMilliseconds.toString());
+class _AudioFadeOutDurationListTileState extends ConsumerState<AudioFadeOutDurationListTile> {
+  final _controller = TextEditingController();
+
+  @override
+  void initState() {
+    ref.listenManual(finampSettingsProvider.audioFadeOutDuration, (_, value) {
+      var newText = value.inMilliseconds.toString();
+      if (_controller.text != newText) _controller.text = newText;
+    }, fireImmediately: true);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -186,6 +209,20 @@ class AutoReloadQueueToggle extends ConsumerWidget {
       subtitle: Text(AppLocalizations.of(context)!.autoReloadQueueSubtitle),
       value: ref.watch(finampSettingsProvider.autoReloadQueue),
       onChanged: FinampSetters.setAutoReloadQueue,
+    );
+  }
+}
+
+class ClearQueueOnStopToggle extends ConsumerWidget {
+  const ClearQueueOnStopToggle({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.clearQueueOnStopEventTitle),
+      subtitle: Text(AppLocalizations.of(context)!.clearQueueOnStopEventSubtitle),
+      value: ref.watch(finampSettingsProvider.clearQueueOnStopEvent),
+      onChanged: FinampSetters.setClearQueueOnStopEvent,
     );
   }
 }

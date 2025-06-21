@@ -65,8 +65,8 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
     SortBy playlistSortBySetting = ref.watch(finampSettingsProvider.playlistTracksSortBy);
     final playlistSortBy =
         (isOffline && (playlistSortBySetting == SortBy.datePlayed || playlistSortBySetting == SortBy.playCount))
-            ? SortBy.defaultOrder
-            : playlistSortBySetting;
+        ? SortBy.defaultOrder
+        : playlistSortBySetting;
 
     final tracksAsync = (widget.parent.type == "Playlist")
         ? ref.watch(getSortedPlaylistTracksProvider(widget.parent, genreFilter: currentGenreFilter))
@@ -111,65 +111,54 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
 
     return PaddedCustomScrollview(
       slivers: [
-        SliverLayoutBuilder(builder: (context, constraints) {
-          final actions = [
-            if (widget.parent.type == "Playlist" && !ref.watch(finampSettingsProvider.isOffline))
-              PlaylistNameEditButton(playlist: widget.parent),
-            if (widget.parent.type == "Playlist")
-              SortOrderButton(
-                tabType: TabContentType.tracks,
-                forPlaylistTracks: true,
-              ),
-            if (widget.parent.type == "Playlist")
-              SortByMenuButton(
-                tabType: TabContentType.tracks,
-                forPlaylistTracks: true,
-              ),
-            FavoriteButton(
-              item: widget.parent,
-            ),
-            if (!isLoading)
-              DownloadButton(
-                item: downloadStub,
-                children: displayChildren,
-                downloadDisabled: (currentGenreFilter != null),
-                customTooltip: (currentGenreFilter != null)
-                    ? AppLocalizations.of(context)!.downloadButtonDisabledGenreFilterTooltip
-                    : null,
-              ),
-          ];
+        SliverLayoutBuilder(
+          builder: (context, constraints) {
+            final actions = [
+              if (widget.parent.type == "Playlist" && !ref.watch(finampSettingsProvider.isOffline))
+                PlaylistNameEditButton(playlist: widget.parent),
+              if (widget.parent.type == "Playlist")
+                SortOrderButton(tabType: TabContentType.tracks, forPlaylistTracks: true),
+              if (widget.parent.type == "Playlist")
+                SortByMenuButton(tabType: TabContentType.tracks, forPlaylistTracks: true),
+              FavoriteButton(item: widget.parent),
+              if (!isLoading)
+                DownloadButton(
+                  item: downloadStub,
+                  children: displayChildren,
+                  downloadDisabled: (currentGenreFilter != null),
+                  customTooltip: (currentGenreFilter != null)
+                      ? AppLocalizations.of(context)!.downloadButtonDisabledGenreFilterTooltip
+                      : null,
+                ),
+            ];
 
-          return SliverAppBar(
-            title: (widget.parent.type != "Playlist")
-                ? Text(
-                    widget.parent.name ?? AppLocalizations.of(context)!.unknownName,
-                  )
-                : null,
-            expandedHeight: kToolbarHeight + 125 + 18 + CTAMedium.predictedHeight(context),
-            // collapsedHeight: kToolbarHeight + 125 + 80,
-            pinned: true,
-            centerTitle: false,
-            titleSpacing: 0,
-            flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
-              parentItem: widget.parent,
-              isPlaylist: widget.parent.type == "Playlist",
-              items: queueChildren,
-              genreFilter: currentGenreFilter,
-              updateGenreFilter: updateGenreFilter,
-            ),
-            actions: actions,
-          );
-        }),
+            return SliverAppBar(
+              title: (widget.parent.type != "Playlist")
+                  ? Text(widget.parent.name ?? AppLocalizations.of(context)!.unknownName)
+                  : null,
+              expandedHeight: kToolbarHeight + 125 + 18 + CTAMedium.predictedHeight(context),
+              // collapsedHeight: kToolbarHeight + 125 + 80,
+              pinned: true,
+              centerTitle: false,
+              titleSpacing: 0,
+              flexibleSpace: AlbumScreenContentFlexibleSpaceBar(
+                parentItem: widget.parent,
+                isPlaylist: widget.parent.type == "Playlist",
+                items: queueChildren,
+                genreFilter: currentGenreFilter,
+                updateGenreFilter: updateGenreFilter,
+              ),
+              actions: actions,
+            );
+          },
+        ),
         if (!isLoading &&
             displayChildren.length > 1 &&
             childrenPerDisc.length > 1) // show headers only for multi disc albums
           for (var childrenOfThisDisc in childrenPerDisc)
             SliverStickyHeader(
               header: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 16.0,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
                 color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 child: Text(
                   AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
@@ -201,11 +190,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             forceAlbumArtists: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.albumArtist),
           )
         else
-          SliverFillRemaining(
-            child: Center(
-              child: CircularProgressIndicator.adaptive(),
-            ),
-          )
+          SliverFillRemaining(child: Center(child: CircularProgressIndicator.adaptive())),
       ],
     );
   }
@@ -268,51 +253,49 @@ class _TracksSliverListState extends ConsumerState<TracksSliverList> {
     return SliverFixedExtentList(
       itemExtent: TrackListItemTile.defaultTileHeight + TrackListItemTile.defaultTitleGap,
       // return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          // When user selects track from disc other than first, index number is
-          // incorrect and track with the same index on first disc is played instead.
-          // Adding this offset ensures playback starts for nth track on correct disc.
-          final indexOffset =
-              widget.childrenForQueue.indexWhere((element) => element.id == widget.childrenForList[index].id);
+      delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+        // When user selects track from disc other than first, index number is
+        // incorrect and track with the same index on first disc is played instead.
+        // Adding this offset ensures playback starts for nth track on correct disc.
+        final indexOffset = widget.childrenForQueue.indexWhere(
+          (element) => element.id == widget.childrenForList[index].id,
+        );
 
-          final BaseItemDto item = widget.childrenForList[index];
+        final BaseItemDto item = widget.childrenForList[index];
 
-          BaseItemDto removeItem() {
-            late BaseItemDto item;
+        BaseItemDto removeItem() {
+          late BaseItemDto item;
 
-            setState(() {
-              item = widget.childrenForList.removeAt(index);
-            });
+          setState(() {
+            item = widget.childrenForList.removeAt(index);
+          });
 
-            return item;
-          }
+          return item;
+        }
 
-          return TrackListTile(
-            item: item,
-            children: widget.childrenForQueue,
-            index: indexOffset,
-            showIndex: item.albumId == widget.parent.id,
-            showCover: item.albumId != widget.parent.id || ref.watch(finampSettingsProvider.showCoversOnAlbumScreen),
-            parentItem: widget.parent,
-            onRemoveFromList: () {
-              final item = removeItem();
-              if (widget.onRemoveFromList != null) {
-                widget.onRemoveFromList!(item);
-              }
-            },
-            isInPlaylist: widget.parent.type == "Playlist",
-            isOnArtistScreen: widget.isOnArtistScreen,
-            isOnGenreScreen: widget.isOnGenreScreen,
-            forceAlbumArtists: widget.forceAlbumArtists,
-            showPlayCount: widget.showPlayCount,
-            showDateAdded: widget.showDateAdded,
-            showDateLastPlayed: widget.showDateLastPlayed,
-            showReleaseDate: widget.showReleaseDate,
-          );
-        },
-        childCount: widget.childrenForList.length,
-      ),
+        return TrackListTile(
+          item: item,
+          children: widget.childrenForQueue,
+          index: indexOffset,
+          showIndex: item.albumId == widget.parent.id,
+          showCover: item.albumId != widget.parent.id || ref.watch(finampSettingsProvider.showCoversOnAlbumScreen),
+          parentItem: widget.parent,
+          onRemoveFromList: () {
+            final item = removeItem();
+            if (widget.onRemoveFromList != null) {
+              widget.onRemoveFromList!(item);
+            }
+          },
+          isInPlaylist: widget.parent.type == "Playlist",
+          isOnArtistScreen: widget.isOnArtistScreen,
+          isOnGenreScreen: widget.isOnGenreScreen,
+          forceAlbumArtists: widget.forceAlbumArtists,
+          showPlayCount: widget.showPlayCount,
+          showDateAdded: widget.showDateAdded,
+          showDateLastPlayed: widget.showDateLastPlayed,
+          showReleaseDate: widget.showReleaseDate,
+        );
+      }, childCount: widget.childrenForList.length),
     );
   }
 }

@@ -19,9 +19,7 @@ class QueueRestoreScreen extends StatelessWidget {
     queueList.sort((x, y) => y.creation - x.creation);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.queuesScreen),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.queuesScreen)),
       body: ListView.builder(
         padding: const EdgeInsets.only(left: 0.0, right: 0.0, top: 30.0, bottom: 45.0),
         itemCount: queueList.length,

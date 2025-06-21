@@ -7,7 +7,11 @@ import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
 Widget buildArtistTypeSelectionRow(
-    BuildContext context, TabContentType tabType, ArtistType defaultArtistType, Function(TabContentType) refreshTab) {
+  BuildContext context,
+  TabContentType tabType,
+  ArtistType defaultArtistType,
+  Function(TabContentType) refreshTab,
+) {
   if (tabType == TabContentType.artists) {
     double screenWidth = MediaQuery.of(context).size.width;
     bool alignLeft = screenWidth > 600;
@@ -54,9 +58,10 @@ Widget buildArtistTypeSelectionRow(
                 selectedColor: Theme.of(context).colorScheme.primary,
                 backgroundColor: Theme.of(context).colorScheme.surface,
                 labelStyle: TextStyle(
-                    color: defaultArtistType == ArtistType.artist
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : Theme.of(context).colorScheme.onSurface),
+                  color: defaultArtistType == ArtistType.artist
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : Theme.of(context).colorScheme.onSurface,
+                ),
                 shape: StadiumBorder(),
               ),
             ],

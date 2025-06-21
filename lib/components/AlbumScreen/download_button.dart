@@ -76,21 +76,21 @@ class DownloadButton extends ConsumerWidget {
           }
           if (isLibrary) {
             await showDialog(
-                context: context,
-                builder: (context) => ConfirmationPromptDialog(
-                      promptText: AppLocalizations.of(context)!.downloadLibraryPrompt(item.name),
-                      confirmButtonText: AppLocalizations.of(context)!.addButtonLabel,
-                      abortButtonText: MaterialLocalizations.of(context).cancelButtonLabel,
-                      onConfirmed: () => DownloadDialog.show(context, item, viewId),
-                      onAborted: () {},
-                    ));
+              context: context,
+              builder: (context) => ConfirmationPromptDialog(
+                promptText: AppLocalizations.of(context)!.downloadLibraryPrompt(item.name),
+                confirmButtonText: AppLocalizations.of(context)!.addButtonLabel,
+                abortButtonText: MaterialLocalizations.of(context).cancelButtonLabel,
+                onConfirmed: () => DownloadDialog.show(context, item, viewId),
+                onAborted: () {},
+              ),
+            );
           } else {
             int? trackCount = switch (item.baseItemType) {
               BaseItemDtoType.album || BaseItemDtoType.playlist => children?.length,
               BaseItemDtoType.artist ||
-              BaseItemDtoType.genre =>
-                children?.fold<int>(0, (count, item) => count + (item.childCount ?? 0)),
-              _ => null
+              BaseItemDtoType.genre => children?.fold<int>(0, (count, item) => count + (item.childCount ?? 0)),
+              _ => null,
             };
             await DownloadDialog.show(context, item, viewId, trackCount: trackCount);
           }
@@ -130,8 +130,12 @@ class DownloadButton extends ConsumerWidget {
             sendDisabledDownloadMessageToSnackbar(customTooltip);
             return;
           }
-          askBeforeDeleteFromServerAndDevice(context, item,
-              popIt: true, refresh: () => musicScreenRefreshStream.add(null)); // trigger a refresh of the music screen
+          askBeforeDeleteFromServerAndDevice(
+            context,
+            item,
+            popIt: true,
+            refresh: () => musicScreenRefreshStream.add(null),
+          ); // trigger a refresh of the music screen
         },
       ),
     );
@@ -143,37 +147,46 @@ class DownloadButton extends ConsumerWidget {
       itemBuilder: (context) {
         return [
           PopupMenuItem(
-              value: null,
-              child: Opacity(
-                  opacity: downloadDisabled ? 0.4 : 1.0,
-                  child: ListTile(
-                      leading: Icon(Icons.delete_outline),
-                      title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("")),
-                      enabled: true,
-                      onTap: () {
-                        if (downloadDisabled) {
-                          sendDisabledDownloadMessageToSnackbar(customTooltip);
-                          return;
-                        }
-                        askBeforeDeleteDownloadFromDevice(context, item);
-                      }))),
+            value: null,
+            child: Opacity(
+              opacity: downloadDisabled ? 0.4 : 1.0,
+              child: ListTile(
+                leading: Icon(Icons.delete_outline),
+                title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("")),
+                enabled: true,
+                onTap: () {
+                  if (downloadDisabled) {
+                    sendDisabledDownloadMessageToSnackbar(customTooltip);
+                    return;
+                  }
+                  askBeforeDeleteDownloadFromDevice(context, item);
+                },
+              ),
+            ),
+          ),
           PopupMenuItem(
-              value: null,
-              child: Opacity(
-                  opacity: downloadDisabled ? 0.4 : 1.0,
-                  child: ListTile(
-                      leading: Icon(Icons.delete_forever),
-                      title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server")),
-                      enabled: true,
-                      onTap: () {
-                        if (downloadDisabled) {
-                          sendDisabledDownloadMessageToSnackbar(customTooltip);
-                          return;
-                        }
-                        askBeforeDeleteFromServerAndDevice(context, item,
-                            popIt: true,
-                            refresh: () => musicScreenRefreshStream.add(null)); // trigger a refresh of the music screen
-                      })))
+            value: null,
+            child: Opacity(
+              opacity: downloadDisabled ? 0.4 : 1.0,
+              child: ListTile(
+                leading: Icon(Icons.delete_forever),
+                title: Text(AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server")),
+                enabled: true,
+                onTap: () {
+                  if (downloadDisabled) {
+                    sendDisabledDownloadMessageToSnackbar(customTooltip);
+                    return;
+                  }
+                  askBeforeDeleteFromServerAndDevice(
+                    context,
+                    item,
+                    popIt: true,
+                    refresh: () => musicScreenRefreshStream.add(null),
+                  ); // trigger a refresh of the music screen
+                },
+              ),
+            ),
+          ),
         ];
       },
     );
@@ -205,8 +218,10 @@ class DownloadButton extends ConsumerWidget {
         //            item.baseItemType != BaseItemDtoType.track) ||
         //        status.outdated) &&
         !isLibrary) {
-      buttons.insert(0,
-          syncButton); //!!! force sync button for now, so users can easily refresh albums which they know to have changed
+      buttons.insert(
+        0,
+        syncButton,
+      ); //!!! force sync button for now, so users can easily refresh albums which they know to have changed
     }
 
     if (buttons.length == 1) {

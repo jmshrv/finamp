@@ -92,7 +92,8 @@ class _ItemCollectionWrapperState extends ConsumerState<ItemCollectionWrapper> {
     mutableItem = widget.item;
 
     // this is jank lol
-    onTap = widget.onTap ??
+    onTap =
+        widget.onTap ??
         () {
           if (mutableItem.type == "MusicArtist") {
             Navigator.of(context).push(
@@ -152,11 +153,7 @@ class _ItemCollectionWrapperState extends ConsumerState<ItemCollectionWrapper> {
         onLongPressStart: (details) => menuCallback(),
         onSecondaryTapDown: (details) => menuCallback(),
         child: widget.isGrid
-            ? ItemCollectionCard(
-                item: mutableItem,
-                onTap: onTap,
-                parentType: widget.parentType,
-              )
+            ? ItemCollectionCard(item: mutableItem, onTap: onTap, parentType: widget.parentType)
             : ItemCollectionListTile(
                 item: mutableItem,
                 onTap: onTap,

@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 class FinampAppBarButton extends StatelessWidget {
-  const FinampAppBarButton({
-    super.key,
-    this.onPressed,
-    this.dismissDirection = AxisDirection.down,
-  });
+  const FinampAppBarButton({super.key, this.onPressed, this.dismissDirection = AxisDirection.down});
 
   final VoidCallback? onPressed;
 
@@ -35,11 +31,7 @@ class FinampAppBarButton extends StatelessWidget {
       child: IconButton(
         onPressed: onPressed,
         tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-        icon: Icon(
-          getIcon(),
-          color: Theme.of(context).iconTheme.color ?? Colors.white,
-          weight: 2.0,
-        ),
+        icon: Icon(getIcon(), color: Theme.of(context).iconTheme.color ?? Colors.white, weight: 2.0),
         // Needed because otherwise the splash goes over the container
 
         // It may be like a pixel over now but I've spent way too long on this

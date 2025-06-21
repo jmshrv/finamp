@@ -17,10 +17,7 @@ class ItemSwipeLeftToRightActionDropdownListTile extends ConsumerWidget {
       trailing: DropdownButton<ItemSwipeActions>(
         value: action,
         items: ItemSwipeActions.values
-            .map((e) => DropdownMenuItem<ItemSwipeActions>(
-                  value: e,
-                  child: Text(e.toLocalisedString(context)),
-                ))
+            .map((e) => DropdownMenuItem<ItemSwipeActions>(value: e, child: Text(e.toLocalisedString(context))))
             .toList(),
         onChanged: (value) {
           if (value != null) {
@@ -44,10 +41,7 @@ class ItemSwipeRightToLeftActionDropdownListTile extends ConsumerWidget {
       trailing: DropdownButton<ItemSwipeActions>(
         value: action,
         items: ItemSwipeActions.values
-            .map((e) => DropdownMenuItem<ItemSwipeActions>(
-                  value: e,
-                  child: Text(e.toLocalisedString(context)),
-                ))
+            .map((e) => DropdownMenuItem<ItemSwipeActions>(value: e, child: Text(e.toLocalisedString(context))))
             .toList(),
         onChanged: (value) {
           if (value != null) {

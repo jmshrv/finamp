@@ -57,8 +57,9 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
                   queueItem.source.name.getLocalized(context),
                   style: TextStyle(
                     fontSize: 14,
-                    color:
-                        Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black.withOpacity(0.9),
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black.withOpacity(0.9),
                   ),
                   maxLines: widget.maxLines,
                   textAlign: TextAlign.center,

@@ -18,10 +18,7 @@ class AutoOfflineSelector extends ConsumerWidget {
       trailing: DropdownButton<AutoOfflineOption>(
         value: option,
         items: AutoOfflineOption.values
-            .map((e) => DropdownMenuItem<AutoOfflineOption>(
-                  value: e,
-                  child: Text(e.toLocalisedString(context)),
-                ))
+            .map((e) => DropdownMenuItem<AutoOfflineOption>(value: e, child: Text(e.toLocalisedString(context))))
             .toList(),
         onChanged: (value) {
           if (value != null) {

@@ -35,10 +35,7 @@ class GenreIconAndText extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: hasFilter ? 4 : 0),
       child: Container(
         decoration: hasFilter
-            ? BoxDecoration(
-                color: theme.colorScheme.primary,
-                borderRadius: BorderRadius.circular(6),
-              )
+            ? BoxDecoration(color: theme.colorScheme.primary, borderRadius: BorderRadius.circular(6))
             : null,
         padding: EdgeInsets.symmetric(horizontal: 1),
         child: Row(
@@ -47,9 +44,7 @@ class GenreIconAndText extends StatelessWidget {
               TablerIcons.color_swatch,
               color: hasFilter
                   ? theme.colorScheme.onPrimary
-                  : theme.iconTheme.color?.withOpacity(
-                      theme.brightness == Brightness.light ? 0.38 : 0.5,
-                    ),
+                  : theme.iconTheme.color?.withOpacity(theme.brightness == Brightness.light ? 0.38 : 0.5),
             ),
             const SizedBox(width: 4),
             Expanded(
@@ -60,13 +55,13 @@ class GenreIconAndText extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     )
                   : (genres.isNotEmpty)
-                      ? GenreChips(
-                          parentType: BaseItemDtoType.fromItem(parent),
-                          genres: genres,
-                          backgroundColor: IconTheme.of(context).color!.withOpacity(0.1),
-                          updateGenreFilter: updateGenreFilter,
-                        )
-                      : Text(AppLocalizations.of(context)!.noGenres),
+                  ? GenreChips(
+                      parentType: BaseItemDtoType.fromItem(parent),
+                      genres: genres,
+                      backgroundColor: IconTheme.of(context).color!.withOpacity(0.1),
+                      updateGenreFilter: updateGenreFilter,
+                    )
+                  : Text(AppLocalizations.of(context)!.noGenres),
             ),
             if (hasFilter)
               GestureDetector(
@@ -77,11 +72,7 @@ class GenreIconAndText extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(left: 4, right: 2),
-                  child: Icon(
-                    Icons.close,
-                    size: 18,
-                    color: theme.colorScheme.onPrimary,
-                  ),
+                  child: Icon(Icons.close, size: 18, color: theme.colorScheme.onPrimary),
                 ),
               ),
           ],
@@ -152,14 +143,15 @@ class GenreChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        constraints: const BoxConstraints(minWidth: 10),
-        child: _GenreChipContent(
-          genre: genre,
-          parentType: parentType,
-          color: color,
-          backgroundColor: backgroundColor,
-          updateGenreFilter: updateGenreFilter,
-        ));
+      constraints: const BoxConstraints(minWidth: 10),
+      child: _GenreChipContent(
+        genre: genre,
+        parentType: parentType,
+        color: color,
+        backgroundColor: backgroundColor,
+        updateGenreFilter: updateGenreFilter,
+      ),
+    );
   }
 }
 
@@ -178,11 +170,7 @@ class _GenreChipContent extends ConsumerWidget {
   final Color? color;
   final void Function(BaseItemDto?)? updateGenreFilter;
 
-  Future<void> _handleGenreTap(
-    BuildContext context,
-    WidgetRef ref, {
-    bool alternativeAction = false,
-  }) async {
+  Future<void> _handleGenreTap(BuildContext context, WidgetRef ref, {bool alternativeAction = false}) async {
     final isOffline = ref.watch(finampSettingsProvider.isOffline);
     final applyFilterOnGenreChipTap = ref.watch(finampSettingsProvider.applyFilterOnGenreChipTap);
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
@@ -192,9 +180,7 @@ class _GenreChipContent extends ConsumerWidget {
 
     if (applyGenreFilter && parentType == BaseItemDtoType.album) {
       applyGenreFilter = false;
-      GlobalSnackbar.message(
-        (context) => AppLocalizations.of(context)!.genreFilterNotAvailableForAlbums,
-      );
+      GlobalSnackbar.message((context) => AppLocalizations.of(context)!.genreFilterNotAvailableForAlbums);
     }
 
     BaseItemDto? genreItem;
@@ -219,10 +205,7 @@ class _GenreChipContent extends ConsumerWidget {
                 label: AppLocalizations.of(context)!.applyFilterOnGenreChipTapPromptButton,
                 onPressed: () {
                   updateGenreFilter!(null);
-                  unawaited(Navigator.of(context).pushNamed(
-                    GenreScreen.routeName,
-                    arguments: genreItem,
-                  ));
+                  unawaited(Navigator.of(context).pushNamed(GenreScreen.routeName, arguments: genreItem));
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 },
               );
@@ -230,10 +213,7 @@ class _GenreChipContent extends ConsumerWidget {
           );
         }
       } else {
-        unawaited(Navigator.of(context).pushNamed(
-          GenreScreen.routeName,
-          arguments: genreItem,
-        ));
+        unawaited(Navigator.of(context).pushNamed(GenreScreen.routeName, arguments: genreItem));
       }
     } else {
       GlobalSnackbar.message(
@@ -247,10 +227,7 @@ class _GenreChipContent extends ConsumerWidget {
     final genreName = genre.name ?? "";
 
     return Semantics.fromProperties(
-      properties: SemanticsProperties(
-        label: genreName,
-        button: true,
-      ),
+      properties: SemanticsProperties(label: genreName, button: true),
       excludeSemantics: true,
       container: true,
       child: Material(
@@ -267,9 +244,7 @@ class _GenreChipContent extends ConsumerWidget {
               genreName,
               overflow: TextOverflow.ellipsis,
               softWrap: false,
-              style: TextStyle(
-                color: color ?? Theme.of(context).textTheme.bodySmall!.color ?? Colors.white,
-              ),
+              style: TextStyle(color: color ?? Theme.of(context).textTheme.bodySmall!.color ?? Colors.white),
             ),
           ),
         ),
@@ -297,7 +272,8 @@ Future<BaseItemDto?> getPlaylistGenreBaseItemDto(String genreName, bool isOfflin
     genreItems = genreItemDownloadStubs.map((e) => e.baseItem).nonNulls.toList();
   } else {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-    genreItems = await jellyfinApiHelper.getItems(
+    genreItems =
+        await jellyfinApiHelper.getItems(
           parentItem: finampUserHelper.currentUser?.currentView,
           includeItemTypes: BaseItemDtoType.genre.idString,
           searchTerm: genreName.trim(),

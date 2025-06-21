@@ -16,54 +16,50 @@ class PlaybackHistoryList extends StatelessWidget {
     List<MapEntry<DateTime, List<FinampHistoryItem>>> groupedHistory;
 
     return StreamBuilder<List<FinampHistoryItem>>(
-        stream: playbackHistoryService.historyStream,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            groupedHistory = playbackHistoryService.getHistoryGroupedDynamically();
+      stream: playbackHistoryService.historyStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          groupedHistory = playbackHistoryService.getHistoryGroupedDynamically();
 
-            return PaddedCustomScrollview(
-              // use nested SliverList.builder()s to show history items grouped by date
-              slivers: groupedHistory.indexed.map((indexedGroup) {
-                final groupIndex = indexedGroup.$1;
-                final group = indexedGroup.$2;
-                return SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final actualIndex = group.value.length - index - 1;
+          return PaddedCustomScrollview(
+            // use nested SliverList.builder()s to show history items grouped by date
+            slivers: groupedHistory.indexed.map((indexedGroup) {
+              final groupIndex = indexedGroup.$1;
+              final group = indexedGroup.$2;
+              return SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final actualIndex = group.value.length - index - 1;
 
-                      final historyItem = TrackListTile(
-                        index: actualIndex,
-                        item: group.value[actualIndex].item.baseItem!,
-                        highlightCurrentTrack: groupIndex == 0 && index == 0, // only highlight first track
-                      );
+                  final historyItem = TrackListTile(
+                    index: actualIndex,
+                    item: group.value[actualIndex].item.baseItem!,
+                    highlightCurrentTrack: groupIndex == 0 && index == 0, // only highlight first track
+                  );
 
-                      return index == 0
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 4.0),
-                                  child: RelativeDateTimeText(
-                                    dateTime: group.key,
-                                    style: const TextStyle(fontSize: 16.0),
-                                    includeStaticDateTime: true,
-                                  ),
-                                ),
-                                historyItem,
-                              ],
-                            )
-                          : historyItem;
-                    },
-                    childCount: group.value.length,
-                  ),
-                );
-              }).toList(),
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        });
+                  return index == 0
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 4.0),
+                              child: RelativeDateTimeText(
+                                dateTime: group.key,
+                                style: const TextStyle(fontSize: 16.0),
+                                includeStaticDateTime: true,
+                              ),
+                            ),
+                            historyItem,
+                          ],
+                        )
+                      : historyItem;
+                }, childCount: group.value.length),
+              );
+            }).toList(),
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
   }
 }

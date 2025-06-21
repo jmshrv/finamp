@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 
 class IconAndText extends StatelessWidget {
-  const IconAndText({
-    super.key,
-    required this.iconData,
-    required this.textSpan,
-    this.iconColor,
-  });
+  const IconAndText({super.key, required this.iconData, required this.textSpan, this.iconColor});
 
   final IconData iconData;
   final TextSpan textSpan;
@@ -14,10 +9,9 @@ class IconAndText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveIconColor = iconColor ??
-        Theme.of(context).iconTheme.color?.withOpacity(
-              Theme.of(context).brightness == Brightness.light ? 0.38 : 0.5,
-            );
+    final effectiveIconColor =
+        iconColor ??
+        Theme.of(context).iconTheme.color?.withOpacity(Theme.of(context).brightness == Brightness.light ? 0.38 : 0.5);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
@@ -36,11 +30,7 @@ class IconAndText extends StatelessWidget {
             // RichText blocks theming.  Text.rich does not.
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: Text.rich(
-                textSpan,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+              child: Text.rich(textSpan, maxLines: 1, overflow: TextOverflow.ellipsis),
             ),
           ),
         ],

@@ -16,10 +16,7 @@ import '../../services/queue_service.dart';
 import 'artist_chip.dart';
 
 class TrackNameContent extends StatelessWidget {
-  const TrackNameContent(
-    this.controller, {
-    super.key,
-  });
+  const TrackNameContent(this.controller, {super.key});
 
   final PlayerHideableController controller;
 
@@ -29,18 +26,17 @@ class TrackNameContent extends StatelessWidget {
       stream: GetIt.instance<QueueService>().getQueueStream(),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data!.currentTrack == null) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Center(child: CircularProgressIndicator());
         }
 
         final currentTrack = snapshot.data!.currentTrack!;
 
         final jellyfin_models.BaseItemDto? trackBaseItemDto = currentTrack.baseItem;
 
-        return LayoutBuilder(builder: (context, constraints) {
-          double padding = ((constraints.maxWidth - 260) / 4).clamp(0, 20);
-          return Padding(
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            double padding = ((constraints.maxWidth - 260) / 4).clamp(0, 20);
+            return Padding(
               padding: EdgeInsets.only(left: padding, right: padding, bottom: 4.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -63,8 +59,9 @@ class TrackNameContent extends StatelessWidget {
                             final textStyle = TextStyle(
                               fontSize: 20,
                               height: 1.2,
-                              fontWeight:
-                                  Theme.of(context).brightness == Brightness.light ? FontWeight.w500 : FontWeight.w600,
+                              fontWeight: Theme.of(context).brightness == Brightness.light
+                                  ? FontWeight.w500
+                                  : FontWeight.w600,
                             );
 
                             final textSpan = TextSpan(text: text, style: textStyle);
@@ -132,24 +129,24 @@ class TrackNameContent extends StatelessWidget {
                           backgroundColor: IconTheme.of(context).color!.withOpacity(0.1),
                         ),
                       ),
-                      AddToPlaylistButton(
-                        item: trackBaseItemDto,
-                        queueItem: currentTrack,
-                      ),
+                      AddToPlaylistButton(item: trackBaseItemDto, queueItem: currentTrack),
                     ],
                   ),
                   Center(
-                      child: Container(
-                    constraints: const BoxConstraints(maxWidth: 280),
-                    child: AlbumChips(
-                      baseItem: trackBaseItemDto!,
-                      backgroundColor: IconTheme.of(context).color!.withOpacity(0.1),
-                      key: trackBaseItemDto.album == null ? null : ValueKey("${trackBaseItemDto.album}-album"),
+                    child: Container(
+                      constraints: const BoxConstraints(maxWidth: 280),
+                      child: AlbumChips(
+                        baseItem: trackBaseItemDto!,
+                        backgroundColor: IconTheme.of(context).color!.withOpacity(0.1),
+                        key: trackBaseItemDto.album == null ? null : ValueKey("${trackBaseItemDto.album}-album"),
+                      ),
                     ),
-                  ))
+                  ),
                 ],
-              ));
-        });
+              ),
+            );
+          },
+        );
       },
     );
   }

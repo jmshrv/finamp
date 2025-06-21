@@ -9,12 +9,7 @@ import '../album_image.dart';
 /// Card content for ItemCollection. You probably shouldn't use this widget directly,
 /// use CollectionItem instead.
 class ItemCollectionCard extends ConsumerWidget {
-  const ItemCollectionCard({
-    super.key,
-    required this.item,
-    this.parentType,
-    this.onTap,
-  });
+  const ItemCollectionCard({super.key, required this.item, this.parentType, this.onTap});
 
   final BaseItemDto item;
   final String? parentType;
@@ -36,11 +31,9 @@ class ItemCollectionCard extends ConsumerWidget {
             Positioned.fill(
               child: Material(
                 color: Colors.transparent,
-                child: InkWell(
-                  onTap: onTap,
-                ),
+                child: InkWell(onTap: onTap),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -49,10 +42,7 @@ class ItemCollectionCard extends ConsumerWidget {
 }
 
 class _ItemCollectionCardText extends ConsumerWidget {
-  const _ItemCollectionCardText({
-    required this.item,
-    required this.parentType,
-  });
+  const _ItemCollectionCardText({required this.item, required this.parentType});
 
   final BaseItemDto item;
   final String? parentType;
@@ -101,7 +91,7 @@ class _ItemCollectionCardText extends ConsumerWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 3,
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.white.withOpacity(0.7)),
-                  )
+                  ),
               ],
             ),
           ),

@@ -7,25 +7,19 @@ import '../../models/finamp_models.dart';
 import 'download_location_delete_dialog.dart';
 
 class DownloadLocationListTile extends ConsumerWidget {
-  const DownloadLocationListTile({
-    super.key,
-    required this.downloadLocation,
-  });
+  const DownloadLocationListTile({super.key, required this.downloadLocation});
 
   final DownloadLocation downloadLocation;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool isDefault = ref
-        .watch(finampSettingsProvider.select((value) => value.value?.defaultDownloadLocation == downloadLocation.id));
+    bool isDefault = ref.watch(
+      finampSettingsProvider.select((value) => value.value?.defaultDownloadLocation == downloadLocation.id),
+    );
 
     return ListTile(
       title: Text(downloadLocation.name),
-      subtitle: Text(
-        downloadLocation.currentPath,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
+      subtitle: Text(downloadLocation.currentPath, maxLines: 1, overflow: TextOverflow.ellipsis),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -41,9 +35,7 @@ class DownloadLocationListTile extends ConsumerWidget {
               icon: const Icon(Icons.delete),
               onPressed: () => showDialog(
                 context: context,
-                builder: (context) => DownloadLocationDeleteDialog(
-                  id: downloadLocation.id,
-                ),
+                builder: (context) => DownloadLocationDeleteDialog(id: downloadLocation.id),
               ),
             ),
         ],

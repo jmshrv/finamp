@@ -6,11 +6,7 @@ class UIOverlaySetterObserver extends WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.resumed:
-        SystemChrome.setSystemUIOverlayStyle(
-          const SystemUiOverlayStyle(
-            systemNavigationBarColor: Colors.transparent,
-          ),
-        );
+        SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent));
         await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
         break;
       default:

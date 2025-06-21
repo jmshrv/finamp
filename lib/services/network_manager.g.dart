@@ -1,5 +1,10 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: deprecated_member_use_from_same_package
+
+// dart format off
+
+
 part of 'network_manager.dart';
 
 // **************************************************************************
@@ -10,13 +15,16 @@ String _$autoOfflineHash() => r'467c3cf000350e05db33178ddeb17c10468e3b65';
 
 /// See also [AutoOffline].
 @ProviderFor(AutoOffline)
-final autoOfflineProvider = AutoDisposeNotifierProvider<AutoOffline, bool>.internal(
-  AutoOffline.new,
-  name: r'autoOfflineProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$autoOfflineHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final autoOfflineProvider =
+    AutoDisposeNotifierProvider<AutoOffline, bool>.internal(
+      AutoOffline.new,
+      name: r'autoOfflineProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$autoOfflineHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$AutoOffline = AutoDisposeNotifier<bool>;
 // ignore_for_file: type=lint

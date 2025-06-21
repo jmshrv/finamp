@@ -8,11 +8,7 @@ import '../components/now_playing_bar.dart';
 import '../models/jellyfin_models.dart';
 
 class ArtistScreen extends ConsumerStatefulWidget {
-  const ArtistScreen({
-    super.key,
-    this.widgetArtist,
-    this.genreFilter,
-  });
+  const ArtistScreen({super.key, this.widgetArtist, this.genreFilter});
 
   static const routeName = "/music/artist";
 
