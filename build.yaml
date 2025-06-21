@@ -1,8 +1,14 @@
 targets:
   $default:
     builders:
-      'finamp:finamp_settings_generator':
+      finamp:finamp_settings_generator:
         enabled: true
+      source_gen:combining_builder:
+        options:
+          ignore_for_file:
+            - deprecated_member_use_from_same_package
+          preamble: |
+            // dart format off
 
 builders:
   finamp_settings_generator:
