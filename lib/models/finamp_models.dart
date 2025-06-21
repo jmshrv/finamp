@@ -2768,7 +2768,9 @@ enum AutoOfflineOption {
   @HiveField(1)
   network,
   @HiveField(2)
-  disconnected;
+  disconnected,
+  @HiveField(3)
+  unreachable;
 
   String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
 
@@ -2783,6 +2785,8 @@ enum AutoOfflineOption {
       case AutoOfflineOption.disconnected:
         // return AppLocalizations.of(context)!.keepScreenOnWhilePlaying;
         return AppLocalizations.of(context)!.autoOfflineOptionDisconnected;
+      case AutoOfflineOption.unreachable:
+        return AppLocalizations.of(context)!.autoOfflineOptionUnreachable;
     }
   }
 }
