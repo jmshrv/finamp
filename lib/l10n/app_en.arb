@@ -2368,7 +2368,11 @@
   "@autoOfflineOptionDisconnected": {
     "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
   },
-  "autoOfflineSettingDescription": "Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nLocal Network: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again",
+  "autoOfflineOptionUnreachable": "Unreachable",
+  "@autoOfflineOptionUnreachable": {
+    "description": "This is shown when the autoOffline feature is set to Unreachable, this means offline mode will be automatically enabled when - after a network change - the server cant be pinged"
+  },
+  "autoOfflineSettingDescription": "Automatically enable Offline Mode.\nDisabled: Wont Automatically turn on Offline Mode. May save battery.\nLocal Network: Turn Offline Mode on when not being connected to wifi or ethernet.\nDisconnected: Turn Offline Mode on when not being connected to anything.\nUnreachable: Turn Offline Mode on when the server cant be pinged after changing networks.\nYou can always manually turn on offline mode which pauses automation until you turn offline mode off again",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
