@@ -195,7 +195,6 @@ class DefaultSettings {
   static const defaultArtistType = ArtistType.albumArtist;
   static const isLocal = false;
   static const preferLocalNetwork = false;
-  static const onlyLocal = false;
   static const localNetworkAddress = "http://0.0.0.0:8096";
   static const autoReloadQueue = false;
   static const genreCuratedItemSelectionTypeTracks = CuratedItemSelectionType.mostPlayed;
