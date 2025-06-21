@@ -334,7 +334,7 @@
   "@queue": {},
   "addToQueue": "加入至播放佇列",
   "@addToQueue": {},
-  "replaceQueue": "更換佇列",
+  "replaceQueue": "更換播放佇列",
   "@replaceQueue": {},
   "instantMix": "隨機組合",
   "@instantMix": {},
@@ -342,7 +342,7 @@
   "@goToAlbum": {},
   "addedToQueue": "已加入至播放佇列。",
   "@addedToQueue": {},
-  "queueReplaced": "佇列已被取代。",
+  "queueReplaced": "播放佇列已被取代。",
   "@queueReplaced": {},
   "startingInstantMix": "開始隨機組合。",
   "@startingInstantMix": {},
@@ -913,7 +913,7 @@
   "@shuffleNext": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
   },
-  "shuffleToQueue": "隨機加入至佇列末端",
+  "shuffleToQueue": "隨機加入至播放佇列末端",
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
@@ -943,7 +943,7 @@
   "@confirmShuffleToNextUp": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
   },
-  "confirmShuffleToQueue": "已隨機排序並加入佇列",
+  "confirmShuffleToQueue": "已隨機排序並加入播放佇列",
   "@confirmShuffleToQueue": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
   },
@@ -973,7 +973,7 @@
   "@tracksFormerNextUp": {
     "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
   },
-  "savedQueue": "已儲存的佇列",
+  "savedQueue": "已儲存的播放佇列",
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
@@ -1022,7 +1022,7 @@
       }
     }
   },
-  "reportQueueToServerSubtitle": "啟用後，Finamp 會將目前的播放佇列傳送至伺服器。這可改善遠端控制體驗，並支援伺服器端的佇列還原功能。若啟用「遠端播放」功能，此功能將自動啟用。",
+  "reportQueueToServerSubtitle": "啟用後，Finamp 會將目前的播放佇列傳送至伺服器。這可改善遠端控制體驗，並支援伺服器端的播放佇列還原功能。若啟用「遠端播放」功能，此功能將自動啟用。",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1116,11 +1116,11 @@
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
   },
-  "queueRetryMessage": "無法還原佇列。是否要重試？",
+  "queueRetryMessage": "無法還原播放佇列。是否要重試？",
   "@queueRetryMessage": {
     "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
   },
-  "autoloadLastQueueOnStartup": "自動恢復上次佇列",
+  "autoloadLastQueueOnStartup": "自動恢復上次播放佇列",
   "@autoloadLastQueueOnStartup": {
     "description": "Setting to restore last queue on startup"
   },
@@ -1128,7 +1128,7 @@
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
   },
-  "reportQueueToServer": "將當前佇列回報至伺服器？",
+  "reportQueueToServer": "將當前播放佇列回報至伺服器？",
   "@reportQueueToServer": {
     "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1207,7 +1207,7 @@
     },
     "description": "Localized names of special downloadable collections like favorites."
   },
-  "hidePlayerBottomActionsSubtitle": "隱藏播放介面中的佇列與歌詞按鈕。向上滑可開啟佇列列表，若有可用的歌詞，則可在專輯封面下方向左滑查看。",
+  "hidePlayerBottomActionsSubtitle": "隱藏播放介面中的播放佇列與歌詞按鈕。向上滑可開啟播放佇列列表，若有可用的歌詞，則可在專輯封面下方向左滑查看。",
   "@hidePlayerBottomActionsSubtitle": {},
   "volumeNormalizationModeAlbumOnly": "依專輯調整",
   "@volumeNormalizationModeAlbumOnly": {
@@ -1602,7 +1602,7 @@
   },
   "fixedGridSizeSwitchSubtitle": "網格大小不會隨著視窗/畫面大小改變。",
   "@fixedGridSizeSwitchSubtitle": {},
-  "hideQueueButtonSubtitle": "隱藏播放介面的佇列按鈕。向上滑動以開啟佇列列表。",
+  "hideQueueButtonSubtitle": "隱藏播放介面的播放佇列按鈕。向上滑動以開啟播放佇列列表。",
   "@hideQueueButtonSubtitle": {},
   "oneLineMarqueeTextButton": "自動捲動較長的標題",
   "@oneLineMarqueeTextButton": {},
@@ -2290,7 +2290,7 @@
       }
     }
   },
-  "autoReloadPrompt": "重新載入佇列以套用新的{type, select, network{網路設定} transcoding{轉碼設定} other{設定}}",
+  "autoReloadPrompt": "重新載入播放佇列以套用新的{type, select, network{網路設定} transcoding{轉碼設定} other{設定}}",
   "@autoReloadPrompt": {
     "description": "Prompt shown when the queue needs to be reloaded after changing network settings",
     "placeholders": {
@@ -2326,7 +2326,7 @@
   "@autoReloadQueueSubtitle": {
     "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
   },
-  "autoReloadPromptMissingTracks": "尚未下載的 {amountUndownloadedTracks, plural, =1{1 首歌曲} other{{amountUndownloadedTracks} 首歌曲}} 將從佇列中移除。",
+  "autoReloadPromptMissingTracks": "尚未下載的 {amountUndownloadedTracks, plural, =1{1 首歌曲} other{{amountUndownloadedTracks} 首歌曲}} 將從播放佇列中移除。",
   "@autoReloadPromptMissingTracks": {
     "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
     "placeholders": {
@@ -2365,7 +2365,7 @@
   "@genreScreen": {
     "description": "Name for the view/screen that shows genres"
   },
-  "autoReloadQueueTitle": "自動重新載入佇列",
+  "autoReloadQueueTitle": "自動重新載入播放佇列",
   "@autoReloadQueueTitle": {
     "description": "Title for the setting that controls if the queue is automatically reloaded when the source changes"
   },
