@@ -208,7 +208,7 @@
   "@audioService": {},
   "interactions": "Intéractions",
   "@interactions": {},
-  "layoutAndTheme": "Disposition & Apparence",
+  "layoutAndTheme": "Disposition et apparence",
   "@layoutAndTheme": {},
   "notAvailableInOfflineMode": "Indisponible en mode hors-ligne",
   "@notAvailableInOfflineMode": {},
@@ -298,7 +298,7 @@
   "@theme": {},
   "system": "Système",
   "@system": {},
-  "light": "Claire",
+  "light": "Clair",
   "@light": {},
   "dark": "Sombre",
   "@dark": {},
@@ -1525,7 +1525,7 @@
   "@swipeLeftToRightAction": {},
   "appearsOnAlbums": "Apparaît dans",
   "@appearsOnAlbums": {},
-  "albumArtists": "Artistes de l’album",
+  "albumArtists": "Artistes d'albums",
   "@albumArtists": {},
   "performingArtists": "Artistes",
   "@performingArtists": {},
@@ -1710,7 +1710,7 @@
   "@normalizationGain": {
     "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
   },
-  "albumScreen": "Écran de l'album",
+  "albumScreen": "Écran d'albums",
   "@albumScreen": {
     "description": "Name for the view/screen that shows albums"
   },
@@ -1801,7 +1801,7 @@
   "@releaseDateFormatYear": {
     "description": "Date format option for the release date of an album, showing only the year"
   },
-  "allowDeleteFromServerTitle": "Permet la suppression du serveur",
+  "allowDeleteFromServerTitle": "Permettre la suppression des fichiers",
   "@allowDeleteFromServerTitle": {
     "description": "Title for the setting that controls if items can be deleted from the server"
   },
@@ -2184,7 +2184,7 @@
   "@showFavoriteButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a favorite button."
   },
-  "artistScreen": "Écran d'artiste",
+  "artistScreen": "Écran d'artistes",
   "@artistScreen": {
     "description": "Name for the view/screen that shows artists"
   },
@@ -2264,7 +2264,7 @@
   "@applyFilterOnGenreChipTapSubtitle": {
     "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
   },
-  "genreScreen": "Écran de genre",
+  "genreScreen": "Écran de genres",
   "@genreScreen": {
     "description": "Name for the view/screen that shows genres"
   },
