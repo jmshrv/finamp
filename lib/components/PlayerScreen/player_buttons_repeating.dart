@@ -12,27 +12,24 @@ class PlayerButtonsRepeating extends StatelessWidget {
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final queueService = GetIt.instance<QueueService>();
 
-  PlayerButtonsRepeating({
-    super.key,
-  });
+  PlayerButtonsRepeating({super.key});
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: mediaStateStream,
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          return IconButton(
-              tooltip:
-                  "${getLocalizedLoopMode(context, queueService.loopMode)}. ${AppLocalizations.of(context)!.genericToggleButtonTooltip}",
-              onPressed: () async {
-                FeedbackHelper.feedback(FeedbackType.light);
-                queueService.toggleLoopMode();
-              },
-              icon: _getRepeatingIcon(
-                queueService.loopMode,
-                Theme.of(context).colorScheme.secondary,
-              ));
-        });
+      stream: mediaStateStream,
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        return IconButton(
+          tooltip:
+              "${getLocalizedLoopMode(context, queueService.loopMode)}. ${AppLocalizations.of(context)!.genericToggleButtonTooltip}",
+          onPressed: () async {
+            FeedbackHelper.feedback(FeedbackType.light);
+            queueService.toggleLoopMode();
+          },
+          icon: _getRepeatingIcon(queueService.loopMode, Theme.of(context).colorScheme.secondary),
+        );
+      },
+    );
   }
 
   Widget _getRepeatingIcon(FinampLoopMode loopMode, Color iconColour) {

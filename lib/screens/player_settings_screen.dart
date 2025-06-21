@@ -17,9 +17,15 @@ class _PlayerSettingsScreenState extends State<PlayerSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.playerScreen), actions: [
-        FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetPlayerScreenSettings)
-      ]),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.playerScreen),
+        actions: [
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetPlayerScreenSettings,
+          ),
+        ],
+      ),
       body: ListView(
         children: const [
           ShowFeatureChipsToggle(),
@@ -87,7 +93,8 @@ class ShowFeatureChipsToggle extends ConsumerWidget {
       value: ref.watch(finampSettingsProvider.featureChipsConfiguration).enabled,
       onChanged: (value) {
         FinampSetters.setFeatureChipsConfiguration(
-            FinampSettingsHelper.finampSettings.featureChipsConfiguration.copyWith(enabled: value));
+          FinampSettingsHelper.finampSettings.featureChipsConfiguration.copyWith(enabled: value),
+        );
       },
     );
   }

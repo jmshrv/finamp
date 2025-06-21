@@ -53,33 +53,31 @@ Future<void> showModalTrackMenu({
   final canGoToGenre = (item.genreItems?.isNotEmpty ?? false);
 
   await showThemedBottomSheet(
-      context: context,
-      item: item,
-      routeName: TrackMenu.routeName,
-      buildWrapper: (context, dragController, childBuilder) {
-        return TrackMenu(
-          key: ValueKey(item.id),
-          item: item,
-          parentItem: parentItem,
-          isOffline: isOffline,
-          showPlaybackControls: showPlaybackControls,
-          isInPlaylist: isInPlaylist,
-          canGoToAlbum: canGoToAlbum,
-          canGoToArtist: canGoToArtist,
-          canGoToGenre: canGoToGenre,
-          onRemoveFromList: onRemoveFromList,
-          confirmPlaylistRemoval: confirmPlaylistRemoval,
-          showClearQueue: showClearQueue,
-          childBuilder: childBuilder,
-          dragController: dragController,
-        );
-      });
+    context: context,
+    item: item,
+    routeName: TrackMenu.routeName,
+    buildWrapper: (context, dragController, childBuilder) {
+      return TrackMenu(
+        key: ValueKey(item.id),
+        item: item,
+        parentItem: parentItem,
+        isOffline: isOffline,
+        showPlaybackControls: showPlaybackControls,
+        isInPlaylist: isInPlaylist,
+        canGoToAlbum: canGoToAlbum,
+        canGoToArtist: canGoToArtist,
+        canGoToGenre: canGoToGenre,
+        onRemoveFromList: onRemoveFromList,
+        confirmPlaylistRemoval: confirmPlaylistRemoval,
+        showClearQueue: showClearQueue,
+        childBuilder: childBuilder,
+        dragController: dragController,
+      );
+    },
+  );
 }
 
-enum SubMenu {
-  speed,
-  sleepTimer,
-}
+enum SubMenu { speed, sleepTimer }
 
 class TrackMenu extends ConsumerStatefulWidget {
   static const routeName = "/track-menu";
@@ -189,9 +187,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
     var currentSize = scrollController.size;
     if ((percentage != null && currentSize < percentage) || scrollController.size == inputStep) {
       if (MediaQuery.of(context).disableAnimations) {
-        scrollController.jumpTo(
-          percentage ?? oldExtent,
-        );
+        scrollController.jumpTo(percentage ?? oldExtent);
       } else {
         scrollController.animateTo(
           percentage ?? oldExtent,
@@ -214,10 +210,12 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
       includePlaybackrow: false,
     );
 
-    return Consumer(builder: (context, ref, child) {
-      final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
-      return widget.childBuilder(stackHeight, menu(context, menuEntries, metadata.value));
-    });
+    return Consumer(
+      builder: (context, ref, child) {
+        final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
+        return widget.childBuilder(stackHeight, menu(context, menuEntries, metadata.value));
+      },
+    );
   }
 
   // Normal track menu entries, excluding headers
@@ -229,10 +227,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
     }
 
     return [
-      AddToPlaylistMenuEntry(
-        baseItem: widget.item,
-        queueItem: queueItem,
-      ),
+      AddToPlaylistMenuEntry(baseItem: widget.item, queueItem: queueItem),
       RemoveFromCurrentPlaylistMenuEntry(
         baseItem: widget.item,
         parentItem: widget.parentItem,
@@ -264,8 +259,12 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
     return [
       if (widget.showPlaybackControls) ...[
         StreamBuilder<PlaybackBehaviorInfo>(
-          stream: Rx.combineLatest3(_queueService.getPlaybackOrderStream(), _queueService.getLoopModeStream(),
-              _queueService.getPlaybackSpeedStream(), (a, b, c) => PlaybackBehaviorInfo(a, b, c)),
+          stream: Rx.combineLatest3(
+            _queueService.getPlaybackOrderStream(),
+            _queueService.getLoopModeStream(),
+            _queueService.getPlaybackSpeedStream(),
+            (a, b, c) => PlaybackBehaviorInfo(a, b, c),
+          ),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const SliverToBoxAdapter();
@@ -324,10 +323,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
                         icon: TablerIcons.bell_z_filled,
                         onPressed: () async {
                           if (hasTimeLeft) {
-                            await showDialog(
-                              context: context,
-                              builder: (context) => const SleepTimerCancelDialog(),
-                            );
+                            await showDialog(context: context, builder: (context) => const SleepTimerCancelDialog());
                           } else {
                             toggleSleepTimerMenu();
                           }
@@ -335,8 +331,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
                         label: hasTimeLeft
                             ? timerValue.asString(context)
                             : AppLocalizations.of(context)!.sleepTimerTooltip,
-                        iconColor:
-                            hasTimeLeft ? iconColor : Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+                        iconColor: hasTimeLeft
+                            ? iconColor
+                            : Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
                       );
                     },
                   );
@@ -399,10 +396,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
                     layoutBuilder: (currentChild, previousChildren) {
                       return Stack(
                         alignment: Alignment.topCenter,
-                        children: <Widget>[
-                          ...previousChildren,
-                          if (currentChild != null) currentChild,
-                        ],
+                        children: <Widget>[...previousChildren, if (currentChild != null) currentChild],
                       );
                     },
                     transitionBuilder: (child, animation) {
@@ -416,40 +410,34 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
                       final Offset beginOffset = previousMenu == null || activeMenu == null
                           ? Offset(0, 0)
                           : (isSpeedMenu
-                              ? const Offset(1, 0)
-                              : isSleepMenu
-                                  ? const Offset(-1, 0)
-                                  : Offset.zero);
+                                ? const Offset(1, 0)
+                                : isSleepMenu
+                                ? const Offset(-1, 0)
+                                : Offset.zero);
 
                       final Offset endOffset = Offset.zero;
                       return FadeTransition(
                         opacity: animation,
                         child: SlideTransition(
-                          position: Tween<Offset>(
-                            begin: beginOffset,
-                            end: endOffset,
-                          ).animate(animation),
+                          position: Tween<Offset>(begin: beginOffset, end: endOffset).animate(animation),
                           child: child,
                         ),
                       );
                     },
                     child: switch (activeMenu) {
-                      SubMenu.speed => SpeedMenu(
-                          key: const ValueKey('speed'),
-                          iconColor: iconColor,
-                        ),
+                      SubMenu.speed => SpeedMenu(key: const ValueKey('speed'), iconColor: iconColor),
                       SubMenu.sleepTimer => SleepTimerMenu(
-                          key: const ValueKey('sleep'),
-                          iconColor: iconColor,
-                          onStartTimer: () {
-                            toggleSleepTimerMenu();
-                          },
-                          onSizeChange: (double height) {
-                            setState(() {
-                              sleepTimerMenuHeight = height;
-                            });
-                          },
-                        ),
+                        key: const ValueKey('sleep'),
+                        iconColor: iconColor,
+                        onStartTimer: () {
+                          toggleSleepTimerMenu();
+                        },
+                        onSizeChange: (double height) {
+                          setState(() {
+                            sleepTimerMenuHeight = height;
+                          });
+                        },
+                      ),
                       _ => null,
                     },
                   ),
@@ -472,12 +460,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
           ),
         ),
       ],
-      SliverPersistentHeader(
-        delegate: MenuItemInfoSliverHeader(
-          item: widget.item,
-        ),
-        pinned: true,
-      ),
+      SliverPersistentHeader(delegate: MenuItemInfoSliverHeader(item: widget.item), pinned: true),
       MenuMask(
         height: MenuItemInfoSliverHeader.defaultHeight,
         child: SliverToBoxAdapter(
@@ -497,11 +480,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
         height: MenuItemInfoSliverHeader.defaultHeight,
         child: SliverPadding(
           padding: const EdgeInsets.only(left: 8.0),
-          sliver: SliverList(
-            delegate: SliverChildListDelegate(menuEntries),
-          ),
+          sliver: SliverList(delegate: SliverChildListDelegate(menuEntries)),
         ),
-      )
+      ),
     ];
   }
 }

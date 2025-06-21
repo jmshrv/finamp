@@ -35,12 +35,10 @@ class PlaybackHistoryService {
 
   bool _wasOfflineBefore = false;
   FinampQueueItem?
-      _lastReportedTrackStarted; // used to check if playback has already reported as "started" at some point for the current track
+  _lastReportedTrackStarted; // used to check if playback has already reported as "started" at some point for the current track
   FinampQueueItem? _lastReportedTrackStopped; // used to prevent reporting a track as stopped multiple times
 
-  final _historyStream = BehaviorSubject<List<FinampHistoryItem>>.seeded(
-    List.empty(growable: true),
-  );
+  final _historyStream = BehaviorSubject<List<FinampHistoryItem>>.seeded(List.empty(growable: true));
 
   Timer? _periodicUpdateTimer;
 
@@ -49,8 +47,10 @@ class PlaybackHistoryService {
 
   PlaybackHistoryService() {
     _queueService.getCurrentTrackStream().listen((currentTrack) {
-      if (![AudioProcessingState.idle, AudioProcessingState.completed]
-          .contains(_audioService.playbackState.valueOrNull?.processingState)) {
+      if (![
+        AudioProcessingState.idle,
+        AudioProcessingState.completed,
+      ].contains(_audioService.playbackState.valueOrNull?.processingState)) {
         updateCurrentTrack(currentTrack);
       } else if (_audioService.playbackState.valueOrNull?.processingState == AudioProcessingState.completed ||
           currentTrack == null) {
@@ -97,15 +97,20 @@ class PlaybackHistoryService {
             }
             if (currentState.processingState != AudioProcessingState.completed &&
                 (currentState.queueIndex != prevState?.queueIndex || currentState.position != prevState?.position)) {
-              _playbackHistoryServiceLogger
-                  .fine("Handling track change event from ${prevItem?.item.title} to ${currentItem.item.title}");
+              _playbackHistoryServiceLogger.fine(
+                "Handling track change event from ${prevItem?.item.title} to ${currentItem.item.title}",
+              );
               //TODO handle reporting track changes based on history changes, as that is more reliable
               onTrackChanged(
-                  currentItem, currentState, prevItem, prevState, currentIndex > (prevState?.queueIndex ?? 0));
+                currentItem,
+                currentState,
+                prevItem,
+                prevState,
+                currentIndex > (prevState?.queueIndex ?? 0),
+              );
             }
           }
           // handle events that don't change the current track (e.g. loop, pause, seek, etc.)
-
           // handle play/pause events
           else if (currentState.playing != prevState?.playing) {
             _playbackHistoryServiceLogger.fine("Handling play/pause event for ${currentItem.item.title}");
@@ -121,10 +126,10 @@ class PlaybackHistoryService {
 
             // detect rewinding & looping a single track
             if (
-                // same track
-                prevItem?.id == currentItem.id &&
-                    // current position is close to the beginning of the track
-                    currentState.position.inMilliseconds <= 1000 * 10) {
+            // same track
+            prevItem?.id == currentItem.id &&
+                // current position is close to the beginning of the track
+                currentState.position.inMilliseconds <= 1000 * 10) {
               if ((prevState.position.inMilliseconds) >= ((prevItem?.item.duration?.inMilliseconds ?? 0) - 1000 * 10)) {
                 // looping a single track
                 // last position was close to the end of the track
@@ -181,9 +186,11 @@ class PlaybackHistoryService {
     _periodicUpdateTimer?.cancel(); // remove old timer
 
     _periodicUpdateTimer = Timer.periodic(
-        Duration(seconds: FinampSettingsHelper.finampSettings.periodicPlaybackSessionUpdateFrequencySeconds), (timer) {
-      _reportPeriodicSessionStatus();
-    });
+      Duration(seconds: FinampSettingsHelper.finampSettings.periodicPlaybackSessionUpdateFrequencySeconds),
+      (timer) {
+        _reportPeriodicSessionStatus();
+      },
+    );
   }
 
   /// method that converts history into a list grouped by date
@@ -206,19 +213,10 @@ class PlaybackHistoryService {
           now.month == element.startTime.month &&
           now.day == element.startTime.day) {
         // group by hour
-        return DateTime(
-          element.startTime.year,
-          element.startTime.month,
-          element.startTime.day,
-          element.startTime.hour,
-        );
+        return DateTime(element.startTime.year, element.startTime.month, element.startTime.day, element.startTime.hour);
       }
       // group by date
-      return DateTime(
-        element.startTime.year,
-        element.startTime.month,
-        element.startTime.day,
-      );
+      return DateTime(element.startTime.year, element.startTime.month, element.startTime.day);
     }
 
     return getHistoryGrouped(byDateGroupingConstructor);
@@ -227,11 +225,7 @@ class PlaybackHistoryService {
   /// method that converts history into a list grouped by date
   List<MapEntry<DateTime, List<FinampHistoryItem>>> getHistoryGroupedByDate() {
     DateTime byDateGroupingConstructor(FinampHistoryItem element) {
-      return DateTime(
-        element.startTime.year,
-        element.startTime.month,
-        element.startTime.day,
-      );
+      return DateTime(element.startTime.year, element.startTime.month, element.startTime.day);
     }
 
     return getHistoryGrouped(byDateGroupingConstructor);
@@ -240,12 +234,7 @@ class PlaybackHistoryService {
   /// method that converts history into a list grouped by hour
   List<MapEntry<DateTime, List<FinampHistoryItem>>> getHistoryGroupedByHour() {
     DateTime byHourGroupingConstructor(FinampHistoryItem element) {
-      return DateTime(
-        element.startTime.year,
-        element.startTime.month,
-        element.startTime.day,
-        element.startTime.hour,
-      );
+      return DateTime(element.startTime.year, element.startTime.month, element.startTime.day, element.startTime.hour);
     }
 
     return getHistoryGrouped(byHourGroupingConstructor);
@@ -253,7 +242,8 @@ class PlaybackHistoryService {
 
   /// method that converts history into a list grouped by a custom date constructor controlling the granularity of the grouping
   List<MapEntry<DateTime, List<FinampHistoryItem>>> getHistoryGrouped(
-      DateTime Function(FinampHistoryItem) dateTimeConstructor) {
+    DateTime Function(FinampHistoryItem) dateTimeConstructor,
+  ) {
     final groupedHistory = <MapEntry<DateTime, List<FinampHistoryItem>>>[];
 
     final groupedHistoryMap = <DateTime, List<FinampHistoryItem>>{};
@@ -278,10 +268,7 @@ class PlaybackHistoryService {
     return groupedHistory;
   }
 
-  void updateCurrentTrack(
-    FinampQueueItem? currentTrack, {
-    bool forceNewTrack = false,
-  }) {
+  void updateCurrentTrack(FinampQueueItem? currentTrack, {bool forceNewTrack = false}) {
     if (currentTrack == null ||
         !forceNewTrack &&
             (currentTrack == _currentTrack?.item ||
@@ -297,8 +284,9 @@ class PlaybackHistoryService {
     if (_currentTrack != null) {
       // update end time of previous track
       _currentTrack!.endTime = DateTime.now();
-      previousTrackTotalPlayTimeInMilliseconds =
-          _currentTrack!.endTime!.difference(_currentTrack!.startTime).inMilliseconds;
+      previousTrackTotalPlayTimeInMilliseconds = _currentTrack!.endTime!
+          .difference(_currentTrack!.startTime)
+          .inMilliseconds;
     }
 
     if (previousTrackTotalPlayTimeInMilliseconds < 1000) {
@@ -309,17 +297,15 @@ class PlaybackHistoryService {
     }
 
     // if there is a **current** track
-    _currentTrack = FinampHistoryItem(
-      item: currentTrack,
-      startTime: DateTime.now(),
-    );
+    _currentTrack = FinampHistoryItem(item: currentTrack, startTime: DateTime.now());
     _history.add(_currentTrack!); // current track is always the last item in the history
 
     _historyStream.add(_history);
 
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       WindowManager.instance.setTitle(
-          "${_currentTrack?.item.item.artist != null ? '${_currentTrack?.item.item.artist} - ' : ''}${_currentTrack!.item.item.title} - Finamp");
+        "${_currentTrack?.item.item.artist != null ? '${_currentTrack?.item.item.artist} - ' : ''}${_currentTrack!.item.item.title} - Finamp",
+      );
     }
   }
 
@@ -332,7 +318,8 @@ class PlaybackHistoryService {
     PlaybackState? previousState,
     bool skippingForward,
   ) async {
-    final shouldReportPreviousTrack = previousItem != null &&
+    final shouldReportPreviousTrack =
+        previousItem != null &&
         previousState != null &&
         // don't submit stop events for idle tracks (at position 0 and not playing)
         (previousState.playing || previousState.updatePosition != Duration.zero);
@@ -346,10 +333,7 @@ class PlaybackHistoryService {
 
     jellyfin_models.PlaybackProgressInfo? previousTrackPlaybackData;
     if (shouldReportPreviousTrack) {
-      previousTrackPlaybackData = generatePlaybackProgressInfoFromState(
-        previousItem,
-        previousState,
-      );
+      previousTrackPlaybackData = generatePlaybackProgressInfoFromState(previousItem, previousState);
     }
 
     // prevent reporting the same track twice if playback hasn't started yet
@@ -357,10 +341,7 @@ class PlaybackHistoryService {
       return;
     }
 
-    final newTrackplaybackData = generatePlaybackProgressInfoFromState(
-      currentItem,
-      currentState,
-    );
+    final newTrackplaybackData = generatePlaybackProgressInfoFromState(currentItem, currentState);
 
     //!!! always submit a "start" **AFTER** a "stop" to that Jellyfin knows there's still something playing
     if (previousTrackPlaybackData != null) {
@@ -402,10 +383,7 @@ class PlaybackHistoryService {
       return;
     }
 
-    final playbackData = generatePlaybackProgressInfoFromState(
-      currentItem,
-      currentState,
-    );
+    final playbackData = generatePlaybackProgressInfoFromState(currentItem, currentState);
 
     if (playbackData != null) {
       if (![AudioProcessingState.completed, AudioProcessingState.idle].contains(currentState.processingState)) {
@@ -527,8 +505,9 @@ class PlaybackHistoryService {
         isPaused: isPaused,
         isMuted: isMuted,
         positionTicks: playerPosition.inMicroseconds * 10,
-        playbackStartTimeTicks:
-            _currentTrack != null ? _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10 : null,
+        playbackStartTimeTicks: _currentTrack != null
+            ? _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10
+            : null,
         volumeLevel: (FinampSettingsHelper.finampSettings.currentVolume * 100).round(),
         repeatMode: _toJellyfinRepeatMode(_queueService.loopMode),
         playMethod: item.item.extras?["shouldTranscode"] as bool? ?? false ? "Transcode" : "DirectPlay",
@@ -565,8 +544,9 @@ class PlaybackHistoryService {
         isPaused: _audioService.paused,
         isMuted: _audioService.volume == 0.0,
         positionTicks: _audioService.playbackPosition.inMicroseconds * 10,
-        playbackStartTimeTicks:
-            _currentTrack != null ? _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10 : null,
+        playbackStartTimeTicks: _currentTrack != null
+            ? _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10
+            : null,
         volumeLevel: (FinampSettingsHelper.finampSettings.currentVolume * 100).round(),
         playMethod: currentTrack.item.extras!["shouldTranscode"] as bool? ?? false ? "Transcode" : "DirectPlay",
         playbackOrder: _queueService.playbackOrder == FinampPlaybackOrder.shuffled ? "Shuffle" : "Default",
@@ -585,10 +565,7 @@ class PlaybackHistoryService {
         (FinampSettingsHelper.finampSettings.enablePlayon || FinampSettingsHelper.finampSettings.reportQueueToServer)) {
       final queue = _queueService
           .peekQueue(next: _maxQueueLengthToReport)
-          .map((e) => jellyfin_models.QueueItem(
-                id: e.baseItem?.id.raw ?? "",
-                playlistItemId: e.type.name,
-              ))
+          .map((e) => jellyfin_models.QueueItem(id: e.baseItem?.id.raw ?? "", playlistItemId: e.type.name))
           .toList();
       return queue;
     } else {

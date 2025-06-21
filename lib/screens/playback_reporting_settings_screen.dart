@@ -26,7 +26,7 @@ class _PlaybackReportingSettingsScreenState extends State<PlaybackReportingSetti
             setState(() {
               FinampSettingsHelper.resetNormalizationSettings();
             });
-          })
+          }),
         ],
       ),
       body: ListView(
@@ -35,7 +35,7 @@ class _PlaybackReportingSettingsScreenState extends State<PlaybackReportingSetti
           const PeriodicPlaybackSessionUpdateFrequencyEditor(),
           const ReportQueueToServerToggle(),
           const PlayOnStaleDelayEditor(),
-          const PlayOnReconnectionDelayEditor()
+          const PlayOnReconnectionDelayEditor(),
         ],
       ),
     );

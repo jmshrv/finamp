@@ -43,91 +43,85 @@ class _ProgressSliderState extends State<ProgressSlider> {
   Widget build(BuildContext context) {
     // The slider always needs to be LTR, so we use Directionality to save
     // putting TextDirection.ltr all over the place
-    return LayoutBuilder(builder: (context, constraints) {
-      return Padding(
-        padding: EdgeInsets.symmetric(horizontal: ((constraints.maxWidth - 260) / 4).clamp(0, 20) + 16),
-        child: Directionality(
-          textDirection: TextDirection.ltr,
-          // The slider can refresh up to 60 times per second, so we wrap it in a
-          // RepaintBoundary to avoid more areas being repainted than necessary
-          child: SliderTheme(
-            data: SliderThemeData(
-              trackHeight: 3.5,
-              trackShape: CustomTrackShape(),
-            ),
-            child: StreamBuilder<ProgressState>(
-              stream: progressStateStream,
-              builder: (context, snapshot) {
-                if (snapshot.data?.mediaItem == null) {
-                  // If nothing is playing or the AudioService isn't connected, return a
-                  // greyed out slider with some fake numbers. We also do this if
-                  // currentPosition is null, which sometimes happens when the app is
-                  // closed and reopened.
-                  return widget.showPlaceholder
-                      ? Column(
-                          children: [
-                            Slider(
-                              value: 0,
-                              max: 1,
-                              onChanged: null,
-                              autofocus: false,
-                              focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
-                            ),
-                            if (widget.showDuration)
-                              const _ProgressSliderDuration(
-                                position: Duration(),
-                              )
-                          ],
-                        )
-                      : const SizedBox.shrink();
-                } else if (snapshot.hasData) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        height: 24.0,
-                        child: Stack(
-                          children: [
-                            // Slider displaying playback progress.
-                            _PlaybackProgressSlider(
-                              allowSeeking: widget.allowSeeking,
-                              playbackState: snapshot.data!.playbackState,
-                              position: snapshot.data!.position,
-                              mediaItem: snapshot.data!.mediaItem,
-                              onDrag: (value) => setState(() {
-                                _dragValue = value;
-                              }),
-                            ),
-                          ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: ((constraints.maxWidth - 260) / 4).clamp(0, 20) + 16),
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            // The slider can refresh up to 60 times per second, so we wrap it in a
+            // RepaintBoundary to avoid more areas being repainted than necessary
+            child: SliderTheme(
+              data: SliderThemeData(trackHeight: 3.5, trackShape: CustomTrackShape()),
+              child: StreamBuilder<ProgressState>(
+                stream: progressStateStream,
+                builder: (context, snapshot) {
+                  if (snapshot.data?.mediaItem == null) {
+                    // If nothing is playing or the AudioService isn't connected, return a
+                    // greyed out slider with some fake numbers. We also do this if
+                    // currentPosition is null, which sometimes happens when the app is
+                    // closed and reopened.
+                    return widget.showPlaceholder
+                        ? Column(
+                            children: [
+                              Slider(
+                                value: 0,
+                                max: 1,
+                                onChanged: null,
+                                autofocus: false,
+                                focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
+                              ),
+                              if (widget.showDuration) const _ProgressSliderDuration(position: Duration()),
+                            ],
+                          )
+                        : const SizedBox.shrink();
+                  } else if (snapshot.hasData) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          height: 24.0,
+                          child: Stack(
+                            children: [
+                              // Slider displaying playback progress.
+                              _PlaybackProgressSlider(
+                                allowSeeking: widget.allowSeeking,
+                                playbackState: snapshot.data!.playbackState,
+                                position: snapshot.data!.position,
+                                mediaItem: snapshot.data!.mediaItem,
+                                onDrag: (value) => setState(() {
+                                  _dragValue = value;
+                                }),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      if (widget.showDuration)
-                        _ProgressSliderDuration(
-                          position: _dragValue == null
-                              ? snapshot.data!.position
-                              : Duration(microseconds: _dragValue!.toInt()),
-                          itemDuration: snapshot.data!.mediaItem?.duration,
-                        ),
-                    ],
-                  );
-                } else {
-                  return const Text(
-                      "Snapshot doesn't have data and MediaItem isn't null and AudioService is connected?");
-                }
-              },
+                        if (widget.showDuration)
+                          _ProgressSliderDuration(
+                            position: _dragValue == null
+                                ? snapshot.data!.position
+                                : Duration(microseconds: _dragValue!.toInt()),
+                            itemDuration: snapshot.data!.mediaItem?.duration,
+                          ),
+                      ],
+                    );
+                  } else {
+                    return const Text(
+                      "Snapshot doesn't have data and MediaItem isn't null and AudioService is connected?",
+                    );
+                  }
+                },
+              ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }
 
 class _ProgressSliderDuration extends StatelessWidget {
-  const _ProgressSliderDuration({
-    required this.position,
-    this.itemDuration,
-  });
+  const _ProgressSliderDuration({required this.position, this.itemDuration});
 
   final Duration position;
   final Duration? itemDuration;
@@ -144,8 +138,8 @@ class _ProgressSliderDuration extends StatelessWidget {
         Text(
           printDuration(currentPosition),
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                height: 0.5, // reduce line height
-              ),
+            height: 0.5, // reduce line height
+          ),
         ),
         Text(
           printDuration(
@@ -154,8 +148,8 @@ class _ProgressSliderDuration extends StatelessWidget {
             isRemaining: showRemaining,
           ),
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                height: 0.5, // reduce line height
-              ),
+            height: 0.5, // reduce line height
+          ),
         ),
       ],
     );
@@ -233,13 +227,13 @@ class __PlaybackProgressSliderState extends ConsumerState<_PlaybackProgressSlide
         },
         secondaryTrackValue: widget.mediaItem?.extras?["downloadedTrackPath"] == null
             ? widget.playbackState.bufferedPosition.inMicroseconds
-                .clamp(
-                  0.0,
-                  widget.mediaItem?.duration == null
-                      ? widget.playbackState.bufferedPosition.inMicroseconds
-                      : widget.mediaItem?.duration?.inMicroseconds ?? 0,
-                )
-                .toDouble()
+                  .clamp(
+                    0.0,
+                    widget.mediaItem?.duration == null
+                        ? widget.playbackState.bufferedPosition.inMicroseconds
+                        : widget.mediaItem?.duration?.inMicroseconds ?? 0,
+                  )
+                  .toDouble()
             : 0,
         onChanged: widget.allowSeeking
             ? (newValue) async {

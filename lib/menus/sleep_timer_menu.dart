@@ -14,20 +14,10 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
-enum _MenuPage {
-  minutes,
-  tracks,
-  currentTrack;
-}
+enum _MenuPage { minutes, tracks, currentTrack }
 
 class SleepTimerMenu extends StatefulWidget {
-  const SleepTimerMenu({
-    super.key,
-    required this.iconColor,
-    this.scrollFunction,
-    this.onStartTimer,
-    this.onSizeChange,
-  });
+  const SleepTimerMenu({super.key, required this.iconColor, this.scrollFunction, this.onStartTimer, this.onSizeChange});
 
   final Color iconColor;
   final void Function()? scrollFunction;
@@ -56,8 +46,10 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
   void initState() {
     super.initState();
     var oldTimer = FinampSettingsHelper.finampSettings.sleepTimer;
-    newSleepTimer =
-        SleepTimer(oldTimer?.secondsLength ?? DefaultSettings.sleepTimerDurationSeconds, oldTimer?.tracksLength ?? 0);
+    newSleepTimer = SleepTimer(
+      oldTimer?.secondsLength ?? DefaultSettings.sleepTimerDurationSeconds,
+      oldTimer?.tracksLength ?? 0,
+    );
     finishTrack = (oldTimer?.tracksLength ?? 0) > 0;
     selectedMode = switch (newSleepTimer) {
       SleepTimer(secondsLength: > 0) => _MenuPage.minutes,
@@ -88,17 +80,10 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
       AppLocalizations.of(context)!.tracks,
       AppLocalizations.of(context)!.sleepTimerAfterCurrentTrack,
     ];
-    final List<double> menuHeights = [
-      durationTypeMenuHeight,
-      tracksTypeMenuHeight,
-      afterCurrentTrackTypeMenuHeight,
-    ];
+    final List<double> menuHeights = [durationTypeMenuHeight, tracksTypeMenuHeight, afterCurrentTrackTypeMenuHeight];
 
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: widget.iconColor.withOpacity(0.1),
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: widget.iconColor.withOpacity(0.1)),
       margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
       padding: const EdgeInsets.only(top: 10.0, bottom: 6.0),
       child: Form(
@@ -112,49 +97,47 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: List<Widget>.generate(
-                  _MenuPage.values.length,
-                  (int i) {
-                    bool active = selectedMode.index == i;
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          textStyle: TextStyle(
-                            backgroundColor: Colors.transparent,
-                            fontWeight: active ? FontWeight.w600 : FontWeight.w500,
-                          ),
-                          foregroundColor:
-                              active ? Colors.white : Theme.of(context).textTheme.bodySmall?.color ?? Colors.white,
-                          backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(active ? 0.6 : 0.1),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                          minimumSize: Size(42, 52),
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
-                          visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+                children: List<Widget>.generate(_MenuPage.values.length, (int i) {
+                  bool active = selectedMode.index == i;
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        textStyle: TextStyle(
+                          backgroundColor: Colors.transparent,
+                          fontWeight: active ? FontWeight.w600 : FontWeight.w500,
                         ),
-                        onPressed: () {
-                          setState(() {
-                            selectedMode = _MenuPage.values[i];
-                            switch (selectedMode) {
-                              case _MenuPage.minutes:
-                                newSleepTimer.tracksLength = 0;
-                                newSleepTimer.secondsLength = DefaultSettings.sleepTimerDurationSeconds;
-                              case _MenuPage.tracks:
-                                newSleepTimer.tracksLength = 5; // Default to 5 tracks
-                                newSleepTimer.secondsLength = 0;
-                              case _MenuPage.currentTrack:
-                                newSleepTimer.tracksLength = 1;
-                                newSleepTimer.secondsLength = 0;
-                            }
-                            widget.onSizeChange?.call(menuHeights[i]);
-                            _updateControllers();
-                          });
-                        },
-                        child: Text(chipLabels[i]),
+                        foregroundColor: active
+                            ? Colors.white
+                            : Theme.of(context).textTheme.bodySmall?.color ?? Colors.white,
+                        backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(active ? 0.6 : 0.1),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                        minimumSize: Size(42, 52),
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+                        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
                       ),
-                    );
-                  },
-                ),
+                      onPressed: () {
+                        setState(() {
+                          selectedMode = _MenuPage.values[i];
+                          switch (selectedMode) {
+                            case _MenuPage.minutes:
+                              newSleepTimer.tracksLength = 0;
+                              newSleepTimer.secondsLength = DefaultSettings.sleepTimerDurationSeconds;
+                            case _MenuPage.tracks:
+                              newSleepTimer.tracksLength = 5; // Default to 5 tracks
+                              newSleepTimer.secondsLength = 0;
+                            case _MenuPage.currentTrack:
+                              newSleepTimer.tracksLength = 1;
+                              newSleepTimer.secondsLength = 0;
+                          }
+                          widget.onSizeChange?.call(menuHeights[i]);
+                          _updateControllers();
+                        });
+                      },
+                      child: Text(chipLabels[i]),
+                    ),
+                  );
+                }),
               ),
             ),
             const SizedBox(height: 8),
@@ -261,7 +244,9 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                             isDense: true,
                             contentPadding: EdgeInsets.symmetric(vertical: 4),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
                             filled: true,
                             fillColor: widget.iconColor.withOpacity(0.08),
                           ),
@@ -433,8 +418,10 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                           decoration: InputDecoration(
                             isDense: true,
                             contentPadding: EdgeInsets.symmetric(vertical: 4),
-                            border:
-                                OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide.none,
+                            ),
                             filled: true,
                             fillColor: widget.iconColor.withOpacity(0.08),
                           ),
@@ -469,7 +456,10 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
               padding: const EdgeInsets.only(bottom: 2.0),
               child: StreamBuilder<(ProgressState?, FinampQueueInfo?)>(
                 stream: Rx.combineLatest2<ProgressState, FinampQueueInfo?, (ProgressState?, FinampQueueInfo?)>(
-                    progressStateStream, GetIt.instance<QueueService>().getQueueStream(), (a, b) => (a, b)),
+                  progressStateStream,
+                  GetIt.instance<QueueService>().getQueueStream(),
+                  (a, b) => (a, b),
+                ),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final progressState = snapshot.data!.$1!;
@@ -479,8 +469,9 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                     Duration remaining;
                     switch (selectedMode) {
                       case _MenuPage.minutes:
-                        int? finalTrackIndex =
-                            queueInfo.getTrackIndexAfter(newSleepTimer.totalDuration - currentTrackRemainingDuration);
+                        int? finalTrackIndex = queueInfo.getTrackIndexAfter(
+                          newSleepTimer.totalDuration - currentTrackRemainingDuration,
+                        );
                         Duration? durationOfFinalTrack;
                         Duration? durationUntilFinalTrack;
                         Duration? durationUntilEndOfFinalTrack;
@@ -489,7 +480,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                           durationUntilFinalTrack = newSleepTimer.totalDuration < currentTrackRemainingDuration
                               ? Duration.zero
                               : currentTrackRemainingDuration +
-                                  queueInfo.getDurationUntil(finalTrackIndex - queueInfo.currentTrackIndex + 1);
+                                    queueInfo.getDurationUntil(finalTrackIndex - queueInfo.currentTrackIndex + 1);
                           durationUntilEndOfFinalTrack = newSleepTimer.totalDuration < currentTrackRemainingDuration
                               ? currentTrackRemainingDuration
                               : durationUntilFinalTrack + durationOfFinalTrack;
@@ -497,12 +488,17 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                         remaining = finishTrack
                             ? Duration(
                                 milliseconds: min(
-                                    durationUntilEndOfFinalTrack?.inMilliseconds ??
-                                        (queueRemainingDuration + currentTrackRemainingDuration).inMilliseconds,
-                                    (queueRemainingDuration + currentTrackRemainingDuration).inMilliseconds))
+                                  durationUntilEndOfFinalTrack?.inMilliseconds ??
+                                      (queueRemainingDuration + currentTrackRemainingDuration).inMilliseconds,
+                                  (queueRemainingDuration + currentTrackRemainingDuration).inMilliseconds,
+                                ),
+                              )
                             : Duration(
-                                milliseconds: min(newSleepTimer.totalDuration.inMilliseconds,
-                                    (queueRemainingDuration + currentTrackRemainingDuration).inMilliseconds));
+                                milliseconds: min(
+                                  newSleepTimer.totalDuration.inMilliseconds,
+                                  (queueRemainingDuration + currentTrackRemainingDuration).inMilliseconds,
+                                ),
+                              );
                       case _MenuPage.tracks:
                         remaining =
                             currentTrackRemainingDuration + queueInfo.getDurationUntil(newSleepTimer.tracksLength);

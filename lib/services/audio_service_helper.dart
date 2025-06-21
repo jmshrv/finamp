@@ -19,10 +19,7 @@ class AudioServiceHelper {
   final audioServiceHelperLogger = Logger("AudioServiceHelper");
 
   /// Shuffles every track in the user's current view.
-  Future<void> shuffleAll({
-    required bool onlyShowFavorites,
-    BaseItemDto? genreFilter,
-  }) async {
+  Future<void> shuffleAll({required bool onlyShowFavorites, BaseItemDto? genreFilter}) async {
     List<jellyfin_models.BaseItemDto>? items;
 
     if (FinampSettingsHelper.finampSettings.isOffline) {
@@ -31,12 +28,11 @@ class AudioServiceHelper {
       // shuffle them before making a sublist, but I couldn't think of a better
       // way.
       items = (await _isarDownloader.getAllTracks(
-              viewFilter: _finampUserHelper.currentUser?.currentView?.id,
-              genreFilter: genreFilter,
-              onlyFavorites: onlyShowFavorites,
-              nullableViewFilters: FinampSettingsHelper.finampSettings.showDownloadsWithUnknownLibrary))
-          .map((e) => e.baseItem!)
-          .toList();
+        viewFilter: _finampUserHelper.currentUser?.currentView?.id,
+        genreFilter: genreFilter,
+        onlyFavorites: onlyShowFavorites,
+        nullableViewFilters: FinampSettingsHelper.finampSettings.showDownloadsWithUnknownLibrary,
+      )).map((e) => e.baseItem!).toList();
       items.shuffle();
       if (items.length - 1 > FinampSettingsHelper.finampSettings.trackShuffleItemCount) {
         items = items.sublist(0, FinampSettingsHelper.finampSettings.trackShuffleItemCount);
@@ -44,20 +40,23 @@ class AudioServiceHelper {
     } else {
       // If online, get all audio items from the user's view
       items = await _jellyfinApiHelper.getItems(
-          parentItem: _finampUserHelper.currentUser!.currentView,
-          includeItemTypes: "Audio",
-          filters: onlyShowFavorites ? "IsFavorite" : null,
-          limit: FinampSettingsHelper.finampSettings.trackShuffleItemCount,
-          sortBy: "Random",
-          genreFilter: genreFilter);
+        parentItem: _finampUserHelper.currentUser!.currentView,
+        includeItemTypes: "Audio",
+        filters: onlyShowFavorites ? "IsFavorite" : null,
+        limit: FinampSettingsHelper.finampSettings.trackShuffleItemCount,
+        sortBy: "Random",
+        genreFilter: genreFilter,
+      );
     }
 
     if (items != null) {
       QueueItemSource source = (genreFilter != null)
           ? QueueItemSource(
               type: QueueItemSourceType.genre,
-              name:
-                  QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: genreFilter.name),
+              name: QueueItemSourceName(
+                type: QueueItemSourceNameType.preTranslated,
+                pretranslatedName: genreFilter.name,
+              ),
               id: genreFilter.id,
               item: genreFilter,
             )
@@ -69,11 +68,7 @@ class AudioServiceHelper {
               id: "shuffleAll",
             );
 
-      await _queueService.startPlayback(
-        items: items,
-        source: source,
-        order: FinampPlaybackOrder.shuffled,
-      );
+      await _queueService.startPlayback(items: items, source: source, order: FinampPlaybackOrder.shuffled);
     }
   }
 
@@ -87,12 +82,13 @@ class AudioServiceHelper {
         await _queueService.startPlayback(
           items: items,
           source: QueueItemSource(
-              type: QueueItemSourceType.trackMix,
-              name: QueueItemSourceName(
-                type: item.name != null ? QueueItemSourceNameType.mix : QueueItemSourceNameType.instantMix,
-                localizationParameter: item.name ?? "",
-              ),
-              id: item.id),
+            type: QueueItemSourceType.trackMix,
+            name: QueueItemSourceName(
+              type: item.name != null ? QueueItemSourceNameType.mix : QueueItemSourceNameType.instantMix,
+              localizationParameter: item.name ?? "",
+            ),
+            id: item.id,
+          ),
           order: FinampPlaybackOrder
               .linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
         );
@@ -115,7 +111,9 @@ class AudioServiceHelper {
           source: QueueItemSource(
             type: QueueItemSourceType.artistMix,
             name: QueueItemSourceName(
-                type: QueueItemSourceNameType.mix, localizationParameter: artists.map((e) => e.name).join(" & ")),
+              type: QueueItemSourceNameType.mix,
+              localizationParameter: artists.map((e) => e.name).join(" & "),
+            ),
             id: artists.first.id,
             item: artists.first,
           ),
@@ -142,7 +140,9 @@ class AudioServiceHelper {
           source: QueueItemSource(
             type: QueueItemSourceType.albumMix,
             name: QueueItemSourceName(
-                type: QueueItemSourceNameType.mix, localizationParameter: albums.map((e) => e.name).join(" & ")),
+              type: QueueItemSourceNameType.mix,
+              localizationParameter: albums.map((e) => e.name).join(" & "),
+            ),
             id: albums.first.id,
             item: albums.first,
           ),
@@ -169,7 +169,9 @@ class AudioServiceHelper {
           source: QueueItemSource(
             type: QueueItemSourceType.genreMix,
             name: QueueItemSourceName(
-                type: QueueItemSourceNameType.mix, localizationParameter: genres.map((e) => e.name).join(" & ")),
+              type: QueueItemSourceNameType.mix,
+              localizationParameter: genres.map((e) => e.name).join(" & "),
+            ),
             id: genres.first.id,
             item: genres.first,
           ),

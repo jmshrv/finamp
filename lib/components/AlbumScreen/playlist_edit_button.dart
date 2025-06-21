@@ -7,10 +7,7 @@ import '../../models/jellyfin_models.dart';
 import 'playlist_edit_dialog.dart';
 
 class PlaylistNameEditButton extends StatelessWidget {
-  const PlaylistNameEditButton({
-    super.key,
-    required this.playlist,
-  });
+  const PlaylistNameEditButton({super.key, required this.playlist});
 
   final BaseItemDto playlist;
 

@@ -41,13 +41,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.settings),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetAllSettings,
-              isGlobal: true),
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetAllSettings,
+            isGlobal: true,
+          ),
           Semantics.fromProperties(
-            properties: SemanticsProperties(
-              label: AppLocalizations.of(context)!.about,
-              button: true,
-            ),
+            properties: SemanticsProperties(label: AppLocalizations.of(context)!.about, button: true),
             excludeSemantics: true,
             container: true,
             child: IconButton(
@@ -58,97 +58,73 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
                 ThemeData theme = Theme.of(context);
-                const linkStyle = TextStyle(
-                  color: Colors.blue,
-                  decoration: TextDecoration.underline,
-                );
+                const linkStyle = TextStyle(color: Colors.blue, decoration: TextDecoration.underline);
 
                 showAboutDialog(
-                    context: context,
-                    applicationName: packageInfo.appName,
-                    applicationVersion: packageInfo.version,
-                    applicationIcon: Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: SvgPicture.asset(
-                        'images/finamp_cropped.svg',
-                        width: 56,
-                        height: 56,
+                  context: context,
+                  applicationName: packageInfo.appName,
+                  applicationVersion: packageInfo.version,
+                  applicationIcon: Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: SvgPicture.asset('images/finamp_cropped.svg', width: 56, height: 56),
+                  ),
+                  applicationLegalese: applicationLegalese,
+                  children: [
+                    const SizedBox(height: 20),
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        style: TextStyle(color: theme.textTheme.bodyMedium!.color),
+                        children: [
+                          TextSpan(
+                            text: localizations.finampTagline,
+                            style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w500),
+                          ),
+                          const TextSpan(text: '\n\n'),
+                          TextSpan(text: localizations.aboutContributionPrompt),
+                          const TextSpan(text: '\n\n'),
+                          TextSpan(text: '${localizations.aboutContributionLink}\n'),
+                          TextSpan(
+                            text: repoLink,
+                            style: linkStyle,
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () async {
+                                await launchUrl(Uri.parse(repoLink));
+                              },
+                          ),
+                          const TextSpan(text: '\n\n'),
+                          TextSpan(text: '${localizations.aboutTranslations}\n'),
+                          TextSpan(
+                            text: translationsLink,
+                            style: linkStyle,
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () async {
+                                await launchUrl(Uri.parse(translationsLink));
+                              },
+                          ),
+                          const TextSpan(text: '\n\n'),
+                          TextSpan(text: '${localizations.aboutReleaseNotes}\n'),
+                          TextSpan(
+                            text: releaseNotesLink,
+                            style: linkStyle,
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () async {
+                                await launchUrl(Uri.parse(releaseNotesLink));
+                              },
+                          ),
+                          const TextSpan(text: '\n\n\n'),
+                          TextSpan(
+                            text: localizations.aboutThanks,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                     ),
-                    applicationLegalese: applicationLegalese,
-                    children: [
-                      const SizedBox(height: 20),
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          style: TextStyle(color: theme.textTheme.bodyMedium!.color),
-                          children: [
-                            TextSpan(
-                              text: localizations.finampTagline,
-                              style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w500),
-                            ),
-                            const TextSpan(
-                              text: '\n\n',
-                            ),
-                            TextSpan(
-                              text: localizations.aboutContributionPrompt,
-                            ),
-                            const TextSpan(
-                              text: '\n\n',
-                            ),
-                            TextSpan(
-                              text: '${localizations.aboutContributionLink}\n',
-                            ),
-                            TextSpan(
-                              text: repoLink,
-                              style: linkStyle,
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () async {
-                                  await launchUrl(Uri.parse(repoLink));
-                                },
-                            ),
-                            const TextSpan(
-                              text: '\n\n',
-                            ),
-                            TextSpan(
-                              text: '${localizations.aboutTranslations}\n',
-                            ),
-                            TextSpan(
-                              text: translationsLink,
-                              style: linkStyle,
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () async {
-                                  await launchUrl(Uri.parse(translationsLink));
-                                },
-                            ),
-                            const TextSpan(
-                              text: '\n\n',
-                            ),
-                            TextSpan(
-                              text: '${localizations.aboutReleaseNotes}\n',
-                            ),
-                            TextSpan(
-                              text: releaseNotesLink,
-                              style: linkStyle,
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () async {
-                                  await launchUrl(Uri.parse(releaseNotesLink));
-                                },
-                            ),
-                            const TextSpan(
-                              text: '\n\n\n',
-                            ),
-                            TextSpan(
-                              text: localizations.aboutThanks,
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ]);
+                  ],
+                );
               },
             ),
-          )
+          ),
         ],
       ),
       body: ListView(
@@ -164,9 +140,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             onTap: () => Navigator.of(context).pushNamed(DownloadsSettingsScreen.routeName),
           ),
           ListTile(
-              leading: const Icon(Icons.wifi),
-              title: Text(AppLocalizations.of(context)!.networkSettingsTitle),
-              onTap: () => Navigator.of(context).pushNamed(NetworkSettingsScreen.routeName)),
+            leading: const Icon(Icons.wifi),
+            title: Text(AppLocalizations.of(context)!.networkSettingsTitle),
+            onTap: () => Navigator.of(context).pushNamed(NetworkSettingsScreen.routeName),
+          ),
           ListTile(
             leading: const Icon(Icons.music_note),
             title: Text(AppLocalizations.of(context)!.audioService),

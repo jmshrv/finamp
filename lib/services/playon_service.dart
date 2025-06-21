@@ -26,11 +26,7 @@ late WebSocketChannel _channel;
 StreamSubscription<void>? _keepaliveSubscription;
 StreamSubscription<int>? _isControlledSubscription;
 
-enum SocketState {
-  disconnected,
-  connecting,
-  connected;
-}
+enum SocketState { disconnected, connecting, connected }
 
 class PlayOnService {
   // If the websocket connection to the server is established
@@ -82,15 +78,16 @@ class PlayOnService {
     // Sometimes we temporarily lose connection while the screen is locked.
     // Try reconnecting once again when the user begins interacting again, if still disconnected
     AppLifecycleListener(
-        onRestart: () {},
-        onHide: () {},
-        onShow: () {
-          if (socketState == SocketState.disconnected && FinampSettingsHelper.finampSettings.enablePlayon) {
-            _playOnServiceLogger.info("App in foreground and visible, attempting to reconnect.");
-            _startReconnectionLoop();
-          }
-        },
-        onPause: () {});
+      onRestart: () {},
+      onHide: () {},
+      onShow: () {
+        if (socketState == SocketState.disconnected && FinampSettingsHelper.finampSettings.enablePlayon) {
+          _playOnServiceLogger.info("App in foreground and visible, attempting to reconnect.");
+          _startReconnectionLoop();
+        }
+      },
+      onPause: () {},
+    );
 
     await startListener();
   }
@@ -102,56 +99,58 @@ class PlayOnService {
         assert(socketState == SocketState.disconnected);
         socketState = SocketState.connecting;
 
-        await _jellyfinApiHelper.updateCapabilitiesFull(ClientCapabilities(
-          supportsMediaControl: true,
-          supportsPersistentIdentifier: true,
-          playableMediaTypes: ["Audio"],
-          supportedCommands: [
-            "MoveUp",
-            "MoveDown",
-            "MoveLeft",
-            "MoveRight",
-            "PageUp",
-            "PageDown",
-            "PreviousLetter",
-            "NextLetter",
-            "ToggleOsd",
-            "ToggleContextMenu",
-            "Select",
-            "Back",
-            "TakeScreenshot",
-            "SendKey",
-            "SendString",
-            "GoHome",
-            "GoToSettings",
-            "VolumeUp",
-            "VolumeDown",
-            "Mute",
-            "Unmute",
-            "ToggleMute",
-            "SetVolume",
-            "SetAudioStreamIndex",
-            "SetSubtitleStreamIndex",
-            "ToggleFullscreen",
-            "DisplayContent",
-            "GoToSearch",
-            "DisplayMessage",
-            "SetRepeatMode",
-            "ChannelUp",
-            "ChannelDown",
-            "Guide",
-            "ToggleStats",
-            "PlayMediaSource",
-            "PlayTrailers",
-            "SetShuffleQueue",
-            "PlayState",
-            "PlayNext",
-            "ToggleOsdMenu",
-            "Play",
-            "SetMaxStreamingBitrate",
-            "SetPlaybackOrder"
-          ],
-        ));
+        await _jellyfinApiHelper.updateCapabilitiesFull(
+          ClientCapabilities(
+            supportsMediaControl: true,
+            supportsPersistentIdentifier: true,
+            playableMediaTypes: ["Audio"],
+            supportedCommands: [
+              "MoveUp",
+              "MoveDown",
+              "MoveLeft",
+              "MoveRight",
+              "PageUp",
+              "PageDown",
+              "PreviousLetter",
+              "NextLetter",
+              "ToggleOsd",
+              "ToggleContextMenu",
+              "Select",
+              "Back",
+              "TakeScreenshot",
+              "SendKey",
+              "SendString",
+              "GoHome",
+              "GoToSettings",
+              "VolumeUp",
+              "VolumeDown",
+              "Mute",
+              "Unmute",
+              "ToggleMute",
+              "SetVolume",
+              "SetAudioStreamIndex",
+              "SetSubtitleStreamIndex",
+              "ToggleFullscreen",
+              "DisplayContent",
+              "GoToSearch",
+              "DisplayMessage",
+              "SetRepeatMode",
+              "ChannelUp",
+              "ChannelDown",
+              "Guide",
+              "ToggleStats",
+              "PlayMediaSource",
+              "PlayTrailers",
+              "SetShuffleQueue",
+              "PlayState",
+              "PlayNext",
+              "ToggleOsdMenu",
+              "Play",
+              "SetMaxStreamingBitrate",
+              "SetPlaybackOrder",
+            ],
+          ),
+        );
         if (abortConnect) {
           socketState = SocketState.disconnected;
           return;
@@ -287,8 +286,9 @@ class PlayOnService {
             }
             break;
           case "UserDataChanged":
-            var item = await _jellyfinApiHelper
-                .getItemById(BaseItemId(request['Data']['UserDataList'][0]['ItemId'] as String));
+            var item = await _jellyfinApiHelper.getItemById(
+              BaseItemId(request['Data']['UserDataList'][0]['ItemId'] as String),
+            );
 
             // Handle toggling favorite status from remote client
             _playOnServiceLogger.info("Updating favorite ui state");
@@ -302,13 +302,15 @@ class PlayOnService {
             // This is particularly useful to stop agressively reporting playback when it's not needed
             await _isControlledSubscription?.cancel();
             isControlled = true;
-            _isControlledSubscription = Stream.periodic(
-                    Duration(seconds: FinampSettingsHelper.finampSettings.playOnStaleDelay), (count) => count)
-                .listen((event) {
-              _playOnServiceLogger.info("Mark remote controlling as stale");
-              isControlled = false;
-              _isControlledSubscription?.cancel();
-            });
+            _isControlledSubscription =
+                Stream.periodic(
+                  Duration(seconds: FinampSettingsHelper.finampSettings.playOnStaleDelay),
+                  (count) => count,
+                ).listen((event) {
+                  _playOnServiceLogger.info("Mark remote controlling as stale");
+                  isControlled = false;
+                  _isControlledSubscription?.cancel();
+                });
             switch (request['Data']['Command']) {
               case "Stop":
                 await _audioHandler.stop();
@@ -356,18 +358,18 @@ class PlayOnService {
                     );
                     if (items!.isNotEmpty) {
                       //TODO check if all tracks in the request are in the upcoming queue (peekQueue). If they are, we should try to only reorder the upcoming queue instead of treating it as a new queue, and then skip to the correct index.
-                      unawaited(_queueService.startPlayback(
-                        items: items,
-                        source: QueueItemSource(
-                          name: QueueItemSourceName(
-                            type: QueueItemSourceNameType.remoteClient,
+                      unawaited(
+                        _queueService.startPlayback(
+                          items: items,
+                          source: QueueItemSource(
+                            name: QueueItemSourceName(type: QueueItemSourceNameType.remoteClient),
+                            type: QueueItemSourceType.remoteClient,
+                            id: items[0].id,
                           ),
-                          type: QueueItemSourceType.remoteClient,
-                          id: items[0].id,
+                          // seems like Jellyfin isn't always sending the correct index
+                          startingIndex: request['Data']['StartIndex'] as int,
                         ),
-                        // seems like Jellyfin isn't always sending the correct index
-                        startingIndex: request['Data']['StartIndex'] as int,
-                      ));
+                      );
                     } else {
                       _playOnServiceLogger.severe("Server asked to start an unplayable item");
                     }
@@ -378,9 +380,7 @@ class PlayOnService {
                       includeItemTypes: "Audio",
                       itemIds: List<BaseItemId>.from(request['Data']['ItemIds'] as List<dynamic>),
                     );
-                    unawaited(_queueService.addToNextUp(
-                      items: items!,
-                    ));
+                    unawaited(_queueService.addToNextUp(items: items!));
                     break;
                   case 'PlayLast':
                     var items = await _jellyfinApiHelper.getItems(
@@ -388,9 +388,7 @@ class PlayOnService {
                       includeItemTypes: "Audio",
                       itemIds: List<BaseItemId>.from(request['Data']['ItemIds'] as List<dynamic>),
                     );
-                    unawaited(_queueService.addToQueue(
-                      items: items!,
-                    ));
+                    unawaited(_queueService.addToQueue(items: items!));
                     break;
                 }
             }

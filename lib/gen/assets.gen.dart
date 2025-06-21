@@ -28,13 +28,7 @@ class $ImagesGen {
   AssetGenImage get jellyfinIconTransparent => const AssetGenImage('images/jellyfin-icon-transparent.png');
 
   /// List of all assets
-  List<dynamic> get values => [
-        albumWhite,
-        finamp,
-        finampCroppedPng,
-        finampCroppedSvg,
-        jellyfinIconTransparent,
-      ];
+  List<dynamic> get values => [albumWhite, finamp, finampCroppedPng, finampCroppedSvg, jellyfinIconTransparent];
 }
 
 class Assets {

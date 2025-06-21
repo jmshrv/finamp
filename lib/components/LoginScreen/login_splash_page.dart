@@ -9,10 +9,7 @@ class LoginSplashPage extends StatelessWidget {
 
   final VoidCallback onGetStartedPressed;
 
-  const LoginSplashPage({
-    super.key,
-    required this.onGetStartedPressed,
-  });
+  const LoginSplashPage({super.key, required this.onGetStartedPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +25,7 @@ class LoginSplashPage extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 80.0, bottom: 40.0),
                 child: Hero(
                   tag: "finamp_logo",
-                  child: SvgPicture.asset(
-                    'images/finamp_cropped.svg',
-                    width: 150,
-                    height: 150,
-                  ),
+                  child: SvgPicture.asset('images/finamp_cropped.svg', width: 150, height: 150),
                 ),
               ),
               RichText(
@@ -41,24 +34,22 @@ class LoginSplashPage extends StatelessWidget {
                   children: [
                     TextSpan(text: welcomeString[0]),
                     TextSpan(
-                        text: "Finamp",
-                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                              // color: Theme.of(context).colorScheme.secondary,
-                              fontWeight: FontWeight.w600,
-                            )),
+                      text: "Finamp",
+                      style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                        // color: Theme.of(context).colorScheme.secondary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     TextSpan(
-                        // Avoid crashing on incorrect translations without placeholder
-                        text: welcomeString.length > 1 ? welcomeString[1] : "")
+                      // Avoid crashing on incorrect translations without placeholder
+                      text: welcomeString.length > 1 ? welcomeString[1] : "",
+                    ),
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 60,
-              ),
+              const SizedBox(height: 60),
               Text(AppLocalizations.of(context)!.loginFlowSlogan, style: Theme.of(context).textTheme.bodyLarge),
-              const SizedBox(
-                height: 80,
-              ),
+              const SizedBox(height: 80),
               CTALarge(
                 text: AppLocalizations.of(context)!.loginFlowGetStarted,
                 icon: TablerIcons.music,

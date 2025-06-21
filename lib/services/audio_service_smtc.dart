@@ -89,20 +89,23 @@ class AudioServiceSMTC extends AudioServicePlatform {
     var artURI = request.mediaItem.artUri;
     await smtc.updateMetadata(
       MusicMetadata(
-          title: request.mediaItem.title,
-          album: request.mediaItem.album,
-          artist: request.mediaItem.artist,
-          // We need a null, not the String "null"
-          // ignore: prefer_null_aware_operators
-          thumbnail: artURI == null ? null : artURI.toString()),
+        title: request.mediaItem.title,
+        album: request.mediaItem.album,
+        artist: request.mediaItem.artist,
+        // We need a null, not the String "null"
+        // ignore: prefer_null_aware_operators
+        thumbnail: artURI == null ? null : artURI.toString(),
+      ),
     );
-    await smtc.setTimeline(PlaybackTimeline(
-      startTimeMs: 0,
-      minSeekTimeMs: 0,
-      endTimeMs: request.mediaItem.duration?.inMilliseconds ?? 0,
-      maxSeekTimeMs: request.mediaItem.duration?.inMilliseconds ?? 0,
-      positionMs: 0,
-    ));
+    await smtc.setTimeline(
+      PlaybackTimeline(
+        startTimeMs: 0,
+        minSeekTimeMs: 0,
+        endTimeMs: request.mediaItem.duration?.inMilliseconds ?? 0,
+        maxSeekTimeMs: request.mediaItem.duration?.inMilliseconds ?? 0,
+        positionMs: 0,
+      ),
+    );
   }
 
   @override

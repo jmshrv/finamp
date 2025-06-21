@@ -10,10 +10,7 @@ import 'package:get_it/get_it.dart';
 class ClearQueueMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final BaseItemDto baseItem;
 
-  const ClearQueueMenuEntry({
-    super.key,
-    required this.baseItem,
-  });
+  const ClearQueueMenuEntry({super.key, required this.baseItem});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

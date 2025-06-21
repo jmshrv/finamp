@@ -59,8 +59,7 @@ class GlobalSnackbar {
     String Function(BuildContext scaffold) message, {
     bool isConfirmation = false,
     SnackBarAction Function(BuildContext scaffold)? action,
-  }) =>
-      _enqueue(() => _message(message, isConfirmation, action));
+  }) => _enqueue(() => _message(message, isConfirmation, action));
   static void _message(
     String Function(BuildContext scaffold) message,
     bool isConfirmation,
@@ -110,7 +109,7 @@ class GlobalSnackbar {
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
                   child: Text(MaterialLocalizations.of(context).closeButtonLabel),
-                )
+                ),
               ],
             ),
           ),

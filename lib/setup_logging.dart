@@ -38,7 +38,8 @@ Future<void> setupLogging() async {
   final deviceInfo = DeviceInfoPlugin();
 
   startupLogger.info(
-      "This is ${packageInfo.appName} version ${packageInfo.version}+${packageInfo.buildNumber} (Signature '${packageInfo.buildSignature}'), installed via ${packageInfo.installerStore}.");
+    "This is ${packageInfo.appName} version ${packageInfo.version}+${packageInfo.buildNumber} (Signature '${packageInfo.buildSignature}'), installed via ${packageInfo.installerStore}.",
+  );
 
   try {
     String deviceInfoString;

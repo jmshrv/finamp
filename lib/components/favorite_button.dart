@@ -54,10 +54,7 @@ class _FavoriteButtonState extends ConsumerState<FavoriteButton> {
       }
     } else {
       return IconButton(
-        icon: Icon(
-          isFav ? Icons.favorite : Icons.favorite_outline,
-          size: widget.size ?? 24.0,
-        ),
+        icon: Icon(isFav ? Icons.favorite : Icons.favorite_outline, size: widget.size ?? 24.0),
         color: widget.color ?? IconTheme.of(context).color,
         disabledColor: (widget.color ?? IconTheme.of(context).color)!.withOpacity(0.3),
         visualDensity: widget.visualDensity ?? VisualDensity.compact,

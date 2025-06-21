@@ -31,22 +31,23 @@ import 'PlayerScreen/player_split_screen_scaffold.dart';
 import 'album_image.dart';
 
 class NowPlayingBar extends StatelessWidget {
-  const NowPlayingBar({
-    super.key,
-  });
+  const NowPlayingBar({super.key});
 
   static const horizontalPadding = 8.0;
   static const albumImageSize = 70.0;
 
-  BoxDecoration? getShadow(BuildContext context) =>
-      BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(12.0)), boxShadow: [
-        BoxShadow(
-            blurRadius: 12.0,
-            spreadRadius: 8.0,
-            color: Theme.of(context).brightness == Brightness.light
-                ? darkColorScheme.surface.withOpacity(0.15)
-                : darkColorScheme.surface.withOpacity(0.7))
-      ]);
+  BoxDecoration? getShadow(BuildContext context) => BoxDecoration(
+    borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+    boxShadow: [
+      BoxShadow(
+        blurRadius: 12.0,
+        spreadRadius: 8.0,
+        color: Theme.of(context).brightness == Brightness.light
+            ? darkColorScheme.surface.withOpacity(0.15)
+            : darkColorScheme.surface.withOpacity(0.7),
+      ),
+    ],
+  );
 
   Color getProgressBackgroundColor(WidgetRef ref) {
     return ref.watch(finampSettingsProvider.showProgressOnNowPlayingBar)
@@ -54,7 +55,8 @@ class NowPlayingBar extends StatelessWidget {
             Theme.of(ref.context).brightness == Brightness.dark
                 ? IconTheme.of(ref.context).color!.withOpacity(0.35)
                 : IconTheme.of(ref.context).color!.withOpacity(0.5),
-            Theme.of(ref.context).brightness == Brightness.dark ? Colors.black : Colors.white)
+            Theme.of(ref.context).brightness == Brightness.dark ? Colors.black : Colors.white,
+          )
         : IconTheme.of(ref.context).color!.withOpacity(0.85);
   }
 
@@ -63,70 +65,69 @@ class NowPlayingBar extends StatelessWidget {
     var context = ref.context;
 
     return SimpleGestureDetector(
-        onVerticalSwipe: (direction) {
-          if (direction == SwipeDirection.up && retryCallback != null) {
-            retryCallback();
-          }
-        },
-        onTap: retryCallback,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
-          child: Container(
-            decoration: getShadow(ref.context),
-            child: Material(
-              shadowColor: Theme.of(context)
-                  .colorScheme
-                  .primary
-                  .withOpacity(Theme.of(context).brightness == Brightness.light ? 0.75 : 0.3),
-              borderRadius: BorderRadius.circular(12.0),
-              clipBehavior: Clip.antiAlias,
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? IconTheme.of(context).color!.withOpacity(0.1)
-                  : Theme.of(context).cardColor,
-              elevation: 8.0,
+      onVerticalSwipe: (direction) {
+        if (direction == SwipeDirection.up && retryCallback != null) {
+          retryCallback();
+        }
+      },
+      onTap: retryCallback,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
+        child: Container(
+          decoration: getShadow(ref.context),
+          child: Material(
+            shadowColor: Theme.of(
+              context,
+            ).colorScheme.primary.withOpacity(Theme.of(context).brightness == Brightness.light ? 0.75 : 0.3),
+            borderRadius: BorderRadius.circular(12.0),
+            clipBehavior: Clip.antiAlias,
+            color: Theme.of(context).brightness == Brightness.dark
+                ? IconTheme.of(context).color!.withOpacity(0.1)
+                : Theme.of(context).cardColor,
+            elevation: 8.0,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: albumImageSize,
+              padding: EdgeInsets.zero,
               child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: albumImageSize,
-                padding: EdgeInsets.zero,
-                child: Container(
-                  clipBehavior: Clip.antiAlias,
-                  decoration: ShapeDecoration(
-                    color: progressBackgroundColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
+                clipBehavior: Clip.antiAlias,
+                decoration: ShapeDecoration(
+                  color: progressBackgroundColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: albumImageSize,
+                      height: albumImageSize,
+                      decoration: const ShapeDecoration(shape: Border(), color: Color.fromRGBO(0, 0, 0, 0.3)),
+                      child: (retryCallback != null)
+                          ? const Icon(Icons.refresh, size: albumImageSize)
+                          : const Center(child: CircularProgressIndicator.adaptive()),
                     ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                          width: albumImageSize,
-                          height: albumImageSize,
-                          decoration: const ShapeDecoration(
-                            shape: Border(),
-                            color: Color.fromRGBO(0, 0, 0, 0.3),
-                          ),
-                          child: (retryCallback != null)
-                              ? const Icon(Icons.refresh, size: albumImageSize)
-                              : const Center(child: CircularProgressIndicator.adaptive())),
-                      Expanded(
-                        child: Container(
-                            height: albumImageSize,
-                            padding: const EdgeInsets.only(left: 12, right: 4),
-                            alignment: Alignment.centerLeft,
-                            child: Text((retryCallback != null)
-                                ? AppLocalizations.of(context)!.queueRetryMessage
-                                : AppLocalizations.of(context)!.queueLoadingMessage)),
+                    Expanded(
+                      child: Container(
+                        height: albumImageSize,
+                        padding: const EdgeInsets.only(left: 12, right: 4),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          (retryCallback != null)
+                              ? AppLocalizations.of(context)!.queueRetryMessage
+                              : AppLocalizations.of(context)!.queueLoadingMessage,
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Widget buildNowPlayingBar(WidgetRef ref, FinampQueueItem currentTrack) {
@@ -143,132 +144,127 @@ class NowPlayingBar extends StatelessWidget {
     final progressBackgroundColor = getProgressBackgroundColor(ref);
 
     Future openPlayerScreen() => Navigator.of(context).push(
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => const PlayerScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              if (MediaQuery.of(context).disableAnimations) {
-                return child;
-              }
-              const begin = Offset(0.0, 1.0);
-              const end = Offset.zero;
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => const PlayerScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          if (MediaQuery.of(context).disableAnimations) {
+            return child;
+          }
+          const begin = Offset(0.0, 1.0);
+          const end = Offset.zero;
 
-              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: Curves.easeInOutQuad));
-              var offsetAnimation = animation.drive(tween);
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: Curves.easeInOutQuad));
+          var offsetAnimation = animation.drive(tween);
 
-              if (animation.status == AnimationStatus.reverse) {
-                // dismiss animation
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              } else {
-                return SlideTransition(position: offsetAnimation, child: child);
-              }
-            },
-            settings: const RouteSettings(name: PlayerScreen.routeName),
-          ),
-        );
+          if (animation.status == AnimationStatus.reverse) {
+            // dismiss animation
+            return FadeTransition(opacity: animation, child: child);
+          } else {
+            return SlideTransition(position: offsetAnimation, child: child);
+          }
+        },
+        settings: const RouteSettings(name: PlayerScreen.routeName),
+      ),
+    );
 
     return SafeArea(
-        child: Padding(
-      padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
-      child: Semantics.fromProperties(
-        properties: SemanticsProperties(
-          label: AppLocalizations.of(context)!.nowPlayingBarTooltip,
-          button: true,
-        ),
-        child: SimpleGestureDetector(
-          onTap: openPlayerScreen,
-          child: Dismissible(
-            key: const Key("NowPlayingBarDismiss"),
-            direction:
-                ref.watch(finampSettingsProvider.disableGesture) ? DismissDirection.none : DismissDirection.vertical,
-            confirmDismiss: (direction) async {
-              if (direction == DismissDirection.down) {
-                FeedbackHelper.feedback(FeedbackType.success);
-                await queueService.stopAndClearQueue();
-              } else {
-                await openPlayerScreen();
-              }
-              return false;
-            },
-            dismissThresholds: const {DismissDirection.up: 0.15, DismissDirection.down: 0.7},
-            child: Container(
-              clipBehavior: Clip.antiAlias,
-              decoration: getShadow(context),
-              //TODO use a PageView instead of a Dismissible, and only wrap dynamic items (not the buttons)
-              child: Dismissible(
-                key: const Key("NowPlayingBar"),
-                direction: ref.watch(finampSettingsProvider.disableGesture)
-                    ? DismissDirection.none
-                    : DismissDirection.horizontal,
-                confirmDismiss: (direction) async {
-                  if (direction == DismissDirection.endToStart) {
-                    FeedbackHelper.feedback(FeedbackType.light);
-                    await audioHandler.skipToNext();
-                  } else {
-                    FeedbackHelper.feedback(FeedbackType.light);
-                    await audioHandler.skipToPrevious(forceSkip: true);
-                  }
-                  return false;
-                },
-                child: Material(
-                  shadowColor: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withOpacity(Theme.of(context).brightness == Brightness.light ? 0.75 : 0.3),
-                  borderRadius: BorderRadius.circular(12.0),
-                  clipBehavior: Clip.antiAlias,
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? IconTheme.of(context).color!.withOpacity(0.1)
-                      : Theme.of(context).cardColor,
-                  elevation: 8.0,
-                  child: StreamBuilder<MediaState>(
-                    stream: mediaStateStream.where((event) => event.mediaItem != null),
-                    initialData: MediaState(audioHandler.mediaItem.valueOrNull, audioHandler.playbackState.value,
-                        audioHandler.fadeState.value),
-                    builder: (context, snapshot) {
-                      final MediaState mediaState = snapshot.data!;
-                      final playbackState = mediaState.playbackState;
-                      final fadeState = mediaState.fadeState;
-                      // If we have a media item and the player hasn't finished, show
-                      // the now playing bar.
-                      if (mediaState.mediaItem != null) {
-                        //TODO move into separate component and share with queue list
-                        return Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: albumImageSize,
-                          padding: EdgeInsets.zero,
-                          child: Container(
-                            clipBehavior: Clip.antiAlias,
-                            decoration: ShapeDecoration(
-                              color: progressBackgroundColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
+        child: Semantics.fromProperties(
+          properties: SemanticsProperties(label: AppLocalizations.of(context)!.nowPlayingBarTooltip, button: true),
+          child: SimpleGestureDetector(
+            onTap: openPlayerScreen,
+            child: Dismissible(
+              key: const Key("NowPlayingBarDismiss"),
+              direction: ref.watch(finampSettingsProvider.disableGesture)
+                  ? DismissDirection.none
+                  : DismissDirection.vertical,
+              confirmDismiss: (direction) async {
+                if (direction == DismissDirection.down) {
+                  FeedbackHelper.feedback(FeedbackType.success);
+                  await queueService.stopAndClearQueue();
+                } else {
+                  await openPlayerScreen();
+                }
+                return false;
+              },
+              dismissThresholds: const {DismissDirection.up: 0.15, DismissDirection.down: 0.7},
+              child: Container(
+                clipBehavior: Clip.antiAlias,
+                decoration: getShadow(context),
+                //TODO use a PageView instead of a Dismissible, and only wrap dynamic items (not the buttons)
+                child: Dismissible(
+                  key: const Key("NowPlayingBar"),
+                  direction: ref.watch(finampSettingsProvider.disableGesture)
+                      ? DismissDirection.none
+                      : DismissDirection.horizontal,
+                  confirmDismiss: (direction) async {
+                    if (direction == DismissDirection.endToStart) {
+                      FeedbackHelper.feedback(FeedbackType.light);
+                      await audioHandler.skipToNext();
+                    } else {
+                      FeedbackHelper.feedback(FeedbackType.light);
+                      await audioHandler.skipToPrevious(forceSkip: true);
+                    }
+                    return false;
+                  },
+                  child: Material(
+                    shadowColor: Theme.of(
+                      context,
+                    ).colorScheme.primary.withOpacity(Theme.of(context).brightness == Brightness.light ? 0.75 : 0.3),
+                    borderRadius: BorderRadius.circular(12.0),
+                    clipBehavior: Clip.antiAlias,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? IconTheme.of(context).color!.withOpacity(0.1)
+                        : Theme.of(context).cardColor,
+                    elevation: 8.0,
+                    child: StreamBuilder<MediaState>(
+                      stream: mediaStateStream.where((event) => event.mediaItem != null),
+                      initialData: MediaState(
+                        audioHandler.mediaItem.valueOrNull,
+                        audioHandler.playbackState.value,
+                        audioHandler.fadeState.value,
+                      ),
+                      builder: (context, snapshot) {
+                        final MediaState mediaState = snapshot.data!;
+                        final playbackState = mediaState.playbackState;
+                        final fadeState = mediaState.fadeState;
+                        // If we have a media item and the player hasn't finished, show
+                        // the now playing bar.
+                        if (mediaState.mediaItem != null) {
+                          //TODO move into separate component and share with queue list
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: albumImageSize,
+                            padding: EdgeInsets.zero,
+                            child: Container(
+                              clipBehavior: Clip.antiAlias,
+                              decoration: ShapeDecoration(
+                                color: progressBackgroundColor,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
                               ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    AlbumImage(
-                                      placeholderBuilder: (_) => const SizedBox.shrink(),
-                                      imageListenable: currentAlbumImageProvider,
-                                      borderRadius: BorderRadius.zero,
-                                    ),
-                                    AudioFadeProgressVisualizerContainer(
-                                      key: const Key("AlbumArtAudioFadeProgressVisualizer"),
-                                      width: albumImageSize,
-                                      height: albumImageSize,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(12.0),
-                                        bottomLeft: Radius.circular(12.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      AlbumImage(
+                                        placeholderBuilder: (_) => const SizedBox.shrink(),
+                                        imageListenable: currentAlbumImageProvider,
+                                        borderRadius: BorderRadius.zero,
                                       ),
-                                      child: IconButton(
+                                      AudioFadeProgressVisualizerContainer(
+                                        key: const Key("AlbumArtAudioFadeProgressVisualizer"),
+                                        width: albumImageSize,
+                                        height: albumImageSize,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(12.0),
+                                          bottomLeft: Radius.circular(12.0),
+                                        ),
+                                        child: IconButton(
                                           tooltip: AppLocalizations.of(context)!.togglePlaybackButtonTooltip,
                                           onPressed: () {
                                             FeedbackHelper.feedback(FeedbackType.light);
@@ -276,23 +272,25 @@ class NowPlayingBar extends StatelessWidget {
                                           },
                                           color: Colors.white,
                                           icon: Icon(
-                                              playbackState.playing
-                                                  ? fadeState.fadeDirection != FadeDirection.fadeOut
+                                            playbackState.playing
+                                                ? fadeState.fadeDirection != FadeDirection.fadeOut
                                                       ? TablerIcons.player_pause
                                                       : TablerIcons.player_play
-                                                  : TablerIcons.player_play,
-                                              size: 32)),
-                                    ),
-                                  ],
-                                ),
-                                Expanded(
-                                  child: Stack(
-                                    children: [
-                                      if (ref.watch(finampSettingsProvider.showProgressOnNowPlayingBar))
-                                        Positioned(
-                                          left: 0,
-                                          top: 0,
-                                          child: StreamBuilder<Duration>(
+                                                : TablerIcons.player_play,
+                                            size: 32,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Expanded(
+                                    child: Stack(
+                                      children: [
+                                        if (ref.watch(finampSettingsProvider.showProgressOnNowPlayingBar))
+                                          Positioned(
+                                            left: 0,
+                                            top: 0,
+                                            child: StreamBuilder<Duration>(
                                               stream: AudioService.position,
                                               initialData: audioHandler.playbackState.value.position,
                                               builder: (context, snapshot) {
@@ -302,12 +300,13 @@ class NowPlayingBar extends StatelessWidget {
                                                   return Container(
                                                     // rather hacky workaround, using LayoutBuilder would be nice but I couldn't get it to work...
                                                     width: max(
-                                                        0,
-                                                        (screenSize.width - 3 * horizontalPadding - albumImageSize) *
-                                                            (playbackPosition!.inMilliseconds /
-                                                                (mediaState.mediaItem?.duration ??
-                                                                        const Duration(seconds: 0))
-                                                                    .inMilliseconds)),
+                                                      0,
+                                                      (screenSize.width - 3 * horizontalPadding - albumImageSize) *
+                                                          (playbackPosition!.inMilliseconds /
+                                                              (mediaState.mediaItem?.duration ??
+                                                                      const Duration(seconds: 0))
+                                                                  .inMilliseconds),
+                                                    ),
                                                     height: albumImageSize,
                                                     decoration: ShapeDecoration(
                                                       color: IconTheme.of(context).color!.withOpacity(0.75),
@@ -322,51 +321,53 @@ class NowPlayingBar extends StatelessWidget {
                                                 } else {
                                                   return Container();
                                                 }
-                                              }),
-                                        ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            child: Container(
-                                              height: albumImageSize,
-                                              padding: const EdgeInsets.only(left: 12, right: 4),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  SizedBox(
-                                                    height: 20,
-                                                    child: OneLineMarqueeHelper(
-                                                      key: ValueKey(currentTrack.item.id),
-                                                      text: currentTrack.item.title,
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        height: 26 / 20,
-                                                        color: Colors.white,
-                                                        fontWeight: Theme.of(context).brightness == Brightness.light
-                                                            ? FontWeight.w500
-                                                            : FontWeight.w600,
+                                              },
+                                            ),
+                                          ),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                height: albumImageSize,
+                                                padding: const EdgeInsets.only(left: 12, right: 4),
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 20,
+                                                      child: OneLineMarqueeHelper(
+                                                        key: ValueKey(currentTrack.item.id),
+                                                        text: currentTrack.item.title,
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          height: 26 / 20,
+                                                          color: Colors.white,
+                                                          fontWeight: Theme.of(context).brightness == Brightness.light
+                                                              ? FontWeight.w500
+                                                              : FontWeight.w600,
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  const SizedBox(height: 4),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      Expanded(
-                                                        child: Text(
-                                                          processArtist(currentTrack.item.artist, context),
-                                                          style: TextStyle(
+                                                    const SizedBox(height: 4),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Expanded(
+                                                          child: Text(
+                                                            processArtist(currentTrack.item.artist, context),
+                                                            style: TextStyle(
                                                               color: Colors.white.withOpacity(0.85),
                                                               fontSize: 13,
                                                               fontWeight: FontWeight.w300,
-                                                              overflow: TextOverflow.ellipsis),
+                                                              overflow: TextOverflow.ellipsis,
+                                                            ),
+                                                          ),
                                                         ),
-                                                      ),
-                                                      StreamBuilder<Duration>(
+                                                        StreamBuilder<Duration>(
                                                           stream: AudioService.position,
                                                           initialData: audioHandler.playbackState.value.position,
                                                           builder: (context, snapshot) {
@@ -394,8 +395,10 @@ class NowPlayingBar extends StatelessWidget {
                                                                 child: Row(
                                                                   children: [
                                                                     Text(
-                                                                      printDuration(playbackPosition,
-                                                                          leadingZeroes: false),
+                                                                      printDuration(
+                                                                        playbackPosition,
+                                                                        leadingZeroes: false,
+                                                                      ),
                                                                       style: TextStyle(
                                                                         fontSize: 14,
                                                                         fontWeight: FontWeight.w400,
@@ -431,41 +434,43 @@ class NowPlayingBar extends StatelessWidget {
                                                             } else {
                                                               return const SizedBox.shrink();
                                                             }
-                                                          })
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.end,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(top: 4.0, right: 4.0),
-                                                child: AddToPlaylistButton(
-                                                  item: currentTrackBaseItem,
-                                                  queueItem: currentTrack,
-                                                  color: Colors.white,
-                                                  size: 28,
-                                                  visualDensity: const VisualDensity(horizontal: -4),
+                                                          },
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.only(top: 4.0, right: 4.0),
+                                                  child: AddToPlaylistButton(
+                                                    item: currentTrackBaseItem,
+                                                    queueItem: currentTrack,
+                                                    color: Colors.white,
+                                                    size: 28,
+                                                    visualDensity: const VisualDensity(horizontal: -4),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    },
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -473,7 +478,7 @@ class NowPlayingBar extends StatelessWidget {
           ),
         ),
       ),
-    ));
+    );
   }
 
   @override
@@ -481,38 +486,40 @@ class NowPlayingBar extends StatelessWidget {
     final queueService = GetIt.instance<QueueService>();
 
     return Hero(
-        tag: "nowplaying",
-        createRectTween: (from, to) => RectTween(begin: from, end: from),
-        child: PlayerScreenTheme(
-          // Scaffold ignores system elements padding if bottom bar is present, so we must
-          // use SafeArea in all cases to include it in our height
-          child: SafeArea(
-            // Use consumer inside PlayerScreenTheme to generate ref
-            child: Consumer(
-              builder: (context, ref, child) {
-                ref.listen(currentTrackMetadataProvider, (metadataOrNull, metadata) {}); // keep provider alive
+      tag: "nowplaying",
+      createRectTween: (from, to) => RectTween(begin: from, end: from),
+      child: PlayerScreenTheme(
+        // Scaffold ignores system elements padding if bottom bar is present, so we must
+        // use SafeArea in all cases to include it in our height
+        child: SafeArea(
+          // Use consumer inside PlayerScreenTheme to generate ref
+          child: Consumer(
+            builder: (context, ref, child) {
+              ref.listen(currentTrackMetadataProvider, (metadataOrNull, metadata) {}); // keep provider alive
 
-                return StreamBuilder<FinampQueueInfo?>(
-                    stream: queueService.getQueueStream(),
-                    initialData: queueService.getQueue(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData &&
-                          snapshot.data!.saveState == SavedQueueState.loading &&
-                          !usingPlayerSplitScreen) {
-                        return buildLoadingQueueBar(ref, null);
-                      } else if (snapshot.hasData &&
-                          snapshot.data!.saveState == SavedQueueState.failed &&
-                          !usingPlayerSplitScreen) {
-                        return buildLoadingQueueBar(ref, queueService.retryQueueLoad);
-                      } else if (snapshot.hasData && snapshot.data!.currentTrack != null && !usingPlayerSplitScreen) {
-                        return buildNowPlayingBar(ref, snapshot.data!.currentTrack!);
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    });
-              },
-            ),
+              return StreamBuilder<FinampQueueInfo?>(
+                stream: queueService.getQueueStream(),
+                initialData: queueService.getQueue(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData &&
+                      snapshot.data!.saveState == SavedQueueState.loading &&
+                      !usingPlayerSplitScreen) {
+                    return buildLoadingQueueBar(ref, null);
+                  } else if (snapshot.hasData &&
+                      snapshot.data!.saveState == SavedQueueState.failed &&
+                      !usingPlayerSplitScreen) {
+                    return buildLoadingQueueBar(ref, queueService.retryQueueLoad);
+                  } else if (snapshot.hasData && snapshot.data!.currentTrack != null && !usingPlayerSplitScreen) {
+                    return buildNowPlayingBar(ref, snapshot.data!.currentTrack!);
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
+              );
+            },
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

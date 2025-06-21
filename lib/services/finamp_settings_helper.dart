@@ -53,11 +53,7 @@ class FinampSettingsHelper {
   static void resetTabsSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
     finampSettingsTemp.tabOrder = TabContentType.values;
-    finampSettingsTemp.showTabs = Map.fromEntries(
-      TabContentType.values.map(
-        (e) => MapEntry(e, true),
-      ),
-    );
+    finampSettingsTemp.showTabs = Map.fromEntries(TabContentType.values.map((e) => MapEntry(e, true)));
   }
 
   static void resetCustomizationSettings() {
@@ -188,7 +184,8 @@ class FinampSettingsHelper {
 
   static void resetPlaybackReportingSettings() {
     FinampSetters.setPeriodicPlaybackSessionUpdateFrequencySeconds(
-        DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds); // DOES NOT update UI
+      DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds,
+    ); // DOES NOT update UI
     FinampSetters.setEnablePlayon(DefaultSettings.enablePlayon);
     FinampSetters.setReportQueueToServer(DefaultSettings.reportQueueToServer);
     FinampSetters.setPlayOnStaleDelay(DefaultSettings.playOnStaleDelay);
@@ -202,7 +199,8 @@ class FinampSettingsHelper {
 
     finampSettingsTemp.volumeNormalizationActive = DefaultSettings.volumeNormalizationActive;
     FinampSetters.setVolumeNormalizationIOSBaseGain(
-        DefaultSettings.volumeNormalizationIOSBaseGain); // DOES NOT update UI
+      DefaultSettings.volumeNormalizationIOSBaseGain,
+    ); // DOES NOT update UI
     finampSettingsTemp.volumeNormalizationMode = DefaultSettings.volumeNormalizationMode;
 
     Hive.box<FinampSettings>("FinampSettings").put("FinampSettings", finampSettingsTemp);
@@ -226,10 +224,10 @@ class FinampSettingsHelper {
 
   static void resetNetworkSettings() {
     GetIt.instance<FinampUserHelper>().currentUser?.update(
-          newIsLocal: DefaultSettings.isLocal,
-          newLocalAddress: DefaultSettings.localNetworkAddress,
-          newPreferLocalNetwork: DefaultSettings.preferLocalNetwork,
-        );
+      newIsLocal: DefaultSettings.isLocal,
+      newLocalAddress: DefaultSettings.localNetworkAddress,
+      newPreferLocalNetwork: DefaultSettings.preferLocalNetwork,
+    );
     FinampSetters.setAutoOffline(DefaultSettings.autoOffline);
   }
 
@@ -253,24 +251,28 @@ class FinampSettingsHelper {
     LocaleHelper.setLocale(null); // Reset to System Language
   }
 
-  static IconButton makeSettingsResetButtonWithDialog(BuildContext context, Function() resetFunction,
-      {bool isGlobal = false}) {
+  static IconButton makeSettingsResetButtonWithDialog(
+    BuildContext context,
+    Function() resetFunction, {
+    bool isGlobal = false,
+  }) {
     // TODO: Replace the following Strings with localization
     return IconButton(
       onPressed: () async {
         await showDialog(
-            context: context,
-            builder: (context) => ConfirmationPromptDialog(
-                  promptText: isGlobal
-                      ? AppLocalizations.of(context)!.resetSettingsPromptGlobal
-                      : AppLocalizations.of(context)!.resetSettingsPromptLocal,
-                  confirmButtonText: isGlobal
-                      ? AppLocalizations.of(context)!.resetSettingsPromptGlobalConfirm
-                      : AppLocalizations.of(context)!.reset,
-                  abortButtonText: AppLocalizations.of(context)!.genericCancel,
-                  onConfirmed: resetFunction,
-                  onAborted: () {},
-                ));
+          context: context,
+          builder: (context) => ConfirmationPromptDialog(
+            promptText: isGlobal
+                ? AppLocalizations.of(context)!.resetSettingsPromptGlobal
+                : AppLocalizations.of(context)!.resetSettingsPromptLocal,
+            confirmButtonText: isGlobal
+                ? AppLocalizations.of(context)!.resetSettingsPromptGlobalConfirm
+                : AppLocalizations.of(context)!.reset,
+            abortButtonText: AppLocalizations.of(context)!.genericCancel,
+            onConfirmed: resetFunction,
+            onAborted: () {},
+          ),
+        );
       },
       icon: const Icon(Icons.refresh),
       tooltip: AppLocalizations.of(context)!.resetToDefaults,

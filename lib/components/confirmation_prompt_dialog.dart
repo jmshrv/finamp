@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 class ConfirmationPromptDialog extends AlertDialog {
-  const ConfirmationPromptDialog(
-      {super.key,
-      required this.promptText,
-      required this.confirmButtonText,
-      required this.abortButtonText,
-      required this.onConfirmed,
-      required this.onAborted,
-      this.centerText = false});
+  const ConfirmationPromptDialog({
+    super.key,
+    required this.promptText,
+    required this.confirmButtonText,
+    required this.abortButtonText,
+    required this.onConfirmed,
+    required this.onAborted,
+    this.centerText = false,
+  });
   final String promptText;
   final String confirmButtonText;
   final String? abortButtonText;
@@ -26,22 +27,13 @@ class ConfirmationPromptDialog extends AlertDialog {
       actionsAlignment: MainAxisAlignment.spaceAround,
       actionsOverflowAlignment: OverflowBarAlignment.center,
       actionsOverflowDirection: VerticalDirection.up,
-      title: Text(
-        promptText,
-        style: const TextStyle(fontSize: 18),
-        textAlign: centerText ? TextAlign.center : null,
-      ),
+      title: Text(promptText, style: const TextStyle(fontSize: 18), textAlign: centerText ? TextAlign.center : null),
       actions: [
         if (abortButtonText != null)
           Container(
-            constraints: const BoxConstraints(
-              maxWidth: 150.0,
-            ),
+            constraints: const BoxConstraints(maxWidth: 150.0),
             child: TextButton(
-              child: Text(
-                abortButtonText!,
-                textAlign: TextAlign.center,
-              ),
+              child: Text(abortButtonText!, textAlign: TextAlign.center),
               onPressed: () {
                 Navigator.of(context).pop();
                 onAborted?.call();
@@ -49,15 +41,9 @@ class ConfirmationPromptDialog extends AlertDialog {
             ),
           ),
         Container(
-          constraints: const BoxConstraints(
-            maxWidth: 150.0,
-          ),
+          constraints: const BoxConstraints(maxWidth: 150.0),
           child: TextButton(
-            child: Text(
-              confirmButtonText,
-              textAlign: TextAlign.center,
-              softWrap: true,
-            ),
+            child: Text(confirmButtonText, textAlign: TextAlign.center, softWrap: true),
             onPressed: () {
               Navigator.of(context).pop(); // Close the dialog
               onConfirmed?.call();

@@ -20,9 +20,7 @@ class PlaybackHistoryScreen extends StatelessWidget {
         toolbarHeight: 75.0,
         backgroundColor: Colors.transparent,
         title: Text(AppLocalizations.of(context)!.playbackHistory),
-        actions: const [
-          ShareOfflineListensButton(),
-        ],
+        actions: const [ShareOfflineListensButton()],
       ),
       body: const Padding(
         padding: EdgeInsets.only(left: 0.0, right: 0.0, top: 16.0, bottom: 0.0),

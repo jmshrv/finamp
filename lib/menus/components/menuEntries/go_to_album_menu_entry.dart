@@ -14,10 +14,7 @@ import 'package:get_it/get_it.dart';
 class GoToAlbumMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final BaseItemDto baseItem;
 
-  const GoToAlbumMenuEntry({
-    super.key,
-    required this.baseItem,
-  });
+  const GoToAlbumMenuEntry({super.key, required this.baseItem});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

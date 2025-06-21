@@ -20,11 +20,7 @@ const speedSliderStep = 0.05;
 const speedButtonStep = 0.05;
 
 class SpeedSlider extends StatefulWidget {
-  const SpeedSlider({
-    super.key,
-    required this.iconColor,
-    required this.saveSpeedInput,
-  });
+  const SpeedSlider({super.key, required this.iconColor, required this.saveSpeedInput});
 
   final Color iconColor;
   final Function saveSpeedInput;
@@ -65,7 +61,8 @@ class _SpeedSliderState extends State<SpeedSlider> {
         child: Slider(
           min: speedSliderMin,
           max: speedSliderMax,
-          value: _dragValue ??
+          value:
+              _dragValue ??
               clampDouble(FinampSettingsHelper.finampSettings.playbackSpeed, speedSliderMin, speedSliderMax),
           // divisions: ((speedSliderMax - speedSliderMin) / speedSliderStep / 2).round(),
           onChanged: (value) {
@@ -103,11 +100,7 @@ class _SpeedSliderState extends State<SpeedSlider> {
 }
 
 class SpeedMenu extends StatefulWidget {
-  const SpeedMenu({
-    super.key,
-    required this.iconColor,
-    this.scrollFunction,
-  });
+  const SpeedMenu({super.key, required this.iconColor, this.scrollFunction});
 
   final Color iconColor;
   final VoidCallback? scrollFunction;
@@ -126,15 +119,9 @@ class _SpeedMenuState extends State<SpeedMenu> {
       contentPadding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       label: Center(child: Text(AppLocalizations.of(context)!.speed)),
       floatingLabelBehavior: FloatingLabelBehavior.never,
-      constraints: const BoxConstraints(
-        maxWidth: 82,
-        maxHeight: 40,
-      ),
+      constraints: const BoxConstraints(maxWidth: 82, maxHeight: 40),
       isDense: true,
-      border: OutlineInputBorder(
-        borderSide: BorderSide.none,
-        borderRadius: BorderRadius.circular(16),
-      ),
+      border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(16)),
     );
   }
 
@@ -167,99 +154,100 @@ class _SpeedMenuState extends State<SpeedMenu> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  child: PresetChips(
-                    type: PresetTypes.speed,
-                    mainColour: widget.iconColor,
-                    values: presets,
-                    defaultValue: 1.0,
-                    prefix: "x",
-                    showAsDouble: true,
-                    activeValue: ref.watch(finampSettingsProvider.playbackSpeed),
-                  )),
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: PresetChips(
+                  type: PresetTypes.speed,
+                  mainColour: widget.iconColor,
+                  values: presets,
+                  defaultValue: 1.0,
+                  prefix: "x",
+                  showAsDouble: true,
+                  activeValue: ref.watch(finampSettingsProvider.playbackSpeed),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 4.0, left: 12.0, right: 12.0, bottom: 2.0),
-                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  IconButton(
-                    icon: Icon(
-                      TablerIcons.minus,
-                      color: widget.iconColor,
-                    ),
-                    onPressed: () {
-                      final currentSpeed = FinampSettingsHelper.finampSettings.playbackSpeed;
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: Icon(TablerIcons.minus, color: widget.iconColor),
+                      onPressed: () {
+                        final currentSpeed = FinampSettingsHelper.finampSettings.playbackSpeed;
 
-                      if (currentSpeed > speedSliderMin) {
-                        FeedbackHelper.feedback(FeedbackType.selection);
-                        _queueService.playbackSpeed =
-                            max(speedSliderMin, double.parse((currentSpeed - speedButtonStep).toStringAsFixed(2)));
-                        setState(() {});
-                      } else {
-                        FeedbackHelper.feedback(FeedbackType.error);
-                      }
-                    },
-                    visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-                    tooltip: AppLocalizations.of(context)!.playbackSpeedDecreaseLabel,
-                  ),
-                  Expanded(
-                    child: SpeedSlider(
-                      iconColor: widget.iconColor,
-                      saveSpeedInput: saveSpeedInput,
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      TablerIcons.plus,
-                      color: widget.iconColor,
-                    ),
-                    onPressed: () {
-                      final currentSpeed = FinampSettingsHelper.finampSettings.playbackSpeed;
-
-                      if (currentSpeed < speedSliderMax) {
-                        FeedbackHelper.feedback(FeedbackType.selection);
-                        _queueService.playbackSpeed =
-                            min(speedSliderMax, double.parse((currentSpeed + speedButtonStep).toStringAsFixed(2)));
-                        setState(() {});
-                      } else {
-                        FeedbackHelper.feedback(FeedbackType.error);
-                      }
-                    },
-                    visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-                    tooltip: AppLocalizations.of(context)!.playbackSpeedIncreaseLabel,
-                  ),
-                  const SizedBox(width: 12),
-                  SizedBox(
-                    width: 60,
-                    height: 32,
-                    child: TextFormField(
-                      controller: _textController,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: const EdgeInsets.symmetric(vertical: 4),
-                        border:
-                            OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                        filled: true,
-                        fillColor: widget.iconColor.withOpacity(0.08),
-                      ),
-                      keyboardType: TextInputType.numberWithOptions(decimal: true),
-                      onFieldSubmitted: (val) {
-                        final parsed = double.tryParse(val);
-                        if (parsed != null && parsed >= speedSliderMin && parsed <= speedSliderMax) {
-                          saveSpeedInput(parsed);
+                        if (currentSpeed > speedSliderMin) {
+                          FeedbackHelper.feedback(FeedbackType.selection);
+                          _queueService.playbackSpeed = max(
+                            speedSliderMin,
+                            double.parse((currentSpeed - speedButtonStep).toStringAsFixed(2)),
+                          );
+                          setState(() {});
                         } else {
-                          refreshInputText();
+                          FeedbackHelper.feedback(FeedbackType.error);
                         }
                       },
-                      onChanged: (val) {
-                        final parsed = double.tryParse(val);
-                        if (parsed != null && parsed >= speedSliderMin && parsed <= speedSliderMax) {
-                          saveSpeedInput(parsed);
-                        }
-                      },
+                      visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+                      tooltip: AppLocalizations.of(context)!.playbackSpeedDecreaseLabel,
                     ),
-                  ),
-                ]),
+                    Expanded(
+                      child: SpeedSlider(iconColor: widget.iconColor, saveSpeedInput: saveSpeedInput),
+                    ),
+                    IconButton(
+                      icon: Icon(TablerIcons.plus, color: widget.iconColor),
+                      onPressed: () {
+                        final currentSpeed = FinampSettingsHelper.finampSettings.playbackSpeed;
+
+                        if (currentSpeed < speedSliderMax) {
+                          FeedbackHelper.feedback(FeedbackType.selection);
+                          _queueService.playbackSpeed = min(
+                            speedSliderMax,
+                            double.parse((currentSpeed + speedButtonStep).toStringAsFixed(2)),
+                          );
+                          setState(() {});
+                        } else {
+                          FeedbackHelper.feedback(FeedbackType.error);
+                        }
+                      },
+                      visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+                      tooltip: AppLocalizations.of(context)!.playbackSpeedIncreaseLabel,
+                    ),
+                    const SizedBox(width: 12),
+                    SizedBox(
+                      width: 60,
+                      height: 32,
+                      child: TextFormField(
+                        controller: _textController,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: const EdgeInsets.symmetric(vertical: 4),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: widget.iconColor.withOpacity(0.08),
+                        ),
+                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                        onFieldSubmitted: (val) {
+                          final parsed = double.tryParse(val);
+                          if (parsed != null && parsed >= speedSliderMin && parsed <= speedSliderMax) {
+                            saveSpeedInput(parsed);
+                          } else {
+                            refreshInputText();
+                          }
+                        },
+                        onChanged: (val) {
+                          final parsed = double.tryParse(val);
+                          if (parsed != null && parsed >= speedSliderMin && parsed <= speedSliderMax) {
+                            saveSpeedInput(parsed);
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           );

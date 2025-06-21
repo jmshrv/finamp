@@ -21,8 +21,11 @@ const double infoHeaderFullExtent = 162.0;
 const double infoHeaderFullInternalHeight = 140.0;
 const double infoHeaderCondensedInternalHeight = 80.0;
 
-Widget _getMenuHeaderForItemType(
-    {required BaseItemDto item, required bool condensed, required List<MenuItemInfoHeaderFeatures> features}) {
+Widget _getMenuHeaderForItemType({
+  required BaseItemDto item,
+  required bool condensed,
+  required List<MenuItemInfoHeaderFeatures> features,
+}) {
   return switch (BaseItemDtoType.fromItem(item)) {
     BaseItemDtoType.track => TrackInfo(item: item, condensed: condensed, features: features),
     BaseItemDtoType.album => AlbumInfo(item: item, condensed: condensed, features: features),
@@ -33,10 +36,7 @@ Widget _getMenuHeaderForItemType(
   };
 }
 
-enum MenuItemInfoHeaderFeatures {
-  openItem,
-  addToPlaylistAndFavorite,
-}
+enum MenuItemInfoHeaderFeatures { openItem, addToPlaylistAndFavorite }
 
 class MenuItemInfoSliverHeader extends SliverPersistentHeaderDelegate {
   final BaseItemDto item;
@@ -48,21 +48,15 @@ class MenuItemInfoSliverHeader extends SliverPersistentHeaderDelegate {
     this.features = const [MenuItemInfoHeaderFeatures.openItem, MenuItemInfoHeaderFeatures.addToPlaylistAndFavorite],
   }) : condensed = false;
 
-  MenuItemInfoSliverHeader.condensed({
-    required this.item,
-    this.features = const [MenuItemInfoHeaderFeatures.openItem],
-  }) : condensed = true;
+  MenuItemInfoSliverHeader.condensed({required this.item, this.features = const [MenuItemInfoHeaderFeatures.openItem]})
+    : condensed = true;
 
   static const MenuMaskHeight defaultHeight = MenuMaskHeight(151.0);
   static const MenuMaskHeight condensedHeight = MenuMaskHeight(80.0);
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return _getMenuHeaderForItemType(
-      item: item,
-      condensed: condensed,
-      features: features,
-    );
+    return _getMenuHeaderForItemType(item: item, condensed: condensed, features: features);
   }
 
   @override
@@ -82,39 +76,23 @@ class MenuItemInfoHeader extends ConsumerWidget {
 
   const MenuItemInfoHeader({
     required this.item,
-    this.features = const [
-      MenuItemInfoHeaderFeatures.openItem,
-      MenuItemInfoHeaderFeatures.addToPlaylistAndFavorite,
-    ],
+    this.features = const [MenuItemInfoHeaderFeatures.openItem, MenuItemInfoHeaderFeatures.addToPlaylistAndFavorite],
   }) : condensed = false;
 
-  const MenuItemInfoHeader.condensed({
-    required this.item,
-    this.features = const [
-      MenuItemInfoHeaderFeatures.openItem,
-    ],
-  }) : condensed = true;
+  const MenuItemInfoHeader.condensed({required this.item, this.features = const [MenuItemInfoHeaderFeatures.openItem]})
+    : condensed = true;
 
   static const MenuMaskHeight defaultHeight = MenuMaskHeight(152.0);
   static const MenuMaskHeight condensedHeight = MenuMaskHeight(35.0);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return _getMenuHeaderForItemType(
-      item: item,
-      condensed: condensed,
-      features: features,
-    );
+    return _getMenuHeaderForItemType(item: item, condensed: condensed, features: features);
   }
 }
 
 class TrackInfo extends ConsumerWidget {
-  const TrackInfo({
-    super.key,
-    required this.item,
-    required this.condensed,
-    required this.features,
-  });
+  const TrackInfo({super.key, required this.item, required this.condensed, required this.features});
 
   final BaseItemDto item;
   final bool condensed;
@@ -126,14 +104,8 @@ class TrackInfo extends ConsumerWidget {
       item: item,
       condensed: condensed,
       features: features,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      featureImage: AlbumImage(
-        item: item,
-        borderRadius: BorderRadius.zero,
-        tapToZoom: true,
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      featureImage: AlbumImage(item: item, borderRadius: BorderRadius.zero, tapToZoom: true),
       infoRows: [
         Text(
           item.name ?? AppLocalizations.of(context)!.unknownName,
@@ -151,7 +123,8 @@ class TrackInfo extends ConsumerWidget {
           padding: condensed ? const EdgeInsets.only(top: 6.0) : const EdgeInsets.only(top: 2.0),
           child: ArtistChips(
             baseItem: item,
-            backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??
+            backgroundColor:
+                IconTheme.of(context).color?.withOpacity(0.1) ??
                 Theme.of(context).textTheme.bodyMedium?.color ??
                 Colors.white,
             color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -160,27 +133,21 @@ class TrackInfo extends ConsumerWidget {
         if (!condensed) ...[
           AlbumChips(
             baseItem: item,
-            backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??
+            backgroundColor:
+                IconTheme.of(context).color?.withOpacity(0.1) ??
                 Theme.of(context).textTheme.bodyMedium?.color ??
                 Colors.white,
             key: item.album == null ? null : ValueKey("${item.album}-album"),
           ),
-          GenreIconAndText(
-            parent: item,
-          ),
-        ]
+          GenreIconAndText(parent: item),
+        ],
       ],
     );
   }
 }
 
 class AlbumInfo extends ConsumerWidget {
-  const AlbumInfo({
-    super.key,
-    required this.item,
-    required this.condensed,
-    required this.features,
-  });
+  const AlbumInfo({super.key, required this.item, required this.condensed, required this.features});
 
   final BaseItemDto item;
   final bool condensed;
@@ -192,14 +159,8 @@ class AlbumInfo extends ConsumerWidget {
       item: item,
       condensed: condensed,
       features: features,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      featureImage: AlbumImage(
-        item: item,
-        borderRadius: BorderRadius.zero,
-        tapToZoom: true,
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      featureImage: AlbumImage(item: item, borderRadius: BorderRadius.zero, tapToZoom: true),
       infoRows: [
         Text(
           item.name ?? AppLocalizations.of(context)!.unknownName,
@@ -217,34 +178,27 @@ class AlbumInfo extends ConsumerWidget {
           padding: condensed ? const EdgeInsets.only(top: 6.0) : const EdgeInsets.symmetric(vertical: 0.0),
           child: ArtistChips(
             baseItem: item,
-            backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??
+            backgroundColor:
+                IconTheme.of(context).color?.withOpacity(0.1) ??
                 Theme.of(context).textTheme.bodyMedium?.color ??
                 Colors.white,
             color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
           ),
         ),
         if (!condensed) ...[
-          GenreIconAndText(
-            parent: item,
-          ),
+          GenreIconAndText(parent: item),
           IconAndText(
-              iconData: Icons.event,
-              textSpan: TextSpan(
-                text: ReleaseDateHelper.autoFormat(item) ?? AppLocalizations.of(context)!.noReleaseDate,
-              )),
-        ]
+            iconData: Icons.event,
+            textSpan: TextSpan(text: ReleaseDateHelper.autoFormat(item) ?? AppLocalizations.of(context)!.noReleaseDate),
+          ),
+        ],
       ],
     );
   }
 }
 
 class PlaylistInfo extends ConsumerWidget {
-  const PlaylistInfo({
-    super.key,
-    required this.item,
-    required this.condensed,
-    required this.features,
-  });
+  const PlaylistInfo({super.key, required this.item, required this.condensed, required this.features});
 
   final BaseItemDto item;
   final bool condensed;
@@ -256,14 +210,8 @@ class PlaylistInfo extends ConsumerWidget {
       item: item,
       condensed: condensed,
       features: features,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      featureImage: AlbumImage(
-        item: item,
-        borderRadius: BorderRadius.zero,
-        tapToZoom: true,
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      featureImage: AlbumImage(item: item, borderRadius: BorderRadius.zero, tapToZoom: true),
       infoRows: [
         Text(
           item.name ?? AppLocalizations.of(context)!.unknownName,
@@ -279,26 +227,17 @@ class PlaylistInfo extends ConsumerWidget {
         ),
         if (!condensed) ...[
           const SizedBox(height: 4),
-          GenreIconAndText(
-            parent: item,
-          ),
+          GenreIconAndText(parent: item),
           const SizedBox(height: 4),
-          ItemAmount(
-            baseItem: item,
-          ),
-        ]
+          ItemAmount(baseItem: item),
+        ],
       ],
     );
   }
 }
 
 class ArtistInfo extends ConsumerWidget {
-  const ArtistInfo({
-    super.key,
-    required this.item,
-    required this.condensed,
-    required this.features,
-  });
+  const ArtistInfo({super.key, required this.item, required this.condensed, required this.features});
 
   final BaseItemDto item;
   final bool condensed;
@@ -312,16 +251,13 @@ class ArtistInfo extends ConsumerWidget {
       features: features,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(MenuItemInfoHeader.defaultHeight / 2),
-            bottomLeft: Radius.circular(MenuItemInfoHeader.defaultHeight / 2),
-            topRight: Radius.circular(12),
-            bottomRight: Radius.circular(12)),
+          topLeft: Radius.circular(MenuItemInfoHeader.defaultHeight / 2),
+          bottomLeft: Radius.circular(MenuItemInfoHeader.defaultHeight / 2),
+          topRight: Radius.circular(12),
+          bottomRight: Radius.circular(12),
+        ),
       ),
-      featureImage: AlbumImage(
-        item: item,
-        borderRadius: BorderRadius.all(Radius.circular(9999)),
-        tapToZoom: true,
-      ),
+      featureImage: AlbumImage(item: item, borderRadius: BorderRadius.all(Radius.circular(9999)), tapToZoom: true),
       infoRows: [
         Text(
           item.name ?? AppLocalizations.of(context)!.unknownName,
@@ -337,26 +273,17 @@ class ArtistInfo extends ConsumerWidget {
         ),
         if (!condensed) ...[
           const SizedBox(height: 4),
-          GenreIconAndText(
-            parent: item,
-          ),
+          GenreIconAndText(parent: item),
           const SizedBox(height: 6),
-          ItemAmount(
-            baseItem: item,
-          )
-        ]
+          ItemAmount(baseItem: item),
+        ],
       ],
     );
   }
 }
 
 class GenreInfo extends ConsumerWidget {
-  const GenreInfo({
-    super.key,
-    required this.item,
-    required this.condensed,
-    required this.features,
-  });
+  const GenreInfo({super.key, required this.item, required this.condensed, required this.features});
 
   final BaseItemDto item;
   final bool condensed;
@@ -368,14 +295,8 @@ class GenreInfo extends ConsumerWidget {
       item: item,
       condensed: condensed,
       features: features,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      featureImage: AlbumImage(
-        item: item,
-        borderRadius: BorderRadius.zero,
-        tapToZoom: true,
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      featureImage: AlbumImage(item: item, borderRadius: BorderRadius.zero, tapToZoom: true),
       infoRows: [
         Text(
           item.name ?? AppLocalizations.of(context)!.unknownName,
@@ -389,12 +310,7 @@ class GenreInfo extends ConsumerWidget {
           softWrap: true,
           maxLines: 2,
         ),
-        if (!condensed) ...[
-          const SizedBox(height: 6),
-          ItemAmount(
-            baseItem: item,
-          ),
-        ]
+        if (!condensed) ...[const SizedBox(height: 6), ItemAmount(baseItem: item)],
       ],
     );
   }
@@ -446,27 +362,20 @@ class _ItemInfoState extends ConsumerState<ItemInfo> {
                   top: 0,
                   right: 0,
                   child: IconButton(
-                    icon: const Icon(
-                      TablerIcons.external_link,
-                      size: 20,
-                    ),
+                    icon: const Icon(TablerIcons.external_link, size: 20),
                     padding: const EdgeInsets.all(0.0),
                     visualDensity: VisualDensity(horizontal: -2.0, vertical: -3.0),
                     onPressed: () {
                       if (BaseItemDtoType.fromItem(widget.item) == BaseItemDtoType.track) {
                         return;
                       }
-                      Navigator.pushNamed(
-                        context,
-                        switch (BaseItemDtoType.fromItem(widget.item)) {
-                          BaseItemDtoType.album => AlbumScreen.routeName,
-                          BaseItemDtoType.playlist => AlbumScreen.routeName,
-                          BaseItemDtoType.genre => GenreScreen.routeName,
-                          BaseItemDtoType.artist => ArtistScreen.routeName,
-                          _ => AlbumScreen.routeName,
-                        },
-                        arguments: widget.item,
-                      );
+                      Navigator.pushNamed(context, switch (BaseItemDtoType.fromItem(widget.item)) {
+                        BaseItemDtoType.album => AlbumScreen.routeName,
+                        BaseItemDtoType.playlist => AlbumScreen.routeName,
+                        BaseItemDtoType.genre => GenreScreen.routeName,
+                        BaseItemDtoType.artist => ArtistScreen.routeName,
+                        _ => AlbumScreen.routeName,
+                      }, arguments: widget.item);
                     },
                     color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
                   ),
@@ -484,10 +393,7 @@ class _ItemInfoState extends ConsumerState<ItemInfo> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  AspectRatio(
-                    aspectRatio: 1.0,
-                    child: widget.featureImage,
-                  ),
+                  AspectRatio(aspectRatio: 1.0, child: widget.featureImage),
                   Expanded(
                     child: Container(
                       padding: const EdgeInsets.only(left: 8.0, right: 26.0),

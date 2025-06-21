@@ -32,13 +32,8 @@ final currentAlbumImageProvider = Provider<ThemeImage>((ref) {
 
   final currentTrack = ref.watch(currentTrackProvider).value?.baseItem;
   if (currentTrack != null) {
-    final request = AlbumImageRequest(
-      item: currentTrack,
-    );
-    return ThemeImage(
-      ref.watch(albumImageProvider(request)),
-      currentTrack.blurHash,
-    );
+    final request = AlbumImageRequest(item: currentTrack);
+    return ThemeImage(ref.watch(albumImageProvider(request)), currentTrack.blurHash);
   }
   return ThemeImage.empty();
 });

@@ -21,11 +21,7 @@ final class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> getPublicServerInfo() async {
     final Uri $url = Uri.parse('/System/Info/Public');
-    final Request $request = Request(
-      'GET',
-      $url,
-      client.baseUrl,
-    );
+    final Request $request = Request('GET', $url, client.baseUrl);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -37,11 +33,7 @@ final class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> getPublicUsers() async {
     final Uri $url = Uri.parse('/Users/Public');
-    final Request $request = Request(
-      'GET',
-      $url,
-      client.baseUrl,
-    );
+    final Request $request = Request('GET', $url, client.baseUrl);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -53,11 +45,7 @@ final class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> getQuickConnectState() async {
     final Uri $url = Uri.parse('/QuickConnect/Enabled');
-    final Request $request = Request(
-      'GET',
-      $url,
-      client.baseUrl,
-    );
+    final Request $request = Request('GET', $url, client.baseUrl);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -69,11 +57,7 @@ final class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> initiateQuickConnect() async {
     final Uri $url = Uri.parse('/QuickConnect/Initiate');
-    final Request $request = Request(
-      'GET',
-      $url,
-      client.baseUrl,
-    );
+    final Request $request = Request('GET', $url, client.baseUrl);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -101,15 +85,12 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> authenticateWithQuickConnect(Map<String, String> quickConnectInfo) async {
+  Future<dynamic> authenticateWithQuickConnect(
+    Map<String, String> quickConnectInfo,
+  ) async {
     final Uri $url = Uri.parse('/Users/AuthenticateWithQuickConnect');
     final $body = quickConnectInfo;
-    final Request $request = Request(
-      'POST',
-      $url,
-      client.baseUrl,
-      body: $body,
-    );
+    final Request $request = Request('POST', $url, client.baseUrl, body: $body);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -119,15 +100,12 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> authenticateViaName(Map<String, String> usernameAndPassword) async {
+  Future<dynamic> authenticateViaName(
+    Map<String, String> usernameAndPassword,
+  ) async {
     final Uri $url = Uri.parse('/Users/AuthenticateByName');
     final $body = usernameAndPassword;
-    final Request $request = Request(
-      'POST',
-      $url,
-      client.baseUrl,
-      body: $body,
-    );
+    final Request $request = Request('POST', $url, client.baseUrl, body: $body);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -160,11 +138,7 @@ final class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> getViews(String id) async {
     final Uri $url = Uri.parse('/Users/${id}/Views');
-    final Request $request = Request(
-      'GET',
-      $url,
-      client.baseUrl,
-    );
+    final Request $request = Request('GET', $url, client.baseUrl);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -176,11 +150,7 @@ final class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> deleteItem(BaseItemId id) async {
     final Uri $url = Uri.parse('/Items/${id}');
-    final Request $request = Request(
-      'DELETE',
-      $url,
-      client.baseUrl,
-    );
+    final Request $request = Request('DELETE', $url, client.baseUrl);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -310,11 +280,7 @@ final class _$JellyfinApi extends JellyfinApi {
     required BaseItemId itemId,
   }) async {
     final Uri $url = Uri.parse('/Users/${userId}/Items/${itemId}');
-    final Request $request = Request(
-      'GET',
-      $url,
-      client.baseUrl,
-    );
+    final Request $request = Request('GET', $url, client.baseUrl);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -351,12 +317,7 @@ final class _$JellyfinApi extends JellyfinApi {
   }) async {
     final Uri $url = Uri.parse('/Items/${itemId}');
     final $body = newItem;
-    final Request $request = Request(
-      'POST',
-      $url,
-      client.baseUrl,
-      body: $body,
-    );
+    final Request $request = Request('POST', $url, client.baseUrl, body: $body);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -392,15 +353,12 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> updateCapabilitiesFull(ClientCapabilities clientCapabilities) async {
+  Future<dynamic> updateCapabilitiesFull(
+    ClientCapabilities clientCapabilities,
+  ) async {
     final Uri $url = Uri.parse('/Sessions/Capabilities/Full');
     final $body = clientCapabilities;
-    final Request $request = Request(
-      'POST',
-      $url,
-      client.baseUrl,
-      body: $body,
-    );
+    final Request $request = Request('POST', $url, client.baseUrl, body: $body);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -409,15 +367,12 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> startPlayback(PlaybackProgressInfo playbackProgressInfo) async {
+  Future<dynamic> startPlayback(
+    PlaybackProgressInfo playbackProgressInfo,
+  ) async {
     final Uri $url = Uri.parse('/Sessions/Playing');
     final $body = playbackProgressInfo;
-    final Request $request = Request(
-      'POST',
-      $url,
-      client.baseUrl,
-      body: $body,
-    );
+    final Request $request = Request('POST', $url, client.baseUrl, body: $body);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -426,15 +381,12 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> playbackStatusUpdate(PlaybackProgressInfo playbackProgressInfo) async {
+  Future<dynamic> playbackStatusUpdate(
+    PlaybackProgressInfo playbackProgressInfo,
+  ) async {
     final Uri $url = Uri.parse('/Sessions/Playing/Progress');
     final $body = playbackProgressInfo;
-    final Request $request = Request(
-      'POST',
-      $url,
-      client.baseUrl,
-      body: $body,
-    );
+    final Request $request = Request('POST', $url, client.baseUrl, body: $body);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -443,15 +395,12 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
-  Future<dynamic> playbackStatusStopped(PlaybackProgressInfo playbackProgressInfo) async {
+  Future<dynamic> playbackStatusStopped(
+    PlaybackProgressInfo playbackProgressInfo,
+  ) async {
     final Uri $url = Uri.parse('/Sessions/Playing/Stopped');
     final $body = playbackProgressInfo;
-    final Request $request = Request(
-      'POST',
-      $url,
-      client.baseUrl,
-      body: $body,
-    );
+    final Request $request = Request('POST', $url, client.baseUrl, body: $body);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -494,12 +443,7 @@ final class _$JellyfinApi extends JellyfinApi {
   Future<dynamic> createNewPlaylist({required NewPlaylist newPlaylist}) async {
     final Uri $url = Uri.parse('/Playlists');
     final $body = newPlaylist;
-    final Request $request = Request(
-      'POST',
-      $url,
-      client.baseUrl,
-      body: $body,
-    );
+    final Request $request = Request('POST', $url, client.baseUrl, body: $body);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -537,7 +481,9 @@ final class _$JellyfinApi extends JellyfinApi {
     String? entryIds,
   }) {
     final Uri $url = Uri.parse('/Playlists/${playlistId}/Items');
-    final Map<String, dynamic> $params = <String, dynamic>{'entryIds': entryIds};
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'entryIds': entryIds,
+    };
     final Request $request = Request(
       'DELETE',
       $url,
@@ -557,12 +503,7 @@ final class _$JellyfinApi extends JellyfinApi {
   }) async {
     final Uri $url = Uri.parse('/Playlists/${playlistId}');
     final $body = playlist;
-    final Request $request = Request(
-      'POST',
-      $url,
-      client.baseUrl,
-      body: $body,
-    );
+    final Request $request = Request('POST', $url, client.baseUrl, body: $body);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -573,11 +514,7 @@ final class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> getPlaylist({required BaseItemId playlistId}) async {
     final Uri $url = Uri.parse('/Playlists/${playlistId}');
-    final Request $request = Request(
-      'GET',
-      $url,
-      client.baseUrl,
-    );
+    final Request $request = Request('GET', $url, client.baseUrl);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       responseConverter: JsonConverter.responseFactory,
@@ -717,11 +654,7 @@ final class _$JellyfinApi extends JellyfinApi {
     required BaseItemId itemId,
   }) async {
     final Uri $url = Uri.parse('/Users/${userId}/FavoriteItems/${itemId}');
-    final Request $request = Request(
-      'POST',
-      $url,
-      client.baseUrl,
-    );
+    final Request $request = Request('POST', $url, client.baseUrl);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -736,11 +669,7 @@ final class _$JellyfinApi extends JellyfinApi {
     required BaseItemId itemId,
   }) async {
     final Uri $url = Uri.parse('/Users/${userId}/FavoriteItems/${itemId}');
-    final Request $request = Request(
-      'DELETE',
-      $url,
-      client.baseUrl,
-    );
+    final Request $request = Request('DELETE', $url, client.baseUrl);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -752,11 +681,7 @@ final class _$JellyfinApi extends JellyfinApi {
   @override
   Future<dynamic> getLyrics({required BaseItemId itemId}) async {
     final Uri $url = Uri.parse('/Audio/${itemId}/Lyrics');
-    final Request $request = Request(
-      'GET',
-      $url,
-      client.baseUrl,
-    );
+    final Request $request = Request('GET', $url, client.baseUrl);
     final Response $response = await client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -768,11 +693,7 @@ final class _$JellyfinApi extends JellyfinApi {
   @override
   Future<Response<dynamic>> logout() {
     final Uri $url = Uri.parse('/Sessions/Logout');
-    final Request $request = Request(
-      'POST',
-      $url,
-      client.baseUrl,
-    );
+    final Request $request = Request('POST', $url, client.baseUrl);
     return client.send<dynamic, dynamic>(
       $request,
       requestConverter: JsonConverter.requestFactory,
@@ -782,11 +703,7 @@ final class _$JellyfinApi extends JellyfinApi {
   @override
   Future<Response<dynamic>> pingServer() {
     final Uri $url = Uri.parse('/System/Endpoint');
-    final Request $request = Request(
-      'GET',
-      $url,
-      client.baseUrl,
-    );
+    final Request $request = Request('GET', $url, client.baseUrl);
     return client.send<dynamic, dynamic>($request);
   }
 }

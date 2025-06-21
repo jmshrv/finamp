@@ -18,14 +18,10 @@ class _AlbumSettingsScreenState extends State<AlbumSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.albumScreen),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetAlbumSettings)
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetAlbumSettings),
         ],
       ),
-      body: ListView(
-        children: const [
-          ShowCoversOnAlbumScreenToggle(),
-        ],
-      ),
+      body: ListView(children: const [ShowCoversOnAlbumScreenToggle()]),
     );
   }
 }

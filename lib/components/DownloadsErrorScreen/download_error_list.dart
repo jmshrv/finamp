@@ -22,23 +22,17 @@ class DownloadErrorList extends StatelessWidget {
       _ => Theme.of(context).colorScheme.surfaceContainerHighest,
     };
     return SliverStickyHeader(
-        header: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-            vertical: 16.0,
-          ),
-          color: headerColor,
-          child: Text(
-            title,
-            style: const TextStyle(fontSize: 20.0),
-          ),
-        ),
-        sliver: SliverList.builder(
-          itemCount: children.length,
-          itemBuilder: (context, index) {
-            return DownloadErrorListTile(
-                downloadTask: children[index], showType: state == DownloadItemState.syncFailed);
-          },
-        ));
+      header: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+        color: headerColor,
+        child: Text(title, style: const TextStyle(fontSize: 20.0)),
+      ),
+      sliver: SliverList.builder(
+        itemCount: children.length,
+        itemBuilder: (context, index) {
+          return DownloadErrorListTile(downloadTask: children[index], showType: state == DownloadItemState.syncFailed);
+        },
+      ),
+    );
   }
 }

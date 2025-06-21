@@ -29,7 +29,7 @@ class _DownloadsSettingsScreenState extends State<DownloadsSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.downloadSettings),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetDownloadSettings)
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetDownloadSettings),
         ],
       ),
       body: ListView(
@@ -46,35 +46,45 @@ class _DownloadsSettingsScreenState extends State<DownloadsSettingsScreen> {
             title: Text(AppLocalizations.of(context)!.allPlaylistsInfoSetting),
             subtitle: Text(AppLocalizations.of(context)!.allPlaylistsInfoSettingSubtitle),
             trailing: DownloadButton(
-                item: DownloadStub.fromFinampCollection(
-                    FinampCollection(type: FinampCollectionType.allPlaylistsMetadata))),
+              item: DownloadStub.fromFinampCollection(
+                FinampCollection(type: FinampCollectionType.allPlaylistsMetadata),
+              ),
+            ),
           ),
           ListTile(
             // TODO real UI for this
             title: Text(AppLocalizations.of(context)!.cacheLibraryImagesSettings),
             subtitle: Text(AppLocalizations.of(context)!.cacheLibraryImagesSettingsSubtitle),
             trailing: DownloadButton(
-                item: DownloadStub.fromFinampCollection(FinampCollection(
-                    type: FinampCollectionType.libraryImages, library: userHelper.currentUser!.currentView!))),
+              item: DownloadStub.fromFinampCollection(
+                FinampCollection(
+                  type: FinampCollectionType.libraryImages,
+                  library: userHelper.currentUser!.currentView!,
+                ),
+              ),
+            ),
           ),
           ListTile(
             // TODO real UI for this
             title: Text(AppLocalizations.of(context)!.downloadFavoritesSetting),
             trailing: DownloadButton(
-                item: DownloadStub.fromFinampCollection(FinampCollection(type: FinampCollectionType.favorites))),
+              item: DownloadStub.fromFinampCollection(FinampCollection(type: FinampCollectionType.favorites)),
+            ),
           ),
           ListTile(
             // TODO real UI for this
             title: Text(AppLocalizations.of(context)!.downloadAllPlaylistsSetting),
             trailing: DownloadButton(
-                item: DownloadStub.fromFinampCollection(FinampCollection(type: FinampCollectionType.allPlaylists))),
+              item: DownloadStub.fromFinampCollection(FinampCollection(type: FinampCollectionType.allPlaylists)),
+            ),
           ),
           ListTile(
             // TODO real UI for this
             title: Text(AppLocalizations.of(context)!.fiveLatestAlbumsSetting),
             subtitle: Text(AppLocalizations.of(context)!.fiveLatestAlbumsSettingSubtitle),
             trailing: DownloadButton(
-                item: DownloadStub.fromFinampCollection(FinampCollection(type: FinampCollectionType.latest5Albums))),
+              item: DownloadStub.fromFinampCollection(FinampCollection(type: FinampCollectionType.latest5Albums)),
+            ),
           ),
           const SyncOnStartupSwitch(),
           const PreferQuickSyncsSwitch(),
@@ -156,10 +166,11 @@ class PreferQuickSyncsSwitch extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
-        title: Text(AppLocalizations.of(context)!.preferQuickSyncSwitch),
-        subtitle: Text(AppLocalizations.of(context)!.preferQuickSyncSwitchSubtitle),
-        value: ref.watch(finampSettingsProvider.preferQuickSyncs),
-        onChanged: FinampSetters.setPreferQuickSyncs);
+      title: Text(AppLocalizations.of(context)!.preferQuickSyncSwitch),
+      subtitle: Text(AppLocalizations.of(context)!.preferQuickSyncSwitchSubtitle),
+      value: ref.watch(finampSettingsProvider.preferQuickSyncs),
+      onChanged: FinampSetters.setPreferQuickSyncs,
+    );
   }
 }
 
@@ -182,19 +193,21 @@ class ConcurentDownloadsSelector extends ConsumerWidget {
               min: 1,
               max: 100,
               value: ref.watch(finampSettingsProvider.maxConcurrentDownloads).clamp(1, 100).toDouble(),
-              label: AppLocalizations.of(context)!
-                  .maxConcurrentDownloadsLabel(ref.watch(finampSettingsProvider.maxConcurrentDownloads).toString()),
+              label: AppLocalizations.of(
+                context,
+              )!.maxConcurrentDownloadsLabel(ref.watch(finampSettingsProvider.maxConcurrentDownloads).toString()),
               onChanged: (value) => FinampSetters.setMaxConcurrentDownloads(value.toInt()),
               autofocus: false,
               focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
             ),
             Text(
-              AppLocalizations.of(context)!
-                  .maxConcurrentDownloadsLabel(ref.watch(finampSettingsProvider.maxConcurrentDownloads).toString()),
+              AppLocalizations.of(
+                context,
+              )!.maxConcurrentDownloadsLabel(ref.watch(finampSettingsProvider.maxConcurrentDownloads).toString()),
               style: Theme.of(context).textTheme.titleLarge,
-            )
+            ),
           ],
-        )
+        ),
       ],
     );
   }
@@ -228,7 +241,7 @@ class DownloadWorkersSelector extends ConsumerWidget {
             Text(
               AppLocalizations.of(context)!.downloadsWorkersSettingLabel(workers.toString()),
               style: Theme.of(context).textTheme.titleLarge,
-            )
+            ),
           ],
         ),
       ],
@@ -266,8 +279,9 @@ class DownloadSizeWarningCutoffTile extends StatefulWidget {
 }
 
 class _BufferSizeListTileState extends State<DownloadSizeWarningCutoffTile> {
-  final _controller =
-      TextEditingController(text: FinampSettingsHelper.finampSettings.downloadSizeWarningCutoff.toString());
+  final _controller = TextEditingController(
+    text: FinampSettingsHelper.finampSettings.downloadSizeWarningCutoff.toString(),
+  );
 
   @override
   Widget build(BuildContext context) {

@@ -13,19 +13,9 @@ import 'finamp_settings_helper.dart';
 
 Logger _dataSourceServiceLogger = Logger("Data Source Service");
 
-enum SourceChangeGenericType {
-  network,
-  transcoding,
-}
+enum SourceChangeGenericType { network, transcoding }
 
-enum SourceChangeType {
-  toLocalUrl,
-  toRemoteUrl,
-  toOffline,
-  toOnline,
-  toDirectPlay,
-  toTranscoding,
-}
+enum SourceChangeType { toLocalUrl, toRemoteUrl, toOffline, toOnline, toDirectPlay, toTranscoding }
 
 class DataSourceService {
   static void create() {
@@ -89,10 +79,12 @@ class DataSourceService {
             } else {
               GlobalSnackbar.message(
                 (context) {
-                  final reloadPrompt =
-                      AppLocalizations.of(context)!.autoReloadPrompt(SourceChangeGenericType.network.name);
-                  final reloadPromptMissingTracks =
-                      AppLocalizations.of(context)!.autoReloadPromptMissingTracks(queueInfo.undownloadedTracks);
+                  final reloadPrompt = AppLocalizations.of(
+                    context,
+                  )!.autoReloadPrompt(SourceChangeGenericType.network.name);
+                  final reloadPromptMissingTracks = AppLocalizations.of(
+                    context,
+                  )!.autoReloadPromptMissingTracks(queueInfo.undownloadedTracks);
                   if (event == SourceChangeType.toOffline && queueInfo.undownloadedTracks > 0) {
                     // we want to warn the user about undownloaded tracks that won't be available after reloading the queue, before they actually reload
                     return "$reloadPrompt. $reloadPromptMissingTracks";

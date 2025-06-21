@@ -11,11 +11,19 @@ final displayFeaturesProvider = StateProvider<List<DisplayFeature>>((ref) {
 
 final brightnessProvider = StateProvider((ref) => Brightness.dark);
 
-final halfOpenFoldableProvider = Provider((ref) => ref.watch(displayFeaturesProvider.select((x) => x.any((d) =>
-    (d.type == DisplayFeatureType.fold || d.type == DisplayFeatureType.hinge) &&
-    // Flip-style foldable, top == bottom, height == 0
-    d.bounds.height == 0 &&
-    d.state == DisplayFeatureState.postureHalfOpened))));
+final halfOpenFoldableProvider = Provider(
+  (ref) => ref.watch(
+    displayFeaturesProvider.select(
+      (x) => x.any(
+        (d) =>
+            (d.type == DisplayFeatureType.fold || d.type == DisplayFeatureType.hinge) &&
+            // Flip-style foldable, top == bottom, height == 0
+            d.bounds.height == 0 &&
+            d.state == DisplayFeatureState.postureHalfOpened,
+      ),
+    ),
+  ),
+);
 
 class FinampProviderBuilder extends ConsumerStatefulWidget {
   const FinampProviderBuilder({required this.child, super.key});

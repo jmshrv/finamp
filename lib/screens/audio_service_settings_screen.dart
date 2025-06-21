@@ -28,7 +28,7 @@ class _AudioServiceSettingsScreenState extends State<AudioServiceSettingsScreen>
             setState(() {
               FinampSettingsHelper.resetAudioServiceSettings();
             });
-          })
+          }),
         ],
       ),
       body: ListView(

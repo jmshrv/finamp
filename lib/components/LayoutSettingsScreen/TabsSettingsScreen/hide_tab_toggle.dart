@@ -5,11 +5,7 @@ import '../../../models/finamp_models.dart';
 import '../../../services/finamp_settings_helper.dart';
 
 class HideTabToggle extends ConsumerWidget {
-  const HideTabToggle({
-    super.key,
-    required this.index,
-    required this.tabContentType,
-  });
+  const HideTabToggle({super.key, required this.index, required this.tabContentType});
 
   final TabContentType tabContentType;
   final int index;
@@ -20,10 +16,7 @@ class HideTabToggle extends ConsumerWidget {
       index: index,
       child: SwitchListTile.adaptive(
         title: Text(tabContentType.toLocalisedString(context)),
-        secondary: ReorderableDragStartListener(
-          index: index,
-          child: const Icon(Icons.drag_handle),
-        ),
+        secondary: ReorderableDragStartListener(index: index, child: const Icon(Icons.drag_handle)),
         // This should never be null, but it gets set to true if it is.
         value: ref.watch(finampSettingsProvider.showTabs(tabContentType)) ?? true,
         onChanged: (value) => FinampSetters.setShowTabs(tabContentType, value),

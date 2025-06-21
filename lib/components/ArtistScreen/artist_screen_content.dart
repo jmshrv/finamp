@@ -21,12 +21,7 @@ import '../padded_custom_scrollview.dart';
 import 'artist_screen_content_flexible_space_bar.dart';
 
 class ArtistScreenContent extends ConsumerStatefulWidget {
-  const ArtistScreenContent({
-    super.key,
-    required this.parent,
-    this.library,
-    this.genreFilter,
-  });
+  const ArtistScreenContent({super.key, required this.parent, this.library, this.genreFilter});
 
   final BaseItemDto parent;
   final BaseItemDto? library;
@@ -95,16 +90,17 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     /// containing the disabled filters that had no items.
     final (topTracksAsync, artistCuratedItemSelectionType, newDisabledTrackFilters) =
         ref.watch(getArtistTracksSectionProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull ??
-            (null, null, null);
-    final albumArtistAlbumsAsync =
-        ref.watch(getArtistAlbumsProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull;
-    final performingArtistAlbumsAsync =
-        ref.watch(getPerformingArtistAlbumsProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull;
-    final allPerformingArtistTracksAsync =
-        ref.watch(getPerformingArtistTracksProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull;
-    final allTracks = ref.watch(
-      getArtistTracksProvider(widget.parent, widget.library, currentGenreFilter).future,
-    );
+        (null, null, null);
+    final albumArtistAlbumsAsync = ref
+        .watch(getArtistAlbumsProvider(widget.parent, widget.library, currentGenreFilter))
+        .valueOrNull;
+    final performingArtistAlbumsAsync = ref
+        .watch(getPerformingArtistAlbumsProvider(widget.parent, widget.library, currentGenreFilter))
+        .valueOrNull;
+    final allPerformingArtistTracksAsync = ref
+        .watch(getPerformingArtistTracksProvider(widget.parent, widget.library, currentGenreFilter))
+        .valueOrNull;
+    final allTracks = ref.watch(getArtistTracksProvider(widget.parent, widget.library, currentGenreFilter).future);
 
     final isLoading = topTracksAsync == null || albumArtistAlbumsAsync == null || performingArtistAlbumsAsync == null;
 
@@ -124,10 +120,11 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
         clickedCuratedItemSelectionType != null &&
         _disabledTrackFilters.contains(clickedCuratedItemSelectionType)) {
       sendEmptyItemSelectionTypeMessage(
-          context: context,
-          typeSelected: clickedCuratedItemSelectionType,
-          messageFor: BaseItemDtoType.artist,
-          hasGenreFilter: (currentGenreFilter != null));
+        context: context,
+        typeSelected: clickedCuratedItemSelectionType,
+        messageFor: BaseItemDtoType.artist,
+        hasGenreFilter: (currentGenreFilter != null),
+      );
       // When we've sent the message, we should reset the clicked value
       // so that we don't send it again on next state refresh
       clickedCuratedItemSelectionType = null;
@@ -146,122 +143,124 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
 
     return RefreshIndicator(
       onRefresh: _refresh,
-      child: PaddedCustomScrollview(slivers: <Widget>[
-        SliverAppBar(
-          title: Text(widget.parent.name ?? AppLocalizations.of(context)!.unknownName),
-          // 125 + 116 is the total height of the widget we use as a
-          // FlexibleSpaceBar. We add the toolbar height since the widget
-          // should appear below the appbar.
-          expandedHeight: kToolbarHeight + 125 + 24 + CTAMedium.predictedHeight(context),
-          centerTitle: false,
-          pinned: true,
-          flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
-            parentItem: widget.parent,
-            allTracks: allTracks,
-            albumCount: albumArtistAlbums.length,
-            genreFilter: currentGenreFilter,
-            updateGenreFilter: updateGenreFilter,
+      child: PaddedCustomScrollview(
+        slivers: <Widget>[
+          SliverAppBar(
+            title: Text(widget.parent.name ?? AppLocalizations.of(context)!.unknownName),
+            // 125 + 116 is the total height of the widget we use as a
+            // FlexibleSpaceBar. We add the toolbar height since the widget
+            // should appear below the appbar.
+            expandedHeight: kToolbarHeight + 125 + 24 + CTAMedium.predictedHeight(context),
+            centerTitle: false,
+            pinned: true,
+            flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
+              parentItem: widget.parent,
+              allTracks: allTracks,
+              albumCount: albumArtistAlbums.length,
+              genreFilter: currentGenreFilter,
+              updateGenreFilter: updateGenreFilter,
+            ),
+            actions: [
+              FavoriteButton(item: widget.parent),
+              if (!isLoading)
+                DownloadButton(
+                  item: DownloadStub.fromFinampCollection(
+                    FinampCollection(
+                      type: FinampCollectionType.collectionWithLibraryFilter,
+                      library: library,
+                      item: widget.parent,
+                    ),
+                  ),
+                  children: allChildren,
+                  downloadDisabled: (currentGenreFilter != null),
+                  customTooltip: (currentGenreFilter != null)
+                      ? AppLocalizations.of(context)!.downloadButtonDisabledGenreFilterTooltip
+                      : null,
+                ),
+            ],
           ),
-          actions: [
-            FavoriteButton(item: widget.parent),
-            if (!isLoading)
-              DownloadButton(
-                item: DownloadStub.fromFinampCollection(FinampCollection(
-                  type: FinampCollectionType.collectionWithLibraryFilter,
-                  library: library,
-                  item: widget.parent,
-                )),
-                children: allChildren,
-                downloadDisabled: (currentGenreFilter != null),
-                customTooltip: (currentGenreFilter != null)
-                    ? AppLocalizations.of(context)!.downloadButtonDisabledGenreFilterTooltip
-                    : null,
-              ),
-          ],
-        ),
-        const SliverToBoxAdapter(child: SizedBox(height: 10)),
-        if (!isLoading)
-          ...artistItemSectionsOrder.map((type) {
-            switch (type) {
-              case ArtistItemSections.tracks:
-                if (ref.watch(finampSettingsProvider.showArtistsTracksSection)) {
-                  return SliverPadding(
-                    padding: const EdgeInsets.all(0),
-                    sliver: TracksSection(
-                      parent: widget.parent,
-                      tracks: topTracks,
-                      childrenForQueue: topTracks,
-                      tracksText: type.toLocalisedSectionTitle(context, artistCuratedItemSelectionType),
-                      isOnArtistScreen: true,
-                      genreFilter: currentGenreFilter,
-                      includeFilterRow: true,
-                      customFilterOrder: artistCuratedItemSectionFilterOrder,
-                      selectedFilter: artistCuratedItemSelectionType,
-                      disabledFilters: _disabledTrackFilters.toList(),
-                      onFilterSelected: (type) {
-                        // We store the clicked type locally in addition to changing the setting,
-                        // because we don't know if the provider might auto-switch to something else
-                        // because of an empty result-list, but we want to show a message in that case.
-                        clickedCuratedItemSelectionType = type;
-                        FinampSetters.setArtistCuratedItemSelectionType(type);
-                      },
+          const SliverToBoxAdapter(child: SizedBox(height: 10)),
+          if (!isLoading)
+            ...artistItemSectionsOrder.map((type) {
+              switch (type) {
+                case ArtistItemSections.tracks:
+                  if (ref.watch(finampSettingsProvider.showArtistsTracksSection)) {
+                    return SliverPadding(
+                      padding: const EdgeInsets.all(0),
+                      sliver: TracksSection(
+                        parent: widget.parent,
+                        tracks: topTracks,
+                        childrenForQueue: topTracks,
+                        tracksText: type.toLocalisedSectionTitle(context, artistCuratedItemSelectionType),
+                        isOnArtistScreen: true,
+                        genreFilter: currentGenreFilter,
+                        includeFilterRow: true,
+                        customFilterOrder: artistCuratedItemSectionFilterOrder,
+                        selectedFilter: artistCuratedItemSelectionType,
+                        disabledFilters: _disabledTrackFilters.toList(),
+                        onFilterSelected: (type) {
+                          // We store the clicked type locally in addition to changing the setting,
+                          // because we don't know if the provider might auto-switch to something else
+                          // because of an empty result-list, but we want to show a message in that case.
+                          clickedCuratedItemSelectionType = type;
+                          FinampSetters.setArtistCuratedItemSelectionType(type);
+                        },
+                      ),
+                    );
+                  }
+                  return const SliverToBoxAdapter(child: SizedBox.shrink());
+                case ArtistItemSections.albums:
+                  if (albumArtistAlbums.isNotEmpty) {
+                    return SliverPadding(
+                      padding: const EdgeInsets.all(0),
+                      sliver: CollectionsSection(
+                        parent: widget.parent,
+                        itemsText: AppLocalizations.of(context)!.albums,
+                        items: albumArtistAlbums,
+                        albumsShowYearAndDurationInstead: true,
+                      ),
+                    );
+                  }
+                  return const SliverToBoxAdapter(child: SizedBox.shrink());
+                case ArtistItemSections.appearsOn:
+                  if (appearsOnAlbums.isNotEmpty) {
+                    return SliverPadding(
+                      padding: const EdgeInsets.all(0),
+                      sliver: CollectionsSection(
+                        parent: widget.parent,
+                        itemsText: AppLocalizations.of(context)!.appearsOnAlbums,
+                        items: appearsOnAlbums,
+                        albumsShowYearAndDurationInstead: true,
+                      ),
+                    );
+                  }
+                  return const SliverToBoxAdapter(child: SizedBox.shrink());
+              }
+            }),
+          if (!isLoading && (albumArtistAlbums.isEmpty && appearsOnAlbums.isEmpty))
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(6, 12, 6, 0),
+              sliver: SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12),
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.of(context)!.emptyFilteredListTitle,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                  );
-                }
-                return const SliverToBoxAdapter(child: SizedBox.shrink());
-              case ArtistItemSections.albums:
-                if (albumArtistAlbums.isNotEmpty) {
-                  return SliverPadding(
-                    padding: const EdgeInsets.all(0),
-                    sliver: CollectionsSection(
-                      parent: widget.parent,
-                      itemsText: AppLocalizations.of(context)!.albums,
-                      items: albumArtistAlbums,
-                      albumsShowYearAndDurationInstead: true,
-                    ),
-                  );
-                }
-                return const SliverToBoxAdapter(child: SizedBox.shrink());
-              case ArtistItemSections.appearsOn:
-                if (appearsOnAlbums.isNotEmpty) {
-                  return SliverPadding(
-                    padding: const EdgeInsets.all(0),
-                    sliver: CollectionsSection(
-                      parent: widget.parent,
-                      itemsText: AppLocalizations.of(context)!.appearsOnAlbums,
-                      items: appearsOnAlbums,
-                      albumsShowYearAndDurationInstead: true,
-                    ),
-                  );
-                }
-                return const SliverToBoxAdapter(child: SizedBox.shrink());
-            }
-          }),
-        if (!isLoading && (albumArtistAlbums.isEmpty && appearsOnAlbums.isEmpty))
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(6, 12, 6, 0),
-            sliver: SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12),
-                child: Center(
-                  child: Text(
-                    AppLocalizations.of(context)!.emptyFilteredListTitle,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
             ),
-          ),
-        if (isLoading)
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-              child: Center(
-                child: CircularProgressIndicator.adaptive(),
+          if (isLoading)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                child: Center(child: CircularProgressIndicator.adaptive()),
               ),
             ),
-          )
-      ]),
+        ],
+      ),
     );
   }
 }

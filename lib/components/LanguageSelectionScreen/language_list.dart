@@ -46,15 +46,12 @@ class _LanguageListState extends State<LanguageList> {
               ]),
             ),
             SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final locale = locales.values.elementAt(index);
+              delegate: SliverChildBuilderDelegate((context, index) {
+                final locale = locales.values.elementAt(index);
 
-                  return LanguageListTile(locale: locale);
-                },
-                childCount: locales.length,
-              ),
-            )
+                return LanguageListTile(locale: locale);
+              }, childCount: locales.length),
+            ),
           ],
         );
       },
@@ -63,10 +60,7 @@ class _LanguageListState extends State<LanguageList> {
 }
 
 class LanguageListTile extends StatelessWidget {
-  const LanguageListTile({
-    super.key,
-    this.locale,
-  });
+  const LanguageListTile({super.key, this.locale});
 
   final Locale? locale; // null if system language
 

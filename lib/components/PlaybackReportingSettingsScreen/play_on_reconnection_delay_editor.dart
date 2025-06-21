@@ -11,8 +11,9 @@ class PlayOnReconnectionDelayEditor extends StatefulWidget {
 }
 
 class _PlayOnReconnectionDelayEditorState extends State<PlayOnReconnectionDelayEditor> {
-  final _controller =
-      TextEditingController(text: FinampSettingsHelper.finampSettings.playOnReconnectionDelay.toString());
+  final _controller = TextEditingController(
+    text: FinampSettingsHelper.finampSettings.playOnReconnectionDelay.toString(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class _PlayOnReconnectionDelayEditorState extends State<PlayOnReconnectionDelayE
             TextSpan(
               text: AppLocalizations.of(context)!.playOnReconnectionDelaySubtitle,
               style: Theme.of(context).textTheme.bodyMedium,
-            )
+            ),
           ],
         ),
       ),

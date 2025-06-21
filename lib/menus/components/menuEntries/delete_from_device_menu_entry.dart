@@ -10,10 +10,7 @@ import 'package:get_it/get_it.dart';
 class DeleteFromDeviceMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final DownloadStub downloadStub;
 
-  const DeleteFromDeviceMenuEntry({
-    super.key,
-    required this.downloadStub,
-  });
+  const DeleteFromDeviceMenuEntry({super.key, required this.downloadStub});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,13 +19,15 @@ class DeleteFromDeviceMenuEntry extends ConsumerWidget implements HideableMenuEn
     final DownloadItemStatus downloadStatus = ref.watch(downloadsService.statusProvider((downloadStub, null)));
 
     return Visibility(
-        visible: downloadStatus.isRequired,
-        child: MenuEntry(
-            icon: Icons.delete_outlined,
-            title: AppLocalizations.of(context)!.deleteFromTargetConfirmButton("device"),
-            onTap: () async {
-              await askBeforeDeleteDownloadFromDevice(context, downloadStub);
-            }));
+      visible: downloadStatus.isRequired,
+      child: MenuEntry(
+        icon: Icons.delete_outlined,
+        title: AppLocalizations.of(context)!.deleteFromTargetConfirmButton("device"),
+        onTap: () async {
+          await askBeforeDeleteDownloadFromDevice(context, downloadStub);
+        },
+      ),
+    );
   }
 
   @override

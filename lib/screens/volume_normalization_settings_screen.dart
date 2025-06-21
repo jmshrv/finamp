@@ -26,7 +26,7 @@ class _VolumeNormalizationSettingsScreenState extends State<VolumeNormalizationS
             setState(() {
               FinampSettingsHelper.resetNormalizationSettings();
             });
-          })
+          }),
         ],
       ),
       body: ListView(

@@ -59,8 +59,9 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
         source: QueueItemSource(
           type: QueueItemSourceType.artist,
           name: QueueItemSourceName(
-              type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
+            type: QueueItemSourceNameType.preTranslated,
+            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
+          ),
           id: parentItem.id,
           item: parentItem,
         ),
@@ -74,8 +75,9 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
         source: QueueItemSource(
           type: QueueItemSourceType.artist,
           name: QueueItemSourceName(
-              type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
+            type: QueueItemSourceNameType.preTranslated,
+            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
+          ),
           id: parentItem.id,
           item: parentItem,
         ),
@@ -90,8 +92,9 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
         source: QueueItemSource(
           type: QueueItemSourceType.nextUpArtist,
           name: QueueItemSourceName(
-              type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
+            type: QueueItemSourceNameType.preTranslated,
+            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
+          ),
           id: parentItem.id,
           item: parentItem,
         ),
@@ -106,8 +109,9 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
         source: QueueItemSource(
           type: QueueItemSourceType.nextUpArtist,
           name: QueueItemSourceName(
-              type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
+            type: QueueItemSourceNameType.preTranslated,
+            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
+          ),
           id: parentItem.id,
           item: parentItem,
         ),
@@ -122,8 +126,9 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
         source: QueueItemSource(
           type: QueueItemSourceType.artist,
           name: QueueItemSourceName(
-              type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
+            type: QueueItemSourceNameType.preTranslated,
+            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
+          ),
           id: parentItem.id,
           item: parentItem,
         ),
@@ -133,47 +138,59 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
 
     void addArtistNext(List<BaseItemDto> items) {
       queueService.addNext(
-          items: items,
-          source: QueueItemSource(
-            type: QueueItemSourceType.nextUpArtist,
-            name: QueueItemSourceName(
-                type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
-            id: parentItem.id,
-            item: parentItem,
-          ));
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext("artist"),
-          isConfirmation: true);
+        items: items,
+        source: QueueItemSource(
+          type: QueueItemSourceType.nextUpArtist,
+          name: QueueItemSourceName(
+            type: QueueItemSourceNameType.preTranslated,
+            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
+          ),
+          id: parentItem.id,
+          item: parentItem,
+        ),
+      );
+      GlobalSnackbar.message(
+        (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext("artist"),
+        isConfirmation: true,
+      );
     }
 
     void addArtistToNextUp(List<BaseItemDto> items) {
       queueService.addToNextUp(
-          items: items,
-          source: QueueItemSource(
-            type: QueueItemSourceType.nextUpArtist,
-            name: QueueItemSourceName(
-                type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
-            id: parentItem.id,
-            item: parentItem,
-          ));
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp("artist"),
-          isConfirmation: true);
+        items: items,
+        source: QueueItemSource(
+          type: QueueItemSourceType.nextUpArtist,
+          name: QueueItemSourceName(
+            type: QueueItemSourceNameType.preTranslated,
+            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
+          ),
+          id: parentItem.id,
+          item: parentItem,
+        ),
+      );
+      GlobalSnackbar.message(
+        (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp("artist"),
+        isConfirmation: true,
+      );
     }
 
     void addArtistToQueue(List<BaseItemDto> items) {
       queueService.addToQueue(
-          items: items,
-          source: QueueItemSource(
-            type: QueueItemSourceType.artist,
-            name: QueueItemSourceName(
-                type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
-            id: parentItem.id,
-            item: parentItem,
-          ));
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue("artist"),
-          isConfirmation: true);
+        items: items,
+        source: QueueItemSource(
+          type: QueueItemSourceType.artist,
+          name: QueueItemSourceName(
+            type: QueueItemSourceNameType.preTranslated,
+            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
+          ),
+          id: parentItem.id,
+          item: parentItem,
+        ),
+      );
+      GlobalSnackbar.message(
+        (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue("artist"),
+        isConfirmation: true,
+      );
     }
 
     void shuffleAlbumsFromArtist(List<BaseItemDto> items) {
@@ -184,8 +201,9 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
         source: QueueItemSource(
           type: QueueItemSourceType.artist,
           name: QueueItemSourceName(
-              type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
+            type: QueueItemSourceNameType.preTranslated,
+            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
+          ),
           id: parentItem.id,
           item: parentItem,
         ),
@@ -201,8 +219,9 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
         source: QueueItemSource(
           type: QueueItemSourceType.nextUpArtist,
           name: QueueItemSourceName(
-              type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
+            type: QueueItemSourceNameType.preTranslated,
+            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
+          ),
           id: parentItem.id,
           item: parentItem,
         ),
@@ -218,8 +237,9 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
         source: QueueItemSource(
           type: QueueItemSourceType.nextUpArtist,
           name: QueueItemSourceName(
-              type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
+            type: QueueItemSourceNameType.preTranslated,
+            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
+          ),
           id: parentItem.id,
           item: parentItem,
         ),
@@ -235,8 +255,9 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
         source: QueueItemSource(
           type: QueueItemSourceType.artist,
           name: QueueItemSourceName(
-              type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
+            type: QueueItemSourceNameType.preTranslated,
+            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
+          ),
           id: parentItem.id,
           item: parentItem,
         ),
@@ -255,16 +276,8 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    SizedBox(
-                      height: 125,
-                      child: AlbumImage(
-                        item: parentItem,
-                        tapToZoom: true,
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 4),
-                    ),
+                    SizedBox(height: 125, child: AlbumImage(item: parentItem, tapToZoom: true)),
+                    const Padding(padding: EdgeInsets.symmetric(horizontal: 4)),
                     FutureBuilder(
                       future: allTracks,
                       builder: (context, snapshot) => Expanded(
@@ -277,7 +290,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                           updateGenreFilter: updateGenreFilter,
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 SingleChildScrollView(
@@ -307,7 +320,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),

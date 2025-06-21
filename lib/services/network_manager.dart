@@ -31,8 +31,9 @@ final autoOfflineStatusProvider = StreamProvider((ref) {
   return autoOfflineStatusStream.stream;
 }).select((v) => v.valueOrNull ?? 0);
 
-final StreamSubscription<List<ConnectivityResult>> _listener =
-    Connectivity().onConnectivityChanged.listen(_onConnectivityChange);
+final StreamSubscription<List<ConnectivityResult>> _listener = Connectivity().onConnectivityChanged.listen(
+  _onConnectivityChange,
+);
 
 @riverpod
 class AutoOffline extends _$AutoOffline {
@@ -59,7 +60,8 @@ class AutoOffline extends _$AutoOffline {
     // false = user overwrote offline mode
     bool autoOfflineActive = ref.watch(finampSettingsProvider.autoOfflineListenerActive);
 
-    bool autoServerSwitch = ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.preferLocalNetwork ??
+    bool autoServerSwitch =
+        ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.preferLocalNetwork ??
         DefaultSettings.preferLocalNetwork;
 
     return (autoOfflineEnabled && autoOfflineActive) || autoServerSwitch;
@@ -68,12 +70,10 @@ class AutoOffline extends _$AutoOffline {
 
 Future<void> _onConnectivityChange(List<ConnectivityResult>? connections) async {
   _networkAutomationLogger.finest(
-      "Network Change: ${connections?.map((element) => element.toString()).join(", ") ?? "None (likely a manual function call)"}");
+    "Network Change: ${connections?.map((element) => element.toString()).join(", ") ?? "None (likely a manual function call)"}",
+  );
   connections ??= await Connectivity().checkConnectivity();
-  final [offlineModeActive, baseUrlChanged] = await Future.wait([
-    _setOfflineMode(connections),
-    changeTargetUrl(),
-  ]);
+  final [offlineModeActive, baseUrlChanged] = await Future.wait([_setOfflineMode(connections), changeTargetUrl()]);
   _notifyOfPausedDownloads(connections);
   if (baseUrlChanged) {
     _reconnectPlayOnService(connections);
@@ -116,7 +116,8 @@ Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
   }
 
   GlobalSnackbar.message(
-      (context) => AppLocalizations.of(context)!.autoOfflineNotification(state2 ? "enabled" : "disabled"));
+    (context) => AppLocalizations.of(context)!.autoOfflineNotification(state2 ? "enabled" : "disabled"),
+  );
 
   _autoOfflineLogger.info("Automatically ${state2 ? "Enabled" : "Disabled"} Offline Mode");
 

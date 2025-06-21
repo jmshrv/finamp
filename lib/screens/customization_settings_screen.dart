@@ -26,7 +26,9 @@ class _CustomizationSettingsScreenState extends State<CustomizationSettingsScree
         title: Text(AppLocalizations.of(context)!.customizationSettingsTitle),
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-              context, FinampSettingsHelper.resetCustomizationSettings)
+            context,
+            FinampSettingsHelper.resetCustomizationSettings,
+          ),
         ],
       ),
       body: ListView(
@@ -151,10 +153,7 @@ class ReleaseDateFormatDropdownListTile extends ConsumerWidget {
       trailing: DropdownButton<ReleaseDateFormat>(
         value: ref.watch(finampSettingsProvider.releaseDateFormat),
         items: ReleaseDateFormat.values
-            .map((e) => DropdownMenuItem<ReleaseDateFormat>(
-                  value: e,
-                  child: Text(e.toLocalisedString(context)),
-                ))
+            .map((e) => DropdownMenuItem<ReleaseDateFormat>(value: e, child: Text(e.toLocalisedString(context))))
             .toList(),
         onChanged: FinampSetters.setReleaseDateFormat.ifNonNull,
       ),

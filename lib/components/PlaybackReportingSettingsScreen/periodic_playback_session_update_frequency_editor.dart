@@ -14,7 +14,8 @@ class PeriodicPlaybackSessionUpdateFrequencyEditor extends StatefulWidget {
 
 class _PeriodicPlaybackSessionUpdateFrequencyEditorState extends State<PeriodicPlaybackSessionUpdateFrequencyEditor> {
   final _controller = TextEditingController(
-      text: FinampSettingsHelper.finampSettings.periodicPlaybackSessionUpdateFrequencySeconds.toString());
+    text: FinampSettingsHelper.finampSettings.periodicPlaybackSessionUpdateFrequencySeconds.toString(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -31,28 +32,26 @@ class _PeriodicPlaybackSessionUpdateFrequencyEditorState extends State<PeriodicP
             // tappable "more info" text
             TextSpan(
               text: AppLocalizations.of(context)!.moreInfo,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-                fontWeight: FontWeight.w500,
-              ),
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w500),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
                   showGeneralDialog(
-                      context: context,
-                      pageBuilder: (context, anim1, anim2) {
-                        return AlertDialog(
-                          title: Text(AppLocalizations.of(context)!.periodicPlaybackSessionUpdateFrequency),
-                          content: Text(AppLocalizations.of(context)!.periodicPlaybackSessionUpdateFrequencyDetails),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(AppLocalizations.of(context)!.close),
-                            ),
-                          ],
-                        );
-                      });
+                    context: context,
+                    pageBuilder: (context, anim1, anim2) {
+                      return AlertDialog(
+                        title: Text(AppLocalizations.of(context)!.periodicPlaybackSessionUpdateFrequency),
+                        content: Text(AppLocalizations.of(context)!.periodicPlaybackSessionUpdateFrequencyDetails),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(AppLocalizations.of(context)!.close),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
             ),
           ],

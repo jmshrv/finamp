@@ -1,5 +1,10 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: deprecated_member_use_from_same_package
+
+// dart format off
+
+
 part of 'genre_screen_provider.dart';
 
 // **************************************************************************
@@ -35,7 +40,17 @@ const genreCuratedItemsProvider = GenreCuratedItemsFamily();
 
 /// See also [genreCuratedItems].
 class GenreCuratedItemsFamily
-    extends Family<AsyncValue<(List<BaseItemDto>, int, CuratedItemSelectionType, Set<CuratedItemSelectionType>?)>> {
+    extends
+        Family<
+          AsyncValue<
+            (
+              List<BaseItemDto>,
+              int,
+              CuratedItemSelectionType,
+              Set<CuratedItemSelectionType>?,
+            )
+          >
+        > {
   /// See also [genreCuratedItems].
   const GenreCuratedItemsFamily();
 
@@ -45,22 +60,14 @@ class GenreCuratedItemsFamily
     BaseItemDtoType baseItemType,
     BaseItemDto? library,
   ) {
-    return GenreCuratedItemsProvider(
-      parent,
-      baseItemType,
-      library,
-    );
+    return GenreCuratedItemsProvider(parent, baseItemType, library);
   }
 
   @override
   GenreCuratedItemsProvider getProviderOverride(
     covariant GenreCuratedItemsProvider provider,
   ) {
-    return call(
-      provider.parent,
-      provider.baseItemType,
-      provider.library,
-    );
+    return call(provider.parent, provider.baseItemType, provider.library);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -71,36 +78,48 @@ class GenreCuratedItemsFamily
   static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies => _allTransitiveDependencies;
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
 
   @override
   String? get name => r'genreCuratedItemsProvider';
 }
 
 /// See also [genreCuratedItems].
-class GenreCuratedItemsProvider extends AutoDisposeFutureProvider<
-    (List<BaseItemDto>, int, CuratedItemSelectionType, Set<CuratedItemSelectionType>?)> {
+class GenreCuratedItemsProvider
+    extends
+        AutoDisposeFutureProvider<
+          (
+            List<BaseItemDto>,
+            int,
+            CuratedItemSelectionType,
+            Set<CuratedItemSelectionType>?,
+          )
+        > {
   /// See also [genreCuratedItems].
   GenreCuratedItemsProvider(
     BaseItemDto parent,
     BaseItemDtoType baseItemType,
     BaseItemDto? library,
   ) : this._internal(
-          (ref) => genreCuratedItems(
-            ref as GenreCuratedItemsRef,
-            parent,
-            baseItemType,
-            library,
-          ),
-          from: genreCuratedItemsProvider,
-          name: r'genreCuratedItemsProvider',
-          debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$genreCuratedItemsHash,
-          dependencies: GenreCuratedItemsFamily._dependencies,
-          allTransitiveDependencies: GenreCuratedItemsFamily._allTransitiveDependencies,
-          parent: parent,
-          baseItemType: baseItemType,
-          library: library,
-        );
+        (ref) => genreCuratedItems(
+          ref as GenreCuratedItemsRef,
+          parent,
+          baseItemType,
+          library,
+        ),
+        from: genreCuratedItemsProvider,
+        name: r'genreCuratedItemsProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$genreCuratedItemsHash,
+        dependencies: GenreCuratedItemsFamily._dependencies,
+        allTransitiveDependencies:
+            GenreCuratedItemsFamily._allTransitiveDependencies,
+        parent: parent,
+        baseItemType: baseItemType,
+        library: library,
+      );
 
   GenreCuratedItemsProvider._internal(
     super._createNotifier, {
@@ -120,9 +139,16 @@ class GenreCuratedItemsProvider extends AutoDisposeFutureProvider<
 
   @override
   Override overrideWith(
-    FutureOr<(List<BaseItemDto>, int, CuratedItemSelectionType, Set<CuratedItemSelectionType>?)> Function(
-            GenreCuratedItemsRef provider)
-        create,
+    FutureOr<
+      (
+        List<BaseItemDto>,
+        int,
+        CuratedItemSelectionType,
+        Set<CuratedItemSelectionType>?,
+      )
+    >
+    Function(GenreCuratedItemsRef provider)
+    create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -141,8 +167,15 @@ class GenreCuratedItemsProvider extends AutoDisposeFutureProvider<
   }
 
   @override
-  AutoDisposeFutureProviderElement<(List<BaseItemDto>, int, CuratedItemSelectionType, Set<CuratedItemSelectionType>?)>
-      createElement() {
+  AutoDisposeFutureProviderElement<
+    (
+      List<BaseItemDto>,
+      int,
+      CuratedItemSelectionType,
+      Set<CuratedItemSelectionType>?,
+    )
+  >
+  createElement() {
     return _GenreCuratedItemsProviderElement(this);
   }
 
@@ -167,8 +200,16 @@ class GenreCuratedItemsProvider extends AutoDisposeFutureProvider<
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin GenreCuratedItemsRef on AutoDisposeFutureProviderRef<
-    (List<BaseItemDto>, int, CuratedItemSelectionType, Set<CuratedItemSelectionType>?)> {
+mixin GenreCuratedItemsRef
+    on
+        AutoDisposeFutureProviderRef<
+          (
+            List<BaseItemDto>,
+            int,
+            CuratedItemSelectionType,
+            Set<CuratedItemSelectionType>?,
+          )
+        > {
   /// The parameter `parent` of this provider.
   BaseItemDto get parent;
 
@@ -179,16 +220,27 @@ mixin GenreCuratedItemsRef on AutoDisposeFutureProviderRef<
   BaseItemDto? get library;
 }
 
-class _GenreCuratedItemsProviderElement extends AutoDisposeFutureProviderElement<
-    (List<BaseItemDto>, int, CuratedItemSelectionType, Set<CuratedItemSelectionType>?)> with GenreCuratedItemsRef {
+class _GenreCuratedItemsProviderElement
+    extends
+        AutoDisposeFutureProviderElement<
+          (
+            List<BaseItemDto>,
+            int,
+            CuratedItemSelectionType,
+            Set<CuratedItemSelectionType>?,
+          )
+        >
+    with GenreCuratedItemsRef {
   _GenreCuratedItemsProviderElement(super.provider);
 
   @override
   BaseItemDto get parent => (origin as GenreCuratedItemsProvider).parent;
   @override
-  BaseItemDtoType get baseItemType => (origin as GenreCuratedItemsProvider).baseItemType;
+  BaseItemDtoType get baseItemType =>
+      (origin as GenreCuratedItemsProvider).baseItemType;
   @override
   BaseItemDto? get library => (origin as GenreCuratedItemsProvider).library;
 }
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

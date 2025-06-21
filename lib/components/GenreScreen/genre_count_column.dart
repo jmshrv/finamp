@@ -16,27 +16,17 @@ Widget buildCountColumn({
       decoration: BoxDecoration(
         color: backgroundColor ?? Colors.white.withOpacity(0.1),
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(
-          color: borderColor ?? Colors.black.withOpacity(0.2),
-          width: 1,
-        ),
+        border: Border.all(color: borderColor ?? Colors.black.withOpacity(0.2), width: 1),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             count?.toString() ?? '-',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: textColor ?? Colors.black,
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: textColor ?? Colors.black),
           ),
           const SizedBox(height: 2),
-          Text(
-            label,
-            style: TextStyle(fontSize: 12, color: subtitleColor ?? Colors.grey),
-          ),
+          Text(label, style: TextStyle(fontSize: 12, color: subtitleColor ?? Colors.grey)),
         ],
       ),
     ),
