@@ -74,7 +74,7 @@ body:
 
   - type: markdown
     attributes:
-      value: "<details><summary>Logs</summary>"  
+      value: ""  
 
   - type: textarea
     id: logs
@@ -86,12 +86,13 @@ body:
         .zip due to file size.
         To get the logs Open the side menu, click "Logs", and then use the
         *share* button at the top right to get the log file.
+      placeholder: |
+        <details>
+          <summary>Logs</summary>
+          PLACE YOUR LOGS HERE
+        </details> 
     validations:
       required: true
-  
-  - type: markdown
-    attributes:
-      value: "</details>"
 
   - type: textarea
     id: others
