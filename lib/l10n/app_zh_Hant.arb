@@ -432,7 +432,7 @@
   "@showFastScroller": {},
   "swipeInsertQueueNext": "滑動接續播放歌曲",
   "@swipeInsertQueueNext": {},
-  "swipeInsertQueueNextSubtitle": "開啟後滑動清單中的歌曲，可以將歌曲接著播放，而不是加到播放清單的最後一首。",
+  "swipeInsertQueueNextSubtitle": "開啟後滑動音樂清單中的歌曲，可以將歌曲接著播放，而不是加到播放清單的最後一首。",
   "@swipeInsertQueueNextSubtitle": {},
   "loginFlowQuickConnectInstructions": "打開 Jellyfin 應用程式或網站，點擊你的用戶圖示，然後選擇「快速連接」。",
   "@loginFlowQuickConnectInstructions": {
@@ -1930,7 +1930,7 @@
   },
   "audioFadeInDurationSettingTitle": "音訊淡入時長",
   "@audioFadeInDurationSettingTitle": {},
-  "swipeLeftToRightActionSubtitle": "向右滑動清單中的歌曲時觸發的操作。",
+  "swipeLeftToRightActionSubtitle": "向右滑動音樂清單中的歌曲時觸發的操作。",
   "@swipeLeftToRightActionSubtitle": {},
   "audioFadeOutDurationSettingSubtitle": "音訊淡出的時間長度，以毫秒為單位。",
   "@audioFadeOutDurationSettingSubtitle": {
@@ -1952,7 +1952,7 @@
   "@autoOfflineSettingTitle": {},
   "swipeLeftToRightAction": "右滑動作",
   "@swipeLeftToRightAction": {},
-  "swipeRightToLeftActionSubtitle": "向左滑動清單中的歌曲時觸發的操作。",
+  "swipeRightToLeftActionSubtitle": "向左滑動音樂清單中的歌曲時觸發的操作。",
   "@swipeRightToLeftActionSubtitle": {},
   "autoOfflineOptionNetwork": "區域網路",
   "@autoOfflineOptionNetwork": {
