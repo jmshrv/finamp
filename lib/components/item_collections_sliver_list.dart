@@ -27,8 +27,7 @@ class CollectionsSliverList extends ConsumerStatefulWidget {
 }
 
 class _ItemsSliverListState extends ConsumerState<CollectionsSliverList> {
-  final GlobalKey<SliverAnimatedListState> sliverListKey =
-      GlobalKey<SliverAnimatedListState>();
+  final GlobalKey<SliverAnimatedListState> sliverListKey = GlobalKey<SliverAnimatedListState>();
 
   @override
   void initState() {

@@ -73,8 +73,7 @@ class _AlbumImageState extends ConsumerState<AlbumImage> {
     final borderRadius = widget.borderRadius ?? AlbumImage.defaultBorderRadius;
     assert(widget.item == null || widget.imageListenable == null);
     assert(!(widget.disabled && widget.tapToZoom));
-    if ((widget.item == null || widget.item!.imageId == null) &&
-        widget.imageListenable == null) {
+    if ((widget.item == null || widget.item!.imageId == null) && widget.imageListenable == null) {
       return ClipRRect(
         borderRadius: borderRadius,
         child: AspectRatio(
@@ -95,9 +94,8 @@ class _AlbumImageState extends ConsumerState<AlbumImage> {
         if (listenable == null) {
           // If the current themeing context has a usable image for this item,
           // use that instead of generating a new request
-          if (ref.watch(localThemeInfoProvider.select((request) =>
-              (request?.largeThemeImage ?? false) &&
-              request?.item == widget.item))) {
+          if (ref.watch(localThemeInfoProvider
+              .select((request) => (request?.largeThemeImage ?? false) && request?.item == widget.item))) {
             listenable = localImageProvider;
           } else {
             int? physicalWidth;
@@ -110,21 +108,15 @@ class _AlbumImageState extends ConsumerState<AlbumImage> {
               // If we use logical pixels for the image request, we'll get a smaller image than we want.
               // Because of this, we convert the logical pixels to physical pixels by multiplying by the device's DPI.
               final MediaQueryData mediaQuery = MediaQuery.of(context);
-              physicalWidth =
-                  (constraints.maxWidth * mediaQuery.devicePixelRatio).toInt();
-              physicalHeight =
-                  (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
+              physicalWidth = (constraints.maxWidth * mediaQuery.devicePixelRatio).toInt();
+              physicalHeight = (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
               // If using grid music screen view without fixed size tiles, and if the view is resizable due
               // to being on desktop and using split screen, then clamp album size to reduce server requests when resizing.
-              if ((!(Platform.isIOS || Platform.isAndroid) ||
-                      usingPlayerSplitScreen) &&
+              if ((!(Platform.isIOS || Platform.isAndroid) || usingPlayerSplitScreen) &&
                   !FinampSettingsHelper.finampSettings.useFixedSizeGridTiles &&
-                  FinampSettingsHelper.finampSettings.contentViewType ==
-                      ContentViewType.grid) {
-                physicalWidth =
-                    exp((log(physicalWidth) * 3).ceil() / 3).toInt();
-                physicalHeight =
-                    exp((log(physicalHeight) * 3).ceil() / 3).toInt();
+                  FinampSettingsHelper.finampSettings.contentViewType == ContentViewType.grid) {
+                physicalWidth = exp((log(physicalWidth) * 3).ceil() / 3).toInt();
+                physicalHeight = exp((log(physicalHeight) * 3).ceil() / 3).toInt();
               }
             }
 
@@ -159,36 +151,27 @@ class _AlbumImageState extends ConsumerState<AlbumImage> {
           return MouseRegion(
             cursor: SystemMouseCursors.click,
             child: GestureDetector(
-                onTap: () => Navigator.of(context).push(PageRouteBuilder<
-                        _ZoomedImage>(
+                onTap: () => Navigator.of(context).push(PageRouteBuilder<_ZoomedImage>(
                     opaque: false,
                     barrierDismissible: true,
-                    transitionDuration: MediaQuery.of(context).disableAnimations
-                        ? Duration.zero
-                        : const Duration(milliseconds: 500),
-                    pageBuilder: (BuildContext context,
-                        Animation<double> animation1,
-                        Animation<double> animation2) {
+                    transitionDuration:
+                        MediaQuery.of(context).disableAnimations ? Duration.zero : const Duration(milliseconds: 500),
+                    pageBuilder: (BuildContext context, Animation<double> animation1, Animation<double> animation2) {
                       return _ZoomedImage(albumImage: largeImage, id: zoomID);
                     })),
                 child: Hero(
                     tag: zoomID,
-                    createRectTween: (begin, end) =>
-                        RectTween(begin: begin, end: end),
+                    createRectTween: (begin, end) => RectTween(begin: begin, end: end),
                     child: image,
                     placeholderBuilder: (context, heroSize, child) => image,
-                    flightShuttleBuilder: (_, __, ___, ____, _____) =>
-                        largeImage)),
+                    flightShuttleBuilder: (_, __, ___, ____, _____) => largeImage)),
           );
         }
 
         return widget.disabled
             ? Opacity(
                 opacity: 0.75,
-                child: ColorFiltered(
-                    colorFilter:
-                        const ColorFilter.mode(Colors.black, BlendMode.color),
-                    child: image))
+                child: ColorFiltered(colorFilter: const ColorFilter.mode(Colors.black, BlendMode.color), child: image))
             : image;
       }),
     );
@@ -235,8 +218,7 @@ class BareAlbumImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var ThemeImage(image: image, blurHash: blurHash) =
-        ref.watch(imageListenable);
+    var ThemeImage(image: image, blurHash: blurHash) = ref.watch(imageListenable);
     var localPlaceholder = placeholderBuilder;
     if (blurHash != null) {
       localPlaceholder ??= (_) => Image(
@@ -257,12 +239,10 @@ class BareAlbumImage extends ConsumerWidget {
       return OctoImage(
         image: image,
         filterQuality: FilterQuality.medium,
-        fadeOutDuration: MediaQuery.of(context).disableAnimations || onZoomRoute
-            ? Duration.zero
-            : const Duration(milliseconds: 300),
-        fadeInDuration: MediaQuery.of(context).disableAnimations || onZoomRoute
-            ? Duration.zero
-            : const Duration(milliseconds: 300),
+        fadeOutDuration:
+            MediaQuery.of(context).disableAnimations || onZoomRoute ? Duration.zero : const Duration(milliseconds: 300),
+        fadeInDuration:
+            MediaQuery.of(context).disableAnimations || onZoomRoute ? Duration.zero : const Duration(milliseconds: 300),
         fit: BoxFit.contain,
         placeholderBuilder: localPlaceholder,
         errorBuilder: errorBuilder,
@@ -316,8 +296,7 @@ class _ZoomedImage extends StatelessWidget {
             clipBehavior: Clip.none,
             child: Hero(
               tag: id,
-              createRectTween: (begin, end) =>
-                  RectTween(begin: begin, end: end),
+              createRectTween: (begin, end) => RectTween(begin: begin, end: end),
               child: albumImage,
             ),
           ),

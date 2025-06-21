@@ -11,11 +11,9 @@ class StopForegroundSelector extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.enterLowPriorityStateOnPause),
-      subtitle: Text(
-          AppLocalizations.of(context)!.enterLowPriorityStateOnPauseSubtitle),
+      subtitle: Text(AppLocalizations.of(context)!.enterLowPriorityStateOnPauseSubtitle),
       value: ref.watch(finampSettingsProvider.androidStopForegroundOnPause),
-      onChanged: (value) =>
-          FinampSetters.setAndroidStopForegroundOnPause(value),
+      onChanged: (value) => FinampSetters.setAndroidStopForegroundOnPause(value),
     );
   }
 }

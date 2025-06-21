@@ -22,20 +22,13 @@ const double infoHeaderFullInternalHeight = 140.0;
 const double infoHeaderCondensedInternalHeight = 80.0;
 
 Widget _getMenuHeaderForItemType(
-    {required BaseItemDto item,
-    required bool condensed,
-    required List<MenuItemInfoHeaderFeatures> features}) {
+    {required BaseItemDto item, required bool condensed, required List<MenuItemInfoHeaderFeatures> features}) {
   return switch (BaseItemDtoType.fromItem(item)) {
-    BaseItemDtoType.track =>
-      TrackInfo(item: item, condensed: condensed, features: features),
-    BaseItemDtoType.album =>
-      AlbumInfo(item: item, condensed: condensed, features: features),
-    BaseItemDtoType.playlist =>
-      PlaylistInfo(item: item, condensed: condensed, features: features),
-    BaseItemDtoType.genre =>
-      GenreInfo(item: item, condensed: condensed, features: features),
-    BaseItemDtoType.artist =>
-      ArtistInfo(item: item, condensed: condensed, features: features),
+    BaseItemDtoType.track => TrackInfo(item: item, condensed: condensed, features: features),
+    BaseItemDtoType.album => AlbumInfo(item: item, condensed: condensed, features: features),
+    BaseItemDtoType.playlist => PlaylistInfo(item: item, condensed: condensed, features: features),
+    BaseItemDtoType.genre => GenreInfo(item: item, condensed: condensed, features: features),
+    BaseItemDtoType.artist => ArtistInfo(item: item, condensed: condensed, features: features),
     _ => TrackInfo(item: item, condensed: condensed, features: features),
   };
 }
@@ -52,10 +45,7 @@ class MenuItemInfoSliverHeader extends SliverPersistentHeaderDelegate {
 
   MenuItemInfoSliverHeader({
     required this.item,
-    this.features = const [
-      MenuItemInfoHeaderFeatures.openItem,
-      MenuItemInfoHeaderFeatures.addToPlaylistAndFavorite
-    ],
+    this.features = const [MenuItemInfoHeaderFeatures.openItem, MenuItemInfoHeaderFeatures.addToPlaylistAndFavorite],
   }) : condensed = false;
 
   MenuItemInfoSliverHeader.condensed({
@@ -67,8 +57,7 @@ class MenuItemInfoSliverHeader extends SliverPersistentHeaderDelegate {
   static const MenuMaskHeight condensedHeight = MenuMaskHeight(80.0);
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return _getMenuHeaderForItemType(
       item: item,
       condensed: condensed,
@@ -77,16 +66,13 @@ class MenuItemInfoSliverHeader extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent =>
-      (condensed ? condensedHeight.raw : defaultHeight.raw) + 10.0;
+  double get maxExtent => (condensed ? condensedHeight.raw : defaultHeight.raw) + 10.0;
 
   @override
-  double get minExtent =>
-      (condensed ? condensedHeight.raw : defaultHeight.raw) + 10.0;
+  double get minExtent => (condensed ? condensedHeight.raw : defaultHeight.raw) + 10.0;
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
-      true;
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => true;
 }
 
 class MenuItemInfoHeader extends ConsumerWidget {
@@ -155,24 +141,20 @@ class TrackInfo extends ConsumerWidget {
           style: TextStyle(
             fontSize: condensed ? 16 : 18,
             height: 1.1,
-            color:
-                Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+            color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
           ),
           overflow: TextOverflow.ellipsis,
           softWrap: true,
           maxLines: 2,
         ),
         Padding(
-          padding: condensed
-              ? const EdgeInsets.only(top: 6.0)
-              : const EdgeInsets.only(top: 2.0),
+          padding: condensed ? const EdgeInsets.only(top: 6.0) : const EdgeInsets.only(top: 2.0),
           child: ArtistChips(
             baseItem: item,
             backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??
                 Theme.of(context).textTheme.bodyMedium?.color ??
                 Colors.white,
-            color:
-                Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+            color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
           ),
         ),
         if (!condensed) ...[
@@ -225,24 +207,20 @@ class AlbumInfo extends ConsumerWidget {
           style: TextStyle(
             fontSize: condensed ? 16 : 18,
             height: 1.2,
-            color:
-                Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+            color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
           ),
           overflow: TextOverflow.ellipsis,
           softWrap: true,
           maxLines: 2,
         ),
         Padding(
-          padding: condensed
-              ? const EdgeInsets.only(top: 6.0)
-              : const EdgeInsets.symmetric(vertical: 0.0),
+          padding: condensed ? const EdgeInsets.only(top: 6.0) : const EdgeInsets.symmetric(vertical: 0.0),
           child: ArtistChips(
             baseItem: item,
             backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ??
                 Theme.of(context).textTheme.bodyMedium?.color ??
                 Colors.white,
-            color:
-                Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+            color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
           ),
         ),
         if (!condensed) ...[
@@ -252,8 +230,7 @@ class AlbumInfo extends ConsumerWidget {
           IconAndText(
               iconData: Icons.event,
               textSpan: TextSpan(
-                text: ReleaseDateHelper.autoFormat(item) ??
-                    AppLocalizations.of(context)!.noReleaseDate,
+                text: ReleaseDateHelper.autoFormat(item) ?? AppLocalizations.of(context)!.noReleaseDate,
               )),
         ]
       ],
@@ -294,8 +271,7 @@ class PlaylistInfo extends ConsumerWidget {
           style: TextStyle(
             fontSize: condensed ? 16 : 18,
             height: 1.2,
-            color:
-                Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+            color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
           ),
           overflow: TextOverflow.ellipsis,
           softWrap: true,
@@ -353,8 +329,7 @@ class ArtistInfo extends ConsumerWidget {
           style: TextStyle(
             fontSize: condensed ? 16 : 18,
             height: 1.2,
-            color:
-                Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+            color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
           ),
           overflow: TextOverflow.ellipsis,
           softWrap: true,
@@ -408,8 +383,7 @@ class GenreInfo extends ConsumerWidget {
           style: TextStyle(
             fontSize: condensed ? 16 : 18,
             height: 1.2,
-            color:
-                Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+            color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
           ),
           overflow: TextOverflow.ellipsis,
           softWrap: true,
@@ -455,11 +429,8 @@ class _ItemInfoState extends ConsumerState<ItemInfo> {
       color: Colors.transparent,
       child: Center(
         child: Container(
-          margin:
-              EdgeInsets.symmetric(horizontal: widget.condensed ? 28.0 : 12.0),
-          height: widget.condensed
-              ? infoHeaderCondensedInternalHeight
-              : infoHeaderFullInternalHeight,
+          margin: EdgeInsets.symmetric(horizontal: widget.condensed ? 28.0 : 12.0),
+          height: widget.condensed ? infoHeaderCondensedInternalHeight : infoHeaderFullInternalHeight,
           clipBehavior: Clip.antiAlias,
           decoration: ShapeDecoration(
             color: Theme.of(context).brightness == Brightness.dark
@@ -469,8 +440,7 @@ class _ItemInfoState extends ConsumerState<ItemInfo> {
           ),
           child: Stack(
             children: [
-              if (BaseItemDtoType.fromItem(widget.item) !=
-                      BaseItemDtoType.track &&
+              if (BaseItemDtoType.fromItem(widget.item) != BaseItemDtoType.track &&
                   widget.features.contains(MenuItemInfoHeaderFeatures.openItem))
                 Positioned(
                   top: 0,
@@ -481,11 +451,9 @@ class _ItemInfoState extends ConsumerState<ItemInfo> {
                       size: 20,
                     ),
                     padding: const EdgeInsets.all(0.0),
-                    visualDensity:
-                        VisualDensity(horizontal: -2.0, vertical: -3.0),
+                    visualDensity: VisualDensity(horizontal: -2.0, vertical: -3.0),
                     onPressed: () {
-                      if (BaseItemDtoType.fromItem(widget.item) ==
-                          BaseItemDtoType.track) {
+                      if (BaseItemDtoType.fromItem(widget.item) == BaseItemDtoType.track) {
                         return;
                       }
                       Navigator.pushNamed(
@@ -500,20 +468,17 @@ class _ItemInfoState extends ConsumerState<ItemInfo> {
                         arguments: widget.item,
                       );
                     },
-                    color: Theme.of(context).textTheme.bodyMedium?.color ??
-                        Colors.white,
+                    color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
                   ),
                 ),
-              if (widget.features.contains(
-                  MenuItemInfoHeaderFeatures.addToPlaylistAndFavorite))
+              if (widget.features.contains(MenuItemInfoHeaderFeatures.addToPlaylistAndFavorite))
                 Positioned(
                   bottom: 0,
                   right: 0,
                   child: AddToPlaylistButton(
                     item: widget.item,
                     size: 20,
-                    visualDensity:
-                        VisualDensity(horizontal: -4.0, vertical: -3.0),
+                    visualDensity: VisualDensity(horizontal: -4.0, vertical: -3.0),
                   ),
                 ),
               Row(

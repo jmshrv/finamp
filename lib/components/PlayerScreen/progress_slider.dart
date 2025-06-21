@@ -45,8 +45,7 @@ class _ProgressSliderState extends State<ProgressSlider> {
     // putting TextDirection.ltr all over the place
     return LayoutBuilder(builder: (context, constraints) {
       return Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: ((constraints.maxWidth - 260) / 4).clamp(0, 20) + 16),
+        padding: EdgeInsets.symmetric(horizontal: ((constraints.maxWidth - 260) / 4).clamp(0, 20) + 16),
         child: Directionality(
           textDirection: TextDirection.ltr,
           // The slider can refresh up to 60 times per second, so we wrap it in a
@@ -67,10 +66,12 @@ class _ProgressSliderState extends State<ProgressSlider> {
                   return widget.showPlaceholder
                       ? Column(
                           children: [
-                            const Slider(
+                            Slider(
                               value: 0,
                               max: 1,
                               onChanged: null,
+                              autofocus: false,
+                              focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
                             ),
                             if (widget.showDuration)
                               const _ProgressSliderDuration(
@@ -134,10 +135,8 @@ class _ProgressSliderDuration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final showRemaining = Platform.isIOS || Platform.isMacOS;
-    final currentPosition =
-        Duration(seconds: (position.inMilliseconds / 1000).round());
-    final roundedDuration =
-        Duration(seconds: ((itemDuration?.inMilliseconds ?? 0) / 1000).round());
+    final currentPosition = Duration(seconds: (position.inMilliseconds / 1000).round());
+    final roundedDuration = Duration(seconds: ((itemDuration?.inMilliseconds ?? 0) / 1000).round());
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,9 +150,7 @@ class _ProgressSliderDuration extends StatelessWidget {
         Text(
           printDuration(
             // display remaining time if on iOS or macOS
-            showRemaining
-                ? (roundedDuration - currentPosition)
-                : roundedDuration,
+            showRemaining ? (roundedDuration - currentPosition) : roundedDuration,
             isRemaining: showRemaining,
           ),
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -181,12 +178,10 @@ class _PlaybackProgressSlider extends ConsumerStatefulWidget {
   final DragCallback onDrag; // should probably be nullable but its never null
 
   @override
-  ConsumerState<_PlaybackProgressSlider> createState() =>
-      __PlaybackProgressSliderState();
+  ConsumerState<_PlaybackProgressSlider> createState() => __PlaybackProgressSliderState();
 }
 
-class __PlaybackProgressSliderState
-    extends ConsumerState<_PlaybackProgressSlider> {
+class __PlaybackProgressSliderState extends ConsumerState<_PlaybackProgressSlider> {
   /// Value used to hold the slider's value when dragging.
   double? _dragValue;
 
@@ -198,19 +193,15 @@ class __PlaybackProgressSliderState
       data: widget.allowSeeking
           // ? _sliderThemeData.copyWith(
           ? SliderTheme.of(context).copyWith(
-              inactiveTrackColor:
-                  IconTheme.of(context).color!.withOpacity(0.35),
-              secondaryActiveTrackColor:
-                  IconTheme.of(context).color!.withOpacity(0.6),
+              inactiveTrackColor: IconTheme.of(context).color!.withOpacity(0.35),
+              secondaryActiveTrackColor: IconTheme.of(context).color!.withOpacity(0.6),
               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7),
             )
           // )
           // : _sliderThemeData.copyWith(
           : SliderTheme.of(context).copyWith(
-              inactiveTrackColor:
-                  IconTheme.of(context).color!.withOpacity(0.35),
-              secondaryActiveTrackColor:
-                  IconTheme.of(context).color!.withOpacity(0.6),
+              inactiveTrackColor: IconTheme.of(context).color!.withOpacity(0.35),
+              secondaryActiveTrackColor: IconTheme.of(context).color!.withOpacity(0.6),
               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0.1),
               // gets rid of both horizontal and vertical padding
               overlayShape: const RoundSliderOverlayShape(overlayRadius: 0.1),
@@ -225,39 +216,31 @@ class __PlaybackProgressSliderState
             ? widget.playbackState.bufferedPosition.inMicroseconds.toDouble()
             : widget.mediaItem?.duration?.inMicroseconds.toDouble() ?? 0,
         value: (_dragValue ?? widget.position.inMicroseconds)
-            .clamp(
-                0, widget.mediaItem?.duration?.inMicroseconds.toDouble() ?? 0)
+            .clamp(0, widget.mediaItem?.duration?.inMicroseconds.toDouble() ?? 0)
             .toDouble(),
         semanticFormatterCallback: (double value) {
-          final positionFullMinutes =
-              Duration(microseconds: value.toInt()).inMinutes % 60;
-          final positionFullHours =
-              Duration(microseconds: value.toInt()).inHours;
-          final positionSeconds =
-              Duration(microseconds: value.toInt()).inSeconds % 60;
+          final positionFullMinutes = Duration(microseconds: value.toInt()).inMinutes % 60;
+          final positionFullHours = Duration(microseconds: value.toInt()).inHours;
+          final positionSeconds = Duration(microseconds: value.toInt()).inSeconds % 60;
           final durationFullHours = (widget.mediaItem?.duration?.inHours ?? 0);
-          final durationFullMinutes =
-              (widget.mediaItem?.duration?.inMinutes ?? 0) % 60;
-          final durationSeconds =
-              (widget.mediaItem?.duration?.inSeconds ?? 0) % 60;
+          final durationFullMinutes = (widget.mediaItem?.duration?.inMinutes ?? 0) % 60;
+          final durationSeconds = (widget.mediaItem?.duration?.inSeconds ?? 0) % 60;
           final positionString =
               "${positionFullHours > 0 ? "$positionFullHours ${AppLocalizations.of(context)!.hours} " : ""}${positionFullMinutes > 0 ? "$positionFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$positionSeconds ${AppLocalizations.of(context)!.seconds}";
           final durationString =
               "${durationFullHours > 0 ? "$durationFullHours ${AppLocalizations.of(context)!.hours} " : ""}${durationFullMinutes > 0 ? "$durationFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$durationSeconds ${AppLocalizations.of(context)!.seconds}";
-          return AppLocalizations.of(context)!
-              .timeFractionTooltip(positionString, durationString);
+          return AppLocalizations.of(context)!.timeFractionTooltip(positionString, durationString);
         },
-        secondaryTrackValue:
-            widget.mediaItem?.extras?["downloadedTrackPath"] == null
-                ? widget.playbackState.bufferedPosition.inMicroseconds
-                    .clamp(
-                      0.0,
-                      widget.mediaItem?.duration == null
-                          ? widget.playbackState.bufferedPosition.inMicroseconds
-                          : widget.mediaItem?.duration?.inMicroseconds ?? 0,
-                    )
-                    .toDouble()
-                : 0,
+        secondaryTrackValue: widget.mediaItem?.extras?["downloadedTrackPath"] == null
+            ? widget.playbackState.bufferedPosition.inMicroseconds
+                .clamp(
+                  0.0,
+                  widget.mediaItem?.duration == null
+                      ? widget.playbackState.bufferedPosition.inMicroseconds
+                      : widget.mediaItem?.duration?.inMicroseconds ?? 0,
+                )
+                .toDouble()
+            : 0,
         onChanged: widget.allowSeeking
             ? (newValue) async {
                 // We don't actually tell audio_service to seek here
@@ -279,8 +262,7 @@ class __PlaybackProgressSliderState
         onChangeEnd: widget.allowSeeking
             ? (newValue) async {
                 // Seek to the new position
-                await _audioHandler
-                    .seek(Duration(microseconds: newValue.toInt()));
+                await _audioHandler.seek(Duration(microseconds: newValue.toInt()));
 
                 // Clear drag value so that the slider uses the play
                 // duration again.
@@ -292,6 +274,8 @@ class __PlaybackProgressSliderState
                 widget.onDrag(null);
               }
             : (_) {},
+        autofocus: false,
+        focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
       ),
     );
   }
@@ -331,8 +315,7 @@ class CustomTrackShape extends RoundedRectSliderTrackShape {
   }) {
     final double trackHeight = sliderTheme.trackHeight!;
     final double trackLeft = offset.dx;
-    final double trackTop =
-        offset.dy + (parentBox.size.height - trackHeight) / 2;
+    final double trackTop = offset.dy + (parentBox.size.height - trackHeight) / 2;
     final double trackWidth = parentBox.size.width;
     return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
   }

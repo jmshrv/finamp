@@ -175,8 +175,6 @@
       }
     }
   },
-  "editPlaylistNameTitle": "Uredi ime playliste",
-  "@editPlaylistNameTitle": {},
   "customLocation": "Prilagođena lokacija",
   "@customLocation": {},
   "viewTypeSubtitle": "Vrsta prikaza za ekran glazbe",
@@ -213,8 +211,6 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Uredi ime playliste",
-  "@editPlaylistNameTooltip": {},
   "playlistUpdated": "Ime playliste je ažurirano.",
   "@playlistUpdated": {},
   "dlEnqueued": "{count} dodano u red",

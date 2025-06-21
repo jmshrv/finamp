@@ -39,12 +39,8 @@ class DownloadsOverview extends StatelessWidget {
             initialData: downloadsService.downloadStatuses,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                final downloadCount = (snapshot
-                            .data?[DownloadItemState.complete] ??
-                        0) +
-                    (snapshot
-                            .data?[DownloadItemState.needsRedownloadComplete] ??
-                        0) +
+                final downloadCount = (snapshot.data?[DownloadItemState.complete] ?? 0) +
+                    (snapshot.data?[DownloadItemState.needsRedownloadComplete] ?? 0) +
                     (snapshot.data?[DownloadItemState.needsRedownload] ?? 0) +
                     (snapshot.data?[DownloadItemState.failed] ?? 0) +
                     (snapshot.data?[DownloadItemState.enqueued] ?? 0) +
@@ -63,20 +59,16 @@ class DownloadsOverview extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 AutoSizeText(
-                                  AppLocalizations.of(context)!
-                                      .downloadCount(downloadCount),
+                                  AppLocalizations.of(context)!.downloadCount(downloadCount),
                                   style: const TextStyle(fontSize: 28),
                                   maxLines: 1,
                                 ),
                                 Text(
-                                  AppLocalizations.of(context)!
-                                      .downloadedCountUnified(
-                                          countSnapshot.data?["track"] ?? -1,
-                                          countSnapshot.data?["image"] ?? -1,
-                                          countSnapshot.data?["sync"] ?? -1,
-                                          countSnapshot.data?[
-                                                  repairStepTrackingName] ??
-                                              0),
+                                  AppLocalizations.of(context)!.downloadedCountUnified(
+                                      countSnapshot.data?["track"] ?? -1,
+                                      countSnapshot.data?["image"] ?? -1,
+                                      countSnapshot.data?["sync"] ?? -1,
+                                      countSnapshot.data?[repairStepTrackingName] ?? 0),
                                   style: const TextStyle(color: Colors.grey),
                                 )
                               ],
@@ -88,36 +80,24 @@ class DownloadsOverview extends StatelessWidget {
                               children: [
                                 Text(
                                   AppLocalizations.of(context)!.dlComplete(
-                                      (snapshot.data?[
-                                                  DownloadItemState.complete] ??
-                                              -1) +
-                                          (snapshot.data?[DownloadItemState
-                                                  .needsRedownloadComplete] ??
-                                              -1)),
-                                  style: const TextStyle(color: Colors.green),
+                                      (snapshot.data?[DownloadItemState.complete] ?? -1) +
+                                          (snapshot.data?[DownloadItemState.needsRedownloadComplete] ?? -1)),
+                                  style: const TextStyle(color: Colors.blue),
                                 ),
                                 Text(
                                   AppLocalizations.of(context)!.dlFailed(
-                                      (snapshot.data?[DownloadItemState
-                                                  .syncFailed] ??
-                                              0) +
-                                          (snapshot.data?[
-                                                  DownloadItemState.failed] ??
-                                              -1)),
+                                      (snapshot.data?[DownloadItemState.syncFailed] ?? 0) +
+                                          (snapshot.data?[DownloadItemState.failed] ?? -1)),
                                   style: const TextStyle(color: Colors.red),
                                 ),
                                 Text(
-                                  AppLocalizations.of(context)!.dlEnqueued(
-                                      snapshot.data?[
-                                              DownloadItemState.enqueued] ??
-                                          -1),
+                                  AppLocalizations.of(context)!
+                                      .dlEnqueued(snapshot.data?[DownloadItemState.enqueued] ?? -1),
                                   style: const TextStyle(color: Colors.grey),
                                 ),
                                 Text(
-                                  AppLocalizations.of(context)!.dlRunning(
-                                      snapshot.data?[
-                                              DownloadItemState.downloading] ??
-                                          -1),
+                                  AppLocalizations.of(context)!
+                                      .dlRunning(snapshot.data?[DownloadItemState.downloading] ?? -1),
                                   style: const TextStyle(color: Colors.grey),
                                 ),
                               ],

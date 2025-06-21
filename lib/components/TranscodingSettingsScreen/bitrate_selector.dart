@@ -34,8 +34,7 @@ class _BitrateSelectorState extends ConsumerState<BitrateSelector> {
               max: 320,
               value: (currentBitrate / 1000).clamp(64, 320),
               divisions: 8,
-              label: AppLocalizations.of(context)!
-                  .kiloBitsPerSecondLabel(currentBitrate ~/ 1000),
+              label: AppLocalizations.of(context)!.kiloBitsPerSecondLabel(currentBitrate ~/ 1000),
               onChanged: (value) {
                 setState(() {
                   currentBitrate = (value * 1000).toInt();
@@ -44,10 +43,11 @@ class _BitrateSelectorState extends ConsumerState<BitrateSelector> {
               onChangeEnd: (value) {
                 FinampSetters.setTranscodeBitrate((value * 1000).toInt());
               },
+              autofocus: false,
+              focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
             ),
             Text(
-              AppLocalizations.of(context)!
-                  .kiloBitsPerSecondLabel(currentBitrate ~/ 1000),
+              AppLocalizations.of(context)!.kiloBitsPerSecondLabel(currentBitrate ~/ 1000),
               style: Theme.of(context).textTheme.titleLarge,
             )
           ],
@@ -55,5 +55,4 @@ class _BitrateSelectorState extends ConsumerState<BitrateSelector> {
       ],
     );
   }
-
 }

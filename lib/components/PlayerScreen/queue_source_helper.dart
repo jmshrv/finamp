@@ -22,25 +22,21 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
     case QueueItemSourceType.album:
     case QueueItemSourceType.nextUpAlbum:
     case QueueItemSourceType.albumMix:
-      Navigator.of(context)
-          .pushNamed(AlbumScreen.routeName, arguments: source.item);
+      Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: source.item);
       break;
     case QueueItemSourceType.artist:
     case QueueItemSourceType.nextUpArtist:
     case QueueItemSourceType.artistMix:
-      Navigator.of(context)
-          .pushNamed(ArtistScreen.routeName, arguments: source.item);
+      Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: source.item);
       break;
     case QueueItemSourceType.genre:
     case QueueItemSourceType.nextUpGenre:
     case QueueItemSourceType.genreMix:
-      Navigator.of(context)
-          .pushNamed(GenreScreen.routeName, arguments: source.item);
+      Navigator.of(context).pushNamed(GenreScreen.routeName, arguments: source.item);
       break;
     case QueueItemSourceType.playlist:
     case QueueItemSourceType.nextUpPlaylist:
-      Navigator.of(context)
-          .pushNamed(AlbumScreen.routeName, arguments: source.item);
+      Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: source.item);
       break;
     case QueueItemSourceType.allTracks:
       Navigator.of(context).pushNamed(MusicScreen.routeName,
@@ -71,18 +67,16 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
   }
 }
 
-Future<bool> removeFromPlaylist(BuildContext context, BaseItemDto item,
-    BaseItemDto parent, String playlistItemId,
+Future<bool> removeFromPlaylist(BuildContext context, BaseItemDto item, BaseItemDto parent, String playlistItemId,
     {required bool confirm}) async {
   bool isConfirmed = !confirm;
   if (confirm) {
     await showDialog(
       context: context,
       builder: (context) => ConfirmationPromptDialog(
-        promptText: AppLocalizations.of(context)!.removeFromPlaylistPrompt(
-            item.name ?? "item", parent.name ?? "playlist"),
-        confirmButtonText:
-            AppLocalizations.of(context)!.removeFromPlaylistConfirm,
+        promptText:
+            AppLocalizations.of(context)!.removeFromPlaylistPrompt(item.name ?? "item", parent.name ?? "playlist"),
+        confirmButtonText: AppLocalizations.of(context)!.removeFromPlaylistConfirm,
         abortButtonText: AppLocalizations.of(context)!.genericCancel,
         onConfirmed: () {
           isConfirmed = true;
@@ -95,22 +89,17 @@ Future<bool> removeFromPlaylist(BuildContext context, BaseItemDto item,
   }
   if (isConfirmed) {
     try {
-      await GetIt.instance<JellyfinApiHelper>().removeItemsFromPlaylist(
-          playlistId: parent.id, entryIds: [playlistItemId]);
+      await GetIt.instance<JellyfinApiHelper>()
+          .removeItemsFromPlaylist(playlistId: parent.id, entryIds: [playlistItemId]);
 
       // re-sync playlist to delete removed item if not required anymore
       final downloadsService = GetIt.instance<DownloadsService>();
-      unawaited(downloadsService.resync(
-          DownloadStub.fromItem(
-              type: DownloadItemType.collection, item: parent),
-          null,
+      unawaited(downloadsService.resync(DownloadStub.fromItem(type: DownloadItemType.collection, item: parent), null,
           keepSlow: true));
 
       playlistRemovalsCache.add(parent.id.raw + playlistItemId);
 
-      GlobalSnackbar.message(
-          (context) => AppLocalizations.of(context)!.removedFromPlaylist,
-          isConfirmation: true);
+      GlobalSnackbar.message((context) => AppLocalizations.of(context)!.removedFromPlaylist, isConfirmation: true);
       return true;
     } catch (err) {
       GlobalSnackbar.error(err);
@@ -120,22 +109,16 @@ Future<bool> removeFromPlaylist(BuildContext context, BaseItemDto item,
   return false;
 }
 
-Future<bool> addItemToPlaylist(
-    BuildContext context, BaseItemDto item, BaseItemDto parent) async {
+Future<bool> addItemToPlaylist(BuildContext context, BaseItemDto item, BaseItemDto parent) async {
   //TODO request server to return the new playlist item id
-  await GetIt.instance<JellyfinApiHelper>()
-      .addItemstoPlaylist(playlistId: parent.id, ids: [item.id]);
+  await GetIt.instance<JellyfinApiHelper>().addItemstoPlaylist(playlistId: parent.id, ids: [item.id]);
 
   // re-sync playlist to download added item if needed
   final downloadsService = GetIt.instance<DownloadsService>();
-  unawaited(downloadsService.resync(
-      DownloadStub.fromItem(type: DownloadItemType.collection, item: parent),
-      null,
+  unawaited(downloadsService.resync(DownloadStub.fromItem(type: DownloadItemType.collection, item: parent), null,
       keepSlow: true));
 
-  GlobalSnackbar.message(
-      (scaffold) => AppLocalizations.of(context)!.confirmAddedToPlaylist,
-      isConfirmation: true);
+  GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.confirmAddedToPlaylist, isConfirmation: true);
   return true;
 }
 
@@ -148,9 +131,7 @@ bool queueItemInPlaylist(FinampQueueItem? queueItem) {
     return false;
   }
   final baseItem = queueItem.baseItem;
-  return [QueueItemSourceType.playlist, QueueItemSourceType.nextUpPlaylist]
-          .contains(queueItem.source.type) &&
+  return [QueueItemSourceType.playlist, QueueItemSourceType.nextUpPlaylist].contains(queueItem.source.type) &&
       baseItem?.playlistItemId != null &&
-      !playlistRemovalsCache
-          .contains(queueItem.source.id + (baseItem?.playlistItemId ?? ""));
+      !playlistRemovalsCache.contains(queueItem.source.id + (baseItem?.playlistItemId ?? ""));
 }

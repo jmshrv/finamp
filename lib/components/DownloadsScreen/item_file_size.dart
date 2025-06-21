@@ -19,12 +19,10 @@ class ItemFileSize extends ConsumerWidget {
     var downloadingText = AppLocalizations.of(context)!.activeDownloadSize;
     var deletingText = AppLocalizations.of(context)!.missingDownloadSize;
     var syncingText = AppLocalizations.of(context)!.syncingDownloadSize;
-    Future<String> sizeText =
-        ref.watch(isarDownloader.itemProvider(stub).future).then((item) {
+    Future<String> sizeText = ref.watch(isarDownloader.itemProvider(stub).future).then((item) {
       switch (item?.state) {
         case DownloadItemState.notDownloaded:
-          if (isarDownloader.getStatus(item!, null) ==
-              DownloadItemStatus.notNeeded) {
+          if (isarDownloader.getStatus(item!, null) == DownloadItemStatus.notNeeded) {
             return Future.value(deletingText);
           } else {
             return Future.value(syncingText);
@@ -38,51 +36,37 @@ class ItemFileSize extends ConsumerWidget {
             String codec = "";
             String bitrate = "null";
             if (item.fileTranscodingProfile == null ||
-                item.fileTranscodingProfile?.codec ==
-                    FinampTranscodingCodec.original) {
+                item.fileTranscodingProfile?.codec == FinampTranscodingCodec.original) {
               codec = item.baseItem?.mediaSources?[0].container ?? "";
             } else {
               codec = item.fileTranscodingProfile?.codec.name ?? "";
               bitrate = item.fileTranscodingProfile?.bitrateKbps ?? "null";
             }
-            return isarDownloader.getFileSize(item).then((value) =>
-                AppLocalizations.of(context)!.downloadInfo(
-                    bitrate,
-                    codec.toUpperCase(),
-                    FileSize.getSize(value),
-                    // only show name if there is more than one location
-                    (FinampSettingsHelper.finampSettings.downloadLocationsMap
-                                    .length >
-                                1
-                            ? FinampSettingsHelper
-                            .finampSettings
-                            .downloadLocationsMap[item.fileDownloadLocation?.id]
-                                ?.name
-                            : null) ??
-                        "null"));
+            return isarDownloader.getFileSize(item).then((value) => AppLocalizations.of(context)!.downloadInfo(
+                bitrate,
+                codec.toUpperCase(),
+                FileSize.getSize(value),
+                // only show name if there is more than one location
+                (FinampSettingsHelper.finampSettings.downloadLocationsMap.length > 1
+                        ? FinampSettingsHelper.finampSettings.downloadLocationsMap[item.fileDownloadLocation?.id]?.name
+                        : null) ??
+                    "null"));
           } else {
-            var profile =
-                item.userTranscodingProfile ?? item.syncTranscodingProfile;
+            var profile = item.userTranscodingProfile ?? item.syncTranscodingProfile;
             //Suppress codec display on downloads without audio files
             if (!(item.finampCollection?.type.hasAudio ?? true)) {
               profile = null;
             }
-            var codec =
-                profile?.codec.name ?? FinampTranscodingCodec.original.name;
-            return isarDownloader.getFileSize(item).then((value) =>
-                AppLocalizations.of(context)!.collectionDownloadInfo(
+            var codec = profile?.codec.name ?? FinampTranscodingCodec.original.name;
+            return isarDownloader.getFileSize(item).then((value) => AppLocalizations.of(context)!
+                .collectionDownloadInfo(
                     profile?.bitrateKbps ?? "null",
                     codec.toUpperCase(),
                     FileSize.getSize(value),
                     // only show name if there is more than one location
-                    (FinampSettingsHelper.finampSettings.downloadLocationsMap
-                                    .length >
-                                1
+                    (FinampSettingsHelper.finampSettings.downloadLocationsMap.length > 1
                             ? FinampSettingsHelper
-                                .finampSettings
-                                .downloadLocationsMap[
-                                    item.syncDownloadLocation?.id]
-                                ?.name
+                                .finampSettings.downloadLocationsMap[item.syncDownloadLocation?.id]?.name
                             : null) ??
                         "null"));
           }

@@ -18,8 +18,7 @@ class PlaybackSpeedControlVisibilityDropdownListTile extends ConsumerWidget {
         text: TextSpan(
           children: [
             TextSpan(
-              text: AppLocalizations.of(context)!
-                  .playbackSpeedControlSettingSubtitle,
+              text: AppLocalizations.of(context)!.playbackSpeedControlSettingSubtitle,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const TextSpan(text: "\n"),
@@ -36,16 +35,11 @@ class PlaybackSpeedControlVisibilityDropdownListTile extends ConsumerWidget {
                       context: context,
                       pageBuilder: (context, anim1, anim2) {
                         return AlertDialog(
-                          title: Text(AppLocalizations.of(context)!
-                              .playbackSpeedControlSetting),
-                          content: Text(AppLocalizations.of(context)!
-                              .playbackSpeedControlSettingDescription(
-                                  MetadataProvider
-                                      .speedControlLongTrackDuration.inMinutes,
-                                  MetadataProvider
-                                      .speedControlLongAlbumDuration.inHours,
-                                  MetadataProvider.speedControlGenres
-                                      .join(", "))),
+                          title: Text(AppLocalizations.of(context)!.playbackSpeedControlSetting),
+                          content: Text(AppLocalizations.of(context)!.playbackSpeedControlSettingDescription(
+                              MetadataProvider.speedControlLongTrackDuration.inMinutes,
+                              MetadataProvider.speedControlLongAlbumDuration.inHours,
+                              MetadataProvider.speedControlGenres.join(", "))),
                           actions: [
                             TextButton(
                               onPressed: () {

@@ -11,12 +11,10 @@ class RepairDownloadsButton extends ConsumerStatefulWidget {
   const RepairDownloadsButton({super.key});
 
   @override
-  ConsumerState<RepairDownloadsButton> createState() =>
-      _DownloadMissingImagesButtonState();
+  ConsumerState<RepairDownloadsButton> createState() => _DownloadMissingImagesButtonState();
 }
 
-class _DownloadMissingImagesButtonState
-    extends ConsumerState<RepairDownloadsButton> {
+class _DownloadMissingImagesButtonState extends ConsumerState<RepairDownloadsButton> {
   bool _enabled = true;
 
   @override
@@ -36,8 +34,7 @@ class _DownloadMissingImagesButtonState
                 return;
               }
 
-              GlobalSnackbar.message(
-                  (scaffold) => AppLocalizations.of(scaffold)!.repairComplete);
+              GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.repairComplete);
 
               if (!mounted) return;
               setState(() {

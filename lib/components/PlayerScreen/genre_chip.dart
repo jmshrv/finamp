@@ -16,15 +16,10 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
 
-
 final _borderRadius = BorderRadius.circular(4);
 
 class GenreIconAndText extends StatelessWidget {
-  const GenreIconAndText({
-    required this.parent,
-    this.genreFilter,
-    this.updateGenreFilter
-  });
+  const GenreIconAndText({required this.parent, this.genreFilter, this.updateGenreFilter});
 
   final BaseItemDto parent;
   final BaseItemDto? genreFilter;
@@ -66,15 +61,12 @@ class GenreIconAndText extends StatelessWidget {
                     )
                   : (genres.isNotEmpty)
                       ? GenreChips(
-                        parentType: BaseItemDtoType.fromItem(parent),
-                        genres: genres,
-                        backgroundColor:
-                          IconTheme.of(context).color!.withOpacity(0.1),
-                        updateGenreFilter: updateGenreFilter,
-                      )
-                    : Text(
-                        AppLocalizations.of(context)!.noGenres
-                      ),
+                          parentType: BaseItemDtoType.fromItem(parent),
+                          genres: genres,
+                          backgroundColor: IconTheme.of(context).color!.withOpacity(0.1),
+                          updateGenreFilter: updateGenreFilter,
+                        )
+                      : Text(AppLocalizations.of(context)!.noGenres),
             ),
             if (hasFilter)
               GestureDetector(
@@ -122,19 +114,19 @@ class GenreChips extends ConsumerWidget {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Wrap(
-            spacing: 4.0,
-            runSpacing: 4.0,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: genres.map((genre) {
-              return GenreChip(
-                key: ValueKey(genre.id),
-                backgroundColor: backgroundColor,
-                color: color,
-                parentType: parentType,
-                genre: genre,
-                updateGenreFilter: updateGenreFilter,
-              );
-            }).toList(),
+          spacing: 4.0,
+          runSpacing: 4.0,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: genres.map((genre) {
+            return GenreChip(
+              key: ValueKey(genre.id),
+              backgroundColor: backgroundColor,
+              color: color,
+              parentType: parentType,
+              genre: genre,
+              updateGenreFilter: updateGenreFilter,
+            );
+          }).toList(),
         ),
       ),
     );
@@ -196,15 +188,12 @@ class _GenreChipContent extends ConsumerWidget {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     final isarDownloader = GetIt.instance<DownloadsService>();
 
-    bool applyGenreFilter = alternativeAction
-        ? !applyFilterOnGenreChipTap
-        : applyFilterOnGenreChipTap;
+    bool applyGenreFilter = alternativeAction ? !applyFilterOnGenreChipTap : applyFilterOnGenreChipTap;
 
     if (applyGenreFilter && parentType == BaseItemDtoType.album) {
       applyGenreFilter = false;
       GlobalSnackbar.message(
-            (context) =>
-                AppLocalizations.of(context)!.genreFilterNotAvailableForAlbums,
+        (context) => AppLocalizations.of(context)!.genreFilterNotAvailableForAlbums,
       );
     }
 
@@ -214,8 +203,7 @@ class _GenreChipContent extends ConsumerWidget {
       // so we have to get the gneres BaseItemDto in a different way.
       genreItem = await getPlaylistGenreBaseItemDto(genre.name!, isOffline);
     } else if (isOffline) {
-      genreItem =
-          (await isarDownloader.getCollectionInfo(id: genre.id!))?.baseItem;
+      genreItem = (await isarDownloader.getCollectionInfo(id: genre.id!))?.baseItem;
     } else {
       genreItem = await jellyfinApiHelper.getItemById(genre.id!);
     }
@@ -225,12 +213,10 @@ class _GenreChipContent extends ConsumerWidget {
         updateGenreFilter!(genreItem);
         if (!alternativeAction) {
           GlobalSnackbar.message(
-            (context) =>
-                AppLocalizations.of(context)!.applyFilterOnGenreChipTapPrompt,
+            (context) => AppLocalizations.of(context)!.applyFilterOnGenreChipTapPrompt,
             action: (context) {
               return SnackBarAction(
-                label: AppLocalizations.of(context)!
-                    .applyFilterOnGenreChipTapPromptButton,
+                label: AppLocalizations.of(context)!.applyFilterOnGenreChipTapPromptButton,
                 onPressed: () {
                   updateGenreFilter!(null);
                   unawaited(Navigator.of(context).pushNamed(
@@ -251,8 +237,7 @@ class _GenreChipContent extends ConsumerWidget {
       }
     } else {
       GlobalSnackbar.message(
-            (context) =>
-                AppLocalizations.of(context)!.genreNotFound((isOffline) ? "offline" : "other"),
+        (context) => AppLocalizations.of(context)!.genreNotFound((isOffline) ? "offline" : "other"),
       );
     }
   }
@@ -274,8 +259,8 @@ class _GenreChipContent extends ConsumerWidget {
         child: InkWell(
           borderRadius: _borderRadius,
           onTap: () => _handleGenreTap(context, ref),
-          onLongPress: () =>
-              _handleGenreTap(context, ref, alternativeAction: true),
+          onLongPress: () => _handleGenreTap(context, ref, alternativeAction: true),
+          onSecondaryTap: () => _handleGenreTap(context, ref, alternativeAction: true),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
             child: Text(
@@ -283,9 +268,7 @@ class _GenreChipContent extends ConsumerWidget {
               overflow: TextOverflow.ellipsis,
               softWrap: false,
               style: TextStyle(
-                color: color ??
-                    Theme.of(context).textTheme.bodySmall!.color ??
-                    Colors.white,
+                color: color ?? Theme.of(context).textTheme.bodySmall!.color ?? Colors.white,
               ),
             ),
           ),
@@ -298,7 +281,7 @@ class _GenreChipContent extends ConsumerWidget {
 // Playlists use different BaseItemIds for their genreItems.
 // In Online Mode, the API returns the same data for both ids.
 // However, in offline mode, we only have the non-playlist id of a genre.
-// Additionally, the genreFilter on both modes won't work with the 
+// Additionally, the genreFilter on both modes won't work with the
 // playlist-only-genreId, so we have to get the BaseItemDto by name instead of id.
 // That should work, too, because genreNames are distinct.
 Future<BaseItemDto?> getPlaylistGenreBaseItemDto(String genreName, bool isOffline) async {
@@ -308,17 +291,18 @@ Future<BaseItemDto?> getPlaylistGenreBaseItemDto(String genreName, bool isOfflin
   if (isOffline) {
     final isarDownloader = GetIt.instance<DownloadsService>();
     final genreItemDownloadStubs = await isarDownloader.getAllCollections(
-        nameFilter: genreName,
-        baseTypeFilter: BaseItemDtoType.genre,
+      nameFilter: genreName,
+      baseTypeFilter: BaseItemDtoType.genre,
     );
-     genreItems = genreItemDownloadStubs.map((e) => e.baseItem).nonNulls.toList();
+    genreItems = genreItemDownloadStubs.map((e) => e.baseItem).nonNulls.toList();
   } else {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     genreItems = await jellyfinApiHelper.getItems(
-        parentItem: finampUserHelper.currentUser?.currentView,
-        includeItemTypes: BaseItemDtoType.genre.idString,
-        searchTerm: genreName.trim(),
-    ) ?? [];
+          parentItem: finampUserHelper.currentUser?.currentView,
+          includeItemTypes: BaseItemDtoType.genre.idString,
+          searchTerm: genreName.trim(),
+        ) ??
+        [];
   }
 
   for (final item in genreItems) {

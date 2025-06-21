@@ -19,8 +19,7 @@ class _LyricsSettingsScreenState extends State<LyricsSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.lyricsScreen),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-              context, FinampSettingsHelper.resetLyricsSettings)
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetLyricsSettings)
         ],
       ),
       body: ListView(
@@ -42,8 +41,7 @@ class ShowLyricsTimestampsToggle extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.showLyricsTimestampsTitle),
-      subtitle:
-          Text(AppLocalizations.of(context)!.showLyricsTimestampsSubtitle),
+      subtitle: Text(AppLocalizations.of(context)!.showLyricsTimestampsSubtitle),
       value: ref.watch(finampSettingsProvider.showLyricsTimestamps),
       onChanged: FinampSetters.setShowLyricsTimestamps,
     );
@@ -100,10 +98,8 @@ class ShowLyricsScreenAlbumPreludeToggle extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
-      title:
-          Text(AppLocalizations.of(context)!.showLyricsScreenAlbumPreludeTitle),
-      subtitle: Text(
-          AppLocalizations.of(context)!.showLyricsScreenAlbumPreludeSubtitle),
+      title: Text(AppLocalizations.of(context)!.showLyricsScreenAlbumPreludeTitle),
+      subtitle: Text(AppLocalizations.of(context)!.showLyricsScreenAlbumPreludeSubtitle),
       value: ref.watch(finampSettingsProvider.showLyricsScreenAlbumPrelude),
       onChanged: FinampSetters.setShowLyricsScreenAlbumPrelude,
     );

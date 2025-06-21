@@ -104,8 +104,7 @@ class _ItemCollectionWrapperState extends ConsumerState<ItemCollectionWrapper> {
               ),
             );
           } else if (mutableItem.type == "MusicGenre") {
-            Navigator.of(context)
-                .pushNamed(GenreScreen.routeName, arguments: mutableItem);
+            Navigator.of(context).pushNamed(GenreScreen.routeName, arguments: mutableItem);
           } else if (mutableItem.type == "Playlist") {
             Navigator.of(context).push(
               MaterialPageRoute(
@@ -116,8 +115,7 @@ class _ItemCollectionWrapperState extends ConsumerState<ItemCollectionWrapper> {
               ),
             );
           } else {
-            Navigator.of(context)
-                .pushNamed(AlbumScreen.routeName, arguments: mutableItem);
+            Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: mutableItem);
           }
         };
   }
@@ -142,18 +140,14 @@ class _ItemCollectionWrapperState extends ConsumerState<ItemCollectionWrapper> {
         default:
           await showModalAlbumMenu(context: context, baseItem: widget.item);
       }
-
     }
 
     return Padding(
-      padding: widget.isGrid
-          ? Theme.of(context).cardTheme.margin ?? const EdgeInsets.all(4.0)
-          : EdgeInsets.zero,
+      padding: widget.isGrid ? Theme.of(context).cardTheme.margin ?? const EdgeInsets.all(4.0) : EdgeInsets.zero,
       child: GestureDetector(
         onTapDown: (_) {
           // Begin precalculating theme for menu
-          ref.listenManual(
-              finampThemeProvider(ThemeInfo(widget.item)), (_, __) {});
+          ref.listenManual(finampThemeProvider(ThemeInfo(widget.item)), (_, __) {});
         },
         onLongPressStart: (details) => menuCallback(),
         onSecondaryTapDown: (details) => menuCallback(),

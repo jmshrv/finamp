@@ -37,8 +37,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
   final TextEditingController _durationController = TextEditingController();
   final TextEditingController _trackController = TextEditingController();
 
-  SleepTimer newSleepTimer = SleepTimer(
-      SleepTimerType.duration, DefaultSettings.sleepTimerDurationSeconds);
+  SleepTimer newSleepTimer = SleepTimer(SleepTimerType.duration, DefaultSettings.sleepTimerDurationSeconds);
 
   // 0 = duration, 1 = tracks, 2 = after current track
   static int _persistedSelectedMode = 0;
@@ -110,33 +109,24 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                       style: TextButton.styleFrom(
                         textStyle: TextStyle(
                           backgroundColor: Colors.transparent,
-                          fontWeight: selectedMode == i
-                              ? FontWeight.w600
-                              : FontWeight.w500,
+                          fontWeight: selectedMode == i ? FontWeight.w600 : FontWeight.w500,
                         ),
                         foregroundColor: selectedMode == i
                             ? Colors.white
-                            : Theme.of(context).textTheme.bodySmall?.color ??
-                                Colors.white,
-                        backgroundColor: Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withOpacity(selectedMode == i ? 0.6 : 0.1),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24)),
+                            : Theme.of(context).textTheme.bodySmall?.color ?? Colors.white,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.primary.withOpacity(selectedMode == i ? 0.6 : 0.1),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                         minimumSize: Size(42, 52),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12.0, vertical: 4.0),
-                        visualDensity:
-                            VisualDensity(horizontal: -4, vertical: -4),
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+                        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
                       ),
                       onPressed: () {
                         setState(() {
                           selectedMode = i;
                           if (i == 0) {
                             newSleepTimer.type = SleepTimerType.duration;
-                            newSleepTimer.length =
-                                60 * 30; // Default to 30 minutes
+                            newSleepTimer.length = 60 * 30; // Default to 30 minutes
                           } else if (i == 1) {
                             newSleepTimer.type = SleepTimerType.tracks;
                             newSleepTimer.length = 5; // Default to 5 tracks
@@ -163,8 +153,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                   type: PresetTypes.speed, // Reuse for duration
                   mainColour: widget.iconColor,
                   values: [5, 10, 15, 20, 30, 45, 60, 90, 120],
-                  activeValue:
-                      (newSleepTimer.length / 60).clamp(1, 999).toDouble(),
+                  activeValue: (newSleepTimer.length / 60).clamp(1, 999).toDouble(),
                   onPresetSelected: (val) {
                     setState(() {
                       newSleepTimer.length = (val).round() * 60;
@@ -176,8 +165,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -193,43 +181,31 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                           });
                         }
                       },
-                      visualDensity:
-                          VisualDensity(horizontal: -4, vertical: -4),
+                      visualDensity: VisualDensity(horizontal: -4, vertical: -4),
                       padding: EdgeInsets.zero,
                       tooltip: '-',
                     ),
                     Expanded(
                       child: SliderTheme(
                         data: SliderTheme.of(context).copyWith(
-                          thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 24 / 2.0),
+                          thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 24 / 2.0),
                           trackHeight: 24.0,
                           inactiveTrackColor: widget.iconColor.withOpacity(0.3),
                           activeTrackColor: widget.iconColor.withOpacity(0.6),
                           showValueIndicator: ShowValueIndicator.always,
-                          valueIndicatorColor: Color.lerp(
-                              Theme.of(context).cardColor,
-                              widget.iconColor,
-                              0.6),
-                          valueIndicatorTextStyle:
-                              Theme.of(context).textTheme.labelLarge,
-                          valueIndicatorShape:
-                              const RectangularSliderValueIndicatorShape(),
-                          tickMarkShape: const RoundSliderTickMarkShape(
-                              tickMarkRadius: 1.5),
-                          activeTickMarkColor:
-                              widget.iconColor.withOpacity(0.9),
-                          overlayShape: SliderComponentShape
-                              .noOverlay, // get rid of padding
+                          valueIndicatorColor: Color.lerp(Theme.of(context).cardColor, widget.iconColor, 0.6),
+                          valueIndicatorTextStyle: Theme.of(context).textTheme.labelLarge,
+                          valueIndicatorShape: const RectangularSliderValueIndicatorShape(),
+                          tickMarkShape: const RoundSliderTickMarkShape(tickMarkRadius: 1.5),
+                          activeTickMarkColor: widget.iconColor.withOpacity(0.9),
+                          overlayShape: SliderComponentShape.noOverlay, // get rid of padding
                         ),
                         child: ExcludeSemantics(
                           child: Slider(
                             min: 1,
                             max: 120,
                             divisions: 119,
-                            value: (newSleepTimer.length / 60)
-                                .clamp(1, 120)
-                                .toDouble(),
+                            value: (newSleepTimer.length / 60).clamp(1, 120).toDouble(),
                             onChanged: (val) {
                               setState(() {
                                 newSleepTimer.length = (val).round() * 60;
@@ -237,6 +213,8 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                               });
                             },
                             label: '${(newSleepTimer.length / 60).round()} min',
+                            autofocus: false,
+                            focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
                           ),
                         ),
                       ),
@@ -252,11 +230,9 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                           });
                         }
                       },
-                      visualDensity:
-                          VisualDensity(horizontal: -4, vertical: -4),
+                      visualDensity: VisualDensity(horizontal: -4, vertical: -4),
                       padding: EdgeInsets.zero,
-                      tooltip: AppLocalizations.of(context)!
-                          .playbackSpeedIncreaseLabel,
+                      tooltip: AppLocalizations.of(context)!.playbackSpeedIncreaseLabel,
                     ),
                     SizedBox(width: 12),
                     SizedBox(
@@ -271,17 +247,14 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                             isDense: true,
                             contentPadding: EdgeInsets.symmetric(vertical: 4),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide.none),
+                                borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                             filled: true,
                             fillColor: widget.iconColor.withOpacity(0.08),
                           ),
                           keyboardType: TextInputType.number,
                           onFieldSubmitted: (val) {
                             final parsed = int.tryParse(val);
-                            if (parsed != null &&
-                                parsed >= 1 &&
-                                parsed <= 120) {
+                            if (parsed != null && parsed >= 1 && parsed <= 120) {
                               setState(() {
                                 newSleepTimer.length = parsed * 60;
                                 _updateControllers();
@@ -290,9 +263,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                           },
                           onChanged: (val) {
                             final parsed = int.tryParse(val);
-                            if (parsed != null &&
-                                parsed >= 1 &&
-                                parsed <= 120) {
+                            if (parsed != null && parsed >= 1 && parsed <= 120) {
                               setState(() {
                                 newSleepTimer.length = parsed * 60;
                                 _updateControllers();
@@ -324,8 +295,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                             children: [
                               Flexible(
                                 child: Text(
-                                  AppLocalizations.of(context)!
-                                      .sleepTimerFinishLastTrack,
+                                  AppLocalizations.of(context)!.sleepTimerFinishLastTrack,
                                   style: Theme.of(context).textTheme.bodyMedium,
                                   overflow: TextOverflow.visible,
                                 ),
@@ -368,8 +338,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -385,35 +354,24 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                           });
                         }
                       },
-                      visualDensity:
-                          VisualDensity(horizontal: -4, vertical: -4),
+                      visualDensity: VisualDensity(horizontal: -4, vertical: -4),
                       padding: EdgeInsets.zero,
-                      tooltip: AppLocalizations.of(context)!
-                          .playbackSpeedDecreaseLabel,
+                      tooltip: AppLocalizations.of(context)!.playbackSpeedDecreaseLabel,
                     ),
                     Expanded(
                       child: SliderTheme(
                         data: SliderTheme.of(context).copyWith(
-                          thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 24 / 2.0),
+                          thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 24 / 2.0),
                           trackHeight: 24.0,
                           inactiveTrackColor: widget.iconColor.withOpacity(0.3),
                           activeTrackColor: widget.iconColor.withOpacity(0.6),
                           showValueIndicator: ShowValueIndicator.always,
-                          valueIndicatorColor: Color.lerp(
-                              Theme.of(context).cardColor,
-                              widget.iconColor,
-                              0.6),
-                          valueIndicatorTextStyle:
-                              Theme.of(context).textTheme.labelLarge,
-                          valueIndicatorShape:
-                              const RectangularSliderValueIndicatorShape(),
-                          tickMarkShape: const RoundSliderTickMarkShape(
-                              tickMarkRadius: 1.5),
-                          activeTickMarkColor:
-                              widget.iconColor.withOpacity(0.9),
-                          overlayShape: SliderComponentShape
-                              .noOverlay, // get rid of padding
+                          valueIndicatorColor: Color.lerp(Theme.of(context).cardColor, widget.iconColor, 0.6),
+                          valueIndicatorTextStyle: Theme.of(context).textTheme.labelLarge,
+                          valueIndicatorShape: const RectangularSliderValueIndicatorShape(),
+                          tickMarkShape: const RoundSliderTickMarkShape(tickMarkRadius: 1.5),
+                          activeTickMarkColor: widget.iconColor.withOpacity(0.9),
+                          overlayShape: SliderComponentShape.noOverlay, // get rid of padding
                         ),
                         child: ExcludeSemantics(
                           child: Slider(
@@ -427,6 +385,8 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                               });
                             },
                             label: '${newSleepTimer.length} tracks',
+                            autofocus: false,
+                            focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
                           ),
                         ),
                       ),
@@ -442,8 +402,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                           });
                         }
                       },
-                      visualDensity:
-                          VisualDensity(horizontal: -4, vertical: -4),
+                      visualDensity: VisualDensity(horizontal: -4, vertical: -4),
                       padding: EdgeInsets.zero,
                       tooltip: '+',
                     ),
@@ -459,9 +418,8 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                           decoration: InputDecoration(
                             isDense: true,
                             contentPadding: EdgeInsets.symmetric(vertical: 4),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none),
+                            border:
+                                OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
                             filled: true,
                             fillColor: widget.iconColor.withOpacity(0.08),
                           ),
@@ -495,84 +453,58 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
             Padding(
               padding: const EdgeInsets.only(bottom: 2.0),
               child: StreamBuilder<(ProgressState?, FinampQueueInfo?)>(
-                stream: Rx.combineLatest2<ProgressState, FinampQueueInfo?,
-                        (ProgressState?, FinampQueueInfo?)>(
-                    progressStateStream,
-                    GetIt.instance<QueueService>().getQueueStream(),
-                    (a, b) => (a, b)),
+                stream: Rx.combineLatest2<ProgressState, FinampQueueInfo?, (ProgressState?, FinampQueueInfo?)>(
+                    progressStateStream, GetIt.instance<QueueService>().getQueueStream(), (a, b) => (a, b)),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final progressState = snapshot.data!.$1!;
                     final queueInfo = snapshot.data!.$2!;
-                    final currentTrackRemainingDuration =
-                        (progressState.mediaItem!.duration! -
-                            progressState.position);
+                    final currentTrackRemainingDuration = (progressState.mediaItem!.duration! - progressState.position);
                     final queueRemainingDuration = queueInfo.remainingDuration;
                     Duration remaining;
                     if (selectedMode == 0) {
-                      int? finalTrackIndex = queueInfo.getTrackIndexAfter(
-                          newSleepTimer.totalDuration -
-                              currentTrackRemainingDuration);
+                      int? finalTrackIndex =
+                          queueInfo.getTrackIndexAfter(newSleepTimer.totalDuration - currentTrackRemainingDuration);
                       Duration? durationOfFinalTrack;
                       Duration? durationUntilFinalTrack;
                       Duration? durationUntilEndOfFinalTrack;
                       if (finalTrackIndex != null) {
-                        durationOfFinalTrack = queueInfo
-                            .fullQueue[finalTrackIndex - 1].item.duration!;
-                        durationUntilFinalTrack = newSleepTimer.totalDuration <
-                                currentTrackRemainingDuration
+                        durationOfFinalTrack = queueInfo.fullQueue[finalTrackIndex - 1].item.duration!;
+                        durationUntilFinalTrack = newSleepTimer.totalDuration < currentTrackRemainingDuration
                             ? Duration.zero
                             : currentTrackRemainingDuration +
-                                queueInfo.getDurationUntil(finalTrackIndex -
-                                    queueInfo.currentTrackIndex +
-                                    1);
-                        durationUntilEndOfFinalTrack = newSleepTimer
-                                    .totalDuration <
-                                currentTrackRemainingDuration
+                                queueInfo.getDurationUntil(finalTrackIndex - queueInfo.currentTrackIndex + 1);
+                        durationUntilEndOfFinalTrack = newSleepTimer.totalDuration < currentTrackRemainingDuration
                             ? currentTrackRemainingDuration
                             : durationUntilFinalTrack + durationOfFinalTrack;
                       }
                       remaining = finishTrack
                           ? Duration(
                               milliseconds: min(
-                                  durationUntilEndOfFinalTrack
-                                          ?.inMilliseconds ??
-                                      (queueRemainingDuration +
-                                              currentTrackRemainingDuration)
-                                          .inMilliseconds,
-                                  (queueRemainingDuration +
-                                          currentTrackRemainingDuration)
-                                      .inMilliseconds))
+                                  durationUntilEndOfFinalTrack?.inMilliseconds ??
+                                      (queueRemainingDuration + currentTrackRemainingDuration).inMilliseconds,
+                                  (queueRemainingDuration + currentTrackRemainingDuration).inMilliseconds))
                           : Duration(
-                              milliseconds: min(
-                                  newSleepTimer.totalDuration.inMilliseconds,
-                                  (queueRemainingDuration +
-                                          currentTrackRemainingDuration)
-                                      .inMilliseconds));
+                              milliseconds: min(newSleepTimer.totalDuration.inMilliseconds,
+                                  (queueRemainingDuration + currentTrackRemainingDuration).inMilliseconds));
                     } else if (selectedMode == 1) {
-                      remaining = currentTrackRemainingDuration +
-                          queueInfo.getDurationUntil(newSleepTimer.length);
+                      remaining = currentTrackRemainingDuration + queueInfo.getDurationUntil(newSleepTimer.length);
                     } else if (selectedMode == 2) {
-                      remaining = currentTrackRemainingDuration +
-                          queueInfo.getDurationUntil(1);
+                      remaining = currentTrackRemainingDuration + queueInfo.getDurationUntil(1);
                     } else {
                       remaining = Duration.zero;
                     }
-                    final remainText =
-                        printDuration(remaining, leadingZeroes: false);
+                    final remainText = printDuration(remaining, leadingZeroes: false);
                     final remainingLabelFullHours = (remaining.inHours);
-                    final remainingLabelFullMinutes =
-                        (remaining.inMinutes) % 60;
+                    final remainingLabelFullMinutes = (remaining.inMinutes) % 60;
                     final remainingLabelSeconds = (remaining.inSeconds) % 60;
                     final remainingLabelString =
                         "${remainingLabelFullHours > 0 ? "$remainingLabelFullHours ${AppLocalizations.of(context)!.hours} " : ""}${remainingLabelFullMinutes > 0 ? "$remainingLabelFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$remainingLabelSeconds ${AppLocalizations.of(context)!.seconds}";
                     return Padding(
                       padding: const EdgeInsets.only(top: 4.0, right: 8.0),
                       child: Text(
-                        AppLocalizations.of(context)!
-                            .sleepTimerProjectedDuration(remainText),
-                        semanticsLabel: AppLocalizations.of(context)!
-                            .sleepTimerProjectedDuration(remainingLabelString),
+                        AppLocalizations.of(context)!.sleepTimerProjectedDuration(remainText),
+                        semanticsLabel: AppLocalizations.of(context)!.sleepTimerProjectedDuration(remainingLabelString),
                         style: Theme.of(context).textTheme.labelSmall,
                       ),
                     );
@@ -589,8 +521,7 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                 icon: TablerIcons.hourglass_high,
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {
-                    GetIt.instance<MusicPlayerBackgroundTask>()
-                        .startSleepTimer(newSleepTimer);
+                    GetIt.instance<MusicPlayerBackgroundTask>().startSleepTimer(newSleepTimer);
                     FinampSetters.setSleepTimer(newSleepTimer);
                     widget.onStartTimer?.call();
                   }

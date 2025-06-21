@@ -46,8 +46,7 @@ class JellyfinApiHelper {
   JellyfinApiHelper() {
     ReceivePort startupPort = ReceivePort();
     var rootToken = RootIsolateToken.instance!;
-    Isolate.spawn(
-        _processRequestsBackground, (startupPort.sendPort, rootToken));
+    Isolate.spawn(_processRequestsBackground, (startupPort.sendPort, rootToken));
     Future.sync(() async {
       _workerIsolatePort = await startupPort.first as SendPort?;
     });
@@ -57,8 +56,7 @@ class JellyfinApiHelper {
 
   /// This should only be run in a worker isolate
   /// Sets up singletons and listens for work.
-  static Future<void> _processRequestsBackground(
-      (SendPort, RootIsolateToken) input) async {
+  static Future<void> _processRequestsBackground((SendPort, RootIsolateToken) input) async {
     BackgroundIsolateBinaryMessenger.ensureInitialized(input.$2);
     ReceivePort requestPort = ReceivePort();
     input.$1.send(requestPort.sendPort);
@@ -74,13 +72,9 @@ class JellyfinApiHelper {
     GetIt.instance.registerSingleton(FinampUserHelper());
     // TODO get logging working in background isolate
     await GetIt.instance<FinampUserHelper>().setAuthHeader();
-    jellyfin_api.JellyfinApi backgroundApi =
-        jellyfin_api.JellyfinApi.create(false);
+    jellyfin_api.JellyfinApi backgroundApi = jellyfin_api.JellyfinApi.create(false);
     await for (var request in requestPort) {
-      var (func, outputPort) = request as (
-        Future<dynamic> Function(jellyfin_api.JellyfinApi),
-        SendPort
-      );
+      var (func, outputPort) = request as (Future<dynamic> Function(jellyfin_api.JellyfinApi), SendPort);
       try {
         var output = await func(backgroundApi);
         outputPort.send(output);
@@ -91,8 +85,7 @@ class JellyfinApiHelper {
   }
 
   /// Runs the given function in a background isolate, supplying a valid API instance.
-  Future<T> runInIsolate<T>(
-      Future<T> Function(jellyfin_api.JellyfinApi) func) async {
+  Future<T> runInIsolate<T>(Future<T> Function(jellyfin_api.JellyfinApi) func) async {
     if (_workerIsolatePort == null) {
       return func(jellyfinApi);
     }
@@ -136,8 +129,7 @@ class JellyfinApiHelper {
       List<BaseItemDto> output = [];
       // Limit itemIds per request to 200.  Execute up to 10 requests in parallel.
       for (final slice in itemIds!.slices(2000)) {
-        final futures = slice.slices(200).map((subSlice) =>
-            _fetchGetItemsResponse(itemIds: subSlice, fields: fields));
+        final futures = slice.slices(200).map((subSlice) => _fetchGetItemsResponse(itemIds: subSlice, fields: fields));
         final results = await Future.wait(futures);
         for (var subSliceResult in results) {
           output.addAll(subSliceResult.items ?? []);
@@ -227,8 +219,7 @@ class JellyfinApiHelper {
       // since this error usually happens because the listeners on MusicScreenTabView
       // update milliseconds before the page is popped.
       // This shouldn't happen in normal use.
-      return QueryResult_BaseItemDto(
-          totalRecordCount: 0, startIndex: 0, items: []);
+      return QueryResult_BaseItemDto(totalRecordCount: 0, startIndex: 0, items: []);
     }
     assert(_verifyCallable());
     assert(itemIds == null || parentItem == null);
@@ -243,8 +234,7 @@ class JellyfinApiHelper {
       if (itemIds.isEmpty) {
         // An empty itemIds list will not apply a filter to the results, but
         // it should actually return no results
-        return QueryResult_BaseItemDto(
-            totalRecordCount: 0, startIndex: 0, items: []);
+        return QueryResult_BaseItemDto(totalRecordCount: 0, startIndex: 0, items: []);
       }
     } else {
       _jellyfinApiHelperLogger.fine("Getting items.");
@@ -424,8 +414,7 @@ class JellyfinApiHelper {
         defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
 
     if (parentItem != null) {
-      _jellyfinApiHelperLogger
-          .fine("Getting artists which are children of ${parentItem.name}");
+      _jellyfinApiHelperLogger.fine("Getting artists which are children of ${parentItem.name}");
     } else {
       _jellyfinApiHelperLogger.fine("Getting artists.");
     }
@@ -444,8 +433,7 @@ class JellyfinApiHelper {
         limit: limit,
       );
 
-      return QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>)
-          .items;
+      return QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>).items;
     });
   }
 
@@ -471,9 +459,7 @@ class JellyfinApiHelper {
       fields: fields,
     );
 
-    return (response as List<dynamic>)
-        .map((e) => BaseItemDto.fromJson(e as Map<String, dynamic>))
-        .toList();
+    return (response as List<dynamic>).map((e) => BaseItemDto.fromJson(e as Map<String, dynamic>)).toList();
   }
 
   /// Fetch the public server info from the server.
@@ -486,8 +472,7 @@ class JellyfinApiHelper {
 
     var response = await jellyfinApi.getPublicServerInfo();
 
-    PublicSystemInfoResult publicSystemInfoResult =
-        PublicSystemInfoResult.fromJson(response as Map<String, dynamic>);
+    PublicSystemInfoResult publicSystemInfoResult = PublicSystemInfoResult.fromJson(response as Map<String, dynamic>);
 
     return publicSystemInfoResult;
   }
@@ -495,17 +480,14 @@ class JellyfinApiHelper {
   /// Fetch the public server info from a given URL.
   /// Can be used to check if the server is online / the URL is correct.
   /// Since we're potentially looking multiple servers, while the user is entering another base URL, we use a custom http client for this request.
-  Future<PublicSystemInfoResult?> loadCustomServerPublicInfo(
-      Uri customServerUrl) async {
+  Future<PublicSystemInfoResult?> loadCustomServerPublicInfo(Uri customServerUrl) async {
     final requestUrl = customServerUrl.replace(path: "/System/Info/Public");
-    final httpClient = ChopperClient()
-        .httpClient; // http? where we're going, we don't need http
+    final httpClient = ChopperClient().httpClient; // http? where we're going, we don't need http
     final response = await httpClient.get(requestUrl);
     final responseJson = jsonDecode(response.body) as Map<String, dynamic>;
 
     if (response.statusCode == 200) {
-      PublicSystemInfoResult publicSystemInfoResult =
-          PublicSystemInfoResult.fromJson(responseJson);
+      PublicSystemInfoResult publicSystemInfoResult = PublicSystemInfoResult.fromJson(responseJson);
 
       return publicSystemInfoResult;
     } else {
@@ -523,9 +505,7 @@ class JellyfinApiHelper {
     var response = await jellyfinApi.getPublicUsers();
 
     PublicUsersResponse publicUsersResult = PublicUsersResponse(
-      users: (response as List<dynamic>)
-          .map((userJson) => UserDto.fromJson(userJson as Map<String, dynamic>))
-          .toList(),
+      users: (response as List<dynamic>).map((userJson) => UserDto.fromJson(userJson as Map<String, dynamic>)).toList(),
     );
 
     return publicUsersResult;
@@ -541,32 +521,25 @@ class JellyfinApiHelper {
   Future<QuickConnectState> initiateQuickConnect() async {
     var response = await jellyfinApi.initiateQuickConnect();
 
-    QuickConnectState quickConnectState =
-        QuickConnectState.fromJson(response as Map<String, dynamic>);
+    QuickConnectState quickConnectState = QuickConnectState.fromJson(response as Map<String, dynamic>);
 
     return quickConnectState;
   }
 
   /// Update the Quick Connect state.
-  Future<QuickConnectState?> updateQuickConnect(
-      QuickConnectState quickConnectState) async {
-    var response = await jellyfinApi.updateQuickConnect(
-        secret: quickConnectState.secret ?? "");
+  Future<QuickConnectState?> updateQuickConnect(QuickConnectState quickConnectState) async {
+    var response = await jellyfinApi.updateQuickConnect(secret: quickConnectState.secret ?? "");
 
-    QuickConnectState newQuickConnectState =
-        QuickConnectState.fromJson(response as Map<String, dynamic>);
+    QuickConnectState newQuickConnectState = QuickConnectState.fromJson(response as Map<String, dynamic>);
 
     return newQuickConnectState;
   }
 
   /// Authenticates a user using Quick Connect and saves the login details
-  Future<void> authenticateWithQuickConnect(
-      QuickConnectState quickConnectState) async {
-    var response = await jellyfinApi.authenticateWithQuickConnect(
-        {"Secret": quickConnectState.secret ?? ""});
+  Future<void> authenticateWithQuickConnect(QuickConnectState quickConnectState) async {
+    var response = await jellyfinApi.authenticateWithQuickConnect({"Secret": quickConnectState.secret ?? ""});
 
-    AuthenticationResult newUserAuthenticationResult =
-        AuthenticationResult.fromJson(response as Map<String, dynamic>);
+    AuthenticationResult newUserAuthenticationResult = AuthenticationResult.fromJson(response as Map<String, dynamic>);
 
     FinampUser newUser = FinampUser(
       id: newUserAuthenticationResult.user!.id,
@@ -595,12 +568,10 @@ class JellyfinApiHelper {
     if (password == null) {
       response = await jellyfinApi.authenticateViaName({"Username": username});
     } else {
-      response = await jellyfinApi
-          .authenticateViaName({"Username": username, "Pw": password});
+      response = await jellyfinApi.authenticateViaName({"Username": username, "Pw": password});
     }
 
-    AuthenticationResult newUserAuthenticationResult =
-        AuthenticationResult.fromJson(response as Map<String, dynamic>);
+    AuthenticationResult newUserAuthenticationResult = AuthenticationResult.fromJson(response as Map<String, dynamic>);
 
     FinampUser newUser = FinampUser(
       id: newUserAuthenticationResult.user!.id,
@@ -620,11 +591,9 @@ class JellyfinApiHelper {
 
   /// Gets all the user's views.
   Future<List<BaseItemDto>> getViews() async {
-    var response =
-        await jellyfinApi.getViews(_finampUserHelper.currentUser!.id);
+    var response = await jellyfinApi.getViews(_finampUserHelper.currentUser!.id);
 
-    return QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>)
-        .items!;
+    return QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>).items!;
   }
 
   /// Gets the playback info for an item, such as format and bitrate. Usually, I'd require a BaseItemDto as an argument
@@ -638,20 +607,16 @@ class JellyfinApiHelper {
 
     // getPlaybackInfo returns a PlaybackInfoResponse. We only need the List<MediaSourceInfo> in it so we convert it here and
     // return that List<MediaSourceInfo>.
-    final PlaybackInfoResponse decodedResponse =
-        PlaybackInfoResponse.fromJson(response as Map<String, dynamic>);
+    final PlaybackInfoResponse decodedResponse = PlaybackInfoResponse.fromJson(response as Map<String, dynamic>);
     return decodedResponse.mediaSources;
   }
 
   /// Starts an instant mix using the data from the item provided.
   Future<List<BaseItemDto>?> getInstantMix(BaseItemDto? parentItem) async {
-    var response = await jellyfinApi.getInstantMix(
-        id: parentItem!.id,
-        userId: _finampUserHelper.currentUser!.id,
-        limit: 200);
+    var response =
+        await jellyfinApi.getInstantMix(id: parentItem!.id, userId: _finampUserHelper.currentUser!.id, limit: 200);
 
-    return (QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>)
-        .items);
+    return (QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>).items);
   }
 
   /// Updates capabilities for this client.
@@ -660,8 +625,7 @@ class JellyfinApiHelper {
       playableMediaTypes: capabilities.playableMediaTypes?.join(",") ?? "",
       supportedCommands: capabilities.supportedCommands?.join(",") ?? "",
       supportsMediaControl: capabilities.supportsMediaControl ?? false,
-      supportsPersistentIdentifier:
-          capabilities.supportsPersistentIdentifier ?? false,
+      supportsPersistentIdentifier: capabilities.supportsPersistentIdentifier ?? false,
     );
   }
 
@@ -671,8 +635,7 @@ class JellyfinApiHelper {
   }
 
   /// Tells the Jellyfin server that playback has started
-  Future<void> reportPlaybackStart(
-      PlaybackProgressInfo playbackProgressInfo) async {
+  Future<void> reportPlaybackStart(PlaybackProgressInfo playbackProgressInfo) async {
     final response = await jellyfinApi.startPlayback(playbackProgressInfo);
     if (response.toString().isNotEmpty) {
       throw response as Object;
@@ -680,20 +643,16 @@ class JellyfinApiHelper {
   }
 
   /// Updates player progress so that Jellyfin can track what we're listening to
-  Future<void> updatePlaybackProgress(
-      PlaybackProgressInfo playbackProgressInfo) async {
-    final response =
-        await jellyfinApi.playbackStatusUpdate(playbackProgressInfo);
+  Future<void> updatePlaybackProgress(PlaybackProgressInfo playbackProgressInfo) async {
+    final response = await jellyfinApi.playbackStatusUpdate(playbackProgressInfo);
     if (response.toString().isNotEmpty) {
       throw response as Object;
     }
   }
 
   /// Tells Jellyfin that we've stopped listening to music (called when the audio service is stopped)
-  Future<void> stopPlaybackProgress(
-      PlaybackProgressInfo playbackProgressInfo) async {
-    final response =
-        await jellyfinApi.playbackStatusStopped(playbackProgressInfo);
+  Future<void> stopPlaybackProgress(PlaybackProgressInfo playbackProgressInfo) async {
+    final response = await jellyfinApi.playbackStatusStopped(playbackProgressInfo);
     if (response.toString().isNotEmpty) {
       throw response as Object;
     }
@@ -714,14 +673,12 @@ class JellyfinApiHelper {
   final Set<BaseItemId> _getItemByIdBatchedRequests = {};
 
   /// Gets an item from a user's library, batching with other request coming in around the same time.
-  Future<BaseItemDto?> getItemByIdBatched(BaseItemId itemId,
-      [String? fields]) async {
+  Future<BaseItemDto?> getItemByIdBatched(BaseItemId itemId, [String? fields]) async {
     assert(_verifyCallable());
     fields ??=
         defaultFields; // explicitly set the default fields, if we pass `null` to [JellyfinAPI.getItems] it will **not** apply the default fields, since the argument *is* provided.
     _getItemByIdBatchedRequests.add(itemId);
-    _getItemByIdBatchedFuture ??=
-        Future.delayed(const Duration(milliseconds: 250), () async {
+    _getItemByIdBatchedFuture ??= Future.delayed(const Duration(milliseconds: 250), () async {
       _getItemByIdBatchedFuture = null;
       var ids = _getItemByIdBatchedRequests.toList();
       _getItemByIdBatchedRequests.clear();
@@ -794,8 +751,7 @@ class JellyfinApiHelper {
     /// the new Item.
     required BaseItemDto newItem,
   }) async {
-    final response =
-        await jellyfinApi.updateItem(itemId: itemId, newItem: newItem);
+    final response = await jellyfinApi.updateItem(itemId: itemId, newItem: newItem);
     if (response.toString().isNotEmpty) {
       throw response as Object;
     }
@@ -809,8 +765,7 @@ class JellyfinApiHelper {
 
       /// The new Item.
       required NewPlaylist newPlaylist}) async {
-    final response = await jellyfinApi.updatePlaylist(
-        playlistId: itemId, playlist: newPlaylist);
+    final response = await jellyfinApi.updatePlaylist(playlistId: itemId, playlist: newPlaylist);
     if (response.toString().isNotEmpty) {
       throw response as Object;
     }
@@ -819,14 +774,11 @@ class JellyfinApiHelper {
   /// Marks an item as a favorite.
   Future<UserItemDataDto> addFavorite(BaseItemId itemId) async {
     assert(_verifyCallable());
-    final response = await jellyfinApi.addFavorite(
-        userId: _finampUserHelper.currentUser!.id, itemId: itemId);
+    final response = await jellyfinApi.addFavorite(userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
     final downloadsService = GetIt.instance<DownloadsService>();
     unawaited(downloadsService.resync(
-        DownloadStub.fromFinampCollection(
-            FinampCollection(type: FinampCollectionType.favorites)),
-        null,
+        DownloadStub.fromFinampCollection(FinampCollection(type: FinampCollectionType.favorites)), null,
         keepSlow: true));
     return UserItemDataDto.fromJson(response as Map<String, dynamic>);
   }
@@ -834,14 +786,11 @@ class JellyfinApiHelper {
   /// Unmarks item as a favorite.
   Future<UserItemDataDto> removeFavorite(BaseItemId itemId) async {
     assert(_verifyCallable());
-    final response = await jellyfinApi.removeFavorite(
-        userId: _finampUserHelper.currentUser!.id, itemId: itemId);
+    final response = await jellyfinApi.removeFavorite(userId: _finampUserHelper.currentUser!.id, itemId: itemId);
 
     final downloadsService = GetIt.instance<DownloadsService>();
     unawaited(downloadsService.resync(
-        DownloadStub.fromFinampCollection(
-            FinampCollection(type: FinampCollectionType.favorites)),
-        null,
+        DownloadStub.fromFinampCollection(FinampCollection(type: FinampCollectionType.favorites)), null,
         keepSlow: true));
     return UserItemDataDto.fromJson(response as Map<String, dynamic>);
   }
@@ -893,8 +842,7 @@ class JellyfinApiHelper {
         limit: 300,
         fields: "Chapters");
 
-    return (QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>)
-        .items);
+    return (QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>).items);
   }
 
   Future<List<BaseItemDto>?> getAlbumMix(List<BaseItemId> albumIds) async {
@@ -907,8 +855,7 @@ class JellyfinApiHelper {
         limit: 300,
         fields: "Chapters");
 
-    return (QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>)
-        .items);
+    return (QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>).items);
   }
 
   Future<List<BaseItemDto>?> getGenreMix(List<BaseItemId> genreIds) async {
@@ -922,8 +869,7 @@ class JellyfinApiHelper {
         limit: 300,
         fields: "Chapters");
 
-    return (QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>)
-        .items);
+    return (QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>).items);
   }
 
   /// Gets the lyrics for an item.
@@ -980,12 +926,8 @@ class JellyfinApiHelper {
   Future<bool> _pingSpecificServer(String url) async {
     final client = ChopperClient(
         baseUrl: Uri.tryParse(url),
-        client: http.IOClient(
-            HttpClient()..connectionTimeout = const Duration(seconds: 3)),
-        interceptors: [
-          jellyfin_api.JellyfinSpecificInterceptor(url),
-          HttpAggregateLoggingInterceptor()
-        ],
+        client: http.IOClient(HttpClient()..connectionTimeout = const Duration(seconds: 3)),
+        interceptors: [jellyfin_api.JellyfinSpecificInterceptor(url), HttpAggregateLoggingInterceptor()],
         converter: JsonConverter());
 
     final Request $request = Request(
@@ -995,8 +937,7 @@ class JellyfinApiHelper {
     );
 
     try {
-      Response<dynamic> response =
-          await client.send<dynamic, dynamic>($request);
+      Response<dynamic> response = await client.send<dynamic, dynamic>($request);
       if (response.statusCode != 200) return false;
       final body = response.bodyOrThrow as Map<String, dynamic>;
       // If IsInNetwork doesn't exist -> catch
@@ -1022,10 +963,8 @@ class JellyfinApiHelper {
 
   Future<bool> pingActiveServer() async {
     try {
-      Response<dynamic>? response = await jellyfinApi
-          .pingServer()
-          .then((e) => e as Response<dynamic>?)
-          .timeout(Duration(seconds: 3));
+      Response<dynamic>? response =
+          await jellyfinApi.pingServer().then((e) => e as Response<dynamic>?).timeout(Duration(seconds: 3));
       return response?.statusCode == 200;
     } catch (e) {
       _jellyfinApiHelperLogger.severe(e);
@@ -1110,8 +1049,7 @@ class JellyfinApiHelper {
   }) {
     Uri uri = Uri.parse(_finampUserHelper.currentUser!.baseURL);
 
-    if (transcodingProfile != null &&
-        transcodingProfile.codec != FinampTranscodingCodec.original) {
+    if (transcodingProfile != null && transcodingProfile.codec != FinampTranscodingCodec.original) {
       // uri.queryParameters is unmodifiable, so we copy the contents into a new
       // map
       final queryParameters = Map.of(uri.queryParameters);
@@ -1130,30 +1068,26 @@ class JellyfinApiHelper {
       });
 
       uri = uri.replace(
-        pathSegments:
-            uri.pathSegments.followedBy(["Audio", item.id.raw, "Universal"]),
+        pathSegments: uri.pathSegments.followedBy(["Audio", item.id.raw, "Universal"]),
         queryParameters: queryParameters,
       );
     } else {
       uri = uri.replace(
-        pathSegments:
-            uri.pathSegments.followedBy(["Items", item.id.raw, "File"]),
+        pathSegments: uri.pathSegments.followedBy(["Items", item.id.raw, "File"]),
       );
     }
 
     return uri;
   }
 
-  late final ProviderFamily<bool, BaseItemDto> canDeleteFromServerProvider =
-      ProviderFamily((ref, BaseItemDto item) {
+  late final ProviderFamily<bool, BaseItemDto> canDeleteFromServerProvider = ProviderFamily((ref, BaseItemDto item) {
     bool offline = ref.watch(finampSettingsProvider.isOffline);
     if (offline) {
       return false;
     }
     var itemType = BaseItemDtoType.fromItem(item);
     var isPlaylist = itemType == BaseItemDtoType.playlist;
-    bool deleteEnabled =
-        ref.watch(finampSettingsProvider.allowDeleteFromServer);
+    bool deleteEnabled = ref.watch(finampSettingsProvider.allowDeleteFromServer);
 
     // always check if a playlist is deletable
     if (!deleteEnabled && !isPlaylist) {
@@ -1161,15 +1095,10 @@ class JellyfinApiHelper {
     }
 
     // do not bother checking server for item types known to not be deletable
-    if (![
-      BaseItemDtoType.album,
-      BaseItemDtoType.playlist,
-      BaseItemDtoType.track
-    ].contains(itemType)) {
+    if (![BaseItemDtoType.album, BaseItemDtoType.playlist, BaseItemDtoType.track].contains(itemType)) {
       return false;
     }
-    bool? serverReturn =
-        ref.watch(_canDeleteFromServerAsyncProvider(item.id)).value;
+    bool? serverReturn = ref.watch(_canDeleteFromServerAsyncProvider(item.id)).value;
     if (serverReturn == null) {
       // fallback to allowing deletion even if the response is invalid, since the user might still be able to delete
       // worst case would be getting an error message when trying to delete
@@ -1179,8 +1108,7 @@ class JellyfinApiHelper {
     }
   });
 
-  late final AutoDisposeFutureProviderFamily<bool?, BaseItemId>
-      _canDeleteFromServerAsyncProvider =
+  late final AutoDisposeFutureProviderFamily<bool?, BaseItemId> _canDeleteFromServerAsyncProvider =
       AutoDisposeFutureProviderFamily((ref, BaseItemId id) {
     return getItemById(id).then((response) {
       return response.canDelete;
@@ -1203,8 +1131,8 @@ bool _verifyCallable() {
   }
   var stack = StackTrace.current.toString();
   if (stack.contains('ProviderContainer.readProviderElement') ||
-      stack.contains('initState') ||
-      stack.contains('didChangeDependencies')) {
+      stack.contains('initState ') ||
+      stack.contains('didUpdateWidget')) {
     return true;
   }
   return false;

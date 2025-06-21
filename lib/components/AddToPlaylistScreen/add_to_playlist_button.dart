@@ -31,8 +31,7 @@ class AddToPlaylistButton extends ConsumerStatefulWidget {
   final VisualDensity? visualDensity;
 
   @override
-  ConsumerState<AddToPlaylistButton> createState() =>
-      _AddToPlaylistButtonState();
+  ConsumerState<AddToPlaylistButton> createState() => _AddToPlaylistButtonState();
 }
 
 class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
@@ -56,9 +55,11 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
       child: GestureDetector(
         onLongPress: () async {
           FeedbackHelper.feedback(FeedbackType.selection);
-          ref
-              .read(isFavoriteProvider(widget.item).notifier)
-              .updateFavorite(!isFav);
+          ref.read(isFavoriteProvider(widget.item).notifier).updateFavorite(!isFav);
+        },
+        onSecondaryTap: () async {
+          FeedbackHelper.feedback(FeedbackType.selection);
+          ref.read(isFavoriteProvider(widget.item).notifier).updateFavorite(!isFav);
         },
         child: IconButton(
             icon: Icon(
@@ -66,22 +67,19 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
               size: widget.size ?? 24.0,
             ),
             color: widget.color ?? IconTheme.of(context).color,
-            disabledColor:
-                (widget.color ?? IconTheme.of(context).color)!.withOpacity(0.3),
+            disabledColor: (widget.color ?? IconTheme.of(context).color)!.withOpacity(0.3),
             visualDensity: widget.visualDensity ?? VisualDensity.compact,
             // tooltip: AppLocalizations.of(context)!.addToPlaylistTooltip,
             onPressed: () async {
               if (FinampSettingsHelper.finampSettings.isOffline) {
-                return GlobalSnackbar.message((context) =>
-                    AppLocalizations.of(context)!.notAvailableInOfflineMode);
+                return GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notAvailableInOfflineMode);
               }
 
               bool inPlaylist = queueItemInPlaylist(widget.queueItem);
               await showPlaylistActionsMenu(
                 context: context,
                 item: widget.item!,
-                parentPlaylist:
-                    inPlaylist ? widget.queueItem!.source.item : null,
+                parentPlaylist: inPlaylist ? widget.queueItem!.source.item : null,
               );
             }),
       ),

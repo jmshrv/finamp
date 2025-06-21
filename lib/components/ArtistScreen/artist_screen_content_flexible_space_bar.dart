@@ -60,8 +60,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           type: QueueItemSourceType.artist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ??
-                  AppLocalizations.of(context)!.placeholderSource),
+              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
         ),
@@ -76,8 +75,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           type: QueueItemSourceType.artist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ??
-                  AppLocalizations.of(context)!.placeholderSource),
+              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
         ),
@@ -93,15 +91,12 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           type: QueueItemSourceType.nextUpArtist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ??
-                  AppLocalizations.of(context)!.placeholderSource),
+              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
         ),
       );
-      GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext,
-          isConfirmation: true);
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext, isConfirmation: true);
     }
 
     void shuffleAllFromArtistToNextUp(List<BaseItemDto> items) {
@@ -112,15 +107,12 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           type: QueueItemSourceType.nextUpArtist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ??
-                  AppLocalizations.of(context)!.placeholderSource),
+              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
         ),
       );
-      GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
-          isConfirmation: true);
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp, isConfirmation: true);
     }
 
     void shuffleAllFromArtistToQueue(List<BaseItemDto> items) {
@@ -131,15 +123,12 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           type: QueueItemSourceType.artist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ??
-                  AppLocalizations.of(context)!.placeholderSource),
+              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
         ),
       );
-      GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue,
-          isConfirmation: true);
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue, isConfirmation: true);
     }
 
     void addArtistNext(List<BaseItemDto> items) {
@@ -149,14 +138,11 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
             type: QueueItemSourceType.nextUpArtist,
             name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: parentItem.name ??
-                    AppLocalizations.of(context)!.placeholderSource),
+                pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
           ));
-      GlobalSnackbar.message(
-          (scaffold) =>
-              AppLocalizations.of(scaffold)!.confirmPlayNext("artist"),
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext("artist"),
           isConfirmation: true);
     }
 
@@ -167,14 +153,11 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
             type: QueueItemSourceType.nextUpArtist,
             name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: parentItem.name ??
-                    AppLocalizations.of(context)!.placeholderSource),
+                pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
           ));
-      GlobalSnackbar.message(
-          (scaffold) =>
-              AppLocalizations.of(scaffold)!.confirmAddToNextUp("artist"),
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp("artist"),
           isConfirmation: true);
     }
 
@@ -185,23 +168,16 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
             type: QueueItemSourceType.artist,
             name: QueueItemSourceName(
                 type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: parentItem.name ??
-                    AppLocalizations.of(context)!.placeholderSource),
+                pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
             id: parentItem.id,
             item: parentItem,
           ));
-      GlobalSnackbar.message(
-          (scaffold) =>
-              AppLocalizations.of(scaffold)!.confirmAddToQueue("artist"),
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue("artist"),
           isConfirmation: true);
     }
 
     void shuffleAlbumsFromArtist(List<BaseItemDto> items) {
-      var tracks =
-          (items.groupListsBy((element) => element.albumId).values.toList()
-                ..shuffle())
-              .flattened
-              .toList();
+      var tracks = (items.groupListsBy((element) => element.albumId).values.toList()..shuffle()).flattened.toList();
 
       queueService.startPlayback(
         items: tracks,
@@ -209,8 +185,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           type: QueueItemSourceType.artist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ??
-                  AppLocalizations.of(context)!.placeholderSource),
+              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
         ),
@@ -219,11 +194,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
     }
 
     void shuffleAlbumsFromArtistNext(List<BaseItemDto> items) {
-      var tracks =
-          (items.groupListsBy((element) => element.albumId).values.toList()
-                ..shuffle())
-              .flattened
-              .toList();
+      var tracks = (items.groupListsBy((element) => element.albumId).values.toList()..shuffle()).flattened.toList();
 
       queueService.addNext(
         items: tracks,
@@ -231,23 +202,16 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           type: QueueItemSourceType.nextUpArtist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ??
-                  AppLocalizations.of(context)!.placeholderSource),
+              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
         ),
       );
-      GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext,
-          isConfirmation: true);
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext, isConfirmation: true);
     }
 
     void shuffleAlbumsFromArtistToNextUp(List<BaseItemDto> items) {
-      var tracks =
-          (items.groupListsBy((element) => element.albumId).values.toList()
-                ..shuffle())
-              .flattened
-              .toList();
+      var tracks = (items.groupListsBy((element) => element.albumId).values.toList()..shuffle()).flattened.toList();
 
       queueService.addToNextUp(
         items: tracks,
@@ -255,23 +219,16 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           type: QueueItemSourceType.nextUpArtist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ??
-                  AppLocalizations.of(context)!.placeholderSource),
+              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
         ),
       );
-      GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
-          isConfirmation: true);
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp, isConfirmation: true);
     }
 
     void shuffleAlbumsFromArtistToQueue(List<BaseItemDto> items) {
-      var tracks =
-          (items.groupListsBy((element) => element.albumId).values.toList()
-                ..shuffle())
-              .flattened
-              .toList();
+      var tracks = (items.groupListsBy((element) => element.albumId).values.toList()..shuffle()).flattened.toList();
 
       queueService.addToQueue(
         items: tracks,
@@ -279,15 +236,12 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
           type: QueueItemSourceType.artist,
           name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: parentItem.name ??
-                  AppLocalizations.of(context)!.placeholderSource),
+              pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource),
           id: parentItem.id,
           item: parentItem,
         ),
       );
-      GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue,
-          isConfirmation: true);
+      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue, isConfirmation: true);
     }
 
     return FlexibleSpaceBar(
@@ -336,22 +290,19 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                       CTAMedium(
                         text: AppLocalizations.of(context)!.playButtonLabel,
                         icon: TablerIcons.player_play,
-                        onPressed: () => allTracks
-                            .then((items) => playAllFromArtist(items ?? [])),
+                        onPressed: () => allTracks.then((items) => playAllFromArtist(items ?? [])),
                         // set the minimum width as 25% of the screen width,
                         minWidth: MediaQuery.of(context).size.width * 0.25,
                       ),
                       CTAMedium(
                         text: AppLocalizations.of(context)!.shuffleButtonLabel,
                         icon: TablerIcons.arrows_shuffle,
-                        onPressed: () => allTracks
-                            .then((items) => shuffleAllFromArtist(items ?? [])),
+                        onPressed: () => allTracks.then((items) => shuffleAllFromArtist(items ?? [])),
                         // set the minimum width as 25% of the screen width,
                         minWidth: MediaQuery.of(context).size.width * 0.25,
                       ),
                       OverflowMenuButton(
-                        onPressed: () => showModalArtistMenu(
-                            context: context, baseItem: parentItem),
+                        onPressed: () => showModalArtistMenu(context: context, baseItem: parentItem),
                         label: AppLocalizations.of(context)!.menuButtonLabel,
                       ),
                     ],

@@ -26,8 +26,7 @@ class ItemAmount extends ConsumerWidget {
     return Semantics.fromProperties(
         properties: SemanticsProperties(
           label: itemCount.hasValue
-              ? AppLocalizations.of(context)!
-                  .itemCount(itemCount.value!.$2.name, itemCount.value!.$1)
+              ? AppLocalizations.of(context)!.itemCount(itemCount.value!.$2.name, itemCount.value!.$1)
               : AppLocalizations.of(context)!.itemCountCalculating,
           button: true,
         ),
@@ -48,23 +47,17 @@ class ItemAmount extends ConsumerWidget {
                     maxHeight: 16,
                   ),
                   padding: const EdgeInsets.all(2.0),
-                  color: color ??
-                      Theme.of(context).textTheme.bodySmall!.color ??
-                      Colors.white,
+                  color: color ?? Theme.of(context).textTheme.bodySmall!.color ?? Colors.white,
                   strokeWidth: 2.0,
                 ),
               Text(
                 itemCount.hasValue
-                    ? AppLocalizations.of(context)!.itemCount(
-                        itemCount.value!.$2.name, itemCount.value!.$1)
-                    : AppLocalizations.of(context)!.itemCountLoading(
-                        ref.watch(childItemTypeProvider(baseItem)).name),
+                    ? AppLocalizations.of(context)!.itemCount(itemCount.value!.$2.name, itemCount.value!.$1)
+                    : AppLocalizations.of(context)!.itemCountLoading(ref.watch(childItemTypeProvider(baseItem)).name),
                 overflow: TextOverflow.ellipsis,
                 softWrap: false,
                 style: TextStyle(
-                  color: color ??
-                      Theme.of(context).textTheme.bodySmall!.color ??
-                      Colors.white,
+                  color: color ?? Theme.of(context).textTheme.bodySmall!.color ?? Colors.white,
                 ),
               )
             ],

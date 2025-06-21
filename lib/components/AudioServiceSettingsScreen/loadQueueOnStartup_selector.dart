@@ -11,8 +11,7 @@ class LoadQueueOnStartupSelector extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.autoloadLastQueueOnStartup),
-      subtitle: Text(
-          AppLocalizations.of(context)!.autoloadLastQueueOnStartupSubtitle),
+      subtitle: Text(AppLocalizations.of(context)!.autoloadLastQueueOnStartupSubtitle),
       value: ref.watch(finampSettingsProvider.autoloadLastQueueOnStartup),
       onChanged: (value) => FinampSetters.setAutoloadLastQueueOnStartup(value),
     );

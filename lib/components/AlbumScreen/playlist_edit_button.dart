@@ -18,8 +18,7 @@ class PlaylistNameEditButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(TablerIcons.edit),
-      tooltip: AppLocalizations.of(context)!
-          .editItemTitle(BaseItemDtoType.fromItem(playlist).name),
+      tooltip: AppLocalizations.of(context)!.editItemTitle(BaseItemDtoType.fromItem(playlist).name),
       onPressed: () => showDialog(
         context: context,
         builder: (context) => PlaylistEditDialog(playlist: playlist),

@@ -119,10 +119,6 @@
       }
     }
   },
-  "editPlaylistNameTitle": "Muokkaa soittolistan nimeä",
-  "@editPlaylistNameTitle": {},
-  "editPlaylistNameTooltip": "Muokkaa soittolistan nimeä",
-  "@editPlaylistNameTooltip": {},
   "playlistUpdated": "Soittolistan nimi päivitetty.",
   "@playlistUpdated": {},
   "addDownloads": "Lisää lataukset",
@@ -207,7 +203,7 @@
   "@cancelSleepTimer": {},
   "yesButtonLabel": "Kyllä",
   "@yesButtonLabel": {},
-  "setSleepTimer": "Aseta uniajastin",
+  "setSleepTimer": "Pysäytä toisto jälkeen ajan",
   "@setSleepTimer": {},
   "minutes": "Minuuttia",
   "@minutes": {},
@@ -300,7 +296,7 @@
   },
   "sortBy": "Järjestä",
   "@sortBy": {},
-  "premiereDate": "Ensiesityspäivä",
+  "premiereDate": "Julkaisupäivä",
   "@premiereDate": {},
   "interactions": "Vuorovaikutukset",
   "@interactions": {},
@@ -476,7 +472,7 @@
   "@loginFlowSelectAUser": {
     "description": "Heading for the list of users that the user can select from during the login flow."
   },
-  "loginFlowWelcomeHeading": "Tervetuloa sovellukseen",
+  "loginFlowWelcomeHeading": "Tervetuloa sovellukseen {styledName}",
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
@@ -724,7 +720,7 @@
   "@yourLikes": {
     "description": "Title for the queue source when the user is playing their liked tracks"
   },
-  "playingFromType": "Toistetaan lähteestä {source, select, album{Albumi} playlist{Soittolista} trackMix{Kappalemix} artistMix{Artistimix} albumMix{Albumimix} genreMix{Genre Mix} favorites{Suosikit} allTracks{Kaikki raidat} filteredList{Kappaleet} genre{Genre} artist{Artisti} track{Raita} nextUpAlbum{Seuraavaksi-Albumi} nextUpPlaylist{ Seuraavaksi-Soittolista} nextUpArtist{Seuraavaksi-Artisti} remoteClient{Etäohjauslaite} other{}}",
+  "playingFromType": "Toistetaan lähteestä {source, select, album{Albumi} playlist{Soittolista} trackMix{Kappalemix} artistMix{Artistimix} albumMix{Albumimix} genreMix{Genre Mix} favorites{Suosikit} allTracks{Kaikki raidat} filteredList{Kappaleet} genre{Genre} artist{Artisti} track{Raita} nextUpAlbum{Seuraavaksi-Albumi} nextUpPlaylist{ Seuraavaksi-Soittolista} nextUpArtist{Seuraavaksi-Artisti} nextUpGenre{Seuraavaksi-Genre} remoteClient{Etäohjauslaite} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -775,7 +771,7 @@
   "@queuesScreen": {
     "description": "Title for the screen where older now playing queues can be restored"
   },
-  "periodicPlaybackSessionUpdateFrequencyDetails": "Jos Jellyfin palvelin ei ole saanut yhtäkään päivitystä liitetyltä laitteelta viimeiseen 5 minuuttiin, palvelin olettaa toiston loppuneeksi. Tämä tarkoittaa, että kappaleille, jotka ovat yli 5 minuuttia pitkiä, toisto voidaan virheellisesti raportoida loppuneeksi, mikä vähentää toistoraporttien datan laatua.",
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Jos Jellyfin palvelin ei ole saanut yhtäkään päivitystä liitetyltä laitteelta viimeiseen 5 minuuttiin, palvelin olettaa toiston loppuneeksi. Tämä tarkoittaa, että kappaleille, jotka ovat yli 5 minuuttia pitkiä, toisto voidaan virheellisesti raportoida loppuneeksi, mikä vähentää toistoraporttien luotettavuutta.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1365,7 +1361,7 @@
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
   },
-  "sleepTimerRemainingTime": "Nukahtaa {time} minuutissa",
+  "sleepTimerRemainingTime": "Nukahtaa ajassa {prefix}{time} {suffix}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -1891,7 +1887,7 @@
   "@finampTagline": {
     "description": "Tagline / short description for the app"
   },
-  "downloadsQueued": "Valmistauduttu poimuajoon, tiedostoja ladataan",
+  "downloadsQueued": "Tiedostoja ladataan",
   "@downloadsQueued": {},
   "togglePlaybackButtonTooltip": "Toista / pysäytä",
   "@togglePlaybackButtonTooltip": {
@@ -2076,18 +2072,282 @@
   "@outputMenuButtonTitle": {
     "description": "Button title for opening the output menu/panel"
   },
-  "startupErrorTitle": "Jokin meni pieleen sovelluksen käynnistyksessä!\nPahoittelut siitä..",
+  "startupErrorTitle": "Jokin meni pieleen sovelluksen käynnistyksessä!",
   "@startupErrorTitle": {
     "description": "The title for the error screen that shows when startup fails."
   },
   "exportLogs": "Tallenna lokit",
   "@exportLogs": {},
-  "startupErrorCallToAction": "Ole hyvä ja luo tiketti osoitteessa github.com/jmshrv/finamp , ja liitä mukaan lokitiedot(!) (Käytä nappia alla) Liitä myös näyttökuva tästä sivusta, jotta voimme korjata vian mahdollisimman nopeasti.",
+  "startupErrorCallToAction": "Ole hyvä ja luo tiketti osoitteessa github.com/jmshrv/finamp , ja liitä mukaan lokitiedot (käytä nappia alla). Liitä myös näyttökuva tästä sivusta, jotta voimme korjata vian mahdollisimman sujuvasti.",
   "@startupErrorCallToAction": {
     "description": "The subtitle / call to action for what to do after encountering a startup error"
   },
   "startupErrorWorkaround": "Tilapäiskorjauksena voit yrittää tyhjentää sovelluksen datan nollataksesi sovelluksen. Ota huomioon, että tämä poistaa kaikki asetukset ja ladatut tiedostot.",
   "@startupErrorWorkaround": {
     "description": "The subtitle for how to manually recover from a startup error"
+  },
+  "defaultOrder": "Oletusjärjestys",
+  "@defaultOrder": {
+    "description": "Default sorting order for playlists (server order)"
+  },
+  "favorite": "Suosikki",
+  "@favorite": {},
+  "performingArtist": "Esiintyvä artisti",
+  "@performingArtist": {},
+  "duration": "Kesto",
+  "@duration": {},
+  "notAvailable": "Ei saatavilla",
+  "@notAvailable": {},
+  "allLibraries": "Kaikki kirjastot",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
+  "noGenres": "Ei tyylilajeja",
+  "@noGenres": {
+    "description": "Gets shown when there are no genres available for an album or artist"
+  },
+  "onlineMode": "Online-tila",
+  "@onlineMode": {},
+  "favorites": "Suosikit",
+  "@favorites": {},
+  "removeFavorite": "Poista suosikki",
+  "@removeFavorite": {},
+  "addFavorite": "Lisää suosikki",
+  "@addFavorite": {},
+  "stopAndClearQueue": "Pysäytä toisto ja tyhjennä jono",
+  "@stopAndClearQueue": {
+    "description": "Label for a button that stops playback and removes all tracks from the queue."
+  },
+  "recentlyAddedAlbums": "Viimeksi lisätyt albumit",
+  "@recentlyAddedAlbums": {
+    "description": "Label for the genre section that shows albums that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyPlayedTracks": "Viimeksi toistetut raidat",
+  "@recentlyPlayedTracks": {},
+  "randomAlbums": "Albumit (satunnaiset valinnat)",
+  "@randomAlbums": {},
+  "randomArtists": "Artistit (satunnaiset valinnat)",
+  "@randomArtists": {},
+  "randomTracks": "Raidat (satunnaiset valinnat)",
+  "@randomTracks": {},
+  "genreItemSectionFilterChipOrderSubtitle": "Säätää saatavilla olevien suodattimien järjestystä kohdeosioille.",
+  "@genreItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections filter chips."
+  },
+  "genreFilterArtistScreens": "Suodata artistit",
+  "@genreFilterArtistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "downloadButtonDisabledGenreFilterTooltip": "Poista genresuodatin, jotta lataustoiminnot voidaan ottaa käyttöön.",
+  "@downloadButtonDisabledGenreFilterTooltip": {
+    "description": "Tooltip shown when a download button is disabled because of an active genre filter."
+  },
+  "showShuffleButtonOnMediaNotificationSubtitle": "Ohjaa sitä näytetäänkö sekoitusnappi mediailmoituksissa. Tämä antaa mahdollisuuden kytkeä sekoitus päälle/pois avaamatta sovellusta.",
+  "@showShuffleButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
+  },
+  "showFavoriteButtonOnMediaNotificationTitle": "Näytä suosikkinappi mediailmoituksissa",
+  "@showFavoriteButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a favorite button."
+  },
+  "playbackActionPageShuffleAlbums": "Sekoita Albumit",
+  "@playbackActionPageShuffleAlbums": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+  },
+  "editItemTitle": "Muokkaa {itemType, select, playlist{Soittolista} other{}}",
+  "@editItemTitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
+  "browsePlaylists": "Selaa soittolistoja",
+  "@browsePlaylists": {
+    "description": "Label for a button on the genre screen that brings you to a list of genre-filtered playlists."
+  },
+  "recentlyAddedTracks": "Viimeksi lisätyt raidat",
+  "@recentlyAddedTracks": {
+    "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedArtists": "Viimeksi lisätyt artistit",
+  "@recentlyAddedArtists": {
+    "description": "Label for the genre section that shows artists that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyPlayedAlbums": "Viimeksi toistetut albumit",
+  "@recentlyPlayedAlbums": {},
+  "recentlyPlayed": "Viimeksi toistetut",
+  "@recentlyPlayed": {},
+  "unknown": "Tuntematon",
+  "@unknown": {},
+  "artistItemSectionFilterChipOrderSubtitle": "Säätää raitaosion saatavilla olevien suodattimien järjestystä.",
+  "@artistItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of the tracks sections filter chips."
+  },
+  "genreFilterPlaylistScreens": "Suodata soittolistat",
+  "@genreFilterPlaylistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "curatedItemsNoFavorites": "Sinulla ei ole yhtään suosikkia{itemType, select, artistGenreFilter{ tältä artistilta tässä genressä} artist{ tältä artistilta} genre{ tässä genressä} other{}}.",
+  "@curatedItemsNoFavorites": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "genreNoItems": "Sinulla ei ole yhtään {itemType, select, playlists{soittolistaa} artists{artistia} albums{albumia} tracks{kappaletta} other{kohteita}} tässä genressä.",
+  "@genreNoItems": {
+    "description": "Message for empty See All lists for a genre.",
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
+  "genreFilterNotAvailableForAlbums": "Genresuodattimet eivät ole käytössä albumeille.",
+  "@genreFilterNotAvailableForAlbums": {
+    "description": "Message shown when the user tries to apply a genre filter to an album."
+  },
+  "sleepTimerProjectedDuration": "Toisto katkeaa ajassa ~{duration}",
+  "@sleepTimerProjectedDuration": {
+    "description": "Displays duration until playback is expected to be ended by the sleep timer (unless the queue is modified before). {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Ohjaa sitä näytetäänkö suosikkinappi mediailmoituksissa. Tämä antaa mahdollisuuden lisätä kappale suosikkeihin / poistaa se niistä avaamatta sovellusta.",
+  "@showFavoriteButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a favorite button."
+  },
+  "formattedRelativeTime": "{type, select, just_now{juuri nyt} minutes{{value} minuuttia sitten} hours{{value} tuntia sitten} yesterday{eilen} days{{value, plural, =1{1 päivä sitten} other{{value} päivää sitten}}} other{value}}",
+  "@formattedRelativeTime": {
+    "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
+    "placeholders": {
+      "type": {
+        "type": "String",
+        "description": "The category of time passed: one of 'just_now', 'minutes', 'hours', 'yesterday', or 'days'."
+      },
+      "value": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "playbackActionPagePlay": "Toista",
+  "@playbackActionPagePlay": {
+    "description": "Label for the playback action page that contains all actions related to playing in order"
+  },
+  "genreFilterPlaylistScreensSubtitle": "Kun päällä, soittolistat (genrevalikon kautta avattuna) näyttävät vain raidat, jotka täsmäävät genreen jota paraikaa selaat. (Genresuodattimen saa aina käsin pois päältä näyttääksesi kaikki raidat.)",
+  "@genreFilterPlaylistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "playbackActionPageShuffle": "Sekoita",
+  "@playbackActionPageShuffle": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled"
+  },
+  "favoriteArtists": "Suosikkiartistit",
+  "@favoriteArtists": {},
+  "recentlyPlayedArtists": "Viimeksi toistetut artistit",
+  "@recentlyPlayedArtists": {},
+  "genreNotFound": "Genreä ei löytynyt.{additionalInfo, select, offline{ Sitä ei ehkä ole ladattu tai se voi kuulua toiseen kirjastoon.} other{ Se voi kuulua toiseen kirjastoon.}}",
+  "@genreNotFound": {
+    "placeholders": {
+      "additionalInfo": {
+        "type": "String"
+      }
+    },
+    "description": "Message shown when a genre filter or open-genre action fails because the genre item could not be found."
+  },
+  "curatedItemsNotListenedYet": "Et ole kuunnellut yhtään kappaletta{itemType, select, artistGenreFilter{ tältä artistilta tässä genressä} artist{ tältä artistilta} genre{ tässä genressä} other{}}.",
+  "@curatedItemsNotListenedYet": {
+    "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "autoSwitchItemCurationTypeTitle": "Automaattinen soittolistan järjestelytavan vaihto",
+  "@autoSwitchItemCurationTypeTitle": {},
+  "showArtistsTracksSection": "Näytä Raidat-osio",
+  "@showArtistsTracksSection": {},
+  "showArtistsTracksSectionSubtitle": "Näytetäänkö osio, jossa enintään viisi raitaa. Kun päällä, voit valita näytetäänkö osiossa eniten toistettuja, suosikkeja, satunnaisia, viimeksi julkaistuja, viimeksi lisättyjä vai viimeksi toistettuja raitoja.",
+  "@showArtistsTracksSectionSubtitle": {},
+  "autoSwitchItemCurationTypeSubtitle": "Kun tämä on päällä, artistien ja genrejen näyttöjen kohdeosiot vaihtavat automaattisesti toiseen järjestelytapaan, jos kohteita ei ole saatavilla (esim. ei suosikkeja tietylle artistille).",
+  "@autoSwitchItemCurationTypeSubtitle": {},
+  "topAlbums": "Suosituimmat albumit",
+  "@topAlbums": {},
+  "topArtists": "Suosituimmat artistit",
+  "@topArtists": {},
+  "latestTracks": "Viimeisimmät raidat",
+  "@latestTracks": {},
+  "favoriteAlbums": "Suosikkialbumit",
+  "@favoriteAlbums": {},
+  "latestAlbums": "Viimeisimmät albumit",
+  "@latestAlbums": {},
+  "latestArtists": "Viimeisimmät artistit",
+  "@latestArtists": {},
+  "favoriteTracks": "Suosikkiraidat",
+  "@favoriteTracks": {},
+  "mostPlayed": "Eniten toistetut",
+  "@mostPlayed": {},
+  "randomFavoritesFirst": "Satunnainen (suosikit ensin)",
+  "@randomFavoritesFirst": {},
+  "recentlyAdded": "Viimeksi lisätyt",
+  "@recentlyAdded": {},
+  "latestReleases": "Viimeisimmät julkaisut",
+  "@latestReleases": {},
+  "itemSectionsOrder": "Kohdeosioiden järjestys",
+  "@itemSectionsOrder": {
+    "description": "Label for the setting that controls the order of item sections on the screens."
+  },
+  "itemSectionsOrderSubtitle": "Säätää kohdeosioiden järjestystä.",
+  "@itemSectionsOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections on the screens."
+  },
+  "genreItemSectionFilterChipOrderTitle": "Kohdeosioiden suodattimien järjestys",
+  "@genreItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of item sections filter chips."
+  },
+  "artistItemSectionFilterChipOrderTitle": "Raitaosion suodattimien järjestys",
+  "@artistItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of the tracks sections filter chips."
+  },
+  "genreFilterArtistScreensSubtitle": "Kun päällä, Artistit (genrevalikon kautta valittuna) näyttää vain raidat ja albumit jotka täsmäävät genreen jota paraikaa selaat. (Genresuodattimen voi poistaa aina käsin näyttääksesi kaikki raidat ja albumit.)",
+  "@genreFilterArtistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreListsInheritSorting": "Koko listan lajittelun periytyminen",
+  "@genreListsInheritSorting": {
+    "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "curatedItemsMostPlayedOfflineTooltip": "Ei saatavilla offline-tilassa.",
+  "@curatedItemsMostPlayedOfflineTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Offline Mode."
+  },
+  "genreListsInheritSortingSubtitle": "Kun päällä, \"Näytä kaikki\"-listat perivät järjestys- ja suodatusasetukset genrenäkymästä. Kun kytketty pois päältä, liittyvän kirjastovälilehden asetuksia sovelletaan sen sijaan. Täyden listan järjestelyasetuksineen saa näkyviin genrenäkymän yläreunan laskuria näpäyttämällä, tai \"selaa soittolistoja\"-napista.",
+  "@genreListsInheritSortingSubtitle": {
+    "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "showShuffleButtonOnMediaNotificationTitle": "Näytä satunnaistoiston painike mediailmoituksissa",
+  "@showShuffleButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a shuffle button."
+  },
+  "seeAll": "Näytä kaikki",
+  "@seeAll": {
+    "description": ""
+  },
+  "artistScreen": "Artistinäkymä",
+  "@artistScreen": {
+    "description": "Name for the view/screen that shows artists"
   }
 }

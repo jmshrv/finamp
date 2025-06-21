@@ -12,8 +12,7 @@ class AppDirectoryLocationForm extends StatefulWidget {
   final Key formKey;
 
   @override
-  State<AppDirectoryLocationForm> createState() =>
-      _AppDirectoryLocationFormState();
+  State<AppDirectoryLocationForm> createState() => _AppDirectoryLocationFormState();
 }
 
 class _AppDirectoryLocationFormState extends State<AppDirectoryLocationForm> {
@@ -40,16 +39,15 @@ class _AppDirectoryLocationFormState extends State<AppDirectoryLocationForm> {
                 if (snapshot.data!.isEmpty) {
                   return const Text("No external directories.");
                 }
-                List<DropdownMenuItem<Directory>> dropdownButtonItems =
-                    snapshot.data!
-                        .map((e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(
-                                e.path,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ))
-                        .toList();
+                List<DropdownMenuItem<Directory>> dropdownButtonItems = snapshot.data!
+                    .map((e) => DropdownMenuItem(
+                          value: e,
+                          child: Text(
+                            e.path,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ))
+                    .toList();
                 return DropdownButtonFormField<Directory>(
                   items: dropdownButtonItems,
                   hint: const Text("Location"),

@@ -16,8 +16,8 @@ class DownloadLocationListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool isDefault = ref.watch(finampSettingsProvider.select((value) =>
-        value.value?.defaultDownloadLocation == downloadLocation.id));
+    bool isDefault = ref
+        .watch(finampSettingsProvider.select((value) => value.value?.defaultDownloadLocation == downloadLocation.id));
 
     return ListTile(
       title: Text(downloadLocation.name),
@@ -32,11 +32,9 @@ class DownloadLocationListTile extends ConsumerWidget {
           IconButton(
             icon: Icon(isDefault ? Icons.star : Icons.star_outline),
             onPressed: () {
-              FinampSetters.setDefaultDownloadLocation(
-                  isDefault ? null : downloadLocation.id);
+              FinampSetters.setDefaultDownloadLocation(isDefault ? null : downloadLocation.id);
             },
-            tooltip:
-                AppLocalizations.of(context)!.defaultDownloadLocationButton,
+            tooltip: AppLocalizations.of(context)!.defaultDownloadLocationButton,
           ),
           if (downloadLocation.baseDirectory.needsPath)
             IconButton(

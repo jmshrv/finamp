@@ -38,8 +38,7 @@ class ChopperAggregateLogger implements Logger {
   Map<String, Logger> get children => _delegate.children;
 
   @override
-  void log(Level logLevel, Object? message,
-      [Object? error, StackTrace? stackTrace, Zone? zone]) {
+  void log(Level logLevel, Object? message, [Object? error, StackTrace? stackTrace, Zone? zone]) {
     if (message is ChopperLogRecord) {
       if (message.request != null) {
         _requests[message.request]?.writeln(message.message);
@@ -89,20 +88,17 @@ class ChopperAggregateLogger implements Logger {
       log(Level.FINEST, message, error, stackTrace);
 
   @override
-  void finer(Object? message, [Object? error, StackTrace? stackTrace]) =>
-      log(Level.FINER, message, error, stackTrace);
+  void finer(Object? message, [Object? error, StackTrace? stackTrace]) => log(Level.FINER, message, error, stackTrace);
 
   @override
-  void fine(Object? message, [Object? error, StackTrace? stackTrace]) =>
-      log(Level.FINE, message, error, stackTrace);
+  void fine(Object? message, [Object? error, StackTrace? stackTrace]) => log(Level.FINE, message, error, stackTrace);
 
   @override
   void config(Object? message, [Object? error, StackTrace? stackTrace]) =>
       log(Level.CONFIG, message, error, stackTrace);
 
   @override
-  void info(Object? message, [Object? error, StackTrace? stackTrace]) =>
-      log(Level.INFO, message, error, stackTrace);
+  void info(Object? message, [Object? error, StackTrace? stackTrace]) => log(Level.INFO, message, error, stackTrace);
 
   @override
   void warning(Object? message, [Object? error, StackTrace? stackTrace]) =>
@@ -113,6 +109,5 @@ class ChopperAggregateLogger implements Logger {
       log(Level.SEVERE, message, error, stackTrace);
 
   @override
-  void shout(Object? message, [Object? error, StackTrace? stackTrace]) =>
-      log(Level.SHOUT, message, error, stackTrace);
+  void shout(Object? message, [Object? error, StackTrace? stackTrace]) => log(Level.SHOUT, message, error, stackTrace);
 }

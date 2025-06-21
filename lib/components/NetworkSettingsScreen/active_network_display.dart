@@ -14,14 +14,12 @@ class ActiveNetworkDisplay extends ConsumerWidget {
     String? address = ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.baseURL;
 
     return ValueListenableBuilder<Box<FinampSettings>>(
-      valueListenable: FinampSettingsHelper.finampSettingsListener,
-      builder: (context, box, __) {
-        return ListTile(
-          leading: Icon(Icons.router_outlined),
-          subtitle: Text(AppLocalizations.of(context)!.preferLocalNetworkActiveAddressInfoText),
-          trailing: Text(address ?? "")
-        );
-      }
-    );
+        valueListenable: FinampSettingsHelper.finampSettingsListener,
+        builder: (context, box, __) {
+          return ListTile(
+              leading: Icon(Icons.router_outlined),
+              subtitle: Text(AppLocalizations.of(context)!.preferLocalNetworkActiveAddressInfoText),
+              trailing: Text(address ?? ""));
+        });
   }
 }

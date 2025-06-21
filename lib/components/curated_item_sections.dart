@@ -11,7 +11,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
 class TracksSection extends ConsumerStatefulWidget {
-  const TracksSection({super.key, 
+  const TracksSection({
+    super.key,
     required this.parent,
     this.tracks,
     this.childrenForQueue,
@@ -84,7 +85,7 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
       }
     }
   }
-      
+
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
@@ -92,7 +93,7 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
     final itemType = BaseItemDtoType.fromItem(widget.parent);
     final isFavorites = widget.selectedFilter == CuratedItemSelectionType.favorites;
     final isPlayed = widget.selectedFilter == CuratedItemSelectionType.mostPlayed ||
-                    widget.selectedFilter == CuratedItemSelectionType.recentlyPlayed;
+        widget.selectedFilter == CuratedItemSelectionType.recentlyPlayed;
 
     String itemTypeKey = 'other';
 
@@ -111,8 +112,7 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
 
     return SliverStickyHeader(
       header: Container(
-        padding: EdgeInsets.fromLTRB(
-            6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
+        padding: EdgeInsets.fromLTRB(6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
         color: Theme.of(context).colorScheme.surfaceContainerHighest,
         child: GestureDetector(
           onTap: () {
@@ -133,23 +133,22 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                          if (_isExpandable)
-                            Transform.rotate(
-                              angle: _showTracks ? 0 : -math.pi / 2,
-                              child: const Icon(Icons.arrow_drop_down, size: 24),
-                            ),
-                          if (_isExpandable)
-                            const SizedBox(width: 4),
-                          Expanded(
-                            child: Text(
-                              widget.tracksText,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                      if (_isExpandable)
+                        Transform.rotate(
+                          angle: _showTracks ? 0 : -math.pi / 2,
+                          child: const Icon(Icons.arrow_drop_down, size: 24),
+                        ),
+                      if (_isExpandable) const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          widget.tracksText,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 if (widget.seeAllCallbackFunction != null)
@@ -185,8 +184,8 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
               if (widget.includeFilterRow)
                 buildCuratedItemFilterRow(
                   ref: ref,
-                  parent: widget.parent, 
-                  filterListFor: BaseItemDtoType.track, 
+                  parent: widget.parent,
+                  filterListFor: BaseItemDtoType.track,
                   customFilterOrder: widget.customFilterOrder,
                   selectedFilter: widget.selectedFilter,
                   disabledFilters: widget.disabledFilters,
@@ -217,11 +216,7 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
                     ),
                   ),
                 ),
-              SliverToBoxAdapter(
-                  child: SizedBox(
-                      height: (widget.parent.type != "MusicGenre") ? 14 : 0
-                  )
-              ),
+              SliverToBoxAdapter(child: SizedBox(height: (widget.parent.type != "MusicGenre") ? 14 : 0)),
             ])
           : SliverToBoxAdapter(child: SizedBox.shrink()),
     );
@@ -229,7 +224,8 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
 }
 
 class CollectionsSection extends ConsumerStatefulWidget {
-  const CollectionsSection({super.key, 
+  const CollectionsSection({
+    super.key,
     required this.parent,
     required this.itemsText,
     this.items,
@@ -240,7 +236,7 @@ class CollectionsSection extends ConsumerStatefulWidget {
     this.customFilterOrder,
     this.selectedFilter,
     this.disabledFilters,
-    this.onFilterSelected, 
+    this.onFilterSelected,
   });
 
   final BaseItemDto parent;
@@ -297,7 +293,7 @@ class _ItemsSectionState extends ConsumerState<CollectionsSection> {
       }
     }
   }
-        
+
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
@@ -305,7 +301,7 @@ class _ItemsSectionState extends ConsumerState<CollectionsSection> {
     final itemType = BaseItemDtoType.fromItem(widget.parent);
     final isFavorites = widget.selectedFilter == CuratedItemSelectionType.favorites;
     final isPlayed = widget.selectedFilter == CuratedItemSelectionType.mostPlayed ||
-                    widget.selectedFilter == CuratedItemSelectionType.recentlyPlayed;
+        widget.selectedFilter == CuratedItemSelectionType.recentlyPlayed;
 
     String itemTypeKey = 'other';
 
@@ -324,8 +320,7 @@ class _ItemsSectionState extends ConsumerState<CollectionsSection> {
 
     return SliverStickyHeader(
       header: Container(
-        padding: EdgeInsets.fromLTRB(
-            6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
+        padding: EdgeInsets.fromLTRB(6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
         color: Theme.of(context).colorScheme.surfaceContainerHighest,
         child: GestureDetector(
           onTap: () {
@@ -351,8 +346,7 @@ class _ItemsSectionState extends ConsumerState<CollectionsSection> {
                           angle: _showItems ? 0 : -math.pi / 2,
                           child: const Icon(Icons.arrow_drop_down, size: 24),
                         ),
-                      if (_isExpandable)
-                        const SizedBox(width: 4),
+                      if (_isExpandable) const SizedBox(width: 4),
                       Expanded(
                         child: Text(
                           widget.itemsText,
@@ -399,7 +393,7 @@ class _ItemsSectionState extends ConsumerState<CollectionsSection> {
               slivers: [
                 if (widget.includeFilterRowFor != null)
                   buildCuratedItemFilterRow(
-                    ref: ref, 
+                    ref: ref,
                     parent: widget.parent,
                     filterListFor: widget.includeFilterRowFor!,
                     customFilterOrder: widget.customFilterOrder,
@@ -420,11 +414,11 @@ class _ItemsSectionState extends ConsumerState<CollectionsSection> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
                       child: Center(
-                          child: Text(
-                            emptyText,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
+                        child: Text(
+                          emptyText,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
                       ),
                     ),
                   ),
@@ -434,7 +428,7 @@ class _ItemsSectionState extends ConsumerState<CollectionsSection> {
                   ),
                 ),
               ],
-          )
+            )
           : const SliverToBoxAdapter(child: SizedBox.shrink()),
     );
   }

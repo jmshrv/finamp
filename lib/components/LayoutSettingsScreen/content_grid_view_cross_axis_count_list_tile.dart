@@ -15,11 +15,9 @@ enum ContentGridViewCrossAxisCountType {
   @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
 
-  String toLocalisedString(BuildContext context) =>
-      _humanReadableLocalisedName(this, context);
+  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
 
-  String _humanReadableName(
-      ContentGridViewCrossAxisCountType contentGridViewCrossAxisCountType) {
+  String _humanReadableName(ContentGridViewCrossAxisCountType contentGridViewCrossAxisCountType) {
     switch (contentGridViewCrossAxisCountType) {
       case ContentGridViewCrossAxisCountType.portrait:
         return "Portrait";
@@ -29,8 +27,7 @@ enum ContentGridViewCrossAxisCountType {
   }
 
   String _humanReadableLocalisedName(
-      ContentGridViewCrossAxisCountType contentGridViewCrossAxisCountType,
-      BuildContext context) {
+      ContentGridViewCrossAxisCountType contentGridViewCrossAxisCountType, BuildContext context) {
     switch (contentGridViewCrossAxisCountType) {
       case ContentGridViewCrossAxisCountType.portrait:
         return AppLocalizations.of(context)!.portrait;
@@ -49,12 +46,10 @@ class ContentGridViewCrossAxisCountListTile extends StatefulWidget {
   final ContentGridViewCrossAxisCountType type;
 
   @override
-  State<ContentGridViewCrossAxisCountListTile> createState() =>
-      _ContentGridViewCrossAxisCountListTileState();
+  State<ContentGridViewCrossAxisCountListTile> createState() => _ContentGridViewCrossAxisCountListTileState();
 }
 
-class _ContentGridViewCrossAxisCountListTileState
-    extends State<ContentGridViewCrossAxisCountListTile> {
+class _ContentGridViewCrossAxisCountListTileState extends State<ContentGridViewCrossAxisCountListTile> {
   final _controller = TextEditingController();
 
   @override
@@ -62,14 +57,10 @@ class _ContentGridViewCrossAxisCountListTileState
     super.initState();
     switch (widget.type) {
       case ContentGridViewCrossAxisCountType.portrait:
-        _controller.text = FinampSettingsHelper
-            .finampSettings.contentGridViewCrossAxisCountPortrait
-            .toString();
+        _controller.text = FinampSettingsHelper.finampSettings.contentGridViewCrossAxisCountPortrait.toString();
         break;
       case ContentGridViewCrossAxisCountType.landscape:
-        _controller.text = FinampSettingsHelper
-            .finampSettings.contentGridViewCrossAxisCountLandscape
-            .toString();
+        _controller.text = FinampSettingsHelper.finampSettings.contentGridViewCrossAxisCountLandscape.toString();
         break;
     }
   }
@@ -77,11 +68,9 @@ class _ContentGridViewCrossAxisCountListTileState
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(AppLocalizations.of(context)!
-          .gridCrossAxisCount(widget.type.toLocalisedString(context))),
+      title: Text(AppLocalizations.of(context)!.gridCrossAxisCount(widget.type.toLocalisedString(context))),
       subtitle: Text(
-        AppLocalizations.of(context)!.gridCrossAxisCountSubtitle(
-            widget.type.toLocalisedString(context).toLowerCase()),
+        AppLocalizations.of(context)!.gridCrossAxisCountSubtitle(widget.type.toLocalisedString(context).toLowerCase()),
       ),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
@@ -95,12 +84,10 @@ class _ContentGridViewCrossAxisCountListTileState
             if (valueInt != null && valueInt > 0) {
               switch (widget.type) {
                 case ContentGridViewCrossAxisCountType.portrait:
-                  FinampSetters.setContentGridViewCrossAxisCountPortrait(
-                      valueInt);
+                  FinampSetters.setContentGridViewCrossAxisCountPortrait(valueInt);
                   break;
                 case ContentGridViewCrossAxisCountType.landscape:
-                  FinampSetters.setContentGridViewCrossAxisCountLandscape(
-                      valueInt);
+                  FinampSetters.setContentGridViewCrossAxisCountLandscape(valueInt);
                   break;
               }
             }

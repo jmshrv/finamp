@@ -64,9 +64,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
     SortBy? sortByOverride;
     SortOrder? sortOrderOverride;
 
-    if (doOverride &&
-        ref.read(finampSettingsProvider.genreListsInheritSorting) &&
-        itemSelectionType != null) {
+    if (doOverride && ref.read(finampSettingsProvider.genreListsInheritSorting) && itemSelectionType != null) {
       switch (itemSelectionType) {
         case CuratedItemSelectionType.mostPlayed:
           sortByOverride = itemSelectionType.getSortBy();
@@ -112,12 +110,9 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
     final library = finampUserHelper.currentUser?.currentView;
     final loc = AppLocalizations.of(context)!;
-    final genreCuratedItemSectionFilterOrder =
-        ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
-    final genreItemSectionsOrder =
-        ref.watch(finampSettingsProvider.genreItemSectionsOrder);
-    final bool autoSwitchItemCurationTypeEnabled =
-        ref.watch(finampSettingsProvider.autoSwitchItemCurationType);
+    final genreCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
+    final genreItemSectionsOrder = ref.watch(finampSettingsProvider.genreItemSectionsOrder);
+    final bool autoSwitchItemCurationTypeEnabled = ref.watch(finampSettingsProvider.autoSwitchItemCurationType);
 
     /// There are inidivual fetch methods for each section on the genre screen. They all are handled
     /// by a single entry point provider "genreCuratedItemsProvider". This provider returns multiple values:
@@ -127,31 +122,16 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
     /// the current filter would return an empty result and auto-switching is enabled. It then re-tries
     /// with that next filter. The filters that would've returned an empty result get returned in the
     /// disabledFilters set, so we can pass them on to the UI to show them as disabled.
-    final tracksAsync = ref.watch(genreCuratedItemsProvider(
-        widget.parent, BaseItemDtoType.track, widget.library));
-    final albumsAsync = ref.watch(genreCuratedItemsProvider(
-        widget.parent, BaseItemDtoType.album, widget.library));
-    final artistsAsync = ref.watch(genreCuratedItemsProvider(
-        widget.parent, BaseItemDtoType.artist, widget.library));
+    final tracksAsync = ref.watch(genreCuratedItemsProvider(widget.parent, BaseItemDtoType.track, widget.library));
+    final albumsAsync = ref.watch(genreCuratedItemsProvider(widget.parent, BaseItemDtoType.album, widget.library));
+    final artistsAsync = ref.watch(genreCuratedItemsProvider(widget.parent, BaseItemDtoType.artist, widget.library));
 
-    final (
-      tracks,
-      trackCount,
-      genreCuratedItemSelectionTypeTracks,
-      newDisabledTrackFilters
-    ) = tracksAsync.valueOrNull ?? (null, null, null, null);
-    final (
-      albums,
-      albumCount,
-      genreCuratedItemSelectionTypeAlbums,
-      newDisabledAlbumFilters
-    ) = albumsAsync.valueOrNull ?? (null, null, null, null);
-    final (
-      artists,
-      artistCount,
-      genreCuratedItemSelectionTypeArtists,
-      newDisabledArtistFilters
-    ) = artistsAsync.valueOrNull ?? (null, null, null, null);
+    final (tracks, trackCount, genreCuratedItemSelectionTypeTracks, newDisabledTrackFilters) =
+        tracksAsync.valueOrNull ?? (null, null, null, null);
+    final (albums, albumCount, genreCuratedItemSelectionTypeAlbums, newDisabledAlbumFilters) =
+        albumsAsync.valueOrNull ?? (null, null, null, null);
+    final (artists, artistCount, genreCuratedItemSelectionTypeArtists, newDisabledArtistFilters) =
+        artistsAsync.valueOrNull ?? (null, null, null, null);
 
     final isLoading = tracks == null || albums == null || artists == null;
 
@@ -201,8 +181,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
     }
     if (autoSwitchItemCurationTypeEnabled &&
         clickedCuratedItemSelectionTypeArtists != null &&
-        _disabledArtistFilters
-            .contains(clickedCuratedItemSelectionTypeArtists)) {
+        _disabledArtistFilters.contains(clickedCuratedItemSelectionTypeArtists)) {
       sendEmptyItemSelectionTypeMessage(
         context: context,
         typeSelected: clickedCuratedItemSelectionTypeArtists,
@@ -213,14 +192,12 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
 
     final countsTextColor = IconTheme.of(context).color;
     final countsSubtitleColor = IconTheme.of(context).color!.withOpacity(0.6);
-    final countsBorderColor =
-        Theme.of(context).colorScheme.onSurface.withOpacity(0.2);
+    final countsBorderColor = Theme.of(context).colorScheme.onSurface.withOpacity(0.2);
     final countsBackgroundColor = Theme.of(context).colorScheme.surface;
 
     return PaddedCustomScrollview(slivers: <Widget>[
       SliverAppBar(
-        title: Text(
-            widget.parent.name ?? AppLocalizations.of(context)!.unknownName),
+        title: Text(widget.parent.name ?? AppLocalizations.of(context)!.unknownName),
         pinned: true,
         centerTitle: false,
         actions: [
@@ -237,8 +214,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
       ),
       SliverToBoxAdapter(
         child: Padding(
-          padding:
-              const EdgeInsets.only(top: 6, bottom: 8, left: 10, right: 10),
+          padding: const EdgeInsets.only(top: 6, bottom: 8, left: 10, right: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -279,9 +255,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                   padding: const EdgeInsets.only(left: 4),
                   child: buildCountColumn(
                     count: artistCount,
-                    label:
-                        (ref.read(finampSettingsProvider.defaultArtistType) ==
-                                ArtistType.albumArtist)
+                    label: (ref.read(finampSettingsProvider.defaultArtistType) == ArtistType.albumArtist)
                         ? AppLocalizations.of(context)!.albumArtists
                         : AppLocalizations.of(context)!.performingArtists,
                     onTap: () {
@@ -312,9 +286,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                   tracks: tracks,
                   childrenForQueue: tracks,
                   tracksText: (genreCuratedItemSelectionTypeTracks != null)
-                      ? genreCuratedItemSelectionTypeTracks
-                          .toLocalisedSectionTitle(
-                              context, BaseItemDtoType.track)
+                      ? genreCuratedItemSelectionTypeTracks.toLocalisedSectionTitle(context, BaseItemDtoType.track)
                       : loc.tracks,
                   isOnGenreScreen: true,
                   seeAllCallbackFunction: () => openSeeAll(
@@ -340,9 +312,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                 sliver: CollectionsSection(
                   parent: widget.parent,
                   itemsText: (genreCuratedItemSelectionTypeAlbums != null)
-                      ? genreCuratedItemSelectionTypeAlbums
-                          .toLocalisedSectionTitle(
-                              context, BaseItemDtoType.album)
+                      ? genreCuratedItemSelectionTypeAlbums.toLocalisedSectionTitle(context, BaseItemDtoType.album)
                       : loc.albums,
                   items: albums,
                   seeAllCallbackFunction: () => openSeeAll(
@@ -365,9 +335,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                 sliver: CollectionsSection(
                   parent: widget.parent,
                   itemsText: (genreCuratedItemSelectionTypeArtists != null)
-                      ? genreCuratedItemSelectionTypeArtists
-                          .toLocalisedSectionTitle(
-                              context, BaseItemDtoType.artist)
+                      ? genreCuratedItemSelectionTypeArtists.toLocalisedSectionTitle(context, BaseItemDtoType.artist)
                       : loc.artists,
                   items: artists,
                   seeAllCallbackFunction: () => openSeeAll(
@@ -396,9 +364,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SimpleButton(
-                    text: AppLocalizations.of(context)!
-                        .browsePlaylists
-                        .toUpperCase(),
+                    text: AppLocalizations.of(context)!.browsePlaylists.toUpperCase(),
                     textColor: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.w500,
                     icon: Icons.chevron_right,

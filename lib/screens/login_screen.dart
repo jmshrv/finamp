@@ -15,9 +15,8 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Theme(
       data: Theme.of(context).copyWith(
-        bottomSheetTheme: const BottomSheetThemeData(
-            backgroundColor: Colors.transparent,
-            surfaceTintColor: Colors.transparent),
+        bottomSheetTheme:
+            const BottomSheetThemeData(backgroundColor: Colors.transparent, surfaceTintColor: Colors.transparent),
       ),
       child: const Scaffold(
         body: SafeArea(
@@ -43,14 +42,12 @@ class _LoginAuxillaryOptions extends StatelessWidget {
             SimpleButton(
               text: AppLocalizations.of(context)!.viewLogs,
               icon: TablerIcons.file_text,
-              onPressed: () =>
-                  Navigator.of(context).pushNamed(LogsScreen.routeName),
+              onPressed: () => Navigator.of(context).pushNamed(LogsScreen.routeName),
             ),
             SimpleButton(
               text: AppLocalizations.of(context)!.changeLanguage,
               icon: TablerIcons.language,
-              onPressed: () => Navigator.of(context)
-                  .pushNamed(LanguageSelectionScreen.routeName),
+              onPressed: () => Navigator.of(context).pushNamed(LanguageSelectionScreen.routeName),
             ),
           ],
         ),

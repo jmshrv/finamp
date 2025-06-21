@@ -118,9 +118,7 @@ class TrackMenu extends ConsumerStatefulWidget {
   ConsumerState<TrackMenu> createState() => _TrackMenuState();
 }
 
-class _TrackMenuState extends ConsumerState<TrackMenu>
-    with TickerProviderStateMixin {
-
+class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateMixin {
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _queueService = GetIt.instance<QueueService>();
 
@@ -148,13 +146,12 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
 
   bool isBaseItemInQueueItem(BaseItemDto baseItem, FinampQueueItem? queueItem) {
     if (queueItem != null) {
-      final baseItem = BaseItemDto.fromJson(
-          queueItem.item.extras!["itemJson"] as Map<String, dynamic>);
+      final baseItem = BaseItemDto.fromJson(queueItem.item.extras!["itemJson"] as Map<String, dynamic>);
       return baseItem.id == queueItem.id;
     }
     return false;
   }
-  
+
   void setActiveMenu(SubMenu? menu) {
     setState(() {
       previousMenu = activeMenu;
@@ -174,27 +171,22 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
     setActiveMenu(activeMenu == SubMenu.sleepTimer ? null : SubMenu.sleepTimer);
   }
 
-  bool shouldShowSpeedControls(
-      double currentSpeed, MetadataProvider? metadata) {
+  bool shouldShowSpeedControls(double currentSpeed, MetadataProvider? metadata) {
     if (currentSpeed != 1.0 ||
-        FinampSettingsHelper.finampSettings.playbackSpeedVisibility ==
-            PlaybackSpeedVisibility.visible) {
+        FinampSettingsHelper.finampSettings.playbackSpeedVisibility == PlaybackSpeedVisibility.visible) {
       return true;
     }
 
-    if (FinampSettingsHelper.finampSettings.playbackSpeedVisibility ==
-        PlaybackSpeedVisibility.automatic) {
+    if (FinampSettingsHelper.finampSettings.playbackSpeedVisibility == PlaybackSpeedVisibility.automatic) {
       return metadata?.qualifiesForPlaybackSpeedControl ?? false;
     }
 
     return false;
   }
 
-  void scrollToExtent(
-      DraggableScrollableController scrollController, double? percentage) {
+  void scrollToExtent(DraggableScrollableController scrollController, double? percentage) {
     var currentSize = scrollController.size;
-    if ((percentage != null && currentSize < percentage) ||
-        scrollController.size == inputStep) {
+    if ((percentage != null && currentSize < percentage) || scrollController.size == inputStep) {
       if (MediaQuery.of(context).disableAnimations) {
         scrollController.jumpTo(
           percentage ?? oldExtent,
@@ -223,8 +215,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
 
     return Consumer(builder: (context, ref, child) {
       final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
-      return widget.childBuilder(
-          stackHeight, menu(context, menuEntries, metadata.value));
+      return widget.childBuilder(stackHeight, menu(context, menuEntries, metadata.value));
     });
   }
 
@@ -256,8 +247,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
   }
 
   // All track menu slivers, including headers
-  List<Widget> menu(BuildContext context, List<Widget> menuEntries,
-      MetadataProvider? metadata) {
+  List<Widget> menu(BuildContext context, List<Widget> menuEntries, MetadataProvider? metadata) {
     var iconColor = Theme.of(context).colorScheme.primary;
     double menuHeight;
     switch (activeMenu) {
@@ -271,14 +261,10 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
         menuHeight = closedHeight;
     }
     return [
-      if (widget.showPlaybackControls)
-        ...[
+      if (widget.showPlaybackControls) ...[
         StreamBuilder<PlaybackBehaviorInfo>(
-          stream: Rx.combineLatest3(
-              _queueService.getPlaybackOrderStream(),
-              _queueService.getLoopModeStream(),
-              _queueService.getPlaybackSpeedStream(),
-              (a, b, c) => PlaybackBehaviorInfo(a, b, c)),
+          stream: Rx.combineLatest3(_queueService.getPlaybackOrderStream(), _queueService.getLoopModeStream(),
+              _queueService.getPlaybackSpeedStream(), (a, b, c) => PlaybackBehaviorInfo(a, b, c)),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const SliverToBoxAdapter();
@@ -290,10 +276,8 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
               FinampPlaybackOrder.shuffled: TablerIcons.arrows_shuffle,
             };
             final playbackOrderTooltips = {
-              FinampPlaybackOrder.linear:
-                  AppLocalizations.of(context)!.playbackOrderLinearButtonLabel,
-              FinampPlaybackOrder.shuffled: AppLocalizations.of(context)!
-                  .playbackOrderShuffledButtonLabel,
+              FinampPlaybackOrder.linear: AppLocalizations.of(context)!.playbackOrderLinearButtonLabel,
+              FinampPlaybackOrder.shuffled: AppLocalizations.of(context)!.playbackOrderShuffledButtonLabel,
             };
             const loopModeIcons = {
               FinampLoopMode.none: TablerIcons.repeat,
@@ -301,12 +285,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
               FinampLoopMode.all: TablerIcons.repeat,
             };
             final loopModeTooltips = {
-              FinampLoopMode.none:
-                  AppLocalizations.of(context)!.loopModeNoneButtonLabel,
-              FinampLoopMode.one:
-                  AppLocalizations.of(context)!.loopModeOneButtonLabel,
-              FinampLoopMode.all:
-                  AppLocalizations.of(context)!.loopModeAllButtonLabel,
+              FinampLoopMode.none: AppLocalizations.of(context)!.loopModeNoneButtonLabel,
+              FinampLoopMode.one: AppLocalizations.of(context)!.loopModeOneButtonLabel,
+              FinampLoopMode.all: AppLocalizations.of(context)!.loopModeAllButtonLabel,
             };
 
             var playbackActionsArray = [
@@ -316,11 +297,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
                   _queueService.togglePlaybackOrder();
                 },
                 label: playbackOrderTooltips[playbackBehavior.order]!,
-                iconColor:
-                    playbackBehavior.order == FinampPlaybackOrder.shuffled
-                        ? iconColor
-                        : Theme.of(context).textTheme.bodyMedium?.color ??
-                            Colors.white,
+                iconColor: playbackBehavior.order == FinampPlaybackOrder.shuffled
+                    ? iconColor
+                    : Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
               ),
               ValueListenableBuilder<SleepTimer?>(
                 valueListenable: _audioHandler.timer,
@@ -332,9 +311,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
                         toggleSleepTimerMenu();
                       },
                       label: AppLocalizations.of(context)!.sleepTimerTooltip,
-                      iconColor:
-                          Theme.of(context).textTheme.bodyMedium?.color ??
-                              Colors.white,
+                      iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
                     );
                   }
 
@@ -348,8 +325,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
                           if (hasTimeLeft) {
                             await showDialog(
                               context: context,
-                              builder: (context) =>
-                                  const SleepTimerCancelDialog(),
+                              builder: (context) => const SleepTimerCancelDialog(),
                             );
                           } else {
                             toggleSleepTimerMenu();
@@ -358,10 +334,8 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
                         label: hasTimeLeft
                             ? timerValue.asString(context)
                             : AppLocalizations.of(context)!.sleepTimerTooltip,
-                        iconColor: hasTimeLeft
-                            ? iconColor
-                            : Theme.of(context).textTheme.bodyMedium?.color ??
-                                Colors.white,
+                        iconColor:
+                            hasTimeLeft ? iconColor : Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
                       );
                     },
                   );
@@ -374,8 +348,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
                 },
                 label: loopModeTooltips[playbackBehavior.loop]!,
                 iconColor: playbackBehavior.loop == FinampLoopMode.none
-                    ? Theme.of(context).textTheme.bodyMedium?.color ??
-                        Colors.white
+                    ? Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white
                     : iconColor,
               ),
             ];
@@ -385,16 +358,13 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
               onPressed: () {
                 toggleSpeedMenu();
               },
-              label: AppLocalizations.of(context)!
-                  .playbackSpeedButtonLabel(playbackBehavior.speed),
+              label: AppLocalizations.of(context)!.playbackSpeedButtonLabel(playbackBehavior.speed),
               iconColor: playbackBehavior.speed == 1.0
-                  ? Theme.of(context).textTheme.bodyMedium?.color ??
-                      Colors.white
+                  ? Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white
                   : iconColor,
             );
 
-            if (speedWidgetWasVisible ||
-                shouldShowSpeedControls(playbackBehavior.speed, metadata)) {
+            if (speedWidgetWasVisible || shouldShowSpeedControls(playbackBehavior.speed, metadata)) {
               speedWidgetWasVisible = true;
               playbackActionsArray.insertAll(2, [speedWidget]);
             }
@@ -439,19 +409,16 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
                         return child;
                       }
                       // Determine if this is the incoming or outgoing child
-                      final isSpeedMenu = (child.key is ValueKey &&
-                          (child.key as ValueKey).value == 'speed');
-                      final isSleepMenu = (child.key is ValueKey &&
-                          (child.key as ValueKey).value == 'sleep');
+                      final isSpeedMenu = (child.key is ValueKey && (child.key as ValueKey).value == 'speed');
+                      final isSleepMenu = (child.key is ValueKey && (child.key as ValueKey).value == 'sleep');
                       // Slide in from right for speed, left for sleep
-                      final Offset beginOffset =
-                          previousMenu == null || activeMenu == null
-                              ? Offset(0, 0)
-                              : (isSpeedMenu
-                                  ? const Offset(1, 0)
-                                  : isSleepMenu
-                                      ? const Offset(-1, 0)
-                                      : Offset.zero);
+                      final Offset beginOffset = previousMenu == null || activeMenu == null
+                          ? Offset(0, 0)
+                          : (isSpeedMenu
+                              ? const Offset(1, 0)
+                              : isSleepMenu
+                                  ? const Offset(-1, 0)
+                                  : Offset.zero);
 
                       final Offset endOffset = Offset.zero;
                       return FadeTransition(
@@ -495,12 +462,8 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
             padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
             child: Divider(
               color: Theme.of(context).brightness == Brightness.light
-                  ? Color.alphaBlend(
-                      Theme.of(context).primaryColor.withOpacity(0.6),
-                      Colors.black26)
-                  : Color.alphaBlend(
-                      Theme.of(context).primaryColor.withOpacity(0.8),
-                      Colors.white),
+                  ? Color.alphaBlend(Theme.of(context).primaryColor.withOpacity(0.6), Colors.black26)
+                  : Color.alphaBlend(Theme.of(context).primaryColor.withOpacity(0.8), Colors.white),
               indent: 24.0,
               endIndent: 24.0,
               height: 2.0,
@@ -522,8 +485,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu>
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               PlayPlaybackAction(baseItem: widget.item),
-              if (_queueService.getQueue().nextUp.isNotEmpty)
-                PlayNextPlaybackAction(baseItem: widget.item),
+              if (_queueService.getQueue().nextUp.isNotEmpty) PlayNextPlaybackAction(baseItem: widget.item),
               AddToNextUpPlaybackAction(baseItem: widget.item),
               AddToQueuePlaybackAction(baseItem: widget.item),
             ],

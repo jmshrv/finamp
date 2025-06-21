@@ -23,10 +23,7 @@ class DownloadedItemsTitle extends StatelessWidget {
         padding: const EdgeInsets.only(left: 16, top: 12, right: 16, bottom: 4),
         child: Text(
           title,
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.copyWith(fontWeight: FontWeight.w500),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
     );
@@ -39,8 +36,7 @@ class DownloadedItemsList extends ConsumerStatefulWidget {
   final DownloadsScreenCategory type;
 
   @override
-  ConsumerState<DownloadedItemsList> createState() =>
-      _DownloadedItemTypeListState();
+  ConsumerState<DownloadedItemsList> createState() => _DownloadedItemTypeListState();
 }
 
 class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
@@ -48,9 +44,7 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
 
   @override
   Widget build(BuildContext context) {
-    return ref
-        .watch(_downloadsService.userDownloadedItemsProvider(widget.type))
-        .when(
+    return ref.watch(_downloadsService.userDownloadedItemsProvider(widget.type)).when(
           data: (items) => items.isNotEmpty
               ? SliverList(
                   delegate: SliverChildBuilderDelegate(
@@ -58,18 +52,16 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
                       DownloadStub stub = items.elementAt(index);
                       return ExpansionTile(
                         key: PageStorageKey(stub.id),
-                        leading:
-                            (stub.type == DownloadItemType.finampCollection)
-                                ? AlbumImage(item: stub.finampCollection?.item)
-                                : AlbumImage(item: stub.baseItem),
+                        leading: (stub.type == DownloadItemType.finampCollection)
+                            ? AlbumImage(item: stub.finampCollection?.item)
+                            : AlbumImage(item: stub.baseItem),
                         title: Text(stub.baseItem?.name ?? stub.name),
                         subtitle: buildDownloadedItemSubtitle(context, stub),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             if ((!(stub.baseItemType == BaseItemDtoType.album ||
-                                    stub.baseItemType ==
-                                        BaseItemDtoType.track)) &&
+                                    stub.baseItemType == BaseItemDtoType.track)) &&
                                 !ref.watch(finampSettingsProvider.isOffline))
                               IconButton(
                                 icon: const Icon(Icons.sync),
@@ -79,9 +71,7 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
                               ),
                             IconButton(
                               icon: const Icon(Icons.delete),
-                              onPressed: () =>
-                                  askBeforeDeleteDownloadFromDevice(
-                                      context, stub),
+                              onPressed: () => askBeforeDeleteDownloadFromDevice(context, stub),
                             ),
                           ],
                         ),
@@ -89,8 +79,7 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
                         shape: LinearBorder(),
                         collapsedShape: LinearBorder(),
                         children: [
-                          if (stub.type == DownloadItemType.finampCollection ||
-                              stub.baseItemType.hasChildren)
+                          if (stub.type == DownloadItemType.finampCollection || stub.baseItemType.hasChildren)
                             DownloadedChildrenList(parent: stub)
                         ],
                       );
@@ -101,8 +90,7 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
               : SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child:
-                        Text(AppLocalizations.of(context)!.noItemsDownloaded),
+                    child: Text(AppLocalizations.of(context)!.noItemsDownloaded),
                   ),
                 ),
           loading: () => const SliverToBoxAdapter(
@@ -129,12 +117,10 @@ class DownloadedChildrenList extends ConsumerStatefulWidget {
   final DownloadStub parent;
 
   @override
-  ConsumerState<DownloadedChildrenList> createState() =>
-      _DownloadedChildrenListState();
+  ConsumerState<DownloadedChildrenList> createState() => _DownloadedChildrenListState();
 }
 
-class _DownloadedChildrenListState
-    extends ConsumerState<DownloadedChildrenList> {
+class _DownloadedChildrenListState extends ConsumerState<DownloadedChildrenList> {
   final _downloadsService = GetIt.instance<DownloadsService>();
 
   @override
@@ -143,13 +129,10 @@ class _DownloadedChildrenListState
 
     // If we're displaying an artist, we have to filter out tracks that are
     // children of albums we already have in the list
-    if ((widget.parent.type == DownloadItemType.collection &&
-            widget.parent.baseItemType == BaseItemDtoType.artist) ||
+    if ((widget.parent.type == DownloadItemType.collection && widget.parent.baseItemType == BaseItemDtoType.artist) ||
         (widget.parent.type == DownloadItemType.finampCollection &&
-            widget.parent.finampCollection!.type ==
-                FinampCollectionType.collectionWithLibraryFilter &&
-            BaseItemDtoType.fromItem(widget.parent.finampCollection!.item!) ==
-                BaseItemDtoType.artist)) {
+            widget.parent.finampCollection!.type == FinampCollectionType.collectionWithLibraryFilter &&
+            BaseItemDtoType.fromItem(widget.parent.finampCollection!.item!) == BaseItemDtoType.artist)) {
       // Collect album names
       final albumIds = <BaseItemId>{};
       for (var stub in items) {
@@ -178,12 +161,10 @@ class _DownloadedChildrenListState
             title: Text(stub.baseItem?.name ?? stub.name),
             leading: AlbumImage(item: stub.baseItem),
             subtitle: ItemFileSize(stub: stub),
-            trailing: ref
-                    .watch(_downloadsService.statusProvider((stub, null)))
-                    .isRequired
+            trailing: ref.watch(_downloadsService.statusProvider((stub, null))).isRequired
                 ? IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () => askBeforeDeleteDownloadFromDevice(context, stub),
+                    icon: const Icon(Icons.delete),
+                    onPressed: () => askBeforeDeleteDownloadFromDevice(context, stub),
                   )
                 : null,
           )
@@ -194,18 +175,15 @@ class _DownloadedChildrenListState
 
 Column buildDownloadedItemSubtitle(BuildContext context, DownloadStub stub) {
   String? libraryName;
-  final isLegacyAllLibrariesDownload = stub.type ==
-          DownloadItemType.collection &&
+  final isLegacyAllLibrariesDownload = stub.type == DownloadItemType.collection &&
       (BaseItemDtoType.fromItem(stub.baseItem!) == BaseItemDtoType.artist ||
           BaseItemDtoType.fromItem(stub.baseItem!) == BaseItemDtoType.genre);
 
   final isCollectionWithLibraryFilter = !isLegacyAllLibrariesDownload &&
       (stub.type == DownloadItemType.finampCollection &&
-          stub.finampCollection?.type ==
-              FinampCollectionType.collectionWithLibraryFilter);
+          stub.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter);
 
-  final showLibraryName =
-      isLegacyAllLibrariesDownload || isCollectionWithLibraryFilter;
+  final showLibraryName = isLegacyAllLibrariesDownload || isCollectionWithLibraryFilter;
 
   if (showLibraryName && isLegacyAllLibrariesDownload) {
     libraryName = AppLocalizations.of(context)!.allLibraries;
@@ -218,9 +196,7 @@ Column buildDownloadedItemSubtitle(BuildContext context, DownloadStub stub) {
       Text(
         libraryName,
         style: TextStyle(
-          color: isLegacyAllLibrariesDownload
-              ? Colors.orange
-              : Theme.of(context).textTheme.bodyMedium?.color,
+          color: isLegacyAllLibrariesDownload ? Colors.orange : Theme.of(context).textTheme.bodyMedium?.color,
         ),
       ),
     ItemFileSize(stub: stub),

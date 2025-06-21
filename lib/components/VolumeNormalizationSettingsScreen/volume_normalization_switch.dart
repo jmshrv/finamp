@@ -11,8 +11,7 @@ class VolumeNormalizationSwitch extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.volumeNormalizationSwitchTitle),
-      subtitle:
-          Text(AppLocalizations.of(context)!.volumeNormalizationSwitchSubtitle),
+      subtitle: Text(AppLocalizations.of(context)!.volumeNormalizationSwitchSubtitle),
       value: ref.watch(finampSettingsProvider.volumeNormalizationActive),
       onChanged: FinampSetters.setVolumeNormalizationActive,
     );

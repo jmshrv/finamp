@@ -43,8 +43,7 @@ mixin RunTimeTickDuration {
   /// Returns a duration of the item's runtime. We define a getter for this
   /// since Jellyfin returns microseconds * 10 for some reason, and manually
   /// making durations for everything was clunky.
-  Duration? runTimeTicksDuration() =>
-      runTimeTicks == null ? null : Duration(microseconds: runTimeTicks! ~/ 10);
+  Duration? runTimeTicksDuration() => runTimeTicks == null ? null : Duration(microseconds: runTimeTicks! ~/ 10);
 
   abstract int? runTimeTicks;
 }
@@ -132,8 +131,7 @@ class UserDto {
   @HiveField(13)
   double? primaryImageAspectRatio;
 
-  factory UserDto.fromJson(Map<String, dynamic> json) =>
-      _$UserDtoFromJson(json);
+  factory UserDto.fromJson(Map<String, dynamic> json) => _$UserDtoFromJson(json);
   Map<String, dynamic> toJson() => _$UserDtoToJson(this);
 }
 
@@ -212,8 +210,7 @@ class UserConfiguration {
   @HiveField(14)
   bool enableNextEpisodeAutoPlay;
 
-  factory UserConfiguration.fromJson(Map<String, dynamic> json) =>
-      _$UserConfigurationFromJson(json);
+  factory UserConfiguration.fromJson(Map<String, dynamic> json) => _$UserConfigurationFromJson(json);
   Map<String, dynamic> toJson() => _$UserConfigurationToJson(this);
 }
 
@@ -394,8 +391,7 @@ class UserPolicy {
   @HiveField(38)
   String syncPlayAccess;
 
-  factory UserPolicy.fromJson(Map<String, dynamic> json) =>
-      _$UserPolicyFromJson(json);
+  factory UserPolicy.fromJson(Map<String, dynamic> json) => _$UserPolicyFromJson(json);
   Map<String, dynamic> toJson() => _$UserPolicyToJson(this);
 }
 
@@ -437,8 +433,7 @@ class AccessSchedule {
   @HiveField(4)
   String userId;
 
-  factory AccessSchedule.fromJson(Map<String, dynamic> json) =>
-      _$AccessScheduleFromJson(json);
+  factory AccessSchedule.fromJson(Map<String, dynamic> json) => _$AccessScheduleFromJson(json);
   Map<String, dynamic> toJson() => _$AccessScheduleToJson(this);
 }
 
@@ -468,8 +463,7 @@ class AuthenticationResult {
   @HiveField(3)
   String? serverId;
 
-  factory AuthenticationResult.fromJson(Map<String, dynamic> json) =>
-      _$AuthenticationResultFromJson(json);
+  factory AuthenticationResult.fromJson(Map<String, dynamic> json) => _$AuthenticationResultFromJson(json);
   Map<String, dynamic> toJson() => _$AuthenticationResultToJson(this);
 }
 
@@ -620,8 +614,7 @@ class SessionInfo {
   @HiveField(27)
   bool hasCustomDeviceName;
 
-  factory SessionInfo.fromJson(Map<String, dynamic> json) =>
-      _$SessionInfoFromJson(json);
+  factory SessionInfo.fromJson(Map<String, dynamic> json) => _$SessionInfoFromJson(json);
   Map<String, dynamic> toJson() => _$SessionInfoToJson(this);
 }
 
@@ -681,8 +674,7 @@ class TranscodingInfo {
   /// "AudioBitDepthNotSupported" "SubtitleCodecNotSupported" "DirectPlayError"
   List<String>? transcodeReasons;
 
-  factory TranscodingInfo.fromJson(Map<String, dynamic> json) =>
-      _$TranscodingInfoFromJson(json);
+  factory TranscodingInfo.fromJson(Map<String, dynamic> json) => _$TranscodingInfoFromJson(json);
   Map<String, dynamic> toJson() => _$TranscodingInfoToJson(this);
 }
 
@@ -747,8 +739,7 @@ class PlayerStateInfo {
   @HiveField(9)
   String? repeatMode;
 
-  factory PlayerStateInfo.fromJson(Map<String, dynamic> json) =>
-      _$PlayerStateInfoFromJson(json);
+  factory PlayerStateInfo.fromJson(Map<String, dynamic> json) => _$PlayerStateInfoFromJson(json);
   Map<String, dynamic> toJson() => _$PlayerStateInfoToJson(this);
 }
 
@@ -772,8 +763,7 @@ class SessionUserInfo {
   @HiveField(1)
   String? userName;
 
-  factory SessionUserInfo.fromJson(Map<String, dynamic> json) =>
-      _$SessionUserInfoFromJson(json);
+  factory SessionUserInfo.fromJson(Map<String, dynamic> json) => _$SessionUserInfoFromJson(json);
   Map<String, dynamic> toJson() => _$SessionUserInfoToJson(this);
 }
 
@@ -818,8 +808,7 @@ class ClientCapabilities {
   @HiveField(9)
   String? appStoreUrl;
 
-  factory ClientCapabilities.fromJson(Map<String, dynamic> json) =>
-      _$ClientCapabilitiesFromJson(json);
+  factory ClientCapabilities.fromJson(Map<String, dynamic> json) => _$ClientCapabilitiesFromJson(json);
   Map<String, dynamic> toJson() => _$ClientCapabilitiesToJson(this);
 }
 
@@ -1029,8 +1018,7 @@ class DeviceProfile {
   @HiveField(38)
   List<SubtitleProfile>? subtitleProfiles;
 
-  factory DeviceProfile.fromJson(Map<String, dynamic> json) =>
-      _$DeviceProfileFromJson(json);
+  factory DeviceProfile.fromJson(Map<String, dynamic> json) => _$DeviceProfileFromJson(json);
   Map<String, dynamic> toJson() => _$DeviceProfileToJson(this);
 }
 
@@ -1089,8 +1077,7 @@ class DeviceIdentification {
   @HiveField(8)
   List<HttpHeaderInfo>? headers;
 
-  factory DeviceIdentification.fromJson(Map<String, dynamic> json) =>
-      _$DeviceIdentificationFromJson(json);
+  factory DeviceIdentification.fromJson(Map<String, dynamic> json) => _$DeviceIdentificationFromJson(json);
   Map<String, dynamic> toJson() => _$DeviceIdentificationToJson(this);
 }
 
@@ -1117,8 +1104,7 @@ class HttpHeaderInfo {
   @HiveField(2)
   String match;
 
-  factory HttpHeaderInfo.fromJson(Map<String, dynamic> json) =>
-      _$HttpHeaderInfoFromJson(json);
+  factory HttpHeaderInfo.fromJson(Map<String, dynamic> json) => _$HttpHeaderInfoFromJson(json);
   Map<String, dynamic> toJson() => _$HttpHeaderInfoToJson(this);
 }
 
@@ -1140,8 +1126,7 @@ class XmlAttribute {
   @HiveField(1)
   String? value;
 
-  factory XmlAttribute.fromJson(Map<String, dynamic> json) =>
-      _$XmlAttributeFromJson(json);
+  factory XmlAttribute.fromJson(Map<String, dynamic> json) => _$XmlAttributeFromJson(json);
   Map<String, dynamic> toJson() => _$XmlAttributeToJson(this);
 }
 
@@ -1172,8 +1157,7 @@ class DirectPlayProfile {
   @HiveField(3)
   String type;
 
-  factory DirectPlayProfile.fromJson(Map<String, dynamic> json) =>
-      _$DirectPlayProfileFromJson(json);
+  factory DirectPlayProfile.fromJson(Map<String, dynamic> json) => _$DirectPlayProfileFromJson(json);
   Map<String, dynamic> toJson() => _$DirectPlayProfileToJson(this);
 }
 
@@ -1252,8 +1236,7 @@ class TranscodingProfile {
   @HiveField(14)
   bool enableSubtitlesInManifest;
 
-  factory TranscodingProfile.fromJson(Map<String, dynamic> json) =>
-      _$TranscodingProfileFromJson(json);
+  factory TranscodingProfile.fromJson(Map<String, dynamic> json) => _$TranscodingProfileFromJson(json);
   Map<String, dynamic> toJson() => _$TranscodingProfileToJson(this);
 }
 
@@ -1280,8 +1263,7 @@ class ContainerProfile {
   @HiveField(2)
   String? container;
 
-  factory ContainerProfile.fromJson(Map<String, dynamic> json) =>
-      _$ContainerProfileFromJson(json);
+  factory ContainerProfile.fromJson(Map<String, dynamic> json) => _$ContainerProfileFromJson(json);
   Map<String, dynamic> toJson() => _$ContainerProfileToJson(this);
 }
 
@@ -1318,8 +1300,7 @@ class ProfileCondition {
   @HiveField(3)
   bool isRequired;
 
-  factory ProfileCondition.fromJson(Map<String, dynamic> json) =>
-      _$ProfileConditionFromJson(json);
+  factory ProfileCondition.fromJson(Map<String, dynamic> json) => _$ProfileConditionFromJson(json);
   Map<String, dynamic> toJson() => _$ProfileConditionToJson(this);
 }
 
@@ -1354,8 +1335,7 @@ class CodecProfile {
   @HiveField(4)
   String? container;
 
-  factory CodecProfile.fromJson(Map<String, dynamic> json) =>
-      _$CodecProfileFromJson(json);
+  factory CodecProfile.fromJson(Map<String, dynamic> json) => _$CodecProfileFromJson(json);
   Map<String, dynamic> toJson() => _$CodecProfileToJson(this);
 }
 
@@ -1398,8 +1378,7 @@ class ResponseProfile {
   @HiveField(6)
   List<ProfileCondition>? conditions;
 
-  factory ResponseProfile.fromJson(Map<String, dynamic> json) =>
-      _$ResponseProfileFromJson(json);
+  factory ResponseProfile.fromJson(Map<String, dynamic> json) => _$ResponseProfileFromJson(json);
   Map<String, dynamic> toJson() => _$ResponseProfileToJson(this);
 }
 
@@ -1434,8 +1413,7 @@ class SubtitleProfile {
   @HiveField(4)
   String? container;
 
-  factory SubtitleProfile.fromJson(Map<String, dynamic> json) =>
-      _$SubtitleProfileFromJson(json);
+  factory SubtitleProfile.fromJson(Map<String, dynamic> json) => _$SubtitleProfileFromJson(json);
   Map<String, dynamic> toJson() => _$SubtitleProfileToJson(this);
 }
 
@@ -2209,8 +2187,7 @@ class BaseItemDto with RunTimeTickDuration {
   bool get hasOwnImage => imageTags?.containsKey("Primary") ?? false;
 
   /// String form of [productionYear], with substitution if null
-  String get productionYearString =>
-      productionYear?.toString() ?? "Unknown Year";
+  String get productionYearString => productionYear?.toString() ?? "Unknown Year";
 
   /// Gets the image id of a given item. If the item has its own image, it will
   /// return the item id. Otherwise, if the item's parent has an image ID, it
@@ -2272,8 +2249,7 @@ class BaseItemDto with RunTimeTickDuration {
     return name!.toLowerCase();
   }
 
-  factory BaseItemDto.fromJson(Map<String, dynamic> json) =>
-      _$BaseItemDtoFromJson(json);
+  factory BaseItemDto.fromJson(Map<String, dynamic> json) => _$BaseItemDtoFromJson(json);
   Map<String, dynamic> toJson({bool setOffline = true}) {
     var json = _$BaseItemDtoToJson(this);
     if (setOffline) {
@@ -2299,8 +2275,7 @@ class BaseItemDto with RunTimeTickDuration {
         other.playlistItemId == playlistItemId;
   }
 
-  DownloadItemType get downloadType =>
-      BaseItemDtoType.fromItem(this).downloadType!;
+  DownloadItemType get downloadType => BaseItemDtoType.fromItem(this).downloadType!;
 
   // BaseItemDtos with the same id should be considered equal so that Providers
   // taking the BaseItemDto as an argument will be shared across all instances
@@ -2331,8 +2306,7 @@ class ExternalUrl {
   @HiveField(1)
   String? url;
 
-  factory ExternalUrl.fromJson(Map<String, dynamic> json) =>
-      _$ExternalUrlFromJson(json);
+  factory ExternalUrl.fromJson(Map<String, dynamic> json) => _$ExternalUrlFromJson(json);
   Map<String, dynamic> toJson() => _$ExternalUrlToJson(this);
 }
 
@@ -2538,18 +2512,14 @@ class MediaSourceInfo with RunTimeTickDuration {
   /// an issue as they are not counted in the size. Attachments are also not
   /// counted, as [mediaStreams] doesn't seem to note their size.
   int transcodedSize(int Function(int channels) bitrateChannels) {
-    final channels = mediaStreams
-            .firstWhere((element) => element.type == "Audio")
-            .channels ??
-        2;
+    final channels = mediaStreams.firstWhere((element) => element.type == "Audio").channels ?? 2;
     final bitrate = bitrateChannels(channels);
 
     // Divide by 8 to get bytes/sec
     return (runTimeTicksDuration()?.inSeconds ?? 0) * bitrate ~/ 8;
   }
 
-  factory MediaSourceInfo.fromJson(Map<String, dynamic> json) =>
-      _$MediaSourceInfoFromJson(json);
+  factory MediaSourceInfo.fromJson(Map<String, dynamic> json) => _$MediaSourceInfoFromJson(json);
   Map<String, dynamic> toJson() => _$MediaSourceInfoToJson(this);
 }
 
@@ -2792,8 +2762,7 @@ class MediaStream {
   @HiveField(46)
   String? localizedForced;
 
-  factory MediaStream.fromJson(Map<String, dynamic> json) =>
-      _$MediaStreamFromJson(json);
+  factory MediaStream.fromJson(Map<String, dynamic> json) => _$MediaStreamFromJson(json);
   Map<String, dynamic> toJson() => _$MediaStreamToJson(this);
 }
 
@@ -2810,8 +2779,7 @@ class MediaUrl {
 
   String? name;
 
-  factory MediaUrl.fromJson(Map<String, dynamic> json) =>
-      _$MediaUrlFromJson(json);
+  factory MediaUrl.fromJson(Map<String, dynamic> json) => _$MediaUrlFromJson(json);
   Map<String, dynamic> toJson() => _$MediaUrlToJson(this);
 }
 
@@ -2849,8 +2817,7 @@ class BaseItemPerson {
   /// Gets or sets the primary image blurhash.
   ImageBlurHashes? imageBlurHashes;
 
-  factory BaseItemPerson.fromJson(Map<String, dynamic> json) =>
-      _$BaseItemPersonFromJson(json);
+  factory BaseItemPerson.fromJson(Map<String, dynamic> json) => _$BaseItemPersonFromJson(json);
   Map<String, dynamic> toJson() => _$BaseItemPersonToJson(this);
 }
 
@@ -2873,8 +2840,7 @@ class NameLongIdPair {
   @HiveField(1)
   BaseItemId id;
 
-  factory NameLongIdPair.fromJson(Map<String, dynamic> json) =>
-      _$NameLongIdPairFromJson(json);
+  factory NameLongIdPair.fromJson(Map<String, dynamic> json) => _$NameLongIdPairFromJson(json);
   Map<String, dynamic> toJson() => _$NameLongIdPairToJson(this);
 }
 
@@ -2946,16 +2912,12 @@ class UserItemDataDto {
   @HiveField(10)
   String? itemId;
 
-  factory UserItemDataDto.fromJson(Map<String, dynamic> json) =>
-      _$UserItemDataDtoFromJson(json);
+  factory UserItemDataDto.fromJson(Map<String, dynamic> json) => _$UserItemDataDtoFromJson(json);
   Map<String, dynamic> toJson() => _$UserItemDataDtoToJson(this);
 }
 
 @JsonSerializable(
-    fieldRename: FieldRename.pascal,
-    explicitToJson: true,
-    anyMap: true,
-    converters: [BaseItemIdConverter()])
+    fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true, converters: [BaseItemIdConverter()])
 @HiveType(typeId: 2)
 class NameIdPair {
   NameIdPair({
@@ -2969,8 +2931,7 @@ class NameIdPair {
   @HiveField(1)
   BaseItemId id;
 
-  factory NameIdPair.fromJson(Map<String, dynamic> json) =>
-      _$NameIdPairFromJson(json);
+  factory NameIdPair.fromJson(Map<String, dynamic> json) => _$NameIdPairFromJson(json);
   Map<String, dynamic> toJson() => _$NameIdPairToJson(this);
 }
 
@@ -3003,8 +2964,7 @@ class ChapterInfo {
 
   String imageDateModified;
 
-  factory ChapterInfo.fromJson(Map<String, dynamic> json) =>
-      _$ChapterInfoFromJson(json);
+  factory ChapterInfo.fromJson(Map<String, dynamic> json) => _$ChapterInfoFromJson(json);
   Map<String, dynamic> toJson() => _$ChapterInfoToJson(this);
 }
 
@@ -3030,8 +2990,7 @@ class QueryResult_BaseItemDto {
   /// The index of the first record in Items.
   int startIndex;
 
-  factory QueryResult_BaseItemDto.fromJson(Map<String, dynamic> json) =>
-      _$QueryResult_BaseItemDtoFromJson(json);
+  factory QueryResult_BaseItemDto.fromJson(Map<String, dynamic> json) => _$QueryResult_BaseItemDtoFromJson(json);
   Map<String, dynamic> toJson() => _$QueryResult_BaseItemDtoToJson(this);
 }
 
@@ -3057,8 +3016,7 @@ class PlaybackInfoResponse {
   /// Gets or sets the error code.
   String? errorCode;
 
-  factory PlaybackInfoResponse.fromJson(Map<String, dynamic> json) =>
-      _$PlaybackInfoResponseFromJson(json);
+  factory PlaybackInfoResponse.fromJson(Map<String, dynamic> json) => _$PlaybackInfoResponseFromJson(json);
   Map<String, dynamic> toJson() => _$PlaybackInfoResponseToJson(this);
 }
 
@@ -3154,8 +3112,7 @@ class PlaybackProgressInfo {
 
   String? playlistItemId;
 
-  factory PlaybackProgressInfo.fromJson(Map<String, dynamic> json) =>
-      _$PlaybackProgressInfoFromJson(json);
+  factory PlaybackProgressInfo.fromJson(Map<String, dynamic> json) => _$PlaybackProgressInfoFromJson(json);
   Map<String, dynamic> toJson() => _$PlaybackProgressInfoToJson(this);
 }
 
@@ -3222,8 +3179,7 @@ class ImageBlurHashes {
   @HiveField(12)
   Map<String, String>? profile;
 
-  factory ImageBlurHashes.fromJson(Map<String, dynamic> json) =>
-      _$ImageBlurHashesFromJson(json);
+  factory ImageBlurHashes.fromJson(Map<String, dynamic> json) => _$ImageBlurHashesFromJson(json);
   Map<String, dynamic> toJson() => _$ImageBlurHashesToJson(this);
 }
 
@@ -3272,8 +3228,7 @@ class MediaAttachment {
   @HiveField(6)
   String? deliveryUrl;
 
-  factory MediaAttachment.fromJson(Map<String, dynamic> json) =>
-      _$MediaAttachmentFromJson(json);
+  factory MediaAttachment.fromJson(Map<String, dynamic> json) => _$MediaAttachmentFromJson(json);
   Map<String, dynamic> toJson() => _$MediaAttachmentToJson(this);
 }
 
@@ -3332,8 +3287,7 @@ class BaseItem {
   @HiveField(10)
   bool supportsExternalTransfer;
 
-  factory BaseItem.fromJson(Map<String, dynamic> json) =>
-      _$BaseItemFromJson(json);
+  factory BaseItem.fromJson(Map<String, dynamic> json) => _$BaseItemFromJson(json);
   Map<String, dynamic> toJson() => _$BaseItemToJson(this);
 }
 
@@ -3355,8 +3309,7 @@ class QueueItem {
   @HiveField(1)
   String? playlistItemId;
 
-  factory QueueItem.fromJson(Map<String, dynamic> json) =>
-      _$QueueItemFromJson(json);
+  factory QueueItem.fromJson(Map<String, dynamic> json) => _$QueueItemFromJson(json);
   Map<String, dynamic> toJson() => _$QueueItemToJson(this);
 }
 
@@ -3380,7 +3333,7 @@ class NewPlaylist {
   String? name;
 
   /// Gets or sets item ids to add to the playlist.
-  List<BaseItemId>?ids;
+  List<BaseItemId>? ids;
 
   /// Gets or sets the user id. Required when creating playlists, but not adding
   /// to them.
@@ -3392,8 +3345,7 @@ class NewPlaylist {
   /// Whether the playlist should be publicly visible
   bool? isPublic;
 
-  factory NewPlaylist.fromJson(Map<String, dynamic> json) =>
-      _$NewPlaylistFromJson(json);
+  factory NewPlaylist.fromJson(Map<String, dynamic> json) => _$NewPlaylistFromJson(json);
   Map<String, dynamic> toJson() => _$NewPlaylistToJson(this);
 }
 
@@ -3409,8 +3361,7 @@ class NewPlaylistResponse {
 
   BaseItemId? id;
 
-  factory NewPlaylistResponse.fromJson(Map<String, dynamic> json) =>
-      _$NewPlaylistResponseFromJson(json);
+  factory NewPlaylistResponse.fromJson(Map<String, dynamic> json) => _$NewPlaylistResponseFromJson(json);
   Map<String, dynamic> toJson() => _$NewPlaylistResponseToJson(this);
 }
 
@@ -3465,10 +3416,7 @@ enum SortBy {
   @HiveField(15)
   defaultOrder;
 
-  static List<SortBy> defaultsFor({
-    required TabContentType type, 
-    bool includeDefaultOrder = false
-  }) {
+  static List<SortBy> defaultsFor({required TabContentType type, bool includeDefaultOrder = false}) {
     List<SortBy> options;
 
     switch (type) {
@@ -3528,8 +3476,7 @@ enum SortBy {
   @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
 
-  String toLocalisedString(BuildContext context) =>
-      _humanReadableLocalisedName(this, context);
+  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
 
   /// Name used by Jellyfin in API requests.
   String jellyfinName(TabContentType? contentType) {
@@ -3827,8 +3774,7 @@ class PublicSystemInfoResult {
   @HiveField(6)
   bool? startupWizardCompleted;
 
-  factory PublicSystemInfoResult.fromJson(Map<String, dynamic> json) =>
-      _$PublicSystemInfoResultFromJson(json);
+  factory PublicSystemInfoResult.fromJson(Map<String, dynamic> json) => _$PublicSystemInfoResultFromJson(json);
   Map<String, dynamic> toJson() => _$PublicSystemInfoResultToJson(this);
 }
 
@@ -3882,8 +3828,7 @@ class QuickConnectState {
   @HiveField(7)
   String? dateAdded;
 
-  factory QuickConnectState.fromJson(Map<String, dynamic> json) =>
-      _$QuickConnectStateFromJson(json);
+  factory QuickConnectState.fromJson(Map<String, dynamic> json) => _$QuickConnectStateFromJson(json);
   Map<String, dynamic> toJson() => _$QuickConnectStateToJson(this);
 }
 
@@ -3908,8 +3853,7 @@ class ClientDiscoveryResponse {
 
   String? endpointAddress;
 
-  factory ClientDiscoveryResponse.fromJson(Map<String, dynamic> json) =>
-      _$ClientDiscoveryResponseFromJson(json);
+  factory ClientDiscoveryResponse.fromJson(Map<String, dynamic> json) => _$ClientDiscoveryResponseFromJson(json);
 }
 
 /// LyricMetadata model.
@@ -3973,8 +3917,7 @@ class LyricMetadata {
   @HiveField(9)
   bool? isSynced;
 
-  factory LyricMetadata.fromJson(Map<String, dynamic> json) =>
-      _$LyricMetadataFromJson(json);
+  factory LyricMetadata.fromJson(Map<String, dynamic> json) => _$LyricMetadataFromJson(json);
   Map<String, dynamic> toJson() => _$LyricMetadataToJson(this);
 }
 
@@ -3999,8 +3942,7 @@ class LyricLine {
   @HiveField(1)
   int? start;
 
-  factory LyricLine.fromJson(Map<String, dynamic> json) =>
-      _$LyricLineFromJson(json);
+  factory LyricLine.fromJson(Map<String, dynamic> json) => _$LyricLineFromJson(json);
   Map<String, dynamic> toJson() => _$LyricLineToJson(this);
 }
 
@@ -4025,7 +3967,6 @@ class LyricDto {
   @HiveField(1)
   List<LyricLine>? lyrics;
 
-  factory LyricDto.fromJson(Map<String, dynamic> json) =>
-      _$LyricDtoFromJson(json);
+  factory LyricDto.fromJson(Map<String, dynamic> json) => _$LyricDtoFromJson(json);
   Map<String, dynamic> toJson() => _$LyricDtoToJson(this);
 }

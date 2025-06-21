@@ -166,10 +166,6 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Muuda esitusloendi nime",
-  "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Muuda esitusloendi nime",
-  "@editPlaylistNameTitle": {},
   "required": "Nõutav",
   "@required": {},
   "updateButtonLabel": "UUENDA",

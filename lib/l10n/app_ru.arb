@@ -75,10 +75,6 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Редактировать название плейлиста",
-  "@editPlaylistNameTooltip": {},
-  "editPlaylistNameTitle": "Редактировать название плейлиста",
-  "@editPlaylistNameTitle": {},
   "required": "Необходимо",
   "@required": {},
   "updateButtonLabel": "Обновить",
@@ -2025,26 +2021,6 @@
   "outputMenuOpenConnectionSettingsButtonTitle": "Подключиться к устройству",
   "@outputMenuOpenConnectionSettingsButtonTitle": {
     "description": "Button title for connecting to a device from the output menu"
-  },
-  "preferHomeNetworkActiveAddressInfoText": "Активный Адрес",
-  "@preferHomeNetworkActiveAddressInfoText": {
-    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
-  },
-  "preferHomeNetworkTargetAddressLocalSettingTitle": "Адрес Домашней Сети",
-  "@preferHomeNetworkTargetAddressLocalSettingTitle": {},
-  "preferHomeNetworkTargetAddressLocalSettingDescription": "Целевой адрес сервера Jellyfin в пределах вашей домашней сети",
-  "@preferHomeNetworkTargetAddressLocalSettingDescription": {},
-  "preferHomeNetworkEnableSwitchTitle": "Предпочитать Домашнюю Сеть",
-  "@preferHomeNetworkEnableSwitchTitle": {},
-  "preferHomeNetworkEnableSwitchDescription": "Стоит ли использовать другой адрес, когда вы находитесь дома",
-  "@preferHomeNetworkEnableSwitchDescription": {},
-  "preferHomeNetworkPublicAddressSettingTitle": "Публичный Адрес",
-  "@preferHomeNetworkPublicAddressSettingTitle": {},
-  "preferHomeNetworkPublicAddressSettingDescription": "Основной адрес, используемый для подключения к вашему серверу Jellyfin",
-  "@preferHomeNetworkPublicAddressSettingDescription": {},
-  "preferHomeNetworkInfoBox": "Этой функции требуется доступ в местоположению (оно также должно быть включено), чтобы прочитать имя сети.",
-  "@preferHomeNetworkInfoBox": {
-    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
   },
   "missingSchemaError": "Адрес должен начинаться с http(s)://",
   "@missingSchemaError": {

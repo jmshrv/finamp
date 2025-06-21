@@ -11,8 +11,7 @@ class UseCoverAsBackgroundToggle extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.useCoverAsBackground),
-      subtitle:
-          Text(AppLocalizations.of(context)!.useCoverAsBackgroundSubtitle),
+      subtitle: Text(AppLocalizations.of(context)!.useCoverAsBackgroundSubtitle),
       value: ref.watch(finampSettingsProvider.useCoverAsBackground),
       onChanged: (value) => FinampSetters.setUseCoverAsBackground(value),
     );

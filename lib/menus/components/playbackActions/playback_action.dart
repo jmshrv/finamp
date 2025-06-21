@@ -52,8 +52,7 @@ class PlaybackAction extends ConsumerWidget {
           onPressed();
         },
         visualDensity: VisualDensity.compact,
-        padding: const EdgeInsets.only(
-            top: 10.0, left: 8.0, right: 8.0, bottom: 12.0),
+        padding: const EdgeInsets.only(top: 10.0, left: 8.0, right: 8.0, bottom: 12.0),
       ),
     );
   }

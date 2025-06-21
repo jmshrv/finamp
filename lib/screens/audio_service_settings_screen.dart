@@ -14,12 +14,10 @@ class AudioServiceSettingsScreen extends StatefulWidget {
   const AudioServiceSettingsScreen({super.key});
   static const routeName = "/settings/audioservice";
   @override
-  State<AudioServiceSettingsScreen> createState() =>
-      _AudioServiceSettingsScreenState();
+  State<AudioServiceSettingsScreen> createState() => _AudioServiceSettingsScreenState();
 }
 
-class _AudioServiceSettingsScreenState
-    extends State<AudioServiceSettingsScreen> {
+class _AudioServiceSettingsScreenState extends State<AudioServiceSettingsScreen> {
   // Overwriting this value causes the childrens to update
   // this is a required workaround because some input fields
   // might not update when resetting to defaults
@@ -61,10 +59,8 @@ class BufferDisableSizeConstraintsSelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
-      title:
-          Text(AppLocalizations.of(context)!.bufferDisableSizeConstraintsTitle),
-      subtitle: Text(
-          AppLocalizations.of(context)!.bufferDisableSizeConstraintsSubtitle),
+      title: Text(AppLocalizations.of(context)!.bufferDisableSizeConstraintsTitle),
+      subtitle: Text(AppLocalizations.of(context)!.bufferDisableSizeConstraintsSubtitle),
       value: ref.watch(finampSettingsProvider.bufferDisableSizeConstraints),
       onChanged: FinampSetters.setBufferDisableSizeConstraints,
     );
@@ -79,8 +75,7 @@ class BufferSizeListTile extends StatefulWidget {
 }
 
 class _BufferSizeListTileState extends State<BufferSizeListTile> {
-  final _controller = TextEditingController(
-      text: FinampSettingsHelper.finampSettings.bufferSizeMegabytes.toString());
+  final _controller = TextEditingController(text: FinampSettingsHelper.finampSettings.bufferSizeMegabytes.toString());
 
   @override
   Widget build(BuildContext context) {
@@ -115,24 +110,18 @@ class AudioFadeInDurationListTile extends StatefulWidget {
   const AudioFadeInDurationListTile({super.key});
 
   @override
-  State<AudioFadeInDurationListTile> createState() =>
-      _AudioFadeInDurationListTileState();
+  State<AudioFadeInDurationListTile> createState() => _AudioFadeInDurationListTileState();
 }
 
-class _AudioFadeInDurationListTileState
-    extends State<AudioFadeInDurationListTile> {
-  final _controller = TextEditingController(
-      text: FinampSettingsHelper
-          .finampSettings.audioFadeInDuration.inMilliseconds
-          .toString());
+class _AudioFadeInDurationListTileState extends State<AudioFadeInDurationListTile> {
+  final _controller =
+      TextEditingController(text: FinampSettingsHelper.finampSettings.audioFadeInDuration.inMilliseconds.toString());
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title:
-          Text(AppLocalizations.of(context)!.audioFadeInDurationSettingTitle),
-      subtitle: Text(
-          AppLocalizations.of(context)!.audioFadeInDurationSettingSubtitle),
+      title: Text(AppLocalizations.of(context)!.audioFadeInDurationSettingTitle),
+      subtitle: Text(AppLocalizations.of(context)!.audioFadeInDurationSettingSubtitle),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(
@@ -143,8 +132,7 @@ class _AudioFadeInDurationListTileState
             final valueInt = int.tryParse(value);
 
             if (valueInt != null && !valueInt.isNegative) {
-              FinampSetters.setAudioFadeInDuration(
-                  Duration(milliseconds: valueInt));
+              FinampSetters.setAudioFadeInDuration(Duration(milliseconds: valueInt));
             }
           },
         ),
@@ -157,24 +145,18 @@ class AudioFadeOutDurationListTile extends StatefulWidget {
   const AudioFadeOutDurationListTile({super.key});
 
   @override
-  State<AudioFadeOutDurationListTile> createState() =>
-      _AudioFadeOutDurationListTileState();
+  State<AudioFadeOutDurationListTile> createState() => _AudioFadeOutDurationListTileState();
 }
 
-class _AudioFadeOutDurationListTileState
-    extends State<AudioFadeOutDurationListTile> {
-  final _controller = TextEditingController(
-      text: FinampSettingsHelper
-          .finampSettings.audioFadeOutDuration.inMilliseconds
-          .toString());
+class _AudioFadeOutDurationListTileState extends State<AudioFadeOutDurationListTile> {
+  final _controller =
+      TextEditingController(text: FinampSettingsHelper.finampSettings.audioFadeOutDuration.inMilliseconds.toString());
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title:
-          Text(AppLocalizations.of(context)!.audioFadeOutDurationSettingTitle),
-      subtitle: Text(
-          AppLocalizations.of(context)!.audioFadeOutDurationSettingSubtitle),
+      title: Text(AppLocalizations.of(context)!.audioFadeOutDurationSettingTitle),
+      subtitle: Text(AppLocalizations.of(context)!.audioFadeOutDurationSettingSubtitle),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(
@@ -185,8 +167,7 @@ class _AudioFadeOutDurationListTileState
             final valueInt = int.tryParse(value);
 
             if (valueInt != null && !valueInt.isNegative) {
-              FinampSetters.setAudioFadeOutDuration(
-                  Duration(milliseconds: valueInt));
+              FinampSetters.setAudioFadeOutDuration(Duration(milliseconds: valueInt));
             }
           },
         ),

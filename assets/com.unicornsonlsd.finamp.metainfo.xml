@@ -39,6 +39,34 @@
   </screenshots>
   <launchable type="desktop-id">com.unicornsonlsd.finamp.desktop</launchable>
   <releases>
+    <release version="0.9.18-beta" date="2025-06-14">
+      <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.18-beta</url>
+      <description>
+        <p>
+          New Features
+        </p>
+        <ul>
+          <li>Configure local server address</li>
+          <li>Redesigned genre screen with more features</li>
+          <li>Improved artist screen</li>
+          <li>Improved sleep timer</li>
+          <li>Sort playlist and edit visibility</li>
+          <li>Redesigned menus</li>
+          <li>...</li>
+        </ul>
+        <p>
+          Bug Fixes
+        </p>
+        <ul>
+          <li>Fix volume normalization using the wrong gain when shuffled</li>
+          <li>Tab visibility can now be properly toggled again</li>
+          <li>Fixed visual glitch when opening menus on the artist/genre screen</li>
+        </ul>
+        <p>
+          <em>Thank you for using Finamp!</em>
+        </p>
+      </description>
+    </release>
     <release version="0.9.16-beta" date="2025-04-17">
       <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.16-beta</url>
       <description>

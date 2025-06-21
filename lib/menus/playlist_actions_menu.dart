@@ -68,17 +68,14 @@ Future<void> showPlaylistActionsMenu({
                 initialState: isFavorite,
                 tapFeedback: false,
                 onToggle: (bool currentState) async {
-                  return ref
-                      .read(isFavoriteProvider(item).notifier)
-                      .updateFavorite(!isFavorite);
+                  return ref.read(isFavoriteProvider(item).notifier).updateFavorite(!isFavorite);
                 },
                 enabled: !ref.watch(finampSettingsProvider.isOffline),
               );
             },
           ),
           FutureBuilder(
-              future: playlistsFuture.then((value) =>
-                  value?.firstWhereOrNull((x) => x.id == parentPlaylist?.id)),
+              future: playlistsFuture.then((value) => value?.firstWhereOrNull((x) => x.id == parentPlaylist?.id)),
               initialData: parentPlaylist,
               builder: (context, snapshot) {
                 if (snapshot.data != null) {
@@ -98,13 +95,11 @@ Future<void> showPlaylistActionsMenu({
             header: const PlaylistActionsMenuHeader(),
             sliver: MenuMask(
                 height: PlaylistActionsMenuHeader.defaultHeight,
-                child: SliverList(
-                    delegate: SliverChildListDelegate(menuEntries))),
+                child: SliverList(delegate: SliverChildListDelegate(menuEntries))),
           ),
           SliverStickyHeader(
               header: Padding(
-                padding: const EdgeInsets.only(
-                    top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
+                padding: const EdgeInsets.only(top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
                 child: Text(AppLocalizations.of(context)!.addPlaylistSubheader,
                     style: Theme.of(context).textTheme.titleMedium),
               ),
@@ -112,10 +107,8 @@ Future<void> showPlaylistActionsMenu({
                 height: PlaylistActionsMenuHeader.defaultHeight,
                 child: AddToPlaylistList(
                   itemToAdd: item,
-                  playlistsFuture: playlistsFuture.then((value) => (value
-                          ?.where((element) => element.id != parentPlaylist?.id)
-                          .toList() ??
-                      [])),
+                  playlistsFuture: playlistsFuture
+                      .then((value) => (value?.where((element) => element.id != parentPlaylist?.id).toList() ?? [])),
                 ),
               )),
           const SliverPadding(padding: EdgeInsets.only(bottom: 100.0))
@@ -137,9 +130,7 @@ class PlaylistActionsMenuHeader extends ConsumerWidget {
       child: Center(
         child: Text(AppLocalizations.of(context)!.addRemoveFromPlaylist,
             style: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge!.color!,
-                fontSize: 18,
-                fontWeight: FontWeight.w400)),
+                color: Theme.of(context).textTheme.bodyLarge!.color!, fontSize: 18, fontWeight: FontWeight.w400)),
       ),
     );
   }
@@ -197,8 +188,7 @@ class _ToggleableListTileState extends ConsumerState<ToggleableListTile> {
   Widget build(BuildContext context) {
     var themeColor = Theme.of(context).colorScheme.primary;
     return Padding(
-      padding:
-          const EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0, bottom: 4.0),
+      padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0, bottom: 4.0),
       child: Container(
         decoration: ShapeDecoration(
           color: themeColor.withOpacity(currentState ? 0.3 : 0.1),
@@ -217,46 +207,37 @@ class _ToggleableListTileState extends ConsumerState<ToggleableListTile> {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-          trailing: Wrap(
-              alignment: WrapAlignment.end,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                if (widget.subtitle != null)
-                  Text(
-                    widget.subtitle!,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                SizedBox(
-                  height: 48.0,
-                  width: 16.0,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 12.0),
-                    child: VerticalDivider(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.color
-                          ?.withOpacity(0.5),
-                      thickness: 1.5,
-                      indent: 8.0,
-                      endIndent: 8.0,
-                      width: 1.0,
+          trailing: Wrap(alignment: WrapAlignment.end, crossAxisAlignment: WrapCrossAlignment.center, children: [
+            if (widget.subtitle != null)
+              Text(
+                widget.subtitle!,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            SizedBox(
+              height: 48.0,
+              width: 16.0,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 12.0),
+                child: VerticalDivider(
+                  color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
+                  thickness: 1.5,
+                  indent: 8.0,
+                  endIndent: 8.0,
+                  width: 1.0,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 12.0),
+              child: isLoading || widget.forceLoading
+                  ? const CircularProgressIndicator()
+                  : Icon(
+                      currentState == true ? widget.positiveIcon : widget.negativeIcon,
+                      size: 36.0,
+                      color: themeColor,
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 12.0),
-                  child: isLoading || widget.forceLoading
-                      ? const CircularProgressIndicator()
-                      : Icon(
-                          currentState == true
-                              ? widget.positiveIcon
-                              : widget.negativeIcon,
-                          size: 36.0,
-                          color: themeColor,
-                        ),
-                ),
-              ]),
+            ),
+          ]),
           onTap: widget.forceLoading || isLoading
               ? null
               : () async {

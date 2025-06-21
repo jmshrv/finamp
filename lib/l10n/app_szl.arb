@@ -219,8 +219,6 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Edytowanie miana ôd playlisty",
-  "@editPlaylistNameTooltip": {},
   "logsCopied": "Logi skopiowane.",
   "@logsCopied": {},
   "downloadedTracksWillNotBeDeleted": "Pobrane śpiywki niy bydōm wymazane",
@@ -241,8 +239,6 @@
   "@errorScreenError": {},
   "shuffleButtonLabel": "LŌSOWO",
   "@shuffleButtonLabel": {},
-  "editPlaylistNameTitle": "Edycyjo miana ôd playlisty",
-  "@editPlaylistNameTitle": {},
   "audioService": "Usuga audio",
   "@audioService": {},
   "enableTranscodingSubtitle": "Jeźli zaznaczōne, to strumiynie muzyki bydōm transkodowane na serwerze.",

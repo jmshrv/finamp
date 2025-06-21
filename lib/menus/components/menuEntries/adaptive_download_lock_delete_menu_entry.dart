@@ -12,8 +12,7 @@ import 'package:get_it/get_it.dart';
 
 import 'menu_entry.dart';
 
-class AdaptiveDownloadLockDeleteMenuEntry extends ConsumerWidget
-    implements HideableMenuEntry {
+class AdaptiveDownloadLockDeleteMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final BaseItemDto baseItem;
 
   const AdaptiveDownloadLockDeleteMenuEntry({
@@ -27,16 +26,13 @@ class AdaptiveDownloadLockDeleteMenuEntry extends ConsumerWidget
 
     final DownloadStub downloadStub = _getStub();
 
-    final DownloadItemStatus? downloadStatus =
-        ref.watch(downloadsService.statusProvider((downloadStub, null)));
+    final DownloadItemStatus? downloadStatus = ref.watch(downloadsService.statusProvider((downloadStub, null)));
 
-    if (!ref.watch(finampSettingsProvider.isOffline) &&
-        downloadStatus == DownloadItemStatus.notNeeded) {
+    if (!ref.watch(finampSettingsProvider.isOffline) && downloadStatus == DownloadItemStatus.notNeeded) {
       return DownloadMenuEntry(downloadStub: downloadStub);
     } else if (downloadStatus?.isRequired ?? false) {
       return DeleteFromDeviceMenuEntry(downloadStub: downloadStub);
-    } else if (!ref.watch(finampSettingsProvider.isOffline) &&
-        (downloadStatus?.isIncidental ?? false)) {
+    } else if (!ref.watch(finampSettingsProvider.isOffline) && (downloadStatus?.isIncidental ?? false)) {
       return LockDownloadMenuEntry(downloadStub: downloadStub);
     } else {
       return SizedBox.shrink();
@@ -46,26 +42,20 @@ class AdaptiveDownloadLockDeleteMenuEntry extends ConsumerWidget
   DownloadStub _getStub() {
     final library = GetIt.instance<FinampUserHelper>().currentUser?.currentView;
     return switch (BaseItemDtoType.fromItem(baseItem)) {
-      BaseItemDtoType.track =>
-        DownloadStub.fromItem(type: DownloadItemType.track, item: baseItem),
-      BaseItemDtoType.artist ||
-      BaseItemDtoType.genre =>
-        DownloadStub.fromFinampCollection(FinampCollection(
+      BaseItemDtoType.track => DownloadStub.fromItem(type: DownloadItemType.track, item: baseItem),
+      BaseItemDtoType.artist || BaseItemDtoType.genre => DownloadStub.fromFinampCollection(FinampCollection(
           type: FinampCollectionType.collectionWithLibraryFilter,
           library: library,
           item: baseItem,
         )),
-      _ => DownloadStub.fromItem(
-          type: DownloadItemType.collection, item: baseItem),
+      _ => DownloadStub.fromItem(type: DownloadItemType.collection, item: baseItem),
     };
   }
 
   @override
   bool get isVisible {
-    final DownloadItemStatus downloadStatus =
-        GetIt.instance<DownloadsService>().getStatus(_getStub(), null);
+    final DownloadItemStatus downloadStatus = GetIt.instance<DownloadsService>().getStatus(_getStub(), null);
 
-    return downloadStatus.isRequired ||
-        !FinampSettingsHelper.finampSettings.isOffline;
+    return downloadStatus.isRequired || !FinampSettingsHelper.finampSettings.isOffline;
   }
 }

@@ -301,8 +301,6 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "แก้ไขชื่อเพลย์ลิสต์",
-  "@editPlaylistNameTooltip": {},
   "discNumber": "แผ่นที่ {number}",
   "@discNumber": {
     "placeholders": {
@@ -311,8 +309,6 @@
       }
     }
   },
-  "editPlaylistNameTitle": "แก้ไขชื่อเพลย์ลิสต์",
-  "@editPlaylistNameTitle": {},
   "errorScreenError": "พบข้อผิดพลาดในการดึงรายการข้อผิดพลาด! ถ้าถึงขั้นนี้แล้ว คุณน่าจะต้องไปสร้าง Issue บน Github แล้วลบข้อมูลแอปทิ้งซะ",
   "@errorScreenError": {},
   "error": "ผิดพลาด",

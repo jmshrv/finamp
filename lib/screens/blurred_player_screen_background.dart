@@ -22,14 +22,11 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var ThemeImage(image: imageProvider, blurHash: localBlurhash) =
-        ref.watch(localImageProvider);
+    var ThemeImage(image: imageProvider, blurHash: localBlurhash) = ref.watch(localImageProvider);
 
     var overlayColor = Theme.of(context).brightness == Brightness.dark
-        ? Colors.black
-            .withOpacity(ui.clampDouble(0.675 * opacityFactor, 0.0, 1.0))
-        : Colors.white
-            .withOpacity(ui.clampDouble(0.75 * opacityFactor, 0.0, 1.0));
+        ? Colors.black.withOpacity(ui.clampDouble(0.675 * opacityFactor, 0.0, 1.0))
+        : Colors.white.withOpacity(ui.clampDouble(0.75 * opacityFactor, 0.0, 1.0));
 
     Widget placeholderBuilder(_) => localBlurhash != null
         ? SizedBox.expand(
@@ -52,8 +49,7 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
                 : OctoImage(
                     // Don't transition between images with identical files/urls unless
                     // system theme has changed
-                    key: ValueKey(imageProvider.hashCode +
-                        Theme.of(context).brightness.hashCode),
+                    key: ValueKey(imageProvider.hashCode + Theme.of(context).brightness.hashCode),
                     image: imageProvider,
                     fit: BoxFit.cover,
                     fadeInDuration: Duration.zero,
@@ -94,8 +90,7 @@ class CachePaint extends SingleChildRenderObjectWidget {
 
   @override
   RenderCachePaint createRenderObject(BuildContext context) {
-    return RenderCachePaint(
-        imageKey, MediaQuery.sizeOf(context), Theme.of(context).brightness);
+    return RenderCachePaint(imageKey, MediaQuery.sizeOf(context), Theme.of(context).brightness);
   }
 }
 
@@ -121,8 +116,7 @@ class RenderCachePaint extends RenderProxyBox {
 
   @override
   void performLayout() {
-    child?.layout(BoxConstraints.tightFor(
-        width: _screenSize.width, height: _screenSize.height));
+    child?.layout(BoxConstraints.tightFor(width: _screenSize.width, height: _screenSize.height));
     size = constraints.biggest;
     return;
   }
@@ -152,10 +146,7 @@ class RenderCachePaint extends RenderProxyBox {
       // Save image of child to cache
       final OffsetLayer offsetLayer = layer! as OffsetLayer;
       Future.sync(() async {
-        _cache[_cacheKey] = (
-          _cache[_cacheKey]!.$1,
-          await offsetLayer.toImage(offset & _screenSize)
-        );
+        _cache[_cacheKey] = (_cache[_cacheKey]!.$1, await offsetLayer.toImage(offset & _screenSize));
         // Schedule repaint next frame because the image is lighter than the full
         // child during compositing, which is more frequent than paints.
         for (var element in _cache[_cacheKey]!.$1) {

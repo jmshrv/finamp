@@ -22,26 +22,22 @@ class SortOrderButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var order = sortOrderOverride ?? (forPlaylistTracks
-          ? ref.watch(finampSettingsProvider.playlistTracksSortOrder)
-          : ref.watch(finampSettingsProvider.tabSortOrder(tabType)));
+    var order = sortOrderOverride ??
+        (forPlaylistTracks
+            ? ref.watch(finampSettingsProvider.playlistTracksSortOrder)
+            : ref.watch(finampSettingsProvider.tabSortOrder(tabType)));
     return IconButton(
-      tooltip: AppLocalizations.of(context)!.sortOrder,
-      icon: order == SortOrder.ascending
-          ? const Icon(Icons.arrow_downward)
-          : const Icon(Icons.arrow_upward),
-      onPressed: () {
-        final newOrder = order == SortOrder.ascending
-            ? SortOrder.descending
-            : SortOrder.ascending;
-        if (sortOrderOverride != null && onOverrideChanged != null) {
-          onOverrideChanged!(newOrder);
-        } else if (forPlaylistTracks) {
-          FinampSetters.setPlaylistTracksSortOrder(newOrder);
-        } else {
-          FinampSetters.setTabSortOrder(tabType, newOrder);
-        }
-      }
-    );
+        tooltip: AppLocalizations.of(context)!.sortOrder,
+        icon: order == SortOrder.ascending ? const Icon(Icons.arrow_downward) : const Icon(Icons.arrow_upward),
+        onPressed: () {
+          final newOrder = order == SortOrder.ascending ? SortOrder.descending : SortOrder.ascending;
+          if (sortOrderOverride != null && onOverrideChanged != null) {
+            onOverrideChanged!(newOrder);
+          } else if (forPlaylistTracks) {
+            FinampSetters.setPlaylistTracksSortOrder(newOrder);
+          } else {
+            FinampSetters.setTabSortOrder(tabType, newOrder);
+          }
+        });
   }
 }

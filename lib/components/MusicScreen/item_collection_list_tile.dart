@@ -44,28 +44,20 @@ class ItemCollectionListTile extends ConsumerWidget {
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
     final library = finampUserHelper.currentUser?.currentView;
     final itemType = BaseItemDtoType.fromItem(item);
-    final isArtistOrGenre = (itemType == BaseItemDtoType.artist ||
-            itemType == BaseItemDtoType.genre);
+    final isArtistOrGenre = (itemType == BaseItemDtoType.artist || itemType == BaseItemDtoType.genre);
     final isOnDesktop = Platform.isMacOS || Platform.isWindows || Platform.isLinux;
     final subtitle = (itemType != BaseItemDtoType.album || !albumShowsYearAndDurationInstead)
         ? generateSubtitle(
             item: item,
             parentType: parentType,
             context: context,
-                artistType: ref.watch(finampSettingsProvider.defaultArtistType),
-          ) : null;
+            artistType: ref.watch(finampSettingsProvider.defaultArtistType),
+          )
+        : null;
     final itemDownloadStub = isArtistOrGenre
-          ? DownloadStub.fromFinampCollection(
-                FinampCollection(
-                  type: FinampCollectionType.collectionWithLibraryFilter,
-                  library: library,
-                  item: item
-                )
-            )
-          : DownloadStub.fromItem(
-                type: DownloadItemType.collection,
-                item: item
-            );
+        ? DownloadStub.fromFinampCollection(
+            FinampCollection(type: FinampCollectionType.collectionWithLibraryFilter, library: library, item: item))
+        : DownloadStub.fromItem(type: DownloadItemType.collection, item: item);
     final downloadedIndicator = DownloadedIndicator(
       item: itemDownloadStub,
       size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 1,
@@ -103,10 +95,7 @@ class ItemCollectionListTile extends ConsumerWidget {
             offset: meta.offset,
             child: Icon(
               meta.icon,
-              size: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .fontSize! + 1,
+              size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 1,
               color: color,
             ),
           ),
@@ -153,8 +142,8 @@ class ItemCollectionListTile extends ConsumerWidget {
       }
     })();
 
-    final showSubtitle = (subtitle != null || 
-        (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) || 
+    final showSubtitle = (subtitle != null ||
+        (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) ||
         (additionalInfo != null) ||
         downloadedIndicator.isVisible(ref));
     final subtitleText = Text.rich(
@@ -169,19 +158,18 @@ class ItemCollectionListTile extends ConsumerWidget {
             baseline: TextBaseline.alphabetic,
           ),
           if (downloadedIndicator.isVisible(ref))
-              WidgetSpan(child: SizedBox(width: (additionalInfo != null) ? 5.0 : 2.0)),
+            WidgetSpan(child: SizedBox(width: (additionalInfo != null) ? 5.0 : 2.0)),
           if (downloadedIndicator.isVisible(ref) && additionalInfoIcon != null)
-              WidgetSpan(child: SizedBox(width: 2.25)),
+            WidgetSpan(child: SizedBox(width: 2.25)),
           if (additionalInfo != null) ...[
-            if (additionalInfoIcon != null)
-              additionalInfoIcon,
+            if (additionalInfoIcon != null) additionalInfoIcon,
             additionalInfo,
             TextSpan(
               text: (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead)
-                ? " · ${printDuration(item.runTimeTicksDuration())}"
-                : (subtitle != null)
-                  ? " · $subtitle"
-                  : null,
+                  ? " · ${printDuration(item.runTimeTicksDuration())}"
+                  : (subtitle != null)
+                      ? " · $subtitle"
+                      : null,
               style: TextStyle(color: Theme.of(context).disabledColor),
             ),
           ] else ...[
@@ -196,34 +184,34 @@ class ItemCollectionListTile extends ConsumerWidget {
     );
 
     return ListTile(
-        // This widget is used on the add to playlist screen, so we allow a custom
-        // onTap to be passed as an argument.
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: 16.0,
-          vertical: !showSubtitle ? 8.0 : 0.0,
-        ),
-        onTap: onTap,
-        leading: AlbumImage(item: item),
-        title: titleText,
-        subtitle: (showSubtitle) ? subtitleText : null,
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            if ((itemType == BaseItemDtoType.artist
-                    ? jellyfinApiHelper.selectedMixArtists
-                    : (itemType == BaseItemDtoType.genre)
-                        ? jellyfinApiHelper.selectedMixGenres
-                        : jellyfinApiHelper.selectedMixAlbums)
-                .contains(item))
-              const Icon(Icons.explore),
-            FavoriteButton(
-              item: item,
-              onlyIfFav: true,
-              showFavoriteIconOnlyWhenFilterDisabled: showFavoriteIconOnlyWhenFilterDisabled,
-            )
-          ],
-        ),
+      // This widget is used on the add to playlist screen, so we allow a custom
+      // onTap to be passed as an argument.
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: 16.0,
+        vertical: !showSubtitle ? 8.0 : 0.0,
+      ),
+      onTap: onTap,
+      leading: AlbumImage(item: item),
+      title: titleText,
+      subtitle: (showSubtitle) ? subtitleText : null,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          if ((itemType == BaseItemDtoType.artist
+                  ? jellyfinApiHelper.selectedMixArtists
+                  : (itemType == BaseItemDtoType.genre)
+                      ? jellyfinApiHelper.selectedMixGenres
+                      : jellyfinApiHelper.selectedMixAlbums)
+              .contains(item))
+            const Icon(Icons.explore),
+          FavoriteButton(
+            item: item,
+            onlyIfFav: true,
+            showFavoriteIconOnlyWhenFilterDisabled: showFavoriteIconOnlyWhenFilterDisabled,
+          )
+        ],
+      ),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:finamp/screens/customization_settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,15 +17,13 @@ class _PlayerSettingsScreenState extends State<PlayerSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.playerScreen),
-          actions: [
-            FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-                context, FinampSettingsHelper.resetPlayerScreenSettings)
-          ]),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.playerScreen), actions: [
+        FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetPlayerScreenSettings)
+      ]),
       body: ListView(
         children: const [
           ShowFeatureChipsToggle(),
+          ShowAlbumReleaseDateOnPlayerScreenToggle(),
           PlayerScreenMinimumCoverPaddingEditor(),
           SuppressPlayerPaddingSwitch(),
           PrioritizeCoverSwitch(),
@@ -42,8 +41,7 @@ class SuppressPlayerPaddingSwitch extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.suppressPlayerPadding),
-      subtitle:
-          Text(AppLocalizations.of(context)!.suppressPlayerPaddingSubtitle),
+      subtitle: Text(AppLocalizations.of(context)!.suppressPlayerPaddingSubtitle),
       value: ref.watch(finampSettingsProvider.suppressPlayerPadding),
       onChanged: FinampSetters.setSuppressPlayerPadding,
     );
@@ -57,8 +55,7 @@ class HidePlayerBottomActionsSwitch extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.hidePlayerBottomActions),
-      subtitle:
-          Text(AppLocalizations.of(context)!.hidePlayerBottomActionsSubtitle),
+      subtitle: Text(AppLocalizations.of(context)!.hidePlayerBottomActionsSubtitle),
       value: ref.watch(finampSettingsProvider.hidePlayerBottomActions),
       onChanged: FinampSetters.setHidePlayerBottomActions,
     );
@@ -72,11 +69,9 @@ class PrioritizeCoverSwitch extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.prioritizePlayerCover),
-      subtitle:
-          Text(AppLocalizations.of(context)!.prioritizePlayerCoverSubtitle),
+      subtitle: Text(AppLocalizations.of(context)!.prioritizePlayerCoverSubtitle),
       value: ref.watch(finampSettingsProvider.prioritizeCoverFactor) < 6,
-      onChanged: (value) =>
-          FinampSetters.setPrioritizeCoverFactor(value ? 3.0 : 8.0),
+      onChanged: (value) => FinampSetters.setPrioritizeCoverFactor(value ? 3.0 : 8.0),
     );
   }
 }
@@ -88,14 +83,11 @@ class ShowFeatureChipsToggle extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.showFeatureChipsToggleTitle),
-      subtitle:
-          Text(AppLocalizations.of(context)!.showFeatureChipsToggleSubtitle),
-      value:
-          ref.watch(finampSettingsProvider.featureChipsConfiguration).enabled,
+      subtitle: Text(AppLocalizations.of(context)!.showFeatureChipsToggleSubtitle),
+      value: ref.watch(finampSettingsProvider.featureChipsConfiguration).enabled,
       onChanged: (value) {
-        FinampSetters.setFeatureChipsConfiguration(FinampSettingsHelper
-            .finampSettings.featureChipsConfiguration
-            .copyWith(enabled: value));
+        FinampSetters.setFeatureChipsConfiguration(
+            FinampSettingsHelper.finampSettings.featureChipsConfiguration.copyWith(enabled: value));
       },
     );
   }

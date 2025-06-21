@@ -33,8 +33,7 @@ class ArtistScreenContent extends ConsumerStatefulWidget {
   final BaseItemDto? genreFilter;
 
   @override
-  ConsumerState<ArtistScreenContent> createState() =>
-      _ArtistScreenContentState();
+  ConsumerState<ArtistScreenContent> createState() => _ArtistScreenContentState();
 }
 
 class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
@@ -84,11 +83,9 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
   Widget build(BuildContext context) {
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
     final library = finampUserHelper.currentUser?.currentView;
-    final artistItemSectionsOrder =
-        ref.watch(finampSettingsProvider.artistItemSectionsOrder);
+    final artistItemSectionsOrder = ref.watch(finampSettingsProvider.artistItemSectionsOrder);
     final artistCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.artistItemSectionFilterChipOrder);
-    final bool autoSwitchItemCurationTypeEnabled = 
-      ref.watch(finampSettingsProvider.autoSwitchItemCurationType);
+    final bool autoSwitchItemCurationTypeEnabled = ref.watch(finampSettingsProvider.autoSwitchItemCurationType);
 
     List<BaseItemDto> allChildren = [];
 
@@ -96,17 +93,17 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     /// when there are no items to show for the currently selected type. In this case, the provider
     /// will use the next available filter, fetch its items and return those in addition to a set
     /// containing the disabled filters that had no items.
-    final (topTracksAsync, artistCuratedItemSelectionType, newDisabledTrackFilters) = ref.watch(
-        getArtistTracksSectionProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull ?? (null, null, null);
-    final albumArtistAlbumsAsync = ref.watch(
-        getArtistAlbumsProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull;
-    final performingArtistAlbumsAsync = ref.watch(
-        getPerformingArtistAlbumsProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull;
-    final allPerformingArtistTracksAsync = ref.watch(
-        getPerformingArtistTracksProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull;
+    final (topTracksAsync, artistCuratedItemSelectionType, newDisabledTrackFilters) =
+        ref.watch(getArtistTracksSectionProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull ??
+            (null, null, null);
+    final albumArtistAlbumsAsync =
+        ref.watch(getArtistAlbumsProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull;
+    final performingArtistAlbumsAsync =
+        ref.watch(getPerformingArtistAlbumsProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull;
+    final allPerformingArtistTracksAsync =
+        ref.watch(getPerformingArtistTracksProvider(widget.parent, widget.library, currentGenreFilter)).valueOrNull;
     final allTracks = ref.watch(
-      getArtistTracksProvider(widget.parent, widget.library, currentGenreFilter)
-          .future,
+      getArtistTracksProvider(widget.parent, widget.library, currentGenreFilter).future,
     );
 
     final isLoading = topTracksAsync == null || albumArtistAlbumsAsync == null || performingArtistAlbumsAsync == null;
@@ -116,19 +113,22 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     if (newDisabledTrackFilters != null) {
       _disabledTrackFilters.addAll(newDisabledTrackFilters.whereType<CuratedItemSelectionType>());
     }
+
     /// The currently active filter either has items (now) or the user has disabled auto-switching,
     /// so we can remove it from our disabled Set in case it was there before and show it as enabled.
     _disabledTrackFilters.remove(artistCuratedItemSelectionType);
-    /// In case the user selects an option that has no items and auto-switch is enabled, 
+
+    /// In case the user selects an option that has no items and auto-switch is enabled,
     /// we want to show a snackbar message in addition to disabling the filter.
-    if (autoSwitchItemCurationTypeEnabled && clickedCuratedItemSelectionType != null && 
+    if (autoSwitchItemCurationTypeEnabled &&
+        clickedCuratedItemSelectionType != null &&
         _disabledTrackFilters.contains(clickedCuratedItemSelectionType)) {
       sendEmptyItemSelectionTypeMessage(
-        context: context,
-        typeSelected: clickedCuratedItemSelectionType,
-        messageFor: BaseItemDtoType.artist, hasGenreFilter: (currentGenreFilter != null)
-      );
-      // When we've sent the message, we should reset the clicked value 
+          context: context,
+          typeSelected: clickedCuratedItemSelectionType,
+          messageFor: BaseItemDtoType.artist,
+          hasGenreFilter: (currentGenreFilter != null));
+      // When we've sent the message, we should reset the clicked value
       // so that we don't send it again on next state refresh
       clickedCuratedItemSelectionType = null;
     }
@@ -138,9 +138,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     final performingArtistAlbums = performingArtistAlbumsAsync ?? [];
     final allPerformingArtistTracks = allPerformingArtistTracksAsync ?? [];
 
-    var appearsOnAlbums = performingArtistAlbums
-        .where((a) => !albumArtistAlbums.any((b) => b.id == a.id))
-        .toList();
+    var appearsOnAlbums = performingArtistAlbums.where((a) => !albumArtistAlbums.any((b) => b.id == a.id)).toList();
 
     // Combine Children to get correct ChildrenCount
     // for the Download Status Sync Display for Artists
@@ -150,13 +148,11 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
       onRefresh: _refresh,
       child: PaddedCustomScrollview(slivers: <Widget>[
         SliverAppBar(
-          title: Text(widget.parent.name ??
-              AppLocalizations.of(context)!.unknownName),
+          title: Text(widget.parent.name ?? AppLocalizations.of(context)!.unknownName),
           // 125 + 116 is the total height of the widget we use as a
           // FlexibleSpaceBar. We add the toolbar height since the widget
           // should appear below the appbar.
-          expandedHeight:
-              kToolbarHeight + 125 + 24 + CTAMedium.predictedHeight(context),
+          expandedHeight: kToolbarHeight + 125 + 24 + CTAMedium.predictedHeight(context),
           centerTitle: false,
           pinned: true,
           flexibleSpace: ArtistScreenContentFlexibleSpaceBar(
@@ -170,13 +166,11 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
             FavoriteButton(item: widget.parent),
             if (!isLoading)
               DownloadButton(
-                item: DownloadStub.fromFinampCollection(
-                  FinampCollection(
-                      type: FinampCollectionType.collectionWithLibraryFilter,
-                      library: library,
-                      item: widget.parent,
-                  )
-                ),
+                item: DownloadStub.fromFinampCollection(FinampCollection(
+                  type: FinampCollectionType.collectionWithLibraryFilter,
+                  library: library,
+                  item: widget.parent,
+                )),
                 children: allChildren,
                 downloadDisabled: (currentGenreFilter != null),
                 customTooltip: (currentGenreFilter != null)
@@ -245,17 +239,14 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
           }),
         if (!isLoading && (albumArtistAlbums.isEmpty && appearsOnAlbums.isEmpty))
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(6, 12, 6,
-                0),
+            padding: const EdgeInsets.fromLTRB(6, 12, 6, 0),
             sliver: SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 2, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12),
                 child: Center(
                   child: Text(
                     AppLocalizations.of(context)!.emptyFilteredListTitle,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),

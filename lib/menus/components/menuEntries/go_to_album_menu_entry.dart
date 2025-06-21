@@ -35,9 +35,7 @@ class GoToAlbumMenuEntry extends ConsumerWidget implements HideableMenuEntry {
           try {
             if (FinampSettingsHelper.finampSettings.isOffline) {
               final downloadsService = GetIt.instance<DownloadsService>();
-              album = (await downloadsService.getCollectionInfo(
-                      id: baseItem.albumId!))!
-                  .baseItem!;
+              album = (await downloadsService.getCollectionInfo(id: baseItem.albumId!))!.baseItem!;
             } else {
               album = await jellyfinApiHelper.getItemById(baseItem.albumId!);
             }
@@ -47,8 +45,7 @@ class GoToAlbumMenuEntry extends ConsumerWidget implements HideableMenuEntry {
           }
           if (context.mounted) {
             Navigator.pop(context);
-            await Navigator.of(context)
-                .pushNamed(AlbumScreen.routeName, arguments: album);
+            await Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: album);
           }
         },
       ),

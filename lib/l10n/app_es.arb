@@ -124,8 +124,6 @@
       }
     }
   },
-  "editPlaylistNameTooltip": "Editar la lista de reproducción",
-  "@editPlaylistNameTooltip": {},
   "playlistUpdated": "Se actualizó el nombre de la lista.",
   "@playlistUpdated": {},
   "downloadsQueued": "Descarga preparada, descargando archivos",
@@ -154,8 +152,6 @@
   "@replaceQueue": {},
   "downloadsDeleted": "Se borraron las descargas.",
   "@downloadsDeleted": {},
-  "editPlaylistNameTitle": "Editar la lista de reproducción",
-  "@editPlaylistNameTitle": {},
   "error": "Error",
   "@error": {},
   "list": "Lista",

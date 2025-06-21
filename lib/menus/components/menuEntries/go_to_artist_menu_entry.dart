@@ -35,12 +35,9 @@ class GoToArtistMenuEntry extends ConsumerWidget implements HideableMenuEntry {
           try {
             if (FinampSettingsHelper.finampSettings.isOffline) {
               final downloadsService = GetIt.instance<DownloadsService>();
-              artist = (await downloadsService.getCollectionInfo(
-                      id: baseItem.artistItems!.first.id))!
-                  .baseItem!;
+              artist = (await downloadsService.getCollectionInfo(id: baseItem.artistItems!.first.id))!.baseItem!;
             } else {
-              artist = await jellyfinApiHelper
-                  .getItemById(baseItem.artistItems!.first.id);
+              artist = await jellyfinApiHelper.getItemById(baseItem.artistItems!.first.id);
             }
           } catch (e) {
             GlobalSnackbar.error(e);
@@ -48,8 +45,7 @@ class GoToArtistMenuEntry extends ConsumerWidget implements HideableMenuEntry {
           }
           if (context.mounted) {
             Navigator.pop(context);
-            await Navigator.of(context)
-                .pushNamed(ArtistScreen.routeName, arguments: artist);
+            await Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: artist);
           }
         },
       ),
