@@ -26,6 +26,8 @@ Future<void> showPlaylistActionsMenu({
 
   FeedbackHelper.feedback(FeedbackType.selection);
 
+  var playlistsFuture = jellyfinApiHelper.getItems(includeItemTypes: "Playlist", sortBy: "SortName");
+
   await showThemedBottomSheet(
     context: context,
     item: item,
@@ -33,7 +35,6 @@ Future<void> showPlaylistActionsMenu({
     minDraggableHeight: 0.2,
     buildSlivers: (context) {
       var themeColor = Theme.of(context).colorScheme.primary;
-      var playlistsFuture = jellyfinApiHelper.getItems(includeItemTypes: "Playlist", sortBy: "SortName");
 
       final menuEntries = [
         MenuItemInfoHeader.condensed(item: item),

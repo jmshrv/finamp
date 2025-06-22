@@ -748,16 +748,6 @@
     "placeholders": {
       "time": {
         "type": "int"
-      },
-      "prefix": {
-        "type": "String",
-        "example": "'<' for 1, otherwise empty",
-        "description": "Left for existing translation compatibility."
-      },
-      "suffix": {
-        "type": "String",
-        "example": "minutes",
-        "description": "Will always be localized 'minutes'.  Left for existing translation compatibility."
       }
     }
   },

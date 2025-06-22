@@ -438,6 +438,7 @@ class JellyfinApiHelper {
   }
 
   Future<dynamic> deleteItem(BaseItemId itemId) async {
+    assert(_verifyCallable());
     return await jellyfinApi.deleteItem(itemId);
   }
 
@@ -607,6 +608,7 @@ class JellyfinApiHelper {
 
   /// Starts an instant mix using the data from the item provided.
   Future<List<BaseItemDto>?> getInstantMix(BaseItemDto? parentItem) async {
+    assert(_verifyCallable());
     var response = await jellyfinApi.getInstantMix(
       id: parentItem!.id,
       userId: _finampUserHelper.currentUser!.id,
@@ -618,6 +620,7 @@ class JellyfinApiHelper {
 
   /// Updates capabilities for this client.
   Future<void> updateCapabilities(ClientCapabilities capabilities) async {
+    assert(_verifyCallable());
     await jellyfinApi.updateCapabilities(
       playableMediaTypes: capabilities.playableMediaTypes?.join(",") ?? "",
       supportedCommands: capabilities.supportedCommands?.join(",") ?? "",
@@ -628,11 +631,13 @@ class JellyfinApiHelper {
 
   /// Updates capabilities for this client.
   Future<void> updateCapabilitiesFull(ClientCapabilities capabilities) async {
+    assert(_verifyCallable());
     await jellyfinApi.updateCapabilitiesFull(capabilities);
   }
 
   /// Tells the Jellyfin server that playback has started
   Future<void> reportPlaybackStart(PlaybackProgressInfo playbackProgressInfo) async {
+    assert(_verifyCallable());
     final response = await jellyfinApi.startPlayback(playbackProgressInfo);
     if (response.toString().isNotEmpty) {
       throw response as Object;
@@ -641,6 +646,7 @@ class JellyfinApiHelper {
 
   /// Updates player progress so that Jellyfin can track what we're listening to
   Future<void> updatePlaybackProgress(PlaybackProgressInfo playbackProgressInfo) async {
+    assert(_verifyCallable());
     final response = await jellyfinApi.playbackStatusUpdate(playbackProgressInfo);
     if (response.toString().isNotEmpty) {
       throw response as Object;
@@ -649,6 +655,7 @@ class JellyfinApiHelper {
 
   /// Tells Jellyfin that we've stopped listening to music (called when the audio service is stopped)
   Future<void> stopPlaybackProgress(PlaybackProgressInfo playbackProgressInfo) async {
+    assert(_verifyCallable());
     final response = await jellyfinApi.playbackStatusStopped(playbackProgressInfo);
     if (response.toString().isNotEmpty) {
       throw response as Object;
@@ -684,12 +691,14 @@ class JellyfinApiHelper {
 
   /// Gets a Playlist
   Future<dynamic> getPlaylist(BaseItemId playlistId) async {
+    assert(_verifyCallable());
     final response = await jellyfinApi.getPlaylist(playlistId: playlistId);
     return response;
   }
 
   /// Creates a new playlist.
   Future<NewPlaylistResponse> createNewPlaylist(NewPlaylist newPlaylist) async {
+    assert(_verifyCallable());
     final response = await jellyfinApi.createNewPlaylist(newPlaylist: newPlaylist);
 
     return NewPlaylistResponse.fromJson(response as Map<String, dynamic>);
@@ -703,6 +712,7 @@ class JellyfinApiHelper {
     /// Item ids to add.
     List<BaseItemId>? ids,
   }) async {
+    assert(_verifyCallable());
     await jellyfinApi.addItemsToPlaylist(playlistId: playlistId, ids: ids?.join(","));
   }
 
@@ -714,6 +724,7 @@ class JellyfinApiHelper {
     /// Item ids to add.
     List<String>? entryIds,
   }) async {
+    assert(_verifyCallable());
     final response = await jellyfinApi.removeItemsFromPlaylist(playlistId: playlistId, entryIds: entryIds?.join(","));
     if (response.statusCode == 403) {
       _jellyfinApiHelperLogger.warning(
@@ -738,6 +749,7 @@ class JellyfinApiHelper {
     /// the new Item.
     required BaseItemDto newItem,
   }) async {
+    assert(_verifyCallable());
     final response = await jellyfinApi.updateItem(itemId: itemId, newItem: newItem);
     if (response.toString().isNotEmpty) {
       throw response as Object;
@@ -752,6 +764,7 @@ class JellyfinApiHelper {
     /// The new Item.
     required NewPlaylist newPlaylist,
   }) async {
+    assert(_verifyCallable());
     final response = await jellyfinApi.updatePlaylist(playlistId: itemId, playlist: newPlaylist);
     if (response.toString().isNotEmpty) {
       throw response as Object;
@@ -827,6 +840,7 @@ class JellyfinApiHelper {
   }
 
   Future<List<BaseItemDto>?> getArtistMix(List<BaseItemId> artistIds) async {
+    assert(_verifyCallable());
     final response = await jellyfinApi.getItems(
       userId: _finampUserHelper.currentUser!.id,
       parentId: _finampUserHelper.currentUser!.currentView?.id,
@@ -842,6 +856,7 @@ class JellyfinApiHelper {
   }
 
   Future<List<BaseItemDto>?> getAlbumMix(List<BaseItemId> albumIds) async {
+    assert(_verifyCallable());
     final response = await jellyfinApi.getItems(
       userId: _finampUserHelper.currentUser!.id,
       albumIds: albumIds.join(","),
@@ -856,6 +871,7 @@ class JellyfinApiHelper {
   }
 
   Future<List<BaseItemDto>?> getGenreMix(List<BaseItemId> genreIds) async {
+    assert(_verifyCallable());
     final response = await jellyfinApi.getItems(
       userId: _finampUserHelper.currentUser!.id,
       parentId: _finampUserHelper.currentUser!.currentView?.id,
@@ -872,6 +888,7 @@ class JellyfinApiHelper {
 
   /// Gets the lyrics for an item.
   Future<LyricDto> getLyrics({required BaseItemId itemId}) async {
+    assert(_verifyCallable());
     final response = await jellyfinApi.getLyrics(itemId: itemId);
 
     return LyricDto.fromJson(response as Map<String, dynamic>);
@@ -1119,7 +1136,8 @@ bool _verifyCallable() {
   var stack = StackTrace.current.toString();
   if (stack.contains('ProviderContainer.readProviderElement') ||
       stack.contains('initState ') ||
-      stack.contains('didUpdateWidget')) {
+      stack.contains('didUpdateWidget') ||
+      stack.contains('PagingController.notifyPageRequestListeners')) {
     return true;
   }
   return false;

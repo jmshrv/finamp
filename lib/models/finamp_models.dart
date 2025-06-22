@@ -3232,9 +3232,7 @@ class SleepTimer {
   String asString(BuildContext context) {
     if (_tracksRemaining == null) {
       final minutes = (remainingDuration.inSeconds / 60).ceil();
-      final prefix = minutes == 1 ? "<" : "";
-      final suffix = AppLocalizations.of(context)!.minutes.toLowerCase();
-      return AppLocalizations.of(context)!.sleepTimerRemainingTime(minutes, prefix, suffix);
+      return AppLocalizations.of(context)!.sleepTimerRemainingTime(minutes);
     } else {
       return AppLocalizations.of(context)!.sleepTimerRemainingTracks(_tracksRemaining ?? 0);
     }

@@ -114,6 +114,7 @@ dependencies:
   progress_border: ^0.1.5
   visibility_detector: ^0.4.0+2
   gaimon: ^1.4.0
+  http: ^1.4.0
 
 dev_dependencies:
   flutter_test:
