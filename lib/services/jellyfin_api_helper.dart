@@ -1113,7 +1113,7 @@ bool _verifyCallable() {
   }
   // Verify that all calls to jellyfin occur either in background async calls,
   // initState methods, or providers.
-  if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
+  if ([SchedulerPhase.idle, SchedulerPhase.postFrameCallbacks].contains(SchedulerBinding.instance.schedulerPhase)) {
     return true;
   }
   var stack = StackTrace.current.toString();

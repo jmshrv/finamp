@@ -341,7 +341,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     });
 
     mediaItem.listen((currentTrack) {
-      sleepTimer?.trackCompleted();
+      sleepTimer?.onTrackCompleted();
 
       _applyVolumeNormalization(currentTrack);
     });
@@ -351,7 +351,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       if (sleepTimer?.remainingTracks == 1 &&
           ((mediaItem.value?.duration ?? Duration.zero) - position) <=
               FinampSettingsHelper.finampSettings.audioFadeOutDuration) {
-        sleepTimer?.trackCompleted();
+        sleepTimer?.onTrackCompleted();
       }
     });
 

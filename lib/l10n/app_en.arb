@@ -742,7 +742,7 @@
   "@invalidNumber": {},
   "sleepTimerTooltip": "Sleep timer",
   "@sleepTimerTooltip": {},
-  "sleepTimerRemainingTime": "Sleeping in {prefix}{time,plural,=1{1 Minute} other{{time} minutes}}",
+  "sleepTimerRemainingTime": "Sleeping in {time,plural,=1{<1 Minute} other{{time} minutes}}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -751,15 +751,17 @@
       },
       "prefix": {
         "type": "String",
-        "example": "< or nothing"
+        "example": "'<' for 1, otherwise empty",
+        "description": "Left for existing translation compatibility."
       },
       "suffix": {
         "type": "String",
-        "example": "minutes"
+        "example": "minutes",
+        "description": "Will always be localized 'minutes'.  Left for existing translation compatibility."
       }
     }
   },
-  "sleepTimerRemainingTracks": "Sleeping {time,plural,=1{at end of track} other{in {time} tracks}}",
+  "sleepTimerRemainingTracks": "Sleeping {time,plural,=1{after this track} other{in {time} tracks}}",
   "@sleepTimerRemainingTracks": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -2511,7 +2513,7 @@
   "@clearQueueOnStopEventTitle": {
     "description": "Title for the setting that controls if OS stop commands clear the queue."
   },
-  "clearQueueOnStopEventSubtitle": "Clear the queue and close the player if a 'stop' command is received from the OS. In-app stop gestures will always close the player and clear the queue.",
+  "clearQueueOnStopEventSubtitle": "Clear the queue and close the player if a 'stop' command is received from the OS. In-app stop actions will always close the player and clear the queue.",
   "@clearQueueOnStopEventSubtitle": {
     "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
   },

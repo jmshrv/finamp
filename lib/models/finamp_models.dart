@@ -3157,7 +3157,7 @@ class SleepTimer {
   DateTime? _startTime;
   Function? _callback;
 
-  /// Amount of time remaining.  Either track count or seconds, depending on timer type
+  /// Notifier which is non-zero while the timer is running.  Updates at least as often as asString changes.
   final ValueNotifier<int> remainingNotifier = ValueNotifier(0);
 
   final sleepTimerLogger = Logger("SleepTimer");
@@ -3196,7 +3196,7 @@ class SleepTimer {
     sleepTimerLogger.info("Sleep timer started for ${Duration(seconds: secondsLength)}, $tracksLength tracks");
   }
 
-  void trackCompleted() {
+  void onTrackCompleted() {
     if (_tracksRemaining == null) return;
     assert(_startTime != null && _callback != null);
     _tracksRemaining = _tracksRemaining! - 1;
