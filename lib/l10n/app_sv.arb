@@ -780,7 +780,7 @@
   "@playerScreen": {
     "description": "Name for the expanded player"
   },
-  "sleepTimerRemainingTime": "Sover om {prefix}{time} {suffix}",
+  "sleepTimerRemainingTime": "Sover om {time,plural,=1{en minut} other{{time} minuter}}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -2504,5 +2504,22 @@
   "applyFilterOnGenreChipTapSubtitle": "Som standard så öppnas en genre om du trycker lätt på den, medan ett långt tryck filtrerar artisten eller spellistan av den genren. När funktionen är aktiv inverteras detta.",
   "@applyFilterOnGenreChipTapSubtitle": {
     "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "sleepTimerRemainingTracks": "Stoppar {time,plural,=1{efter det här spåret} other{efter {time} spår}}",
+  "@sleepTimerRemainingTracks": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "clearQueueOnStopEventTitle": "Rensa spelkö vid externt stopp",
+  "@clearQueueOnStopEventTitle": {
+    "description": "Title for the setting that controls if OS stop commands clear the queue."
+  },
+  "clearQueueOnStopEventSubtitle": "Rensa spelkön och stäng spelaren ifall ett 'stopp'-kommando mottages från operativsystemet. Stopp-åtgärder i appen kommer alltid att stänga spelaren och rensa kön.",
+  "@clearQueueOnStopEventSubtitle": {
+    "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
   }
 }
