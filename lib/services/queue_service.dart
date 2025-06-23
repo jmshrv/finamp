@@ -607,10 +607,9 @@ class QueueService {
 
     await _queueAudioSource.clear();
 
-    _queueFromConcatenatingAudioSource();
-
     await _audioHandler.stopPlayback();
 
+    _queueFromConcatenatingAudioSource();
     // await _audioHandler.initializeAudioSource(_queueAudioSource,
     //     preload: false);
 
