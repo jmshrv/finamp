@@ -2495,5 +2495,31 @@
   "preferLocalNetworkTargetAddressLocalSettingTitle": "Адреса локальної мережі",
   "@preferLocalNetworkTargetAddressLocalSettingTitle": {},
   "preferLocalNetworkTargetAddressLocalSettingDescription": "Цільова адреса сервера Jellyfin у вашій локальній мережі",
-  "@preferLocalNetworkTargetAddressLocalSettingDescription": {}
+  "@preferLocalNetworkTargetAddressLocalSettingDescription": {},
+  "sleepTimerRemainingTime": "Сон у {time,plural,=1{<1 Хвилина} other{{time} хвилин}}",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "clearQueueOnStopEventTitle": "Очистити чергу під час зовнішньої зупинки",
+  "@clearQueueOnStopEventTitle": {
+    "description": "Title for the setting that controls if OS stop commands clear the queue."
+  },
+  "sleepTimerRemainingTracks": "Сон {time,plural,=1{після цього треку} other{in {time} треки}}",
+  "@sleepTimerRemainingTracks": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "clearQueueOnStopEventSubtitle": "Очистити чергу та закрити програвач, якщо від ОС отримано команду «зупинити». Дії зупинки в програмі завжди закриватимуть програвач та очищуватимуть чергу.",
+  "@clearQueueOnStopEventSubtitle": {
+    "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
+  }
 }
