@@ -825,7 +825,7 @@
       }
     }
   },
-  "sleepTimerRemainingTime": "Adormecer em {prefix}{time} {suffix}",
+  "sleepTimerRemainingTime": "Adormecer em {time,plural,=1{<1 Minute} other{{time} minutes}}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -2512,5 +2512,22 @@
   "outputMenuButtonTitle": "Saída de Som",
   "@outputMenuButtonTitle": {
     "description": "Button title for opening the output menu/panel"
+  },
+  "sleepTimerRemainingTracks": "Adormecer {time,plural,=1{após esta faixa} other{em {time} tracks}}",
+  "@sleepTimerRemainingTracks": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "clearQueueOnStopEventTitle": "Limpar Fila Em Paragem Externa",
+  "@clearQueueOnStopEventTitle": {
+    "description": "Title for the setting that controls if OS stop commands clear the queue."
+  },
+  "clearQueueOnStopEventSubtitle": "Limpa a fila e fecha o reprodutor se um comando 'stop' for recebido vindo do SO. As ações de parar internas da aplicação irão sempre fechar o reprodutor e limpar a fila.",
+  "@clearQueueOnStopEventSubtitle": {
+    "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
   }
 }
