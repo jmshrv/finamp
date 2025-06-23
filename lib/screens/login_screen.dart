@@ -15,13 +15,13 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Theme(
       data: Theme.of(context).copyWith(
-        bottomSheetTheme:
-            const BottomSheetThemeData(backgroundColor: Colors.transparent, surfaceTintColor: Colors.transparent),
+        bottomSheetTheme: const BottomSheetThemeData(
+          backgroundColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
+        ),
       ),
       child: const Scaffold(
-        body: SafeArea(
-          child: LoginFlow(),
-        ),
+        body: SafeArea(child: LoginFlow()),
         bottomNavigationBar: _LoginAuxillaryOptions(),
       ),
     );

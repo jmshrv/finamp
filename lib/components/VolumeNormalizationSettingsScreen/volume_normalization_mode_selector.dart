@@ -41,28 +41,26 @@ class VolumeNormalizationModeSelector extends ConsumerWidget {
             // tappable "more info" text
             TextSpan(
               text: AppLocalizations.of(context)!.moreInfo,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-                fontWeight: FontWeight.w500,
-              ),
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w500),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
                   showGeneralDialog(
-                      context: context,
-                      pageBuilder: (context, anim1, anim2) {
-                        return AlertDialog(
-                          title: Text(AppLocalizations.of(context)!.volumeNormalizationModeSelectorTitle),
-                          content: Text(AppLocalizations.of(context)!.volumeNormalizationModeSelectorDescription),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(AppLocalizations.of(context)!.close),
-                            ),
-                          ],
-                        );
-                      });
+                    context: context,
+                    pageBuilder: (context, anim1, anim2) {
+                      return AlertDialog(
+                        title: Text(AppLocalizations.of(context)!.volumeNormalizationModeSelectorTitle),
+                        content: Text(AppLocalizations.of(context)!.volumeNormalizationModeSelectorDescription),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(AppLocalizations.of(context)!.close),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
             ),
           ],
@@ -71,10 +69,7 @@ class VolumeNormalizationModeSelector extends ConsumerWidget {
       trailing: DropdownButton<VolumeNormalizationMode>(
         value: volumeNormalizationMode,
         items: VolumeNormalizationMode.values
-            .map((e) => DropdownMenuItem<VolumeNormalizationMode>(
-                  value: e,
-                  child: Text(e.toLocalizedString(context)),
-                ))
+            .map((e) => DropdownMenuItem<VolumeNormalizationMode>(value: e, child: Text(e.toLocalizedString(context))))
             .toList(),
         onChanged: FinampSetters.setVolumeNormalizationMode.ifNonNull,
       ),

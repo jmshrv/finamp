@@ -1,2 +1,4 @@
 # Reformatted with new line length limit of 120
 700fd8ae5bddf1697810dca53045979ea27a966e
+# Apply dart 3.7 formatter update, use default line width on generated files
+e2851074b658152939a4b03473aba1b681956e92

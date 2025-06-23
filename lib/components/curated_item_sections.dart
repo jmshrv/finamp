@@ -92,7 +92,8 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
     String emptyText = loc!.emptyFilteredListTitle;
     final itemType = BaseItemDtoType.fromItem(widget.parent);
     final isFavorites = widget.selectedFilter == CuratedItemSelectionType.favorites;
-    final isPlayed = widget.selectedFilter == CuratedItemSelectionType.mostPlayed ||
+    final isPlayed =
+        widget.selectedFilter == CuratedItemSelectionType.mostPlayed ||
         widget.selectedFilter == CuratedItemSelectionType.recentlyPlayed;
 
     String itemTypeKey = 'other';
@@ -142,10 +143,7 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
                       Expanded(
                         child: Text(
                           widget.tracksText,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
@@ -166,11 +164,7 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
                           ),
                         ),
                         const SizedBox(width: 4),
-                        Icon(
-                          Icons.chevron_right,
-                          size: 20,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                        Icon(Icons.chevron_right, size: 20, color: Theme.of(context).colorScheme.primary),
                       ],
                     ),
                   ),
@@ -180,44 +174,46 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
         ),
       ),
       sliver: _showTracks
-          ? SliverMainAxisGroup(slivers: [
-              if (widget.includeFilterRow)
-                buildCuratedItemFilterRow(
-                  ref: ref,
-                  parent: widget.parent,
-                  filterListFor: BaseItemDtoType.track,
-                  customFilterOrder: widget.customFilterOrder,
-                  selectedFilter: widget.selectedFilter,
-                  disabledFilters: widget.disabledFilters,
-                  onFilterSelected: widget.onFilterSelected,
-                ),
-              if (widget.tracks != null && widget.tracks!.isNotEmpty)
-                TracksSliverList(
-                  childrenForList: widget.tracks!,
-                  childrenForQueue: widget.childrenForQueue!,
-                  showPlayCount: (widget.selectedFilter?.getSortBy() == SortBy.playCount),
-                  showReleaseDate: (widget.selectedFilter?.getSortBy() == SortBy.premiereDate),
-                  showDateLastPlayed: (widget.selectedFilter?.getSortBy() == SortBy.datePlayed),
-                  showDateAdded: (widget.selectedFilter?.getSortBy() == SortBy.dateCreated),
-                  parent: widget.parent,
-                  isOnArtistScreen: widget.isOnArtistScreen,
-                  isOnGenreScreen: widget.isOnGenreScreen,
-                )
-              else
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
-                    child: Center(
-                      child: Text(
-                        emptyText,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyMedium,
+          ? SliverMainAxisGroup(
+              slivers: [
+                if (widget.includeFilterRow)
+                  buildCuratedItemFilterRow(
+                    ref: ref,
+                    parent: widget.parent,
+                    filterListFor: BaseItemDtoType.track,
+                    customFilterOrder: widget.customFilterOrder,
+                    selectedFilter: widget.selectedFilter,
+                    disabledFilters: widget.disabledFilters,
+                    onFilterSelected: widget.onFilterSelected,
+                  ),
+                if (widget.tracks != null && widget.tracks!.isNotEmpty)
+                  TracksSliverList(
+                    childrenForList: widget.tracks!,
+                    childrenForQueue: widget.childrenForQueue!,
+                    showPlayCount: (widget.selectedFilter?.getSortBy() == SortBy.playCount),
+                    showReleaseDate: (widget.selectedFilter?.getSortBy() == SortBy.premiereDate),
+                    showDateLastPlayed: (widget.selectedFilter?.getSortBy() == SortBy.datePlayed),
+                    showDateAdded: (widget.selectedFilter?.getSortBy() == SortBy.dateCreated),
+                    parent: widget.parent,
+                    isOnArtistScreen: widget.isOnArtistScreen,
+                    isOnGenreScreen: widget.isOnGenreScreen,
+                  )
+                else
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
+                      child: Center(
+                        child: Text(
+                          emptyText,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              SliverToBoxAdapter(child: SizedBox(height: (widget.parent.type != "MusicGenre") ? 14 : 0)),
-            ])
+                SliverToBoxAdapter(child: SizedBox(height: (widget.parent.type != "MusicGenre") ? 14 : 0)),
+              ],
+            )
           : SliverToBoxAdapter(child: SizedBox.shrink()),
     );
   }
@@ -300,7 +296,8 @@ class _ItemsSectionState extends ConsumerState<CollectionsSection> {
     String emptyText = loc!.emptyFilteredListTitle;
     final itemType = BaseItemDtoType.fromItem(widget.parent);
     final isFavorites = widget.selectedFilter == CuratedItemSelectionType.favorites;
-    final isPlayed = widget.selectedFilter == CuratedItemSelectionType.mostPlayed ||
+    final isPlayed =
+        widget.selectedFilter == CuratedItemSelectionType.mostPlayed ||
         widget.selectedFilter == CuratedItemSelectionType.recentlyPlayed;
 
     String itemTypeKey = 'other';
@@ -350,10 +347,7 @@ class _ItemsSectionState extends ConsumerState<CollectionsSection> {
                       Expanded(
                         child: Text(
                           widget.itemsText,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
@@ -375,11 +369,7 @@ class _ItemsSectionState extends ConsumerState<CollectionsSection> {
                           ),
                         ),
                         const SizedBox(width: 4),
-                        Icon(
-                          Icons.chevron_right,
-                          size: 20,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                        Icon(Icons.chevron_right, size: 20, color: Theme.of(context).colorScheme.primary),
                       ],
                     ),
                   ),
@@ -422,11 +412,7 @@ class _ItemsSectionState extends ConsumerState<CollectionsSection> {
                       ),
                     ),
                   ),
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: (widget.parent.type != "MusicGenre") ? 14 : 0,
-                  ),
-                ),
+                SliverToBoxAdapter(child: SizedBox(height: (widget.parent.type != "MusicGenre") ? 14 : 0)),
               ],
             )
           : const SliverToBoxAdapter(child: SizedBox.shrink()),

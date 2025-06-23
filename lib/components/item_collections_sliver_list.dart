@@ -38,21 +38,18 @@ class _ItemsSliverListState extends ConsumerState<CollectionsSliverList> {
   Widget build(BuildContext context) {
     final filterArtistScreens = ref.watch(finampSettingsProvider.genreFilterArtistScreens);
     return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          final BaseItemDto item = widget.childrenForList[index];
-          final itemType = BaseItemDtoType.fromItem(item);
-          return ItemCollectionWrapper(
-            key: ValueKey(item.id),
-            item: item,
-            isPlaylist: false,
-            genreFilter: (itemType == BaseItemDtoType.artist && filterArtistScreens) ? widget.genreFilter : null,
-            albumShowsYearAndDurationInstead: widget.albumShowsYearAndDurationInstead,
-            showAdditionalInfoForSortBy: widget.showAdditionalInfoForSortBy,
-          );
-        },
-        childCount: widget.childrenForList.length,
-      ),
+      delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+        final BaseItemDto item = widget.childrenForList[index];
+        final itemType = BaseItemDtoType.fromItem(item);
+        return ItemCollectionWrapper(
+          key: ValueKey(item.id),
+          item: item,
+          isPlaylist: false,
+          genreFilter: (itemType == BaseItemDtoType.artist && filterArtistScreens) ? widget.genreFilter : null,
+          albumShowsYearAndDurationInstead: widget.albumShowsYearAndDurationInstead,
+          showAdditionalInfoForSortBy: widget.showAdditionalInfoForSortBy,
+        );
+      }, childCount: widget.childrenForList.length),
     );
   }
 }

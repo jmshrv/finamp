@@ -19,11 +19,7 @@ class LoginAuthenticationPage extends StatefulWidget {
   final ConnectionState? connectionState;
   final VoidCallback? onAuthenticated;
 
-  const LoginAuthenticationPage({
-    super.key,
-    required this.connectionState,
-    required this.onAuthenticated,
-  });
+  const LoginAuthenticationPage({super.key, required this.connectionState, required this.onAuthenticated});
 
   @override
   State<LoginAuthenticationPage> createState() => _LoginAuthenticationPageState();
@@ -59,14 +55,13 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 32.0, bottom: 20.0),
-                child: SvgPicture.asset(
-                  'images/finamp_cropped.svg',
-                  width: 75,
-                  height: 75,
-                ),
+                child: SvgPicture.asset('images/finamp_cropped.svg', width: 75, height: 75),
               ),
-              Text(AppLocalizations.of(context)!.loginFlowAuthenticationHeading,
-                  style: Theme.of(context).textTheme.headlineMedium, textAlign: TextAlign.center),
+              Text(
+                AppLocalizations.of(context)!.loginFlowAuthenticationHeading,
+                style: Theme.of(context).textTheme.headlineMedium,
+                textAlign: TextAlign.center,
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 20.0, bottom: 12.0),
                 child: Align(
@@ -80,13 +75,9 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
                   ),
                 ),
               ),
-              JellyfinUserWidget(
-                user: widget.connectionState?.selectedUser,
-              ),
+              JellyfinUserWidget(user: widget.connectionState?.selectedUser),
               _buildLoginForm(context),
-              const SizedBox(
-                height: 16,
-              ),
+              const SizedBox(height: 16),
               CTAMedium(
                 text: AppLocalizations.of(context)!.login,
                 icon: TablerIcons.login_2,
@@ -111,10 +102,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
         contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
         label: Text(placeholder),
         floatingLabelBehavior: FloatingLabelBehavior.never,
-        border: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(16),
-        ),
+        border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(16)),
       );
     }
 
@@ -126,11 +114,9 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 2.0, left: 8.0),
-                child: Text(
-                  AppLocalizations.of(context)!.username,
-                  textAlign: TextAlign.start,
-                )),
+              padding: const EdgeInsets.only(top: 8.0, bottom: 2.0, left: 8.0),
+              child: Text(AppLocalizations.of(context)!.username, textAlign: TextAlign.start),
+            ),
             TextFormField(
               autocorrect: false,
               keyboardType: TextInputType.text,
@@ -148,11 +134,9 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
               },
             ),
             Padding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 2.0, left: 8.0),
-                child: Text(
-                  AppLocalizations.of(context)!.password,
-                  textAlign: TextAlign.start,
-                )),
+              padding: const EdgeInsets.only(top: 8.0, bottom: 2.0, left: 8.0),
+              child: Text(AppLocalizations.of(context)!.password, textAlign: TextAlign.start),
+            ),
             TextFormField(
               autocorrect: false,
               obscureText: true,
@@ -177,10 +161,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
       if (password == null) {
         await jellyfinApiHelper.authenticateViaName(username: username);
       } else {
-        await jellyfinApiHelper.authenticateViaName(
-          username: username,
-          password: password,
-        );
+        await jellyfinApiHelper.authenticateViaName(username: username, password: password);
       }
 
       if (!mounted) return;
@@ -199,11 +180,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
       setState(() {
         widget.connectionState!.isAuthenticating = true;
       });
-      await loginHelper(
-        username: username!,
-        password: password,
-        context: context,
-      );
+      await loginHelper(username: username!, password: password, context: context);
       setState(() {
         widget.connectionState!.isAuthenticating = false;
       });

@@ -27,7 +27,9 @@ enum ContentGridViewCrossAxisCountType {
   }
 
   String _humanReadableLocalisedName(
-      ContentGridViewCrossAxisCountType contentGridViewCrossAxisCountType, BuildContext context) {
+    ContentGridViewCrossAxisCountType contentGridViewCrossAxisCountType,
+    BuildContext context,
+  ) {
     switch (contentGridViewCrossAxisCountType) {
       case ContentGridViewCrossAxisCountType.portrait:
         return AppLocalizations.of(context)!.portrait;
@@ -38,10 +40,7 @@ enum ContentGridViewCrossAxisCountType {
 }
 
 class ContentGridViewCrossAxisCountListTile extends StatefulWidget {
-  const ContentGridViewCrossAxisCountListTile({
-    super.key,
-    required this.type,
-  });
+  const ContentGridViewCrossAxisCountListTile({super.key, required this.type});
 
   final ContentGridViewCrossAxisCountType type;
 

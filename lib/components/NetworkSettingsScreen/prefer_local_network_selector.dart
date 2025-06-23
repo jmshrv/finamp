@@ -11,7 +11,8 @@ class LocalNetworkSelector extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool preferLocalNetwork = ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.preferLocalNetwork ??
+    bool preferLocalNetwork =
+        ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.preferLocalNetwork ??
         DefaultSettings.preferLocalNetwork;
 
     return SwitchListTile.adaptive(

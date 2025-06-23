@@ -23,7 +23,10 @@ class _TranscodingSettingsScreenState extends State<TranscodingSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.transcoding),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetTranscodingSettings)
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetTranscodingSettings,
+          ),
         ],
       ),
       body: ListView(
@@ -68,12 +71,9 @@ class DownloadBitrateSelector extends ConsumerWidget {
               autofocus: false,
               focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
             ),
-            Text(
-              transcodeProfile.bitrateKbps,
-              style: Theme.of(context).textTheme.titleLarge,
-            )
+            Text(transcodeProfile.bitrateKbps, style: Theme.of(context).textTheme.titleLarge),
           ],
-        )
+        ),
       ],
     );
   }
@@ -89,10 +89,12 @@ class DownloadTranscodeEnableDropdownListTile extends ConsumerWidget {
       trailing: DropdownButton<TranscodeDownloadsSetting>(
         value: ref.watch(finampSettingsProvider.shouldTranscodeDownloads),
         items: TranscodeDownloadsSetting.values
-            .map((e) => DropdownMenuItem<TranscodeDownloadsSetting>(
-                  value: e,
-                  child: Text(AppLocalizations.of(context)!.downloadTranscodeEnableOption(e.name)),
-                ))
+            .map(
+              (e) => DropdownMenuItem<TranscodeDownloadsSetting>(
+                value: e,
+                child: Text(AppLocalizations.of(context)!.downloadTranscodeEnableOption(e.name)),
+              ),
+            )
             .toList(),
         onChanged: FinampSetters.setShouldTranscodeDownloads.ifNonNull,
       ),
@@ -112,10 +114,7 @@ class DownloadTranscodeCodecDropdownListTile extends ConsumerWidget {
         items: FinampTranscodingCodec.values
             .where((element) => !Platform.isIOS || element.iosCompatible)
             .where((element) => element != FinampTranscodingCodec.original)
-            .map((e) => DropdownMenuItem<FinampTranscodingCodec>(
-                  value: e,
-                  child: Text(e.name.toUpperCase()),
-                ))
+            .map((e) => DropdownMenuItem<FinampTranscodingCodec>(value: e, child: Text(e.name.toUpperCase())))
             .toList(),
         onChanged: FinampSetters.setDownloadTranscodingCodec,
       ),
@@ -134,10 +133,12 @@ class StreamingTranscodingFormatDropdownListTile extends ConsumerWidget {
       trailing: DropdownButton<FinampTranscodingStreamingFormat>(
         value: ref.watch(finampSettingsProvider.transcodingStreamingFormat),
         items: FinampTranscodingStreamingFormat.values
-            .map((e) => DropdownMenuItem<FinampTranscodingStreamingFormat>(
-                  value: e,
-                  child: Text("${e.codec}+${e.container}".toUpperCase()),
-                ))
+            .map(
+              (e) => DropdownMenuItem<FinampTranscodingStreamingFormat>(
+                value: e,
+                child: Text("${e.codec}+${e.container}".toUpperCase()),
+              ),
+            )
             .toList(),
         onChanged: FinampSetters.setTranscodingStreamingFormat.ifNonNull,
       ),

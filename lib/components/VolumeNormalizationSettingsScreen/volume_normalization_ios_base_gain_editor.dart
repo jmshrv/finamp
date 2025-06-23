@@ -1,18 +1,27 @@
-import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
-class VolumeNormalizationIOSBaseGainEditor extends StatefulWidget {
+class VolumeNormalizationIOSBaseGainEditor extends ConsumerStatefulWidget {
   const VolumeNormalizationIOSBaseGainEditor({super.key});
 
   @override
-  State<VolumeNormalizationIOSBaseGainEditor> createState() => _VolumeNormalizationIOSBaseGainEditorState();
+  ConsumerState<VolumeNormalizationIOSBaseGainEditor> createState() => _VolumeNormalizationIOSBaseGainEditorState();
 }
 
-class _VolumeNormalizationIOSBaseGainEditorState extends State<VolumeNormalizationIOSBaseGainEditor> {
-  final _controller =
-      TextEditingController(text: FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain.toString());
+class _VolumeNormalizationIOSBaseGainEditorState extends ConsumerState<VolumeNormalizationIOSBaseGainEditor> {
+  final _controller = TextEditingController();
+
+  @override
+  void initState() {
+    ref.listenManual(finampSettingsProvider.volumeNormalizationIOSBaseGain, (_, value) {
+      var newText = value.toString();
+      if (_controller.text != newText) _controller.text = newText;
+    }, fireImmediately: true);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

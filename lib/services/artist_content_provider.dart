@@ -149,13 +149,14 @@ Future<List<BaseItemDto>> getArtistAlbums(
     // In Offline Mode:
     // Get Albums where artist is Album Artist sorted by Premiere Date
     final List<DownloadStub> fetchArtistAlbums = await downloadsService.getAllCollections(
-        viewFilter: library?.id,
-        childViewFilter: null,
-        nullableViewFilters: ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
-        baseTypeFilter: BaseItemDtoType.album,
-        relatedTo: parent,
-        artistType: ArtistType.albumArtist,
-        genreFilter: genreFilter);
+      viewFilter: library?.id,
+      childViewFilter: null,
+      nullableViewFilters: ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
+      baseTypeFilter: BaseItemDtoType.album,
+      relatedTo: parent,
+      artistType: ArtistType.albumArtist,
+      genreFilter: genreFilter,
+    );
     fetchArtistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "").compareTo(b.baseItem!.premiereDate ?? ""));
     final List<BaseItemDto> artistAlbums = fetchArtistAlbums.map((e) => e.baseItem).nonNulls.toList();
     return artistAlbums;
@@ -163,12 +164,13 @@ Future<List<BaseItemDto>> getArtistAlbums(
     // In Online Mode:
     // Get Albums where artist is Album Artist sorted by Premiere Date
     final List<BaseItemDto>? artistAlbums = await jellyfinApiHelper.getItems(
-        libraryFilter: library,
-        parentItem: parent,
-        genreFilter: genreFilter,
-        sortBy: "PremiereDate,SortName",
-        includeItemTypes: "MusicAlbum",
-        artistType: ArtistType.albumArtist);
+      libraryFilter: library,
+      parentItem: parent,
+      genreFilter: genreFilter,
+      sortBy: "PremiereDate,SortName",
+      includeItemTypes: "MusicAlbum",
+      artistType: ArtistType.albumArtist,
+    );
     return artistAlbums ?? [];
   }
 }
@@ -191,17 +193,21 @@ Future<List<BaseItemDto>> getPerformingArtistAlbums(
     // In Offline Mode:
     // Get Albums where artist is Performing Artist sorted by Premiere Date
     final List<DownloadStub> fetchPerformingArtistAlbums = await downloadsService.getAllCollections(
-        viewFilter: library?.id,
-        childViewFilter: null,
-        nullableViewFilters: ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
-        baseTypeFilter: BaseItemDtoType.album,
-        relatedTo: parent,
-        artistType: ArtistType.artist,
-        genreFilter: genreFilter);
-    fetchPerformingArtistAlbums
-        .sort((a, b) => (a.baseItem?.premiereDate ?? "").compareTo(b.baseItem!.premiereDate ?? ""));
-    final List<BaseItemDto> performingArtistAlbums =
-        fetchPerformingArtistAlbums.map((e) => e.baseItem).nonNulls.toList();
+      viewFilter: library?.id,
+      childViewFilter: null,
+      nullableViewFilters: ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
+      baseTypeFilter: BaseItemDtoType.album,
+      relatedTo: parent,
+      artistType: ArtistType.artist,
+      genreFilter: genreFilter,
+    );
+    fetchPerformingArtistAlbums.sort(
+      (a, b) => (a.baseItem?.premiereDate ?? "").compareTo(b.baseItem!.premiereDate ?? ""),
+    );
+    final List<BaseItemDto> performingArtistAlbums = fetchPerformingArtistAlbums
+        .map((e) => e.baseItem)
+        .nonNulls
+        .toList();
     return performingArtistAlbums;
   } else {
     // In Online Mode:
@@ -293,11 +299,9 @@ Future<List<BaseItemDto>> getArtistTracks(
     // Then add the tracks of every album
     final List<BaseItemDto> sortedTracks = [];
     for (var album in allAlbumArtistAlbums) {
-      sortedTracks.addAll(await downloadsService.getCollectionTracks(
-        album,
-        playable: true,
-        onlyFavorites: onlyFavorites,
-      ));
+      sortedTracks.addAll(
+        await downloadsService.getCollectionTracks(album, playable: true, onlyFavorites: onlyFavorites),
+      );
     }
     // Fetch every performing artist track
     final List<BaseItemDto> allPerformingArtistTracks = await ref.watch(
@@ -305,8 +309,9 @@ Future<List<BaseItemDto>> getArtistTracks(
     );
     // Filter out the tracks already added through album artist albums
     final existingIds = sortedTracks.map((t) => t.id).toSet();
-    final List<BaseItemDto> allPerformingArtistTracksFiltered =
-        allPerformingArtistTracks.where((track) => !existingIds.contains(track.id)).toList();
+    final List<BaseItemDto> allPerformingArtistTracksFiltered = allPerformingArtistTracks
+        .where((track) => !existingIds.contains(track.id))
+        .toList();
     // Add the remaining tracks
     sortedTracks.addAll(allPerformingArtistTracksFiltered);
     // And return the tracks
@@ -330,8 +335,9 @@ Future<List<BaseItemDto>> getArtistTracks(
     final allAlbumArtistTracks = allAlbumArtistTracksResponse ?? [];
     final allPerformingTracks = allPerformingArtistTracks;
     final albumArtistTrackIds = allAlbumArtistTracks.map((item) => item.id).toSet();
-    final filteredPerformingTracks =
-        allPerformingTracks.where((performingTrack) => !albumArtistTrackIds.contains(performingTrack.id)).toList();
+    final filteredPerformingTracks = allPerformingTracks
+        .where((performingTrack) => !albumArtistTrackIds.contains(performingTrack.id))
+        .toList();
     // combine and return
     final combinedTracks = [...allAlbumArtistTracks, ...filteredPerformingTracks];
     return combinedTracks;

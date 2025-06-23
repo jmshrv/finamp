@@ -32,7 +32,7 @@ class _LayoutSettingsScreenState extends ConsumerState<LayoutSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.layoutAndTheme),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetLayoutSettings)
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetLayoutSettings),
         ],
       ),
       body: ListView(
@@ -127,14 +127,17 @@ class FixedGridTileSizeDropdownListTile extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.fixedGridSizeTitle),
       trailing: DropdownButton<FixedGridTileSize>(
-          value: FixedGridTileSize.fromInt(FinampSettingsHelper.finampSettings.fixedGridTileSize),
-          items: FixedGridTileSize.values
-              .map((e) => DropdownMenuItem<FixedGridTileSize>(
-                    value: e,
-                    child: Text(AppLocalizations.of(context)!.fixedGridTileSizeEnum(e.name)),
-                  ))
-              .toList(),
-          onChanged: (value) => FinampSetters.setFixedGridTileSize.ifNonNull(value?.toInt)),
+        value: FixedGridTileSize.fromInt(FinampSettingsHelper.finampSettings.fixedGridTileSize),
+        items: FixedGridTileSize.values
+            .map(
+              (e) => DropdownMenuItem<FixedGridTileSize>(
+                value: e,
+                child: Text(AppLocalizations.of(context)!.fixedGridTileSizeEnum(e.name)),
+              ),
+            )
+            .toList(),
+        onChanged: (value) => FinampSetters.setFixedGridTileSize.ifNonNull(value?.toInt),
+      ),
     );
   }
 }
@@ -173,8 +176,18 @@ enum FixedGridTileSize {
   large,
   veryLarge;
 
-  static FixedGridTileSize fromInt(int size) =>
-      switch (size) { 100 => small, 150 => medium, 230 => large, 360 => veryLarge, _ => medium };
+  static FixedGridTileSize fromInt(int size) => switch (size) {
+    100 => small,
+    150 => medium,
+    230 => large,
+    360 => veryLarge,
+    _ => medium,
+  };
 
-  int get toInt => switch (this) { small => 100, medium => 150, large => 230, veryLarge => 360 };
+  int get toInt => switch (this) {
+    small => 100,
+    medium => 150,
+    large => 230,
+    veryLarge => 360,
+  };
 }

@@ -32,7 +32,8 @@ class FeatureState {
   final FinampSettings settings;
   final MetadataProvider? metadata;
 
-  String get properties => "currentTrack: '${currentTrack?.item.title}', "
+  String get properties =>
+      "currentTrack: '${currentTrack?.item.title}', "
       "isDownloaded: $isDownloaded, "
       "isTranscoding: $isTranscoding, "
       "container: $container, "
@@ -69,17 +70,16 @@ class FeatureState {
 
     if (queueService.playbackSpeed != 1.0) {
       features.add(
-        FeatureProperties(
-          text: AppLocalizations.of(context)!.playbackSpeedFeatureText(queueService.playbackSpeed),
-        ),
+        FeatureProperties(text: AppLocalizations.of(context)!.playbackSpeedFeatureText(queueService.playbackSpeed)),
       );
     }
 
     if (FinampSettingsHelper.finampSettings.currentVolume != 1.0) {
       features.add(
         FeatureProperties(
-          text: AppLocalizations.of(context)!
-              .currentVolumeFeatureText((FinampSettingsHelper.finampSettings.currentVolume * 100).floor()),
+          text: AppLocalizations.of(
+            context,
+          )!.currentVolumeFeatureText((FinampSettingsHelper.finampSettings.currentVolume * 100).floor()),
         ),
       );
     }
@@ -97,41 +97,23 @@ class FeatureState {
 
       if (feature == FinampFeatureChipType.additionalPeople && (currentTrack?.baseItem?.people?.isNotEmpty ?? false)) {
         currentTrack?.baseItem?.people?.forEach((person) {
-          features.add(
-            FeatureProperties(
-              type: feature,
-              text: "${person.role}: ${person.name}",
-            ),
-          );
+          features.add(FeatureProperties(type: feature, text: "${person.role}: ${person.name}"));
         });
       }
 
       if (feature == FinampFeatureChipType.playbackMode) {
         if (currentTrack?.item.extras?["downloadedTrackPath"] != null) {
-          features.add(
-            FeatureProperties(
-              type: feature,
-              text: AppLocalizations.of(context)!.playbackModeLocal,
-            ),
-          );
+          features.add(FeatureProperties(type: feature, text: AppLocalizations.of(context)!.playbackModeLocal));
         } else {
           if (isTranscoding) {
-            features.add(
-              FeatureProperties(
-                type: feature,
-                text: AppLocalizations.of(context)!.playbackModeTranscoding,
-              ),
-            );
+            features.add(FeatureProperties(type: feature, text: AppLocalizations.of(context)!.playbackModeTranscoding));
           } else {
             features.add(
               //TODO differentiate between direct streaming and direct playing
               // const FeatureProperties(
               //   text: "Direct Streaming",
               // ),
-              FeatureProperties(
-                type: feature,
-                text: AppLocalizations.of(context)!.playbackModeDirectPlaying,
-              ),
+              FeatureProperties(type: feature, text: AppLocalizations.of(context)!.playbackModeDirectPlaying),
             );
           }
         }
@@ -152,12 +134,7 @@ class FeatureState {
         }
 
         if (feature == FinampFeatureChipType.bitDepth && bitDepth != null) {
-          features.add(
-            FeatureProperties(
-              type: feature,
-              text: AppLocalizations.of(context)!.numberAsBit(bitDepth!),
-            ),
-          );
+          features.add(FeatureProperties(type: feature, text: AppLocalizations.of(context)!.numberAsBit(bitDepth!)));
         }
 
         if (feature == FinampFeatureChipType.sampleRate && sampleRate != null) {
@@ -170,12 +147,7 @@ class FeatureState {
         }
 
         if (feature == FinampFeatureChipType.size && size != null) {
-          features.add(
-            FeatureProperties(
-              type: feature,
-              text: FileSize.getSize(size),
-            ),
-          );
+          features.add(FeatureProperties(type: feature, text: FileSize.getSize(size)));
         }
       }
 
@@ -197,19 +169,14 @@ class FeatureState {
 }
 
 class FeatureProperties {
-  const FeatureProperties({
-    required this.text,
-    this.type,
-  });
+  const FeatureProperties({required this.text, this.type});
 
   final String text;
   final FinampFeatureChipType? type;
 }
 
 class FeatureChips extends ConsumerWidget {
-  const FeatureChips({
-    super.key,
-  });
+  const FeatureChips({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -220,47 +187,43 @@ class FeatureChips extends ConsumerWidget {
     // TODO refactor this to not rebuild on every settings change
     final settings = ref.watch(finampSettingsProvider).requireValue;
     return StreamBuilder<FinampQueueItem?>(
-        stream: queueService.getCurrentTrackStream(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const SizedBox.shrink();
-          }
-          final featureState = FeatureState(
-            context: context,
-            currentTrack: snapshot.data,
-            settings: settings,
-            metadata: metadata.valueOrNull,
-          );
+      stream: queueService.getCurrentTrackStream(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const SizedBox.shrink();
+        }
+        final featureState = FeatureState(
+          context: context,
+          currentTrack: snapshot.data,
+          settings: settings,
+          metadata: metadata.valueOrNull,
+        );
 
-          // log feature state for debugging
-          //TODO if feature chips are disabled, this won't be logged, but is super useful for debugging. Ideally, move the whole metadata stuff into the metadata provider and log it there, and then use the generated values to create the feature chips if needed
-          featureLogger.finer("Current track features: ${featureState.properties}");
+        // log feature state for debugging
+        //TODO if feature chips are disabled, this won't be logged, but is super useful for debugging. Ideally, move the whole metadata stuff into the metadata provider and log it there, and then use the generated values to create the feature chips if needed
+        featureLogger.finer("Current track features: ${featureState.properties}");
 
-          return Padding(
-            padding: const EdgeInsets.only(left: 32.0, right: 32.0),
-            child: ScrollConfiguration(
-              // Allow drag scrolling on desktop
-              behavior: ScrollConfiguration.of(context).copyWith(dragDevices: PointerDeviceKind.values.toSet()),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Features(
-                  backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ?? _defaultBackgroundColour,
-                  features: featureState,
-                ),
+        return Padding(
+          padding: const EdgeInsets.only(left: 32.0, right: 32.0),
+          child: ScrollConfiguration(
+            // Allow drag scrolling on desktop
+            behavior: ScrollConfiguration.of(context).copyWith(dragDevices: PointerDeviceKind.values.toSet()),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Features(
+                backgroundColor: IconTheme.of(context).color?.withOpacity(0.1) ?? _defaultBackgroundColour,
+                features: featureState,
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }
 
 class Features extends StatelessWidget {
-  const Features({
-    super.key,
-    required this.features,
-    this.backgroundColor,
-    this.color,
-  });
+  const Features({super.key, required this.features, this.backgroundColor, this.color});
 
   final FeatureState features;
   final Color? backgroundColor;
@@ -286,11 +249,7 @@ class Features extends StatelessWidget {
 }
 
 class _FeatureContent extends StatelessWidget {
-  const _FeatureContent({
-    required this.feature,
-    required this.backgroundColor,
-    this.color,
-  });
+  const _FeatureContent({required this.feature, required this.backgroundColor, this.color});
 
   final FeatureProperties feature;
   final Color? backgroundColor;
@@ -307,10 +266,9 @@ class _FeatureContent extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
       child: Text(
         feature.text,
-        style: Theme.of(context)
-            .textTheme
-            .displaySmall!
-            .copyWith(fontSize: 11, fontWeight: FontWeight.w300, overflow: TextOverflow.ellipsis),
+        style: Theme.of(
+          context,
+        ).textTheme.displaySmall!.copyWith(fontSize: 11, fontWeight: FontWeight.w300, overflow: TextOverflow.ellipsis),
         softWrap: false,
         overflow: TextOverflow.ellipsis,
       ),

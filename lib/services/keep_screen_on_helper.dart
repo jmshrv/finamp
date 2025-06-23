@@ -76,7 +76,8 @@ class KeepScreenOnHelper {
     }
 
     _keepScreenOnLogger.fine(
-        "keepingScreenOn: $_keepingScreenOn | mainSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnOption} | whilePluggedInSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn} | isPlaying: $_isPlaying | lyricsShowing: $_isLyricsShowing | isPluggedIn: $_isPluggedIn");
+      "keepingScreenOn: $_keepingScreenOn | mainSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnOption} | whilePluggedInSetting: ${FinampSettingsHelper.finampSettings.keepScreenOnWhilePluggedIn} | isPlaying: $_isPlaying | lyricsShowing: $_isLyricsShowing | isPluggedIn: $_isPluggedIn",
+    );
   }
 
   void setCondition({bool? isPlaying, bool? isLyricsShowing, BatteryState? batteryState}) {

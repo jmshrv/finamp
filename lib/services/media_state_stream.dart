@@ -17,8 +17,9 @@ class MediaState {
 Stream<MediaState> get mediaStateStream {
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   return Rx.combineLatest3<MediaItem?, PlaybackState, FadeState, MediaState>(
-      audioHandler.mediaItem,
-      audioHandler.playbackState,
-      audioHandler.fadeState,
-      (mediaItem, playbackState, fadeState) => MediaState(mediaItem, playbackState, fadeState));
+    audioHandler.mediaItem,
+    audioHandler.playbackState,
+    audioHandler.fadeState,
+    (mediaItem, playbackState, fadeState) => MediaState(mediaItem, playbackState, fadeState),
+  );
 }

@@ -144,12 +144,11 @@ class RelativeDateTimeText extends StatelessWidget {
       initialData: DateTime.now(),
       builder: (context, snapshot) {
         final text = DateTimeHelper.formatRelativeTime(
-            context: context, dateTime: dateTime, includeStaticDateTime: includeStaticDateTime);
-        return Text(
-          text,
-          style: style,
-          textScaler: disableTextScaling ? TextScaler.noScaling : null,
+          context: context,
+          dateTime: dateTime,
+          includeStaticDateTime: includeStaticDateTime,
         );
+        return Text(text, style: style, textScaler: disableTextScaling ? TextScaler.noScaling : null);
       },
     );
   }
@@ -182,11 +181,7 @@ class RelativeDateTimeTextFromString extends StatelessWidget {
     final String fallbackText = fallback ?? AppLocalizations.of(context)!.unknown;
 
     if (parsed == null) {
-      return Text(
-        fallbackText,
-        style: style,
-        textScaler: disableTextScaling ? TextScaler.noScaling : null,
-      );
+      return Text(fallbackText, style: style, textScaler: disableTextScaling ? TextScaler.noScaling : null);
     }
 
     return RelativeDateTimeText(

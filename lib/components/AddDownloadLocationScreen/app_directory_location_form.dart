@@ -40,13 +40,12 @@ class _AppDirectoryLocationFormState extends State<AppDirectoryLocationForm> {
                   return const Text("No external directories.");
                 }
                 List<DropdownMenuItem<Directory>> dropdownButtonItems = snapshot.data!
-                    .map((e) => DropdownMenuItem(
-                          value: e,
-                          child: Text(
-                            e.path,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ))
+                    .map(
+                      (e) => DropdownMenuItem(
+                        value: e,
+                        child: Text(e.path, overflow: TextOverflow.ellipsis),
+                      ),
+                    )
                     .toList();
                 return DropdownButtonFormField<Directory>(
                   items: dropdownButtonItems,

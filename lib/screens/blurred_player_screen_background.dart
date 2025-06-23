@@ -15,10 +15,7 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
   /// should never be less than 1.0
   final double opacityFactor;
 
-  const BlurredPlayerScreenBackground({
-    super.key,
-    this.opacityFactor = 1.0,
-  });
+  const BlurredPlayerScreenBackground({super.key, this.opacityFactor = 1.0});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,50 +28,48 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
     Widget placeholderBuilder(_) => localBlurhash != null
         ? SizedBox.expand(
             child: Image(
-                fit: BoxFit.cover,
-                color: overlayColor,
-                colorBlendMode: BlendMode.srcOver,
-                image: BlurHashImage(
-                  localBlurhash,
-                )),
+              fit: BoxFit.cover,
+              color: overlayColor,
+              colorBlendMode: BlendMode.srcOver,
+              image: BlurHashImage(localBlurhash),
+            ),
           )
         : const SizedBox.shrink();
 
     return Positioned.fill(
-        child: AnimatedSwitcher(
-            duration: getThemeTransitionDuration(context),
-            switchOutCurve: const Threshold(0.0),
-            child: imageProvider == null
-                ? placeholderBuilder(null)
-                : OctoImage(
-                    // Don't transition between images with identical files/urls unless
-                    // system theme has changed
-                    key: ValueKey(imageProvider.hashCode + Theme.of(context).brightness.hashCode),
-                    image: imageProvider,
-                    fit: BoxFit.cover,
-                    fadeInDuration: Duration.zero,
-                    fadeOutDuration: Duration.zero,
-                    color: overlayColor,
-                    colorBlendMode: BlendMode.srcOver,
-                    filterQuality: FilterQuality.none,
-                    errorBuilder: (x, _, __) => placeholderBuilder(x),
-                    placeholderBuilder: placeholderBuilder,
-                    imageBuilder: (context, child) {
-                      var image = ImageFiltered(
-                        imageFilter: ui.ImageFilter.blur(
-                          sigmaX: 85,
-                          sigmaY: 85,
-                          tileMode: TileMode.mirror,
-                        ),
-                        child: SizedBox.expand(child: child),
-                      );
-                      // There seems to be some sort of issue with how Linux handles ui.Image that breaks
-                      // cachePaint.  This shouldn't be too important outside mobile, though.
-                      if (Platform.isLinux) {
-                        return image;
-                      }
-                      return CachePaint(imageKey: imageProvider, child: image);
-                    })));
+      child: AnimatedSwitcher(
+        duration: getThemeTransitionDuration(context),
+        switchOutCurve: const Threshold(0.0),
+        child: imageProvider == null
+            ? placeholderBuilder(null)
+            : OctoImage(
+                // Don't transition between images with identical files/urls unless
+                // system theme has changed
+                key: ValueKey(imageProvider.hashCode + Theme.of(context).brightness.hashCode),
+                image: imageProvider,
+                fit: BoxFit.cover,
+                fadeInDuration: Duration.zero,
+                fadeOutDuration: Duration.zero,
+                color: overlayColor,
+                colorBlendMode: BlendMode.srcOver,
+                filterQuality: FilterQuality.none,
+                errorBuilder: (x, _, __) => placeholderBuilder(x),
+                placeholderBuilder: placeholderBuilder,
+                imageBuilder: (context, child) {
+                  var image = ImageFiltered(
+                    imageFilter: ui.ImageFilter.blur(sigmaX: 85, sigmaY: 85, tileMode: TileMode.mirror),
+                    child: SizedBox.expand(child: child),
+                  );
+                  // There seems to be some sort of issue with how Linux handles ui.Image that breaks
+                  // cachePaint.  This shouldn't be too important outside mobile, though.
+                  if (Platform.isLinux) {
+                    return image;
+                  }
+                  return CachePaint(imageKey: imageProvider, child: image);
+                },
+              ),
+      ),
+    );
   }
 }
 

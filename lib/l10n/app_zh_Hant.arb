@@ -705,15 +705,6 @@
       }
     }
   },
-  "sleepTimerRemainingTime": "{prefix}{time} {suffix}後進入睡眠",
-  "@sleepTimerRemainingTime": {
-    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
-    "placeholders": {
-      "time": {
-        "type": "int"
-      }
-    }
-  },
   "addToMorePlaylistsTooltip": "加入至更多播放清單",
   "@addToMorePlaylistsTooltip": {},
   "addToMorePlaylistsTitle": "加入至更多播放清單",

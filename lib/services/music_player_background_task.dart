@@ -38,11 +38,12 @@ class FadeState {
   // current fade direction
   final FadeDirection fadeDirection;
 
-  FadeState(
-      {required this.fadeVolume,
-      this.volumeFadeInStepSize = 0.0,
-      this.volumeFadeOutStepSize = 0.0,
-      this.fadeDirection = FadeDirection.none});
+  FadeState({
+    required this.fadeVolume,
+    this.volumeFadeInStepSize = 0.0,
+    this.volumeFadeOutStepSize = 0.0,
+    this.fadeDirection = FadeDirection.none,
+  });
 
   FadeState copyWith({
     double? recoverVolume,
@@ -52,10 +53,11 @@ class FadeState {
     FadeDirection? fadeDirection,
   }) {
     return FadeState(
-        fadeVolume: fadeVolume ?? this.fadeVolume,
-        volumeFadeInStepSize: volumeFadeInStepSize ?? this.volumeFadeInStepSize,
-        volumeFadeOutStepSize: volumeFadeOutStepSize ?? this.volumeFadeOutStepSize,
-        fadeDirection: fadeDirection ?? this.fadeDirection);
+      fadeVolume: fadeVolume ?? this.fadeVolume,
+      volumeFadeInStepSize: volumeFadeInStepSize ?? this.volumeFadeInStepSize,
+      volumeFadeOutStepSize: volumeFadeOutStepSize ?? this.volumeFadeOutStepSize,
+      fadeDirection: fadeDirection ?? this.fadeDirection,
+    );
   }
 }
 
@@ -178,7 +180,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     try {
       final List<Object?>? rawObjects = await outputSwitcherChannel.invokeMethod<List<Object?>>('getRoutes');
 
-      final routes = rawObjects
+      final routes =
+          rawObjects
               ?.map((obj) => Map<String, dynamic>.from(obj as Map))
               .map((route) => FinampOutputRoute.fromJson(route))
               .toList() ??
@@ -239,13 +242,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       _audioServiceBackgroundTaskLogger.info("Initializing media-kit for Windows/Linux");
       JustAudioMediaKit.title = "Finamp";
       JustAudioMediaKit.prefetchPlaylist = true; // cache upcoming tracks, enable gapless playback
-      JustAudioMediaKit.ensureInitialized(
-        linux: true,
-        windows: true,
-        macOS: false,
-        iOS: false,
-        android: false,
-      );
+      JustAudioMediaKit.ensureInitialized(linux: true, windows: true, macOS: false, iOS: false, android: false);
     }
 
     _androidAudioEffects = [];
@@ -258,10 +255,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       _loudnessEnhancerEffect = null;
     }
 
-    _audioPipeline = AudioPipeline(
-      androidAudioEffects: _androidAudioEffects,
-      darwinAudioEffects: _iosAudioEffects,
-    );
+    _audioPipeline = AudioPipeline(androidAudioEffects: _androidAudioEffects, darwinAudioEffects: _iosAudioEffects);
 
     _player = AudioPlayer(
       audioLoadConfiguration: AudioLoadConfiguration(
@@ -272,11 +266,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           // minBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration, //!!! there are issues with the bufferForPlaybackDuration setting, the min duration seemingly has to be smaller than that. so we're using the default
           minBufferDuration: minBufferDuration,
           maxBufferDuration: Duration(
-              seconds: max(
-                  minBufferDuration.inSeconds,
-                  FinampSettingsHelper.finampSettings.bufferDuration
-                      .inSeconds)), // allows the player to fetch a bit more data in exchange for reduced request frequency
-          prioritizeTimeOverSizeThresholds: FinampSettingsHelper.finampSettings
+            seconds: max(minBufferDuration.inSeconds, FinampSettingsHelper.finampSettings.bufferDuration.inSeconds),
+          ), // allows the player to fetch a bit more data in exchange for reduced request frequency
+          prioritizeTimeOverSizeThresholds: FinampSettingsHelper
+              .finampSettings
               .bufferDisableSizeConstraints, // targetBufferBytes sets the absolute maximum, but if this false and maxBufferDuration is reached, buffering will end
           bufferForPlaybackDuration: Duration(seconds: 5),
           bufferForPlaybackAfterRebufferDuration: Duration(seconds: 10),
@@ -293,11 +286,13 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     );
 
     _loudnessEnhancerEffect?.setEnabled(FinampSettingsHelper.finampSettings.volumeNormalizationActive);
-    _loudnessEnhancerEffect?.setTargetGain(0.0 /
-        10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
+    _loudnessEnhancerEffect?.setTargetGain(
+      0.0 / 10.0,
+    ); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
     // calculate base volume gain for iOS as a linear factor, because just_audio doesn't yet support AudioEffect on iOS
-    iosBaseVolumeGainFactor = pow(10.0, FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain / 20.0)
-        as double; // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
+    iosBaseVolumeGainFactor =
+        pow(10.0, FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain / 20.0)
+            as double; // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
     if (!Platform.isAndroid) {
       _volumeNormalizationLogger.info("non-Android base volume gain factor: $iosBaseVolumeGainFactor");
     }
@@ -332,8 +327,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       prevIosGain = iosGain;
       prevNormActive = normalizationActive;
       // update replay gain settings every time settings are changed
-      iosBaseVolumeGainFactor = pow(10.0, iosGain / 20.0)
-          as double; // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
+      iosBaseVolumeGainFactor =
+          pow(10.0, iosGain / 20.0)
+              as double; // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
       if (normalizationActive) {
         _loudnessEnhancerEffect?.setEnabled(true);
         _applyVolumeNormalization(mediaItem.valueOrNull);
@@ -345,26 +341,17 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     });
 
     mediaItem.listen((currentTrack) {
-      if (sleepTimer != null && sleepTimer?.type == SleepTimerType.tracks && sleepTimer?.startTime != null) {
-        // Listen for events if it's the next track, and it's a tracks timer, reduce the length
-        sleepTimer?.remainingLength--;
-
-        if ((sleepTimer?.remainingLength ?? 0) <= 0) {
-          sleepTimer?.callback();
-          return;
-        }
-      }
+      sleepTimer?.onTrackCompleted();
 
       _applyVolumeNormalization(currentTrack);
     });
 
-    // trigger sleep timer if we're almost at the end of the final track
+    // trigger sleep timer early if we're almost at the end of the final track
     _player.positionStream.listen((position) {
-      if ((sleepTimer?.remainingLength ?? 0) <= 1 &&
+      if (sleepTimer?.remainingTracks == 1 &&
           ((mediaItem.value?.duration ?? Duration.zero) - position) <=
               FinampSettingsHelper.finampSettings.audioFadeOutDuration) {
-        sleepTimer?.callback();
-        return;
+        sleepTimer?.onTrackCompleted();
       }
     });
 
@@ -379,8 +366,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _player.shuffleModeEnabledStream.listen((_) {
       final event = _transformEvent(_player.playbackEvent);
       playbackState.add(event);
-      _audioServiceBackgroundTaskLogger
-          .info("Shuffle mode changed to ${event.shuffleMode} (${_player.shuffleModeEnabled}).");
+      _audioServiceBackgroundTaskLogger.info(
+        "Shuffle mode changed to ${event.shuffleMode} (${_player.shuffleModeEnabled}).",
+      );
     });
     _player.loopModeStream.listen((_) {
       final event = _transformEvent(_player.playbackEvent);
@@ -394,9 +382,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   SleepTimer? get sleepTimer => _timer.value;
 
   /// this could be useful for updating queue state from this player class, but isn't used right now due to limitations with just_audio
-  void setQueueCallbacks({
-    required Future<bool> Function() previousTrackCallback,
-  }) {
+  void setQueueCallbacks({required Future<bool> Function() previousTrackCallback}) {
     _queueCallbackPreviousTrack = previousTrackCallback;
   }
 
@@ -404,11 +390,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _queueAudioSource = source;
 
     try {
-      await _player.setAudioSource(
-        _queueAudioSource,
-        preload: preload,
-        initialIndex: nextInitialIndex,
-      );
+      await _player.setAudioSource(_queueAudioSource, preload: preload, initialIndex: nextInitialIndex);
     } on PlayerException catch (e) {
       _audioServiceBackgroundTaskLogger.severe("Player error code ${e.code}: ${e.message}");
       GlobalSnackbar.error(e);
@@ -467,11 +449,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   Future<void> _fadeAudio(FadeDirection direction) async {
-    fadeState.add(FadeState(
+    fadeState.add(
+      FadeState(
         fadeVolume: direction == FadeDirection.fadeIn ? 0.0 : 1.0,
         volumeFadeInStepSize: _getVolumeFadeInStepSize(),
         volumeFadeOutStepSize: _getVolumeFadeOutStepSize(),
-        fadeDirection: direction));
+        fadeDirection: direction,
+      ),
+    );
 
     // Prepare fade-in
     Future<void>? fut;
@@ -481,9 +466,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     }
 
     bool cancelled = false;
-    await Stream.periodic(_audioFadeStepDuration, (_) => fadeState.value)
-        .takeWhile((fade) => fade.fadeDirection != FadeDirection.none && !cancelled)
-        .forEach((state) async {
+    await Stream.periodic(
+      _audioFadeStepDuration,
+      (_) => fadeState.value,
+    ).takeWhile((fade) => fade.fadeDirection != FadeDirection.none && !cancelled).forEach((state) async {
       switch (state.fadeDirection) {
         case FadeDirection.fadeIn:
           var newVolume = state.fadeVolume + state.volumeFadeInStepSize;
@@ -550,19 +536,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<void> stop() async {
     try {
-      _audioServiceBackgroundTaskLogger.info("Stopping audio service");
+      _audioServiceBackgroundTaskLogger.info("Audio service received stop command");
 
-      final queueService = GetIt.instance<QueueService>();
-      await queueService.stopPlayback();
-      // await _player.seek(_player.duration);
-
-      // await handleEndOfQueue();
-
-      // TODO: Do we want to actually cancel the sleep timer if we stop the music?
-      _timer.value?.cancel();
-      _timer.value = null;
-
-      await super.stop();
+      if (FinampSettingsHelper.finampSettings.clearQueueOnStopEvent) {
+        await GetIt.instance<QueueService>().stopAndClearQueue();
+      } else {
+        // stop the player to release native assets but do not clear queue or reset playback state
+        await stopPlayback();
+      }
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -571,6 +552,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
   Future<void> stopPlayback() async {
     try {
+      clearSleepTimer();
+
       await _player.stop();
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
@@ -599,9 +582,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   }
 
   @override
-  Future<void> skipToPrevious({
-    bool forceSkip = false,
-  }) async {
+  Future<void> skipToPrevious({bool forceSkip = false}) async {
     bool doSkip = true;
 
     try {
@@ -671,8 +652,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           queueIndex %= (_player.effectiveIndices?.length ?? 1);
         }
       }
-      await _player.seek(Duration.zero,
-          index: _player.shuffleModeEnabled ? _queueAudioSource.shuffleIndices[queueIndex] : queueIndex);
+      await _player.seek(
+        Duration.zero,
+        index: _player.shuffleModeEnabled ? _queueAudioSource.shuffleIndices[queueIndex] : queueIndex,
+      );
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -683,8 +666,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     _audioServiceBackgroundTaskLogger.fine("skipping to index: $index");
 
     try {
-      await _player.seek(Duration.zero,
-          index: _player.shuffleModeEnabled ? _queueAudioSource.shuffleIndices[index] : index);
+      await _player.seek(
+        Duration.zero,
+        index: _player.shuffleModeEnabled ? _queueAudioSource.shuffleIndices[index] : index,
+      );
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
       return Future.error(e);
@@ -726,7 +711,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           break;
         default:
           return Future.error(
-              "Unsupported AudioServiceRepeatMode! Received ${shuffleMode.toString()}, requires all or none.");
+            "Unsupported AudioServiceRepeatMode! Received ${shuffleMode.toString()}, requires all or none.",
+          );
       }
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
@@ -749,7 +735,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
           break;
         default:
           return Future.error(
-              "Unsupported AudioServiceRepeatMode! Received ${repeatMode.toString()}, requires all, none, or one.");
+            "Unsupported AudioServiceRepeatMode! Received ${repeatMode.toString()}, requires all, none, or one.",
+          );
       }
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe(e);
@@ -762,25 +749,31 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     return [
       MediaItem(
         id: MediaItemId(contentType: TabContentType.albums, parentType: MediaItemParentType.rootCollection).toString(),
+        // ignore: deprecated_member_use_from_same_package
         title: _appLocalizations?.albums ?? TabContentType.albums.toString(),
         playable: false,
       ),
       MediaItem(
         id: MediaItemId(contentType: TabContentType.artists, parentType: MediaItemParentType.rootCollection).toString(),
+        // ignore: deprecated_member_use_from_same_package
         title: _appLocalizations?.artists ?? TabContentType.artists.toString(),
         playable: false,
       ),
       MediaItem(
-        id: MediaItemId(contentType: TabContentType.playlists, parentType: MediaItemParentType.rootCollection)
-            .toString(),
+        id: MediaItemId(
+          contentType: TabContentType.playlists,
+          parentType: MediaItemParentType.rootCollection,
+        ).toString(),
+        // ignore: deprecated_member_use_from_same_package
         title: _appLocalizations?.playlists ?? TabContentType.playlists.toString(),
         playable: false,
       ),
       MediaItem(
         id: MediaItemId(contentType: TabContentType.genres, parentType: MediaItemParentType.rootCollection).toString(),
+        // ignore: deprecated_member_use_from_same_package
         title: _appLocalizations?.genres ?? TabContentType.genres.toString(),
         playable: false,
-      )
+      ),
     ];
   }
 
@@ -801,7 +794,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       // return await _androidAutoHelper.getRecentItems();
       // return playlists for now
       return await _androidAutoHelper.getMediaItems(
-          MediaItemId(contentType: TabContentType.playlists, parentType: MediaItemParentType.rootCollection));
+        MediaItemId(contentType: TabContentType.playlists, parentType: MediaItemParentType.rootCollection),
+      );
     } else {
       try {
         final itemId = MediaItemId.fromJson(jsonDecode(parentMediaId) as Map<String, dynamic>);
@@ -880,7 +874,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
           if (mediaItem.valueOrNull?.extras?["itemJson"] != null) {
             currentItem = jellyfin_models.BaseItemDto.fromJson(
-                mediaItem.valueOrNull?.extras!["itemJson"] as Map<String, dynamic>);
+              mediaItem.valueOrNull?.extras!["itemJson"] as Map<String, dynamic>,
+            );
           } else {
             return;
           }
@@ -905,12 +900,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
               newUserData.isFavorite = isFavorite;
             }
             currentItem.userData = newUserData;
-            mediaItem.add(mediaItem.valueOrNull?.copyWith(
-              extras: {
-                ...mediaItem.valueOrNull?.extras ?? {},
-                "itemJson": currentItem.toJson(),
-              },
-            ));
+            mediaItem.add(
+              mediaItem.valueOrNull?.copyWith(
+                extras: {...mediaItem.valueOrNull?.extras ?? {}, "itemJson": currentItem.toJson()},
+              ),
+            );
           }
           return refreshPlaybackStateAndMediaNotification();
       }
@@ -945,56 +939,51 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       double? effectiveGainChange = getEffectiveGainChange(currentTrack, baseItem);
 
       _volumeNormalizationLogger.info(
-          "normalization gain for '${baseItem.name}': $effectiveGainChange (track gain change: ${baseItem.normalizationGain})");
+        "normalization gain for '${baseItem.name}': $effectiveGainChange (track gain change: ${baseItem.normalizationGain})",
+      );
       if (effectiveGainChange != null) {
         _volumeNormalizationLogger.info("Gain change: $effectiveGainChange");
         if (Platform.isAndroid) {
-          _loudnessEnhancerEffect?.setTargetGain(effectiveGainChange /
-              10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
+          _loudnessEnhancerEffect?.setTargetGain(
+            effectiveGainChange / 10.0,
+          ); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856a630329c4e6 is merged)
         } else {
-          final newVolume = iosBaseVolumeGainFactor *
+          final newVolume =
+              iosBaseVolumeGainFactor *
               pow(
-                  10.0,
-                  effectiveGainChange /
-                      20.0); // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
+                10.0,
+                effectiveGainChange / 20.0,
+              ); // https://sound.stackexchange.com/questions/38722/convert-db-value-to-linear-scale
           _volumeNormalizationLogger.finer("new volume: $newVolume");
           _volume.setReplayGainVolume(newVolume);
         }
       } else {
         // reset gain offset
-        _loudnessEnhancerEffect?.setTargetGain(0 /
-            10.0); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856ua630329c4e6 is merged)
+        _loudnessEnhancerEffect?.setTargetGain(
+          0 / 10.0,
+        ); //!!! always divide by 10, the just_audio implementation has a bug so it expects a value in Bel and not Decibel (remove once https://github.com/ryanheise/just_audio/pull/1092/commits/436b3274d0233818a061ecc1c0856ua630329c4e6 is merged)
         _volume.setReplayGainVolume(
-            iosBaseVolumeGainFactor); //!!! it's important that the base gain is used instead of 1.0, so that any tracks without normalization gain information don't fall back to full volume, but to the base volume for iOS
+          iosBaseVolumeGainFactor,
+        ); //!!! it's important that the base gain is used instead of 1.0, so that any tracks without normalization gain information don't fall back to full volume, but to the base volume for iOS
       }
     }
   }
 
-  void sleepTimerActions() {
-    clearSleepTimer();
+  /// Handles a sleep timer triggering, pausing play and clearing the timer
+  void completeSleepTimer() {
+    pause();
+    _timer.value?.cancel();
+    _timer.value = null;
   }
 
   /// Starts the new sleep timer
-  Timer? startSleepTimer(SleepTimer newSleepTimer) {
+  void startSleepTimer(SleepTimer newSleepTimer) {
     _timer.value = newSleepTimer;
-    sleepTimer?.start(() => sleepTimerActions());
-    return _timer.value!.timer;
+    sleepTimer?.start(completeSleepTimer);
   }
 
   /// Cancels the sleep timer and clears it.
   void clearSleepTimer() {
-    // This was a timer and we want to finish this track, convert it to a tracks timer with 0
-    if (sleepTimer?.type == SleepTimerType.duration && (sleepTimer?.finishTrack ?? false)) {
-      sleepTimer?.type = SleepTimerType.tracks;
-      sleepTimer?.length = 1;
-      // restart the timer
-      sleepTimer?.start(() => sleepTimerActions());
-      return;
-    }
-
-    // _sleepTimerDuration = Duration.zero;
-    // sleepTimer.remainingLength = 0;
-    pause();
     _timer.value?.cancel();
     _timer.value = null;
   }
@@ -1013,8 +1002,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     bool isFavorite = false;
 
     if (mediaItem.valueOrNull?.extras?["itemJson"] != null) {
-      currentItem =
-          jellyfin_models.BaseItemDto.fromJson(mediaItem.valueOrNull?.extras!["itemJson"] as Map<String, dynamic>);
+      currentItem = jellyfin_models.BaseItemDto.fromJson(
+        mediaItem.valueOrNull?.extras!["itemJson"] as Map<String, dynamic>,
+      );
       if (GlobalSnackbar.materialAppScaffoldKey.currentContext != null) {
         isFavorite = GetIt.instance<ProviderContainer>().read(isFavoriteProvider(currentItem));
       } else {
@@ -1033,36 +1023,35 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
             androidIcon: isFavorite ? "drawable/baseline_heart_filled_24" : "drawable/baseline_heart_24",
             label: isFavorite
                 ? (GlobalSnackbar.materialAppScaffoldKey.currentContext != null
-                    ? AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!.removeFavorite
-                    : "Remove Favorite")
+                      ? AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!.removeFavorite
+                      : "Remove Favorite")
                 : (GlobalSnackbar.materialAppScaffoldKey.currentContext != null
-                    ? AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!.addFavorite
-                    : "Add Favorite"),
+                      ? AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!.addFavorite
+                      : "Add Favorite"),
           ),
         if (FinampSettingsHelper.finampSettings.showShuffleButtonOnMediaNotification)
           MediaControl.custom(
             name: CustomPlaybackActions.shuffle.name,
-            androidIcon:
-                _player.shuffleModeEnabled ? "drawable/baseline_shuffle_on_24" : "drawable/baseline_shuffle_24",
+            androidIcon: _player.shuffleModeEnabled
+                ? "drawable/baseline_shuffle_on_24"
+                : "drawable/baseline_shuffle_24",
             label: _player.shuffleModeEnabled
                 ? (GlobalSnackbar.materialAppScaffoldKey.currentContext != null
-                    ? AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!
-                        .playbackOrderShuffledButtonLabel
-                    : "Shuffle enabled")
+                      ? AppLocalizations.of(
+                          GlobalSnackbar.materialAppScaffoldKey.currentContext!,
+                        )!.playbackOrderShuffledButtonLabel
+                      : "Shuffle enabled")
                 : (GlobalSnackbar.materialAppScaffoldKey.currentContext != null
-                    ? AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!
-                        .playbackOrderLinearButtonLabel
-                    : "Shuffle disabled"),
+                      ? AppLocalizations.of(
+                          GlobalSnackbar.materialAppScaffoldKey.currentContext!,
+                        )!.playbackOrderLinearButtonLabel
+                      : "Shuffle disabled"),
           ),
         if (FinampSettingsHelper.finampSettings.showStopButtonOnMediaNotification)
           MediaControl.stop.copyWith(androidIcon: "drawable/baseline_stop_24"),
       ],
       systemActions: FinampSettingsHelper.finampSettings.showSeekControlsOnMediaNotification
-          ? const {
-              MediaAction.seek,
-              MediaAction.seekForward,
-              MediaAction.seekBackward,
-            }
+          ? const {MediaAction.seek, MediaAction.seekForward, MediaAction.seekBackward}
           : {},
       androidCompactActionIndices: const [0, 1, 2],
       processingState: const {

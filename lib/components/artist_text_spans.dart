@@ -14,15 +14,11 @@ List<TextSpan> getArtistsTextSpans(BaseItemDto item, BuildContext context, bool 
   List<NameIdPair>? artists = item.type == "MusicAlbum" ? item.albumArtists : item.artistItems;
 
   if (artists?.isEmpty ?? true) {
-    separatedArtistTextSpans = [
-      TextSpan(
-        text: "Unknown Artist",
-        style: Theme.of(context).textTheme.bodyMedium,
-      )
-    ];
+    separatedArtistTextSpans = [TextSpan(text: "Unknown Artist", style: Theme.of(context).textTheme.bodyMedium)];
   } else {
     artists
-        ?.map((e) => TextSpan(
+        ?.map(
+          (e) => TextSpan(
             text: e.name,
             style: Theme.of(context).textTheme.bodyMedium,
             recognizer: TapGestureRecognizer()
@@ -30,17 +26,20 @@ List<TextSpan> getArtistsTextSpans(BaseItemDto item, BuildContext context, bool 
                 // Offline artists aren't implemented yet so we return if offline
                 if (FinampSettingsHelper.finampSettings.isOffline) return;
 
-                jellyfinApiHelper.getItemById(e.id).then((artist) => popRoutes
-                    ? Navigator.of(context).popAndPushNamed(ArtistScreen.routeName, arguments: artist)
-                    : Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: artist));
-              }))
+                jellyfinApiHelper
+                    .getItemById(e.id)
+                    .then(
+                      (artist) => popRoutes
+                          ? Navigator.of(context).popAndPushNamed(ArtistScreen.routeName, arguments: artist)
+                          : Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: artist),
+                    );
+              },
+          ),
+        )
         .forEach((artistTextSpan) {
-      separatedArtistTextSpans.add(artistTextSpan);
-      separatedArtistTextSpans.add(TextSpan(
-        text: ", ",
-        style: Theme.of(context).textTheme.bodyMedium,
-      ));
-    });
+          separatedArtistTextSpans.add(artistTextSpan);
+          separatedArtistTextSpans.add(TextSpan(text: ", ", style: Theme.of(context).textTheme.bodyMedium));
+        });
     separatedArtistTextSpans.removeLast();
   }
   return separatedArtistTextSpans;

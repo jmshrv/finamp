@@ -24,7 +24,7 @@ class SleepTimerCancelDialog extends StatelessWidget {
             audioHandler.clearSleepTimer();
             Navigator.of(context).pop();
           },
-        )
+        ),
       ],
     );
   }

@@ -1,5 +1,10 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: deprecated_member_use_from_same_package
+
+// dart format off
+
+
 part of 'item_amount_provider.dart';
 
 // **************************************************************************
@@ -67,32 +72,36 @@ class ItemAmountFamily extends Family<AsyncValue<(int, BaseItemDtoType)>> {
   static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies => _allTransitiveDependencies;
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
 
   @override
   String? get name => r'itemAmountProvider';
 }
 
 /// See also [itemAmount].
-class ItemAmountProvider extends AutoDisposeFutureProvider<(int, BaseItemDtoType)> {
+class ItemAmountProvider
+    extends AutoDisposeFutureProvider<(int, BaseItemDtoType)> {
   /// See also [itemAmount].
   ItemAmountProvider({
     required BaseItemDto baseItem,
     bool showTrackCountForArtists = false,
   }) : this._internal(
-          (ref) => itemAmount(
-            ref as ItemAmountRef,
-            baseItem: baseItem,
-            showTrackCountForArtists: showTrackCountForArtists,
-          ),
-          from: itemAmountProvider,
-          name: r'itemAmountProvider',
-          debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$itemAmountHash,
-          dependencies: ItemAmountFamily._dependencies,
-          allTransitiveDependencies: ItemAmountFamily._allTransitiveDependencies,
-          baseItem: baseItem,
-          showTrackCountForArtists: showTrackCountForArtists,
-        );
+         (ref) => itemAmount(
+           ref as ItemAmountRef,
+           baseItem: baseItem,
+           showTrackCountForArtists: showTrackCountForArtists,
+         ),
+         from: itemAmountProvider,
+         name: r'itemAmountProvider',
+         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+             ? null
+             : _$itemAmountHash,
+         dependencies: ItemAmountFamily._dependencies,
+         allTransitiveDependencies: ItemAmountFamily._allTransitiveDependencies,
+         baseItem: baseItem,
+         showTrackCountForArtists: showTrackCountForArtists,
+       );
 
   ItemAmountProvider._internal(
     super._createNotifier, {
@@ -159,13 +168,16 @@ mixin ItemAmountRef on AutoDisposeFutureProviderRef<(int, BaseItemDtoType)> {
   bool get showTrackCountForArtists;
 }
 
-class _ItemAmountProviderElement extends AutoDisposeFutureProviderElement<(int, BaseItemDtoType)> with ItemAmountRef {
+class _ItemAmountProviderElement
+    extends AutoDisposeFutureProviderElement<(int, BaseItemDtoType)>
+    with ItemAmountRef {
   _ItemAmountProviderElement(super.provider);
 
   @override
   BaseItemDto get baseItem => (origin as ItemAmountProvider).baseItem;
   @override
-  bool get showTrackCountForArtists => (origin as ItemAmountProvider).showTrackCountForArtists;
+  bool get showTrackCountForArtists =>
+      (origin as ItemAmountProvider).showTrackCountForArtists;
 }
 
 String _$childItemTypeHash() => r'c65893697d022dbe49bb11327dd9d9df3cbdfc49';
@@ -180,21 +192,15 @@ class ChildItemTypeFamily extends Family<BaseItemDtoType> {
   const ChildItemTypeFamily();
 
   /// See also [childItemType].
-  ChildItemTypeProvider call(
-    BaseItemDto item,
-  ) {
-    return ChildItemTypeProvider(
-      item,
-    );
+  ChildItemTypeProvider call(BaseItemDto item) {
+    return ChildItemTypeProvider(item);
   }
 
   @override
   ChildItemTypeProvider getProviderOverride(
     covariant ChildItemTypeProvider provider,
   ) {
-    return call(
-      provider.item,
-    );
+    return call(provider.item);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -205,7 +211,8 @@ class ChildItemTypeFamily extends Family<BaseItemDtoType> {
   static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies => _allTransitiveDependencies;
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
 
   @override
   String? get name => r'childItemTypeProvider';
@@ -214,20 +221,19 @@ class ChildItemTypeFamily extends Family<BaseItemDtoType> {
 /// See also [childItemType].
 class ChildItemTypeProvider extends AutoDisposeProvider<BaseItemDtoType> {
   /// See also [childItemType].
-  ChildItemTypeProvider(
-    BaseItemDto item,
-  ) : this._internal(
-          (ref) => childItemType(
-            ref as ChildItemTypeRef,
-            item,
-          ),
-          from: childItemTypeProvider,
-          name: r'childItemTypeProvider',
-          debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$childItemTypeHash,
-          dependencies: ChildItemTypeFamily._dependencies,
-          allTransitiveDependencies: ChildItemTypeFamily._allTransitiveDependencies,
-          item: item,
-        );
+  ChildItemTypeProvider(BaseItemDto item)
+    : this._internal(
+        (ref) => childItemType(ref as ChildItemTypeRef, item),
+        from: childItemTypeProvider,
+        name: r'childItemTypeProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$childItemTypeHash,
+        dependencies: ChildItemTypeFamily._dependencies,
+        allTransitiveDependencies:
+            ChildItemTypeFamily._allTransitiveDependencies,
+        item: item,
+      );
 
   ChildItemTypeProvider._internal(
     super._createNotifier, {
@@ -285,11 +291,14 @@ mixin ChildItemTypeRef on AutoDisposeProviderRef<BaseItemDtoType> {
   BaseItemDto get item;
 }
 
-class _ChildItemTypeProviderElement extends AutoDisposeProviderElement<BaseItemDtoType> with ChildItemTypeRef {
+class _ChildItemTypeProviderElement
+    extends AutoDisposeProviderElement<BaseItemDtoType>
+    with ChildItemTypeRef {
   _ChildItemTypeProviderElement(super.provider);
 
   @override
   BaseItemDto get item => (origin as ChildItemTypeProvider).item;
 }
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

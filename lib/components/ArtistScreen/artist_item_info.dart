@@ -24,7 +24,7 @@ class ArtistItemInfo extends ConsumerWidget {
   final BaseItemDto? genreFilter;
   final void Function(BaseItemDto?)? updateGenreFilter;
 
-// TODO: see if there's a way to expand this column to the row that it's in
+  // TODO: see if there's a way to expand this column to the row that it's in
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
@@ -32,19 +32,19 @@ class ArtistItemInfo extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconAndText(
-            iconData: Icons.music_note,
-            textSpan: TextSpan(
-              text: ref.watch(finampSettingsProvider.isOffline)
-                  ? AppLocalizations.of(context)!.offlineTrackCountArtist(itemTracks)
-                  : AppLocalizations.of(context)!.trackCount(itemTracks),
-            )),
+          iconData: Icons.music_note,
+          textSpan: TextSpan(
+            text: ref.watch(finampSettingsProvider.isOffline)
+                ? AppLocalizations.of(context)!.offlineTrackCountArtist(itemTracks)
+                : AppLocalizations.of(context)!.trackCount(itemTracks),
+          ),
+        ),
         IconAndText(
-            iconData: TablerIcons.disc,
-            textSpan: TextSpan(
-              text: AppLocalizations.of(context)!.albumCount(itemAlbums),
-            )),
+          iconData: TablerIcons.disc,
+          textSpan: TextSpan(text: AppLocalizations.of(context)!.albumCount(itemAlbums)),
+        ),
         if (item.type != "MusicGenre" && updateGenreFilter != null && item.genreItems != null)
-          GenreIconAndText(parent: item, genreFilter: genreFilter, updateGenreFilter: updateGenreFilter!)
+          GenreIconAndText(parent: item, genreFilter: genreFilter, updateGenreFilter: updateGenreFilter!),
       ],
     );
   }

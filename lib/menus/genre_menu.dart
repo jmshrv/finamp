@@ -16,10 +16,7 @@ const Curve genreMenuDefaultInCurve = Curves.easeOutCubic;
 const Curve genreMenuDefaultOutCurve = Curves.easeInCubic;
 const genreMenuRouteName = "/genre-menu";
 
-Future<void> showModalGenreMenu({
-  required BuildContext context,
-  required BaseItemDto baseItem,
-}) async {
+Future<void> showModalGenreMenu({required BuildContext context, required BaseItemDto baseItem}) async {
   // Normal menu entries, excluding headers
   List<HideableMenuEntry> getMenuEntries(BuildContext context) {
     return [
@@ -41,12 +38,7 @@ Future<void> showModalGenreMenu({
     final pageViewController = PageController();
 
     List<Widget> menu = [
-      SliverPersistentHeader(
-        delegate: MenuItemInfoSliverHeader(
-          item: baseItem,
-        ),
-        pinned: true,
-      ),
+      SliverPersistentHeader(delegate: MenuItemInfoSliverHeader(item: baseItem), pinned: true),
       //!!! temporarily disabled due to performance issues with large queues
       // MenuMask(
       //   height: MenuMask.defaultHeight,
@@ -64,11 +56,9 @@ Future<void> showModalGenreMenu({
         height: MenuItemInfoSliverHeader.defaultHeight,
         child: SliverPadding(
           padding: const EdgeInsets.only(left: 8.0),
-          sliver: SliverList(
-            delegate: SliverChildListDelegate(menuEntries),
-          ),
+          sliver: SliverList(delegate: SliverChildListDelegate(menuEntries)),
         ),
-      )
+      ),
     ];
 
     return (stackHeight, menu);

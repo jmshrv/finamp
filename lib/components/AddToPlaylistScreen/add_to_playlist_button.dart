@@ -15,14 +15,7 @@ import 'package:get_it/get_it.dart';
 import '../../menus/playlist_actions_menu.dart';
 
 class AddToPlaylistButton extends ConsumerStatefulWidget {
-  const AddToPlaylistButton({
-    super.key,
-    required this.item,
-    this.queueItem,
-    this.color,
-    this.size,
-    this.visualDensity,
-  });
+  const AddToPlaylistButton({super.key, required this.item, this.queueItem, this.color, this.size, this.visualDensity});
 
   final BaseItemDto? item;
   final FinampQueueItem? queueItem;
@@ -62,26 +55,24 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
           ref.read(isFavoriteProvider(widget.item).notifier).updateFavorite(!isFav);
         },
         child: IconButton(
-            icon: Icon(
-              isFav ? Icons.favorite : Icons.favorite_outline,
-              size: widget.size ?? 24.0,
-            ),
-            color: widget.color ?? IconTheme.of(context).color,
-            disabledColor: (widget.color ?? IconTheme.of(context).color)!.withOpacity(0.3),
-            visualDensity: widget.visualDensity ?? VisualDensity.compact,
-            // tooltip: AppLocalizations.of(context)!.addToPlaylistTooltip,
-            onPressed: () async {
-              if (FinampSettingsHelper.finampSettings.isOffline) {
-                return GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notAvailableInOfflineMode);
-              }
+          icon: Icon(isFav ? Icons.favorite : Icons.favorite_outline, size: widget.size ?? 24.0),
+          color: widget.color ?? IconTheme.of(context).color,
+          disabledColor: (widget.color ?? IconTheme.of(context).color)!.withOpacity(0.3),
+          visualDensity: widget.visualDensity ?? VisualDensity.compact,
+          // tooltip: AppLocalizations.of(context)!.addToPlaylistTooltip,
+          onPressed: () async {
+            if (FinampSettingsHelper.finampSettings.isOffline) {
+              return GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notAvailableInOfflineMode);
+            }
 
-              bool inPlaylist = queueItemInPlaylist(widget.queueItem);
-              await showPlaylistActionsMenu(
-                context: context,
-                item: widget.item!,
-                parentPlaylist: inPlaylist ? widget.queueItem!.source.item : null,
-              );
-            }),
+            bool inPlaylist = queueItemInPlaylist(widget.queueItem);
+            await showPlaylistActionsMenu(
+              context: context,
+              item: widget.item!,
+              parentPlaylist: inPlaylist ? widget.queueItem!.source.item : null,
+            );
+          },
+        ),
       ),
     );
   }

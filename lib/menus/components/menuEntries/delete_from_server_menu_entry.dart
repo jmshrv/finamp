@@ -14,10 +14,7 @@ import 'package:get_it/get_it.dart';
 class DeleteFromServerMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final BaseItemDto baseItem;
 
-  const DeleteFromServerMenuEntry({
-    super.key,
-    required this.baseItem,
-  });
+  const DeleteFromServerMenuEntry({super.key, required this.baseItem});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,10 +29,11 @@ class DeleteFromServerMenuEntry extends ConsumerWidget implements HideableMenuEn
         title: AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server"),
         onTap: () async {
           var item = DownloadStub.fromItem(
-              type: BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.track
-                  ? DownloadItemType.track
-                  : DownloadItemType.collection,
-              item: baseItem);
+            type: BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.track
+                ? DownloadItemType.track
+                : DownloadItemType.collection,
+            item: baseItem,
+          );
           await askBeforeDeleteFromServerAndDevice(context, item);
           Navigator.pop(context); // close popup
           musicScreenRefreshStream.add(null);

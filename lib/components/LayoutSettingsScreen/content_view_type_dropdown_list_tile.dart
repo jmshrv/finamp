@@ -16,10 +16,7 @@ class ContentViewTypeDropdownListTile extends ConsumerWidget {
       trailing: DropdownButton<ContentViewType>(
         value: ref.watch(finampSettingsProvider.contentViewType),
         items: ContentViewType.values
-            .map((e) => DropdownMenuItem<ContentViewType>(
-                  value: e,
-                  child: Text(e.toLocalisedString(context)),
-                ))
+            .map((e) => DropdownMenuItem<ContentViewType>(value: e, child: Text(e.toLocalisedString(context))))
             .toList(),
         onChanged: (value) {
           if (value != null) {

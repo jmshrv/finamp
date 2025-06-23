@@ -697,15 +697,6 @@
   },
   "removeFromPlaylistConfirm": "Вилучити",
   "@removeFromPlaylistConfirm": {},
-  "sleepTimerRemainingTime": "Сон у {prefix}{time} {suffix}",
-  "@sleepTimerRemainingTime": {
-    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
-    "placeholders": {
-      "time": {
-        "type": "int"
-      }
-    }
-  },
   "confirmFavoriteRemoved": "Вилучено Обране",
   "@confirmFavoriteRemoved": {},
   "confirmAddedToPlaylist": "Додано до списку відтворення.",

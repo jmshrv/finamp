@@ -10,10 +10,7 @@ import 'package:get_it/get_it.dart';
 class ClearQueueMenuEntry extends ConsumerWidget implements HideableMenuEntry {
   final BaseItemDto baseItem;
 
-  const ClearQueueMenuEntry({
-    super.key,
-    required this.baseItem,
-  });
+  const ClearQueueMenuEntry({super.key, required this.baseItem});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,7 +21,7 @@ class ClearQueueMenuEntry extends ConsumerWidget implements HideableMenuEntry {
       title: AppLocalizations.of(context)!.stopAndClearQueue,
       onTap: () async {
         if (context.mounted) Navigator.pop(context);
-        await queueService.stopPlayback();
+        await queueService.stopAndClearQueue();
       },
     );
   }

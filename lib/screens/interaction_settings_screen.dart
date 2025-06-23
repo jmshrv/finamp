@@ -26,7 +26,9 @@ class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
         title: Text(AppLocalizations.of(context)!.interactions),
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-              context, FinampSettingsHelper.resetInteractionsSettings)
+            context,
+            FinampSettingsHelper.resetInteractionsSettings,
+          ),
         ],
       ),
       body: ListView(
@@ -41,7 +43,7 @@ class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
           DisableGestureSelector(),
           DisableVibrationSelector(),
           KeepScreenOnDropdownListTile(),
-          KeepScreenOnWhilePluggedInSelector()
+          KeepScreenOnWhilePluggedInSelector(),
         ],
       ),
     );

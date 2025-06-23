@@ -9,11 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:focus_on_it/focus_on_it.dart';
 
-enum Drag {
-  start,
-  update,
-  end;
-}
+enum Drag { start, update, end }
 
 class AlphabetList extends ConsumerStatefulWidget {
   final Function(String) callback;
@@ -23,19 +19,21 @@ class AlphabetList extends ConsumerStatefulWidget {
   final Widget child;
   final ScrollController scrollController;
 
-  const AlphabetList(
-      {super.key,
-      required this.callback,
-      required this.sortOrder,
-      required this.child,
-      required this.scrollController});
+  const AlphabetList({
+    super.key,
+    required this.callback,
+    required this.sortOrder,
+    required this.child,
+    required this.scrollController,
+  });
 
   @override
   ConsumerState<AlphabetList> createState() => _AlphabetListState();
 }
 
 class _AlphabetListState extends ConsumerState<AlphabetList> {
-  List<String> alphabet = ['#'] +
+  List<String> alphabet =
+      ['#'] +
       List.generate(26, (int index) {
         return String.fromCharCode('A'.codeUnitAt(0) + index);
       });
@@ -63,9 +61,7 @@ class _AlphabetListState extends ConsumerState<AlphabetList> {
   @override
   Widget build(BuildContext context) {
     final alphabetList = Container(
-      margin: EdgeInsets.only(
-        bottom: MediaQuery.paddingOf(context).bottom + _bottomPadding / 2,
-      ),
+      margin: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + _bottomPadding / 2),
       decoration: ref.watch(finampSettingsProvider.contentViewType) == ContentViewType.grid
           ? BoxDecoration(
               borderRadius: BorderRadius.circular(12.0),
@@ -73,32 +69,31 @@ class _AlphabetListState extends ConsumerState<AlphabetList> {
             )
           : null,
       padding: EdgeInsets.only(top: 10, bottom: _bottomPadding / 2, right: 3 + MediaQuery.paddingOf(context).right),
-      child: LayoutBuilder(builder: (context, constraints) {
-        _letterHeight = constraints.maxHeight / alphabet.length;
-        return Listener(
-          onPointerDown: (x) => updateSelected(x.localPosition, Drag.start),
-          onPointerMove: (x) => updateSelected(x.localPosition, Drag.update),
-          onPointerUp: (x) => updateSelected(x.localPosition, Drag.end),
-          behavior: HitTestBehavior.opaque,
-          child: Semantics(
-            excludeSemantics: true, // replace child semantics with custom semantics
-            child: Column(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          _letterHeight = constraints.maxHeight / alphabet.length;
+          return Listener(
+            onPointerDown: (x) => updateSelected(x.localPosition, Drag.start),
+            onPointerMove: (x) => updateSelected(x.localPosition, Drag.update),
+            onPointerUp: (x) => updateSelected(x.localPosition, Drag.end),
+            behavior: HitTestBehavior.opaque,
+            child: Semantics(
+              excludeSemantics: true, // replace child semantics with custom semantics
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
                   alphabet.length,
                   (x) => Container(
                     padding: const EdgeInsets.only(right: 6.0),
                     height: _letterHeight,
-                    child: FittedBox(
-                      child: Text(
-                        alphabet[x].toUpperCase(),
-                      ),
-                    ),
+                    child: FittedBox(child: Text(alphabet[x].toUpperCase())),
                   ),
-                )),
-          ),
-        );
-      }),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
 
     // This gestureDetector blocks the horizontal drag to switch tabs gesture
@@ -116,11 +111,9 @@ class _AlphabetListState extends ConsumerState<AlphabetList> {
           children: [
             // Disable default scrollbar
             ScrollConfiguration(
-                behavior: const FinampScrollBehavior(scrollbars: false),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 22.0),
-                  child: widget.child,
-                )),
+              behavior: const FinampScrollBehavior(scrollbars: false),
+              child: Padding(padding: const EdgeInsets.only(right: 22.0), child: widget.child),
+            ),
             if (_currentSelected != null && _displayPreview)
               Positioned(
                 left: 20,
@@ -143,26 +136,17 @@ class _AlphabetListState extends ConsumerState<AlphabetList> {
                       width: MediaQuery.sizeOf(context).width / 3,
                       height: MediaQuery.sizeOf(context).width / 3,
                       decoration: BoxDecoration(
-                          color: Theme.of(context).cardColor.withOpacity(0.85),
-                          borderRadius: BorderRadius.circular(20)),
+                        color: Theme.of(context).cardColor.withOpacity(0.85),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                       child: FittedBox(child: Text(_currentSelected!, style: const TextStyle(fontSize: 120))),
                     ),
                   ),
                 ),
               ),
             Directionality.of(context) == TextDirection.rtl
-                ? Positioned(
-                    left: 0,
-                    top: -10,
-                    bottom: -10,
-                    child: alphabetList,
-                  )
-                : Positioned(
-                    right: 0,
-                    top: -10,
-                    bottom: -10,
-                    child: alphabetList,
-                  ),
+                ? Positioned(left: 0, top: -10, bottom: -10, child: alphabetList)
+                : Positioned(right: 0, top: -10, bottom: -10, child: alphabetList),
           ],
         ),
       ),

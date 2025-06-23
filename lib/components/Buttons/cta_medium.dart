@@ -26,9 +26,7 @@ class CTAMedium extends StatelessWidget {
       },
       style: ButtonStyle(
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
         padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
           EdgeInsets.only(left: 8 + paddingHorizontal, right: 8, top: paddingVertical, bottom: paddingVertical),
@@ -50,16 +48,10 @@ class CTAMedium extends StatelessWidget {
               color: Theme.of(context).brightness == Brightness.dark ? accentColor : Colors.white,
               weight: 1.5,
             ),
-            const SizedBox(
-              width: 8,
-            ),
+            const SizedBox(width: 8),
             Text(
               text,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ],
         ),
@@ -70,6 +62,8 @@ class CTAMedium extends StatelessWidget {
   static double predictedHeight(BuildContext context) {
     final densityAdj = VisualDensity.adaptivePlatformDensity.baseSizeAdjustment.dy;
     return max(
-        MediaQuery.sizeOf(context).height * 0.03 + 24 + densityAdj + densityAdj, kMinInteractiveDimension + densityAdj);
+      MediaQuery.sizeOf(context).height * 0.03 + 24 + densityAdj + densityAdj,
+      kMinInteractiveDimension + densityAdj,
+    );
   }
 }

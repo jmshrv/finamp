@@ -1,17 +1,27 @@
-import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
-class TrackShuffleItemCountEditor extends StatefulWidget {
+class TrackShuffleItemCountEditor extends ConsumerStatefulWidget {
   const TrackShuffleItemCountEditor({super.key});
 
   @override
-  State<TrackShuffleItemCountEditor> createState() => _TrackShuffleItemCountEditorState();
+  ConsumerState<TrackShuffleItemCountEditor> createState() => _TrackShuffleItemCountEditorState();
 }
 
-class _TrackShuffleItemCountEditorState extends State<TrackShuffleItemCountEditor> {
-  final _controller = TextEditingController(text: FinampSettingsHelper.finampSettings.trackShuffleItemCount.toString());
+class _TrackShuffleItemCountEditorState extends ConsumerState<TrackShuffleItemCountEditor> {
+  final _controller = TextEditingController();
+
+  @override
+  void initState() {
+    ref.listenManual(finampSettingsProvider.trackShuffleItemCount, (_, value) {
+      var newText = value.toString();
+      if (_controller.text != newText) _controller.text = newText;
+    }, fireImmediately: true);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

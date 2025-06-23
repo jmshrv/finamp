@@ -78,115 +78,118 @@ class _AlbumImageState extends ConsumerState<AlbumImage> {
         borderRadius: borderRadius,
         child: AspectRatio(
           aspectRatio: 1,
-          child: Container(
-            decoration: widget.decoration,
-            child: const _AlbumImageErrorPlaceholder(),
-          ),
+          child: Container(decoration: widget.decoration, child: const _AlbumImageErrorPlaceholder()),
         ),
       );
     }
 
     final content = ClipRRect(
       borderRadius: borderRadius,
-      child: LayoutBuilder(builder: (context, constraints) {
-        var listenable = widget.imageListenable;
-        bool imageScaled = false;
-        if (listenable == null) {
-          // If the current themeing context has a usable image for this item,
-          // use that instead of generating a new request
-          if (ref.watch(localThemeInfoProvider
-              .select((request) => (request?.largeThemeImage ?? false) && request?.item == widget.item))) {
-            listenable = localImageProvider;
-          } else {
-            int? physicalWidth;
-            int? physicalHeight;
-            if (widget.autoScale) {
-              imageScaled = true;
-              // LayoutBuilder (and other pixel-related stuff in Flutter) returns logical pixels instead of physical pixels.
-              // While this is great for doing layout stuff, we want to get images that are the right size in pixels.
-              // Logical pixels aren't the same as the physical pixels on the device, they're quite a bit bigger.
-              // If we use logical pixels for the image request, we'll get a smaller image than we want.
-              // Because of this, we convert the logical pixels to physical pixels by multiplying by the device's DPI.
-              final MediaQueryData mediaQuery = MediaQuery.of(context);
-              physicalWidth = (constraints.maxWidth * mediaQuery.devicePixelRatio).toInt();
-              physicalHeight = (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
-              // If using grid music screen view without fixed size tiles, and if the view is resizable due
-              // to being on desktop and using split screen, then clamp album size to reduce server requests when resizing.
-              if ((!(Platform.isIOS || Platform.isAndroid) || usingPlayerSplitScreen) &&
-                  !FinampSettingsHelper.finampSettings.useFixedSizeGridTiles &&
-                  FinampSettingsHelper.finampSettings.contentViewType == ContentViewType.grid) {
-                physicalWidth = exp((log(physicalWidth) * 3).ceil() / 3).toInt();
-                physicalHeight = exp((log(physicalHeight) * 3).ceil() / 3).toInt();
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          var listenable = widget.imageListenable;
+          bool imageScaled = false;
+          if (listenable == null) {
+            // If the current themeing context has a usable image for this item,
+            // use that instead of generating a new request
+            if (ref.watch(
+              localThemeInfoProvider.select(
+                (request) => (request?.largeThemeImage ?? false) && request?.item == widget.item,
+              ),
+            )) {
+              listenable = localImageProvider;
+            } else {
+              int? physicalWidth;
+              int? physicalHeight;
+              if (widget.autoScale) {
+                imageScaled = true;
+                // LayoutBuilder (and other pixel-related stuff in Flutter) returns logical pixels instead of physical pixels.
+                // While this is great for doing layout stuff, we want to get images that are the right size in pixels.
+                // Logical pixels aren't the same as the physical pixels on the device, they're quite a bit bigger.
+                // If we use logical pixels for the image request, we'll get a smaller image than we want.
+                // Because of this, we convert the logical pixels to physical pixels by multiplying by the device's DPI.
+                final MediaQueryData mediaQuery = MediaQuery.of(context);
+                physicalWidth = (constraints.maxWidth * mediaQuery.devicePixelRatio).toInt();
+                physicalHeight = (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
+                // If using grid music screen view without fixed size tiles, and if the view is resizable due
+                // to being on desktop and using split screen, then clamp album size to reduce server requests when resizing.
+                if ((!(Platform.isIOS || Platform.isAndroid) || usingPlayerSplitScreen) &&
+                    !FinampSettingsHelper.finampSettings.useFixedSizeGridTiles &&
+                    FinampSettingsHelper.finampSettings.contentViewType == ContentViewType.grid) {
+                  physicalWidth = exp((log(physicalWidth) * 3).ceil() / 3).toInt();
+                  physicalHeight = exp((log(physicalHeight) * 3).ceil() / 3).toInt();
+                }
               }
+
+              listenable = albumImageProvider(
+                AlbumImageRequest(item: widget.item!, maxWidth: physicalWidth, maxHeight: physicalHeight),
+              ).select((value) => ThemeImage(value, widget.item?.blurHash));
             }
-
-            listenable = albumImageProvider(AlbumImageRequest(
-              item: widget.item!,
-              maxWidth: physicalWidth,
-              maxHeight: physicalHeight,
-            )).select((value) => ThemeImage(value, widget.item?.blurHash));
           }
-        }
 
-        var image = Container(
-          decoration: widget.decoration,
-          child: BareAlbumImage(
-            imageListenable: listenable,
-            placeholderBuilder: widget.placeholderBuilder,
-            onZoomRoute: widget.onZoomRoute,
-          ),
-        );
-
-        if (widget.tapToZoom) {
-          final largeImage = AlbumImage(
-            item: imageScaled ? widget.item : null,
-            imageListenable: imageScaled ? null : listenable,
-            borderRadius: BorderRadius.zero,
-            placeholderBuilder: (_) => image,
-            autoScale: false,
-            tapToZoom: false,
-            onZoomRoute: true,
+          var image = Container(
+            decoration: widget.decoration,
+            child: BareAlbumImage(
+              imageListenable: listenable,
+              placeholderBuilder: widget.placeholderBuilder,
+              onZoomRoute: widget.onZoomRoute,
+            ),
           );
-          // Show album as clickable on desktop
-          return MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-                onTap: () => Navigator.of(context).push(PageRouteBuilder<_ZoomedImage>(
+
+          if (widget.tapToZoom) {
+            final largeImage = AlbumImage(
+              item: imageScaled ? widget.item : null,
+              imageListenable: imageScaled ? null : listenable,
+              borderRadius: BorderRadius.zero,
+              placeholderBuilder: (_) => image,
+              autoScale: false,
+              tapToZoom: false,
+              onZoomRoute: true,
+            );
+            // Show album as clickable on desktop
+            return MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () => Navigator.of(context).push(
+                  PageRouteBuilder<_ZoomedImage>(
                     opaque: false,
                     barrierDismissible: true,
-                    transitionDuration:
-                        MediaQuery.of(context).disableAnimations ? Duration.zero : const Duration(milliseconds: 500),
+                    transitionDuration: MediaQuery.of(context).disableAnimations
+                        ? Duration.zero
+                        : const Duration(milliseconds: 500),
                     pageBuilder: (BuildContext context, Animation<double> animation1, Animation<double> animation2) {
                       return _ZoomedImage(albumImage: largeImage, id: zoomID);
-                    })),
+                    },
+                  ),
+                ),
                 child: Hero(
-                    tag: zoomID,
-                    createRectTween: (begin, end) => RectTween(begin: begin, end: end),
-                    child: image,
-                    placeholderBuilder: (context, heroSize, child) => image,
-                    flightShuttleBuilder: (_, __, ___, ____, _____) => largeImage)),
-          );
-        }
+                  tag: zoomID,
+                  createRectTween: (begin, end) => RectTween(begin: begin, end: end),
+                  child: image,
+                  placeholderBuilder: (context, heroSize, child) => image,
+                  flightShuttleBuilder: (_, __, ___, ____, _____) => largeImage,
+                ),
+              ),
+            );
+          }
 
-        return widget.disabled
-            ? Opacity(
-                opacity: 0.75,
-                child: ColorFiltered(colorFilter: const ColorFilter.mode(Colors.black, BlendMode.color), child: image))
-            : image;
-      }),
+          return widget.disabled
+              ? Opacity(
+                  opacity: 0.75,
+                  child: ColorFiltered(
+                    colorFilter: const ColorFilter.mode(Colors.black, BlendMode.color),
+                    child: image,
+                  ),
+                )
+              : image;
+        },
+      ),
     );
 
     return Semantics(
       // label: item?.name != null ? AppLocalizations.of(context)!.artworkTooltip(item!.name!) : AppLocalizations.of(context)!.artwork, // removed to reduce screen reader verbosity
       excludeSemantics: true,
-      child: AspectRatio(
-        aspectRatio: 1.0,
-        child: widget.onZoomRoute
-            ? content
-            : Align(
-                child: content,
-              ),
-      ),
+      child: AspectRatio(aspectRatio: 1.0, child: widget.onZoomRoute ? content : Align(child: content)),
     );
   }
 }
@@ -222,13 +225,13 @@ class BareAlbumImage extends ConsumerWidget {
     var localPlaceholder = placeholderBuilder;
     if (blurHash != null) {
       localPlaceholder ??= (_) => Image(
-            fit: BoxFit.contain,
-            image: BlurHashImage(
-              blurHash,
-              // Allow scaling blurhashes up to 3200 pixels wide by setting scale
-              scale: 0.01,
-            ),
-          );
+        fit: BoxFit.contain,
+        image: BlurHashImage(
+          blurHash,
+          // Allow scaling blurhashes up to 3200 pixels wide by setting scale
+          scale: 0.01,
+        ),
+      );
     }
     localPlaceholder ??= defaultPlaceholderBuilder;
 
@@ -239,10 +242,12 @@ class BareAlbumImage extends ConsumerWidget {
       return OctoImage(
         image: image,
         filterQuality: FilterQuality.medium,
-        fadeOutDuration:
-            MediaQuery.of(context).disableAnimations || onZoomRoute ? Duration.zero : const Duration(milliseconds: 300),
-        fadeInDuration:
-            MediaQuery.of(context).disableAnimations || onZoomRoute ? Duration.zero : const Duration(milliseconds: 300),
+        fadeOutDuration: MediaQuery.of(context).disableAnimations || onZoomRoute
+            ? Duration.zero
+            : const Duration(milliseconds: 300),
+        fadeInDuration: MediaQuery.of(context).disableAnimations || onZoomRoute
+            ? Duration.zero
+            : const Duration(milliseconds: 300),
         fit: BoxFit.contain,
         placeholderBuilder: localPlaceholder,
         errorBuilder: errorBuilder,
@@ -258,10 +263,7 @@ class _AlbumImageErrorPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).cardColor,
-      child: const Icon(Icons.album),
-    );
+    return Container(color: Theme.of(context).cardColor, child: const Icon(Icons.album));
   }
 }
 
@@ -269,10 +271,7 @@ class _ZoomedImage extends StatelessWidget {
   final Widget albumImage;
   final String id;
 
-  const _ZoomedImage({
-    required this.albumImage,
-    required this.id,
-  });
+  const _ZoomedImage({required this.albumImage, required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -282,10 +281,7 @@ class _ZoomedImage extends StatelessWidget {
           child: IgnorePointer(
             child: Container(
               color: Colors.black.withOpacity(0.5),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-                child: SizedBox.expand(),
-              ),
+              child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0), child: SizedBox.expand()),
             ),
           ),
         ),

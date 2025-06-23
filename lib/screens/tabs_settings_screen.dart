@@ -20,7 +20,7 @@ class _TabsSettingsScreenState extends State<TabsSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.tabs),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetTabsSettings)
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetTabsSettings),
         ],
       ),
       body: ReorderableListView.builder(

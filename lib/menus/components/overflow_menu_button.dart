@@ -7,12 +7,7 @@ class OverflowMenuButton extends ConsumerWidget {
   final IconData icon;
   final String label;
 
-  const OverflowMenuButton({
-    super.key,
-    required this.onPressed,
-    required this.label,
-    this.icon = TablerIcons.menu_2,
-  });
+  const OverflowMenuButton({super.key, required this.onPressed, required this.label, this.icon = TablerIcons.menu_2});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,17 +16,8 @@ class OverflowMenuButton extends ConsumerWidget {
       excludeSemantics: true, // replace child semantics with custom semantics
       container: true,
       child: IconTheme(
-        data: IconThemeData(
-          color: IconTheme.of(context).color,
-          size: 24,
-        ),
-        child: IconButton(
-          icon: Icon(
-            icon,
-          ),
-          visualDensity: VisualDensity.compact,
-          onPressed: onPressed,
-        ),
+        data: IconThemeData(color: IconTheme.of(context).color, size: 24),
+        child: IconButton(icon: Icon(icon), visualDensity: VisualDensity.compact, onPressed: onPressed),
       ),
     );
   }

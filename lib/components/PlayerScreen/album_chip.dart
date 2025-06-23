@@ -14,13 +14,7 @@ import '../../services/jellyfin_api_helper.dart';
 final _borderRadius = BorderRadius.circular(4);
 
 class AlbumChips extends ConsumerWidget {
-  const AlbumChips({
-    super.key,
-    this.baseItem,
-    this.backgroundColor,
-    this.color,
-    this.includeReleaseDate,
-  });
+  const AlbumChips({super.key, this.baseItem, this.backgroundColor, this.color, this.includeReleaseDate});
 
   final BaseItemDto? baseItem;
   final Color? backgroundColor;
@@ -33,34 +27,26 @@ class AlbumChips extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: Wrap(spacing: 4.0, runSpacing: 4.0, crossAxisAlignment: WrapCrossAlignment.center, children: [
-          AlbumChip(
-            key: const ValueKey(null),
-            backgroundColor: backgroundColor,
-            color: color,
-            item: baseItem,
-          ),
-          if (((includeReleaseDate ?? false) ||
-                  (includeReleaseDate == null &&
-                      ref.watch(finampSettingsProvider.showAlbumReleaseDateOnPlayerScreen))) &&
-              ReleaseDateHelper.autoFormat(baseItem) != null)
-            ReleaseDate(
-              baseItem: baseItem,
-              color: color,
-            )
-        ]),
+        child: Wrap(
+          spacing: 4.0,
+          runSpacing: 4.0,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            AlbumChip(key: const ValueKey(null), backgroundColor: backgroundColor, color: color, item: baseItem),
+            if (((includeReleaseDate ?? false) ||
+                    (includeReleaseDate == null &&
+                        ref.watch(finampSettingsProvider.showAlbumReleaseDateOnPlayerScreen))) &&
+                ReleaseDateHelper.autoFormat(baseItem) != null)
+              ReleaseDate(baseItem: baseItem, color: color),
+          ],
+        ),
       ),
     );
   }
 }
 
 class AlbumChip extends StatelessWidget {
-  const AlbumChip({
-    super.key,
-    this.item,
-    this.backgroundColor,
-    this.color,
-  });
+  const AlbumChip({super.key, this.item, this.backgroundColor, this.color});
 
   final BaseItemDto? item;
   final Color? backgroundColor;
@@ -71,12 +57,9 @@ class AlbumChip extends StatelessWidget {
     if (item == null) return const _EmptyAlbumChip();
 
     return Container(
-        constraints: const BoxConstraints(minWidth: 10),
-        child: _AlbumChipContent(
-          item: item!,
-          color: color,
-          backgroundColor: backgroundColor,
-        ));
+      constraints: const BoxConstraints(minWidth: 10),
+      child: _AlbumChipContent(item: item!, color: color, backgroundColor: backgroundColor),
+    );
   }
 }
 
@@ -85,22 +68,12 @@ class _EmptyAlbumChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 64,
-      height: 20,
-      child: Material(
-        borderRadius: _borderRadius,
-      ),
-    );
+    return SizedBox(width: 64, height: 20, child: Material(borderRadius: _borderRadius));
   }
 }
 
 class ReleaseDate extends StatelessWidget {
-  const ReleaseDate({
-    this.baseItem,
-    this.backgroundColor,
-    this.color,
-  });
+  const ReleaseDate({this.baseItem, this.backgroundColor, this.color});
 
   final BaseItemDto? baseItem;
   final Color? backgroundColor;
@@ -111,10 +84,7 @@ class ReleaseDate extends StatelessWidget {
     final releaseDate = ReleaseDateHelper.autoFormat(baseItem);
 
     return Semantics.fromProperties(
-      properties: SemanticsProperties(
-        label: "Release date: $releaseDate",
-        button: true,
-      ),
+      properties: SemanticsProperties(label: "Release date: $releaseDate", button: true),
       excludeSemantics: true,
       container: true,
       child: Padding(
@@ -123,9 +93,7 @@ class ReleaseDate extends StatelessWidget {
           releaseDate ?? "Unknown",
           overflow: TextOverflow.ellipsis,
           softWrap: false,
-          style: TextStyle(
-            color: color ?? Theme.of(context).textTheme.bodySmall!.color ?? Colors.white,
-          ),
+          style: TextStyle(color: color ?? Theme.of(context).textTheme.bodySmall!.color ?? Colors.white),
         ),
       ),
     );
@@ -133,11 +101,7 @@ class ReleaseDate extends StatelessWidget {
 }
 
 class _AlbumChipContent extends StatelessWidget {
-  const _AlbumChipContent({
-    required this.item,
-    required this.backgroundColor,
-    required this.color,
-  });
+  const _AlbumChipContent({required this.item, required this.backgroundColor, required this.color});
 
   final BaseItemDto item;
   final Color? backgroundColor;
@@ -151,10 +115,7 @@ class _AlbumChipContent extends StatelessWidget {
     final albumName = item.album ?? AppLocalizations.of(context)!.noAlbum;
 
     return Semantics.fromProperties(
-      properties: SemanticsProperties(
-        label: "$albumName (${AppLocalizations.of(context)!.album})",
-        button: true,
-      ),
+      properties: SemanticsProperties(label: "$albumName (${AppLocalizations.of(context)!.album})", button: true),
       excludeSemantics: true,
       container: true,
       child: Material(
@@ -164,20 +125,20 @@ class _AlbumChipContent extends StatelessWidget {
           borderRadius: _borderRadius,
           onTap: FinampSettingsHelper.finampSettings.isOffline
               ? () => isarDownloader
-                  .getCollectionInfo(id: item.albumId!)
-                  .then((album) => Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: album!.baseItem!))
+                    .getCollectionInfo(id: item.albumId!)
+                    .then(
+                      (album) => Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: album!.baseItem!),
+                    )
               : () => jellyfinApiHelper
-                  .getItemById(item.albumId!)
-                  .then((album) => Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: album)),
+                    .getItemById(item.albumId!)
+                    .then((album) => Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: album)),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
             child: Text(
               albumName,
               overflow: TextOverflow.ellipsis,
               softWrap: false,
-              style: TextStyle(
-                color: color ?? Theme.of(context).textTheme.bodySmall!.color ?? Colors.white,
-              ),
+              style: TextStyle(color: color ?? Theme.of(context).textTheme.bodySmall!.color ?? Colors.white),
             ),
           ),
         ),

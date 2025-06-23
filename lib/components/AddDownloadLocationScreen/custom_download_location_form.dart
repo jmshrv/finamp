@@ -48,23 +48,24 @@ class _CustomDownloadLocationFormState extends State<CustomDownloadLocationForm>
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: selectedDirectory == null
-                                    ? Theme.of(context).textTheme.titleMedium?.copyWith(
-                                          color: Theme.of(context).hintColor,
-                                        )
+                                    ? Theme.of(
+                                        context,
+                                      ).textTheme.titleMedium?.copyWith(color: Theme.of(context).hintColor)
                                     : Theme.of(context).textTheme.titleMedium,
                               ),
                             ),
                             IconButton(
-                                icon: const Icon(Icons.folder),
-                                onPressed: () async {
-                                  String? newPath = await FilePicker.platform.getDirectoryPath();
+                              icon: const Icon(Icons.folder),
+                              onPressed: () async {
+                                String? newPath = await FilePicker.platform.getDirectoryPath();
 
-                                  if (newPath != null) {
-                                    setState(() {
-                                      selectedDirectory = Directory(newPath);
-                                    });
-                                  }
-                                }),
+                                if (newPath != null) {
+                                  setState(() {
+                                    selectedDirectory = Directory(newPath);
+                                  });
+                                }
+                              },
+                            ),
                           ],
                         ),
                       ),
@@ -75,8 +76,9 @@ class _CustomDownloadLocationFormState extends State<CustomDownloadLocationForm>
                       padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
                       child: Text(
                         field.errorText ?? AppLocalizations.of(context)!.unknownError,
-                        style:
-                            Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.error),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.error),
                       ),
                     ),
                 ],
@@ -118,8 +120,11 @@ class _CustomDownloadLocationFormState extends State<CustomDownloadLocationForm>
           ),
           const Padding(padding: EdgeInsets.all(8.0)),
           if (Platform.isIOS || Platform.isAndroid)
-            Text(AppLocalizations.of(context)!.customLocationsBuggy,
-                textAlign: TextAlign.center, style: const TextStyle(color: Colors.red)),
+            Text(
+              AppLocalizations.of(context)!.customLocationsBuggy,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.red),
+            ),
         ],
       ),
     );

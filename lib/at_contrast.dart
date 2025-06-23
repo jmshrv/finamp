@@ -6,7 +6,7 @@ extension AtContrast on Color {
 
   static final _atContrastLogger = Logger("AtContrast");
 
-// Contrast calculations
+  // Contrast calculations
   double contrastRatio(num a, num b) {
     final ratio = (a + 0.05) / (b + 0.05);
     return ratio >= 1 ? ratio : 1 / ratio;
@@ -17,10 +17,7 @@ extension AtContrast on Color {
 
     HSLColor hslColor = HSLColor.fromColor(this);
 
-    double contrast = contrastRatio(
-      computeLuminance(),
-      backgroundLuminance,
-    );
+    double contrast = contrastRatio(computeLuminance(), backgroundLuminance);
 
     double minLightness = 0.0;
     double maxLightness = 1.0;
@@ -44,10 +41,7 @@ extension AtContrast on Color {
         hslColor = hslColor.withLightness(hslColor.lightness + lightDiff / 2);
       }
 
-      contrast = contrastRatio(
-        hslColor.toColor().computeLuminance(),
-        backgroundLuminance,
-      );
+      contrast = contrastRatio(hslColor.toColor().computeLuminance(), backgroundLuminance);
 
       diff = (contrast.abs() - targetContrast.abs());
     }

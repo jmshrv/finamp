@@ -65,8 +65,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
   static const _pageSize = 100;
 
-  final PagingController<int, BaseItemDto> _pagingController =
-      PagingController(firstPageKey: 0, invisibleItemsThreshold: 70);
+  final PagingController<int, BaseItemDto> _pagingController = PagingController(
+    firstPageKey: 0,
+    invisibleItemsThreshold: 70,
+  );
 
   Future<List<BaseItemDto>>? offlineSortedItems;
 
@@ -97,7 +99,8 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     }
     int localRefreshCount = refreshCount;
     try {
-      final sortOrder = (widget.sortOrderOverride ?? settings.tabSortOrder[widget.tabContentType])?.toString() ??
+      final sortOrder =
+          (widget.sortOrderOverride ?? settings.tabSortOrder[widget.tabContentType])?.toString() ??
           SortOrder.ascending.toString();
       final newItems = await _jellyfinApiHelper.getItems(
         // starting with Jellyfin 10.9, only automatically created playlists will have a specific library as parent. user-created playlists will not be returned anymore
@@ -110,17 +113,18 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         // If widget.sortBy is set, it is used instead.
         sortBy:
             (widget.sortByOverride ?? settings.tabSortBy[widget.tabContentType])?.jellyfinName(widget.tabContentType) ??
-                (widget.tabContentType == TabContentType.tracks ? "Album,SortName" : "SortName"),
+            (widget.tabContentType == TabContentType.tracks ? "Album,SortName" : "SortName"),
         sortOrder: sortOrder,
         searchTerm: widget.searchTerm?.trim(),
         filters:
             (widget.isFavoriteOverride == true || (widget.isFavoriteOverride == null && settings.onlyShowFavorites))
-                ? "IsFavorite"
-                : null,
+            ? "IsFavorite"
+            : null,
         // "filters" are not implemented in the Jellyfin API Endpoint for Genres
         // but the bool "isFavorite" is, so we use it instead (but don't set it
         // to "false", because then it will actually exclude all favorites)
-        isFavorite: (widget.tabContentType.itemType == BaseItemDtoType.genre &&
+        isFavorite:
+            (widget.tabContentType.itemType == BaseItemDtoType.genre &&
                 (widget.isFavoriteOverride == true ||
                     (widget.isFavoriteOverride == null && settings.onlyShowFavorites)))
             ? true
@@ -154,38 +158,40 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
   Future<void> _getPageOffline() async {
     var settings = FinampSettingsHelper.finampSettings;
     int localRefreshCount = refreshCount;
-    var artistInfoForType =
-        (settings.defaultArtistType == ArtistType.albumArtist) ? BaseItemDtoType.album : BaseItemDtoType.track;
+    var artistInfoForType = (settings.defaultArtistType == ArtistType.albumArtist)
+        ? BaseItemDtoType.album
+        : BaseItemDtoType.track;
 
     List<DownloadStub> offlineItems;
     if (widget.tabContentType == TabContentType.tracks) {
       // If we're on the tracks tab, just get all of the downloaded items
       // We should probably try to page this, at least if we are sorting by name
       offlineItems = await _isarDownloader.getAllTracks(
-          nameFilter: widget.searchTerm,
-          viewFilter: widget.view?.id,
-          nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
-          onlyFavorites: (widget.isFavoriteOverride == true ||
-                  (widget.isFavoriteOverride == null && settings.onlyShowFavorites)) &&
-              settings.trackOfflineFavorites,
-          genreFilter: widget.genreFilter);
+        nameFilter: widget.searchTerm,
+        viewFilter: widget.view?.id,
+        nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
+        onlyFavorites:
+            (widget.isFavoriteOverride == true || (widget.isFavoriteOverride == null && settings.onlyShowFavorites)) &&
+            settings.trackOfflineFavorites,
+        genreFilter: widget.genreFilter,
+      );
     } else {
       offlineItems = await _isarDownloader.getAllCollections(
-          nameFilter: widget.searchTerm,
-          baseTypeFilter: widget.tabContentType.itemType,
-          fullyDownloaded: settings.onlyShowFullyDownloaded,
-          viewFilter: widget.tabContentType == TabContentType.albums ? widget.view?.id : null,
-          childViewFilter:
-              (widget.tabContentType != TabContentType.albums && widget.tabContentType != TabContentType.playlists)
-                  ? widget.view?.id
-                  : null,
-          nullableViewFilters:
-              widget.tabContentType == TabContentType.albums && settings.showDownloadsWithUnknownLibrary,
-          onlyFavorites: (widget.isFavoriteOverride == true ||
-                  (widget.isFavoriteOverride == null && settings.onlyShowFavorites)) &&
-              settings.trackOfflineFavorites,
-          infoForType: (widget.tabContentType == TabContentType.artists) ? artistInfoForType : null,
-          genreFilter: widget.tabContentType == TabContentType.playlists ? null : widget.genreFilter);
+        nameFilter: widget.searchTerm,
+        baseTypeFilter: widget.tabContentType.itemType,
+        fullyDownloaded: settings.onlyShowFullyDownloaded,
+        viewFilter: widget.tabContentType == TabContentType.albums ? widget.view?.id : null,
+        childViewFilter:
+            (widget.tabContentType != TabContentType.albums && widget.tabContentType != TabContentType.playlists)
+            ? widget.view?.id
+            : null,
+        nullableViewFilters: widget.tabContentType == TabContentType.albums && settings.showDownloadsWithUnknownLibrary,
+        onlyFavorites:
+            (widget.isFavoriteOverride == true || (widget.isFavoriteOverride == null && settings.onlyShowFavorites)) &&
+            settings.trackOfflineFavorites,
+        infoForType: (widget.tabContentType == TabContentType.artists) ? artistInfoForType : null,
+        genreFilter: widget.tabContentType == TabContentType.playlists ? null : widget.genreFilter,
+      );
     }
 
     var items = offlineItems.map((e) => e.baseItem).nonNulls.toList();
@@ -223,9 +229,10 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
       _getPage(pageKey);
     });
     controller = AutoScrollController(
-        suggestedRowHeight: 72,
-        viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
-        axis: Axis.vertical);
+      suggestedRowHeight: 72,
+      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+      axis: Axis.vertical,
+    );
     _musicScreenRefreshStreamSubscription = musicScreenRefreshStream.stream.listen((_) {
       _refresh();
     });
@@ -260,8 +267,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
         final comparisonResult = itemCodePoint - codePointToScrollTo;
         if (comparisonResult == 0) {
           timer?.cancel();
-          await controller.scrollToIndex(i,
-              duration: _getAnimationDurationForOffsetToIndex(i), preferPosition: AutoScrollPosition.begin);
+          await controller.scrollToIndex(
+            i,
+            duration: _getAnimationDurationForOffsetToIndex(i),
+            preferPosition: AutoScrollPosition.begin,
+          );
 
           letterToSearch = null;
           return;
@@ -269,10 +279,12 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
           // If the letter is before the current item, there was no previous match (letter doesn't seem to exist in library)
           // scroll to the previous item instead
           timer?.cancel();
-          await controller.scrollToIndex((i - 1).clamp(0, (_pagingController.itemList?.length ?? 1) - 1),
-              // duration: scrollDuration,
-              duration: _getAnimationDurationForOffsetToIndex(i),
-              preferPosition: AutoScrollPosition.middle);
+          await controller.scrollToIndex(
+            (i - 1).clamp(0, (_pagingController.itemList?.length ?? 1) - 1),
+            // duration: scrollDuration,
+            duration: _getAnimationDurationForOffsetToIndex(i),
+            preferPosition: AutoScrollPosition.middle,
+          );
 
           letterToSearch = null;
           return;
@@ -294,8 +306,11 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     if (MediaQuery.of(context).disableAnimations) {
       controller.jumpTo(controller.position.maxScrollExtent);
     } else {
-      await controller.animateTo(controller.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 500), curve: Curves.ease);
+      await controller.animateTo(
+        controller.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.ease,
+      );
     }
   }
 
@@ -304,9 +319,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
     if (renderedIndices.isEmpty) return Duration(milliseconds: 200);
     final medianIndex = renderedIndices.elementAt(renderedIndices.length ~/ 2);
 
-    final duration = Duration(
-      milliseconds: ((medianIndex - index).abs() / 50 * 300).clamp(200, 7500).round(),
-    );
+    final duration = Duration(milliseconds: ((medianIndex - index).abs() / 50 * 300).clamp(200, 7500).round());
     return duration;
   }
 
@@ -334,177 +347,177 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
 
     // TODO stop unnecessary rebuilds from unrelated settings changes
     return ValueListenableBuilder<Box<FinampSettings>>(
-        valueListenable: FinampSettingsHelper.finampSettingsListener,
-        builder: (context, box, _) {
-          // If the searchTerm argument is different to lastSearch, the user has changed their search input.
-          // This makes albumViewFuture search again so that results with the search are shown.
-          // This also means we don't redo a search unless we actaully need to.
-          var settings = box.get("FinampSettings")!;
-          var newRefreshHash = Object.hash(
-            widget.searchTerm,
-            settings.onlyShowFavorites,
-            widget.isFavoriteOverride,
-            settings.tabSortBy[widget.tabContentType],
-            widget.sortByOverride,
-            settings.tabSortOrder[widget.tabContentType],
-            widget.sortOrderOverride,
-            settings.onlyShowFullyDownloaded,
-            widget.view?.id,
-            settings.isOffline,
-            settings.tabOrder,
-            settings.trackOfflineFavorites,
-            widget.genreFilter?.id,
-          );
-          if (refreshHash == null) {
-            refreshHash = newRefreshHash;
-          } else if (refreshHash != newRefreshHash) {
-            _refresh();
-            refreshHash = newRefreshHash;
-          }
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (context, box, _) {
+        // If the searchTerm argument is different to lastSearch, the user has changed their search input.
+        // This makes albumViewFuture search again so that results with the search are shown.
+        // This also means we don't redo a search unless we actaully need to.
+        var settings = box.get("FinampSettings")!;
+        var newRefreshHash = Object.hash(
+          widget.searchTerm,
+          settings.onlyShowFavorites,
+          widget.isFavoriteOverride,
+          settings.tabSortBy[widget.tabContentType],
+          widget.sortByOverride,
+          settings.tabSortOrder[widget.tabContentType],
+          widget.sortOrderOverride,
+          settings.onlyShowFullyDownloaded,
+          widget.view?.id,
+          settings.isOffline,
+          settings.tabOrder,
+          settings.trackOfflineFavorites,
+          widget.genreFilter?.id,
+        );
+        if (refreshHash == null) {
+          refreshHash = newRefreshHash;
+        } else if (refreshHash != newRefreshHash) {
+          _refresh();
+          refreshHash = newRefreshHash;
+        }
 
-          final emptyListIndicator = Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
-            child: Column(
-              children: [
+        final emptyListIndicator = Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+          child: Column(
+            children: [
+              Text(
+                AppLocalizations.of(context)!.emptyFilteredListTitle,
+                style: TextStyle(fontSize: 24),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              if (widget.genreFilter != null && widget.tabContentType != TabContentType.genres)
                 Text(
-                  AppLocalizations.of(context)!.emptyFilteredListTitle,
-                  style: TextStyle(
-                    fontSize: 24,
-                  ),
+                  AppLocalizations.of(context)!.genreNoItems(widget.tabContentType.name),
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                )
+              else ...[
+                Text(
+                  AppLocalizations.of(context)!.emptyFilteredListSubtitle,
+                  style: TextStyle(fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
-                if (widget.genreFilter != null && widget.tabContentType != TabContentType.genres)
-                  Text(
-                    AppLocalizations.of(context)!.genreNoItems(widget.tabContentType.name),
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                    textAlign: TextAlign.center,
-                  )
-                else ...[
-                  Text(
-                    AppLocalizations.of(context)!.emptyFilteredListSubtitle,
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  CTAMedium(
-                    icon: TablerIcons.filter_x,
-                    text: AppLocalizations.of(context)!.resetFiltersButton,
-                    onPressed: () {
-                      FinampSetters.setOnlyShowFavorites(DefaultSettings.onlyShowFavorites);
-                      FinampSetters.setOnlyShowFullyDownloaded(DefaultSettings.onlyShowFullyDownloaded);
-                    },
-                  )
-                ],
+                CTAMedium(
+                  icon: TablerIcons.filter_x,
+                  text: AppLocalizations.of(context)!.resetFiltersButton,
+                  onPressed: () {
+                    FinampSetters.setOnlyShowFavorites(DefaultSettings.onlyShowFavorites);
+                    FinampSetters.setOnlyShowFullyDownloaded(DefaultSettings.onlyShowFullyDownloaded);
+                  },
+                ),
               ],
-            ),
-          );
-          var sortBy = widget.sortByOverride ?? settings.tabSortBy[widget.tabContentType];
-          var tabContent = box.get("FinampSettings")!.contentViewType == ContentViewType.list ||
-                  widget.tabContentType == TabContentType.tracks
-              ? PagedListView<int, BaseItemDto>.separated(
-                  pagingController: _pagingController,
-                  scrollController: controller,
-                  physics: _DeferredLoadingAlwaysScrollableScrollPhysics(tabState: this),
-                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                  builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
-                    itemBuilder: (context, item, index) {
-                      // Use right padding inherited from fast scroller minus
-                      // built-in icon padding
-                      return Padding(
-                        padding: EdgeInsets.only(right: max(0, MediaQuery.paddingOf(context).right - 20)),
-                        child: AutoScrollTag(
-                          key: ValueKey(index),
-                          controller: controller,
-                          index: index,
-                          child: widget.tabContentType == TabContentType.tracks
-                              ? TrackListTile(
-                                  key: ValueKey(item.id),
-                                  item: item,
-                                  isTrack: true,
-                                  index: index,
-                                  isShownInSearch: widget.searchTerm != null,
-                                  // when the tabBar was filtered and we only have the tracks tab,
-                                  // we can allow Dismiss gestures in the track list
-                                  allowDismiss: widget.tabBarFiltered,
-                                  genreFilter: widget.genreFilter,
-                                  isOnGenreScreen: (widget.genreFilter != null) ? true : false,
-                                  parentItem: widget.genreFilter,
-                                  forceAlbumArtists: (sortBy == SortBy.albumArtist),
-                                  showPlayCount: (!settings.isOffline && sortBy == SortBy.playCount),
-                                  showReleaseDate: (sortBy == SortBy.premiereDate),
-                                  showDateAdded: (sortBy == SortBy.dateCreated),
-                                  showDateLastPlayed: (!settings.isOffline && sortBy == SortBy.datePlayed),
-                                )
-                              : ItemCollectionWrapper(
-                                  key: ValueKey(item.id),
-                                  item: item,
-                                  isPlaylist: widget.tabContentType == TabContentType.playlists,
-                                  genreFilter: widget.genreFilter,
-                                  showAdditionalInfoForSortBy: sortBy,
-                                  showFavoriteIconOnlyWhenFilterDisabled: true),
-                        ),
-                      );
-                    },
-                    firstPageProgressIndicatorBuilder: (_) => const FirstPageProgressIndicator(),
-                    newPageProgressIndicatorBuilder: (_) => const NewPageProgressIndicator(),
-                    noItemsFoundIndicatorBuilder: (_) => emptyListIndicator,
-                  ),
-                  separatorBuilder: (context, index) => const SizedBox.shrink(),
-                )
-              : PagedGridView(
-                  pagingController: _pagingController,
-                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                  scrollController: controller,
-                  physics: _DeferredLoadingAlwaysScrollableScrollPhysics(tabState: this),
-                  builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
-                    itemBuilder: (context, item, index) {
-                      return AutoScrollTag(
+            ],
+          ),
+        );
+        var sortBy = widget.sortByOverride ?? settings.tabSortBy[widget.tabContentType];
+        var tabContent =
+            box.get("FinampSettings")!.contentViewType == ContentViewType.list ||
+                widget.tabContentType == TabContentType.tracks
+            ? PagedListView<int, BaseItemDto>.separated(
+                pagingController: _pagingController,
+                scrollController: controller,
+                physics: _DeferredLoadingAlwaysScrollableScrollPhysics(tabState: this),
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
+                  itemBuilder: (context, item, index) {
+                    // Use right padding inherited from fast scroller minus
+                    // built-in icon padding
+                    return Padding(
+                      padding: EdgeInsets.only(right: max(0, MediaQuery.paddingOf(context).right - 20)),
+                      child: AutoScrollTag(
                         key: ValueKey(index),
                         controller: controller,
                         index: index,
-                        child: ItemCollectionWrapper(
-                          key: ValueKey(item.id),
-                          item: item,
-                          isPlaylist: widget.tabContentType == TabContentType.playlists,
-                          isGrid: true,
-                          genreFilter: widget.genreFilter,
-                        ),
-                      );
-                    },
-                    firstPageProgressIndicatorBuilder: (_) => const FirstPageProgressIndicator(),
-                    newPageProgressIndicatorBuilder: (_) => const NewPageProgressIndicator(),
-                    noItemsFoundIndicatorBuilder: (_) => emptyListIndicator,
-                  ),
-                  gridDelegate: FinampSettingsHelper.finampSettings.useFixedSizeGridTiles
-                      ? SliverGridDelegateWithFixedSizeTiles(
-                          gridTileSize: FinampSettingsHelper.finampSettings.fixedGridTileSize.toDouble())
-                      : SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: MediaQuery.of(context).size.width > MediaQuery.of(context).size.height
-                              ? FinampSettingsHelper.finampSettings.contentGridViewCrossAxisCountLandscape
-                              : FinampSettingsHelper.finampSettings.contentGridViewCrossAxisCountPortrait,
-                        ),
-                );
+                        child: widget.tabContentType == TabContentType.tracks
+                            ? TrackListTile(
+                                key: ValueKey(item.id),
+                                item: item,
+                                isTrack: true,
+                                index: index,
+                                isShownInSearch: widget.searchTerm != null,
+                                // when the tabBar was filtered and we only have the tracks tab,
+                                // we can allow Dismiss gestures in the track list
+                                allowDismiss: widget.tabBarFiltered,
+                                genreFilter: widget.genreFilter,
+                                isOnGenreScreen: (widget.genreFilter != null) ? true : false,
+                                parentItem: widget.genreFilter,
+                                forceAlbumArtists: (sortBy == SortBy.albumArtist),
+                                showPlayCount: (!settings.isOffline && sortBy == SortBy.playCount),
+                                showReleaseDate: (sortBy == SortBy.premiereDate),
+                                showDateAdded: (sortBy == SortBy.dateCreated),
+                                showDateLastPlayed: (!settings.isOffline && sortBy == SortBy.datePlayed),
+                              )
+                            : ItemCollectionWrapper(
+                                key: ValueKey(item.id),
+                                item: item,
+                                isPlaylist: widget.tabContentType == TabContentType.playlists,
+                                genreFilter: widget.genreFilter,
+                                showAdditionalInfoForSortBy: sortBy,
+                                showFavoriteIconOnlyWhenFilterDisabled: true,
+                              ),
+                      ),
+                    );
+                  },
+                  firstPageProgressIndicatorBuilder: (_) => const FirstPageProgressIndicator(),
+                  newPageProgressIndicatorBuilder: (_) => const NewPageProgressIndicator(),
+                  noItemsFoundIndicatorBuilder: (_) => emptyListIndicator,
+                ),
+                separatorBuilder: (context, index) => const SizedBox.shrink(),
+              )
+            : PagedGridView(
+                pagingController: _pagingController,
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                scrollController: controller,
+                physics: _DeferredLoadingAlwaysScrollableScrollPhysics(tabState: this),
+                builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
+                  itemBuilder: (context, item, index) {
+                    return AutoScrollTag(
+                      key: ValueKey(index),
+                      controller: controller,
+                      index: index,
+                      child: ItemCollectionWrapper(
+                        key: ValueKey(item.id),
+                        item: item,
+                        isPlaylist: widget.tabContentType == TabContentType.playlists,
+                        isGrid: true,
+                        genreFilter: widget.genreFilter,
+                      ),
+                    );
+                  },
+                  firstPageProgressIndicatorBuilder: (_) => const FirstPageProgressIndicator(),
+                  newPageProgressIndicatorBuilder: (_) => const NewPageProgressIndicator(),
+                  noItemsFoundIndicatorBuilder: (_) => emptyListIndicator,
+                ),
+                gridDelegate: FinampSettingsHelper.finampSettings.useFixedSizeGridTiles
+                    ? SliverGridDelegateWithFixedSizeTiles(
+                        gridTileSize: FinampSettingsHelper.finampSettings.fixedGridTileSize.toDouble(),
+                      )
+                    : SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: MediaQuery.of(context).size.width > MediaQuery.of(context).size.height
+                            ? FinampSettingsHelper.finampSettings.contentGridViewCrossAxisCountLandscape
+                            : FinampSettingsHelper.finampSettings.contentGridViewCrossAxisCountPortrait,
+                      ),
+              );
 
-          return RefreshIndicator(
-            onRefresh: () async => _refresh(),
-            child: box.get("FinampSettings")!.showFastScroller &&
-                    (widget.sortByOverride == SortBy.sortName ||
-                        (widget.sortByOverride == null && settings.tabSortBy[widget.tabContentType] == SortBy.sortName))
-                ? AlphabetList(
-                    callback: scrollToLetter,
-                    scrollController: controller,
-                    sortOrder: (widget.sortOrderOverride != null)
-                        ? widget.sortOrderOverride ?? SortOrder.ascending
-                        : (settings.tabSortOrder[widget.tabContentType] ?? SortOrder.ascending),
-                    child: tabContent)
-                : tabContent,
-          );
-        });
+        return RefreshIndicator(
+          onRefresh: () async => _refresh(),
+          child:
+              box.get("FinampSettings")!.showFastScroller &&
+                  (widget.sortByOverride == SortBy.sortName ||
+                      (widget.sortByOverride == null && settings.tabSortBy[widget.tabContentType] == SortBy.sortName))
+              ? AlphabetList(
+                  callback: scrollToLetter,
+                  scrollController: controller,
+                  sortOrder: (widget.sortOrderOverride != null)
+                      ? widget.sortOrderOverride ?? SortOrder.ascending
+                      : (settings.tabSortOrder[widget.tabContentType] ?? SortOrder.ascending),
+                  child: tabContent,
+                )
+              : tabContent,
+        );
+      },
+    );
   }
 }
 
@@ -514,9 +527,7 @@ class MusicRefreshCallback {
 }
 
 class SliverGridDelegateWithFixedSizeTiles extends SliverGridDelegate {
-  SliverGridDelegateWithFixedSizeTiles({
-    required this.gridTileSize,
-  });
+  SliverGridDelegateWithFixedSizeTiles({required this.gridTileSize});
 
   final double gridTileSize;
 
@@ -606,10 +617,12 @@ List<BaseItemDto> sortItems(List<BaseItemDto> itemsToSort, SortBy? sortBy, SortO
             return a.criticRating!.compareTo(b.criticRating!);
           }
         case SortBy.datePlayed:
-          final dateA =
-              a.userData?.lastPlayedDate == null ? null : DateTime.tryParse(a.userData!.lastPlayedDate!.trim());
-          final dateB =
-              b.userData?.lastPlayedDate == null ? null : DateTime.tryParse(b.userData!.lastPlayedDate!.trim());
+          final dateA = a.userData?.lastPlayedDate == null
+              ? null
+              : DateTime.tryParse(a.userData!.lastPlayedDate!.trim());
+          final dateB = b.userData?.lastPlayedDate == null
+              ? null
+              : DateTime.tryParse(b.userData!.lastPlayedDate!.trim());
           if (dateA == null && dateB == null) return 0;
           if (dateA == null) return -1;
           if (dateB == null) return 1;

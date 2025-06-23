@@ -43,8 +43,10 @@ class _AudioFadeProgressVisualizerContainerState extends State<AudioFadeProgress
 
     _controller = AnimationController(duration: FinampSettingsHelper.finampSettings.audioFadeInDuration, vsync: this);
 
-    _animation =
-        Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    _animation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     resetFade();
 
@@ -104,41 +106,43 @@ class _AudioFadeProgressVisualizerContainerState extends State<AudioFadeProgress
   @override
   Widget build(BuildContext context) {
     return VisibilityDetector(
-        key: widget.key!,
-        onVisibilityChanged: (visibleState) {
-          final bool visible = visibleState.visibleFraction > 0.0;
+      key: widget.key!,
+      onVisibilityChanged: (visibleState) {
+        final bool visible = visibleState.visibleFraction > 0.0;
 
-          if (!context.mounted) return;
+        if (!context.mounted) return;
 
-          // If visible state changed to visible
-          if (visible != _isVisible && visible) {
-            resetFade();
-          }
+        // If visible state changed to visible
+        if (visible != _isVisible && visible) {
+          resetFade();
+        }
 
-          setState(() {
-            _isVisible = visible;
-          });
+        setState(() {
+          _isVisible = visible;
+        });
+      },
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Container(
+            width: widget.width,
+            height: widget.height,
+            decoration: BoxDecoration(
+              borderRadius: widget.borderRadius,
+              border:
+                  (_controller.status == AnimationStatus.forward || _controller.status == AnimationStatus.reverse) &&
+                      !MediaQuery.of(context).disableAnimations
+                  ? ProgressBorder.all(
+                      color: IconTheme.of(context).color!.withAlpha(128),
+                      width: 4,
+                      progress: _animation.value,
+                    )
+                  : null,
+            ),
+            child: widget.child,
+          );
         },
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return Container(
-                width: widget.width,
-                height: widget.height,
-                decoration: BoxDecoration(
-                  borderRadius: widget.borderRadius,
-                  border: (_controller.status == AnimationStatus.forward ||
-                              _controller.status == AnimationStatus.reverse) &&
-                          !MediaQuery.of(context).disableAnimations
-                      ? ProgressBorder.all(
-                          color: IconTheme.of(context).color!.withAlpha(128),
-                          width: 4,
-                          progress: _animation.value,
-                        )
-                      : null,
-                ),
-                child: widget.child);
-          },
-        ));
+      ),
+    );
   }
 }

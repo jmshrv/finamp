@@ -1,5 +1,10 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: deprecated_member_use_from_same_package
+
+// dart format off
+
+
 part of 'artist_chip.dart';
 
 // **************************************************************************
@@ -39,21 +44,15 @@ class ArtistItemFamily extends Family<AsyncValue<BaseItemDto>> {
   const ArtistItemFamily();
 
   /// See also [artistItem].
-  ArtistItemProvider call(
-    BaseItemId id,
-  ) {
-    return ArtistItemProvider(
-      id,
-    );
+  ArtistItemProvider call(BaseItemId id) {
+    return ArtistItemProvider(id);
   }
 
   @override
   ArtistItemProvider getProviderOverride(
     covariant ArtistItemProvider provider,
   ) {
-    return call(
-      provider.id,
-    );
+    return call(provider.id);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -64,7 +63,8 @@ class ArtistItemFamily extends Family<AsyncValue<BaseItemDto>> {
   static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies => _allTransitiveDependencies;
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
 
   @override
   String? get name => r'artistItemProvider';
@@ -73,20 +73,18 @@ class ArtistItemFamily extends Family<AsyncValue<BaseItemDto>> {
 /// See also [artistItem].
 class ArtistItemProvider extends AutoDisposeFutureProvider<BaseItemDto> {
   /// See also [artistItem].
-  ArtistItemProvider(
-    BaseItemId id,
-  ) : this._internal(
-          (ref) => artistItem(
-            ref as ArtistItemRef,
-            id,
-          ),
-          from: artistItemProvider,
-          name: r'artistItemProvider',
-          debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$artistItemHash,
-          dependencies: ArtistItemFamily._dependencies,
-          allTransitiveDependencies: ArtistItemFamily._allTransitiveDependencies,
-          id: id,
-        );
+  ArtistItemProvider(BaseItemId id)
+    : this._internal(
+        (ref) => artistItem(ref as ArtistItemRef, id),
+        from: artistItemProvider,
+        name: r'artistItemProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$artistItemHash,
+        dependencies: ArtistItemFamily._dependencies,
+        allTransitiveDependencies: ArtistItemFamily._allTransitiveDependencies,
+        id: id,
+      );
 
   ArtistItemProvider._internal(
     super._createNotifier, {
@@ -144,11 +142,14 @@ mixin ArtistItemRef on AutoDisposeFutureProviderRef<BaseItemDto> {
   BaseItemId get id;
 }
 
-class _ArtistItemProviderElement extends AutoDisposeFutureProviderElement<BaseItemDto> with ArtistItemRef {
+class _ArtistItemProviderElement
+    extends AutoDisposeFutureProviderElement<BaseItemDto>
+    with ArtistItemRef {
   _ArtistItemProviderElement(super.provider);
 
   @override
   BaseItemId get id => (origin as ArtistItemProvider).id;
 }
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

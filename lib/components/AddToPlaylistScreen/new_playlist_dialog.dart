@@ -12,10 +12,7 @@ import '../../services/jellyfin_api_helper.dart';
 import '../global_snackbar.dart';
 
 class NewPlaylistDialog extends StatefulWidget {
-  const NewPlaylistDialog({
-    super.key,
-    required this.itemToAdd,
-  });
+  const NewPlaylistDialog({super.key, required this.itemToAdd});
 
   final BaseItemId itemToAdd;
 
@@ -57,17 +54,14 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
               builder: (state) {
                 return CheckboxListTile(
                   value: state.value,
-                  title: Text(
-                    AppLocalizations.of(context)!.publiclyVisiblePlaylist,
-                    textAlign: TextAlign.end,
-                  ),
+                  title: Text(AppLocalizations.of(context)!.publiclyVisiblePlaylist, textAlign: TextAlign.end),
                   onChanged: state.didChange,
                   contentPadding: EdgeInsets.zero,
                 );
               },
               initialValue: true,
               onSaved: (newValue) => _public = newValue,
-            )
+            ),
           ],
         ),
       ),
@@ -92,27 +86,30 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
 
       Navigator.of(context).pop<(Future<BaseItemId>, String?)?>((
         Future.sync(() async {
-          var newId = await _jellyfinApiHelper.createNewPlaylist(NewPlaylist(
-            name: _name,
-            ids: [widget.itemToAdd],
-            userId: _finampUserHelper.currentUser!.id,
-            isPublic: _public,
-          ));
-
-          GlobalSnackbar.message(
-            (scaffold) => AppLocalizations.of(scaffold)!.playlistCreated,
-            isConfirmation: true,
+          var newId = await _jellyfinApiHelper.createNewPlaylist(
+            NewPlaylist(
+              name: _name,
+              ids: [widget.itemToAdd],
+              userId: _finampUserHelper.currentUser!.id,
+              isPublic: _public,
+            ),
           );
+
+          GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.playlistCreated, isConfirmation: true);
 
           // resync all playlists, so the new playlist automatically gets downloaded if all playlists should be downloaded
 
           final downloadsService = GetIt.instance<DownloadsService>();
-          unawaited(downloadsService.resync(
-              DownloadStub.fromFinampCollection(FinampCollection(type: FinampCollectionType.allPlaylists)), null,
-              keepSlow: true));
+          unawaited(
+            downloadsService.resync(
+              DownloadStub.fromFinampCollection(FinampCollection(type: FinampCollectionType.allPlaylists)),
+              null,
+              keepSlow: true,
+            ),
+          );
           return newId.id!;
         }),
-        _name
+        _name,
       ));
     }
   }

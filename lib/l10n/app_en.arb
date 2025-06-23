@@ -742,20 +742,21 @@
   "@invalidNumber": {},
   "sleepTimerTooltip": "Sleep timer",
   "@sleepTimerTooltip": {},
-  "sleepTimerRemainingTime": "Sleeping in {prefix}{time} {suffix}",
+  "sleepTimerRemainingTime": "Sleeping in {time,plural,=1{<1 Minute} other{{time} minutes}}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
       "time": {
         "type": "int"
-      },
-      "prefix": {
-        "type": "String",
-        "example": "< or nothing"
-      },
-      "suffix": {
-        "type": "String",
-        "example": "minutes or tracks"
+      }
+    }
+  },
+  "sleepTimerRemainingTracks": "Sleeping {time,plural,=1{after this track} other{in {time} tracks}}",
+  "@sleepTimerRemainingTracks": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
       }
     }
   },
@@ -2497,6 +2498,14 @@
   "autoReloadQueueSubtitle": "Automatically reload the queue when the source changes (i.e. offline mode enabled or server address switch). If disabled, Finamp will prompt you instead.",
   "@autoReloadQueueSubtitle": {
     "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "clearQueueOnStopEventTitle": "Clear Queue On External Stop",
+  "@clearQueueOnStopEventTitle": {
+    "description": "Title for the setting that controls if OS stop commands clear the queue."
+  },
+  "clearQueueOnStopEventSubtitle": "Clear the queue and close the player if a 'stop' command is received from the OS. In-app stop actions will always close the player and clear the queue.",
+  "@clearQueueOnStopEventSubtitle": {
+    "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
   },
   "autoReloadPrompt": "Reload queue to apply new {type, select, network{network settings} transcoding{transcoding settings} other{settings}}",
   "@autoReloadPrompt": {
