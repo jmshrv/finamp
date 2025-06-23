@@ -2485,5 +2485,31 @@
   "automaticOfflineModeOverrideActiveTitle": "Automatisches Wechseln pausiert",
   "@automaticOfflineModeOverrideActiveTitle": {
     "description": "Title for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "sleepTimerRemainingTime": "Timer endet in {time,plural,=1{<1 Minute} other{{time} Minuten}}",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "sleepTimerRemainingTracks": "Timer endet {time,plural,=1{nach diesem Titel} other{nach {time} Titel}}",
+  "@sleepTimerRemainingTracks": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "clearQueueOnStopEventTitle": "Nach externem Stop-Event die Warteschlange leeren",
+  "@clearQueueOnStopEventTitle": {
+    "description": "Title for the setting that controls if OS stop commands clear the queue."
+  },
+  "clearQueueOnStopEventSubtitle": "Leert die Warteschlange und schließt den Player, wenn ein 'Stop' Befehl vom Betriebssystem empfangen wird. In-App Stop Aktionen werden den Player immer schließen und die Warteschlange leeren.",
+  "@clearQueueOnStopEventSubtitle": {
+    "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
   }
 }
