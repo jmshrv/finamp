@@ -2113,7 +2113,7 @@
   "@networkSettingsTitle": {
     "description": "Title for the network settings screen"
   },
-  "showFavoriteButtonOnMediaNotificationSubtitle": "Controla se a notificação de média tem um botão de favorito. Isto permite-lhe marcar/desmarcar como favorito a faixa atual sem abrir a aplicação.",
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Controla se a notificação de média tem um botão de favorito. Isto permite-lhe marcar/desmarcar como favorito a faixa atual sem abrir a aplicação. Escondido em modo offline.",
   "@showFavoriteButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a favorite button."
   },
