@@ -2409,6 +2409,8 @@ class AutoOfflineOptionAdapter extends TypeAdapter<AutoOfflineOption> {
         return AutoOfflineOption.network;
       case 2:
         return AutoOfflineOption.disconnected;
+      case 3:
+        return AutoOfflineOption.unreachable;
       default:
         return AutoOfflineOption.disabled;
     }
@@ -2423,6 +2425,8 @@ class AutoOfflineOptionAdapter extends TypeAdapter<AutoOfflineOption> {
         writer.writeByte(1);
       case AutoOfflineOption.disconnected:
         writer.writeByte(2);
+      case AutoOfflineOption.unreachable:
+        writer.writeByte(3);
     }
   }
 

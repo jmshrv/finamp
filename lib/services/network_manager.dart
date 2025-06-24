@@ -91,7 +91,7 @@ Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
     return FinampSettingsHelper.finampSettings.isOffline;
   }
 
-  bool state1 = _shouldBeOffline(connections);
+  bool state1 = await _shouldBeOffline(connections);
 
   // this prevents an issue on ios (and mac?) where the
   // listener gets called even though it shouldn't.
@@ -106,7 +106,8 @@ Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
   if (!featureEnabled()) {
     return FinampSettingsHelper.finampSettings.isOffline;
   }
-  bool state2 = _shouldBeOffline(await Connectivity().checkConnectivity());
+  connections = await Connectivity().checkConnectivity();
+  bool state2 = await _shouldBeOffline(connections);
 
   // skip if state changed during the delay because the function should be triggered by the change again
   // skip if target state is already the active offline-mode state to prevent unessesary snackbar messages
@@ -125,7 +126,7 @@ Future<bool> _setOfflineMode(List<ConnectivityResult> connections) async {
   return state2;
 }
 
-bool _shouldBeOffline(List<ConnectivityResult> connections) {
+Future<bool> _shouldBeOffline(List<ConnectivityResult> connections) async {
   switch (FinampSettingsHelper.finampSettings.autoOffline) {
     case AutoOfflineOption.disconnected:
       return !connections.contains(ConnectivityResult.mobile) &&
@@ -133,6 +134,8 @@ bool _shouldBeOffline(List<ConnectivityResult> connections) {
           !connections.contains(ConnectivityResult.wifi);
     case AutoOfflineOption.network:
       return !connections.contains(ConnectivityResult.ethernet) && !connections.contains(ConnectivityResult.wifi);
+    case AutoOfflineOption.unreachable:
+      return !await GetIt.instance<JellyfinApiHelper>().pingActiveServer();
     default:
       return false;
   }
@@ -173,6 +176,8 @@ int _getDownloads() {
 }
 
 void _notifyOfPausedDownloads(List<ConnectivityResult> connections) async {
+  if (!FinampSettingsHelper.finampSettings.isOffline) return;
+  
   if (connections.contains(ConnectivityResult.none)) {
     if (_getDownloads() == 0) return;
     GlobalSnackbar.message((context) => AppLocalizations.of(context)!.downloadPaused);
