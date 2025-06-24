@@ -284,13 +284,16 @@ class _MusicScreenState extends ConsumerState<MusicScreen> with TickerProviderSt
               : (widget.genreFilter != null ? BackButton(onPressed: () => Navigator.of(context).pop()) : null),
           actions: isSearching
               ? [
-                  IconButton(
-                    icon: Icon(Icons.cancel, color: Theme.of(context).colorScheme.onSurface),
-                    onPressed: () => setState(() {
-                      textEditingController.clear();
-                      searchQuery = null;
-                    }),
-                    tooltip: AppLocalizations.of(context)!.clear,
+                  GestureDetector(
+                    onDoubleTap: () => _stopSearching(),
+                    child: IconButton(
+                      icon: Icon(Icons.cancel, color: Theme.of(context).colorScheme.onSurface),
+                      onPressed: () => setState(() {
+                        textEditingController.clear();
+                        searchQuery = null;
+                      }),
+                      tooltip: AppLocalizations.of(context)!.clear,
+                    ),
                   ),
                 ]
               : [
