@@ -97,6 +97,7 @@ class PlayOnService {
     try {
       if (!FinampSettingsHelper.finampSettings.isOffline && FinampSettingsHelper.finampSettings.enablePlayon) {
         assert(socketState == SocketState.disconnected);
+        _playOnServiceLogger.info("Attempting to start PlayOn listener");
         socketState = SocketState.connecting;
 
         await _jellyfinApiHelper.updateCapabilitiesFull(
@@ -186,7 +187,6 @@ class PlayOnService {
               return;
             } else {
               // Retry the connection
-              _playOnServiceLogger.warning("Attempt to restart playon listener");
               await startListener();
             }
           case SocketState.connecting:
