@@ -1951,7 +1951,7 @@
   "@startupErrorTitle": {
     "description": "The title for the error screen that shows when startup fails."
   },
-  "startupErrorWorkaround": "Como maneira de contornar o erro você pode limpar os seus dados da aplicação para reiniciar a reiniciar. Tenha em mente que neste caso todas as suas definições e downloads serão apagados.",
+  "startupErrorWorkaround": "Como maneira de contornar o erro você pode limpar os seus dados da aplicação para a reiniciar. Tenha em mente que neste caso todas as suas definições e downloads serão apagados.",
   "@startupErrorWorkaround": {
     "description": "The subtitle for how to manually recover from a startup error"
   },
@@ -2529,5 +2529,9 @@
   "clearQueueOnStopEventSubtitle": "Limpa a fila e fecha o reprodutor se um comando 'stop' for recebido vindo do SO. As ações de parar internas da aplicação irão sempre fechar o reprodutor e limpar a fila.",
   "@clearQueueOnStopEventSubtitle": {
     "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
+  },
+  "autoOfflineOptionUnreachable": "Inalcançável",
+  "@autoOfflineOptionUnreachable": {
+    "description": "This is shown when the autoOffline feature is set to Unreachable, this means offline mode will be automatically enabled when - after a network change - the server cant be pinged"
   }
 }
