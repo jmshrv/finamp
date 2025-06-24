@@ -71,8 +71,21 @@ extension CensoredMessage on LogRecord {
           "TEMP_HOST",
         );
 
-        // remove anything between the quotes in "Failed host lookup: ''"
-        workingLogString = workingLogString.replaceAll(RegExp(r"host: [^,]+, port: \d+"), "HOST");
+        // Replace the host and port values in network errors
+        workingLogString = workingLogString.replaceAllMapped(
+          RegExp(r"(host: )([^,]+)(, port: )(\d+)", caseSensitive: false),
+          (match) => "${match[1]}HOST${match[3]}PORT",
+        );
+
+        workingLogString = workingLogString.replaceAllMapped(
+          RegExp(r"(Failed host lookup: ')([^']+)(')", caseSensitive: false),
+          (match) => "${match[1]}HOST${match[3]}",
+        );
+
+        workingLogString = workingLogString.replaceAllMapped(
+          RegExp(r"(address = )([^,]+)(, port = )(\d+)", caseSensitive: false),
+          (match) => "${match[1]}HOST${match[3]}PORT",
+        );
       }
     }
 
