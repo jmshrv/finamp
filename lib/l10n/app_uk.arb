@@ -931,7 +931,7 @@
   "@repairDownloads": {
     "description": "Tooltip for downloads repair button."
   },
-  "queueRestoreButtonLabel": "Відновити",
+  "queueRestoreButtonLabel": "Відновити цю чергу",
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
