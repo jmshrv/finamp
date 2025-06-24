@@ -1015,7 +1015,7 @@
   "@loopModeAllButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
   },
-  "queueRestoreButtonLabel": "Återställ",
+  "queueRestoreButtonLabel": "Återställ denna kö",
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
