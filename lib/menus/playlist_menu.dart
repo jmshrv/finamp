@@ -6,10 +6,12 @@ import 'package:finamp/menus/components/menuEntries/add_to_playlist_menu_entry.d
 import 'package:finamp/menus/components/menuEntries/delete_from_server_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/edit_item_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/instant_mix_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/restore_queue_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/toggle_favorite_menu_entry.dart';
 import 'package:finamp/menus/components/menu_item_info_header.dart';
 import 'package:finamp/menus/components/playbackActions/playback_action_row.dart';
 import 'package:finamp/menus/components/playbackActions/playback_actions.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
 
@@ -20,10 +22,15 @@ const Curve playlistMenuDefaultInCurve = Curves.easeOutCubic;
 const Curve playlistMenuDefaultOutCurve = Curves.easeInCubic;
 const playlistMenuRouteName = "/playlist-menu";
 
-Future<void> showModalPlaylistMenu({required BuildContext context, required BaseItemDto baseItem}) async {
+Future<void> showModalPlaylistMenu({
+  required BuildContext context,
+  required BaseItemDto baseItem,
+  FinampStorableQueueInfo? queueInfo,
+}) async {
   // Normal menu entries, excluding headers
   List<HideableMenuEntry> getMenuEntries(BuildContext context) {
     return [
+      if (queueInfo != null) RestoreQueueMenuEntry(queueInfo: queueInfo),
       AddToPlaylistMenuEntry(baseItem: baseItem),
       InstantMixMenuEntry(baseItem: baseItem),
       AdaptiveDownloadLockDeleteMenuEntry(baseItem: baseItem),

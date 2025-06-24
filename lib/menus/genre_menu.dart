@@ -4,8 +4,10 @@ import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/menus/components/menuEntries/adaptive_download_lock_delete_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/add_to_playlist_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/instant_mix_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/restore_queue_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/toggle_favorite_menu_entry.dart';
 import 'package:finamp/menus/components/menu_item_info_header.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
 
@@ -16,10 +18,15 @@ const Curve genreMenuDefaultInCurve = Curves.easeOutCubic;
 const Curve genreMenuDefaultOutCurve = Curves.easeInCubic;
 const genreMenuRouteName = "/genre-menu";
 
-Future<void> showModalGenreMenu({required BuildContext context, required BaseItemDto baseItem}) async {
+Future<void> showModalGenreMenu({
+  required BuildContext context,
+  required BaseItemDto baseItem,
+  FinampStorableQueueInfo? queueInfo,
+}) async {
   // Normal menu entries, excluding headers
   List<HideableMenuEntry> getMenuEntries(BuildContext context) {
     return [
+      if (queueInfo != null) RestoreQueueMenuEntry(queueInfo: queueInfo),
       AddToPlaylistMenuEntry(baseItem: baseItem),
       InstantMixMenuEntry(baseItem: baseItem),
       AdaptiveDownloadLockDeleteMenuEntry(baseItem: baseItem),

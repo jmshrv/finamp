@@ -7,6 +7,7 @@ import 'package:finamp/menus/album_menu.dart';
 import 'package:finamp/menus/artist_menu.dart';
 import 'package:finamp/menus/genre_menu.dart';
 import 'package:finamp/menus/playlist_menu.dart';
+import 'package:finamp/menus/track_menu.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/album_screen.dart';
@@ -125,24 +126,6 @@ class _ItemCollectionWrapperState extends ConsumerState<ItemCollectionWrapper> {
   Widget build(BuildContext context) {
     local = AppLocalizations.of(context)!;
 
-    void menuCallback() async {
-      unawaited(Feedback.forLongPress(context));
-
-      switch (BaseItemDtoType.fromItem(widget.item)) {
-        case BaseItemDtoType.artist:
-          await showModalArtistMenu(context: context, baseItem: widget.item);
-          break;
-        case BaseItemDtoType.genre:
-          await showModalGenreMenu(context: context, baseItem: widget.item);
-          break;
-        case BaseItemDtoType.playlist:
-          await showModalPlaylistMenu(context: context, baseItem: widget.item);
-          break;
-        default:
-          await showModalAlbumMenu(context: context, baseItem: widget.item);
-      }
-    }
-
     return Padding(
       padding: widget.isGrid ? Theme.of(context).cardTheme.margin ?? const EdgeInsets.all(4.0) : EdgeInsets.zero,
       child: GestureDetector(
@@ -150,8 +133,8 @@ class _ItemCollectionWrapperState extends ConsumerState<ItemCollectionWrapper> {
           // Begin precalculating theme for menu
           ref.listenManual(finampThemeProvider(ThemeInfo(widget.item)), (_, __) {});
         },
-        onLongPressStart: (details) => menuCallback(),
-        onSecondaryTapDown: (details) => menuCallback(),
+        onLongPressStart: (details) => openItemMenu(context: context, item: widget.item),
+        onSecondaryTapDown: (details) => openItemMenu(context: context, item: widget.item),
         child: widget.isGrid
             ? ItemCollectionCard(item: mutableItem, onTap: onTap, parentType: widget.parentType)
             : ItemCollectionListTile(
@@ -164,5 +147,34 @@ class _ItemCollectionWrapperState extends ConsumerState<ItemCollectionWrapper> {
               ),
       ),
     );
+  }
+}
+
+void openItemMenu({
+  required BuildContext context,
+  required BaseItemDto item,
+  FinampStorableQueueInfo? queueInfo,
+}) async {
+  unawaited(Feedback.forLongPress(context));
+
+  switch (BaseItemDtoType.fromItem(item)) {
+    case BaseItemDtoType.artist:
+      await showModalArtistMenu(context: context, baseItem: item, queueInfo: queueInfo);
+      break;
+    case BaseItemDtoType.genre:
+      await showModalGenreMenu(context: context, baseItem: item, queueInfo: queueInfo);
+      break;
+    case BaseItemDtoType.playlist:
+      await showModalPlaylistMenu(context: context, baseItem: item, queueInfo: queueInfo);
+      break;
+    case BaseItemDtoType.track:
+      await showModalTrackMenu(context: context, item: item, queueInfo: queueInfo);
+      break;
+    case BaseItemDtoType.album:
+      await showModalAlbumMenu(context: context, baseItem: item, queueInfo: queueInfo);
+      break;
+    default:
+      // Do nothing for unsupported item types
+      break;
   }
 }

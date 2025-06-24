@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:finamp/components/MusicScreen/item_collection_wrapper.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
@@ -40,7 +42,7 @@ class QueueRestoreTile extends StatelessWidget {
       contentPadding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
       child: ListTile(
         title: Text(
-          AppLocalizations.of(context)!.queueRestoreTitle(DateTime.fromMillisecondsSinceEpoch(info.creation)),
+          info.source?.name.getLocalized(context) ?? AppLocalizations.of(context)!.unknown,
         ),
         leading: Padding(
           padding: const EdgeInsets.only(right: 16),
@@ -57,21 +59,32 @@ class QueueRestoreTile extends StatelessWidget {
           builder: (context, snapshot) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children:
-                ((snapshot.data?.name == null)
-                    ? <Text>[]
-                    : [
-                        // exclude subtitle line 1 if track name is null
-                        Text(
-                          AppLocalizations.of(context)!.queueRestoreSubtitle1(snapshot.data!.name!),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ]) +
-                [Text(AppLocalizations.of(context)!.queueRestoreSubtitle2(info.trackCount, remainingTracks))],
+            children: [
+              Text(
+                AppLocalizations.of(context)!.queueRestoreTitle(DateTime.fromMillisecondsSinceEpoch(info.creation)),
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              ...((snapshot.data?.name == null)
+                  ? <Text>[]
+                  : [
+                      // exclude subtitle line 1 if track name is null
+                      Text(
+                        AppLocalizations.of(context)!.queueRestoreSubtitle1(snapshot.data!.name!),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ]),
+              Text(
+                AppLocalizations.of(context)!.queueRestoreSubtitle2(info.trackCount, remainingTracks),
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
           ),
         ),
+        onLongPress: () => {
+          if (info.source?.item != null) {openItemMenu(context: context, item: info.source!.item!, queueInfo: info)},
+        },
         trailing: IconButton(
-          icon: const Icon(Icons.arrow_circle_right_outlined),
+          icon: const Icon(TablerIcons.restore),
           onPressed: () {
             queueService.archiveSavedQueue();
             unawaited(queueService.loadSavedQueue(info).catchError(GlobalSnackbar.error));
