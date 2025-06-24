@@ -1017,7 +1017,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         MediaControl.skipToPrevious,
         if (_player.playing) MediaControl.pause else MediaControl.play,
         MediaControl.skipToNext,
-        if (FinampSettingsHelper.finampSettings.showFavoriteButtonOnMediaNotification)
+        if (FinampSettingsHelper.finampSettings.showFavoriteButtonOnMediaNotification &&
+            !FinampSettingsHelper.finampSettings.isOffline)
           MediaControl.custom(
             name: CustomPlaybackActions.toggleFavorite.name,
             androidIcon: isFavorite ? "drawable/baseline_heart_filled_24" : "drawable/baseline_heart_24",

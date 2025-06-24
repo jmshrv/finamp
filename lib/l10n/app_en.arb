@@ -2035,7 +2035,7 @@
   "@showFavoriteButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a favorite button."
   },
-  "showFavoriteButtonOnMediaNotificationSubtitle": "Controls if the media notification has a favorite button. This lets you favorite/unfavorite the current track without opening the app.",
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Controls if the media notification has a favorite button. This lets you favorite/unfavorite the current track without opening the app. Hidden in offline mode.",
   "@showFavoriteButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a favorite button."
   },
