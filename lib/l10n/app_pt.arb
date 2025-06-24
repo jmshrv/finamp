@@ -1136,7 +1136,7 @@
   "@queuesScreen": {
     "description": "Title for the screen where older now playing queues can be restored"
   },
-  "queueRestoreButtonLabel": "Restaurar",
+  "queueRestoreButtonLabel": "Restaurar Esta Fila",
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
