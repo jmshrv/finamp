@@ -63,9 +63,9 @@
   "@criticRating": {},
   "dateAdded": "추가된 날짜",
   "@dateAdded": {},
-  "datePlayed": "재생한 날짜",
+  "datePlayed": "최근 재생 날짜",
   "@datePlayed": {},
-  "premiereDate": "초연(프리미어) 날짜",
+  "premiereDate": "출시일",
   "@premiereDate": {},
   "productionYear": "제작년도",
   "@productionYear": {},
@@ -225,7 +225,7 @@
   "@yesButtonLabel": {},
   "noButtonLabel": "아니오",
   "@noButtonLabel": {},
-  "setSleepTimer": "취침 타이머 설정",
+  "setSleepTimer": "다음 재생 일시 정지",
   "@setSleepTimer": {},
   "minutes": "분",
   "@minutes": {},
@@ -376,7 +376,7 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "로그아웃",
   "@logOut": {},
-  "bitrateSubtitle": "비트레이트가 높으면 고품질의 음악을 들을 수 있습니다. 데이터 사용량도 증가합니다. FLAC 등 무손실 코덱에는 적용되지 않습니다.",
+  "bitrateSubtitle": "비트레이트가 높으면 고품질의 음악을 들을 수 있습니다. 데이터 사용량도 증가합니다. FLAC 등 무손실 코덱에는 적용되지 않습니다",
   "@bitrateSubtitle": {},
   "appDirectory": "앱 디렉토리",
   "@appDirectory": {},
@@ -478,7 +478,7 @@
   "@aboutTranslations": {
     "description": "Link to the translation project, shown in the about screen."
   },
-  "loginFlowWelcomeHeading": "환영해요, 핀앰프 Finamp 입니다",
+  "loginFlowWelcomeHeading": "환영해요, {styledName} 입니다",
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
@@ -615,7 +615,7 @@
       }
     }
   },
-  "sleepTimerRemainingTime": "취침 타이머 {time}분 남음",
+  "sleepTimerRemainingTime": "취침 타이머는 {time,plural,=1{<1 분} other{{time} 분}} 남았습니다",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -670,7 +670,7 @@
   "@queuesScreen": {
     "description": "Title for the screen where older now playing queues can be restored"
   },
-  "queueRestoreButtonLabel": "복원",
+  "queueRestoreButtonLabel": "현재 대기열 복원",
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
@@ -925,7 +925,7 @@
   "@autoloadLastQueueOnStartup": {
     "description": "Setting to restore last queue on startup"
   },
-  "reportQueueToServerSubtitle": "활성화시 핀앰프 Finamp는 현재 대기열을 서버로 보냅니다. 현재 거의 안쓰는 기능이며 네트워크 트래픽이 증가합니다.",
+  "reportQueueToServerSubtitle": "활성화시 핀앰프 Finamp는 현재 대기열을 서버로 보냅니다. 이는 원격 제어를 개선하고 및 서버측이 대기열을 복원할 수 있습니다. '플레이 온' 기능이 활성화되면 본 기능도 항상 활성화됩니다.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1110,7 +1110,7 @@
   },
   "close": "닫기",
   "@close": {},
-  "couldNotLoad": "{source, select, album{앨범 } playlist{플레이리스트 } trackMix{트랙 믹스 } artistMix{아티스트 믹스 } albumMix{앨범 믹스 } genreMix{장르 믹스 } favorites{즐겨찾기 } allTracks{전체 트랙 } filteredList{트랙 목록 } genre{장르 } artist{아티스트 } track{트랙 } nextUpAlbum{우선재생 앨범 } nextUpPlaylist{우선재생 플레이리스트 } nextUpArtist{우선재생 아티스트 } other{}}로딩에 실패하였습니다",
+  "couldNotLoad": "{source, select, album{앨범 } playlist{플레이리스트 } trackMix{트랙 믹스 } artistMix{아티스트 믹스 } albumMix{앨범 믹스 } genreMix{장르 믹스 } favorites{즐겨찾기 } allTracks{전체 트랙 } filteredList{트랙 목록 } genre{장르 } artist{아티스트 } track{트랙 } nextUpAlbum{다음 앨범 } nextUpPlaylist{다음 플레이리스트 } nextUpArtist{다음 아티스트 } nextUpGenre{다음 장르} other{}}로딩에 실패하였습니다",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -1149,7 +1149,7 @@
       }
     }
   },
-  "playingFromType": "{source, select, album{앨범 } playlist{플레이리스트 } trackMix{트랙 믹스 } artistMix{아티스트 믹스 } albumMix{앨범 믹스 } genreMix{장르 믹스 } favorites{즐겨찾기 } allTracks{전체 트랙 } filteredList{트랙 목록 } genre{장르 } artist{아티스트 } track{트랙 } nextUpAlbum{앨범 우선} nextUpPlaylist{플레이리스트 우선} nextUpArtist{아티스트 우선} other{}}재생 중",
+  "playingFromType": "{source, select, album{앨범 } playlist{플레이리스트 } trackMix{트랙 믹스 } artistMix{아티스트 믹스 } albumMix{앨범 믹스 } genreMix{장르 믹스 } favorites{즐겨찾기 } allTracks{전체 트랙 } filteredList{트랙 목록 } genre{장르 } artist{아티스트 } track{트랙 } nextUpAlbum{다음 앨범} nextUpPlaylist{다음 플레이리스트} nextUpArtist{다음 아티스트} nextUpGenre{다음 장르} remoteClient{원격 클라이언트} other{}} 재생 중",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1361,7 +1361,7 @@
     },
     "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
   },
-  "finampCollectionNames": "{itemType, select, favorites{즐겨찾기} allPlaylists{모든 플레이리스트} fiveLatestAlbums{최신 앨범 다섯} allPlaylistsMetadata{플레이리스트 정보} other{{itemType}} }",
+  "finampCollectionNames": "{itemType, select, favorites{즐겨찾기} allPlaylists{모든 플레이리스트} fiveLatestAlbums{최신 앨범 다섯} allPlaylistsMetadata{플레이리스트 정보} collectionWithLibraryFilter{라이브러리 선별 콜렉션} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
@@ -1415,7 +1415,7 @@
   "@transcodeHint": {
     "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
   },
-  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ 트랜스코딩 후 {bitrate}}}",
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} 트랜스코딩됨}}{location, select, null{} other{ ({location})}}",
   "@downloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1435,7 +1435,7 @@
   },
   "swipeLeftToRightActionSubtitle": "리스트에 있는 트랙을 왼쪽에서 오른쪽으로 밀었을 때 실행할 동작.",
   "@swipeLeftToRightActionSubtitle": {},
-  "collectionDownloadInfo": "{codec, select, ORIGINAL{} other{{codec} @ {bitrate}로 }}{size}",
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ {codec} @ {bitrate}로/으로}}{location, select, null{} other{ ({location})}}",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1493,5 +1493,87 @@
   "redownloadcomplete": "트랜스코드 재다운로드 대기 중.",
   "@redownloadcomplete": {
     "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
+  },
+  "defaultOrder": "기본 정렬",
+  "@defaultOrder": {
+    "description": "Default sorting order for playlists (server order)"
+  },
+  "playbackReporting": "재생 보고",
+  "@playbackReporting": {},
+  "favorite": "즐겨찾기",
+  "@favorite": {},
+  "albumArtists": "앨범 아티스트",
+  "@albumArtists": {},
+  "performingArtist": "공연 아티스트",
+  "@performingArtist": {},
+  "duration": "노래 길이",
+  "@duration": {},
+  "formattedRelativeTime": "{type, select, just_now{지금} minutes{{value} 분 전} hours{{value} 시간 전} yesterday{어제} days{{value, plural, =1{하루 전} other{{value} 일 전}}} other{value}}",
+  "@formattedRelativeTime": {
+    "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
+    "placeholders": {
+      "type": {
+        "type": "String",
+        "description": "The category of time passed: one of 'just_now', 'minutes', 'hours', 'yesterday', or 'days'."
+      },
+      "value": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "libraryDownloads": "라이브러리 다운로드",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "playbackActionPagePlay": "재생",
+  "@playbackActionPagePlay": {
+    "description": "Label for the playback action page that contains all actions related to playing in order"
+  },
+  "playbackActionPageShuffle": "임의 재생",
+  "@playbackActionPageShuffle": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled"
+  },
+  "playbackActionPageShuffleAlbums": "앨범 임의 재생",
+  "@playbackActionPageShuffleAlbums": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+  },
+  "editItemTitle": "편집 {itemType, select, playlist{플레이리스트} other{}}",
+  "@editItemTitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
+  "appearsOnAlbums": "참여 앨범",
+  "@appearsOnAlbums": {},
+  "performingArtists": "공연 아티스트",
+  "@performingArtists": {},
+  "startupErrorTitle": "앱 시작중에 (원인불명의) 오류가 발생했습니다!",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "allLibraries": "모든 라이브러리",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
+  "noGenres": "장르 없음",
+  "@noGenres": {
+    "description": "Gets shown when there are no genres available for an album or artist"
+  },
+  "onlineMode": "온라인 모드",
+  "@onlineMode": {},
+  "favorites": "즐겨찾기",
+  "@favorites": {},
+  "exportLogs": "로그 저장",
+  "@exportLogs": {},
+  "startupErrorCallToAction": "\"github.com/jmshrv/finamp\"에 문제점을 등록해주세요. 로그와 스크린샷을 함께 등록하시면 우리가 최대한 빠르게 조치할 수 있습니다.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "startupErrorWorkaround": "앱 데이터를 삭제하고 앱을 초기화 함으로써 문제를 해결할 수 있습니다. 단, 이 조치를 하면 앱 설정과 다운로드한 곡들도 삭제되는 점 주의하십시오.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
   }
 }
