@@ -374,6 +374,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
         clearQueueOnStopEvent: fields[117] == null
             ? false
             : fields[117] as bool,
+        serverSharingEnabled: fields[118] == null ? false : fields[118] as bool,
       )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -385,7 +386,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(111)
+      ..writeByte(112)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -607,7 +608,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(116)
       ..write(obj.sleepTimer)
       ..writeByte(117)
-      ..write(obj.clearQueueOnStopEvent);
+      ..write(obj.clearQueueOnStopEvent)
+      ..writeByte(118)
+      ..write(obj.serverSharingEnabled);
   }
 
   @override

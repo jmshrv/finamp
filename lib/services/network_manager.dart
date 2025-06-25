@@ -177,7 +177,7 @@ int _getDownloads() {
 
 void _notifyOfPausedDownloads(List<ConnectivityResult> connections) async {
   if (!FinampSettingsHelper.finampSettings.isOffline) return;
-  
+
   if (connections.contains(ConnectivityResult.none)) {
     if (_getDownloads() == 0) return;
     GlobalSnackbar.message((context) => AppLocalizations.of(context)!.downloadPaused);

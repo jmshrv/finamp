@@ -29,22 +29,18 @@ class JellyfinServerDiscoveryEmulationService {
         }
       }
     });
-    
   }
 
   void advertiseServer() async {
-
     isSharing = true;
 
     const discoveryMessage =
         "who is JellyfinServer?"; // doesn't seem to be case sensitive, but the Kotlin SDK uses this capitalization
-    final broadcastAddress =
-        InternetAddress("255.255.255.255"); // UDP broadcast address
+    final broadcastAddress = InternetAddress("255.255.255.255"); // UDP broadcast address
     const discoveryPort = 7359; // Jellyfin client discovery port
 
     socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, discoveryPort);
-    socket.broadcastEnabled =
-        true; // important to allow sending to broadcast address
+    socket.broadcastEnabled = true; // important to allow sending to broadcast address
     socket.multicastHops = 5; // to account for weird network setups
 
     _serverDiscoveryEmulationLogger.fine("Advertising server on port $discoveryPort");
@@ -53,11 +49,12 @@ class JellyfinServerDiscoveryEmulationService {
       if (event == RawSocketEvent.read) {
         final datagram = socket.receive();
         if (datagram != null) {
-          _serverDiscoveryEmulationLogger
-              .finest("Received datagram: ${utf8.decode(datagram.data)}");
+          _serverDiscoveryEmulationLogger.finest("Received datagram: ${utf8.decode(datagram.data)}");
           final requestMessage = utf8.decode(datagram.data);
           if (requestMessage.toLowerCase().contains(discoveryMessage.toLowerCase())) {
-            _serverDiscoveryEmulationLogger.fine("Received discovery message from ${datagram.address}:${datagram.port}");
+            _serverDiscoveryEmulationLogger.fine(
+              "Received discovery message from ${datagram.address}:${datagram.port}",
+            );
             // Respond with the server's information
             final response = ClientDiscoveryResponse(
               address: _finampUserHelper.currentUser?.baseUrl,

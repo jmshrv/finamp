@@ -20,85 +20,81 @@ import '../../services/theme_provider.dart';
 
 const serverSharingPanelRouteName = "/server-sharing-panel";
 
-Future<void> showServerSharingPanel({
-  required BuildContext context,
-  FinampTheme? themeProvider,
-}) async {
+Future<void> showServerSharingPanel({required BuildContext context, FinampTheme? themeProvider}) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
   FeedbackHelper.feedback(FeedbackType.selection);
 
   await showThemedBottomSheet(
-      context: context,
-      usePlayerTheme: true,
-      routeName: serverSharingPanelRouteName,
-      minDraggableHeight: 0.2,
-      buildSlivers: (context) {
+    context: context,
+    usePlayerTheme: true,
+    routeName: serverSharingPanelRouteName,
+    minDraggableHeight: 0.2,
+    buildSlivers: (context) {
+      final menuEntries = [
+        Consumer(
+          builder: (context, ref, child) {
+            FinampSettings? finampSettings = ref.watch(finampSettingsProvider).value;
+            return Text(
+              "Server Sharing ${finampSettings?.serverSharingEnabled ?? false ? "Enabled" : "Disabled"}",
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge!.color!,
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+              ),
+            );
+          },
+        ),
+        const Divider(),
+        Consumer(
+          builder: (context, ref, child) {
+            final finampSettings = ref.watch(finampSettingsProvider).value;
+            // button for toggling server sharing
+            return ToggleableListTile(
+              title: "Enable Server Sharing",
+              leading: const Icon(TablerIcons.share, size: 36.0),
+              positiveIcon: TablerIcons.check,
+              negativeIcon: TablerIcons.x,
+              initialState: (finampSettings?.serverSharingEnabled ?? false),
+              enabled: !isOffline,
+              onToggle: (bool currentState) async {
+                FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+                if (currentState) {
+                  finampSettingsTemp.serverSharingEnabled = !currentState;
+                } else {
+                  finampSettingsTemp.serverSharingEnabled = !currentState;
+                }
+                await Hive.box<FinampSettings>("FinampSettings").put("FinampSettings", finampSettingsTemp);
+                return finampSettingsTemp.serverSharingEnabled;
+              },
+            );
+          },
+        ),
+      ];
 
-        final menuEntries = [
-          Consumer(
-            builder: (context, ref, child) {
-              FinampSettings? finampSettings =
-                  ref.watch(finampSettingsProvider).value;
-              return Text("Server Sharing ${finampSettings?.serverSharingEnabled ?? false ? "Enabled" : "Disabled"}",
-                  style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge!.color!,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400));
-            },
-          ),
-          const Divider(),
-          Consumer(
-            builder: (context, ref, child) {
-              final finampSettings =
-                  ref.watch(finampSettingsProvider).value;
-              // button for toggling server sharing
-              return ToggleableListTile(
-                title: "Enable Server Sharing",
-                leading: const Icon(TablerIcons.share, size: 36.0),
-                positiveIcon: TablerIcons.check,
-                negativeIcon: TablerIcons.x,
-                initialState: (finampSettings?.serverSharingEnabled ?? false),
-                enabled: !isOffline,
-                onToggle: (bool currentState) async {
-                    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-                  if (currentState) {
-                    finampSettingsTemp.serverSharingEnabled = !currentState;
-                  } else {
-                    finampSettingsTemp.serverSharingEnabled = !currentState;
-                  }
-                  await Hive.box<FinampSettings>("FinampSettings").put("FinampSettings", finampSettingsTemp);
-                  return finampSettingsTemp.serverSharingEnabled;
-                },
-              );
-            },
-          ),
-        ];
-
-        var menu = [
-          SliverStickyHeader(
-            header: Padding(
-              padding: const EdgeInsets.only(top: 6.0, bottom: 16.0),
-              child: Center(
-                child: Text(AppLocalizations.of(context)!.addRemoveFromPlaylist,
-                    style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color!,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400)),
+      var menu = [
+        SliverStickyHeader(
+          header: Padding(
+            padding: const EdgeInsets.only(top: 6.0, bottom: 16.0),
+            child: Center(
+              child: Text(
+                AppLocalizations.of(context)!.addRemoveFromPlaylist,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge!.color!,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
-            sliver: MenuMask(
-                height: 36.0,
-                child: SliverList(
-                    delegate: SliverChildListDelegate.fixed(
-                  menuEntries,
-                ))),
           ),
-          const SliverPadding(padding: EdgeInsets.only(bottom: 100.0))
-        ];
-        var stackHeight = MediaQuery.sizeOf(context).height * 0.5;
-        return (stackHeight, menu);
-      },
-      themeProvider: themeProvider);
+          sliver: MenuMask(height: 36.0, child: SliverList(delegate: SliverChildListDelegate.fixed(menuEntries))),
+        ),
+        const SliverPadding(padding: EdgeInsets.only(bottom: 100.0)),
+      ];
+      var stackHeight = MediaQuery.sizeOf(context).height * 0.5;
+      return (stackHeight, menu);
+    },
+    themeProvider: themeProvider,
+  );
 }
