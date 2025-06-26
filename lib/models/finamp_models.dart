@@ -131,6 +131,8 @@ class DefaultSettings {
   static const itemSwipeActionRightToLeft = ItemSwipeActions.addToNextUp;
   static const loopMode = FinampLoopMode.none;
   static const playbackSpeed = 1.0;
+  static const playbackPitch = 1.0;
+  static const syncPlaybackSpeedAndPitch = false;
   static const autoLoadLastQueueOnStartup = true;
   static const shouldTranscodeDownloads = TranscodeDownloadsSetting.ask;
   static const shouldRedownloadTranscodes = false;
@@ -253,6 +255,8 @@ class FinampSettings {
     required this.tabSortOrder,
     this.loopMode = DefaultSettings.loopMode,
     this.playbackSpeed = DefaultSettings.playbackSpeed,
+    this.playbackPitch = DefaultSettings.playbackPitch,
+    this.syncPlaybackSpeedAndPitch = DefaultSettings.syncPlaybackSpeedAndPitch,
     this.tabOrder = DefaultSettings.tabOrder,
     this.autoloadLastQueueOnStartup = DefaultSettings.autoLoadLastQueueOnStartup,
     this.hasCompletedDownloadsServiceMigration =
@@ -699,6 +703,12 @@ class FinampSettings {
 
   @HiveField(117, defaultValue: DefaultSettings.clearQueueOnStopEvent)
   bool clearQueueOnStopEvent;
+
+  @HiveField(118, defaultValue: DefaultSettings.playbackPitch)
+  double playbackPitch;
+
+  @HiveField(119, defaultValue: DefaultSettings.syncPlaybackSpeedAndPitch)
+  bool syncPlaybackSpeedAndPitch;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

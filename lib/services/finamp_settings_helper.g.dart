@@ -986,6 +986,22 @@ extension FinampSetters on FinampSettingsHelper {
     ).put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setPlaybackPitch(double newPlaybackPitch) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.playbackPitch = newPlaybackPitch;
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setSyncPlaybackSpeedAndPitch(bool newSyncPlaybackSpeedAndPitch) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.syncPlaybackSpeedAndPitch = newSyncPlaybackSpeedAndPitch;
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -1344,6 +1360,13 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       finampSettingsProvider.select((value) => value.requireValue.sleepTimer);
   ProviderListenable<bool> get clearQueueOnStopEvent => finampSettingsProvider
       .select((value) => value.requireValue.clearQueueOnStopEvent);
+  ProviderListenable<double> get playbackPitch => finampSettingsProvider.select(
+    (value) => value.requireValue.playbackPitch,
+  );
+  ProviderListenable<bool> get syncPlaybackSpeedAndPitch =>
+      finampSettingsProvider.select(
+        (value) => value.requireValue.syncPlaybackSpeedAndPitch,
+      );
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider.select(
         (value) => value.requireValue.downloadTranscodingProfile,

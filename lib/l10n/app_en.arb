@@ -2560,5 +2560,9 @@
   "sleepTimerStartTimer": "Start Timer",
   "@sleepTimerStartTimer" : {
     "description": "Label for the button that starts the sleep timer"
+  },
+  "syncPlaybackSpeedAndPitchLabel": "Sync Speed & Pitch",
+  "@syncPlaybackSpeedAndPitchLabel": {
+    "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
   }
 }

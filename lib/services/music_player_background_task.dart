@@ -421,6 +421,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     return _player.setSpeed(speed);
   }
 
+  Future<void> setPitch(final double pitch) async {
+    return _player.setPitch(pitch);
+  }
+
   void setVolume(final double volume) async {
     return _volume.setInternalVolume(volume);
   }
