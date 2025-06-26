@@ -277,7 +277,9 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
               await autoScrollController.scrollToIndex(
                 -1,
                 preferPosition: AutoScrollPosition.middle,
-                duration: MediaQuery.of(context).disableAnimations ? Duration.zero : const Duration(milliseconds: 500),
+                duration: MediaQuery.of(context).disableAnimations
+                    ? const Duration(milliseconds: 1) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
+                    : const Duration(milliseconds: 500),
               );
             } else {
               unawaited(
@@ -285,7 +287,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                   clampedIndex.clamp(0, metadata.value!.lyrics!.lyrics!.length - 1),
                   preferPosition: AutoScrollPosition.middle,
                   duration: MediaQuery.of(context).disableAnimations
-                      ? Duration.zero
+                      ? const Duration(milliseconds: 1) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
                       : const Duration(milliseconds: 500),
                 ),
               );
