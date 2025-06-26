@@ -356,7 +356,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                                       previousLineIndex!,
                                       preferPosition: AutoScrollPosition.middle,
                                       duration: MediaQuery.of(context).disableAnimations
-                                          ? Duration.zero
+                                          ? const Duration(milliseconds: 1) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
                                           : const Duration(milliseconds: 500),
                                     ),
                                   );
@@ -387,7 +387,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                               previousLineIndex!,
                               preferPosition: AutoScrollPosition.middle,
                               duration: MediaQuery.of(context).disableAnimations
-                                  ? Duration.zero
+                                  ? const Duration(milliseconds: 1) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
                                   : const Duration(milliseconds: 500),
                             ),
                           );
