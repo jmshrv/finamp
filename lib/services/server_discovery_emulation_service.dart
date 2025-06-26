@@ -57,8 +57,8 @@ class JellyfinServerDiscoveryEmulationService {
             );
             // Respond with the server's information
             final response = ClientDiscoveryResponse(
-              address: _finampUserHelper.currentUser?.baseUrl,
-              endpointAddress: _finampUserHelper.currentUser?.baseUrl,
+              address: _finampUserHelper.currentUser?.baseURL,
+              endpointAddress: _finampUserHelper.currentUser?.baseURL,
               id: _finampUserHelper.currentUser?.serverId,
               name: "Jellyfin Server (provided by Finamp)",
             );

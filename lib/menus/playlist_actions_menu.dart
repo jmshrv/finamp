@@ -142,7 +142,7 @@ class ToggleableListTile extends ConsumerStatefulWidget {
     required this.negativeIcon,
     required this.initialState,
     required this.onToggle,
-    required this.enabled,
+    this.enabled = true,
     this.forceLoading = false,
     this.tapFeedback = true,
   });

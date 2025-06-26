@@ -351,15 +351,11 @@ class JellyfinServerClientDiscovery {
     const destinationPort = 7359; // Jellyfin client discovery port
 
     // Send discovery message repeatedly to scan for local servers (because UDP is unreliable)
-
-    _clientDiscoveryLogger.fine("Sending discovery messages");
-
-    _socket?.send(message.codeUnits, broadcastAddress, destinationPort);
-
-    while (!_isDisposed) {
-      await Future.delayed(const Duration(milliseconds: 1500));
+    do {
+      _clientDiscoveryLogger.fine("Sending discovery message");
       _socket?.send(message.codeUnits, broadcastAddress, destinationPort);
-    }
+      await Future<void>.delayed(const Duration(milliseconds: 1500));
+    } while (!_isDisposed);
   }
 
   void dispose() {

@@ -61,10 +61,10 @@ Future<void> showThemedBottomSheet({
         overrides: [
           if (themeImage != null) localImageProvider.overrideWithValue(themeImage),
           if (themeImage != null) localThemeInfoProvider.overrideWithValue(themeInfo),
-          if (themeImage == null) localThemeInfoProvider.overrideWithValue(ThemeInfo(item, useIsolate: false)),
+          if (themeImage == null && item != null) localThemeInfoProvider.overrideWithValue(ThemeInfo(item, useIsolate: false)),
         ],
         child: ThemedBottomSheet(
-          key: ValueKey(item.id.raw + routeName),
+          key: ValueKey((item?.id?.raw ?? "") + routeName),
           buildSlivers: buildSlivers,
           buildWrapper: buildWrapper,
           minDraggableHeight: minDraggableHeight,
