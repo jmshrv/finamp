@@ -2525,5 +2525,9 @@
   "autoOfflineOptionUnreachable": "Недосяжний",
   "@autoOfflineOptionUnreachable": {
     "description": "This is shown when the autoOffline feature is set to Unreachable, this means offline mode will be automatically enabled when - after a network change - the server cant be pinged"
+  },
+  "syncPlaybackSpeedAndPitchLabel": "Синхронізація швидкості та висоти тону",
+  "@syncPlaybackSpeedAndPitchLabel": {
+    "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
   }
 }
