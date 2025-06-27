@@ -667,7 +667,7 @@
   "@playbackHistory": {
     "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
   },
-  "queueRestoreButtonLabel": "Obnovit",
+  "queueRestoreButtonLabel": "Obnovit tuto frontu",
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
@@ -1307,7 +1307,7 @@
   "@timeFractionTooltip": {
     "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
   },
-  "sleepTimerRemainingTime": "Uspání za {prefix}{time} {suffix}",
+  "sleepTimerRemainingTime": "Uspání za {time,plural,=1{<1 minutu} few{{time} minuty} other{{time} minut}}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -1975,7 +1975,7 @@
   "@autoOfflineOptionDisconnected": {
     "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
   },
-  "autoOfflineSettingDescription": "Automaticky povolit offline režim\nZakázáno: offline režim nebude automaticky zapnut. Může šetřit baterii.\nMístní síť: zapnout offline režim, když nejste připojeni k Wi-Fi nebo ethernetu.\nOdpojeno: zapnout offline režim, když nejste připojeni k ničemu.\nOffline režim můžete vždy ručně zapnout. Pozastavíte tím automatické akce, dokud režim opět nevypnete",
+  "autoOfflineSettingDescription": "Automaticky povolit offline režim\nZakázáno: offline režim nebude automaticky zapnut. Může šetřit baterii.\nMístní síť: zapnout offline režim, když nejste připojeni k Wi-Fi nebo ethernetu.\nOdpojeno: zapnout offline režim, když nejste připojeni k ničemu.\nNedosažitelné: zapnout offline režim, pokud není možné kontaktovat server po změně sítí.\nOffline režim můžete vždy ručně zapnout. Pozastavíte tím automatické akce, dokud režim opět nevypnete",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
@@ -2084,7 +2084,7 @@
   "@showFavoriteButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a favorite button."
   },
-  "showFavoriteButtonOnMediaNotificationSubtitle": "Určuje, zda má oznámení médií mít tlačítko Oblíbené. To umožňuje označit aktuální skladbu jako oblíbenou bez otevření aplikace.",
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Určuje, zda má oznámení médií mít tlačítko Oblíbené. To umožňuje označit aktuální skladbu jako oblíbenou bez otevření aplikace. Skryto v offline režimu.",
   "@showFavoriteButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a favorite button."
   },
@@ -2502,5 +2502,30 @@
   "sleepTimerAfterCurrentTrack": "Po aktuální skladbě",
   "@sleepTimerAfterCurrentTrack": {
     "description": "Option for the sleep timer that will stop playback after the current track finishes."
+  },
+  "sleepTimerRemainingTracks": "Uspání {time,plural,=1{po této skladbě} other{po {time} skladbách}}",
+  "@sleepTimerRemainingTracks": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "clearQueueOnStopEventTitle": "Vymazat frontu po externím zastavení",
+  "@clearQueueOnStopEventTitle": {
+    "description": "Title for the setting that controls if OS stop commands clear the queue."
+  },
+  "autoOfflineOptionUnreachable": "Nedosažitelné",
+  "@autoOfflineOptionUnreachable": {
+    "description": "This is shown when the autoOffline feature is set to Unreachable, this means offline mode will be automatically enabled when - after a network change - the server cant be pinged"
+  },
+  "clearQueueOnStopEventSubtitle": "Vymazat frontu a zavřít přehrávač, pokud je ze systému obdržen příkaz „zastavení“. Zastavení v aplikaci vždy zavře přehrávač a vymaže frontu.",
+  "@clearQueueOnStopEventSubtitle": {
+    "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
+  },
+  "syncPlaybackSpeedAndPitchLabel": "Synchronizovat rychlost a výšku",
+  "@syncPlaybackSpeedAndPitchLabel": {
+    "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
   }
 }
