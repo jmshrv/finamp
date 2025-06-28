@@ -1578,8 +1578,21 @@
   },
   "notAvailable": "사용 불가",
   "@notAvailable": {},
-  "autoSwitchItemCurationTypeTitle": "항목 큐레이션 유형 자동 전환",
+  "autoSwitchItemCurationTypeTitle": "큐레이션 유형 자동 전환",
   "@autoSwitchItemCurationTypeTitle": {},
-  "autoSwitchItemCurationTypeSubtitle": "활성화했을 경우, 아티스트와 장르 섹션에서 사용 가능한 항목이 없을 때 자동으로 다른 유형의 큐레이션 유형으로 전환됩니다 (예를 들어 특정 아티스트에 대한 즐겨찾기가 없을 때).",
-  "@autoSwitchItemCurationTypeSubtitle": {}
+  "autoSwitchItemCurationTypeSubtitle": "활성화했을 경우, 아티스트와 장르 섹션에서 사용 가능한 항목이 없을 때 자동으로 다른 큐레이션 유형으로 전환됩니다 (예를 들어 특정 아티스트에 대한 즐겨찾기가 없을 때).",
+  "@autoSwitchItemCurationTypeSubtitle": {},
+  "showArtistsTracksSection": "트랙 섹션 보이기",
+  "@showArtistsTracksSection": {},
+  "showArtistsTracksSectionSubtitle": "활성화 했을 경우 섹션에서 최다재생, 즐겨찾기, 랜덤, 최신출시, 최근추가 중 하나의 범주로 최대 5곡까지 보여줍니다.",
+  "@showArtistsTracksSectionSubtitle": {},
+  "sleepTimerRemainingTracks": "{time,plural,=1{이 곡이 끝나면} other{{time} 분 분량의 곡들 재생후}} 취침",
+  "@sleepTimerRemainingTracks": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  }
 }
