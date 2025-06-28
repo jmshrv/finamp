@@ -1620,5 +1620,7 @@
   "playOnStaleDelay": "'Play On' 세션 시간 초과",
   "@playOnStaleDelay": {
     "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
-  }
+  },
+  "latestAlbums": "최신 앨범",
+  "@latestAlbums": {}
 }
