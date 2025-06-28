@@ -1586,7 +1586,7 @@
   "@showArtistsTracksSection": {},
   "showArtistsTracksSectionSubtitle": "활성화 했을 경우 섹션에서 최다재생, 즐겨찾기, 랜덤, 최신출시, 최근추가 중 하나의 범주로 최대 5곡까지 보여줍니다.",
   "@showArtistsTracksSectionSubtitle": {},
-  "sleepTimerRemainingTracks": "{time,plural,=1{이 곡이 끝나면} other{{time} 분 분량의 곡들 재생후}} 취침",
+  "sleepTimerRemainingTracks": "{time,plural,=1{이 곡이 끝나면} other{{time} 분 분량의 곡 재생후}} 취침",
   "@sleepTimerRemainingTracks": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -1594,5 +1594,31 @@
         "type": "int"
       }
     }
+  },
+  "browsePlaylists": "플레이리스트 탐색",
+  "@browsePlaylists": {
+    "description": "Label for a button on the genre screen that brings you to a list of genre-filtered playlists."
+  },
+  "removeFavorite": "즐겨찾기 삭제",
+  "@removeFavorite": {},
+  "addFavorite": "즐겨찾기 추가",
+  "@addFavorite": {},
+  "stopAndClearQueue": "정지 후 대기열 삭제",
+  "@stopAndClearQueue": {
+    "description": "Label for a button that stops playback and removes all tracks from the queue."
+  },
+  "currentVolumeFeatureText": "{volume}% 볼륨",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
+      }
+    }
+  },
+  "playOnStaleDelay": "'Play On' 세션 시간 초과",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
   }
 }
