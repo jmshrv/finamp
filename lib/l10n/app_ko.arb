@@ -1575,5 +1575,11 @@
   "startupErrorWorkaround": "앱 데이터를 삭제하고 앱을 초기화 함으로써 문제를 해결할 수 있습니다. 단, 이 조치를 하면 앱 설정과 다운로드한 곡들도 삭제되는 점 주의하십시오.",
   "@startupErrorWorkaround": {
     "description": "The subtitle for how to manually recover from a startup error"
-  }
+  },
+  "notAvailable": "사용 불가",
+  "@notAvailable": {},
+  "autoSwitchItemCurationTypeTitle": "큐레이션 유형 자동 전환",
+  "@autoSwitchItemCurationTypeTitle": {},
+  "autoSwitchItemCurationTypeSubtitle": "활성화했을 경우, 아티스트와 장르 섹션에서 사용 가능한 항목이 없을 때 자동으로 다른 유형의 큐레이션 유형으로 전환됩니다. (예를 들어 특정 아티스트에 대한 즐겨찾기가 없을 때)",
+  "@autoSwitchItemCurationTypeSubtitle": {}
 }
