@@ -1621,6 +1621,48 @@
   "@playOnStaleDelay": {
     "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
   },
-  "latestAlbums": "최신 앨범",
-  "@latestAlbums": {}
+  "latestAlbums": "최근 앨범",
+  "@latestAlbums": {},
+  "latestArtists": "최근 아티스트",
+  "@latestArtists": {},
+  "recentlyPlayedTracks": "최근 재생 곡",
+  "@recentlyPlayedTracks": {},
+  "playOnStaleDelaySubtitle": "명령을 수신한 후 'Play On'세션을 활성 상태로 간주하는 시간입니다. 활성 상태에서는 재생 정보를 더 자주 보고하며 데이터 사용량이 증가할 수 잇씁니다.",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "enablePlayonTitle": "'Play On' 지원 활성화",
+  "@enablePlayonTitle": {
+    "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "enablePlayonSubtitle": "Jellyfin의 'Play On'기능 (다른 클라이언트에서 Finamp를 원격 제어함)을 활성화합니다. 리버스 프록시나 리버스 서버가 웹소켓을 지원하지 않을 경우 비활성화 하십시오.",
+  "@enablePlayonSubtitle": {
+    "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "playOnReconnectionDelay": "'Play On' 세션의 재접속 주기 조정",
+  "@playOnReconnectionDelay": {
+    "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "playOnReconnectionDelaySubtitle": "Play On 웹소켓 연결이 끊겼을 때 재접속을 시도하는 시간 간격(초단위)를 조절합니다. 짧은 시간 간격은 데이터 사용량을 증가시킵니다.",
+  "@playOnReconnectionDelaySubtitle": {
+    "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "topAlbums": "최고 인기 앨범",
+  "@topAlbums": {},
+  "topArtists": "최고 인기 아티스트",
+  "@topArtists": {},
+  "recentlyAddedTracks": "최근 추가된 곡(들)",
+  "@recentlyAddedTracks": {
+    "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedAlbums": "최근 추가된 앨범(들)",
+  "@recentlyAddedAlbums": {
+    "description": "Label for the genre section that shows albums that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedArtists": "최근 추가된 아티스트(들)",
+  "@recentlyAddedArtists": {
+    "description": "Label for the genre section that shows artists that were recently added to the library, sorted by the date they were added."
+  },
+  "latestTracks": "최신 곡(들)",
+  "@latestTracks": {}
 }
