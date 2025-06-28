@@ -1621,9 +1621,9 @@
   "@playOnStaleDelay": {
     "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
   },
-  "latestAlbums": "최근 앨범",
+  "latestAlbums": "최신 앨범",
   "@latestAlbums": {},
-  "latestArtists": "최근 아티스트",
+  "latestArtists": "최신 아티스트(들)",
   "@latestArtists": {},
   "recentlyPlayedTracks": "최근 재생 곡",
   "@recentlyPlayedTracks": {},
