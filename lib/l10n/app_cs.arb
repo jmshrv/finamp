@@ -240,7 +240,7 @@
   "@dark": {},
   "tabs": "Karty",
   "@tabs": {},
-  "setSleepTimer": "Nastavit časovač spánku",
+  "setSleepTimer": "Pozastavit přehrávání po",
   "@setSleepTimer": {},
   "invalidNumber": "Neplatné číslo",
   "@invalidNumber": {},
@@ -667,7 +667,7 @@
   "@playbackHistory": {
     "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
   },
-  "queueRestoreButtonLabel": "Obnovit",
+  "queueRestoreButtonLabel": "Obnovit tuto frontu",
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
@@ -1307,7 +1307,7 @@
   "@timeFractionTooltip": {
     "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
   },
-  "sleepTimerRemainingTime": "Uspání za {time} minut",
+  "sleepTimerRemainingTime": "Uspání za {time,plural,=1{<1 minutu} few{{time} minuty} other{{time} minut}}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -1455,7 +1455,7 @@
   "@connectionInterruptedBackground": {
     "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
   },
-  "couldNotLoad": "Nepodařilo se načíst {source, select, album{album} playlist{seznam skladeb} trackMix{mix skladby} artistMix{mix umělce} albumMix{mix alba} genreMix{mix žánru} favorites{oblíbené} allTracks{všechny skladby} filteredList{skladby} genre{žánr} artist{umělce} track{skladbu} nextUpAlbum{album v dalších na řadě} nextUpPlaylist{seznam skladeb v dalších na řadě} nextUpArtist{umělce v dalších na řadě} other{}}",
+  "couldNotLoad": "Nepodařilo se načíst {source, select, album{album} playlist{seznam skladeb} trackMix{mix skladby} artistMix{mix umělce} albumMix{mix alba} genreMix{mix žánru} favorites{oblíbené} allTracks{všechny skladby} filteredList{skladby} genre{žánr} artist{umělce} track{skladbu} nextUpAlbum{album v dalších na řadě} nextUpPlaylist{seznam skladeb v dalších na řadě} nextUpArtist{umělce v dalších na řadě} nextUpGenre{žánr v dalších na řadě} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -1697,7 +1697,7 @@
   "@confirmShuffleToQueue": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
   },
-  "playingFromType": "Přehrávání z {source, select, album{alba} playlist{seznamu skladeb} trackMix{mixu skladeb} artistMix{mixu umělců} albumMix{mixu alb} genreMix{mixu žánrů} favorites{oblíbených} allTracks{všech skladeb} filteredList{skladeb} genre{žánru} artist{umělce} track{skladby} nextUpAlbum{alba v dalších na řadě} nextUpPlaylist{playlistu v dalších na řadě} nextUpArtist{umělce v dalších na řadě} remoteClient{vzdáleného zařízení} other{}}",
+  "playingFromType": "Přehrávání z {source, select, album{alba} playlist{seznamu skladeb} trackMix{mixu skladeb} artistMix{mixu umělců} albumMix{mixu alb} genreMix{mixu žánrů} favorites{oblíbených} allTracks{všech skladeb} filteredList{skladeb} genre{žánru} artist{umělce} track{skladby} nextUpAlbum{alba v dalších na řadě} nextUpPlaylist{playlistu v dalších na řadě} nextUpArtist{umělce v dalších na řadě} nextUpGenre{žánru v dalších na řadě} remoteClient{vzdáleného zařízení} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1975,7 +1975,7 @@
   "@autoOfflineOptionDisconnected": {
     "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
   },
-  "autoOfflineSettingDescription": "Automaticky povolit offline režim\nZakázáno: offline režim nebude automaticky zapnut. Může šetřit baterii.\nMístní síť: zapnout offline režim, když nejste připojeni k Wi-Fi nebo ethernetu.\nOdpojeno: zapnout offline režim, když nejste připojeni k ničemu.\nOffline režim můžete vždy ručně zapnout. Pozastavíte tím automatické akce, dokud režim opět nevypnete",
+  "autoOfflineSettingDescription": "Automaticky povolit offline režim\nZakázáno: offline režim nebude automaticky zapnut. Může šetřit baterii.\nMístní síť: zapnout offline režim, když nejste připojeni k Wi-Fi nebo ethernetu.\nOdpojeno: zapnout offline režim, když nejste připojeni k ničemu.\nNedosažitelné: zapnout offline režim, pokud není možné kontaktovat server po změně sítí.\nOffline režim můžete vždy ručně zapnout. Pozastavíte tím automatické akce, dokud režim opět nevypnete",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
@@ -2084,7 +2084,7 @@
   "@showFavoriteButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a favorite button."
   },
-  "showFavoriteButtonOnMediaNotificationSubtitle": "Určuje, zda má oznámení médií mít tlačítko Oblíbené. To umožňuje označit aktuální skladbu jako oblíbenou bez otevření aplikace.",
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Určuje, zda má oznámení médií mít tlačítko Oblíbené. To umožňuje označit aktuální skladbu jako oblíbenou bez otevření aplikace. Skryto v offline režimu.",
   "@showFavoriteButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a favorite button."
   },
@@ -2395,5 +2395,137 @@
   "defaultOrder": "Výchozí pořadí",
   "@defaultOrder": {
     "description": "Default sorting order for playlists (server order)"
+  },
+  "playbackActionPagePlay": "Přehrát",
+  "@playbackActionPagePlay": {
+    "description": "Label for the playback action page that contains all actions related to playing in order"
+  },
+  "playbackActionPageShuffleAlbums": "Alba náhodně",
+  "@playbackActionPageShuffleAlbums": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+  },
+  "editItemTitle": "Upravit {itemType, select, playlist{seznam skladeb} other{}}",
+  "@editItemTitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
+  "playbackActionPageShuffle": "Náhodně",
+  "@playbackActionPageShuffle": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled"
+  },
+  "sleepTimerProjectedDuration": "Přehrávání se pozastaví za ~{duration}",
+  "@sleepTimerProjectedDuration": {
+    "description": "Displays duration until playback is expected to be ended by the sleep timer (unless the queue is modified before). {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "itemCountLoading": "{childType, select, track{skladby} album{alba} other{položky}}",
+  "@itemCountLoading": {
+    "description": "Shown while the item count is being calculated.",
+    "placeholders": {
+      "childType": {
+        "type": "String",
+        "example": "album",
+        "description": "Options match BaseItemDtoType.name"
+      }
+    }
+  },
+  "preferLocalNetworkTargetAddressLocalSettingDescription": "Cílová adresa serveru Jellyfin uvnitř vaší místní sítě",
+  "@preferLocalNetworkTargetAddressLocalSettingDescription": {},
+  "preferLocalNetworkEnableSwitchTitle": "Preferovat místní síť",
+  "@preferLocalNetworkEnableSwitchTitle": {},
+  "preferLocalNetworkTargetAddressLocalSettingTitle": "Místní síťová adresa",
+  "@preferLocalNetworkTargetAddressLocalSettingTitle": {},
+  "preferLocalNetworkEnableSwitchDescription": "Zda používat jinou adresu, když jste uvnitř místní sítě vašeho serveru Jellyfin",
+  "@preferLocalNetworkEnableSwitchDescription": {},
+  "preferLocalNetworkPublicAddressSettingTitle": "Veřejná adresa",
+  "@preferLocalNetworkPublicAddressSettingTitle": {},
+  "preferLocalNetworkInfoBox": "Tato funkce vyžaduje oprávnění Poloha (kterou je nutné zapnout) pro čtení názvu sítě.",
+  "@preferLocalNetworkInfoBox": {
+    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
+  },
+  "menuButtonLabel": "Další akce",
+  "@menuButtonLabel": {
+    "description": "Generic label for menu buttons shown throughout the app. Used for the album, artist, playlist, etc. menus"
+  },
+  "notImplementedYet": "Zatím není implementováno.",
+  "@notImplementedYet": {
+    "description": "Message shown when a feature is not implemented yet"
+  },
+  "automaticOfflineModeOverrideActiveSubtitle": "Klepněte sem pro pokračování",
+  "@automaticOfflineModeOverrideActiveSubtitle": {
+    "description": "Subtitle for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "sleepTimerStartTimer": "Spustit časovač",
+  "@sleepTimerStartTimer": {
+    "description": "Label for the button that starts the sleep timer"
+  },
+  "itemCount": "{childType, select, track{{amount, plural, =1{1 skladba} few{{amount} skladby} other{{amount} skladeb}}} album{{amount, plural, =1{1 album} few{{amount} alba} other{{amount} alb}}} other{{amount, plural, =1{1 položka} few{{amount} položky} other{{amount} položek}}}}",
+  "@itemCount": {
+    "description": "Amount of various child item, like artist albums, performing artist tracks, or genre albums. Shown for example in the menu headers.",
+    "placeholders": {
+      "childType": {
+        "type": "String",
+        "example": "album",
+        "description": "Options match BaseItemDtoType.name"
+      },
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "preferLocalNetworkActiveAddressInfoText": "Aktivní adresa",
+  "@preferLocalNetworkActiveAddressInfoText": {
+    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+  },
+  "sleepTimerFinishLastTrack": "Dokončit poslední skladbu?",
+  "@sleepTimerFinishLastTrack": {
+    "description": "Option for the sleep timer that will finish the last track before stopping playback."
+  },
+  "itemCountCalculating": "Počítání položek",
+  "@itemCountCalculating": {
+    "description": "Shown to screen readers while the item count is being calculated."
+  },
+  "preferLocalNetworkPublicAddressSettingDescription": "Primární adresa používaná k připojení k vašemu serveru Jellyfin",
+  "@preferLocalNetworkPublicAddressSettingDescription": {},
+  "automaticOfflineModeOverrideActiveTitle": "Automatické přepínání pozastaveno",
+  "@automaticOfflineModeOverrideActiveTitle": {
+    "description": "Title for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "sleepTimerAfterCurrentTrack": "Po aktuální skladbě",
+  "@sleepTimerAfterCurrentTrack": {
+    "description": "Option for the sleep timer that will stop playback after the current track finishes."
+  },
+  "sleepTimerRemainingTracks": "Uspání {time,plural,=1{po této skladbě} other{po {time} skladbách}}",
+  "@sleepTimerRemainingTracks": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "clearQueueOnStopEventTitle": "Vymazat frontu po externím zastavení",
+  "@clearQueueOnStopEventTitle": {
+    "description": "Title for the setting that controls if OS stop commands clear the queue."
+  },
+  "autoOfflineOptionUnreachable": "Nedosažitelné",
+  "@autoOfflineOptionUnreachable": {
+    "description": "This is shown when the autoOffline feature is set to Unreachable, this means offline mode will be automatically enabled when - after a network change - the server cant be pinged"
+  },
+  "clearQueueOnStopEventSubtitle": "Vymazat frontu a zavřít přehrávač, pokud je ze systému obdržen příkaz „zastavení“. Zastavení v aplikaci vždy zavře přehrávač a vymaže frontu.",
+  "@clearQueueOnStopEventSubtitle": {
+    "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
+  },
+  "syncPlaybackSpeedAndPitchLabel": "Synchronizovat rychlost a výšku",
+  "@syncPlaybackSpeedAndPitchLabel": {
+    "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
   }
 }

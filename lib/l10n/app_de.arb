@@ -795,7 +795,7 @@
   "@yourLikes": {
     "description": "Title for the queue source when the user is playing their liked tracks"
   },
-  "queueRestoreButtonLabel": "Wiederherstellen",
+  "queueRestoreButtonLabel": "Diese Warteschlange wiederherstellen",
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
@@ -1960,7 +1960,7 @@
   },
   "swipeLeftToRightActionSubtitle": "Aktion, die ausgeführt wird, wenn ein Titel in der Liste von links nach rechts geswipt wird.",
   "@swipeLeftToRightActionSubtitle": {},
-  "autoOfflineSettingDescription": "Automatisch den Offline Modus aktivieren.\nDeaktiviert: Der Offline Modus wird nicht automatisch aktiviert. Könnte Batterie sparen.\nLokales Netzwerk: Der Offline Modus wird aktiviert, wenn keine Verbindung über WLAN oder Ethernet besteht.\nGetrennt: Der Offline Modus wird aktiviert, wenn keine Internetverbindung besteht.\nDu kannst den Offline Modus jederzeit manuell aktivieren, wodurch die Automation pausiert wird, bis du ihn wieder manuell deaktivierst",
+  "autoOfflineSettingDescription": "Automatisch den Offline Modus aktivieren.\nDeaktiviert: Der Offline Modus wird nicht automatisch aktiviert. Könnte Batterie sparen.\nLokales Netzwerk: Der Offline Modus wird aktiviert, wenn keine Verbindung über WLAN oder Ethernet besteht.\nGetrennt: Der Offline Modus wird aktiviert, wenn keine Internetverbindung besteht.\nNicht erreichbar: Der Offline Modus wird aktiviert, wenn der Server nach einem Netzwerkwechsel nicht erreichbar ist.\nDu kannst den Offline Modus jederzeit manuell aktivieren, wodurch die Automation pausiert wird, bis du ihn wieder manuell deaktivierst",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
@@ -2205,7 +2205,7 @@
   "@showShuffleButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
   },
-  "showFavoriteButtonOnMediaNotificationSubtitle": "Legt fest, ob die Medienbenachrichtigung einen Favorit-Button hat. Dadurch kannst du den derzeitigen Titel als Favorit markieren oder entfernen, ohne die App öffnen zu müssen.",
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Legt fest, ob die Medienbenachrichtigung einen Favorit-Button hat. Dadurch kannst du den derzeitigen Titel als Favorit markieren oder entfernen, ohne die App öffnen zu müssen. Im Offline-Modus nicht verfügbar.",
   "@showFavoriteButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a favorite button."
   },
@@ -2485,5 +2485,39 @@
   "automaticOfflineModeOverrideActiveTitle": "Automatisches Wechseln pausiert",
   "@automaticOfflineModeOverrideActiveTitle": {
     "description": "Title for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "sleepTimerRemainingTime": "Timer endet in {time,plural,=1{<1 Minute} other{{time} Minuten}}",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "sleepTimerRemainingTracks": "Timer endet {time,plural,=1{nach diesem Titel} other{nach {time} Titel}}",
+  "@sleepTimerRemainingTracks": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "clearQueueOnStopEventTitle": "Nach externem Stop-Event die Warteschlange leeren",
+  "@clearQueueOnStopEventTitle": {
+    "description": "Title for the setting that controls if OS stop commands clear the queue."
+  },
+  "clearQueueOnStopEventSubtitle": "Leert die Warteschlange und schließt den Player, wenn ein 'Stop' Befehl vom Betriebssystem empfangen wird. In-App Stop Aktionen werden den Player immer schließen und die Warteschlange leeren.",
+  "@clearQueueOnStopEventSubtitle": {
+    "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
+  },
+  "autoOfflineOptionUnreachable": "Nicht erreichbar",
+  "@autoOfflineOptionUnreachable": {
+    "description": "This is shown when the autoOffline feature is set to Unreachable, this means offline mode will be automatically enabled when - after a network change - the server cant be pinged"
+  },
+  "syncPlaybackSpeedAndPitchLabel": "Wiedergabegeschwindigkeit und Tonhöhe synchronisieren",
+  "@syncPlaybackSpeedAndPitchLabel": {
+    "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
   }
 }
