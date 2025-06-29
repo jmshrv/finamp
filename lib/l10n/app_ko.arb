@@ -722,7 +722,7 @@
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
     "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "topTracks": "주요 곡들",
+  "topTracks": "최고 인기 곡(들)",
   "@topTracks": {},
   "albumCount": "{count,plural,=1{{count} 앨범} other{{count} 앨범}}",
   "@albumCount": {
@@ -929,7 +929,7 @@
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "periodicPlaybackSessionUpdateFrequencyDetails": "젤리핀 Jellyfin서버가 최근 5분 동안 클라이언트로부터 어떠한 업데이트도 받지 못하면, 서버는 재생이 종료된 것으로 간주합니다. 이는 5분 이상의 곡들의 경우 재생이 종료된 것으로 잘못 보고되어 재생 보고 데이터의 품질이 저하될 수 있음을 의미합니다.",
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Jellyfin서버가 마지막 5분 동안 클라이언트로부터 어떠한 업데이트도 받지 못하면, 해당 재생이 종료된 것으로 간주합니다. 이는 5분 이상 곡들에 대해서는 (재생이 종료된 것으로 착오함에 따라) 재생 정보 정확성이 저하될 수 있음을 의미합니다.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1110,7 +1110,7 @@
   },
   "close": "닫기",
   "@close": {},
-  "couldNotLoad": "{source, select, album{앨범 } playlist{플레이리스트 } trackMix{트랙 믹스 } artistMix{아티스트 믹스 } albumMix{앨범 믹스 } genreMix{장르 믹스 } favorites{즐겨찾기 } allTracks{전체 트랙 } filteredList{트랙 목록 } genre{장르 } artist{아티스트 } track{트랙 } nextUpAlbum{다음 앨범 } nextUpPlaylist{다음 플레이리스트 } nextUpArtist{다음 아티스트 } nextUpGenre{다음 장르} other{}}로딩에 실패하였습니다",
+  "couldNotLoad": "{source, select, album{앨범} playlist{플레이리스트} trackMix{트랙 믹스} artistMix{아티스트 믹스} albumMix{앨범 믹스} genreMix{장르 믹스} favorites{즐겨찾기} allTracks{전체 트랙} filteredList{트랙 목록} genre{장르} artist{아티스트} track{트랙} nextUpAlbum{Next Up 앨범} nextUpPlaylist{Next Up 플레이리스트 } nextUpArtist{Next Up 아티스트 } nextUpGenre{Next Up 장르} other{}}로딩에 실패하였습니다",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -1726,5 +1726,41 @@
   "noReleaseDate": "발매일 정보 없음",
   "@noReleaseDate": {
     "description": "Placeholder text if an item has no release date set."
+  },
+  "artistItemSectionFilterChipOrderTitle": "곡 섹션 필터 순서",
+  "@artistItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of the tracks sections filter chips."
+  },
+  "artistItemSectionFilterChipOrderSubtitle": "곡 섹션에서 이용 가능한 필터들으 순서를 조정합니다.",
+  "@artistItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of the tracks sections filter chips."
+  },
+  "genreFilterArtistScreensSubtitle": "활성화하면, 장르를 통해 진입한 아티스트 화면은 탐색중인 장르와 일치하는 곡과 앨범들만 보여줍니다. (모든 곡과 앨범들을 보려면 장르필터를 수동으로 삭제하세요.)",
+  "@genreFilterArtistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreFilterPlaylistScreensSubtitle": "활성화하면, 장르를 통해 진입한 플레이리스트 화면은 탐색중인 장르와 일치하는 곡과 앨범들만 보여줍니다. (모든 곡과 앨범들을 보려면 장르필터를 수동으로 삭제하세요.)",
+  "@genreFilterPlaylistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "curatedItemsNotListenedYet": "{itemType, select, artistGenreFilter{이 장르, 이 아티스트의} artist{이 아티스트의} genre{이 장르의} other{}} 곡(들)을 듣지 않았습니다.",
+  "@curatedItemsNotListenedYet": {
+    "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "genreNoItems": "이 장르에 대한 {itemType, select, playlists{플레이리스트(들)} artists{아티스트(들)} albums{앨범(들)} tracks{곡(들)} other{항목(들)}}이 없습니다.",
+  "@genreNoItems": {
+    "description": "Message for empty See All lists for a genre.",
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
   }
 }
