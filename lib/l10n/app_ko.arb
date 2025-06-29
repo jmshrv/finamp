@@ -1110,7 +1110,7 @@
   },
   "close": "닫기",
   "@close": {},
-  "couldNotLoad": "{source, select, album{앨범} playlist{플레이리스트} trackMix{트랙 믹스} artistMix{아티스트 믹스} albumMix{앨범 믹스} genreMix{장르 믹스} favorites{즐겨찾기} allTracks{전체 트랙} filteredList{트랙 목록} genre{장르} artist{아티스트} track{트랙} nextUpAlbum{Next Up 앨범} nextUpPlaylist{Next Up 플레이리스트 } nextUpArtist{Next Up 아티스트 } nextUpGenre{Next Up 장르} other{}}로딩에 실패하였습니다",
+  "couldNotLoad": "{source, select, album{앨범} playlist{플레이리스트} trackMix{트랙 믹스} artistMix{아티스트 믹스} albumMix{앨범 믹스} genreMix{장르 믹스} favorites{즐겨찾기} allTracks{전체 트랙} filteredList{트랙 목록} genre{장르} artist{아티스트} track{트랙} nextUpAlbum{Next Up 앨범} nextUpPlaylist{Next Up 플레이리스트 } nextUpArtist{Next Up 아티스트 } nextUpGenre{Next Up 장르} other{}} 로딩에 실패하였습니다",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -1178,7 +1178,7 @@
   "@volumeNormalizationModeAlbumOnly": {
     "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
   },
-  "volumeNormalizationIOSBaseGainEditorSubtitle": "현재 iOS에서의 볼륨 표준화는 재생 볼륨을 조절하여 음량 변화를 표현하는 방식으로 이루어집니다. 다만 볼륨을 100% 이상 키울 수는 없으니, 전체적으로 볼륨을 줄여 조용한 트랙에서 음량을 키울 수 있도록 합니다. 단위는 데시벨 (dB) 이며, -10 dB 은 볼륨 ~30%, -4.5 dB 은 볼륨 ~60%, -2 dB 은 볼륨 ~80%에 상응합니다.",
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "현재 iOS에서의 음량 정규화는 재생 볼륨을 조절하여 음량 변화를 표현하는 방식으로 이루어집니다. 다만 볼륨을 100% 이상 키울 수는 없으니, 전체적으로 볼륨을 줄여 조용한 트랙에서 음량을 키울 수 있도록 합니다. 단위는 데시벨 (dB) 이며, -10 dB 은 볼륨 ~30%, -4.5 dB 은 볼륨 ~60%, -2 dB 은 볼륨 ~80%에 상응합니다.",
   "@volumeNormalizationIOSBaseGainEditorSubtitle": {
     "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
@@ -1233,11 +1233,11 @@
   "@volumeNormalizationModeSelectorSubtitle": {
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
-  "volumeNormalizationSwitchSubtitle": "음량 정보로 트랙 볼륨 표준화 (ReplayGain)",
+  "volumeNormalizationSwitchSubtitle": "게인 정보를 사용하여 곡의 음량을 정규화함 (Replay Gain)",
   "@volumeNormalizationSwitchSubtitle": {
     "description": "Subtitle for the switch that toggles replay gain"
   },
-  "volumeNormalizationModeSelectorDescription": "하이브리드 (트랙 + 앨범)\n평상시에는 트랙의 음량 정보를 참조하지만, 앨범이 재생 중인 경우 앨범의 음량 정보를 참조합니다.\n\n트랙 기반\n항상 트랙의 음량 정보를 사용합니다.\n\n앨범만\n앨범을 재생할 때에만, 앨범의 음량 정보에 기반한 볼륨 표준화가 적용됩니다. 앨범 외의 개별적인 트랙에는 적용되지 않습니다.",
+  "volumeNormalizationModeSelectorDescription": "하이브리드 (트랙 + 앨범)\n평상시에는 곡의 게인값이 적용됩니다. (어떤 형태로든 대기열에 추가된) 앨범을 재생 중인 경우 앨범의 게인값을 참조합니다.\n\n곡 기반\n앨범 재생 여부와 관계없이 곡의 게인값은 항상 사용됩니다.\n\n앨범만\n앨범을 재생할 때에만 음량 정규화가 적용됩니다(앨범 게인값 사용), 개별단위 곡(들)에는 적용되지 않습니다.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
