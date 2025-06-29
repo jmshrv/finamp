@@ -1178,7 +1178,7 @@
   "@volumeNormalizationModeAlbumOnly": {
     "description": "'Only for Albums' option for the replay gain mode dropdown. In albums-only mode, Volume Normalization is only applied while playing albums (using the album gain), but not for individual tracks."
   },
-  "volumeNormalizationIOSBaseGainEditorSubtitle": "현재 iOS에서의 음량 정규화는 재생 볼륨을 조절하여 음량 변화를 표현하는 방식으로 이루어집니다. 다만 볼륨을 100% 이상 키울 수는 없으니, 전체적으로 볼륨을 줄여 조용한 트랙에서 음량을 키울 수 있도록 합니다. 단위는 데시벨 (dB) 이며, -10 dB 은 볼륨 ~30%, -4.5 dB 은 볼륨 ~60%, -2 dB 은 볼륨 ~80%에 상응합니다.",
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "현재, iOS의 음량 정규화는 게인값 변화를 구현하기 위해 재생 음량 변경이 필요합니다. 음량을 100% 초과하여 올릴 수 없으므로, 조용한 곡(들)의 음량을 증폭시키기 위해서는 기본적으로 음량을 감소시킬 필요가 있습니다. 값단위는 데시벨이며 -10dB은 ~30% 음량, -4.5dB은 ~60% 음량, -2dB은 ~80% 음량입니다.",
   "@volumeNormalizationIOSBaseGainEditorSubtitle": {
     "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
@@ -1259,13 +1259,13 @@
       }
     }
   },
-  "startInstantMixForIndividualTracksSwitchSubtitle": "활성화되면 트랙을 탭할 때 해당 트랙에 이어 믹스를 재생합니다.",
+  "startInstantMixForIndividualTracksSwitchSubtitle": "활성화되면, 곡을 탭했을 때 단일 곡 재생 대신 해당 곡의 인스턴트 믹스를 시작합니다.",
   "@startInstantMixForIndividualTracksSwitchSubtitle": {},
   "downloadItem": "다운로드",
   "@downloadItem": {
     "description": "Option to download item in long-press menu."
   },
-  "startInstantMixForIndividualTracksSwitchTitle": "개별 트랙부터 믹스 재생",
+  "startInstantMixForIndividualTracksSwitchTitle": "개별 곡(들)의 인스턴트 믹스 시작",
   "@startInstantMixForIndividualTracksSwitchTitle": {
     "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
   },
@@ -1285,7 +1285,7 @@
   "@requireWifiForDownloads": {
     "description": "Description of setting for only performing downloads while on wifi"
   },
-  "queueRestoreError": "경고: 재생목록에서 트랙 {count,plural,=1{{count}개} other{{count}개}}를 복원에 실패했습니다.",
+  "queueRestoreError": "경고: {count,plural, =1{{count} 곡} other{{count} 곡}}이 대기열로 복원되지 못했습니다.",
   "@queueRestoreError": {
     "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
     "placeholders": {
@@ -1344,7 +1344,7 @@
     },
     "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
   },
-  "preferQuickSyncSwitchSubtitle": "자주 변하지 않는 트랙이나 앨범 등 항목은 동기화 시 업데이트되지 않습니다. 다운로드 복원은 언제나 모든 항목을 재동기화합니다.",
+  "preferQuickSyncSwitchSubtitle": "동기화를 할 때, 일반적으로 변동성이 적은 항목들(곡과 앨범들)은 갱신하지 않습니다. 다운로드 복원은 언제나 전체 동기화를 합니다.",
   "@preferQuickSyncSwitchSubtitle": {
     "description": "Description of setting that skips completed albums while syncing."
   },
@@ -1760,6 +1760,37 @@
     "placeholders": {
       "itemType": {
         "type": "String"
+      }
+    }
+  },
+  "redownloadSubtitle": "부모 콜렉션 변경으로 품질이 달라졌을 것으로 예상되는 곡(들)을 자동으로 다시 다운로드 합니다.",
+  "@redownloadSubtitle": {
+    "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "playerAlbumArtworkTooltip": "{title}을 위한 아트워크. 탭하여 재생화면을 전환합니다. 좌우로 스와이프하여 곡(들)을 변경합니다.",
+  "@playerAlbumArtworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for the album artwork on the player screen"
+  },
+  "showCoversOnAlbumScreenTitle": "곡(들)의 앨범 커버를 보여줍니다",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "emptyTopTracksList": "아직 이 아티스트의 곡을 듣지 않았습니다.",
+  "@emptyTopTracksList": {
+    "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
+  },
+  "largeDownloadWarning": "경고: {count} 곡을 다운로드 하려고 합니다. 확실한가요?",
+  "@largeDownloadWarning": {
+    "description": "A line of warning text on the download dialog when large numbers of tracks are downloaded at once.",
+    "placeholders": {
+      "count": {
+        "type": "int"
       }
     }
   }
