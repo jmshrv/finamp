@@ -1785,7 +1785,7 @@
   "@emptyTopTracksList": {
     "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
   },
-  "largeDownloadWarning": "경고: {count} 곡을 다운로드 하려고 합니다. 확실한가요?",
+  "largeDownloadWarning": "경고: {count} 곡을 다운로드 하려고 합니다.",
   "@largeDownloadWarning": {
     "description": "A line of warning text on the download dialog when large numbers of tracks are downloaded at once.",
     "placeholders": {
@@ -1793,5 +1793,9 @@
         "type": "int"
       }
     }
+  },
+  "downloadSizeWarningCutoffSubtitle": "이보다 많은 곡들을 한번에 다운로드 하려고 할 때 경고 메시지가 나타납니다.",
+  "@downloadSizeWarningCutoffSubtitle": {
+    "description": "Subtitle for the setting controlling when to warn about a large download"
   }
 }
