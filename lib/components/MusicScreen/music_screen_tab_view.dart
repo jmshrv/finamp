@@ -429,7 +429,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                         key: ValueKey(index),
                         controller: controller,
                         index: index,
-                        child: widget.tabContentType == TabContentType.tracks
+                        child: [TabContentType.tracks, TabContentType.audioBooks, TabContentType.musicVideos].contains(widget.tabContentType)
                             ? TrackListTile(
                                 key: ValueKey(item.id),
                                 item: item,

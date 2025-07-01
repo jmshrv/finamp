@@ -176,7 +176,7 @@ class TrackListTile extends ConsumerWidget {
             ),
           );
         } else {
-          if (FinampSettingsHelper.finampSettings.startInstantMixForIndividualTracks) {
+          if (FinampSettingsHelper.finampSettings.startInstantMixForIndividualTracks && BaseItemDtoType.fromItem(item) == BaseItemDtoType.track) {
             await audioServiceHelper.startInstantMixForItem(item);
           } else {
             await queueService.startPlayback(

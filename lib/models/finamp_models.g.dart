@@ -168,6 +168,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
                 TabContentType.playlists,
                 TabContentType.genres,
                 TabContentType.tracks,
+                TabContentType.musicVideos,
+                TabContentType.audioBooks,
               ]
             : (fields[22] as List).cast<TabContentType>(),
         autoloadLastQueueOnStartup: fields[28] == null
@@ -1413,6 +1415,10 @@ class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
         return TabContentType.genres;
       case 4:
         return TabContentType.tracks;
+      case 5:
+        return TabContentType.musicVideos;
+      case 6:
+        return TabContentType.audioBooks;
       default:
         return TabContentType.albums;
     }
@@ -1431,6 +1437,10 @@ class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
         writer.writeByte(3);
       case TabContentType.tracks:
         writer.writeByte(4);
+      case TabContentType.musicVideos:
+        writer.writeByte(5);
+      case TabContentType.audioBooks:
+        writer.writeByte(6);
     }
   }
 
@@ -5008,11 +5018,12 @@ const _DownloadItembaseItemTypeEnumValueMap = {
   'folder': 7,
   'musicVideo': 8,
   'audioBook': 9,
-  'tvEpisode': 10,
-  'video': 11,
-  'movie': 12,
-  'trailer': 13,
-  'unknown': 14,
+  'book': 10,
+  'tvEpisode': 11,
+  'video': 12,
+  'movie': 13,
+  'trailer': 14,
+  'unknown': 15,
 };
 const _DownloadItembaseItemTypeValueEnumMap = {
   0: BaseItemDtoType.noItem,
@@ -5025,11 +5036,12 @@ const _DownloadItembaseItemTypeValueEnumMap = {
   7: BaseItemDtoType.folder,
   8: BaseItemDtoType.musicVideo,
   9: BaseItemDtoType.audioBook,
-  10: BaseItemDtoType.tvEpisode,
-  11: BaseItemDtoType.video,
-  12: BaseItemDtoType.movie,
-  13: BaseItemDtoType.trailer,
-  14: BaseItemDtoType.unknown,
+  10: BaseItemDtoType.book,
+  11: BaseItemDtoType.tvEpisode,
+  12: BaseItemDtoType.video,
+  13: BaseItemDtoType.movie,
+  14: BaseItemDtoType.trailer,
+  15: BaseItemDtoType.unknown,
 };
 const _DownloadItemstateEnumValueMap = {
   'notDownloaded': 0,
@@ -8404,6 +8416,7 @@ const _$BaseItemDtoTypeEnumMap = {
   BaseItemDtoType.folder: 'folder',
   BaseItemDtoType.musicVideo: 'musicVideo',
   BaseItemDtoType.audioBook: 'audioBook',
+  BaseItemDtoType.book: 'book',
   BaseItemDtoType.tvEpisode: 'tvEpisode',
   BaseItemDtoType.video: 'video',
   BaseItemDtoType.movie: 'movie',
@@ -8471,6 +8484,8 @@ const _$TabContentTypeEnumMap = {
   TabContentType.playlists: 'playlists',
   TabContentType.genres: 'genres',
   TabContentType.tracks: 'tracks',
+  TabContentType.musicVideos: 'musicVideos',
+  TabContentType.audioBooks: 'audioBooks',
 };
 
 const _$MediaItemParentTypeEnumMap = {

@@ -892,7 +892,11 @@ enum TabContentType {
   @HiveField(3)
   genres(BaseItemDtoType.genre),
   @HiveField(4)
-  tracks(BaseItemDtoType.track);
+  tracks(BaseItemDtoType.track),
+  @HiveField(5)
+  musicVideos(BaseItemDtoType.musicVideo),
+  @HiveField(6)
+  audioBooks(BaseItemDtoType.audioBook);
 
   const TabContentType(this.itemType);
 
@@ -919,6 +923,10 @@ enum TabContentType {
         return "Genres";
       case TabContentType.playlists:
         return "Playlists";
+      case TabContentType.musicVideos:
+        return "Music Videos";
+      case TabContentType.audioBooks:
+        return "Audio Books";
     }
   }
 
@@ -934,6 +942,10 @@ enum TabContentType {
         return AppLocalizations.of(context)!.genres;
       case TabContentType.playlists:
         return AppLocalizations.of(context)!.playlists;
+      case TabContentType.musicVideos:
+        return AppLocalizations.of(context)!.musicVideos;
+      case TabContentType.audioBooks:
+        return AppLocalizations.of(context)!.audioBooks;
     }
   }
 
@@ -949,6 +961,10 @@ enum TabContentType {
         return TabContentType.genres;
       case "Playlist":
         return TabContentType.playlists;
+      case "MusicVideo":
+        return TabContentType.musicVideos;
+      case "AudioBook":
+        return TabContentType.audioBooks;
       default:
         throw const FormatException("Unsupported itemType");
     }
@@ -1582,6 +1598,7 @@ enum BaseItemDtoType {
   folder("Folder", true, null, DownloadItemType.collection),
   musicVideo("MusicVideo", false, [], DownloadItemType.track),
   audioBook("AudioBook", false, [], DownloadItemType.track),
+  book("Book", false, [], DownloadItemType.track),
   tvEpisode("Episode", false, [], DownloadItemType.track),
   video("Video", false, [], DownloadItemType.track),
   movie("Movie", false, [], DownloadItemType.track),
@@ -1612,8 +1629,6 @@ enum BaseItemDtoType {
   static BaseItemDtoType fromItem(BaseItemDto item) {
     switch (item.type) {
       case "Audio":
-      case "AudioBook":
-      case "MusicVideo":
       case "Episode":
       case "Video":
       case "Movie":
@@ -1627,6 +1642,10 @@ enum BaseItemDtoType {
         return genre;
       case "Playlist":
         return playlist;
+      case "AudioBook":
+        return audioBook;
+      case "MusicVideo":
+        return musicVideo;
       case "CollectionFolder":
         return library;
       case "Folder":

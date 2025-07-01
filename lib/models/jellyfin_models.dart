@@ -3259,6 +3259,10 @@ enum SortBy {
         ];
       case TabContentType.genres:
         options = [SortBy.sortName, SortBy.dateCreated, SortBy.random];
+      case TabContentType.musicVideos:
+        options = [SortBy.sortName, SortBy.artist, SortBy.dateCreated, SortBy.premiereDate, SortBy.runtime, SortBy.random];
+      case TabContentType.audioBooks:
+        options = [SortBy.sortName, SortBy.artist, SortBy.dateCreated, SortBy.premiereDate, SortBy.runtime, SortBy.random];
     }
     if (includeDefaultOrder) {
       options.insert(0, SortBy.defaultOrder);
