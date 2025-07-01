@@ -1718,5 +1718,9 @@
     "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
   },
   "exportLogs": "Günlükleri kaydet",
-  "@exportLogs": {}
+  "@exportLogs": {},
+  "startupErrorCallToAction": "Günlükler ve bu sayfanın bir ekran görüntüsünü de ekleyerek \"github.com/jmshrv/finamp\" adresine lütfen bir sorun oluşturun, böylece mümkün olduğunca çabuk düzeltebiliriz.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  }
 }
