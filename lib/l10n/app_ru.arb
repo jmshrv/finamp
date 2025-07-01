@@ -2287,7 +2287,7 @@
   },
   "unknown": "Неизвестно",
   "@unknown": {},
-  "itemSectionsOrderSubtitle": "Управляет порядком объектов в разделах",
+  "itemSectionsOrderSubtitle": "Управляет порядком объектов в разделах.",
   "@itemSectionsOrderSubtitle": {
     "description": "Description of the setting that controls the order of item sections on the screens."
   }
