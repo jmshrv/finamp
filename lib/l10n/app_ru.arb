@@ -37,7 +37,7 @@
   "@datePlayed": {},
   "playCount": "Всего Проигрываний",
   "@playCount": {},
-  "premiereDate": "Дата Премьеры",
+  "premiereDate": "Дата Выпуска",
   "@premiereDate": {},
   "name": "Имя",
   "@name": {},
@@ -1937,11 +1937,11 @@
   "@transcodingStreamingFormatTitle": {
     "description": "Title for the dropdown that selects the format for transcoded streams"
   },
-  "startupErrorTitle": "Что-то пошло не так во время запуска приложения!\nИзвините...",
+  "startupErrorTitle": "Что-то пошло не так во время запуска приложения!",
   "@startupErrorTitle": {
     "description": "The title for the error screen that shows when startup fails."
   },
-  "startupErrorCallToAction": "Пожалуйста, сообщите о проблеме на github.com/jmshrv/finamp прикреплив логи(!) и скриншот этой страницы, чтобы мы могли исправить её как можно быстрее.",
+  "startupErrorCallToAction": "Пожалуйста, сообщите о проблеме на \"github.com/jmshrv/finamp\" прикреплив логи и скриншот этой страницы, чтобы мы могли исправить её как можно быстрее.",
   "@startupErrorCallToAction": {
     "description": "The subtitle / call to action for what to do after encountering a startup error"
   },
@@ -2167,5 +2167,25 @@
   "onlineMode": "Онлайн-Режим",
   "@onlineMode": {},
   "favorites": "Избранное",
-  "@favorites": {}
+  "@favorites": {},
+  "duration": "Продолжительность",
+  "@duration": {},
+  "defaultOrder": "Стандартный Порядок",
+  "@defaultOrder": {
+    "description": "Default sorting order for playlists (server order)"
+  },
+  "formattedRelativeTime": "{type, select, just_now{только что} minutes{{value} мин назад} hours{{value} ч назад} yesterday{вчера} days{{value, plural, =1{1 день назад} other{{value} дней назад}}} other{value}}",
+  "@formattedRelativeTime": {
+    "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
+    "placeholders": {
+      "type": {
+        "type": "String",
+        "description": "The category of time passed: one of 'just_now', 'minutes', 'hours', 'yesterday', or 'days'."
+      },
+      "value": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  }
 }
