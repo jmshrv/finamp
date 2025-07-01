@@ -61,7 +61,7 @@
       }
     }
   },
-  "downloadedCountUnified": "{trackCount, plural, one {{trackCount} டிராக்} other {{trackCount} டிராக்குகள்}}, {imageCount, plural, one {{imageCount} படம்} other {{imageCount} படங்கள்}}, {syncCount, plural, one {{syncCount} முனை ஒத்திசைவு} other {{syncCount} முனைகள் ஒத்திசைத்தல்}}, {repairing, plural, =0 {} other {நடப்பு பழுதுபார்ப்பு}}",
+  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} தடம்} other{{trackCount} தடங்கள்}}, {imageCount,plural,=1{{imageCount} படம்} other{{imageCount} படங்கள்}}\n{syncCount,plural,=1{{syncCount} முனை ஒத்திசைவு} other{{syncCount} முனைகள் ஒத்திசைத்தல்}}{repairing, plural, =0{} other{\nநடப்பு பழுதுபார்ப்பு}}",
   "@downloadedCountUnified": {
     "description": "Display of downloaded track and image count on downloads screen.",
     "placeholders": {
@@ -280,7 +280,7 @@
   "@back": {
     "description": "Label for the back button."
   },
-  "loginFlowWelcomeHeading": "{ச்டைல்ட் பெயர் க்கு க்கு வருக",
+  "loginFlowWelcomeHeading": "{styledName} க்கு வருக",
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
@@ -382,7 +382,7 @@
   },
   "unknownName": "தெரியாத பெயர்",
   "@unknownName": {},
-  "albums": "ஆல்பம்",
+  "albums": "தொகுப்புகள்",
   "@albums": {},
   "artists": "கலைஞர்கள்",
   "@artists": {},
@@ -418,7 +418,7 @@
   "@sortBy": {},
   "title": "தலைப்பு",
   "@title": {},
-  "album": "ஆல்பம்",
+  "album": "தொகுப்பு",
   "@album": {},
   "albumArtist": "ஆல்பம் கலைஞர்",
   "@albumArtist": {},
@@ -1815,7 +1815,7 @@
   "@onlineMode": {},
   "albumArtists": "ஆல்பம் கலைஞர்கள்",
   "@albumArtists": {},
-  "performingArtists": "கலைஞர்கள்",
+  "performingArtists": "நிகழ்த்தும் கலைஞர்கள்",
   "@performingArtists": {},
   "performingArtist": "நிகழ்த்தும் கலைஞர்",
   "@performingArtist": {},
@@ -1825,7 +1825,7 @@
   "@defaultOrder": {
     "description": "Default sorting order for playlists (server order)"
   },
-  "formattedRelativeTime": "{தட்டச்சு செய்க",
+  "formattedRelativeTime": "{type, select, just_now{இப்போது} minutes{{value} நிமையம் முன்பு} hours{{value} ம முன்பு} yesterday{நேற்று} days{{value, plural, =1{1 நாள் முன்பு} other{{value} நாள்கள் முன்பு}}} other{value}}",
   "@formattedRelativeTime": {
     "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
     "placeholders": {
