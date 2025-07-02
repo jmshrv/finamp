@@ -1076,7 +1076,7 @@
   "@queuesScreen": {
     "description": "Title for the screen where older now playing queues can be restored"
   },
-  "queueRestoreButtonLabel": "恢復",
+  "queueRestoreButtonLabel": "恢復此佇列",
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
@@ -1968,7 +1968,7 @@
   "@autoOfflineNotification": {
     "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
   },
-  "autoOfflineSettingDescription": "自動啟用離線模式。\n停用：不會自動啟用離線模式。可能可以節省電力。\n區域網路：離開 Wifi 或乙太網路連線時啟用離線模式。\n離線：失去網路連線時啟用離線模式。\n你可以手動啟用離線模式，這麼做將會暫停自動離線模式，直到離線模式被手動關閉",
+  "autoOfflineSettingDescription": "自動啟用離線模式。\n停用：不會自動啟用離線模式。可能可以節省電力。\n區域網路：離開 Wifi 或乙太網路連線時啟用離線模式。\n離線：失去網路連線時啟用離線模式。\n無法連線：當切換網路後無法 Ping 到伺服器時，自動啟用離線模式。\n你可以手動啟用離線模式，這麼做將會暫停自動離線模式，直到離線模式被手動關閉",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
@@ -2085,7 +2085,7 @@
   "@showShuffleButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
   },
-  "showFavoriteButtonOnMediaNotificationSubtitle": "控制媒體通知中是否顯示「收藏」按鈕，讓您無需開啟應用程式即可將目前播放的歌曲加入或移出收藏。",
+  "showFavoriteButtonOnMediaNotificationSubtitle": "控制媒體通知中是否顯示「收藏」按鈕，讓您無需開啟應用程式即可將目前播放的歌曲加入或移除收藏。離線模式下會隱藏此按鈕。",
   "@showFavoriteButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a favorite button."
   },
@@ -2513,5 +2513,21 @@
         "type": "int"
       }
     }
+  },
+  "autoOfflineOptionUnreachable": "無法連線",
+  "@autoOfflineOptionUnreachable": {
+    "description": "This is shown when the autoOffline feature is set to Unreachable, this means offline mode will be automatically enabled when - after a network change - the server cant be pinged"
+  },
+  "clearQueueOnStopEventTitle": "外部停止時清空佇列",
+  "@clearQueueOnStopEventTitle": {
+    "description": "Title for the setting that controls if OS stop commands clear the queue."
+  },
+  "clearQueueOnStopEventSubtitle": "當從作業系統收到「停止」命令時，會清空佇列並關閉播放器。在應用程式內執行停止操作時，也會同樣關閉播放器並清空佇列。",
+  "@clearQueueOnStopEventSubtitle": {
+    "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
+  },
+  "syncPlaybackSpeedAndPitchLabel": "同步速度與音調",
+  "@syncPlaybackSpeedAndPitchLabel": {
+    "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
   }
 }
