@@ -2495,5 +2495,14 @@
     "description": "This is only shown on ios and android since desktop doesnt require location permissions"
   },
   "preferLocalNetworkPublicAddressSettingTitle": "外部網路",
-  "@preferLocalNetworkPublicAddressSettingTitle": {}
+  "@preferLocalNetworkPublicAddressSettingTitle": {},
+  "sleepTimerRemainingTime": "將於 {time, plural, =1{1 分鐘內} other{{time} 分鐘後}} 進入睡眠",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  }
 }
