@@ -2307,7 +2307,7 @@
   "@artistItemSectionFilterChipOrderSubtitle": {
     "description": "Description of the setting that controls the order of the tracks sections filter chips."
   },
-  "genreFilterArtistScreensSubtitle": "Когда включено страница исполнителя (открытая со страницы жанра) будет показывать только тот жанр, с которого вы перешли. (Всегда можно вручную убрать Фильтр Жанров, чтобы показать все треки и альбомы)",
+  "genreFilterArtistScreensSubtitle": "Когда включено, страница исполнителя (открытая со страницы жанра) будет показывать только треки того жанра, с которого вы перешли. (Всегда можно вручную убрать Фильтр Жанров, чтобы показать все треки и альбомы.)",
   "@genreFilterArtistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
@@ -2322,5 +2322,9 @@
   "genreFilterPlaylistScreensSubtitle": "Когда включено, страница плейлиста (открытая со страницы жанра) будет показывать только треки того жанра, с которого вы перешли. (Всегда можно вручную убрать Фильтр Жанров, чтобы показать все треки.)",
   "@genreFilterPlaylistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "genreListsInheritSorting": "Наследование Сортирования",
+  "@genreListsInheritSorting": {
+    "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   }
 }
