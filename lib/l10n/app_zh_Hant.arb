@@ -2505,7 +2505,7 @@
       }
     }
   },
-  "sleepTimerRemainingTracks": "將於{time, plural, =1{此曲播畢後} other{再播 {time} 首後}}進入睡眠",
+  "sleepTimerRemainingTracks": "將於{time, plural, =1{此曲播畢後} other{ {time} 首後}}進入睡眠",
   "@sleepTimerRemainingTracks": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -2518,11 +2518,11 @@
   "@autoOfflineOptionUnreachable": {
     "description": "This is shown when the autoOffline feature is set to Unreachable, this means offline mode will be automatically enabled when - after a network change - the server cant be pinged"
   },
-  "clearQueueOnStopEventTitle": "外部停止時清空佇列",
+  "clearQueueOnStopEventTitle": "外部停止時清除播放佇列",
   "@clearQueueOnStopEventTitle": {
     "description": "Title for the setting that controls if OS stop commands clear the queue."
   },
-  "clearQueueOnStopEventSubtitle": "當從作業系統收到「停止」命令時，會清空佇列並關閉播放器。在應用程式內執行停止操作時，也會同樣關閉播放器並清空佇列。",
+  "clearQueueOnStopEventSubtitle": "若從作業系統接收到「停止」指令，將清空佇列並關閉播放器。在應用程式內執行停止動作時，也會自動關閉播放器並清空佇列。",
   "@clearQueueOnStopEventSubtitle": {
     "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
   },
