@@ -2290,5 +2290,13 @@
   "itemSectionsOrderSubtitle": "Управляет порядком объектов в разделах.",
   "@itemSectionsOrderSubtitle": {
     "description": "Description of the setting that controls the order of item sections on the screens."
+  },
+  "genreItemSectionFilterChipOrderTitle": "Порядок Фильтров Разделов Объектов",
+  "@genreItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of item sections filter chips."
+  },
+  "genreItemSectionFilterChipOrderSubtitle": "Управляет порядком доступных фильтров в разделах",
+  "@genreItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections filter chips."
   }
 }
