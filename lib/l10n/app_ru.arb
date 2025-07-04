@@ -2323,8 +2323,47 @@
   "@genreFilterPlaylistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
   },
-  "genreListsInheritSorting": "Наследование Сортирования",
+  "genreListsInheritSorting": "Наследование Сортировки",
   "@genreListsInheritSorting": {
     "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "genreListsInheritSortingSubtitle": "Когда включено, страницы \"показать все\" будут наследовать сортировку и фильтры, выбранные на Экране Жанров. Если выключено, будут использоваться настройки соотвествующего раздела. Нажав на счетчик сверху Экрана Жанров всегда будет открывать полный список с настройками сортировки из библиотеки.",
+  "@genreListsInheritSortingSubtitle": {
+    "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "curatedItemsMostPlayedOfflineTooltip": "Недоступно в Оффлайн-Режиме.",
+  "@curatedItemsMostPlayedOfflineTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Offline Mode."
+  },
+  "curatedItemsNotListenedYet": "Вы не слушали ни одного трека{itemType, select, artistGenreFilter{ от этого исполнителя в этом жанре} artist{ от этого исполнителя} genre{ в этом жанре} other{}}.",
+  "@curatedItemsNotListenedYet": {
+    "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "curatedItemsNoFavorites": "Вы не добавили в любимое ни одного трека{itemType, select, artistGenreFilter{ от этого исполнителя в этом жанре} artist{ от этого исполнителя} genre{ в этом жанре} other{}}.",
+  "@curatedItemsNoFavorites": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "genreNoItems": "У вас нету {itemType, select, playlists{плейлистов} artists{исполнителей} albums{альбомов} tracks{треков} other{объектов}} в этом жанре.",
+  "@genreNoItems": {
+    "description": "Message for empty See All lists for a genre.",
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
   }
 }
