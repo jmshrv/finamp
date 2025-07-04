@@ -801,7 +801,7 @@
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "couldNotLoad": "Не удалось загрузить {source, select, album{альбом} playlist{плейлист} trackMix{микс композиций} artistMix{микс исполнителей} albumMix{микс альбомов} genreMix{микс жанров} favorites{избранное} allTracks{все композиции} filteredList{композиции} genre{жанр} artist{исполнителя} track{композицию} nextUpAlbum{альбом в следующих} nextUpPlaylist{плейлист в следующих} nextUpArtist{исполнителя в следующих} other{}}",
+  "couldNotLoad": "Не удалось загрузить {source, select, album{альбом} playlist{плейлист} trackMix{микс композиций} artistMix{микс исполнителей} albumMix{микс альбомов} genreMix{микс жанров} favorites{избранное} allTracks{все композиции} filteredList{композиции} genre{жанр} artist{исполнителя} track{композицию} nextUpAlbum{альбом в следующих} nextUpPlaylist{плейлист в следующих} nextUpArtist{исполнителя в следующих}\nnextUpGenre{жанр в следующих} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
