@@ -45,6 +45,11 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
       PublicSystemInfoResult? serverInfo = await jellyfinApiHelper.loadCustomServerPublicInfo(serverUrl);
       _loginServerSelectionPageLogger.finer("Server info: ${serverInfo?.toJson()}");
       if (serverInfo != null && mounted) {
+        if (serverInfo.serverName == null) {
+          serverInfo.serverName = response.name;
+        } else if (serverInfo.serverName != response.name) {
+          serverInfo.serverName = "${serverInfo.serverName} (${response.name})";
+        }
         // no need to filter duplicates, we're using a map
         setState(() {
           widget.serverState.discoveredServers[serverUrl] = serverInfo;

@@ -138,10 +138,11 @@ class ToggleableListTile extends ConsumerStatefulWidget {
     required this.title,
     this.subtitle,
     required this.leading,
-    required this.positiveIcon,
-    required this.negativeIcon,
+    this.positiveIcon,
+    this.negativeIcon,
     required this.initialState,
     required this.onToggle,
+    this.trailing,
     this.enabled = true,
     this.forceLoading = false,
     this.tapFeedback = true,
@@ -150,8 +151,9 @@ class ToggleableListTile extends ConsumerStatefulWidget {
   final String title;
   final String? subtitle;
   final Widget leading;
-  final IconData positiveIcon;
-  final IconData negativeIcon;
+  final IconData? positiveIcon;
+  final IconData? negativeIcon;
+  final Widget? trailing;
   final bool initialState;
   final Future<bool> Function(bool currentState) onToggle;
   final bool enabled;
@@ -169,6 +171,8 @@ class _ToggleableListTileState extends ConsumerState<ToggleableListTile> {
   @override
   void initState() {
     super.initState();
+    assert((widget.positiveIcon != null && widget.negativeIcon != null) || widget.trailing != null,
+        "Either positiveIcon and negativeIcon must be provided, or trailing must be provided.");
     currentState = widget.initialState;
   }
 
@@ -220,7 +224,7 @@ class _ToggleableListTileState extends ConsumerState<ToggleableListTile> {
                 padding: const EdgeInsets.only(left: 8.0, right: 12.0),
                 child: isLoading || widget.forceLoading
                     ? const CircularProgressIndicator()
-                    : Icon(
+                    : widget.trailing ?? Icon(
                         currentState == true ? widget.positiveIcon : widget.negativeIcon,
                         size: 36.0,
                         color: themeColor,

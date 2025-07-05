@@ -60,7 +60,7 @@ class JellyfinServerDiscoveryEmulationService {
               address: _finampUserHelper.currentUser?.baseURL,
               endpointAddress: _finampUserHelper.currentUser?.baseURL,
               id: _finampUserHelper.currentUser?.serverId,
-              name: "Jellyfin Server (provided by Finamp)",
+              name: "Shared by Finamp",
             );
             final responseMessage = jsonEncode(response);
             _serverDiscoveryEmulationLogger.finest("Sending discovery response: $responseMessage");
