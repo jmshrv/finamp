@@ -777,7 +777,7 @@
   },
   "topTracks": "Parhaat kappaleet",
   "@topTracks": {},
-  "shuffleAlbumsNext": "Sekoita albumit Seuraavaksi-jonoksi",
+  "shuffleAlbumsNext": "Sekoita albumit Seuraavaksi-jonon alkuun",
   "@shuffleAlbumsNext": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
   },
@@ -913,7 +913,7 @@
   "@showLyricsTimestampsSubtitle": {
     "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
   },
-  "showStopButtonOnMediaNotificationTitle": "Näytä pysäytyspainike mediailmoituksessa",
+  "showStopButtonOnMediaNotificationTitle": "Näytä pysäytyspainike mediailmoituksissa",
   "@showStopButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
@@ -1050,7 +1050,7 @@
   "@playbackSpeedIncreaseLabel": {
     "description": "Label for the button in the speed menu that increases the playback speed."
   },
-  "queueRestoreButtonLabel": "Palauta",
+  "queueRestoreButtonLabel": "Palauta tämä jono",
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
@@ -1094,7 +1094,7 @@
   "@genericToggleButtonTooltip": {
     "description": "Tooltip for toggle buttons that can be tapped to toggle their state"
   },
-  "volumeNormalizationModeSelectorTitle": "Volyymitason normalisoinnin tila",
+  "volumeNormalizationModeSelectorTitle": "Äänenvoimakkuuden normalisoinnin tila",
   "@volumeNormalizationModeSelectorTitle": {
     "description": "Title for the dropdown that selects the replay gain mode"
   },
@@ -1124,7 +1124,7 @@
   "@alignmentOptionStart": {
     "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
   },
-  "showSeekControlsOnMediaNotificationTitle": "Näytä hakusäätimet mediailmoituksessa",
+  "showSeekControlsOnMediaNotificationTitle": "Näytä hakusäätimet mediailmoituksissa",
   "@showSeekControlsOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a seekable progress bar."
   },
@@ -1327,7 +1327,7 @@
   "@useCoverAsBackgroundSubtitle": {},
   "hours": "Tuntia",
   "@hours": {},
-  "shuffleToQueue": "Sekotia jonoon",
+  "shuffleToQueue": "Sekoita jonoon",
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
@@ -1404,11 +1404,11 @@
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "volumeNormalizationIOSBaseGainEditorSubtitle": "Tällä hetkellä, volyymitason normalisointi iOS-laitteilla vaatii toistovolyymin muutoksen emuloidakseen vahvistuksen muutosta. Koska ohjelma ei voi lisätä volyymiä yli 100 prosentin, täytyy volyymiä alentaa oletuksena, jotta tarvittaessa normalisointi voi vahvistaa hiljaisia kappaleita tarpeeksi. Arvot ovat desibeleissä (dB), missä -10 dB on noin ~30% volyymistä, -4.5 dB on noin ~60% volyymistä ja -2dB on noin ~80% täydestä volyymistä.",
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "Tällä hetkellä, äänenvoimakkuuden normalisointi iOS-laitteilla vaatii toistovoimakkuuden muutoksen, jotta vahvistuksen muutosta voidaan jäljitellä, ja normalisointi toteuttaa. Koska ohjelma ei voi lisätä äänenvoimakkuutta yli 100 prosentin, täytyy voimakkuutta alentaa oletuksena, jotta tarvittaessa normalisointi voi vahvistaa hiljaisia kappaleita tarpeeksi. Arvot ovat desibeleissä (dB), missä -10 dB on noin ~30% voimakkuudesta, -4.5 dB on noin ~60% voimakkuudesta ja -2dB on noin ~80% täydestä voimakkuudesta.",
   "@volumeNormalizationIOSBaseGainEditorSubtitle": {
     "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
-  "couldNotLoad": "Kohteen lataus epäonnistui: {source, select, album{album} playlist{playlist} trackMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allTracks{all tracks} filteredList{tracks} genre{genre} artist{artist} track{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
+  "couldNotLoad": "{source, select, album{Albumia} playlist{Soittolistaa} trackMix{Kappalemixiä} artistMix{Artistimixiä} albumMix{Albumimixiä} genreMix{Tyylilajimixiä} favorites{Suosikkeja} allTracks{Kaikkia kappaleita} filteredList{Kappaleita} genre{Tyylilajia} artist{Artistia} track{Kappaletta} nextUpAlbum{Seuraavaksi soitettavaa albumia} nextUpPlaylist{Seuraavaksi soitettavaa soittolistaa} nextUpArtist{Seuraavaksi soitettavaa artistia} nextUpGenre{Seuraavaksi soitettavaa tyylilajia} other{}} ei voitu ladata",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -1420,15 +1420,15 @@
   "@alignmentOptionEnd": {
     "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
   },
-  "volumeNormalizationSwitchTitle": "Ota volyymitason normalisointi käyttöön",
+  "volumeNormalizationSwitchTitle": "Ota äänenvoimakkuuden normalisointi käyttöön",
   "@volumeNormalizationSwitchTitle": {
     "description": "Title for the switch that toggles replay gain"
   },
-  "volumeNormalizationModeSelectorSubtitle": "Miloin ja miten käytetään volyymitason normalisointia",
+  "volumeNormalizationModeSelectorSubtitle": "Miloin ja miten käytetään äänenvoimakkuuden normalisointia",
   "@volumeNormalizationModeSelectorSubtitle": {
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
-  "volumeNormalizationModeSelectorDescription": "Hybridi (Kappale + Albumi):\nKappalevahvistusta käytetään normaalissa toistossa, mutta albumia toistaessa (jos jono on toison päälähde, tai albumi lisättiin jonoon jossain vaiheessa), albumivahvistusta käytetään.\n\nKappale-pohjainen:\nKappalevahvistusta käytetään aina, välittämättä soiko albumi vai ei.\n\nVain albumit:\nVolyymitason normalisointia käytetään vain, kun albumia toistetaan (käyttäen albumivahvistusta), mutta ei yksittäisten kappaleiden toistossa.",
+  "volumeNormalizationModeSelectorDescription": "Hybridi (Kappale + Albumi):\nKappalevahvistusta käytetään normaalissa toistossa, mutta albumia toistaessa (jos jono on toison päälähde, tai albumi lisättiin jonoon jossain vaiheessa), albumivahvistusta käytetään.\n\nKappale-pohjainen:\nKappalevahvistusta käytetään aina, välittämättä siitä soiko albumi vai ei.\n\nVain albumit:\nÄänenvoimakkuuden normalisointia käytetään vain, kun albumia toistetaan (käyttäen albumivahvistusta), mutta ei yksittäisten kappaleiden toistossa.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
@@ -1502,7 +1502,7 @@
   "@emptyFilteredListTitle": {
     "description": "Message shown when a list of items is filtered and no items match the filter"
   },
-  "showStopButtonOnMediaNotificationSubtitle": "Näytä stop-näppäin pause-näppäimen lisäksi mediailmoituksissa. Mahdollistaa toiston lopettamisen ilman ohjelman avaamista.",
+  "showStopButtonOnMediaNotificationSubtitle": "Näytä stop-näppäin mediailmoituksissa. Mahdollistaa toiston lopettamisen ilman ohjelman avaamista.",
   "@showStopButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
@@ -1664,7 +1664,7 @@
     },
     "description": "Dropdown option to download transcoded version of tracks"
   },
-  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transkoodattuna}}",
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transkoodattu}}{location, select, null{} other{ ({location})}}",
   "@downloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1682,7 +1682,7 @@
     },
     "description": "Track info line in downloads screen lists"
   },
-  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ {codec} @ {bitrate}}}",
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ muodossa {codec} @ {bitrate}}}{location, select, null{} other{ ({location})}}",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1798,7 +1798,7 @@
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
     "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "shuffleAlbumsToNextUp": "Sekoita albumit Seuraavaksi-jonoon",
+  "shuffleAlbumsToNextUp": "Sekoita albumit Seuraavaksi-jonon loppuun",
   "@shuffleAlbumsToNextUp": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
   },
@@ -1906,7 +1906,7 @@
       }
     }
   },
-  "finampCollectionNames": "{itemType, select, favorites{Suosikit} allPlaylists{Kaikki soittolistat} fiveLatestAlbums{5 uusinta albumia} allPlaylistsMetadata{Soittolistojen metatiedot} other{{itemType}} }",
+  "finampCollectionNames": "{itemType, select, favorites{Suosikit} allPlaylists{Kaikki soittolistat} fiveLatestAlbums{5 uusinta albumia} allPlaylistsMetadata{Soittolistojen metatiedot} collectionWithLibraryFilter{Kokoelma kirjastosuodattimella} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
@@ -1962,7 +1962,7 @@
   "@appearsOnAlbums": {},
   "performingArtists": "Esiintyvät artistit",
   "@performingArtists": {},
-  "autoOfflineOptionNetwork": "Ei lähiverkkoa",
+  "autoOfflineOptionNetwork": "Paikallisverkko",
   "@autoOfflineOptionNetwork": {
     "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
   },
@@ -1978,7 +1978,7 @@
   "@autoOfflineOptionDisconnected": {
     "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
   },
-  "autoOfflineSettingDescription": "Kytke Offline-tila automaattisesti.\nPois päältä: Ei kytke offline-tilaa automaattisesti. Voi säästää akkua.\nEi lähiverkkoa: Kytke offline-tila päälle, kun ei yhteyttä wifin tai ethernetin kautta.\nEi yhteyttä: Kytke offline-tila päälle, kun ei yhteyttä mihinkään.\nVoit aina kytkeä offline-tilan päälle käsin. Tämä kytkee offline-automaation pois päältä, kunnes taas kytket offline-tilan pois päältä.",
+  "autoOfflineSettingDescription": "Kytke Offline-tila automaattisesti.\nPois päältä: Ei kytke offline-tilaa automaattisesti. Voi säästää akkua.\nPaikallisverkko: Kytke offline-tila päälle, kun ei yhteyttä wifin tai ethernetin kautta.\nEi yhteyttä: Kytke offline-tila päälle, kun ei yhteyttä mihinkään.\nEi tavoitettavissa: Kytke offline-tila päälle, kun serveriin ei saada yhteyttä verkon vaihtamisen jälkeen.\nVoit aina kytkeä offline-tilan päälle käsin. Tämä kytkee offline-automaation pois päältä, kunnes taas kytket offline-tilan pois päältä.",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
@@ -1986,13 +1986,13 @@
   "@libraryDownloads": {
     "description": "Title for the library downloads section on the downloads screen."
   },
-  "desktopShuffleWarning": "Sekoitus ei ole tällä hetkellä saatavilla sovelluksen työpöytäversiossa.",
+  "desktopShuffleWarning": "Sekoitustilan vaihto ei tällä hetkellä saatavilla sovelluksen työpöytäversiossa.",
   "@desktopShuffleWarning": {
     "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
   },
   "playbackReporting": "Toiston raportointi",
   "@playbackReporting": {},
-  "currentVolumeFeatureText": "{volume}% äänenvoimakkuus",
+  "currentVolumeFeatureText": "{volume}% taso",
   "@currentVolumeFeatureText": {
     "description": "Label for the feature chip that is shown if the volume is not 100%",
     "placeholders": {
@@ -2073,7 +2073,7 @@
   "@startupErrorCallToAction": {
     "description": "The subtitle / call to action for what to do after encountering a startup error"
   },
-  "startupErrorWorkaround": "Tilapäiskorjauksena voit yrittää tyhjentää sovelluksen datan nollataksesi sovelluksen. Ota huomioon, että tämä poistaa kaikki asetukset ja ladatut tiedostot.",
+  "startupErrorWorkaround": "Tilapäiskorjauksena virhetilanteeseen voit yrittää tyhjentää sovelluksen datan nollataksesi sovelluksen. Ota huomioon, että tämä poistaa kaikki asetukset ja ladatut tiedostot.",
   "@startupErrorWorkaround": {
     "description": "The subtitle for how to manually recover from a startup error"
   },
@@ -2101,9 +2101,9 @@
   "@onlineMode": {},
   "favorites": "Suosikit",
   "@favorites": {},
-  "removeFavorite": "Poista suosikki",
+  "removeFavorite": "Poista suosikeista",
   "@removeFavorite": {},
-  "addFavorite": "Lisää suosikki",
+  "addFavorite": "Lisää suosikiksi",
   "@addFavorite": {},
   "stopAndClearQueue": "Pysäytä toisto ja tyhjennä jono",
   "@stopAndClearQueue": {
@@ -2213,7 +2213,7 @@
       }
     }
   },
-  "showFavoriteButtonOnMediaNotificationSubtitle": "Ohjaa sitä näytetäänkö suosikkinappi mediailmoituksissa. Tämä antaa mahdollisuuden lisätä kappale suosikkeihin / poistaa se niistä avaamatta sovellusta.",
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Ohjaa sitä näytetäänkö suosikkinappi mediailmoituksissa. Tämä antaa mahdollisuuden lisätä kappale suosikkeihin / poistaa se niistä avaamatta sovellusta. Piilotettu offline-tilassa.",
   "@showFavoriteButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a favorite button."
   },
@@ -2340,5 +2340,198 @@
   "artistScreen": "Artistinäkymä",
   "@artistScreen": {
     "description": "Name for the view/screen that shows artists"
+  },
+  "noDateLastPlayed": "Ei vielä toistettu",
+  "@noDateLastPlayed": {
+    "description": "Placeholder text if an item has no lastPlayedDate set."
+  },
+  "applyFilterOnGenreChipTapPrompt": "Tyylilajisuodatin käytössä",
+  "@applyFilterOnGenreChipTapPrompt": {
+    "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "noReleaseDate": "Ei julkaisupäivää",
+  "@noReleaseDate": {
+    "description": "Placeholder text if an item has no release date set."
+  },
+  "itemCountCalculating": "Lasketaan kohteita",
+  "@itemCountCalculating": {
+    "description": "Shown to screen readers while the item count is being calculated."
+  },
+  "itemCountLoading": "{childType, select, track{kappaleet} album{albumit} other{kohteet}}",
+  "@itemCountLoading": {
+    "description": "Shown while the item count is being calculated.",
+    "placeholders": {
+      "childType": {
+        "type": "String",
+        "example": "album",
+        "description": "Options match BaseItemDtoType.name"
+      }
+    }
+  },
+  "preferLocalNetworkPublicAddressSettingTitle": "Julkinen osoite",
+  "@preferLocalNetworkPublicAddressSettingTitle": {},
+  "preferLocalNetworkEnableSwitchDescription": "Käytetäänkö eri osoitetta Jellyfin-palvelimelle kun olet paikallisessa verkossa",
+  "@preferLocalNetworkEnableSwitchDescription": {},
+  "sleepTimerStartTimer": "Kytke ajastin päälle",
+  "@sleepTimerStartTimer": {
+    "description": "Label for the button that starts the sleep timer"
+  },
+  "sleepTimerAfterCurrentTrack": "Nykyisen raidan jälkeen",
+  "@sleepTimerAfterCurrentTrack": {
+    "description": "Option for the sleep timer that will stop playback after the current track finishes."
+  },
+  "sleepTimerRemainingTime": "Nukahtaa {time, plural, =1{<1 minuutissa} other{{time} minuutissa}}",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "ping": "{status, select, true_true{Molemmat saavutettavissa} true_false{Ei saatu yhteyttä paikalliseen osoitteeseen} false_true{Ei saatu yhteyttä julkiseen osoitteeseen} false_false{Ei saatu yhteyttä kumpaankaan} other{tuntematon}}",
+  "@ping": {
+    "description": "Gets shown in the Snackbar when using the Test Connection Button inside the Network Settings. true means reachable, false means unreachable. the first value is for the public address, the second value is fot the home address."
+  },
+  "networkSettingsTitle": "Verkko",
+  "@networkSettingsTitle": {
+    "description": "Title for the network settings screen"
+  },
+  "missingSchemaError": "Verkko-osoitteen täytyy alkaa http(s)://",
+  "@missingSchemaError": {
+    "description": "Snackbar message when the user changes their home/public address but it doesn't start with http"
+  },
+  "testConnectionButtonLabel": "Testaa molemmat yhteydet",
+  "@testConnectionButtonLabel": {
+    "description": "Button to test the public and local url inside the network settings tab"
+  },
+  "autoReloadPrompt": "Lataa jono uudelleen, jotta uudet {type, select, network{verkkasetukset} transcoding{transkoodausasetukset} other{asetukset}} tulevat voimaan",
+  "@autoReloadPrompt": {
+    "description": "Prompt shown when the queue needs to be reloaded after changing network settings",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks, plural, =1{1 kappale} other{{amountUndownloadedTracks} kappaletta}} poistetaan jonosta, koska niitä ei ole ladattu.",
+  "@autoReloadPromptMissingTracks": {
+    "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
+    "placeholders": {
+      "amountUndownloadedTracks": {
+        "type": "int"
+      }
+    }
+  },
+  "sleepTimerRemainingTracks": "Nukahtaa {time, plural, =1{tämän kappaleen jälkeen} other{{time} kappaleen päästä}}",
+  "@sleepTimerRemainingTracks": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "applyFilterOnGenreChipTapTitle": "Ota suodatin käyttöön napauttamalla tyylilajia",
+  "@applyFilterOnGenreChipTapTitle": {
+    "description": "Title for the setting that controls if taps on genre chips should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "applyFilterOnGenreChipTapPromptButton": "Avaa tyylilaji",
+  "@applyFilterOnGenreChipTapPromptButton": {
+    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "genreScreen": "Tyylilajinäkymä",
+  "@genreScreen": {
+    "description": "Name for the view/screen that shows genres"
+  },
+  "noDateAdded": "Ei päivämäärää lisätty",
+  "@noDateAdded": {
+    "description": "Placeholder text if an item has no dateAdded set."
+  },
+  "sleepTimerFinishLastTrack": "Toista viimeinen raita loppuun?",
+  "@sleepTimerFinishLastTrack": {
+    "description": "Option for the sleep timer that will finish the last track before stopping playback."
+  },
+  "preferLocalNetworkActiveAddressInfoText": "Aktiivinen osoite",
+  "@preferLocalNetworkActiveAddressInfoText": {
+    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+  },
+  "preferLocalNetworkTargetAddressLocalSettingTitle": "Paikallisen verkon osoite",
+  "@preferLocalNetworkTargetAddressLocalSettingTitle": {},
+  "preferLocalNetworkEnableSwitchTitle": "Suosi paikallisverkkoa",
+  "@preferLocalNetworkEnableSwitchTitle": {},
+  "preferLocalNetworkPublicAddressSettingDescription": "Ensisijainen osoite, jota käytetään yhdistettäessä Jellyfin-palvelimelle",
+  "@preferLocalNetworkPublicAddressSettingDescription": {},
+  "preferLocalNetworkTargetAddressLocalSettingDescription": "Jellyfin-palvelimen kohdeosoite paikallisessa verkossasi",
+  "@preferLocalNetworkTargetAddressLocalSettingDescription": {},
+  "autoReloadQueueSubtitle": "Lataa jonon automaattisesti uudelleen kun lähde muuttuu (eli kun offline-tila kytketään päälle, tai palvelinosoite muuttuu esim verkon vaihdon takia). Jos kytketty pois päältä, Finamp kysyy tätä erikseen joka kerta.",
+  "@autoReloadQueueSubtitle": {
+    "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "preferLocalNetworkInfoBox": "Tämä toiminto vaatii sijaintipalveluiden sallimisen (ja sijainti täytyy olla päällä), verkon nimen lukemiseksi.",
+  "@preferLocalNetworkInfoBox": {
+    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
+  },
+  "downloadPaused": "Lataus keskeytetty, koska laite ei ole yhteydessä WiFiin",
+  "@downloadPaused": {
+    "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
+  },
+  "autoReloadQueueTitle": "Lataa jono automaattisesti uudelleen",
+  "@autoReloadQueueTitle": {
+    "description": "Title for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "clearQueueOnStopEventTitle": "Tyhjennä jono kun Finamp pysäytetään sovelluksen ulkopuolelta",
+  "@clearQueueOnStopEventTitle": {
+    "description": "Title for the setting that controls if OS stop commands clear the queue."
+  },
+  "clearQueueOnStopEventSubtitle": "Tyhjennä jono ja sulje soitin, kun 'stop'-komento tulee käyttöjärjestelmästä eli apin ulkopuolelta. Sovelluksen sisäiset stop-komennot sulkevat soittimen ja tyhjentävät jonon aina.",
+  "@clearQueueOnStopEventSubtitle": {
+    "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
+  },
+  "menuButtonLabel": "Lisää toimintoja",
+  "@menuButtonLabel": {
+    "description": "Generic label for menu buttons shown throughout the app. Used for the album, artist, playlist, etc. menus"
+  },
+  "autoReloadPromptReloadButton": "Lataa uudelleen",
+  "@autoReloadPromptReloadButton": {
+    "description": "Button title for reloading the queue after network settings change"
+  },
+  "notImplementedYet": "Ei vielä toteutettu.",
+  "@notImplementedYet": {
+    "description": "Message shown when a feature is not implemented yet"
+  },
+  "automaticOfflineModeOverrideActiveSubtitle": "Laita takaisin päälle",
+  "@automaticOfflineModeOverrideActiveSubtitle": {
+    "description": "Subtitle for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "automaticOfflineModeOverrideActiveTitle": "Automaattinen offline-tila tauotettu",
+  "@automaticOfflineModeOverrideActiveTitle": {
+    "description": "Title for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "autoOfflineOptionUnreachable": "Ei tavoitettavissa",
+  "@autoOfflineOptionUnreachable": {
+    "description": "This is shown when the autoOffline feature is set to Unreachable, this means offline mode will be automatically enabled when - after a network change - the server cant be pinged"
+  },
+  "applyFilterOnGenreChipTapSubtitle": "Oletuksena tyylilajin napauttaminen avaa sen, kun taas pitkä painallus suodattaa artistin tai soittolistan tämän tyylilajin mukaan. Kun tämä asetus on päällä, toiminto on siis käänteinen.",
+  "@applyFilterOnGenreChipTapSubtitle": {
+    "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "itemCount": "{childType, select, track{{amount, plural, =1{1 kappale} other{{amount} kappaletta}}} album{{amount, plural, =1{1 albumi} other{{amount} albumia}}} other{{amount, plural, =1{1 kohde} other{{amount} kohdetta}}}}",
+  "@itemCount": {
+    "description": "Amount of various child item, like artist albums, performing artist tracks, or genre albums. Shown for example in the menu headers.",
+    "placeholders": {
+      "childType": {
+        "type": "String",
+        "example": "album",
+        "description": "Options match BaseItemDtoType.name"
+      },
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "syncPlaybackSpeedAndPitchLabel": "Synkronoi nopeus & sävelkorkeus",
+  "@syncPlaybackSpeedAndPitchLabel": {
+    "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
   }
 }

@@ -37,7 +37,7 @@
   "@datePlayed": {},
   "playCount": "Всего Проигрываний",
   "@playCount": {},
-  "premiereDate": "Дата Премьеры",
+  "premiereDate": "Дата Выпуска",
   "@premiereDate": {},
   "name": "Имя",
   "@name": {},
@@ -83,7 +83,7 @@
   "@playlistUpdated": {},
   "downloadsDeleted": "Загрузки удалены.",
   "@downloadsDeleted": {},
-  "downloadsQueued": "Загрузка подготовлена, загружаем файлы",
+  "downloadsQueued": "Загружаем файлы",
   "@downloadsQueued": {},
   "shareLogs": "Поделиться журналом",
   "@shareLogs": {},
@@ -163,7 +163,7 @@
   "@yesButtonLabel": {},
   "noButtonLabel": "Нет",
   "@noButtonLabel": {},
-  "setSleepTimer": "Установить таймер сна",
+  "setSleepTimer": "Остановить Воспроизведение Через",
   "@setSleepTimer": {},
   "sleepTimerTooltip": "Таймер сна",
   "@sleepTimerTooltip": {},
@@ -650,7 +650,7 @@
   "@activeDownloadsTitle": {},
   "noActiveDownloads": "Активных загрузок нет.",
   "@noActiveDownloads": {},
-  "sleepTimerRemainingTime": "Заснёт через {time} минут",
+  "sleepTimerRemainingTime": "Заснет через {time,plural,=1{<1 Минуту} other{{time} минут}}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -801,7 +801,7 @@
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "couldNotLoad": "Не удалось загрузить {source, select, album{альбом} playlist{плейлист} trackMix{микс композиций} artistMix{микс исполнителей} albumMix{микс альбомов} genreMix{микс жанров} favorites{избранное} allTracks{все композиции} filteredList{композиции} genre{жанр} artist{исполнителя} track{композицию} nextUpAlbum{альбом в следующих} nextUpPlaylist{плейлист в следующих} nextUpArtist{исполнителя в следующих} other{}}",
+  "couldNotLoad": "Не удалось загрузить {source, select, album{альбом} playlist{плейлист} trackMix{микс композиций} artistMix{микс исполнителей} albumMix{микс альбомов} genreMix{микс жанров} favorites{избранное} allTracks{все композиции} filteredList{композиции} genre{жанр} artist{исполнителя} track{композицию} nextUpAlbum{альбом в следующих} nextUpPlaylist{плейлист в следующих} nextUpArtist{исполнителя в следующих}\nnextUpGenre{жанр в следующих} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -845,7 +845,7 @@
   "@playbackOrderLinearButtonTooltip": {
     "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
   },
-  "playingFromType": "Воспроизведение из {source, select, album{альбома} playlist{плейлиста} trackMix{микса композиций} artistMix{микса исполнителей} albumMix{микса альбомов} genreMix{микса жанров} favorites{избранного} allTracks{всех композиций} filteredList{композиций} genre{жанра} artist{исполнителя} track{композиции} nextUpAlbum{альбома в следующих} nextUpPlaylist{плейлиста в следующих} nextUpArtist{исполнителя в следующих} remoteClient{удаленного клиента} other{}}",
+  "playingFromType": "Воспроизведение из {source, select, album{альбома} playlist{плейлиста} trackMix{микса композиций} artistMix{микса исполнителей} albumMix{микса альбомов} genreMix{микса жанров} favorites{избранного} allTracks{всех композиций} filteredList{композиций} genre{жанра} artist{исполнителя} track{композиции} nextUpAlbum{альбома в следующих} nextUpPlaylist{плейлиста в следующих} nextUpArtist{исполнителя в следующих} \nnextUpGenre{жанра в следующих} remoteClient{удаленного клиента} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1125,7 +1125,7 @@
   "@loopModeOneButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
   },
-  "queueRestoreButtonLabel": "Восстановить",
+  "queueRestoreButtonLabel": "Восстановить Очередь",
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
@@ -1937,11 +1937,11 @@
   "@transcodingStreamingFormatTitle": {
     "description": "Title for the dropdown that selects the format for transcoded streams"
   },
-  "startupErrorTitle": "Что-то пошло не так во время запуска приложения!\nИзвините...",
+  "startupErrorTitle": "Что-то пошло не так во время запуска приложения!",
   "@startupErrorTitle": {
     "description": "The title for the error screen that shows when startup fails."
   },
-  "startupErrorCallToAction": "Пожалуйста, сообщите о проблеме на github.com/jmshrv/finamp прикреплив логи(!) и скриншот этой страницы, чтобы мы могли исправить её как можно быстрее.",
+  "startupErrorCallToAction": "Пожалуйста, сообщите о проблеме на \"github.com/jmshrv/finamp\" прикреплив логи и скриншот этой страницы, чтобы мы могли исправить её как можно быстрее.",
   "@startupErrorCallToAction": {
     "description": "The subtitle / call to action for what to do after encountering a startup error"
   },
@@ -2167,5 +2167,203 @@
   "onlineMode": "Онлайн-Режим",
   "@onlineMode": {},
   "favorites": "Избранное",
-  "@favorites": {}
+  "@favorites": {},
+  "duration": "Продолжительность",
+  "@duration": {},
+  "defaultOrder": "Стандартный Порядок",
+  "@defaultOrder": {
+    "description": "Default sorting order for playlists (server order)"
+  },
+  "formattedRelativeTime": "{type, select, just_now{только что} minutes{{value} мин назад} hours{{value} ч назад} yesterday{вчера} days{{value, plural, =1{1 д назад} other{{value} д назад}}} other{value}}",
+  "@formattedRelativeTime": {
+    "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
+    "placeholders": {
+      "type": {
+        "type": "String",
+        "description": "The category of time passed: one of 'just_now', 'minutes', 'hours', 'yesterday', or 'days'."
+      },
+      "value": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "playbackActionPagePlay": "Воспроизведение",
+  "@playbackActionPagePlay": {
+    "description": "Label for the playback action page that contains all actions related to playing in order"
+  },
+  "playbackActionPageShuffle": "Перемешка",
+  "@playbackActionPageShuffle": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled"
+  },
+  "playbackActionPageShuffleAlbums": "Перемешка Альбомов",
+  "@playbackActionPageShuffleAlbums": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+  },
+  "editItemTitle": "Изменить {itemType, select, playlist{Плейлист} other{}}",
+  "@editItemTitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
+  "notAvailable": "Недоступно",
+  "@notAvailable": {},
+  "showArtistsTracksSection": "Показывать Раздел Треков",
+  "@showArtistsTracksSection": {},
+  "showArtistsTracksSectionSubtitle": "Показывать раздел с пятью треками. Вы можете выбрать между Самыми Прослушиваемыми, Любимыми, Случайными, Последними Выпусками, Недавно Добавленными и Недавно Воспроизведенными треками.",
+  "@showArtistsTracksSectionSubtitle": {},
+  "sleepTimerRemainingTracks": "Заснет {time,plural,=1{после этого трека} other{через {time} треков}}",
+  "@sleepTimerRemainingTracks": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "browsePlaylists": "Просмотреть Плейлисты",
+  "@browsePlaylists": {
+    "description": "Label for a button on the genre screen that brings you to a list of genre-filtered playlists."
+  },
+  "removeFavorite": "Удалить Из Любымих",
+  "@removeFavorite": {},
+  "addFavorite": "Добавить В Любимые",
+  "@addFavorite": {},
+  "topAlbums": "Топ Альбомов",
+  "@topAlbums": {},
+  "topArtists": "Топ Исполнителей",
+  "@topArtists": {},
+  "recentlyAddedTracks": "Недавно Добавленные Треки",
+  "@recentlyAddedTracks": {
+    "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedAlbums": "Недавно Добавленные Альбомы",
+  "@recentlyAddedAlbums": {
+    "description": "Label for the genre section that shows albums that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedArtists": "Недавно Добавленные Исполнители",
+  "@recentlyAddedArtists": {
+    "description": "Label for the genre section that shows artists that were recently added to the library, sorted by the date they were added."
+  },
+  "latestTracks": "Последние Треки",
+  "@latestTracks": {},
+  "latestAlbums": "Последние Альбомы",
+  "@latestAlbums": {},
+  "latestArtists": "Последние Исполнители",
+  "@latestArtists": {},
+  "recentlyPlayedTracks": "Недавно Прослушанные Треки",
+  "@recentlyPlayedTracks": {},
+  "recentlyPlayedAlbums": "Недавно Прослушанные Альбомы",
+  "@recentlyPlayedAlbums": {},
+  "recentlyPlayedArtists": "Недавно Прослушанные Исполнители",
+  "@recentlyPlayedArtists": {},
+  "favoriteTracks": "Любимые Треки",
+  "@favoriteTracks": {},
+  "favoriteAlbums": "Любимые Альбомы",
+  "@favoriteAlbums": {},
+  "favoriteArtists": "Любимые Исполнители",
+  "@favoriteArtists": {},
+  "randomTracks": "Треки (Случайный Выбор)",
+  "@randomTracks": {},
+  "randomAlbums": "Альбомы (Случайный Выбор)",
+  "@randomAlbums": {},
+  "randomArtists": "Исполнители (Случайный Выбор)",
+  "@randomArtists": {},
+  "mostPlayed": "Самые Прослушиваемые",
+  "@mostPlayed": {},
+  "randomFavoritesFirst": "Случайно (Сначала Любимые)",
+  "@randomFavoritesFirst": {},
+  "recentlyAdded": "Недавно Добавленные",
+  "@recentlyAdded": {},
+  "recentlyPlayed": "Недавно Прослушанные",
+  "@recentlyPlayed": {},
+  "latestReleases": "Последние Выпуски",
+  "@latestReleases": {},
+  "itemSectionsOrder": "Порядок Выбора",
+  "@itemSectionsOrder": {
+    "description": "Label for the setting that controls the order of item sections on the screens."
+  },
+  "unknown": "Неизвестно",
+  "@unknown": {},
+  "itemSectionsOrderSubtitle": "Управляет порядком объектов в разделах.",
+  "@itemSectionsOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections on the screens."
+  },
+  "genreItemSectionFilterChipOrderTitle": "Порядок Фильтров Разделов",
+  "@genreItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of item sections filter chips."
+  },
+  "genreItemSectionFilterChipOrderSubtitle": "Управляет порядком доступных фильтров в разделах.",
+  "@genreItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections filter chips."
+  },
+  "artistItemSectionFilterChipOrderTitle": "Порядок Фильтров В Разделе Треков",
+  "@artistItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of the tracks sections filter chips."
+  },
+  "artistItemSectionFilterChipOrderSubtitle": "Управляет порядком доступных фильтров в разделе треков.",
+  "@artistItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of the tracks sections filter chips."
+  },
+  "genreFilterArtistScreensSubtitle": "Когда включено, страница исполнителя (открытая со страницы жанра) будет показывать только треки того жанра, с которого вы перешли. (Всегда можно вручную убрать Фильтр Жанров, чтобы показать все треки и альбомы.)",
+  "@genreFilterArtistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreFilterArtistScreens": "Фильтр Исполнителей",
+  "@genreFilterArtistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreFilterPlaylistScreens": "Фильтр Плейлистов",
+  "@genreFilterPlaylistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "genreFilterPlaylistScreensSubtitle": "Когда включено, страница плейлиста (открытая со страницы жанра) будет показывать только треки того жанра, с которого вы перешли. (Всегда можно вручную убрать Фильтр Жанров, чтобы показать все треки.)",
+  "@genreFilterPlaylistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "genreListsInheritSorting": "Наследование Сортировки",
+  "@genreListsInheritSorting": {
+    "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "genreListsInheritSortingSubtitle": "Когда включено, страницы \"показать все\" будут наследовать сортировку и фильтры, выбранные на Экране Жанров. Если выключено, будут использоваться настройки соотвествующего раздела. Нажав на счетчик сверху Экрана Жанров всегда будет открывать полный список с настройками сортировки из библиотеки.",
+  "@genreListsInheritSortingSubtitle": {
+    "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "curatedItemsMostPlayedOfflineTooltip": "Недоступно в Оффлайн-Режиме.",
+  "@curatedItemsMostPlayedOfflineTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Offline Mode."
+  },
+  "curatedItemsNotListenedYet": "Вы не слушали ни одного трека{itemType, select, artistGenreFilter{ от этого исполнителя в этом жанре} artist{ от этого исполнителя} genre{ в этом жанре} other{}}.",
+  "@curatedItemsNotListenedYet": {
+    "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "curatedItemsNoFavorites": "Вы не добавили в любимое ни одного трека{itemType, select, artistGenreFilter{ от этого исполнителя в этом жанре} artist{ от этого исполнителя} genre{ в этом жанре} other{}}.",
+  "@curatedItemsNoFavorites": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "genreNoItems": "У вас нету {itemType, select, playlists{плейлистов} artists{исполнителей} albums{альбомов} tracks{треков} other{объектов}} в этом жанре.",
+  "@genreNoItems": {
+    "description": "Message for empty See All lists for a genre.",
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  }
 }
