@@ -1,6 +1,7 @@
 import 'package:balanced_text/balanced_text.dart';
 import 'package:finamp/components/confirmation_prompt_dialog.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/playlist_actions_menu.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -36,13 +37,13 @@ Future<void> showServerSharingPanel({required BuildContext context}) async {
           sliver: SliverList(
             delegate: SliverChildListDelegate.fixed([
               BalancedText(
-                "Sharing your server address can be useful to set up new clients that are not on the same local network as your Jellyfin server, i.e. hotel TVs, your PC at work, or a new client on your phone while you're on the go.",
+                AppLocalizations.of(context)!.serverSharingMenuDescription,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 24.0),
               BalancedText(
-                "It works by listening to server discovery requests by other clients on the local network, and then replying to those requests with the configured address of your Jellyfin server.\nIf you have both a local and public address configured, Finamp will provide both to the requesting client.",
+                AppLocalizations.of(context)!.serverSharingMenuDetails,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
@@ -81,6 +82,7 @@ class _ServerSharingMenuControlsState extends ConsumerState<ServerSharingMenuCon
       onHide: () {
         // If the app is hidden, we stop advertising the server
         toggleServerSharing(forceTo: false);
+        toggleableListTileKey = UniqueKey();
       },
       onShow: () {},
       onPause: () {},
@@ -104,7 +106,6 @@ class _ServerSharingMenuControlsState extends ConsumerState<ServerSharingMenuCon
     if (mounted) {
       setState(() {
         serverSharingEnabled = serverDiscoveryEmulationService.isSharing;
-        toggleableListTileKey = UniqueKey();
       });
     }
   }
@@ -119,8 +120,8 @@ class _ServerSharingMenuControlsState extends ConsumerState<ServerSharingMenuCon
         padding: const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
         child: const Icon(TablerIcons.access_point, size: 36.0),
       ),
-      title: serverSharingEnabled ? "Sharing Server" : "Not Sharing",
-      subtitle: serverSharingEnabled ? "Tap to Stop" : "Tap to Share",
+      title: serverSharingEnabled ? AppLocalizations.of(context)!.serverSharingMenuControlTitleSharingEnabled : AppLocalizations.of(context)!.serverSharingMenuControlTitleSharingDisabled,
+      subtitle: serverSharingEnabled ? AppLocalizations.of(context)!.serverSharingMenuControlSubtitleSharingEnabled : AppLocalizations.of(context)!.serverSharingMenuControlSubtitleSharingDisabled,
       trailing: Switch.adaptive(
         value: serverSharingEnabled,
         onChanged: (value) {
@@ -134,9 +135,8 @@ class _ServerSharingMenuControlsState extends ConsumerState<ServerSharingMenuCon
           await showDialog<ConfirmationPromptDialog>(
             context: context,
             builder: (context) => ConfirmationPromptDialog(
-              promptText:
-                  "Are you sure you want to enable server sharing even though you're in Offline Mode? This will cause Finamp to send data over the local network.*",
-              confirmButtonText: "Enable*",
+              promptText: AppLocalizations.of(context)!.serverSharingMenuConfirmationDialogText,
+              confirmButtonText: AppLocalizations.of(context)!.serverSharingMenuConfirmationDialogConfirmationButtonLabel,
               abortButtonText: MaterialLocalizations.of(context).cancelButtonLabel,
               onConfirmed: () => toggleServerSharing(),
               onAborted: () {},
@@ -163,7 +163,7 @@ class ServerSharingPanelHeader extends StatelessWidget {
       padding: const EdgeInsets.only(top: 6.0, bottom: 16.0),
       child: Center(
         child: Text(
-          "Local Network Server Sharing*",
+          AppLocalizations.of(context)!.serverSharingMenuTitle,
           style: TextStyle(
             color: Theme.of(context).textTheme.bodyLarge!.color!,
             fontSize: 18,
