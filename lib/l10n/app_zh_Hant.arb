@@ -1004,7 +1004,7 @@
       }
     }
   },
-  "playbackSpeedButtonLabel": "以 x{speed} 倍速播放",
+  "playbackSpeedButtonLabel": "x{speed} 倍速",
   "@playbackSpeedButtonLabel": {
     "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
     "placeholders": {
