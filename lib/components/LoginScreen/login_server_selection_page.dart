@@ -49,6 +49,7 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
           serverInfo.serverName = response.name;
         } else if (serverInfo.serverName != response.name) {
           serverInfo.serverName = "${serverInfo.serverName} (${response.name})";
+          serverInfo.localAddress = response.address ?? response.endpointAddress ?? serverInfo.localAddress;
         }
         // no need to filter duplicates, we're using a map
         setState(() {

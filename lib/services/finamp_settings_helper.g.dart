@@ -986,14 +986,6 @@ extension FinampSetters on FinampSettingsHelper {
     ).put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setServerSharingEnabled(bool newServerSharingEnabled) {
-    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.serverSharingEnabled = newServerSharingEnabled;
-    Hive.box<FinampSettings>(
-      "FinampSettings",
-    ).put("FinampSettings", finampSettingsTemp);
-  }
-
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -1352,8 +1344,6 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       finampSettingsProvider.select((value) => value.requireValue.sleepTimer);
   ProviderListenable<bool> get clearQueueOnStopEvent => finampSettingsProvider
       .select((value) => value.requireValue.clearQueueOnStopEvent);
-  ProviderListenable<bool> get serverSharingEnabled => finampSettingsProvider
-      .select((value) => value.requireValue.serverSharingEnabled);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider.select(
         (value) => value.requireValue.downloadTranscodingProfile,

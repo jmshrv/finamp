@@ -87,7 +87,7 @@ class MusicScreenDrawer extends StatelessWidget {
                         onTap: () => Navigator.of(context).pushNamed(LogsScreen.routeName),
                       ),
                       ListTile(
-                        leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(TablerIcons.share)),
+                        leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(TablerIcons.access_point)),
                         title: Text("Share Server*"),
                         onTap: () => showServerSharingPanel(context: context),
                       ),

@@ -368,7 +368,7 @@ Future<void> _setupPlaybackServices() async {
   GetIt.instance.registerSingleton(queueService);
   GetIt.instance.registerSingleton(PlaybackHistoryService());
   GetIt.instance.registerSingleton(AudioServiceHelper());
-  GetIt.instance.registerSingleton(JellyfinServerDiscoveryEmulationService());
+  GetIt.instance.registerSingleton(ServerDiscoveryEmulationService());
 
   // Begin to restore queue
   unawaited(queueService.performInitialQueueLoad().catchError((dynamic x) => GlobalSnackbar.error(x)));

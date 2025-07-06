@@ -10,7 +10,7 @@ import 'package:logging/logging.dart';
 /// Used for discovering Jellyfin servers on the local network
 /// https://jellyfin.org/docs/general/networking/#port-bindings
 /// For some reason it's always being referred to as "client discovery" in the Jellyfin docs, even though we're actually discovering servers
-class JellyfinServerDiscoveryEmulationService {
+class ServerDiscoveryEmulationService {
   static final _serverDiscoveryEmulationLogger = Logger("JellyfinServerDiscoveryEmulation");
 
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
@@ -18,18 +18,7 @@ class JellyfinServerDiscoveryEmulationService {
   late RawDatagramSocket socket;
   bool isSharing = false;
 
-  JellyfinServerDiscoveryEmulationService() {
-    // listen for Finamp settings change and enable/disable server discovery emulation
-    FinampSettingsHelper.finampSettingsListener.addListener(() {
-      if (isSharing != FinampSettingsHelper.finampSettings.serverSharingEnabled) {
-        if (FinampSettingsHelper.finampSettings.serverSharingEnabled) {
-          advertiseServer();
-        } else {
-          dispose();
-        }
-      }
-    });
-  }
+  ServerDiscoveryEmulationService();
 
   void advertiseServer() async {
     isSharing = true;
@@ -56,16 +45,31 @@ class JellyfinServerDiscoveryEmulationService {
               "Received discovery message from ${datagram.address}:${datagram.port}",
             );
             // Respond with the server's information
-            final response = ClientDiscoveryResponse(
-              address: _finampUserHelper.currentUser?.baseURL,
-              endpointAddress: _finampUserHelper.currentUser?.baseURL,
+            final responseActiveOrPublicAddress = ClientDiscoveryResponse(
+              address: _finampUserHelper.currentUser?.publicAddress ?? _finampUserHelper.currentUser?.baseURL,
+              endpointAddress: _finampUserHelper.currentUser?.publicAddress ?? _finampUserHelper.currentUser?.baseURL,
               id: _finampUserHelper.currentUser?.serverId,
               name: "Shared by Finamp",
             );
-            final responseMessage = jsonEncode(response);
-            _serverDiscoveryEmulationLogger.finest("Sending discovery response: $responseMessage");
-            socket.send(utf8.encode(responseMessage), datagram.address, datagram.port);
+            final responseMessageActiveOrPublicAddress = jsonEncode(responseActiveOrPublicAddress);
+            _serverDiscoveryEmulationLogger.finest("Sending discovery response: $responseMessageActiveOrPublicAddress");
+            socket.send(utf8.encode(responseMessageActiveOrPublicAddress), datagram.address, datagram.port);
             _serverDiscoveryEmulationLogger.fine("Sent discovery response to ${datagram.address}:${datagram.port}");
+
+            if (_finampUserHelper.currentUser?.localAddress != null) {
+              final responseLocalAddress = ClientDiscoveryResponse(
+                address: _finampUserHelper.currentUser?.localAddress,
+                endpointAddress: _finampUserHelper.currentUser?.localAddress,
+                id: _finampUserHelper.currentUser?.serverId,
+                name: "Shared by Finamp",
+              );
+              final responseMessageLocalAddress = jsonEncode(responseLocalAddress);
+              _serverDiscoveryEmulationLogger.finest(
+                "Sending discovery response for local address: $responseMessageLocalAddress",
+              );
+              socket.send(utf8.encode(responseMessageLocalAddress), datagram.address, datagram.port);
+              _serverDiscoveryEmulationLogger.fine("Sent discovery response to ${datagram.address}:${datagram.port}");
+            }
           }
         }
       }

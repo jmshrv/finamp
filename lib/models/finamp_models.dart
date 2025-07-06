@@ -216,7 +216,6 @@ class DefaultSettings {
   static const playlistTracksSortOrder = SortOrder.ascending;
   static const genreFilterPlaylists = false;
   static const clearQueueOnStopEvent = false;
-  static const serverSharingEnabledDefault = false;
 }
 
 @HiveType(typeId: 28)
@@ -333,7 +332,6 @@ class FinampSettings {
     this.playlistTracksSortOrder = DefaultSettings.playlistTracksSortOrder,
     this.genreFilterPlaylists = DefaultSettings.genreFilterPlaylists,
     this.clearQueueOnStopEvent = DefaultSettings.clearQueueOnStopEvent,
-    this.serverSharingEnabled = DefaultSettings.serverSharingEnabledDefault,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -701,9 +699,6 @@ class FinampSettings {
 
   @HiveField(117, defaultValue: DefaultSettings.clearQueueOnStopEvent)
   bool clearQueueOnStopEvent;
-
-  @HiveField(118, defaultValue: DefaultSettings.serverSharingEnabledDefault)
-  bool serverSharingEnabled;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
