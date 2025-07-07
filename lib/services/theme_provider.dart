@@ -160,7 +160,7 @@ class FinampThemeFromImage extends _$FinampThemeFromImage {
   ColorScheme build(ThemeRequestFromImage request) {
     var brightness = ref.watch(brightnessProvider);
     if (request.image == null) {
-      return getDefaultTheme(brightness);
+      return getGreyTheme(brightness);
     }
     Future.sync(() async {
       var image = await _fetchImage(request.image!);

@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_list.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
+import 'package:finamp/components/toggleable_list_tile.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/components/menu_item_info_header.dart';
 import 'package:finamp/models/jellyfin_models.dart';
@@ -42,7 +43,7 @@ Future<void> showPlaylistActionsMenu({
         Consumer(
           builder: (context, ref, child) {
             bool isFavorite = ref.watch(isFavoriteProvider(item));
-            return ToggleableListTile(
+            return PlaylistActionsPlaylistListTile(
               title: AppLocalizations.of(context)!.favorites,
               leading: AspectRatio(
                 aspectRatio: 1.0,
@@ -132,8 +133,8 @@ class PlaylistActionsMenuHeader extends ConsumerWidget {
   }
 }
 
-class ToggleableListTile extends ConsumerStatefulWidget {
-  const ToggleableListTile({
+class PlaylistActionsPlaylistListTile extends ConsumerStatefulWidget {
+  const PlaylistActionsPlaylistListTile({
     super.key,
     required this.title,
     this.subtitle,
@@ -142,7 +143,6 @@ class ToggleableListTile extends ConsumerStatefulWidget {
     this.negativeIcon,
     required this.initialState,
     required this.onToggle,
-    this.trailing,
     this.enabled = true,
     this.forceLoading = false,
     this.tapFeedback = true,
@@ -153,7 +153,6 @@ class ToggleableListTile extends ConsumerStatefulWidget {
   final Widget leading;
   final IconData? positiveIcon;
   final IconData? negativeIcon;
-  final Widget? trailing;
   final bool initialState;
   final Future<bool> Function(bool currentState) onToggle;
   final bool enabled;
@@ -161,23 +160,21 @@ class ToggleableListTile extends ConsumerStatefulWidget {
   final bool tapFeedback;
 
   @override
-  ConsumerState<ToggleableListTile> createState() => _ToggleableListTileState();
+  ConsumerState<PlaylistActionsPlaylistListTile> createState() => _PlaylistActionsPlaylistListTileState();
 }
 
-class _ToggleableListTileState extends ConsumerState<ToggleableListTile> {
+class _PlaylistActionsPlaylistListTileState extends ConsumerState<PlaylistActionsPlaylistListTile> {
   bool isLoading = false;
   bool currentState = false;
 
   @override
   void initState() {
     super.initState();
-    assert((widget.positiveIcon != null && widget.negativeIcon != null) || widget.trailing != null,
-        "Either positiveIcon and negativeIcon must be provided, or trailing must be provided.");
     currentState = widget.initialState;
   }
 
   @override
-  void didUpdateWidget(ToggleableListTile oldWidget) {
+  void didUpdateWidget(PlaylistActionsPlaylistListTile oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.forceLoading) {
       currentState = widget.initialState;
@@ -186,80 +183,33 @@ class _ToggleableListTileState extends ConsumerState<ToggleableListTile> {
 
   @override
   Widget build(BuildContext context) {
-    var themeColor = Theme.of(context).colorScheme.primary;
-    return Padding(
-      padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0, bottom: 4.0),
-      child: Container(
-        decoration: ShapeDecoration(
-          color: themeColor.withOpacity(currentState ? 0.3 : 0.1),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-        clipBehavior: Clip.antiAlias,
-        padding: EdgeInsets.zero,
-        child: ListTile(
-          enableFeedback: true,
-          enabled: widget.enabled,
-          leading: widget.leading,
-          title: Text(widget.title, maxLines: 2, overflow: TextOverflow.ellipsis),
-          trailing: Wrap(
-            alignment: WrapAlignment.end,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              if (widget.subtitle != null) Text(widget.subtitle!, style: Theme.of(context).textTheme.bodySmall),
-              SizedBox(
-                height: 48.0,
-                width: 16.0,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 12.0),
-                  child: VerticalDivider(
-                    color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
-                    thickness: 1.5,
-                    indent: 8.0,
-                    endIndent: 8.0,
-                    width: 1.0,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 12.0),
-                child: isLoading || widget.forceLoading
-                    ? const CircularProgressIndicator()
-                    : widget.trailing ?? Icon(
-                        currentState == true ? widget.positiveIcon : widget.negativeIcon,
-                        size: 36.0,
-                        color: themeColor,
-                      ),
-              ),
-            ],
-          ),
-          onTap: widget.forceLoading || isLoading
-              ? null
-              : () async {
-                  FeedbackHelper.feedback(FeedbackType.selection);
-                  try {
-                    setState(() {
-                      isLoading = true;
-                    });
-                    final result = await widget.onToggle(currentState);
-                    if (widget.tapFeedback) {
-                      FeedbackHelper.feedback(FeedbackType.heavy);
-                    }
-                    setState(() {
-                      isLoading = false;
-                      currentState = result;
-                    });
-                  } catch (e) {
-                    setState(() {
-                      isLoading = false;
-                    });
-                    GlobalSnackbar.error(e);
-                  }
-                },
-          contentPadding: EdgeInsets.zero,
-          minVerticalPadding: 0,
-          // visualDensity: const VisualDensity(horizontal: -4.0, vertical: -4.0),
-        ),
-      ),
+    return ToggleableListTile(
+      leading: widget.leading,
+      title: widget.title,
+      subtitle: widget.subtitle,
+      state: currentState,
+      onToggle: (bool newState) async {
+        setState(() {
+          isLoading = true;
+        });
+        try {
+          await widget.onToggle(newState);
+          setState(() {
+            isLoading = false;
+            currentState = newState;
+          });
+        } catch (e) {
+          setState(() {
+            isLoading = false;
+          });
+          GlobalSnackbar.error(e);
+        }
+        return currentState;
+      },
+      isLoading: isLoading,
+      icon: currentState ? widget.positiveIcon : widget.negativeIcon,
+      enabled: widget.enabled,
+      tapFeedback: widget.tapFeedback,
     );
   }
 }

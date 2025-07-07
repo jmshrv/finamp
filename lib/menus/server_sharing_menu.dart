@@ -1,16 +1,16 @@
 import 'package:balanced_text/balanced_text.dart';
 import 'package:finamp/components/confirmation_prompt_dialog.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
+import 'package:finamp/components/toggleable_list_tile.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/playlist_actions_menu.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
-import 'package:finamp/services/server_discovery_emulation_service.dart';
+import 'package:finamp/services/server_client_discovery_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:get_it/get_it.dart';
 
 const serverSharingPanelRouteName = "/server-sharing-panel";
 
@@ -66,7 +66,7 @@ class ServerSharingMenuControls extends ConsumerStatefulWidget {
 }
 
 class _ServerSharingMenuControlsState extends ConsumerState<ServerSharingMenuControls> {
-  final serverDiscoveryEmulationService = GetIt.instance<ServerDiscoveryEmulationService>();
+  final serverDiscoveryEmulationService = JellyfinServerClientDiscovery();
 
   late bool serverSharingEnabled;
   late Key toggleableListTileKey;
@@ -81,7 +81,7 @@ class _ServerSharingMenuControlsState extends ConsumerState<ServerSharingMenuCon
       onRestart: () {},
       onHide: () {
         // If the app is hidden, we stop advertising the server
-        toggleServerSharing(forceTo: false);
+        setServerSharing(false);
         toggleableListTileKey = UniqueKey();
       },
       onShow: () {},
@@ -93,21 +93,21 @@ class _ServerSharingMenuControlsState extends ConsumerState<ServerSharingMenuCon
   void dispose() {
     serverSharingEnabled = false;
     serverDiscoveryEmulationService.dispose();
-    toggleableListTileKey = UniqueKey();
     super.dispose();
   }
 
-  void toggleServerSharing({bool? forceTo}) {
-    if (forceTo == false || (forceTo == null && serverSharingEnabled)) {
-      serverDiscoveryEmulationService.dispose();
-    } else {
+  bool setServerSharing(bool newState) {
+    if (newState) {
       serverDiscoveryEmulationService.advertiseServer();
+    } else {
+      serverDiscoveryEmulationService.stopAdvertising();
     }
     if (mounted) {
       setState(() {
-        serverSharingEnabled = serverDiscoveryEmulationService.isSharing;
+        serverSharingEnabled = serverDiscoveryEmulationService.isAdvertising;
       });
     }
+    return serverDiscoveryEmulationService.isAdvertising;
   }
 
   @override
@@ -115,7 +115,6 @@ class _ServerSharingMenuControlsState extends ConsumerState<ServerSharingMenuCon
     final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
 
     return ToggleableListTile(
-      key: toggleableListTileKey,
       leading: Padding(
         padding: const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
         child: const Icon(TablerIcons.access_point, size: 36.0),
@@ -125,11 +124,11 @@ class _ServerSharingMenuControlsState extends ConsumerState<ServerSharingMenuCon
       trailing: Switch.adaptive(
         value: serverSharingEnabled,
         onChanged: (value) {
-          toggleServerSharing(forceTo: value);
+          setServerSharing(value);
         },
         padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: -8.0),
       ),
-      initialState: serverSharingEnabled,
+      state: serverSharingEnabled,
       onToggle: (bool currentState) async {
         if (!currentState && isOffline) {
           await showDialog<ConfirmationPromptDialog>(
@@ -138,15 +137,14 @@ class _ServerSharingMenuControlsState extends ConsumerState<ServerSharingMenuCon
               promptText: AppLocalizations.of(context)!.serverSharingMenuConfirmationDialogText,
               confirmButtonText: AppLocalizations.of(context)!.serverSharingMenuConfirmationDialogConfirmationButtonLabel,
               abortButtonText: MaterialLocalizations.of(context).cancelButtonLabel,
-              onConfirmed: () => toggleServerSharing(),
+              onConfirmed: () => setServerSharing(true),
               onAborted: () {},
             ),
           );
           return serverSharingEnabled;
         } else {
-          toggleServerSharing();
+          return setServerSharing(!currentState);
         }
-        return !currentState;
       },
     );
   }

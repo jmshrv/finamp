@@ -34,12 +34,15 @@ Future<void> showThemedBottomSheet({
   FeedbackHelper.feedback(FeedbackType.heavy);
   var ref = GetIt.instance<ProviderContainer>();
   var themeInfo = ref.read(localThemeInfoProvider);
+  bool useDefaultTheme = false;
   ThemeImage? themeImage;
   // If we have a usable theme image for our item, propagate this information
   if ((themeInfo?.largeThemeImage ?? false) && themeInfo?.item == item) {
     themeImage = ref.read(localImageProvider);
+  } else if (item == null) {
+    useDefaultTheme = true;
   }
-  await showModalBottomSheet(
+  await showModalBottomSheet<void>(
     context: context,
     backgroundColor: (Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black).withOpacity(0.9),
     shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20.0))),
@@ -59,9 +62,10 @@ Future<void> showThemedBottomSheet({
     builder: (BuildContext context) {
       return ProviderScope(
         overrides: [
-          if (themeImage != null) localImageProvider.overrideWithValue(themeImage),
-          if (themeImage != null) localThemeInfoProvider.overrideWithValue(themeInfo),
-          if (themeImage == null && item != null) localThemeInfoProvider.overrideWithValue(ThemeInfo(item, useIsolate: false)),
+          if (useDefaultTheme) localThemeProvider.overrideWithValue(getDefaultTheme(Theme.of(context).brightness)),
+          if (!useDefaultTheme && themeImage != null) localImageProvider.overrideWithValue(themeImage),
+          if (!useDefaultTheme && themeImage != null) localThemeInfoProvider.overrideWithValue(themeInfo),
+          if (!useDefaultTheme && themeImage == null && item != null) localThemeInfoProvider.overrideWithValue(ThemeInfo(item, useIsolate: false)),
         ],
         child: ThemedBottomSheet(
           key: ValueKey((item?.id?.raw ?? "") + routeName),

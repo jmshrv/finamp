@@ -7,6 +7,7 @@ import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/view_selector.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/server_client_discovery_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
@@ -28,6 +29,13 @@ final loginNavigatorKey = GlobalKey<NavigatorState>();
 class _LoginFlowState extends State<LoginFlow> {
   ServerState serverState = ServerState(discoveredServers: {});
   ConnectionState connectionState = ConnectionState();
+
+  @override
+  void dispose() {
+    serverState.clientDiscoveryHandler.dispose();
+    serverState.connectionTestDebounceTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +98,7 @@ class _LoginFlowState extends State<LoginFlow> {
                   onServerSelected: (PublicSystemInfoResult server, String baseUrl) {
                     serverState.selectedServer = server;
                     serverState.baseUrl = baseUrl;
-                    serverState.clientDiscoveryHandler.dispose();
+                    serverState.clientDiscoveryHandler.stopDiscovery();
                     loginNavigatorKey.currentState!.pushNamed(LoginUserSelectionPage.routeName);
                   },
                 ),
@@ -309,57 +317,3 @@ class ConnectionState {
   ConnectionState({this.isConnected = false, this.isAuthenticating = false, this.quickConnectState, this.selectedUser});
 }
 
-/// Used for discovering Jellyfin servers on the local network
-/// https://jellyfin.org/docs/general/networking/#port-bindings
-/// For some reason it's always being referred to as "client discovery" in the Jellyfin docs, even though we're actually discovering servers
-class JellyfinServerClientDiscovery {
-  static final _clientDiscoveryLogger = Logger("JellyfinServerClientDiscovery");
-
-  RawDatagramSocket? _socket;
-  bool _isDisposed = false;
-
-  void discoverServers(void Function(ClientDiscoveryResponse response) onServerFound) async {
-    _isDisposed = false;
-
-    _socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
-
-    // We have to use ? throughout since _socket isn't final, although at this
-    // point in the code it should never be null
-
-    _socket?.broadcastEnabled = true; // important to allow sending to broadcast address
-    _socket?.multicastHops = 5; // to account for weird network setups
-
-    _socket?.listen((event) {
-      if (event == RawSocketEvent.read) {
-        final datagram = _socket?.receive();
-        if (datagram != null) {
-          _clientDiscoveryLogger.finest("Received datagram: ${utf8.decode(datagram.data)}");
-          final response = ClientDiscoveryResponse.fromJson(
-            jsonDecode(utf8.decode(datagram.data)) as Map<String, dynamic>,
-          );
-          _clientDiscoveryLogger.fine(
-            "Received discovery response from ${datagram.address}:${datagram.port}: ${jsonEncode(response)}",
-          );
-          onServerFound(response);
-        }
-      }
-    });
-
-    const message =
-        "who is JellyfinServer?"; // doesn't seem to be case sensitive, but the Kotlin SDK uses this capitalization
-    final broadcastAddress = InternetAddress("255.255.255.255"); // UDP broadcast address
-    const destinationPort = 7359; // Jellyfin client discovery port
-
-    // Send discovery message repeatedly to scan for local servers (because UDP is unreliable)
-    do {
-      _clientDiscoveryLogger.fine("Sending discovery message");
-      _socket?.send(message.codeUnits, broadcastAddress, destinationPort);
-      await Future<void>.delayed(const Duration(milliseconds: 1500));
-    } while (!_isDisposed);
-  }
-
-  void dispose() {
-    _isDisposed = true;
-    _socket?.close();
-  }
-}
