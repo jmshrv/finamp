@@ -13,6 +13,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:finamp/menus/server_sharing_menu.dart';
+import 'package:finamp/menus/quick_connect_authorization_menu.dart';
 
 class MusicScreenDrawer extends StatelessWidget {
   const MusicScreenDrawer({super.key});
@@ -90,6 +91,11 @@ class MusicScreenDrawer extends StatelessWidget {
                         leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(TablerIcons.access_point)),
                         title: Text(AppLocalizations.of(context)!.serverSharingMenuButtonTitle),
                         onTap: () => showServerSharingPanel(context: context),
+                      ),
+                      ListTile(
+                        leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(TablerIcons.lock_bolt)),
+                        title: Text(AppLocalizations.of(context)!.quickConnectAuthorizationMenuButtonTitle),
+                        onTap: () => showQuickConnectAuthorizationMenu(context: context),
                       ),
                       ListTile(
                         leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(Icons.auto_delete)),

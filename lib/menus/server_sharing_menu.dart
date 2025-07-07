@@ -1,9 +1,10 @@
 import 'package:balanced_text/balanced_text.dart';
+import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/confirmation_prompt_dialog.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/components/toggleable_list_tile.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:finamp/menus/playlist_actions_menu.dart';
+import 'package:finamp/menus/quick_connect_authorization_menu.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/server_client_discovery_service.dart';
@@ -20,7 +21,7 @@ Future<void> showServerSharingPanel({required BuildContext context}) async {
   await showThemedBottomSheet(
     context: context,
     routeName: serverSharingPanelRouteName,
-    minDraggableHeight: 0.4,
+    minDraggableHeight: 0.45,
     buildSlivers: (context) {
       final menuEntries = [ServerSharingMenuControls()];
 
@@ -50,9 +51,22 @@ Future<void> showServerSharingPanel({required BuildContext context}) async {
             ]),
           ),
         ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: SimpleButton(
+              text: AppLocalizations.of(context)!.quickConnectAuthorizationMenuPrompt,
+              icon: TablerIcons.lock_bolt,
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await showQuickConnectAuthorizationMenu(context: context);
+              },
+            ),
+          ),
+        ),
         SliverPadding(padding: EdgeInsets.only(bottom: 40.0)),
       ];
-      var stackHeight = MediaQuery.sizeOf(context).height * 0.4;
+      var stackHeight = MediaQuery.sizeOf(context).height * 0.45;
       return (stackHeight, menu);
     },
   );
