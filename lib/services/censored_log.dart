@@ -71,22 +71,23 @@ extension CensoredMessage on LogRecord {
           "TEMP_HOST",
         );
 
-        // Replace the host and port values in network errors
-        workingLogString = workingLogString.replaceAllMapped(
-          RegExp(r"(host: )([^,]+)(, port: )(\d+)", caseSensitive: false),
-          (match) => "${match[1]}HOST${match[3]}PORT",
-        );
-
-        workingLogString = workingLogString.replaceAllMapped(
-          RegExp(r"(Failed host lookup: ')([^']+)(')", caseSensitive: false),
-          (match) => "${match[1]}HOST${match[3]}",
-        );
-
-        workingLogString = workingLogString.replaceAllMapped(
-          RegExp(r"(address = )([^,]+)(, port = )(\d+)", caseSensitive: false),
-          (match) => "${match[1]}HOST${match[3]}PORT",
-        );
       }
+      
+      // Replace the host and port values in network errors
+      workingLogString = workingLogString.replaceAllMapped(
+        RegExp(r"(host: )([^,]+)(, port: )(\d+)", caseSensitive: false),
+        (match) => "${match[1]}HOST${match[3]}PORT",
+      );
+
+      workingLogString = workingLogString.replaceAllMapped(
+        RegExp(r"(Failed host lookup: ')([^']+)(')", caseSensitive: false),
+        (match) => "${match[1]}HOST${match[3]}",
+      );
+
+      workingLogString = workingLogString.replaceAllMapped(
+        RegExp(r"(address = )([^,]+)(, port = )(\d+)", caseSensitive: false),
+        (match) => "${match[1]}HOST${match[3]}PORT",
+      );
     }
 
     workingLogString = workingLogString.replaceAll("\n", "\n\t\t");
