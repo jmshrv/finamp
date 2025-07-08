@@ -1127,25 +1127,30 @@ class JellyfinApiHelper {
               return false;
             });
       });
-}
 
-/// Verify that we are in an appropriate location to make API calls.
-/// This should only be called inside assert() to prevent running in release mode.
-bool _verifyCallable() {
-  if (FinampSettingsHelper.finampSettings.isOffline) {
+  /// Verify that we are in an appropriate location to make API calls.
+  /// This should only be called inside assert() to prevent running in release mode.
+  bool _verifyCallable() {
+    if (FinampSettingsHelper.finampSettings.isOffline) {
+      return false;
+    }
+    // Verify that all calls to jellyfin occur either in background async calls,
+    // initState methods, or providers.
+    if ([
+      SchedulerPhase.idle,
+      SchedulerPhase.postFrameCallbacks,
+      SchedulerPhase.midFrameMicrotasks,
+    ].contains(SchedulerBinding.instance.schedulerPhase)) {
+      return true;
+    }
+    var stack = StackTrace.current.toString();
+    if (stack.contains('ProviderContainer.readProviderElement') ||
+        stack.contains('initState ') ||
+        stack.contains('didUpdateWidget') ||
+        stack.contains('PagingController.notifyPageRequestListeners')) {
+      return true;
+    }
+    _jellyfinApiHelperLogger.warning("_verifyCallable failed in phase ${SchedulerBinding.instance.schedulerPhase}");
     return false;
   }
-  // Verify that all calls to jellyfin occur either in background async calls,
-  // initState methods, or providers.
-  if ([SchedulerPhase.idle, SchedulerPhase.postFrameCallbacks].contains(SchedulerBinding.instance.schedulerPhase)) {
-    return true;
-  }
-  var stack = StackTrace.current.toString();
-  if (stack.contains('ProviderContainer.readProviderElement') ||
-      stack.contains('initState ') ||
-      stack.contains('didUpdateWidget') ||
-      stack.contains('PagingController.notifyPageRequestListeners')) {
-    return true;
-  }
-  return false;
 }

@@ -137,7 +137,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
 
   // Define heights for each submenu state
   double closedHeight = 0;
-  double speedMenuHeight = 120;
+  double speedMenuHeight = 140;
   double sleepTimerMenuHeight = 265;
 
   @override

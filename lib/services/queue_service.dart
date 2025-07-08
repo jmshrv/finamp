@@ -58,6 +58,7 @@ class QueueService {
   FinampPlaybackOrder _playbackOrder = FinampPlaybackOrder.linear;
   FinampLoopMode _loopMode = FinampLoopMode.none;
   double _playbackSpeed = 1.0;
+  double _playbackPitch = 1.0;
 
   final _currentTrackStream = BehaviorSubject<FinampQueueItem?>.seeded(null);
   final _queueStream = BehaviorSubject<FinampQueueInfo?>.seeded(null);
@@ -65,6 +66,7 @@ class QueueService {
   final _playbackOrderStream = BehaviorSubject<FinampPlaybackOrder>.seeded(FinampPlaybackOrder.linear);
   final _loopModeStream = BehaviorSubject<FinampLoopMode>.seeded(FinampLoopMode.none);
   final _playbackSpeedStream = BehaviorSubject<double>.seeded(1.0);
+  final _playbackPitchStream = BehaviorSubject<double>.seeded(1.0);
 
   // external queue state
 
@@ -888,9 +890,22 @@ class QueueService {
     _audioHandler.setSpeed(speed);
     FinampSetters.setPlaybackSpeed(playbackSpeed);
     _queueServiceLogger.fine("Playback speed set to ${FinampSettingsHelper.finampSettings.playbackSpeed}");
+    if (FinampSettingsHelper.finampSettings.syncPlaybackSpeedAndPitch) {
+      playbackPitch = speed;
+    }
   }
 
   double get playbackSpeed => _playbackSpeed;
+
+  set playbackPitch(double pitch) {
+    _playbackPitch = pitch;
+    _playbackPitchStream.add(pitch);
+    _audioHandler.setPitch(pitch);
+    FinampSetters.setPlaybackPitch(playbackPitch);
+    _queueServiceLogger.fine("Playback pitch set to ${FinampSettingsHelper.finampSettings.playbackPitch}");
+  }
+
+  double get playbackPitch => _playbackPitch;
 
   set loopMode(FinampLoopMode mode) {
     _loopMode = mode;

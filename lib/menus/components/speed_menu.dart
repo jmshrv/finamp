@@ -134,6 +134,24 @@ class _SpeedMenuState extends State<SpeedMenu> {
     refreshInputText();
   }
 
+  void savePitch(double value) {
+    final valueDouble = (min(max(value, 0), 5) * 100).roundToDouble() / 100;
+
+    setState(() {
+      _queueService.playbackPitch = valueDouble;
+    });
+  }
+
+  void updatePitchSyncing(bool value) {
+    if (value) {
+      FinampSetters.setSyncPlaybackSpeedAndPitch(value);
+      savePitch(_queueService.playbackSpeed);
+    } else {
+      savePitch(1.0);
+    }
+    FinampSetters.setSyncPlaybackSpeedAndPitch(value);
+  }
+
   void refreshInputText() {
     _textController.text = FinampSettingsHelper.finampSettings.playbackSpeed.toString();
   }
@@ -244,6 +262,42 @@ class _SpeedMenuState extends State<SpeedMenu> {
                             saveSpeedInput(parsed);
                           }
                         },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, right: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          updatePitchSyncing(!FinampSettingsHelper.finampSettings.syncPlaybackSpeedAndPitch);
+                        },
+                        child: IntrinsicWidth(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  AppLocalizations.of(context)!.syncPlaybackSpeedAndPitchLabel,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  overflow: TextOverflow.visible,
+                                ),
+                              ),
+                              Checkbox.adaptive(
+                                value: ref.watch(finampSettingsProvider.syncPlaybackSpeedAndPitch),
+                                onChanged: (val) {
+                                  updatePitchSyncing(val ?? false);
+                                },
+                                visualDensity: VisualDensity.compact,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ],

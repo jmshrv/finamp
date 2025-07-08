@@ -2561,6 +2561,10 @@
   "@sleepTimerStartTimer" : {
     "description": "Label for the button that starts the sleep timer"
   },
+  "syncPlaybackSpeedAndPitchLabel": "Sync Speed & Pitch",
+  "@syncPlaybackSpeedAndPitchLabel": {
+    "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
+  },
   "serverSharingMenuTitle": "Local Network Server Sharing",
   "@serverSharingMenuTitle": {
     "description": "Title for the server sharing menu that allows the user to share their server address with other devices on the local network"

@@ -155,6 +155,12 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
         playbackSpeed: fields[56] == null
             ? 1.0
             : (fields[56] as num).toDouble(),
+        playbackPitch: fields[118] == null
+            ? 1.0
+            : (fields[118] as num).toDouble(),
+        syncPlaybackSpeedAndPitch: fields[119] == null
+            ? false
+            : fields[119] as bool,
         tabOrder: fields[22] == null
             ? [
                 TabContentType.albums,
@@ -385,7 +391,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(111)
+      ..writeByte(113)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -607,7 +613,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(116)
       ..write(obj.sleepTimer)
       ..writeByte(117)
-      ..write(obj.clearQueueOnStopEvent);
+      ..write(obj.clearQueueOnStopEvent)
+      ..writeByte(118)
+      ..write(obj.playbackPitch)
+      ..writeByte(119)
+      ..write(obj.syncPlaybackSpeedAndPitch);
   }
 
   @override

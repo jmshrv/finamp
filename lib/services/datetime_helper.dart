@@ -14,7 +14,7 @@ class ReleaseDateHelper {
 
     final premiereDate = baseItem?.premiereDate != null ? DateTime.parse(baseItem!.premiereDate!) : null;
     if (premiereDate == null) {
-      return null;
+      return baseItem?.productionYear?.toString();
     }
     switch (format) {
       case ReleaseDateFormat.year:
