@@ -15,7 +15,7 @@ class ToggleableListTile extends ConsumerWidget {
     this.trailing,
     this.isLoading = false,
     this.enabled = true,
-    this.tapFeedback = true,
+    this.confirmationFeedback = true,
   });
 
   final String title;
@@ -24,10 +24,10 @@ class ToggleableListTile extends ConsumerWidget {
   final IconData? icon;
   final Widget? trailing;
   final bool state;
-  final Future<bool> Function(bool state) onToggle;
+  final Future<void> Function(bool state) onToggle;
   final bool isLoading;
   final bool enabled;
-  final bool tapFeedback;
+  final bool confirmationFeedback;
 
 
   @override
@@ -86,7 +86,7 @@ class ToggleableListTile extends ConsumerWidget {
                   FeedbackHelper.feedback(FeedbackType.selection);
                   try {
                     await onToggle(state);
-                    if (tapFeedback) {
+                    if (confirmationFeedback) {
                       FeedbackHelper.feedback(FeedbackType.heavy);
                     }
                   } catch (e) {

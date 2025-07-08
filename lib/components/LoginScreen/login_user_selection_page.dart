@@ -1,8 +1,10 @@
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/LoginScreen/login_server_selection_page.dart';
 import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart' hide ConnectionState;
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
@@ -197,15 +199,23 @@ class QuickConnectSection extends StatelessWidget {
         ? Column(
             children: [
               Text(AppLocalizations.of(context)!.loginFlowQuickConnectPrompt, textAlign: TextAlign.center),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: SelectableText(
-                  connectionState.quickConnectState?.code ?? "",
-                  style: Theme.of(
-                    context,
-                  ).textTheme.displaySmall!.copyWith(fontFamily: "monospace", letterSpacing: 5.0),
-                  semanticsLabel: connectionState.quickConnectState?.code?.split("").join(" "),
-                  textAlign: TextAlign.center,
+              GestureDetector(
+                onTap: () async {
+                  if (connectionState.quickConnectState?.code != null) {
+                    FeedbackHelper.feedback(FeedbackType.selection);
+                    await Clipboard.setData(ClipboardData(text: connectionState.quickConnectState!.code!));
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: SelectableText(
+                    connectionState.quickConnectState?.code ?? "",
+                    style: Theme.of(
+                      context,
+                    ).textTheme.displaySmall!.copyWith(fontFamily: "monospace", letterSpacing: 5.0),
+                    semanticsLabel: connectionState.quickConnectState?.code?.split("").join(" "),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
               Padding(

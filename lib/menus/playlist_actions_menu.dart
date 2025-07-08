@@ -204,12 +204,11 @@ class _PlaylistActionsPlaylistListTileState extends ConsumerState<PlaylistAction
           });
           GlobalSnackbar.error(e);
         }
-        return currentState;
       },
       isLoading: isLoading,
       icon: currentState ? widget.positiveIcon : widget.negativeIcon,
       enabled: widget.enabled,
-      tapFeedback: widget.tapFeedback,
+      confirmationFeedback: widget.tapFeedback,
     );
   }
 }

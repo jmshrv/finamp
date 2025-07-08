@@ -254,7 +254,6 @@ class OutputSelectorTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ToggleableListTile(
-      key: ValueKey(routeInfo.name),
       isLoading: isLoading,
       title: routeInfo.name,
       subtitle: (routeInfo.isDeviceSpeaker
@@ -280,8 +279,9 @@ class OutputSelectorTile extends StatelessWidget {
         final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
         onSelect?.call(loading: true, value: currentState);
         await audioHandler.setOutputToRoute(routeInfo);
-        return true;
+        onSelect?.call(loading: false, value: true);
       },
+      confirmationFeedback: false,
       enabled: true,
     );
   }

@@ -49,6 +49,9 @@ class MusicScreenDrawer extends StatelessWidget {
                     ],
                   ),
                 ),
+                const OfflineModeSwitchListTile(),
+                const OfflineModeStatusLabel(),
+                Divider(),
                 ListTile(
                   leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(Icons.file_download)),
                   title: Text(AppLocalizations.of(context)!.downloads),
@@ -59,8 +62,11 @@ class MusicScreenDrawer extends StatelessWidget {
                   title: Text(AppLocalizations.of(context)!.playbackHistory),
                   onTap: () => Navigator.of(context).pushNamed(PlaybackHistoryScreen.routeName),
                 ),
-                const OfflineModeSwitchListTile(),
-                const OfflineModeStatusLabel(),
+                ListTile(
+                  leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(Icons.auto_delete)),
+                  title: Text(AppLocalizations.of(context)!.queuesScreen),
+                  onTap: () => Navigator.of(context).pushNamed(QueueRestoreScreen.routeName),
+                ),
                 const Divider(),
               ]),
             ),
@@ -86,21 +92,6 @@ class MusicScreenDrawer extends StatelessWidget {
                         leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(Icons.warning)),
                         title: Text(AppLocalizations.of(context)!.logs),
                         onTap: () => Navigator.of(context).pushNamed(LogsScreen.routeName),
-                      ),
-                      ListTile(
-                        leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(TablerIcons.access_point)),
-                        title: Text(AppLocalizations.of(context)!.serverSharingMenuButtonTitle),
-                        onTap: () => showServerSharingPanel(context: context),
-                      ),
-                      ListTile(
-                        leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(TablerIcons.lock_bolt)),
-                        title: Text(AppLocalizations.of(context)!.quickConnectAuthorizationMenuButtonTitle),
-                        onTap: () => showQuickConnectAuthorizationMenu(context: context),
-                      ),
-                      ListTile(
-                        leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(Icons.auto_delete)),
-                        title: Text(AppLocalizations.of(context)!.queuesScreen),
-                        onTap: () => Navigator.of(context).pushNamed(QueueRestoreScreen.routeName),
                       ),
                       ListTile(
                         leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(Icons.settings)),

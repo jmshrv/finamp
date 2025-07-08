@@ -23,14 +23,15 @@ Future<void> showServerSharingPanel({required BuildContext context}) async {
     routeName: serverSharingPanelRouteName,
     minDraggableHeight: 0.45,
     buildSlivers: (context) {
-      final menuEntries = [ServerSharingMenuControls()];
 
       var menu = [
         SliverStickyHeader(
           header: ServerSharingPanelHeader(),
           sliver: MenuMask(
             height: ServerSharingPanelHeader.defaultHeight,
-            child: SliverList(delegate: SliverChildListDelegate.fixed(menuEntries)),
+            child: SliverToBoxAdapter(
+              child: ServerSharingMenuControls(),
+            ),
           ),
         ),
         SliverPadding(
@@ -155,9 +156,8 @@ class _ServerSharingMenuControlsState extends ConsumerState<ServerSharingMenuCon
               onAborted: () {},
             ),
           );
-          return serverSharingEnabled;
         } else {
-          return setServerSharing(!currentState);
+          setServerSharing(!currentState);
         }
       },
     );

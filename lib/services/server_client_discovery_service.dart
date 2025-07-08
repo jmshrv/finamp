@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:get_it/get_it.dart';
@@ -20,48 +21,56 @@ class JellyfinServerClientDiscovery {
   bool isDiscovering = false;
   bool isAdvertising = false;
 
-  bool _isDisposed = false;
-  
   static const discoveryMessage = "who is JellyfinServer?"; // doesn't seem to be case sensitive, but the Kotlin SDK uses this capitalization
   final broadcastAddress = InternetAddress("255.255.255.255"); // UDP broadcast address
   static const discoveryPort = 7359; // Jellyfin client discovery port
 
   void discoverServers(void Function(ClientDiscoveryResponse response) onServerFound) async {
-    _isDisposed = false;
+    try {
 
-    _discoverySocket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
+      isDiscovering = true;
 
-    // We have to use ? throughout since _discoverySocket isn't final, although at this
-    // point in the code it should never be null
+      _discoverySocket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
 
-    _discoverySocket.broadcastEnabled = true; // important to allow sending to broadcast address
-    _discoverySocket.multicastHops = 5; // to account for weird network setups
+      // We have to use ? throughout since _discoverySocket isn't final, although at this
+      // point in the code it should never be null
 
-    _discoverySocket.listen((event) {
-      if (event == RawSocketEvent.read) {
-        final datagram = _discoverySocket.receive();
-        if (datagram != null) {
-          _clientDiscoveryLogger.finest("Received datagram: ${utf8.decode(datagram.data)}");
-          final response = ClientDiscoveryResponse.fromJson(
-            jsonDecode(utf8.decode(datagram.data)) as Map<String, dynamic>,
-          );
-          _clientDiscoveryLogger.fine(
-            "Received discovery response from ${datagram.address}:${datagram.port}: ${jsonEncode(response)}",
-          );
-          onServerFound(response);
+      _discoverySocket.broadcastEnabled = true; // important to allow sending to broadcast address
+      _discoverySocket.multicastHops = 5; // to account for weird network setups
+
+      _discoverySocket.listen((event) {
+        if (event == RawSocketEvent.read) {
+          final datagram = _discoverySocket.receive();
+          if (datagram != null) {
+            _clientDiscoveryLogger.finest("Received datagram: ${utf8.decode(datagram.data)}");
+            final response = ClientDiscoveryResponse.fromJson(
+              jsonDecode(utf8.decode(datagram.data)) as Map<String, dynamic>,
+            );
+            _clientDiscoveryLogger.fine(
+              "Received discovery response from ${datagram.address}:${datagram.port}: ${jsonEncode(response)}",
+            );
+            onServerFound(response);
+          }
         }
-      }
-    });
+      });
 
-    // Send discovery message repeatedly to scan for local servers (because UDP is unreliable)
-    do {
-      _clientDiscoveryLogger.fine("Sending discovery message");
-      _discoverySocket.send(discoveryMessage.codeUnits, broadcastAddress, discoveryPort);
-      await Future<void>.delayed(const Duration(milliseconds: 1500));
-    } while (!_isDisposed);
+      // Send discovery message repeatedly to scan for local servers (because UDP is unreliable)
+      do {
+        _clientDiscoveryLogger.fine("Sending discovery message");
+        _discoverySocket.send(discoveryMessage.codeUnits, broadcastAddress, discoveryPort);
+        await Future<void>.delayed(const Duration(milliseconds: 1500));
+      } while (isDiscovering);
+
+    } catch (e) {
+      _clientDiscoveryLogger.severe("Error during server discovery: $e");
+      GlobalSnackbar.error(e);
+      stopDiscovery();
+      return;
+    }
   }
 
   void advertiseServer() async {
+    try {
       if (isAdvertising) {
         _clientDiscoveryLogger.warning("Server is already being advertised, ignoring request");
         return;
@@ -115,7 +124,14 @@ class JellyfinServerClientDiscovery {
         }
       });
 
+    } catch (e) {
+      _clientDiscoveryLogger.severe("Error during server sharing: $e");
+      GlobalSnackbar.error(e);
+      stopAdvertising();
+      return;
     }
+
+  }
 
   void stopDiscovery() {
     if (!isDiscovering) {

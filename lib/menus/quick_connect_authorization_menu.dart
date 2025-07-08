@@ -21,26 +21,22 @@ Future<void> showQuickConnectAuthorizationMenu({required BuildContext context}) 
     routeName: quickConnectAuthorizationMenuRouteName,
     minDraggableHeight: 0.60,
     buildSlivers: (context) {
-      final menuEntries = [QuickConnectInput()];
-
       var menu = [
         SliverStickyHeader(
           header: ServerSharingPanelHeader(),
           sliver: MenuMask(
             height: ServerSharingPanelHeader.defaultHeight,
-            child: SliverList(delegate: SliverChildListDelegate.fixed(menuEntries)),
+            child: SliverToBoxAdapter(child: QuickConnectInput()),
           ),
         ),
         SliverPadding(
           padding: EdgeInsets.only(left: 32.0, right: 32.0, top: 16.0),
-          sliver: SliverList(
-            delegate: SliverChildListDelegate.fixed([
-              BalancedText(
-                AppLocalizations.of(context)!.quickConnectAuthorizationMenuDescription,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500),
-              ),
-            ]),
+          sliver: SliverToBoxAdapter(
+            child: BalancedText(
+              AppLocalizations.of(context)!.quickConnectAuthorizationMenuDescription,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500),
+            ),
           ),
         ),
         SliverPadding(padding: EdgeInsets.only(bottom: 40.0)),
@@ -58,12 +54,7 @@ class QuickConnectInput extends StatefulWidget {
   State<QuickConnectInput> createState() => _QuickConnectInputState();
 }
 
-enum QuickConnectAuthorizationState {
-  waitingForInput,
-  processing,
-  success,
-  failed,
-} 
+enum QuickConnectAuthorizationState { waitingForInput, processing, success, failed }
 
 class _QuickConnectInputState extends State<QuickConnectInput> {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
@@ -71,6 +62,9 @@ class _QuickConnectInputState extends State<QuickConnectInput> {
   QuickConnectAuthorizationState _state = QuickConnectAuthorizationState.waitingForInput;
 
   Future<void> _authorizeQuickConnect() async {
+    if ([QuickConnectAuthorizationState.processing, QuickConnectAuthorizationState.success].contains(_state)) {
+      return;
+    }
     final code = _controller.text.trim();
     if (code.isEmpty) return;
 
@@ -81,18 +75,22 @@ class _QuickConnectInputState extends State<QuickConnectInput> {
       // Call the authorization method
       final success = await jellyfinApiHelper.authorizeQuickConnect(code: code);
       if (mounted) {
-        setState(() => _state = success ? QuickConnectAuthorizationState.success : QuickConnectAuthorizationState.failed);
+        setState(
+          () => _state = success ? QuickConnectAuthorizationState.success : QuickConnectAuthorizationState.failed,
+        );
       }
 
       if (!success) {
         // If the authorization failed, we don't pop immediately
         return;
       }
-      unawaited(Future<void>.delayed(const Duration(milliseconds: 1500)).then((_) {
-        if (mounted) {
-          Navigator.pop(context);
-        }
-      }));
+      unawaited(
+        Future<void>.delayed(const Duration(milliseconds: 1500)).then((_) {
+          if (mounted) {
+            Navigator.pop(context);
+          }
+        }),
+      );
     } catch (e) {
       if (mounted) {
         setState(() => _state = QuickConnectAuthorizationState.failed);
@@ -113,18 +111,17 @@ class _QuickConnectInputState extends State<QuickConnectInput> {
         ),
       ),
       QuickConnectAuthorizationState.success => Icon(
-          TablerIcons.lock_check,
-          color: Theme.of(context).colorScheme.primary,
-          size: 28.0,
-        ),
+        TablerIcons.lock_check,
+        color: Theme.of(context).colorScheme.primary,
+        size: 28.0,
+      ),
       QuickConnectAuthorizationState.failed => Icon(
-          TablerIcons.lock_exclamation,
-          color: Theme.of(context).colorScheme.error,
-          size: 28.0,
-        ),
+        TablerIcons.lock_exclamation,
+        color: Theme.of(context).colorScheme.error,
+        size: 28.0,
+      ),
     };
   }
-
 
   Widget _getFeedbackWidget() {
     return ConstrainedBox(
@@ -134,28 +131,38 @@ class _QuickConnectInputState extends State<QuickConnectInput> {
         spacing: 10.0,
         children: [
           if (_state != QuickConnectAuthorizationState.waitingForInput)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 8.0,
-            children: [
-              Center(child: _feedbackIcon),
-              Text(
-                switch (_state) {
-                  QuickConnectAuthorizationState.processing => AppLocalizations.of(context)!.quickConnectAuthorizationMenuStateTitleProcessing,
-                  QuickConnectAuthorizationState.success => AppLocalizations.of(context)!.quickConnectAuthorizationMenuStateTitleSuccess,
-                  QuickConnectAuthorizationState.failed => AppLocalizations.of(context)!.quickConnectAuthorizationMenuStateTitleFailed,
-                  _ => "",
-                },
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 8.0,
+              children: [
+                Center(child: _feedbackIcon),
+                Text(
+                  switch (_state) {
+                    QuickConnectAuthorizationState.processing => AppLocalizations.of(
+                      context,
+                    )!.quickConnectAuthorizationMenuStateTitleProcessing,
+                    QuickConnectAuthorizationState.success => AppLocalizations.of(
+                      context,
+                    )!.quickConnectAuthorizationMenuStateTitleSuccess,
+                    QuickConnectAuthorizationState.failed => AppLocalizations.of(
+                      context,
+                    )!.quickConnectAuthorizationMenuStateTitleFailed,
+                    _ => "",
+                  },
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           if ([QuickConnectAuthorizationState.failed, QuickConnectAuthorizationState.waitingForInput].contains(_state))
             Text(
               switch (_state) {
-                QuickConnectAuthorizationState.waitingForInput => AppLocalizations.of(context)!.quickConnectAuthorizationMenuStateSubtitleIdle,
-                QuickConnectAuthorizationState.failed => AppLocalizations.of(context)!.quickConnectAuthorizationMenuStateSubtitleFailed,
+                QuickConnectAuthorizationState.waitingForInput => AppLocalizations.of(
+                  context,
+                )!.quickConnectAuthorizationMenuStateSubtitleIdle,
+                QuickConnectAuthorizationState.failed => AppLocalizations.of(
+                  context,
+                )!.quickConnectAuthorizationMenuStateSubtitleFailed,
                 _ => "",
               },
               style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w400),
@@ -172,10 +179,7 @@ class _QuickConnectInputState extends State<QuickConnectInput> {
     _controller.addListener(() {
       if (_controller.text.trim().length >= 6) {
         // Automatically authorize when the code is long enough
-        if (_state != QuickConnectAuthorizationState.processing &&
-            _state != QuickConnectAuthorizationState.success) {
-          _authorizeQuickConnect();
-        }
+        _authorizeQuickConnect();
       }
     });
   }
@@ -194,10 +198,7 @@ class _QuickConnectInputState extends State<QuickConnectInput> {
         children: [
           _getFeedbackWidget(),
           const SizedBox(height: 16.0),
-          QuickConnectInputField(
-            controller: _controller,
-            onSubmitted: () => _authorizeQuickConnect(),
-          ),
+          QuickConnectInputField(controller: _controller, onSubmitted: () => _authorizeQuickConnect()),
         ],
       ),
     );
@@ -205,11 +206,7 @@ class _QuickConnectInputState extends State<QuickConnectInput> {
 }
 
 class QuickConnectInputField extends StatefulWidget {
-  const QuickConnectInputField({
-    super.key,
-    required this.controller,
-    required this.onSubmitted,
-  });
+  const QuickConnectInputField({super.key, required this.controller, required this.onSubmitted});
 
   final TextEditingController controller;
   final VoidCallback onSubmitted;
@@ -253,7 +250,7 @@ class _QuickConnectInputFieldState extends State<QuickConnectInputField> {
                 final text = widget.controller.text;
                 final hasDigit = index < text.length;
                 final digit = hasDigit ? text[index] : '';
-                
+
                 return Container(
                   width: 48,
                   height: 56,
@@ -262,8 +259,8 @@ class _QuickConnectInputFieldState extends State<QuickConnectInputField> {
                     borderRadius: BorderRadius.circular(12.0),
                     border: Border.all(
                       color: index == text.length && _focusNode.hasFocus
-                        ? Theme.of(context).colorScheme.primary
-                        : Colors.transparent,
+                          ? Theme.of(context).colorScheme.primary
+                          : Colors.transparent,
                       width: 2.0,
                     ),
                   ),
@@ -273,9 +270,9 @@ class _QuickConnectInputFieldState extends State<QuickConnectInputField> {
                       style: Theme.of(context).textTheme.displayMedium?.copyWith(
                         fontSize: 32,
                         fontWeight: hasDigit ? FontWeight.w600 : FontWeight.w200,
-                        color: hasDigit 
-                          ? Theme.of(context).textTheme.bodyLarge?.color
-                          : Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.4),
+                        color: hasDigit
+                            ? Theme.of(context).textTheme.bodyLarge?.color
+                            : Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.4),
                       ),
                     ),
                   ),
@@ -285,30 +282,29 @@ class _QuickConnectInputFieldState extends State<QuickConnectInputField> {
           ),
         ),
         // Hidden text field for actual input handling
-        Opacity(
-          opacity: 0.01,
-          child: SizedBox(
-            height: 1,
-            child: TextField(
-              controller: widget.controller,
-              focusNode: _focusNode,
-              maxLength: 6,
-              keyboardType: TextInputType.number,
-              autofocus: true,
-              textInputAction: TextInputAction.done,
-              autofillHints: const [AutofillHints.oneTimeCode],
-              maxLengthEnforcement: MaxLengthEnforcement.enforced,
-              enableInteractiveSelection: true,
-              scrollPadding: EdgeInsets.zero,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(6),
-              ],
-              onSubmitted: (_) => widget.onSubmitted(),
-              onTapOutside: (_) => setState(() {
-                _focusNode.unfocus();
-              }),
-            ),
+        Visibility(
+          visible: false,
+          maintainState: true,
+          maintainInteractivity: true,
+          maintainSize: true,
+          maintainAnimation: true,
+          maintainSemantics: true,
+          child: TextField(
+            controller: widget.controller,
+            focusNode: _focusNode,
+            maxLength: 6,
+            keyboardType: TextInputType.number,
+            autofocus: true,
+            textInputAction: TextInputAction.done,
+            autofillHints: const [AutofillHints.oneTimeCode],
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+            enableInteractiveSelection: true,
+            scrollPadding: EdgeInsets.zero,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(6)],
+            onSubmitted: (_) => widget.onSubmitted(),
+            onTapOutside: (_) => setState(() {
+              _focusNode.unfocus();
+            }),
           ),
         ),
         const SizedBox(height: 8.0),
