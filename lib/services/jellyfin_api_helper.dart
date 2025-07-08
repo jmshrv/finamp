@@ -537,7 +537,7 @@ class JellyfinApiHelper {
   }
 
   /// Authorize a pending Quick Connect request of another client
-  Future<bool> authorizeQuickConnect({ required String code, String? userId }) async {
+  Future<bool> authorizeQuickConnect({required String code, String? userId}) async {
     Response<dynamic> response = await jellyfinApi.authorizeQuickConnect(code: code, userId: userId);
 
     return response.isSuccessful;

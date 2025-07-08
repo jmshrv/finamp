@@ -21,13 +21,13 @@ class JellyfinServerClientDiscovery {
   bool isDiscovering = false;
   bool isAdvertising = false;
 
-  static const discoveryMessage = "who is JellyfinServer?"; // doesn't seem to be case sensitive, but the Kotlin SDK uses this capitalization
+  static const discoveryMessage =
+      "who is JellyfinServer?"; // doesn't seem to be case sensitive, but the Kotlin SDK uses this capitalization
   final broadcastAddress = InternetAddress("255.255.255.255"); // UDP broadcast address
   static const discoveryPort = 7359; // Jellyfin client discovery port
 
   void discoverServers(void Function(ClientDiscoveryResponse response) onServerFound) async {
     try {
-
       isDiscovering = true;
 
       _discoverySocket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
@@ -60,7 +60,6 @@ class JellyfinServerClientDiscovery {
         _discoverySocket.send(discoveryMessage.codeUnits, broadcastAddress, discoveryPort);
         await Future<void>.delayed(const Duration(milliseconds: 1500));
       } while (isDiscovering);
-
     } catch (e) {
       _clientDiscoveryLogger.severe("Error during server discovery: $e");
       GlobalSnackbar.error(e);
@@ -90,9 +89,7 @@ class JellyfinServerClientDiscovery {
             _clientDiscoveryLogger.finest("Received datagram: ${utf8.decode(datagram.data)}");
             final requestMessage = utf8.decode(datagram.data);
             if (requestMessage.toLowerCase().contains(discoveryMessage.toLowerCase())) {
-              _clientDiscoveryLogger.fine(
-                "Received discovery message from ${datagram.address}:${datagram.port}",
-              );
+              _clientDiscoveryLogger.fine("Received discovery message from ${datagram.address}:${datagram.port}");
               // Respond with the server's information
               final responseActiveOrPublicAddress = ClientDiscoveryResponse(
                 address: _finampUserHelper.currentUser?.publicAddress ?? _finampUserHelper.currentUser?.baseURL,
@@ -102,7 +99,11 @@ class JellyfinServerClientDiscovery {
               );
               final responseMessageActiveOrPublicAddress = jsonEncode(responseActiveOrPublicAddress);
               _clientDiscoveryLogger.finest("Sending discovery response: $responseMessageActiveOrPublicAddress");
-              _advertisingSocket.send(utf8.encode(responseMessageActiveOrPublicAddress), datagram.address, datagram.port);
+              _advertisingSocket.send(
+                utf8.encode(responseMessageActiveOrPublicAddress),
+                datagram.address,
+                datagram.port,
+              );
               _clientDiscoveryLogger.fine("Sent discovery response to ${datagram.address}:${datagram.port}");
 
               if (_finampUserHelper.currentUser?.localAddress != null) {
@@ -123,14 +124,12 @@ class JellyfinServerClientDiscovery {
           }
         }
       });
-
     } catch (e) {
       _clientDiscoveryLogger.severe("Error during server sharing: $e");
       GlobalSnackbar.error(e);
       stopAdvertising();
       return;
     }
-
   }
 
   void stopDiscovery() {

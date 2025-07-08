@@ -316,4 +316,3 @@ class ConnectionState {
 
   ConnectionState({this.isConnected = false, this.isAuthenticating = false, this.quickConnectState, this.selectedUser});
 }
-

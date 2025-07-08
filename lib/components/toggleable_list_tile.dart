@@ -29,11 +29,9 @@ class ToggleableListTile extends ConsumerWidget {
   final bool enabled;
   final bool confirmationFeedback;
 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    assert(icon != null || trailing != null,
-        "Either icon or trailing must be provided.");
+    assert(icon != null || trailing != null, "Either icon or trailing must be provided.");
     var themeColor = Theme.of(context).colorScheme.primary;
     return Padding(
       padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0, bottom: 4.0),
@@ -72,11 +70,7 @@ class ToggleableListTile extends ConsumerWidget {
                 padding: const EdgeInsets.only(left: 8.0, right: 12.0),
                 child: isLoading
                     ? const CircularProgressIndicator()
-                    : trailing ?? Icon(
-                        icon,
-                        size: 36.0,
-                        color: themeColor,
-                      ),
+                    : trailing ?? Icon(icon, size: 36.0, color: themeColor),
               ),
             ],
           ),

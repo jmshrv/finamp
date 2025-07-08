@@ -43,7 +43,10 @@ abstract class JellyfinApi extends ChopperService {
 
   @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @POST(path: "/QuickConnect/Authorize")
-  Future<Response<dynamic>> authorizeQuickConnect({@Query("code") required String code, @Query("userId") String? userId});
+  Future<Response<dynamic>> authorizeQuickConnect({
+    @Query("code") required String code,
+    @Query("userId") String? userId,
+  });
 
   @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Post(path: "/Users/AuthenticateWithQuickConnect")

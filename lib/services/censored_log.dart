@@ -70,9 +70,8 @@ extension CensoredMessage on LogRecord {
           CaseInsensitivePattern(tempUriMatcher.host.toString()),
           "TEMP_HOST",
         );
-
       }
-      
+
       // Replace the host and port values in network errors
       workingLogString = workingLogString.replaceAllMapped(
         RegExp(r"(host: )([^,]+)(, port: )(\d+)", caseSensitive: false),

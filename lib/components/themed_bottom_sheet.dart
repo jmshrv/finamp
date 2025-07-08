@@ -65,7 +65,8 @@ Future<void> showThemedBottomSheet({
           if (useDefaultTheme) localThemeProvider.overrideWithValue(getDefaultTheme(Theme.of(context).brightness)),
           if (!useDefaultTheme && themeImage != null) localImageProvider.overrideWithValue(themeImage),
           if (!useDefaultTheme && themeImage != null) localThemeInfoProvider.overrideWithValue(themeInfo),
-          if (!useDefaultTheme && themeImage == null && item != null) localThemeInfoProvider.overrideWithValue(ThemeInfo(item, useIsolate: false)),
+          if (!useDefaultTheme && themeImage == null && item != null)
+            localThemeInfoProvider.overrideWithValue(ThemeInfo(item, useIsolate: false)),
         ],
         child: ThemedBottomSheet(
           key: ValueKey((item?.id?.raw ?? "") + routeName),
