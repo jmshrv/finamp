@@ -1903,7 +1903,7 @@
   "@showArtistsTracksSection": {},
   "showArtistsTracksSectionSubtitle": "ஐந்து தடங்கள் வரை ஒரு பகுதியைக் காட்ட வேண்டுமா. இயக்கப்பட்டால், நீங்கள் மிகவும் விளையாடிய, பிடித்த, சீரற்ற, அண்மைக் கால வெளியீடுகள், அண்மைக் காலத்தில் சேர்க்கப்பட்ட மற்றும் அண்மைக் காலத்தில் விளையாடிய தடங்களுக்கு இடையில் தேர்வு செய்யலாம்.",
   "@showArtistsTracksSectionSubtitle": {},
-  "sleepTimerRemainingTracks": "தூக்கம் {time, plural, = 1 {after this track} பிற {{time} தடங்கள்}}",
+  "sleepTimerRemainingTracks": "தூக்கம் {time, plural, =1{இந்தப் பாடலுக்குப் பிறகு} other{{time} தடங்கள்}}",
   "@sleepTimerRemainingTracks": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -2502,7 +2502,7 @@
       }
     }
   },
-  "autoReloadPromptMissingTracks": "{SoundownloadedTracks, பன்மை, = 1 {1 track} பிற {{{{amountUndownloadedTracks} TRACKS}} அவை பதிவிறக்கம் செய்யப்படாததால் வரிசையில் இருந்து அகற்றப்படும்.",
+  "autoReloadPromptMissingTracks": "{SoundownloadedTracks, பன்மை, = 1 {1 track} other{{{{amountUndownloadedTracks} TRACKS}} அவை பதிவிறக்கம் செய்யப்படாததால் வரிசையில் இருந்து அகற்றப்படும்.",
   "@autoReloadPromptMissingTracks": {
     "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
     "placeholders": {
