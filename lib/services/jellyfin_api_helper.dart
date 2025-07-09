@@ -1137,7 +1137,7 @@ class JellyfinApiHelper {
       return true;
     }
     var stack = StackTrace.current.toString();
-    if (stack.contains('ProviderContainer.readProviderElement') ||
+    if (stack.contains('ProviderElementBase.buildState') ||
         stack.contains('initState ') ||
         stack.contains('didUpdateWidget') ||
         stack.contains('PagingController.notifyPageRequestListeners')) {
