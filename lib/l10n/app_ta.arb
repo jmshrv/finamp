@@ -1903,7 +1903,7 @@
   "@showArtistsTracksSection": {},
   "showArtistsTracksSectionSubtitle": "ஐந்து தடங்கள் வரை ஒரு பகுதியைக் காட்ட வேண்டுமா. இயக்கப்பட்டால், நீங்கள் மிகவும் விளையாடிய, பிடித்த, சீரற்ற, அண்மைக் கால வெளியீடுகள், அண்மைக் காலத்தில் சேர்க்கப்பட்ட மற்றும் அண்மைக் காலத்தில் விளையாடிய தடங்களுக்கு இடையில் தேர்வு செய்யலாம்.",
   "@showArtistsTracksSectionSubtitle": {},
-  "sleepTimerRemainingTracks": "தூங்குகிறது{time, plural, = 1 {இந்தப் பாடலுக்குப் பிறகு} பிற {{time} தடங்கள்}}",
+  "sleepTimerRemainingTracks": "தூங்குகிறது{time, plural, = 1 {இந்தப் பாடலுக்குப் பிறகு} பிற {time} தடங்கள்}}",
   "@sleepTimerRemainingTracks": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
