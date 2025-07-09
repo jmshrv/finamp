@@ -2502,7 +2502,7 @@
       }
     }
   },
-  "autoReloadPromptMissingTracks": "{SoundownloadedTracks, பன்மை, = 1 {1 track} other{{{{amountUndownloadedTracks} TRACKS}} அவை பதிவிறக்கம் செய்யப்படாததால் வரிசையில் இருந்து அகற்றப்படும்.",
+  "autoReloadPromptMissingTracks": "{SoundownloadedTracks, plural, =1 {1 track} other {{amountUndownloadedTracks} TRACKS அவை பதிவிறக்கம் செய்யப்படாததால் வரிசையில் இருந்து அகற்றப்படும்.}}",
   "@autoReloadPromptMissingTracks": {
     "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
     "placeholders": {
