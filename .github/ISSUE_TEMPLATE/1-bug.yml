@@ -82,10 +82,14 @@ body:
         .zip due to file size.
         To get the logs Open the side menu, click "Logs", and then use the
         *share* button at the top right to get the log file.
-      placeholder: |
+      value: |
         <details>
+        
           <summary>Logs</summary>
-          PLACE YOUR LOGS HERE
+          
+          PLACE YOUR *FULL* LOGS HERE, or attach them as a file
+          you may censor any private information (although Finamp tries to remove that automatically), just please don't edit out larger sections.
+          
         </details> 
     validations:
       required: true
