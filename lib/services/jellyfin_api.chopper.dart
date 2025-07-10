@@ -85,6 +85,29 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
+  Future<Response<dynamic>> authorizeQuickConnect({
+    required String code,
+    String? userId,
+  }) {
+    final Uri $url = Uri.parse('/QuickConnect/Authorize');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'code': code,
+      'userId': userId,
+    };
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<dynamic, dynamic>(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
+  }
+
+  @override
   Future<dynamic> authenticateWithQuickConnect(
     Map<String, String> quickConnectInfo,
   ) async {

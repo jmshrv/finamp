@@ -42,6 +42,13 @@ abstract class JellyfinApi extends ChopperService {
   Future<dynamic> updateQuickConnect({@Query("Secret") required String secret});
 
   @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
+  @POST(path: "/QuickConnect/Authorize")
+  Future<Response<dynamic>> authorizeQuickConnect({
+    @Query("code") required String code,
+    @Query("userId") String? userId,
+  });
+
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
   @Post(path: "/Users/AuthenticateWithQuickConnect")
   Future<dynamic> authenticateWithQuickConnect(@Body() Map<String, String> quickConnectInfo);
 

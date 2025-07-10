@@ -185,7 +185,7 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
   @override
   Widget build(BuildContext context) {
     final isOffline = ref.watch(finampSettingsProvider.isOffline);
-    return ToggleableListTile(
+    return PlaylistActionsPlaylistListTile(
       forceLoading: widget.isLoading,
       title: widget.playlist.name ?? AppLocalizations.of(context)!.unknownName,
       subtitle: AppLocalizations.of(context)!.trackCount(childCount ?? 0),

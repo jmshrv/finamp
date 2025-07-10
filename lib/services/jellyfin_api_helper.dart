@@ -536,6 +536,13 @@ class JellyfinApiHelper {
     return newQuickConnectState;
   }
 
+  /// Authorize a pending Quick Connect request of another client
+  Future<bool> authorizeQuickConnect({required String code, String? userId}) async {
+    Response<dynamic> response = await jellyfinApi.authorizeQuickConnect(code: code, userId: userId);
+
+    return response.isSuccessful;
+  }
+
   /// Authenticates a user using Quick Connect and saves the login details
   Future<void> authenticateWithQuickConnect(QuickConnectState quickConnectState) async {
     var response = await jellyfinApi.authenticateWithQuickConnect({"Secret": quickConnectState.secret ?? ""});

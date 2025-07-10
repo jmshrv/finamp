@@ -1,4 +1,6 @@
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/menus/quick_connect_authorization_menu.dart';
+import 'package:finamp/menus/server_sharing_menu.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/network_settings_screen.dart';
 import 'package:flutter/gestures.dart';
@@ -183,6 +185,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             title: Text(AppLocalizations.of(context)!.language),
             subtitle: Text(LocaleHelper.locale?.nativeDisplayLanguage ?? AppLocalizations.of(context)!.system),
             onTap: () => Navigator.of(context).pushNamed(LanguageSelectionScreen.routeName),
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(TablerIcons.access_point),
+            title: Text(AppLocalizations.of(context)!.serverSharingMenuButtonTitle),
+            onTap: () => showServerSharingPanel(context: context),
+          ),
+          ListTile(
+            leading: Icon(TablerIcons.lock_bolt),
+            title: Text(AppLocalizations.of(context)!.quickConnectAuthorizationMenuButtonTitle),
+            onTap: () => showQuickConnectAuthorizationMenu(context: context),
           ),
           const LogoutListTile(),
         ],

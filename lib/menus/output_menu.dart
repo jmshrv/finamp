@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
+import 'package:finamp/components/toggleable_list_tile.dart';
 import 'package:finamp/menus/playlist_actions_menu.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -173,6 +174,7 @@ class OutputTargetList extends StatefulWidget {
 
 class _OutputTargetListState extends State<OutputTargetList> {
   final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+  String? switchingToRoute;
 
   @override
   Widget build(BuildContext context) {
@@ -187,10 +189,17 @@ class _OutputTargetListState extends State<OutputTargetList> {
                 return openOsOutputOptionsButton(context);
               }
               final route = snapshot.data![index];
+              if (route.isSelected) {
+                switchingToRoute = null; // Reset switching state if route is selected
+              }
               return OutputSelectorTile(
                 routeInfo: route,
-                onSelect: () {
-                  setState(() {});
+                isLoading: switchingToRoute == route.name,
+                onSelect: ({bool loading = false, bool value = false}) {
+                  setState(() {
+                    switchingToRoute = loading ? route.name : null;
+                    outputRoutes = audioHandler.getRoutes();
+                  });
                 },
               );
             }, childCount: snapshot.data!.length + 1),
@@ -240,12 +249,12 @@ class OutputSelectorTile extends StatelessWidget {
 
   final FinampOutputRoute routeInfo;
   final bool isLoading;
-  final VoidCallback? onSelect;
+  final void Function({bool loading, bool value})? onSelect;
 
   @override
   Widget build(BuildContext context) {
     return ToggleableListTile(
-      forceLoading: isLoading,
+      isLoading: isLoading,
       title: routeInfo.name,
       subtitle: (routeInfo.isDeviceSpeaker
           ? AppLocalizations.of(context)!.deviceType("speaker")
@@ -264,19 +273,15 @@ class OutputSelectorTile extends StatelessWidget {
           _ => TablerIcons.volume,
         }),
       ),
-      positiveIcon: TablerIcons.device_speaker_filled,
-      negativeIcon: TablerIcons.device_speaker,
-      initialState: routeInfo.isSelected,
+      icon: routeInfo.isSelected ? TablerIcons.device_speaker_filled : TablerIcons.device_speaker,
+      state: routeInfo.isSelected,
       onToggle: (bool currentState) async {
         final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+        onSelect?.call(loading: true, value: currentState);
         await audioHandler.setOutputToRoute(routeInfo);
-        unawaited(
-          Future<Duration>.delayed(const Duration(milliseconds: 1250)).then((_) {
-            onSelect?.call();
-          }),
-        );
-        return true;
+        onSelect?.call(loading: false, value: true);
       },
+      confirmationFeedback: false,
       enabled: true,
     );
   }

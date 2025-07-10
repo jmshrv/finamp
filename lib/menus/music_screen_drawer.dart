@@ -12,6 +12,8 @@ import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
+import 'package:finamp/menus/server_sharing_menu.dart';
+import 'package:finamp/menus/quick_connect_authorization_menu.dart';
 
 class MusicScreenDrawer extends StatelessWidget {
   const MusicScreenDrawer({super.key});
@@ -47,6 +49,9 @@ class MusicScreenDrawer extends StatelessWidget {
                     ],
                   ),
                 ),
+                const OfflineModeSwitchListTile(),
+                const OfflineModeStatusLabel(),
+                Divider(),
                 ListTile(
                   leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(Icons.file_download)),
                   title: Text(AppLocalizations.of(context)!.downloads),
@@ -57,8 +62,11 @@ class MusicScreenDrawer extends StatelessWidget {
                   title: Text(AppLocalizations.of(context)!.playbackHistory),
                   onTap: () => Navigator.of(context).pushNamed(PlaybackHistoryScreen.routeName),
                 ),
-                const OfflineModeSwitchListTile(),
-                const OfflineModeStatusLabel(),
+                ListTile(
+                  leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(Icons.auto_delete)),
+                  title: Text(AppLocalizations.of(context)!.queuesScreen),
+                  onTap: () => Navigator.of(context).pushNamed(QueueRestoreScreen.routeName),
+                ),
                 const Divider(),
               ]),
             ),
@@ -84,11 +92,6 @@ class MusicScreenDrawer extends StatelessWidget {
                         leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(Icons.warning)),
                         title: Text(AppLocalizations.of(context)!.logs),
                         onTap: () => Navigator.of(context).pushNamed(LogsScreen.routeName),
-                      ),
-                      ListTile(
-                        leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(Icons.auto_delete)),
-                        title: Text(AppLocalizations.of(context)!.queuesScreen),
-                        onTap: () => Navigator.of(context).pushNamed(QueueRestoreScreen.routeName),
                       ),
                       ListTile(
                         leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(Icons.settings)),
