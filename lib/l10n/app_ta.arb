@@ -158,7 +158,7 @@
       }
     }
   },
-  "couldNotLoad": "ஏற்றவில்லை நெக்ச்ட் அப்} நெக்ச்ட் அப்} நெக்ச்ட் அப் பிளேலிச்ட் {album} நெக்ச்டுபார்டிச்ட் {playlist} நெக்ச்ட் அப்சென்ரே {track mix} பிற}}}",
+  "couldNotLoad": "{source, select, album{ஆல்பத்தை} playlist{பாடல்பட்டியை} trackMix{பாடல் கலவையை} artistMix{கலைஞர் கலவையை} albumMix{ஆல்பம் கலவையை} genreMix{வகை கலவையை} favorites{பிடித்தவற்றை} allTracks{அனைத்து பாடல்களை} filteredList{பாடல்களை} genre{வகையை} artist{கலைஞரை} track{பாடலை} nextUpAlbum{அடுத்தது - ஆல்பத்தை} nextUpPlaylist{அடுத்தது - பாடல்பட்டியை} nextUpArtist{அடுத்தது - கலைஞரை} nextUpGenre{அடுத்தது - வகையை} other{உருப்படியை}} ஏற்ற முடியவில்லை.",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -967,7 +967,7 @@
       }
     }
   },
-  "confirmAddToQueue": "சேர்க்கப்பட்டது",
+  "confirmAddToQueue": "{type, select, track{பாடல்} album{ஆல்பம்} artist{கலைஞர்} playlist{பாடல்பட்டி} genre{வகை} other{உருப்படி}} வரிசையில் சேர்க்கப்பட்டது",
   "@confirmAddToQueue": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
     "placeholders": {
@@ -1015,7 +1015,7 @@
       }
     }
   },
-  "playingFromType": "{மூலத்திலிருந்து, தேர்ந்தெடுக்கப்பட்ட, ஆல்பம் {Album} பிளேலிச்ட் {Playlist} டிராக்மிக்ச் {Track Mix} ஆர்ட்டிச்ட்மிக்ச் {Artist Mix} அல்புமிக்ச் நெக்ச்ட் அப்} நெக்ச்ட் அப்} நெக்ச்ட்அப் பிளேலிச்ட் {Album Mix} நெக்ச்ட் அப்} நெக்ச்ட் அப்} நெக்ச்ட் அப்} நெக்ச்ட் அப் {remoteclient {Genre Mix} பிற {}}",
+  "playingFromType": "{source, select, album{ஆல்பம்} playlist{பாடல்பட்டி} trackMix{பாடல் கலவை} artistMix{கலைஞர் கலவை} albumMix{ஆல்பம் கலவை} genreMix{வகை கலவை} favorites{பிடித்தவை} allTracks{அனைத்து பாடல்கள்} filteredList{பாடல்கள்} genre{வகை} artist{கலைஞர்} track{பாடல்} nextUpAlbum{அடுத்தது - ஆல்பம்} nextUpPlaylist{அடுத்தது - பாடல்பட்டி} nextUpArtist{அடுத்தது - கலைஞர்} nextUpGenre{அடுத்தது - வகை} remoteClient{தொலை கண்டிப்பு கிளையண்ட்} other{}} இலிருந்து இயக்கப்படுகிறது",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1932,7 +1932,7 @@
   "@stopAndClearQueue": {
     "description": "Label for a button that stops playback and removes all tracks from the queue."
   },
-  "confirmPlayNext": "{தட்டச்சு செய்க",
+  "confirmPlayNext": "{type, select, track{பாடல்} album{ஆல்பம்} artist{கலைஞர்} playlist{பாடல்பட்டி} genre{வரைபாடு} other{உருப்படி}} அடுத்ததாக இயக்கப்படும்",
   "@confirmPlayNext": {
     "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
     "placeholders": {
@@ -2079,7 +2079,7 @@
   "@curatedItemsMostPlayedOfflineTooltip": {
     "description": "Tooltip for Most Played on Curated Items in Offline Mode."
   },
-  "curatedItemsNotListenedYet": "இந்த கலைஞரின் கலைஞரால் {itemType, Select, SelartengenRefilter { by this artist in this genre} வகை { by this artist} பிற {}}.",
+  "curatedItemsNotListenedYet": "இந்த {itemType, select, artistGenreFilter{கலைஞர் மற்றும் வகையில்} artist{கலைஞரின்} genre{வகையில்} other{}} எந்த பாடலையும் நீங்கள் கேட்டிருக்கவில்லை.",
   "@curatedItemsNotListenedYet": {
     "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks.",
     "placeholders": {
@@ -2090,7 +2090,7 @@
       }
     }
   },
-  "curatedItemsNoFavorites": "உங்களிடம் பிடித்தவை எதுவும் இல்லை {itemType, Select, ArtistengenRefilter இந்த கலைஞருக்கு இந்த கலைஞருக்கு} இந்த கலைஞருக்கு} வகை { for this artist in this genre} பிற {}}.",
+  "curatedItemsNoFavorites": "இந்த {itemType, select, artistGenreFilter{கலைஞர் மற்றும் வகைக்கு} artist{கலைஞருக்கு} genre{வகைக்கு} other{}} நீங்கள் எந்த பிடித்தவையும் வைத்திருக்கவில்லை.",
   "@curatedItemsNoFavorites": {
     "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet.",
     "placeholders": {
@@ -2101,7 +2101,7 @@
       }
     }
   },
-  "genreNoItems": "உங்களிடம் {itemType, Select, Blaylists {playlists} கலைஞர்கள் {artists} ஆல்பங்கள் {albums} தடங்கள் {tracks} பிற {items}}.",
+  "genreNoItems": "இந்த வகைக்கு நீங்கள் எந்த {itemType, select, playlists{பாடல்பட்டிகள்} artists{கலைஞர்கள்} albums{ஆல்பங்கள்} tracks{பாடல்கள்} other{உருப்படிகள்}} வைத்திருக்கவில்லை.",
   "@genreNoItems": {
     "description": "Message for empty See All lists for a genre.",
     "placeholders": {
@@ -2502,7 +2502,7 @@
       }
     }
   },
-  "autoReloadPromptMissingTracks": "{SoundownloadedTracks, plural, =1 {1 track} other {{amountUndownloadedTracks} TRACKS அவை பதிவிறக்கம் செய்யப்படாததால் வரிசையில் இருந்து அகற்றப்படும்.}}",
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks, plural, =1 {1 track} other {{amountUndownloadedTracks} tracks}}அவை பதிவிறக்கம் செய்யப்படாததால் வரிசையில் இருந்து அகற்றப்படும்.",
   "@autoReloadPromptMissingTracks": {
     "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
     "placeholders": {
