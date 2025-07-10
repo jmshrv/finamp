@@ -1,7 +1,7 @@
 {
   "serverUrl": "伺服器 URL",
   "@serverUrl": {},
-  "showTextOnGridViewSubtitle": "是否在音樂網格畫面中顯示文字（如標題、藝人等）。",
+  "showTextOnGridViewSubtitle": "是否在使用「網格瀏覽」時顯示文字（如曲名、藝人名稱等）。",
   "@showTextOnGridViewSubtitle": {},
   "internalExternalIpExplanation": "如果您希望能夠遠程訪問您的 Jellyfin 伺服器，則需要使用您的外部 IP。\n\n如果您的伺服器位於 HTTP 端口 (80/443) 上，則不必指定端口。 如果您的伺服器位於反向代理後面，則可能會出現這種情況。\n\n如果網址正確，輸入欄位下方應該會出現一些關於你的伺服器的相關資訊。",
   "@internalExternalIpExplanation": {
@@ -278,11 +278,11 @@
       }
     }
   },
-  "showTextOnGridView": "在網格檢視中顯示文字",
+  "showTextOnGridView": "在網格瀏覽中顯示文字",
   "@showTextOnGridView": {},
-  "useCoverAsBackground": "使用模糊的專輯圖作為播放器的背景",
+  "useCoverAsBackground": "使用模糊的專輯封面作為播放介面的背景",
   "@useCoverAsBackground": {},
-  "useCoverAsBackgroundSubtitle": "在播放介面中是否顯示模糊的專輯圖作為背景。",
+  "useCoverAsBackgroundSubtitle": "在播放介面中是否顯示模糊的專輯封面作為背景。",
   "@useCoverAsBackgroundSubtitle": {},
   "hideTrackArtistsIfSameAsAlbumArtists": "若與專輯藝人相同則隱藏歌曲藝人",
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
@@ -296,7 +296,7 @@
   "@light": {},
   "dark": "深色",
   "@dark": {},
-  "tabs": "選項卡",
+  "tabs": "分頁",
   "@tabs": {},
   "cancelSleepTimer": "取消睡眠定時器？",
   "@cancelSleepTimer": {},
@@ -334,7 +334,7 @@
   "@queue": {},
   "addToQueue": "加入至播放佇列",
   "@addToQueue": {},
-  "replaceQueue": "更換佇列",
+  "replaceQueue": "更換播放佇列",
   "@replaceQueue": {},
   "instantMix": "隨機組合",
   "@instantMix": {},
@@ -342,7 +342,7 @@
   "@goToAlbum": {},
   "addedToQueue": "已加入至播放佇列。",
   "@addedToQueue": {},
-  "queueReplaced": "佇列已被取代。",
+  "queueReplaced": "播放佇列已被取代。",
   "@queueReplaced": {},
   "startingInstantMix": "開始隨機組合。",
   "@startingInstantMix": {},
@@ -432,7 +432,7 @@
   "@showFastScroller": {},
   "swipeInsertQueueNext": "滑動接續播放歌曲",
   "@swipeInsertQueueNext": {},
-  "swipeInsertQueueNextSubtitle": "開啟後滑動清單中的歌曲，可以將歌曲接著播放，而不是加到播放清單的最後一首。",
+  "swipeInsertQueueNextSubtitle": "開啟後滑動音樂清單中的歌曲，可以將歌曲接著播放，而不是加到播放清單的最後一首。",
   "@swipeInsertQueueNextSubtitle": {},
   "loginFlowQuickConnectInstructions": "打開 Jellyfin 應用程式或網站，點擊你的用戶圖示，然後選擇「快速連接」。",
   "@loginFlowQuickConnectInstructions": {
@@ -612,7 +612,7 @@
   "@resetSettingsPromptGlobalConfirm": {
     "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
   },
-  "playbackSpeedControlSettingDescription": "自動：\nFinamp 會根據音軌是否符合以下條件，自動判斷其為podcast或有聲書的一部分：音軌時長超過 {trackDuration} 分鐘、專輯總時長超過 {albumDuration} 小時，或類型包含以下任一項：{genreList}。\n播放速度控制選單將會顯示於播放介面中。\n\n顯示:\n播放介面選單中的播放速度控制功能將一律保持顯示。\n\n隱藏：\n播放介面選單中的播放速度控制功能將一律保持隱藏。",
+  "playbackSpeedControlSettingDescription": "自動：\nFinamp 會根據音軌是否符合以下條件，自動判斷其為podcast或audiobook的一部分：音軌時長超過 {trackDuration} 分鐘、專輯總時長超過 {albumDuration} 小時，或類型包含以下任一項：{genreList}。\n播放速度控制選單將會顯示於播放介面中。\n\n顯示:\n播放介面選單中的播放速度控制功能將一律保持顯示。\n\n隱藏：\n播放介面選單中的播放速度控制功能將一律保持隱藏。",
   "@playbackSpeedControlSettingDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
     "placeholders": {
@@ -913,7 +913,7 @@
   "@shuffleNext": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
   },
-  "shuffleToQueue": "隨機加入至佇列末端",
+  "shuffleToQueue": "隨機加入至播放佇列末端",
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
@@ -943,7 +943,7 @@
   "@confirmShuffleToNextUp": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
   },
-  "confirmShuffleToQueue": "已隨機排序並加入佇列",
+  "confirmShuffleToQueue": "已隨機排序並加入播放佇列",
   "@confirmShuffleToQueue": {
     "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
   },
@@ -973,7 +973,7 @@
   "@tracksFormerNextUp": {
     "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
   },
-  "savedQueue": "已儲存的佇列",
+  "savedQueue": "已儲存的播放佇列",
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
@@ -1004,7 +1004,7 @@
       }
     }
   },
-  "playbackSpeedButtonLabel": "以 x{speed} 倍速播放",
+  "playbackSpeedButtonLabel": "x{speed} 倍速播放",
   "@playbackSpeedButtonLabel": {
     "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
     "placeholders": {
@@ -1022,11 +1022,11 @@
       }
     }
   },
-  "reportQueueToServerSubtitle": "傳送目前佇列至伺服器，以改善遠端控制與佇列還原。「遠端播放」功能啟用時此選項將自動開啟。",
+  "reportQueueToServerSubtitle": "啟用後，Finamp 會將目前的播放佇列傳送至伺服器。這可改善遠端控制體驗，並支援伺服器端的播放佇列還原功能。若啟用「遠端播放」功能，此功能將自動啟用。",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "periodicPlaybackSessionUpdateFrequencySubtitle": "設定向 Jellyfin 伺服器回報當前播放狀態頻率（秒）的進階細節。設定向伺服器回報當前播放狀態的頻率（以秒計算）。此數值應小於 5 分鐘（300 秒），以防止會話逾時。",
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "設定每隔幾秒向伺服器回報當前的播放狀態。建議值低於 5 分鐘（300 秒），以避免播放階段逾時失效。",
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
     "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1056,11 +1056,11 @@
   },
   "close": "關閉",
   "@close": {},
-  "volumeNormalizationSwitchSubtitle": "使用增益資訊來標準化歌曲的音量（「重放增益」）",
+  "volumeNormalizationSwitchSubtitle": "依據音量分析結果，讓每首歌曲播放時音量保持一致 (音量標準化)",
   "@volumeNormalizationSwitchSubtitle": {
     "description": "Subtitle for the switch that toggles replay gain"
   },
-  "periodicPlaybackSessionUpdateFrequency": "播放狀態更新頻率",
+  "periodicPlaybackSessionUpdateFrequency": "播放狀態回報頻率",
   "@periodicPlaybackSessionUpdateFrequency": {
     "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1076,7 +1076,7 @@
   "@queuesScreen": {
     "description": "Title for the screen where older now playing queues can be restored"
   },
-  "queueRestoreButtonLabel": "恢復",
+  "queueRestoreButtonLabel": "恢復此佇列",
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
@@ -1116,11 +1116,11 @@
   "@queueLoadingMessage": {
     "description": "Message displayed on now-playing bar when a saved queue is loading."
   },
-  "queueRetryMessage": "無法還原佇列。是否要重試？",
+  "queueRetryMessage": "無法還原播放佇列。是否要重試？",
   "@queueRetryMessage": {
     "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
   },
-  "autoloadLastQueueOnStartup": "自動恢復上次佇列",
+  "autoloadLastQueueOnStartup": "自動恢復上次播放佇列",
   "@autoloadLastQueueOnStartup": {
     "description": "Setting to restore last queue on startup"
   },
@@ -1128,7 +1128,7 @@
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
   },
-  "reportQueueToServer": "將當前佇列回報至伺服器？",
+  "reportQueueToServer": "將當前播放佇列回報至伺服器？",
   "@reportQueueToServer": {
     "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1160,7 +1160,7 @@
   "@playbackOrderShuffledButtonLabel": {
     "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
   },
-  "playbackOrderLinearButtonTooltip": "目前為依序播放。點擊切換隨機播放。",
+  "playbackOrderLinearButtonTooltip": "目前為依序播放，點擊切換隨機播放。",
   "@playbackOrderLinearButtonTooltip": {
     "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
   },
@@ -1190,7 +1190,7 @@
   "@volumeNormalizationSwitchTitle": {
     "description": "Title for the switch that toggles replay gain"
   },
-  "volumeNormalizationModeSelectorSubtitle": "音量正規化的適用時機與方法",
+  "volumeNormalizationModeSelectorSubtitle": "音量標準化的適用時機與方法",
   "@volumeNormalizationModeSelectorSubtitle": {
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
@@ -1207,7 +1207,7 @@
     },
     "description": "Localized names of special downloadable collections like favorites."
   },
-  "hidePlayerBottomActionsSubtitle": "隱藏播放介面中的佇列與歌詞按鈕。向上滑可開啟佇列列表，若有可用的歌詞，則可在專輯封面下方向左滑查看。",
+  "hidePlayerBottomActionsSubtitle": "隱藏播放介面中的播放佇列與歌詞按鈕。向上滑可開啟播放佇列列表，若有可用的歌詞，則可在專輯封面下方向左滑查看。",
   "@hidePlayerBottomActionsSubtitle": {},
   "volumeNormalizationModeAlbumOnly": "依專輯調整",
   "@volumeNormalizationModeAlbumOnly": {
@@ -1284,7 +1284,7 @@
     },
     "description": "Tooltip for the album artwork on the player screen"
   },
-  "volumeNormalizationIOSBaseGainEditorSubtitle": "在 iOS 上，音量標準化的實作方式是透過調整播放音量來模擬增益變化。由於無法將音量提高超過 100%，我們預設會先降低音量，使較安靜的音軌在需要時能夠獲得額外的音量提升。該數值以分貝（dB）為單位，-10 dB 對應約 30% 音量，-4.5 dB 對應約 60% 音量，而 -2 dB 對應約 80% 音量。",
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "在 iOS 系統上，目前的音量標準化功能是透過調整播放音量來模擬增益變化。由於無法將音量提高超過 100%，因此系統預設會先將整體音量降低，這樣在遇到音量較小的曲目時，才有空間可以將其放大。這項設定的單位是分貝（dB），例如：設為 -10 dB，大約相當於 30% 的實際音量；設為 -4.5 dB，約為 60%；而 -2 dB 則接近 80% 音量。",
   "@volumeNormalizationIOSBaseGainEditorSubtitle": {
     "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
@@ -1296,7 +1296,7 @@
   "@volumeNormalizationModeTrackBased": {
     "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
   },
-  "startInstantMixForIndividualTracksSwitchSubtitle": "開啟此功能後，在「歌曲」標籤頁點擊某首歌曲時，系統將會立即產生該歌曲的隨機組合，而非僅播放該歌曲本身。",
+  "startInstantMixForIndividualTracksSwitchSubtitle": "啟用後，在「歌曲」分頁點選單一歌曲時，將會自動播放該歌曲的隨機組合，而非僅播放該歌曲本身。",
   "@startInstantMixForIndividualTracksSwitchSubtitle": {},
   "repairComplete": "下載項目已成功修復。",
   "@repairComplete": {
@@ -1602,7 +1602,7 @@
   },
   "fixedGridSizeSwitchSubtitle": "網格大小不會隨著視窗/畫面大小改變。",
   "@fixedGridSizeSwitchSubtitle": {},
-  "hideQueueButtonSubtitle": "隱藏播放介面的佇列按鈕。向上滑動以開啟佇列列表。",
+  "hideQueueButtonSubtitle": "隱藏播放介面的播放佇列按鈕。向上滑動以開啟播放佇列列表。",
   "@hideQueueButtonSubtitle": {},
   "oneLineMarqueeTextButton": "自動捲動較長的標題",
   "@oneLineMarqueeTextButton": {},
@@ -1616,7 +1616,7 @@
   "@hidePlayerBottomActions": {},
   "marqueeOrTruncateButtonSubtitle": "在較長的標題盡頭顯示 … 代替捲動文字",
   "@marqueeOrTruncateButtonSubtitle": {},
-  "showArtistChipImageSubtitle": "此設定將影響藝人小型預覽圖片，例如播放介面中的顯示效果。",
+  "showArtistChipImageSubtitle": "此設定會影響藝人照片的縮圖顯示，例如播放介面中的顯示效果。",
   "@showArtistChipImageSubtitle": {},
   "fixedGridTileSizeEnum": "{size, select, small{小} medium{中} large{大} veryLarge{非常大} other{???}}",
   "@fixedGridTileSizeEnum": {
@@ -1637,7 +1637,7 @@
   "@fixedGridSizeSwitchTitle": {},
   "fixedGridSizeTitle": "網格大小",
   "@fixedGridSizeTitle": {},
-  "showArtistChipImage": "顯示藝人圖片與名稱",
+  "showArtistChipImage": "在藝人名稱旁顯示照片",
   "@showArtistChipImage": {},
   "defaultDownloadLocationButton": "設為預設下載位置。若停用，將可於每次下載時個別選擇位置。",
   "@defaultDownloadLocationButton": {
@@ -1682,7 +1682,7 @@
   "@downloadSizeWarningCutoff": {
     "description": "Title for the setting controlling when to warn about a large download"
   },
-  "releaseDateFormatISO": "ISO 8601 標準格式",
+  "releaseDateFormatISO": "ISO 8601 格式",
   "@releaseDateFormatISO": {
     "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
   },
@@ -1930,7 +1930,7 @@
   },
   "audioFadeInDurationSettingTitle": "音訊淡入時長",
   "@audioFadeInDurationSettingTitle": {},
-  "swipeLeftToRightActionSubtitle": "向右滑動清單中的歌曲時觸發的操作。",
+  "swipeLeftToRightActionSubtitle": "向右滑動音樂清單中的歌曲時觸發的操作。",
   "@swipeLeftToRightActionSubtitle": {},
   "audioFadeOutDurationSettingSubtitle": "音訊淡出的時間長度，以毫秒為單位。",
   "@audioFadeOutDurationSettingSubtitle": {
@@ -1952,7 +1952,7 @@
   "@autoOfflineSettingTitle": {},
   "swipeLeftToRightAction": "右滑動作",
   "@swipeLeftToRightAction": {},
-  "swipeRightToLeftActionSubtitle": "向左滑動清單中的歌曲時觸發的操作。",
+  "swipeRightToLeftActionSubtitle": "向左滑動音樂清單中的歌曲時觸發的操作。",
   "@swipeRightToLeftActionSubtitle": {},
   "autoOfflineOptionNetwork": "區域網路",
   "@autoOfflineOptionNetwork": {
@@ -1968,7 +1968,7 @@
   "@autoOfflineNotification": {
     "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
   },
-  "autoOfflineSettingDescription": "自動啟用離線模式。\n停用：不會自動啟用離線模式。可能可以節省電力。\n區域網路：離開 Wifi 或乙太網路連線時啟用離線模式。\n離線：失去網路連線時啟用離線模式。\n你可以手動啟用離線模式，這麼做將會暫停自動離線模式，直到離線模式被手動關閉",
+  "autoOfflineSettingDescription": "自動啟用離線模式。\n停用：不會自動啟用離線模式。可能可以節省電力。\n區域網路：離開 Wifi 或乙太網路連線時啟用離線模式。\n離線：失去網路連線時啟用離線模式。\n無法連線：當切換網路後無法 Ping 到伺服器時，自動啟用離線模式。\n你可以手動啟用離線模式，這麼做將會暫停自動離線模式，直到離線模式被手動關閉",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
@@ -1990,23 +1990,23 @@
       }
     }
   },
-  "playOnStaleDelay": "「遠端播放」會話逾時",
+  "playOnStaleDelay": "「遠端播放」連線逾時",
   "@playOnStaleDelay": {
     "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
   },
-  "playOnStaleDelaySubtitle": "設定遠端播放會話在接收到指令後保持活躍的時間。活躍期間會提高回報頻率，可能增加頻寬使用。",
+  "playOnStaleDelaySubtitle": "指令觸發後的「遠端播放」會保持啟動狀態，期間播放狀態回報頻率提升，可能導致頻寬消耗增加。",
   "@playOnStaleDelaySubtitle": {
     "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
   },
-  "enablePlayonSubtitle": "啟用 Jellyfin 的「遠端播放」功能（允許從其他用戶端遠端控制 Finamp 的播放）。若您的反向代理或伺服器不支援 WebSocket，請停用此功能。",
+  "enablePlayonSubtitle": "啟用 Jellyfin 的「遠端播放」功能，可從其他用戶端遠端控制 Finamp。若你的反向代理或伺服器不支援 WebSocket，請停用此功能。",
   "@enablePlayonSubtitle": {
     "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
   },
-  "playOnReconnectionDelay": "「遠端播放」會話重新連線延遲",
+  "playOnReconnectionDelay": "「遠端播放」重新連線間隔",
   "@playOnReconnectionDelay": {
     "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
   },
-  "playOnReconnectionDelaySubtitle": "控制遠端播放 WebSocket 連線中斷後，重新嘗試連線之間的延遲時間（秒）。延遲時間越短，頻寬使用量越高。",
+  "playOnReconnectionDelaySubtitle": "設定「遠端播放」WebSocket 斷線後的重連間隔（秒）。間隔越短，頻寬耗用越多。",
   "@playOnReconnectionDelaySubtitle": {
     "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
   },
@@ -2085,7 +2085,7 @@
   "@showShuffleButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
   },
-  "showFavoriteButtonOnMediaNotificationSubtitle": "控制媒體通知中是否顯示「收藏」按鈕，讓您無需開啟應用程式即可將目前播放的歌曲加入或移出收藏。",
+  "showFavoriteButtonOnMediaNotificationSubtitle": "控制媒體通知中是否顯示「收藏」按鈕，讓您無需開啟應用程式即可將目前播放的歌曲加入或移除收藏。離線模式下會隱藏此按鈕。",
   "@showFavoriteButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a favorite button."
   },
@@ -2189,7 +2189,7 @@
   "@testConnectionButtonLabel": {
     "description": "Button to test the public and local url inside the network settings tab"
   },
-  "genreFilterPlaylistScreensSubtitle": "啟用後，透過類型進入的播放清單僅會顯示符合目前所瀏覽音樂類型的歌曲。（你仍可手動移除類型篩選，以顯示所有歌曲。）",
+  "genreFilterPlaylistScreensSubtitle": "啟用後，透過類型進入的播放清單將僅顯示符合目前所瀏覽類型的歌曲。(你仍可手動移除「類型篩選器」，以查看該播放清單中的所有歌曲。)",
   "@genreFilterPlaylistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
   },
@@ -2271,13 +2271,13 @@
   },
   "randomTracks": "隨機推薦的歌曲",
   "@randomTracks": {},
-  "showArtistsTracksSectionSubtitle": "是否顯示最多五首歌曲的區域。啟用後可選擇顯示「經常播放」、「收藏」、「隨機」、「最新發行」、「最近新增」或「最近播放」的歌曲。",
+  "showArtistsTracksSectionSubtitle": "是否顯示最多五首歌曲的區域。啟用後，您可以在「經常播放」、「收藏」、「隨機」、「最新發行」、「最近新增」與「最近播放」之間選擇要顯示的內容。",
   "@showArtistsTracksSectionSubtitle": {},
   "itemSectionsOrder": "項目區域顯示順序",
   "@itemSectionsOrder": {
     "description": "Label for the setting that controls the order of item sections on the screens."
   },
-  "genreFilterArtistScreensSubtitle": "啟用後，透過類型進入的藝人介面，僅會顯示符合該音樂類型的歌曲與專輯。（你仍然可以手動移除類型篩選，以顯示所有歌曲與專輯。）",
+  "genreFilterArtistScreensSubtitle": "啟用後，透過類型進入的藝人介面將僅顯示符合目前所瀏覽類型的歌曲與專輯。(你仍可手動移除「類型篩選器」，以查看該藝人的所有歌曲與專輯。)",
   "@genreFilterArtistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
@@ -2290,7 +2290,7 @@
       }
     }
   },
-  "autoReloadPrompt": "重新載入佇列以套用新的{type, select, network{網路設定} transcoding{轉碼設定} other{設定}}",
+  "autoReloadPrompt": "重新載入播放佇列以套用新的{type, select, network{網路設定} transcoding{轉碼設定} other{設定}}",
   "@autoReloadPrompt": {
     "description": "Prompt shown when the queue needs to be reloaded after changing network settings",
     "placeholders": {
@@ -2299,11 +2299,11 @@
       }
     }
   },
-  "applyFilterOnGenreChipTapSubtitle": "預設情況下，點擊類型會開啟該類型介面，長按則會以該類型篩選藝人或播放清單。啟用此選項後，行為將會反轉。",
+  "applyFilterOnGenreChipTapSubtitle": "預設的情況下，點擊類型標籤會開啟該類型介面，長按類型標籤則會依該類型篩選藝人或播放清單。啟用此設定後，這兩種操作將會對調。",
   "@applyFilterOnGenreChipTapSubtitle": {
     "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
   },
-  "genreListsInheritSortingSubtitle": "啟用後，「查看全部」清單將繼承類型畫面中的排序與篩選設定。若停用，則會改用對應音樂庫分頁的設定。點擊類型畫面上方的數量統計或「瀏覽播放清單」按鈕時，將一律開啟使用音樂庫分頁排序設定的完整清單。",
+  "genreListsInheritSortingSubtitle": "啟用後，「查看全部」清單將繼承類型畫面的排序與篩選設定。若停用，則會改用對應音樂庫的排序與篩選方式。點選類型畫面上方的數量統計或「瀏覽播放清單」按鈕時，將一律使用音樂庫的排序來顯示完整清單。",
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
@@ -2326,7 +2326,7 @@
   "@autoReloadQueueSubtitle": {
     "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
   },
-  "autoReloadPromptMissingTracks": "尚未下載的 {amountUndownloadedTracks, plural, =1{1 首歌曲} other{{amountUndownloadedTracks} 首歌曲}} 將從佇列中移除。",
+  "autoReloadPromptMissingTracks": "尚未下載的 {amountUndownloadedTracks, plural, =1{1 首歌曲} other{{amountUndownloadedTracks} 首歌曲}} 將從播放佇列中移除。",
   "@autoReloadPromptMissingTracks": {
     "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
     "placeholders": {
@@ -2345,11 +2345,11 @@
   "@itemSectionsOrderSubtitle": {
     "description": "Description of the setting that controls the order of item sections on the screens."
   },
-  "genreItemSectionFilterChipOrderTitle": "項目區域篩選順序",
+  "genreItemSectionFilterChipOrderTitle": "項目區域篩選器順序",
   "@genreItemSectionFilterChipOrderTitle": {
     "description": "Label for the setting that controls the order of item sections filter chips."
   },
-  "artistItemSectionFilterChipOrderTitle": "歌曲區域篩選順序",
+  "artistItemSectionFilterChipOrderTitle": "歌曲區域篩選器順序",
   "@artistItemSectionFilterChipOrderTitle": {
     "description": "Label for the setting that controls the order of the tracks sections filter chips."
   },
@@ -2365,7 +2365,7 @@
   "@genreScreen": {
     "description": "Name for the view/screen that shows genres"
   },
-  "autoReloadQueueTitle": "自動重新載入佇列",
+  "autoReloadQueueTitle": "自動重新載入播放佇列",
   "@autoReloadQueueTitle": {
     "description": "Title for the setting that controls if the queue is automatically reloaded when the source changes"
   },
@@ -2495,5 +2495,39 @@
     "description": "This is only shown on ios and android since desktop doesnt require location permissions"
   },
   "preferLocalNetworkPublicAddressSettingTitle": "外部網路",
-  "@preferLocalNetworkPublicAddressSettingTitle": {}
+  "@preferLocalNetworkPublicAddressSettingTitle": {},
+  "sleepTimerRemainingTime": "將於{time, plural, =1{1 分鐘內} other{{time} 分鐘後}}進入睡眠",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "sleepTimerRemainingTracks": "將於{time, plural, =1{此曲播畢後} other{ {time} 首後}}進入睡眠",
+  "@sleepTimerRemainingTracks": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "autoOfflineOptionUnreachable": "無法連線",
+  "@autoOfflineOptionUnreachable": {
+    "description": "This is shown when the autoOffline feature is set to Unreachable, this means offline mode will be automatically enabled when - after a network change - the server cant be pinged"
+  },
+  "clearQueueOnStopEventTitle": "外部停止時清除播放佇列",
+  "@clearQueueOnStopEventTitle": {
+    "description": "Title for the setting that controls if OS stop commands clear the queue."
+  },
+  "clearQueueOnStopEventSubtitle": "若從作業系統接收到「停止」指令，將清空佇列並關閉播放器。在應用程式內執行停止動作時，也會自動關閉播放器並清空佇列。",
+  "@clearQueueOnStopEventSubtitle": {
+    "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
+  },
+  "syncPlaybackSpeedAndPitchLabel": "同步速度與音調",
+  "@syncPlaybackSpeedAndPitchLabel": {
+    "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
+  }
 }

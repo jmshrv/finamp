@@ -1,5 +1,5 @@
 {
-  "downloadsQueued": "Téléchargements ajoutés.",
+  "downloadsQueued": "Téléchargement des fichiers",
   "@downloadsQueued": {},
   "grid": "Mosaïque",
   "@grid": {},
@@ -118,7 +118,7 @@
       }
     }
   },
-  "dlComplete": "{count,plural,=1{{count} achevé} other{{count} achevés}}",
+  "dlComplete": "{count} terminé",
   "@dlComplete": {
     "placeholders": {
       "count": {
@@ -126,7 +126,7 @@
       }
     }
   },
-  "dlFailed": "{count,plural,=1{{count} échec} other{{count} échecs}}",
+  "dlFailed": "{count} échoué",
   "@dlFailed": {
     "placeholders": {
       "count": {
@@ -208,7 +208,7 @@
   "@audioService": {},
   "interactions": "Intéractions",
   "@interactions": {},
-  "layoutAndTheme": "Disposition & Apparence",
+  "layoutAndTheme": "Disposition et apparence",
   "@layoutAndTheme": {},
   "notAvailableInOfflineMode": "Indisponible en mode hors-ligne",
   "@notAvailableInOfflineMode": {},
@@ -298,7 +298,7 @@
   "@theme": {},
   "system": "Système",
   "@system": {},
-  "light": "Claire",
+  "light": "Clair",
   "@light": {},
   "dark": "Sombre",
   "@dark": {},
@@ -310,7 +310,7 @@
   "@yesButtonLabel": {},
   "noButtonLabel": "Non",
   "@noButtonLabel": {},
-  "setSleepTimer": "Configurer le minuteur de sommeil",
+  "setSleepTimer": "Pause après la lecture",
   "@setSleepTimer": {},
   "minutes": "Minutes",
   "@minutes": {},
@@ -430,7 +430,7 @@
   "@noMusicLibrariesBody": {},
   "refresh": "Rafraîchir",
   "@refresh": {},
-  "swipeInsertQueueNext": "Lire la chanson balayée en prochain",
+  "swipeInsertQueueNext": "Lire la chanson balayée à la suite",
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "Placer une chanson comme prochain élément de la file d'attente lorsqu'elle est balayée dans la liste des chansons, au lieu de l'ajouter à la fin de la liste.",
   "@swipeInsertQueueNextSubtitle": {},
@@ -585,7 +585,7 @@
   "@timeFractionTooltip": {
     "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
   },
-  "sleepTimerRemainingTime": "Arrêt de la lecture dans {time} minutes",
+  "sleepTimerRemainingTime": "Dors dans {time, plural, =1{<1 minute} other{{time} minutes}}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -981,17 +981,17 @@
   "@bufferDisableSizeConstraintsSubtitle": {},
   "bufferSizeTitle": "Taille de la mémoire tampon",
   "@bufferSizeTitle": {},
-  "syncingDownloadSize": "Synchronisation...",
+  "syncingDownloadSize": "Synchronisation…",
   "@syncingDownloadSize": {
     "description": "Message shown for download size while item is still syncing."
   },
   "bufferDisableSizeConstraintsTitle": "Ne pas limiter la taille de la mémoire tampon",
   "@bufferDisableSizeConstraintsTitle": {},
-  "activeDownloadSize": "Téléchargement...",
+  "activeDownloadSize": "Téléchargement…",
   "@activeDownloadSize": {
     "description": "Message shown for download size while item is still being downloaded"
   },
-  "missingDownloadSize": "Suppression...",
+  "missingDownloadSize": "Suppression…",
   "@missingDownloadSize": {
     "description": "Message shown for download size while item is being deleted but is not fully removed"
   },
@@ -1007,7 +1007,7 @@
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
   },
-  "reportQueueToServerSubtitle": "Lorsque cette option est activée, Finamp envoie la file d'attente actuelle au serveur. Il semble qu'il n'y ait actuellement que peu d'utilité à cela, à part augmenter la bande passante utilisée.",
+  "reportQueueToServerSubtitle": "Lorsque cette option est activée, Finamp envoie la file d'attente actuelle au serveur. Cela pourrait améliorer le contrôle à distance et permettre une restauration de la file d'attente côté serveur. Laisser cocher seulement si la fonctionnalité 'Play On' est active.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1525,11 +1525,11 @@
   "@swipeLeftToRightAction": {},
   "appearsOnAlbums": "Apparaît dans",
   "@appearsOnAlbums": {},
-  "albumArtists": "Artistes de l’album",
+  "albumArtists": "Artistes d'albums",
   "@albumArtists": {},
   "performingArtists": "Artistes",
   "@performingArtists": {},
-  "swipeRightToLeftAction": "Glissement à gauche",
+  "swipeRightToLeftAction": "Balayer vers la gauche",
   "@swipeRightToLeftAction": {},
   "swipeRightToLeftActionSubtitle": "Action déclenchée lors du glissement d'un morceau de droite à gauche dans la liste.",
   "@swipeRightToLeftActionSubtitle": {},
@@ -1710,7 +1710,7 @@
   "@normalizationGain": {
     "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
   },
-  "albumScreen": "Écran de l'album",
+  "albumScreen": "Écran d'albums",
   "@albumScreen": {
     "description": "Name for the view/screen that shows albums"
   },
@@ -1801,7 +1801,7 @@
   "@releaseDateFormatYear": {
     "description": "Date format option for the release date of an album, showing only the year"
   },
-  "allowDeleteFromServerTitle": "Permet la suppression du serveur",
+  "allowDeleteFromServerTitle": "Permettre la suppression des fichiers",
   "@allowDeleteFromServerTitle": {
     "description": "Title for the setting that controls if items can be deleted from the server"
   },
@@ -2058,7 +2058,7 @@
   "@latestReleases": {},
   "unknown": "Inconnu",
   "@unknown": {},
-  "itemSectionsOrderSubtitle": "Contrôle l'ordre de la section des",
+  "itemSectionsOrderSubtitle": "Contrôle l'ordre des sections de l'élément.",
   "@itemSectionsOrderSubtitle": {
     "description": "Description of the setting that controls the order of item sections on the screens."
   },
@@ -2184,7 +2184,7 @@
   "@showFavoriteButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a favorite button."
   },
-  "artistScreen": "Écran d'artiste",
+  "artistScreen": "Écran d'artistes",
   "@artistScreen": {
     "description": "Name for the view/screen that shows artists"
   },
@@ -2264,12 +2264,157 @@
   "@applyFilterOnGenreChipTapSubtitle": {
     "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
   },
-  "genreScreen": "Écran de genre",
+  "genreScreen": "Écran de genres",
   "@genreScreen": {
     "description": "Name for the view/screen that shows genres"
   },
   "defaultOrder": "Ordre par défaut",
   "@defaultOrder": {
     "description": "Default sorting order for playlists (server order)"
+  },
+  "playbackActionPagePlay": "Lecture",
+  "@playbackActionPagePlay": {
+    "description": "Label for the playback action page that contains all actions related to playing in order"
+  },
+  "playbackActionPageShuffle": "Aléatoire",
+  "@playbackActionPageShuffle": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled"
+  },
+  "playbackActionPageShuffleAlbums": "Albums aléatoires",
+  "@playbackActionPageShuffleAlbums": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+  },
+  "curatedItemsNoFavorites": "Vous n'avez pas de favoris{itemType, select, artistGenreFilter{ pour cet artiste dans ce genre} artist{ pour cet artiste} genre{ pour ce genre} other{}}.",
+  "@curatedItemsNoFavorites": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "genreNoItems": "Vous n'avez aucun {itemType, select, playlists{playlists} artists{artists} albums{albums} tracks{tracks} other{items}} pour ce genre.",
+  "@genreNoItems": {
+    "description": "Message for empty See All lists for a genre.",
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
+  "sleepTimerStartTimer": "Démarrer la minuterie",
+  "@sleepTimerStartTimer": {
+    "description": "Label for the button that starts the sleep timer"
+  },
+  "curatedItemsNotListenedYet": "Vous n'avez écouté aucune tracks{itemType, select, artistGenreFilter{ de cet artiste dans ce genre} artist{ de cet artiste} genre{ dans ce genre} other{}}.",
+  "@curatedItemsNotListenedYet": {
+    "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "sleepTimerProjectedDuration": "La lecture sera interrompue dans ~{duration}",
+  "@sleepTimerProjectedDuration": {
+    "description": "Displays duration until playback is expected to be ended by the sleep timer (unless the queue is modified before). {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "itemCountCalculating": "Calcul du nombre d'articles",
+  "@itemCountCalculating": {
+    "description": "Shown to screen readers while the item count is being calculated."
+  },
+  "preferLocalNetworkActiveAddressInfoText": "Adresse active",
+  "@preferLocalNetworkActiveAddressInfoText": {
+    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+  },
+  "preferLocalNetworkPublicAddressSettingTitle": "Adresse publique",
+  "@preferLocalNetworkPublicAddressSettingTitle": {},
+  "menuButtonLabel": "Plus d'actions",
+  "@menuButtonLabel": {
+    "description": "Generic label for menu buttons shown throughout the app. Used for the album, artist, playlist, etc. menus"
+  },
+  "notImplementedYet": "Pas encore implémenté.",
+  "@notImplementedYet": {
+    "description": "Message shown when a feature is not implemented yet"
+  },
+  "automaticOfflineModeOverrideActiveTitle": "Commutation automatique en pause",
+  "@automaticOfflineModeOverrideActiveTitle": {
+    "description": "Title for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "automaticOfflineModeOverrideActiveSubtitle": "Appuyez ici pour reprendre",
+  "@automaticOfflineModeOverrideActiveSubtitle": {
+    "description": "Subtitle for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "sleepTimerFinishLastTrack": "Terminer le dernier morceau ?",
+  "@sleepTimerFinishLastTrack": {
+    "description": "Option for the sleep timer that will finish the last track before stopping playback."
+  },
+  "sleepTimerAfterCurrentTrack": "Après la piste actuelle",
+  "@sleepTimerAfterCurrentTrack": {
+    "description": "Option for the sleep timer that will stop playback after the current track finishes."
+  },
+  "preferLocalNetworkEnableSwitchDescription": "Utiliser ou non une adresse différente lorsque vous êtes sur le réseau local de votre serveur Jellyfin",
+  "@preferLocalNetworkEnableSwitchDescription": {},
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks, plural, =1{1 piste} other{{amountUndownloadedTracks} pistes}}seront supprimées de la file d'attente car elles ne sont pas téléchargées.",
+  "@autoReloadPromptMissingTracks": {
+    "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
+    "placeholders": {
+      "amountUndownloadedTracks": {
+        "type": "int"
+      }
+    }
+  },
+  "preferLocalNetworkEnableSwitchTitle": "Préférer le réseau local",
+  "@preferLocalNetworkEnableSwitchTitle": {},
+  "preferLocalNetworkInfoBox": "Cette fonctionnalité nécessite des autorisations de localisation (et la localisation doit être activée) pour lire le nom du réseau.",
+  "@preferLocalNetworkInfoBox": {
+    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
+  },
+  "preferLocalNetworkTargetAddressLocalSettingDescription": "Adresse cible du serveur Jellyfin dans votre réseau local",
+  "@preferLocalNetworkTargetAddressLocalSettingDescription": {},
+  "preferLocalNetworkTargetAddressLocalSettingTitle": "Adresse du réseau local",
+  "@preferLocalNetworkTargetAddressLocalSettingTitle": {},
+  "preferLocalNetworkPublicAddressSettingDescription": "L'adresse principale utilisée pour se connecter à votre serveur Jellyfin",
+  "@preferLocalNetworkPublicAddressSettingDescription": {},
+  "autoReloadPrompt": "Recharger la file d'attente pour appliquer un nouveau {type, select, network{network settings} transcoding{transcoding settings} other{settings}}",
+  "@autoReloadPrompt": {
+    "description": "Prompt shown when the queue needs to be reloaded after changing network settings",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "editItemTitle": "Modifier {itemType, select, playlist{Playlist} other{}}",
+  "@editItemTitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
+  "formattedRelativeTime": "{type, select, just_now{à l'instant} minutes{{value, plural, one{1 min} other{{value}min}}} hours{{value, plural, one{1 h} other{{value}h}}} yesterday{hier} days{{value, plural, one{il y a 1 jour} other{il y a {value} jours}}} other{value}}",
+  "@formattedRelativeTime": {
+    "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
+    "placeholders": {
+      "type": {
+        "type": "String",
+        "description": "The category of time passed: one of 'just_now', 'minutes', 'hours', 'yesterday', or 'days'."
+      },
+      "value": {
+        "type": "int",
+        "example": "5"
+      }
+    }
   }
 }

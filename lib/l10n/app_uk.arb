@@ -931,7 +931,7 @@
   "@repairDownloads": {
     "description": "Tooltip for downloads repair button."
   },
-  "queueRestoreButtonLabel": "Відновити",
+  "queueRestoreButtonLabel": "Відновити цю чергу",
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
@@ -1966,7 +1966,7 @@
   "@autoOfflineOptionNetwork": {
     "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
   },
-  "autoOfflineSettingDescription": "Автоматично перемикатись у режим офлайн.\nДеактивовано: Не перемикатиме автоматично у режим офлайн. Може зберігати заряд батареї.\nЛокальні Мережа: Вмикати режим офлайн при відсутності зʼєднання до Інтернету.\nВідʼєднано: Вмикати режим офлайн при відсутності зʼєднання з будь-чим.\nВи завжди можете вручну увімкнути режим офлайн, що призупинить автоматичне увімкнення до моменту поки ви не вийдете з режиму офлайн",
+  "autoOfflineSettingDescription": "Автоматично перемикатись у режим офлайн.\nДеактивовано: Не перемикатиме автоматично у режим офлайн. Може зберігати заряд батареї.\nЛокальні Мережа: Вмикати режим офлайн при відсутності зʼєднання до Інтернету.\nВідʼєднано: Вмикати режим офлайн при відсутності зʼєднання з будь-чим.\nНедоступний: Увімкніть автономний режим, коли сервер не вдається пропінгувати після зміни мережі.\nВи завжди можете вручну увімкнути режим офлайн, що призупинить автоматичне увімкнення до моменту поки ви не вийдете з режиму офлайн",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
@@ -2085,7 +2085,7 @@
   "@showFavoriteButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a favorite button."
   },
-  "showFavoriteButtonOnMediaNotificationSubtitle": "Контролює, чи має медіасповіщення кнопку обраного. Це дозволяє додавати/вилучати поточну композицію з обраного, не відкриваючи програму.",
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Контролює, чи має медіасповіщення кнопку обраного. Це дозволяє додавати/вилучати поточний трек з обраного, не відкриваючи програму. Приховано в офлайн-режимі.",
   "@showFavoriteButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a favorite button."
   },
@@ -2495,5 +2495,39 @@
   "preferLocalNetworkTargetAddressLocalSettingTitle": "Адреса локальної мережі",
   "@preferLocalNetworkTargetAddressLocalSettingTitle": {},
   "preferLocalNetworkTargetAddressLocalSettingDescription": "Цільова адреса сервера Jellyfin у вашій локальній мережі",
-  "@preferLocalNetworkTargetAddressLocalSettingDescription": {}
+  "@preferLocalNetworkTargetAddressLocalSettingDescription": {},
+  "sleepTimerRemainingTime": "Сон у {time,plural,=1{<1 Хвилина} other{{time} хвилин}}",
+  "@sleepTimerRemainingTime": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "clearQueueOnStopEventTitle": "Очистити чергу під час зовнішньої зупинки",
+  "@clearQueueOnStopEventTitle": {
+    "description": "Title for the setting that controls if OS stop commands clear the queue."
+  },
+  "sleepTimerRemainingTracks": "Сон {time,plural,=1{після цього треку} other{in {time} треки}}",
+  "@sleepTimerRemainingTracks": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "clearQueueOnStopEventSubtitle": "Очистити чергу та закрити програвач, якщо від ОС отримано команду «зупинити». Дії зупинки в програмі завжди закриватимуть програвач та очищуватимуть чергу.",
+  "@clearQueueOnStopEventSubtitle": {
+    "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
+  },
+  "autoOfflineOptionUnreachable": "Недосяжний",
+  "@autoOfflineOptionUnreachable": {
+    "description": "This is shown when the autoOffline feature is set to Unreachable, this means offline mode will be automatically enabled when - after a network change - the server cant be pinged"
+  },
+  "syncPlaybackSpeedAndPitchLabel": "Синхронізація швидкості та висоти тону",
+  "@syncPlaybackSpeedAndPitchLabel": {
+    "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
+  }
 }
