@@ -2403,7 +2403,7 @@
       }
     }
   },
-  "formattedRelativeTime": "{type, select, just_now{just now} minutes il y a {{value} minutes} heures il y a {{value} heures} hier {yesterday} jours{{value, plural, =1{il y a un jour} other{il y a {value} jours}}} other{value}}",
+  "formattedRelativeTime": "{type, select, just_now{just now} minutes il y a {{value} minutes} heures il y a {{value} heures} yesterday{hier} jours{{value, plural, =1{il y a un jour} other{il y a {value} jours}}} other{value}}",
   "@formattedRelativeTime": {
     "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
     "placeholders": {
