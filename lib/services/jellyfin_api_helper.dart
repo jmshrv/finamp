@@ -10,6 +10,7 @@ import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_user_certificates_android/flutter_user_certificates_android.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/io_client.dart' as http;
 import 'package:isar/isar.dart';
@@ -59,6 +60,11 @@ class JellyfinApiHelper {
   static Future<void> _processRequestsBackground((SendPort, RootIsolateToken) input) async {
     BackgroundIsolateBinaryMessenger.ensureInitialized(input.$2);
     ReceivePort requestPort = ReceivePort();
+
+    // Extend the default security context to trust Android user certificates.
+    // This is a workaround for <https://github.com/dart-lang/sdk/issues/50435>.
+    await FlutterUserCertificatesAndroid().trustAndroidUserCertificates(SecurityContext.defaultContext);
+
     input.$1.send(requestPort.sendPort);
     final dir = (Platform.isAndroid || Platform.isIOS)
         ? await getApplicationDocumentsDirectory()
