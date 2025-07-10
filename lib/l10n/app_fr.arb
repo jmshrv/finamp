@@ -118,7 +118,7 @@
       }
     }
   },
-  "dlComplete": "{count,plural,=1{{count} achevé} other{{count} achevés}}",
+  "dlComplete": "{count} terminé",
   "@dlComplete": {
     "placeholders": {
       "count": {
@@ -126,7 +126,7 @@
       }
     }
   },
-  "dlFailed": "{count,plural,=1{{count} échec} other{{count} échecs}}",
+  "dlFailed": "{count} échoué",
   "@dlFailed": {
     "placeholders": {
       "count": {
@@ -585,7 +585,7 @@
   "@timeFractionTooltip": {
     "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
   },
-  "sleepTimerRemainingTime": "Arrêt de la lecture dans {prefix}{time} {suffix}",
+  "sleepTimerRemainingTime": "Dors dans {time, plural, =1{<1 minute} other{{time} minutes}}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -2365,7 +2365,7 @@
   },
   "preferLocalNetworkEnableSwitchDescription": "Utiliser ou non une adresse différente lorsque vous êtes sur le réseau local de votre serveur Jellyfin",
   "@preferLocalNetworkEnableSwitchDescription": {},
-  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks, plural, =1{1 track} autres{{amountUndownloadedTracks} pistes}} seront supprimées de la file d'attente car elles ne sont pas téléchargées.",
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks, plural, =1{1 piste} other{{amountUndownloadedTracks} pistes}}seront supprimées de la file d'attente car elles ne sont pas téléchargées.",
   "@autoReloadPromptMissingTracks": {
     "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
     "placeholders": {
@@ -2403,7 +2403,7 @@
       }
     }
   },
-  "formattedRelativeTime": "{type, select, just_now{à l'instant} minutes{{value, plural, one{1 min} other{# min}}} hours{{value, plural, one{1 h} other{{value}h}}} yesterday{hier} days{{value, plural, one{il y a 1 jour} other{il y a {value} jours}}} other{value}}",
+  "formattedRelativeTime": "{type, select, just_now{à l'instant} minutes{{value, plural, one{1 min} other{{value}min}}} hours{{value, plural, one{1 h} other{{value}h}}} yesterday{hier} days{{value, plural, one{il y a 1 jour} other{il y a {value} jours}}} other{value}}",
   "@formattedRelativeTime": {
     "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
     "placeholders": {
