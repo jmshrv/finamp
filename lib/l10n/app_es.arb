@@ -1821,7 +1821,7 @@
   "@shareOfflineListens": {
     "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
   },
-  "sleepTimerRemainingTime": "Durmiendo en {prefix}{time} {suffix}",
+  "sleepTimerRemainingTime": "Durmiendo en {time,plural,=1{<1 minuto} other{{time} minutos}}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {

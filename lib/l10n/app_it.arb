@@ -708,7 +708,7 @@
   "@hours": {},
   "seconds": "Secondi",
   "@seconds": {},
-  "sleepTimerRemainingTime": "Spegnimento in {prefix}{time} {suffix}",
+  "sleepTimerRemainingTime": "Spegnimento in {time,plural,=1{<1 minuto} other{{time} minuti}}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
