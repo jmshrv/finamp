@@ -44,7 +44,7 @@ Future<void> showThemedBottomSheet({
   }
   await showModalBottomSheet<void>(
     context: context,
-    backgroundColor: (Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black).withOpacity(0.9),
+    backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
     shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20.0))),
     isScrollControlled: true,
     clipBehavior: Clip.hardEdge,

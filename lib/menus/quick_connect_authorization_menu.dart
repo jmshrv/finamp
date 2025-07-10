@@ -289,22 +289,24 @@ class _QuickConnectInputFieldState extends State<QuickConnectInputField> {
           maintainSize: true,
           maintainAnimation: true,
           maintainSemantics: true,
-          child: TextField(
-            controller: widget.controller,
-            focusNode: _focusNode,
-            maxLength: 6,
-            keyboardType: TextInputType.number,
-            autofocus: true,
-            textInputAction: TextInputAction.done,
-            autofillHints: const [AutofillHints.oneTimeCode],
-            maxLengthEnforcement: MaxLengthEnforcement.enforced,
-            enableInteractiveSelection: true,
-            scrollPadding: EdgeInsets.zero,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(6)],
-            onSubmitted: (_) => widget.onSubmitted(),
-            onTapOutside: (_) => setState(() {
-              _focusNode.unfocus();
-            }),
+          child: SizedBox.shrink(
+            child: TextField(
+              controller: widget.controller,
+              focusNode: _focusNode,
+              maxLength: 6,
+              keyboardType: TextInputType.number,
+              autofocus: true,
+              textInputAction: TextInputAction.done,
+              autofillHints: const [AutofillHints.oneTimeCode],
+              maxLengthEnforcement: MaxLengthEnforcement.enforced,
+              enableInteractiveSelection: true,
+              scrollPadding: EdgeInsets.zero,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(6)],
+              onSubmitted: (_) => widget.onSubmitted(),
+              onTapOutside: (_) => setState(() {
+                _focusNode.unfocus();
+              }),
+            ),
           ),
         ),
         const SizedBox(height: 8.0),

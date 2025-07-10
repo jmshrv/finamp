@@ -53,7 +53,7 @@ class PlayerScreenTheme extends StatelessWidget {
       ],
       child: Consumer(
         builder: (context, ref, child) {
-          var theme = ThemeData(
+          var theme = Theme.of(context).copyWith(
             colorScheme: ref.watch(localThemeProvider),
             iconTheme: Theme.of(context).iconTheme.copyWith(color: ref.watch(localThemeProvider).primary),
           );
@@ -92,7 +92,7 @@ class ItemTheme extends StatelessWidget {
       overrides: [localThemeInfoProvider.overrideWithValue(ThemeInfo(item, useIsolate: false))],
       child: Consumer(
         builder: (context, ref, child) {
-          var theme = ThemeData(
+          var theme = Theme.of(context).copyWith(
             colorScheme: ref.watch(localThemeProvider),
             iconTheme: Theme.of(context).iconTheme.copyWith(color: ref.watch(localThemeProvider).primary),
           );
