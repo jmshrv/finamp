@@ -158,7 +158,7 @@
       }
     }
   },
-  "couldNotLoad": "{source, select, album{ஆல்பம்} playlist{பாடல்பட்டி} trackMix{பாடல் கலவை} artistMix{கலைஞர் கலவை} albumMix{ஆல்பம் கலவை} genreMix{வகை கலவை} favorites{பிடித்தவை} allTracks{அனைத்து பாடல்கள்} filteredList{பாடல்கள்} genre{வகை} artist{கலைஞர்} track{பாடல்} nextUpAlbum{அடுத்தது - ஆல்பம்} nextUpPlaylist{அடுத்தது - பாடல்பட்டி} nextUpArtist{அடுத்தது - கலைஞர்} nextUpGenre{அடுத்தது - வகை} other{உருப்படி}}ஐ ஏற்ற முடியவில்லை.",
+  "couldNotLoad": "{source, select, album{ஆல்பம்} playlist{பாடல்பட்டி} trackMix{பாடல் கலவை} artistMix{கலைஞர் கலவை} albumMix{ஆல்பம் கலவை} genreMix{வகை கலவை} favorites{பிடித்தவை} allTracks{அனைத்து பாடல்கள்} filteredList{பாடல்கள்} genre{வகை} artist{கலைஞர்} track{பாடல்} nextUpAlbum{அடுத்தது - ஆல்பம்} nextUpPlaylist{அடுத்தது - பாடல்பட்டி} nextUpArtist{அடுத்தது - கலைஞர்} nextUpGenre{அடுத்தது - வகை} other{உருப்படி}}ஐ ஏற்ற முடியவில்லை",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -1257,7 +1257,7 @@
   "@requireWifiForDownloads": {
     "description": "Description of setting for only performing downloads while on wifi"
   },
-  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{பதிவிறக்கம்} failed{தோல்வியுற்ற} repeatedlyUnsynced{ஒத்திசைக்கப்படாத} enqueued{Queued} other{}} {itemCount, plural, one{Download} other{Downloads}}",
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{இயங்குகிறது} failed{தோல்வி} syncFailed{மீண்டும் ஒத்திசைக்கப்படவில்லை} enqueued{வரிசைப்படுத்தப்பட்டது} other{}} {itemCount, plural, =1{பதிவிறக்கம்} other{பதிவிறக்கங்கள்}}",
   "@activeDownloadsListHeader": {
     "description": "Header text for lists of active downloads of a particular state.",
     "placeholders": {
@@ -1269,7 +1269,7 @@
       }
     }
   },
-  "downloadLibraryPrompt": "நூலகத்தின் அனைத்து உள்ளடக்கங்களையும் பதிவிறக்கம் செய்ய விரும்புகிறீர்களா?",
+  "downloadLibraryPrompt": "நீங்கள் ''{libraryName}'' நூலகத்தின் அனைத்து உள்ளடக்கத்தையும் பதிவிறக்க விரும்புகிறீர்களா?",
   "@downloadLibraryPrompt": {
     "description": "Confirmation prompt before downloading entire library, which may be large.",
     "placeholders": {
@@ -1393,7 +1393,7 @@
     },
     "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
   },
-  "finampCollectionNames": "{itemType, தேர்ந்தெடுக்கப்பட்ட, பிடித்தவை {Favorites} allplaylists {All Playlists} fivelatestalbums {5 Latest Albums} allplaylistsmetadata {Playlist Metadata} collectionwithlibraryfilter நூலக வடிகட்டியுடன் சேகரிப்பு} பிற {Collection with Library Filter}}}",
+  "finampCollectionNames": "{itemType, select, favorites{பிடித்தவை} allPlaylists{அனைத்து பாடல்பட்டிகள்} fiveLatestAlbums{கடைசி 5 ஆல்பங்கள்} allPlaylistsMetadata{பாடல்பட்டி மெட்டாடேட்டா} collectionWithLibraryFilter{நூலகம் வடிகட்டிய தொகுப்பு} other{{itemType}}}",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
@@ -1431,7 +1431,7 @@
   "@transcodeHint": {
     "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
   },
-  "collectionDownloadInfo": "{size} {கோடெக், தேர்ந்தெடு, அசல் {} பிற {என {codec} {{bitrate}}} {இருப்பிடம், தேர்ந்தெடுக்கவும், சுழிய {} பிற {({location})}}",
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ {codec} @ {bitrate} ஆக}}{location, select, null{} other{ ({location})}}",
   "@collectionDownloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1477,7 +1477,7 @@
     },
     "description": "Dropdown option to download transcoded version of tracks"
   },
-  "downloadInfo": "{size} {codec} {பிட்ரேட், தேர்ந்தெடுக்கவும், சுழிய {} பிற { @ {bitrate} டிரான்ச்கோடட்}} {இருப்பிடம், தேர்ந்தெடுக்கவும், சுழிய {} பிற {({location})}}",
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} மாற்றியமைக்கப்பட்டது}}{location, select, null{} other{ ({location})}}",
   "@downloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -2130,7 +2130,7 @@
   "@genreFilterNotAvailableForAlbums": {
     "description": "Message shown when the user tries to apply a genre filter to an album."
   },
-  "genreNotFound": "வகையைக் கண்டுபிடிக்க முடியவில்லை.",
+  "genreNotFound": "வகையை கண்டறிய முடியவில்லை.{additionalInfo, select, offline{ இது பதிவிறக்கப்படவில்லை அல்லது வேறு நூலகத்திற்கு属ங்கியிருக்கலாம்.} other{ இது வேறு நூலகத்திற்கு属ங்கியிருக்கலாம்.}}",
   "@genreNotFound": {
     "placeholders": {
       "additionalInfo": {
@@ -2157,7 +2157,7 @@
   "@marqueeOrTruncateButton": {},
   "marqueeOrTruncateButtonSubtitle": "காட்டு… உரையை ச்க்ரோலிங் செய்வதற்கு பதிலாக நீண்ட தலைப்புகளின் முடிவில்",
   "@marqueeOrTruncateButtonSubtitle": {},
-  "sleepTimerProjectedDuration": "பிளேபேக் ~ {duration} இல் இடைநிறுத்தப்படும்}",
+  "sleepTimerProjectedDuration": "பிளேபேக் ~ {duration} இல் இடைநிறுத்தப்படும்",
   "@sleepTimerProjectedDuration": {
     "description": "Displays duration until playback is expected to be ended by the sleep timer (unless the queue is modified before). {duration} is a pre-formatted string.",
     "placeholders": {
@@ -2231,7 +2231,7 @@
   "@genericCancel": {
     "description": "Used when the user stops an action from taking place inside a popup dialog window"
   },
-  "itemDeletedSnackbar": "{itemType, Select, Select, Select, Playlist {Album} கலைஞர் {கலைஞர் {வகை {Playlist} டிராக் {டிராக் {நூலகம் {Artist} பிற {Genre} {deviceType இலிருந்து நீக்கப்பட்டது, தேர்ந்தெடுக்கப்பட்ட, சாதனம் {Track} சேவையகம் {Library}}}}",
+  "itemDeletedSnackbar": "{itemType, select, album{ஆல்பம்} playlist{பாடல்பட்டி} artist{கலைஞர்} genre{வகை} track{பாடல்} library{நூலகம்} other{உருப்படி}} {deviceType, select, device{சாதனத்திலிருந்து} server{சர்வரில் இருந்து} other{அறியப்படாத இடத்தில் இருந்து}} நீக்கப்பட்டது",
   "@itemDeletedSnackbar": {
     "description": "Used whenever item gets deleted from the device or server, message in snackbar"
   },
@@ -2247,7 +2247,7 @@
   "@deleteFromTargetDialogText": {
     "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
   },
-  "deleteFromTargetConfirmButton": "நீக்கு {இலக்கு, தேர்ந்தெடுக்கவும், சாதனம் { from Device} சேவையகத்திலிருந்து {பிற {}}",
+  "deleteFromTargetConfirmButton": "{target, select, device{சாதனத்திலிருந்து நீக்கு} server{சர்வரில் இருந்து நீக்கு} other{நீக்கு}}",
   "@deleteFromTargetConfirmButton": {
     "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
   },
@@ -2268,7 +2268,7 @@
   "@downloadSizeWarningCutoffSubtitle": {
     "description": "Subtitle for the setting controlling when to warn about a large download"
   },
-  "confirmAddAlbumToPlaylist": "{ItemType, Select, Select, Select, தேர்ந்தெடு {Playlist {album} கலைஞர் {playlist} வகை {artist} பிற {genre} '{item}' ஆகியவற்றிலிருந்து அனைத்து தடங்களையும் இந்த பிளேலிச்ட்டில் சேர்க்க விரும்புகிறீர்களா? They can only be removed individually.",
+  "confirmAddAlbumToPlaylist": "நீங்கள் {itemType, select, album{ஆல்பம்} playlist{பாடல்பட்டி} artist{கலைஞர்} genre{வகை} other{உருப்படி}} '{itemName}' இல் இருந்து அனைத்து பாடல்களையும் இந்த பாடல்பட்டியில் சேர்க்க விரும்புகிறீர்களா? அவற்றை தனித்தனியாக மட்டுமே நீக்க முடியும்.",
   "@confirmAddAlbumToPlaylist": {
     "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
     "placeholders": {
@@ -2355,7 +2355,7 @@
   },
   "autoOfflineSettingTitle": "தானியங்கு இணைப்பில்லாத பயன்முறை",
   "@autoOfflineSettingTitle": {},
-  "autoOfflineNotification": "தானாகவே {நிலை, தேர்ந்தெடுக்கவும், இயக்கப்பட்ட {enabled} முடக்கப்பட்ட {disabled} பிற {}} இணைப்பில்லாத பயன்முறையில் குவாண்டம் நிலையை அமைக்கவும்",
+  "autoOfflineNotification": "தானாகவே ஆஃப்லைன் நிலை {state, select, enabled{இயக்கப்பட்டது} disabled{இடைநிறுத்தப்பட்டது} other{அளவிடப்பட்ட நிலைக்கு அமைக்கப்பட்டது}}",
   "@autoOfflineNotification": {
     "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
   },
@@ -2395,7 +2395,7 @@
   "@outputMenuOpenConnectionSettingsButtonTitle": {
     "description": "Button title for connecting to a device from the output menu"
   },
-  "deviceType": "{தட்டச்சு செய்க",
+  "deviceType": "{type, select, speaker{சாதன ஸ்பீக்கர்} tv{டிவி} bluetooth{புளூடூத்} other{அறியப்படாதது}}",
   "@deviceType": {
     "placeholders": {
       "type": {
@@ -2408,7 +2408,7 @@
   "@desktopShuffleWarning": {
     "description": "Warning message when trying to shuffle queue on desktop saying it is not implemented."
   },
-  "itemCount": "{சைல்ட் டைப், தேர்ந்தெடுக்கவும், தேர்ந்தெடுக்கவும் {{அளவு, பன்மை, = 1 {1 track} பிற {{amount} தடங்கள்}}} ஆல்பம் {{தொகை, = 1 {1 album} பிற {{amount} ஆல்பங்கள்}}}} {{{}}}}}}}}}}}}}}}}}}}}}}}",
+  "itemCount": "{childType, select, track{{amount, plural, =1{1 பாடல்} other{{amount} பாடல்கள்}}} album{{amount, plural, =1{1 ஆல்பம்} other{{amount} ஆல்பங்கள்}}} other{{amount, plural, =1{1 உருப்படி} other{{amount} உருப்படிகள்}}}}",
   "@itemCount": {
     "description": "Amount of various child item, like artist albums, performing artist tracks, or genre albums. Shown for example in the menu headers.",
     "placeholders": {
@@ -2422,7 +2422,7 @@
       }
     }
   },
-  "itemCountLoading": "{குழந்தை வகை, தேர்ந்தெடுக்கவும், தடங்கள் {tracks} ஆல்பம் {albums} பிற {items}}",
+  "itemCountLoading": "{childType, select, track{பாடல்கள்} album{ஆல்பங்கள்} other{உருப்படிகள்}}",
   "@itemCountLoading": {
     "description": "Shown while the item count is being calculated.",
     "placeholders": {
@@ -2473,7 +2473,7 @@
   "@testConnectionButtonLabel": {
     "description": "Button to test the public and local url inside the network settings tab"
   },
-  "ping": "{நிலை, தேர்ந்தெடு, true_true {Both reachable} true_false உள்ளக முகவரியை அடையத் தவறியது} FALSE_TRUE {FAILED to reach local address} FALSE_FALSE {FAILED to reach public address} பிற {FAILED to reach both}}",
+  "ping": "{status, select, true_true{இரண்டும் қолைச்சக்கூடியது} true_false{உள்ளூர் முகவரியை அணுக முடியவில்லை} false_true{பொது முகவரியை அணுக முடியவில்லை} false_false{இரண்டையும் அணுக முடியவில்லை} other{அறியப்படாதது}}",
   "@ping": {
     "description": "Gets shown in the Snackbar when using the Test Connection Button inside the Network Settings. true means reachable, false means unreachable. the first value is for the public address, the second value is fot the home address."
   },
@@ -2493,7 +2493,7 @@
   "@clearQueueOnStopEventSubtitle": {
     "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
   },
-  "autoReloadPrompt": "புதிய {வகை, தேர்ந்தெடு, பிணையம் {network settings} டிரான்ச்கோடிங் {transcoding settings} பிற {settings}} பயன்படுத்த வரிசையை மீண்டும் ஏற்றவும்",
+  "autoReloadPrompt": "புதிய {type, select, network{நெட்வொர்க் அமைப்புகளை} transcoding{மாற்றி அமைக்கும் அமைப்புகளை} other{அமைப்புகளை}} பயன்படுத்த வரிசையை மீண்டும் ஏற்று",
   "@autoReloadPrompt": {
     "description": "Prompt shown when the queue needs to be reloaded after changing network settings",
     "placeholders": {
