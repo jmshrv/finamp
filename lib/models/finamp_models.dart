@@ -218,6 +218,7 @@ class DefaultSettings {
   static const playlistTracksSortOrder = SortOrder.ascending;
   static const genreFilterPlaylists = false;
   static const clearQueueOnStopEvent = false;
+  static const audioMuseBaseAddress = "";
 }
 
 @HiveType(typeId: 28)
@@ -336,6 +337,7 @@ class FinampSettings {
     this.playlistTracksSortOrder = DefaultSettings.playlistTracksSortOrder,
     this.genreFilterPlaylists = DefaultSettings.genreFilterPlaylists,
     this.clearQueueOnStopEvent = DefaultSettings.clearQueueOnStopEvent,
+    this.audioMuseBaseAddress = DefaultSettings.audioMuseBaseAddress,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -709,6 +711,9 @@ class FinampSettings {
 
   @HiveField(119, defaultValue: DefaultSettings.syncPlaybackSpeedAndPitch)
   bool syncPlaybackSpeedAndPitch;
+
+  @HiveField(120, defaultValue: DefaultSettings.audioMuseBaseAddress)
+  String audioMuseBaseAddress;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -1865,6 +1870,8 @@ enum QueueItemSourceNameType {
   queue,
   @HiveField(9)
   remoteClient,
+  @HiveField(10)
+  audioMuseMix,
 }
 
 @HiveType(typeId: 56)
@@ -1894,6 +1901,8 @@ class QueueItemSourceName {
         return AppLocalizations.of(context)!.mix(localizationParameter ?? "");
       case QueueItemSourceNameType.instantMix:
         return AppLocalizations.of(context)!.instantMix;
+      case QueueItemSourceNameType.audioMuseMix:
+        return AppLocalizations.of(context)!.audioMuseTrackMix;
       case QueueItemSourceNameType.nextUp:
         return AppLocalizations.of(context)!.nextUp;
       case QueueItemSourceNameType.tracksFormerNextUp:

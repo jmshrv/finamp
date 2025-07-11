@@ -992,6 +992,29 @@ class JellyfinApiHelper {
     }
   }
 
+  Future<List<BaseItemId>> getAudioMuseMix({
+    required BaseItemId itemId,
+    int? mixLength,
+  }) async {
+
+    final settings = FinampSettingsHelper.finampSettings;
+
+    final client = ChopperClient(
+      baseUrl: Uri.tryParse(settings.audioMuseBaseAddress),
+      client: http.IOClient(HttpClient()..connectionTimeout = const Duration(seconds: 8)),
+      interceptors: [jellyfin_api.JellyfinSpecificInterceptor(settings.audioMuseBaseAddress), HttpAggregateLoggingInterceptor()],
+      converter: JsonConverter(),
+    );
+
+    final Request request = Request('GET', Uri.parse("/api/similar_tracks?item_id=$itemId&n=${(mixLength ?? settings.trackShuffleItemCount) - 1}"), client.baseUrl);
+
+    Response<dynamic> response = await client.send<dynamic, dynamic>(request);
+    if (response.statusCode != 200) throw "AudioMuse returned ${response.statusCode}";
+    final body = response.bodyOrThrow as List<dynamic>;
+
+    return [itemId].followedBy(body.map((e) => BaseItemId(e["item_id"] as String))).toList();
+  }
+
   /// Returns the correct image URL for the given item, or null if there is no
   /// image. Uses [getImageId] to get the actual id. [maxWidth] and [maxHeight]
   /// can be specified to return a smaller image. [quality] can be modified to

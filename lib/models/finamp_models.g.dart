@@ -380,6 +380,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
         clearQueueOnStopEvent: fields[117] == null
             ? false
             : fields[117] as bool,
+        audioMuseBaseAddress: fields[120] == null ? '' : fields[120] as String,
       )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -391,7 +392,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(113)
+      ..writeByte(114)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -617,7 +618,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(118)
       ..write(obj.playbackPitch)
       ..writeByte(119)
-      ..write(obj.syncPlaybackSpeedAndPitch);
+      ..write(obj.syncPlaybackSpeedAndPitch)
+      ..writeByte(120)
+      ..write(obj.audioMuseBaseAddress);
   }
 
   @override
@@ -1750,6 +1753,8 @@ class QueueItemSourceNameTypeAdapter
         return QueueItemSourceNameType.queue;
       case 9:
         return QueueItemSourceNameType.remoteClient;
+      case 10:
+        return QueueItemSourceNameType.audioMuseMix;
       default:
         return QueueItemSourceNameType.preTranslated;
     }
@@ -1778,6 +1783,8 @@ class QueueItemSourceNameTypeAdapter
         writer.writeByte(8);
       case QueueItemSourceNameType.remoteClient:
         writer.writeByte(9);
+      case QueueItemSourceNameType.audioMuseMix:
+        writer.writeByte(10);
     }
   }
 
