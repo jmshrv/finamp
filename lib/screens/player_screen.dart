@@ -3,13 +3,13 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:balanced_text/balanced_text.dart';
-import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/menus/track_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/menus/output_menu.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/lyrics_screen.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -32,9 +32,15 @@ import '../components/PlayerScreen/queue_list.dart';
 import '../components/PlayerScreen/track_name_content.dart';
 import '../components/finamp_app_bar_button.dart';
 import 'blurred_player_screen_background.dart';
+import 'package:finamp/services/animated_music_service.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 
 const double _defaultToolbarHeight = 53.0;
 const int _defaultMaxToolbarLines = 2;
+
+// Provider to track if animated video background is playing
+final _videoBackgroundProvider = StateProvider<bool>((ref) => false);
 
 class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({super.key});
@@ -147,6 +153,7 @@ class _PlayerScreenContent extends ConsumerWidget {
     }
 
     final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
+    final hasVideoBackground = ref.watch(_videoBackgroundProvider);
 
     final isLyricsLoading = metadata.isLoading || metadata.isRefreshing;
     final isLyricsAvailable =
@@ -155,7 +162,7 @@ class _PlayerScreenContent extends ConsumerWidget {
         !metadata.hasError;
 
     return SafeArea(
-      bottom: true,
+      bottom: false,
       top: false,
       child: SimpleGestureDetector(
         onVerticalSwipe: (direction) {
@@ -210,6 +217,7 @@ class _PlayerScreenContent extends ConsumerWidget {
           body: Stack(
             children: [
               if (ref.watch(finampSettingsProvider.useCoverAsBackground)) const BlurredPlayerScreenBackground(),
+              const _AnimatedVerticalBackground(),
               SafeArea(
                 minimum: EdgeInsets.only(top: toolbarHeight),
                 child: LayoutBuilder(
@@ -229,7 +237,7 @@ class _PlayerScreenContent extends ConsumerWidget {
                                 bottom: constraints.maxHeight * 0.03,
                                 right: max(0, constraints.maxHeight * 0.03 - 20),
                               ),
-                              child: const PlayerScreenAlbumImage(),
+                              child: _AnimatedAlbumImage(hasVideoBackground: hasVideoBackground),
                             ),
                           ),
                           const Spacer(),
@@ -265,7 +273,7 @@ class _PlayerScreenContent extends ConsumerWidget {
                           SizedBox(
                             height: controller.albumSize.height,
                             width: controller.albumSize.width,
-                            child: const PlayerScreenAlbumImage(),
+                            child: _AnimatedAlbumImage(hasVideoBackground: hasVideoBackground),
                           ),
                           SizedBox(
                             height: controller.controlsSize.height,
@@ -393,6 +401,154 @@ class _PlayerScreenContent extends ConsumerWidget {
         ),
         const Spacer(flex: 1),
       ],
+    );
+  }
+}
+
+class _AnimatedAlbumImage extends StatelessWidget {
+  const _AnimatedAlbumImage({required this.hasVideoBackground});
+
+  final bool hasVideoBackground;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 300),
+      child: hasVideoBackground
+          ? const SizedBox.shrink(key: ValueKey('no-image'))
+          : const PlayerScreenAlbumImage(key: ValueKey('album-image')),
+    );
+  }
+}
+
+//TODO: more to seprate file
+class _AnimatedVerticalBackground extends ConsumerStatefulWidget {
+  const _AnimatedVerticalBackground();
+
+  @override
+  ConsumerState<_AnimatedVerticalBackground> createState() => _AnimatedVerticalBackgroundState();
+}
+
+class _AnimatedVerticalBackgroundState extends ConsumerState<_AnimatedVerticalBackground> {
+  late final AnimatedMusicService _animatedMusicService;
+  Player? _videoPlayer;
+  VideoController? _videoController;
+  String? _currentVideoUri;
+  String? _lastTrackId;
+  bool _isLoadingVerticalBackground = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _animatedMusicService = GetIt.instance<AnimatedMusicService>();
+  }
+
+  @override
+  void dispose() {
+    _disposeVideoPlayer();
+    super.dispose();
+  }
+
+  void _disposeVideoPlayer() {
+    _videoPlayer?.dispose();
+    _videoPlayer = null;
+    _videoController = null;
+    _currentVideoUri = null;
+  }
+
+  Future<void> _loadVerticalBackground(String trackId) async {
+    if (_isLoadingVerticalBackground || _lastTrackId == trackId) {
+      return;
+    }
+
+    _isLoadingVerticalBackground = true;
+    _lastTrackId = trackId;
+
+    try {
+      final backgroundUri = await _animatedMusicService.getVerticalBackgroundForTrack(BaseItemId(trackId));
+
+      if (mounted && _lastTrackId == trackId) {
+        if (backgroundUri != null && backgroundUri != _currentVideoUri) {
+          _setupVideoPlayer(backgroundUri);
+        } else if (backgroundUri == null) {
+          _disposeVideoPlayer();
+        }
+      }
+    } catch (e) {
+      // Silently fail - no vertical background available
+      if (mounted) {
+        _disposeVideoPlayer();
+        ref.read(_videoBackgroundProvider.notifier).state = false;
+      }
+    } finally {
+      if (mounted) {
+        ref.read(_videoBackgroundProvider.notifier).state = false;
+      }
+      _isLoadingVerticalBackground = false;
+    }
+  }
+
+  void _setupVideoPlayer(String videoUri) {
+    _disposeVideoPlayer();
+
+    try {
+      _videoPlayer = Player();
+      _videoController = VideoController(_videoPlayer!);
+      _currentVideoUri = videoUri;
+
+      // Configure video player
+      _videoPlayer!.setPlaylistMode(PlaylistMode.loop);
+      _videoPlayer!.setVolume(0.0); // Mute the video
+      _videoPlayer!.open(Media(videoUri));
+      _videoPlayer!.play();
+
+      // Only call setState if the widget is still mounted
+      if (mounted) {
+        // Update provider to indicate video is playing
+        ref.read(_videoBackgroundProvider.notifier).state = true;
+        setState(() {});
+      }
+    } catch (e) {
+      if (mounted) {
+        // Update provider to indicate video is playing
+        ref.read(_videoBackgroundProvider.notifier).state = false;
+        setState(() {});
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final queueService = GetIt.instance<QueueService>();
+    return StreamBuilder<FinampQueueInfo?>(
+      stream: queueService.getQueueStream(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const SizedBox.shrink();
+        }
+
+        final queueInfo = snapshot.data!;
+        final currentTrack = queueInfo.currentTrack;
+        final currentTrackId = currentTrack?.baseItemId.raw;
+
+        // Load vertical background if we have a track ID
+        if (currentTrackId != null && currentTrackId != _lastTrackId) {
+          if (mounted) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _loadVerticalBackground(currentTrackId);
+            });
+          }
+        }
+
+        // Show animated video background if available
+        if (_videoController != null && _currentVideoUri != null) {
+          return Positioned.fill(
+            child: Video(controller: _videoController!, controls: null, fit: BoxFit.cover, fill: Colors.transparent),
+          );
+        }
+
+        return const SizedBox.shrink();
+      },
     );
   }
 }
