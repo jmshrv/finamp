@@ -11,7 +11,7 @@ part of 'artist_chip.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$artistItemHash() => r'f4d09228b904b8b050fd55960ceab1a3a3823e5f';
+String _$artistItemHash() => r'542d9312760e4643c82889c82891ac4a960e87d2';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -39,7 +39,7 @@ class _SystemHash {
 const artistItemProvider = ArtistItemFamily();
 
 /// See also [artistItem].
-class ArtistItemFamily extends Family<AsyncValue<BaseItemDto>> {
+class ArtistItemFamily extends Family<AsyncValue<BaseItemDto?>> {
   /// See also [artistItem].
   const ArtistItemFamily();
 
@@ -71,7 +71,7 @@ class ArtistItemFamily extends Family<AsyncValue<BaseItemDto>> {
 }
 
 /// See also [artistItem].
-class ArtistItemProvider extends AutoDisposeFutureProvider<BaseItemDto> {
+class ArtistItemProvider extends AutoDisposeFutureProvider<BaseItemDto?> {
   /// See also [artistItem].
   ArtistItemProvider(BaseItemId id)
     : this._internal(
@@ -100,7 +100,7 @@ class ArtistItemProvider extends AutoDisposeFutureProvider<BaseItemDto> {
 
   @override
   Override overrideWith(
-    FutureOr<BaseItemDto> Function(ArtistItemRef provider) create,
+    FutureOr<BaseItemDto?> Function(ArtistItemRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -117,7 +117,7 @@ class ArtistItemProvider extends AutoDisposeFutureProvider<BaseItemDto> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<BaseItemDto> createElement() {
+  AutoDisposeFutureProviderElement<BaseItemDto?> createElement() {
     return _ArtistItemProviderElement(this);
   }
 
@@ -137,13 +137,13 @@ class ArtistItemProvider extends AutoDisposeFutureProvider<BaseItemDto> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin ArtistItemRef on AutoDisposeFutureProviderRef<BaseItemDto> {
+mixin ArtistItemRef on AutoDisposeFutureProviderRef<BaseItemDto?> {
   /// The parameter `id` of this provider.
   BaseItemId get id;
 }
 
 class _ArtistItemProviderElement
-    extends AutoDisposeFutureProviderElement<BaseItemDto>
+    extends AutoDisposeFutureProviderElement<BaseItemDto?>
     with ArtistItemRef {
   _ArtistItemProviderElement(super.provider);
 

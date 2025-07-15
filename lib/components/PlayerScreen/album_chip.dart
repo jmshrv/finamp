@@ -73,7 +73,7 @@ class _EmptyAlbumChip extends StatelessWidget {
 }
 
 class ReleaseDate extends StatelessWidget {
-  const ReleaseDate({this.baseItem, this.backgroundColor, this.color});
+  const ReleaseDate({super.key, this.baseItem, this.backgroundColor, this.color});
 
   final BaseItemDto? baseItem;
   final Color? backgroundColor;
@@ -123,15 +123,21 @@ class _AlbumChipContent extends StatelessWidget {
         borderRadius: _borderRadius,
         child: InkWell(
           borderRadius: _borderRadius,
-          onTap: FinampSettingsHelper.finampSettings.isOffline
-              ? () => isarDownloader
-                    .getCollectionInfo(id: item.albumId!)
-                    .then(
-                      (album) => Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: album!.baseItem!),
-                    )
-              : () => jellyfinApiHelper
-                    .getItemById(item.albumId!)
-                    .then((album) => Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: album)),
+          onTap: item.albumId != null
+              ? () async {
+                  if (FinampSettingsHelper.finampSettings.isOffline) {
+                    var stub = await isarDownloader.getCollectionInfo(id: item.albumId!);
+                    if (stub?.baseItem != null && context.mounted) {
+                      await Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: stub!.baseItem!);
+                    }
+                  } else {
+                    var album = await jellyfinApiHelper.getItemById(item.albumId!);
+                    if (context.mounted) {
+                      await Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: album);
+                    }
+                  }
+                }
+              : null,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
             child: Text(

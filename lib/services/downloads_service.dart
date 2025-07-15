@@ -513,13 +513,13 @@ class DownloadsService {
   }
 
   /// Re-syncs every download node.
-  Future<void> resyncAll() => resync(_anchor, null);
+  Future<void> resyncAll({bool forceSync = false}) => resync(_anchor, null, forceSync: forceSync);
 
   /// Re-syncs the specified stub and all descendants.  For this to work correctly
   /// it is required that [_syncDownload] strictly follows the node graph hierarchy
   /// and only syncs children appropriate for an info node if reaching a node along
   /// an info link, even if children appropriate for a required node are present.
-  Future<void> resync(DownloadStub stub, BaseItemId? viewId, {bool keepSlow = false}) async {
+  Future<void> resync(DownloadStub stub, BaseItemId? viewId, {bool keepSlow = false, bool forceSync = false}) async {
     _consecutiveConnectionErrors = 0;
     _fileSystemFull = false;
     // All sync actions from now until app closure are the direct result of user
@@ -527,10 +527,17 @@ class DownloadsService {
     if (!keepSlow) {
       fullSpeedSync = true;
     }
+
+    // If asked to sync an album or track, force full sync to actually process it
+    forceSync = forceSync || (stub.type.requiresItem && !stub.baseItemType.expectChanges);
+
     var requiredByCount = _isar.downloadItems.filter().requires((q) => q.isarIdEqualTo(stub.isarId)).countSync();
     try {
       bool required = requiredByCount != 0;
       _downloadsLogger.info("Starting sync of ${stub.name}.");
+      if (forceSync) {
+        forceFullSync = true;
+      }
       _isar.writeTxnSync(() {
         syncBuffer.addAll(required ? [stub.isarId] : [], required ? [] : [stub.isarId], viewId);
       });
@@ -539,10 +546,15 @@ class DownloadsService {
       await deleteBuffer.executeDeletes();
       _downloadsLogger.info("Triggering enqueues for ${stub.name}.");
       unawaited(downloadTaskQueue.executeDownloads());
+
       _downloadsLogger.info("Sync of ${stub.name} complete.");
     } catch (error, stackTrace) {
       _downloadsLogger.severe("Isar failure $error", error, stackTrace);
       rethrow;
+    } finally {
+      if (forceSync) {
+        forceFullSync = false;
+      }
     }
   }
 
@@ -726,10 +738,8 @@ class DownloadsService {
     // Step 3 - Resync all nodes from anchor to connect up all needed nodes
     _downloadsLogger.info("Starting downloads repair step 3");
     downloadCounts[repairStepTrackingName] = 3;
-    forceFullSync = true;
     fullSpeedSync = true;
-    await resyncAll();
-    forceFullSync = false;
+    await resyncAll(forceSync: true);
 
     // Step 4 - Fetch all missing lyrics
     _downloadsLogger.info("Starting downloads repair step 4");
