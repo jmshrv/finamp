@@ -1061,7 +1061,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} audioMuseTrackMix{AudioMuse Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} nextUpGenre{Genre in Next Up} remoteClient{a Remote Client} other{}}",
+  "playingFromType": "Playing From {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} audioMuseMix{AudioMuse Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} nextUpGenre{Genre in Next Up} remoteClient{a Remote Client} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -2646,5 +2646,17 @@
   "quickConnectAuthorizationMenuDescription": "If you're trying to sign into another Jellyfin client via Quick Connect, you can enter or paste the 6 digit code into the field above. This will authorize the sign in request of the other client, and log you into the same account as you're using for Finamp.",
   "@quickConnectAuthorizationMenuDescription": {
     "description": "Description for the quick connect authorization menu, shown at the bottom"
+  },
+  "useAudioMuseMixesSwitchTitle": "Use AudioMuse plugin for Instant Mixes",
+  "@useAudioMuseMixesSwitchTitle": {
+    "description": "Title for the setting that controls if the AudioMuse plugin is used for Instant Mixes"
+  },
+  "useAudioMuseMixesSwitchSubtitle": "Will use the AudioMuse plugin for track instant mixes. The plugin has to be installed and configured.",
+  "@useAudioMuseMixesSwitchSubtitle": {
+    "description": "Subtitle for the setting that controls if the AudioMuse plugin is used for Instant Mixes"
+  },
+  "pluginSettingsTitle": "Plugins",
+  "@pluginSettingsTitle": {
+    "description": "Title for the plugin settings screen"
   }
 }

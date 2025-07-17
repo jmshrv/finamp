@@ -531,6 +531,16 @@ abstract class JellyfinApi extends ChopperService {
     // The generated class with the ChopperClient passed in
     return _$JellyfinApi(client);
   }
+
+  // AudioMuseAI plugin
+
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory<List<dynamic>, dynamic>)
+  @GET(path: "/AudioMuseAI/similar_tracks")
+  Future<dynamic> getAudioMuseInstantMix({
+    @Query() required BaseItemId item_id,
+    @Query() required int n,
+  });
+
 }
 
 class JellyfinInterceptor implements Interceptor {

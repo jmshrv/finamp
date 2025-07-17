@@ -206,6 +206,12 @@ class FinampSettingsHelper {
     Hive.box<FinampSettings>("FinampSettings").put("FinampSettings", finampSettingsTemp);
   }
 
+  static void resetPluginSettings() {
+    FinampSetters.setUseAudioMuseMixes(
+      DefaultSettings.useAudioMuseMixes,
+    );
+  }
+
   static void resetInteractionsSettings() {
     FinampSettings finampSettingsTemp = finampSettings;
 

@@ -72,6 +72,7 @@ android {
         release {
             signingConfig signingConfigs.release
             resValue "string", "app_name", "Finamp"
+            // applicationIdSuffix '.test'
             // shrinkResources false
             // minifyEnabled false
         }

@@ -22,6 +22,7 @@ import 'package:finamp/screens/network_settings_screen.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/playback_reporting_settings_screen.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
+import 'package:finamp/screens/plugins_settings_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:finamp/services/android_auto_helper.dart';
 import 'package:finamp/services/audio_service_smtc.dart';
@@ -531,6 +532,7 @@ class _FinampState extends State<Finamp> with WindowListener {
                       ArtistSettingsScreen.routeName: (context) => const ArtistSettingsScreen(),
                       GenreSettingsScreen.routeName: (context) => const GenreSettingsScreen(),
                       NetworkSettingsScreen.routeName: (context) => const NetworkSettingsScreen(),
+                      PluginSettingsScreen.routeName: (context) => const PluginSettingsScreen(),
                     },
                     initialRoute: SplashScreen.routeName,
                     navigatorObservers: [SplitScreenNavigatorObserver(), KeepScreenOnObserver()],

@@ -996,23 +996,13 @@ class JellyfinApiHelper {
     required BaseItemId itemId,
     int? mixLength,
   }) async {
+    assert(_verifyCallable());
+    var response = await jellyfinApi.getAudioMuseInstantMix(
+      item_id: itemId,
+      n: mixLength ?? FinampSettingsHelper.finampSettings.trackShuffleItemCount,
+    ) as List<dynamic>;
 
-    final settings = FinampSettingsHelper.finampSettings;
-
-    final client = ChopperClient(
-      baseUrl: Uri.tryParse(settings.audioMuseBaseAddress),
-      client: http.IOClient(HttpClient()..connectionTimeout = const Duration(seconds: 8)),
-      interceptors: [jellyfin_api.JellyfinSpecificInterceptor(settings.audioMuseBaseAddress), HttpAggregateLoggingInterceptor()],
-      converter: JsonConverter(),
-    );
-
-    final Request request = Request('GET', Uri.parse("/api/similar_tracks?item_id=$itemId&n=${(mixLength ?? settings.trackShuffleItemCount) - 1}"), client.baseUrl);
-
-    Response<dynamic> response = await client.send<dynamic, dynamic>(request);
-    if (response.statusCode != 200) throw "AudioMuse returned ${response.statusCode}";
-    final body = response.bodyOrThrow as List<dynamic>;
-
-    return [itemId].followedBy(body.map((e) => BaseItemId(e["item_id"] as String))).toList();
+    return [itemId].followedBy(response.map((e) => BaseItemId(e["item_id"] as String))).toList();
   }
 
   /// Returns the correct image URL for the given item, or null if there is no

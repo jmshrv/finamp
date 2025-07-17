@@ -380,7 +380,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
         clearQueueOnStopEvent: fields[117] == null
             ? false
             : fields[117] as bool,
-        audioMuseBaseAddress: fields[120] == null ? '' : fields[120] as String,
+        useAudioMuseMixes: fields[120] == null ? false : fields[120] as bool,
       )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -620,7 +620,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(119)
       ..write(obj.syncPlaybackSpeedAndPitch)
       ..writeByte(120)
-      ..write(obj.audioMuseBaseAddress);
+      ..write(obj.useAudioMuseMixes);
   }
 
   @override
@@ -1614,6 +1614,8 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
         return QueueItemSourceType.track;
       case 21:
         return QueueItemSourceType.remoteClient;
+      case 22:
+        return QueueItemSourceType.audioMuseMix;
       default:
         return QueueItemSourceType.album;
     }
@@ -1666,6 +1668,8 @@ class QueueItemSourceTypeAdapter extends TypeAdapter<QueueItemSourceType> {
         writer.writeByte(20);
       case QueueItemSourceType.remoteClient:
         writer.writeByte(21);
+      case QueueItemSourceType.audioMuseMix:
+        writer.writeByte(22);
     }
   }
 
@@ -1753,8 +1757,6 @@ class QueueItemSourceNameTypeAdapter
         return QueueItemSourceNameType.queue;
       case 9:
         return QueueItemSourceNameType.remoteClient;
-      case 10:
-        return QueueItemSourceNameType.audioMuseMix;
       default:
         return QueueItemSourceNameType.preTranslated;
     }
@@ -1783,8 +1785,6 @@ class QueueItemSourceNameTypeAdapter
         writer.writeByte(8);
       case QueueItemSourceNameType.remoteClient:
         writer.writeByte(9);
-      case QueueItemSourceNameType.audioMuseMix:
-        writer.writeByte(10);
     }
   }
 

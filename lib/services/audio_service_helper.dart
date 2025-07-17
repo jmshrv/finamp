@@ -77,71 +77,58 @@ class AudioServiceHelper {
     List<jellyfin_models.BaseItemDto>? items;
 
     try {
-      items = await _jellyfinApiHelper.getInstantMix(item);
-      if (items != null) {
-        await _queueService.startPlayback(
-          items: items,
-          source: QueueItemSource(
-            type: QueueItemSourceType.trackMix,
-            name: QueueItemSourceName(
-              type: item.name != null ? QueueItemSourceNameType.mix : QueueItemSourceNameType.instantMix,
-              localizationParameter: item.name ?? "",
-            ),
-            id: item.id,
-          ),
-          order: FinampPlaybackOrder
-              .linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
-        );
-      }
-    } catch (e) {
-      audioServiceHelperLogger.severe(e);
-      return Future.error(e);
-    }
-  }
-  /// Start instant mix from item.
-  Future<void> startAudioMuseInstantMixForItem(jellyfin_models.BaseItemDto item) async {
-    List<jellyfin_models.BaseItemDto>? items;
+      if (FinampSettingsHelper.finampSettings.useAudioMuseMixes) {
+        final itemIds = await _jellyfinApiHelper.getAudioMuseMix(itemId: item.id);
+        items = await _jellyfinApiHelper.getItems(itemIds: itemIds);
+        // Filter out successive items with the same name and artist
+        if (items != null && items.isNotEmpty) {
+          final filteredItems = <jellyfin_models.BaseItemDto>[];
 
-    try {
-      final itemIds = await _jellyfinApiHelper.getAudioMuseMix(itemId: item.id);
-      items = await _jellyfinApiHelper.getItems(itemIds: itemIds);
-      // Filter out successive items with the same name and artist
-      if (items != null && items.isNotEmpty) {
-        final filteredItems = <jellyfin_models.BaseItemDto>[];
-        
-        for (final item in items) {
-          // Add the item if the list is empty or it differs from the last added item
-          if (filteredItems.isEmpty || 
-              item.name != filteredItems.last.name || 
-              item.artists?.first.toLowerCase() != filteredItems.last.artists?.first.toLowerCase()) {
-            filteredItems.add(item);
+          for (final item in items) {
+            // Add the item if the list is empty or it differs from the last added item
+            if (filteredItems.isEmpty ||
+                item.name != filteredItems.last.name ||
+                item.artists?.first.toLowerCase() != filteredItems.last.artists?.first.toLowerCase()) {
+              filteredItems.add(item);
+            }
           }
+
+          items = filteredItems;
         }
-        
-        items = filteredItems;
+      } else {
+        items = await _jellyfinApiHelper.getInstantMix(item);
       }
-      
+
       if (items != null) {
-        await _queueService.startPlayback(
-          items: items,
-          source: QueueItemSource(
-            type: QueueItemSourceType.trackMix,
-            name: QueueItemSourceName(
-              type: QueueItemSourceNameType.audioMuseMix,
-              localizationParameter: item.name ?? "",
-            ),
-            id: item.id,
-          ),
-          order: FinampPlaybackOrder
-              .linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
-        );
-      }
+          await _queueService.startPlayback(
+            items: items,
+            source: FinampSettingsHelper.finampSettings.useAudioMuseMixes
+                ? QueueItemSource(
+                    type: QueueItemSourceType.audioMuseMix,
+                    name: QueueItemSourceName(
+                      type: item.name != null ? QueueItemSourceNameType.mix : QueueItemSourceNameType.instantMix,
+                      localizationParameter: item.name ?? "",
+                    ),
+                    id: item.id,
+                  )
+                : QueueItemSource(
+                    type: QueueItemSourceType.trackMix,
+                    name: QueueItemSourceName(
+                      type: item.name != null ? QueueItemSourceNameType.mix : QueueItemSourceNameType.instantMix,
+                      localizationParameter: item.name ?? "",
+                    ),
+                    id: item.id,
+                  ),
+            order: FinampPlaybackOrder
+                .linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
+          );
+        }
     } catch (e) {
       audioServiceHelperLogger.severe(e);
       return Future.error(e);
     }
   }
-
+  
   /// Start instant mix from a selection of artists.
   Future<void> startInstantMixForArtists(List<BaseItemDto> artists) async {
     List<jellyfin_models.BaseItemDto>? items;

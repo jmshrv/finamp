@@ -729,4 +729,28 @@ final class _$JellyfinApi extends JellyfinApi {
     final Request $request = Request('GET', $url, client.baseUrl);
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<dynamic> getAudioMuseInstantMix({
+    required BaseItemId item_id,
+    required int n,
+  }) async {
+    final Uri $url = Uri.parse('/AudioMuseAI/similar_tracks');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'item_id': item_id,
+      'n': n,
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    final Response $response = await client.send<dynamic, dynamic>(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
+    return $response.bodyOrThrow;
+  }
 }

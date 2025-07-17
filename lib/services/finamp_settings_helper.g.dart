@@ -1002,9 +1002,9 @@ extension FinampSetters on FinampSettingsHelper {
     ).put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setAudioMuseBaseAddress(String newAudioMuseBaseAddress) {
+  static void setUseAudioMuseMixes(bool newUseAudioMuseMixes) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.audioMuseBaseAddress = newAudioMuseBaseAddress;
+    finampSettingsTemp.useAudioMuseMixes = newUseAudioMuseMixes;
     Hive.box<FinampSettings>(
       "FinampSettings",
     ).put("FinampSettings", finampSettingsTemp);
@@ -1375,8 +1375,8 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       finampSettingsProvider.select(
         (value) => value.requireValue.syncPlaybackSpeedAndPitch,
       );
-  ProviderListenable<String> get audioMuseBaseAddress => finampSettingsProvider
-      .select((value) => value.requireValue.audioMuseBaseAddress);
+  ProviderListenable<bool> get useAudioMuseMixes => finampSettingsProvider
+      .select((value) => value.requireValue.useAudioMuseMixes);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider.select(
         (value) => value.requireValue.downloadTranscodingProfile,

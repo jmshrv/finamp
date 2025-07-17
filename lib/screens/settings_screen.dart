@@ -3,6 +3,7 @@ import 'package:finamp/menus/quick_connect_authorization_menu.dart';
 import 'package:finamp/menus/server_sharing_menu.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/network_settings_screen.dart';
+import 'package:finamp/screens/plugins_settings_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
@@ -170,6 +171,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             leading: const Icon(Icons.widgets),
             title: Text(AppLocalizations.of(context)!.layoutAndTheme),
             onTap: () => Navigator.of(context).pushNamed(LayoutSettingsScreen.routeName),
+          ),
+          ListTile(
+            leading: const Icon(TablerIcons.puzzle),
+            title: Text(AppLocalizations.of(context)!.pluginSettingsTitle),
+            onTap: () => Navigator.of(context).pushNamed(PluginSettingsScreen.routeName),
           ),
           ListTile(
             leading: const Icon(Icons.library_music),
