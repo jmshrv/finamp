@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/color_schemes.g.dart';
@@ -251,6 +250,10 @@ class NowPlayingBar extends StatelessWidget {
                                   Stack(
                                     alignment: Alignment.center,
                                     children: [
+                                      if (ref.watch(finampSettingsProvider.showProgressOnNowPlayingBar))
+                                        Positioned.fill(
+                                          child: ColoredBox(color: IconTheme.of(context).color!.withOpacity(0.75)),
+                                        ),
                                       AlbumImage(
                                         placeholderBuilder: (_) => const SizedBox.shrink(),
                                         imageListenable: currentAlbumImageProvider,
@@ -287,39 +290,33 @@ class NowPlayingBar extends StatelessWidget {
                                     child: Stack(
                                       children: [
                                         if (ref.watch(finampSettingsProvider.showProgressOnNowPlayingBar))
-                                          Positioned(
-                                            left: 0,
-                                            top: 0,
+                                          Positioned.fill(
                                             child: StreamBuilder<Duration>(
                                               stream: AudioService.position,
                                               initialData: audioHandler.playbackState.value.position,
                                               builder: (context, snapshot) {
                                                 if (snapshot.hasData) {
                                                   playbackPosition = snapshot.data;
-                                                  final screenSize = MediaQuery.of(context).size;
-                                                  return Container(
-                                                    // rather hacky workaround, using LayoutBuilder would be nice but I couldn't get it to work...
-                                                    width: max(
-                                                      0,
-                                                      (screenSize.width - 3 * horizontalPadding - albumImageSize) *
-                                                          (playbackPosition!.inMilliseconds /
-                                                              (mediaState.mediaItem?.duration ??
-                                                                      const Duration(seconds: 0))
-                                                                  .inMilliseconds),
-                                                    ),
-                                                    height: albumImageSize,
-                                                    decoration: ShapeDecoration(
-                                                      color: IconTheme.of(context).color!.withOpacity(0.75),
-                                                      shape: const RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.only(
-                                                          topRight: Radius.circular(12),
-                                                          bottomRight: Radius.circular(12),
+                                                  var itemLength = mediaState.mediaItem?.duration;
+                                                  return FractionallySizedBox(
+                                                    alignment: AlignmentDirectional.centerStart,
+                                                    widthFactor: itemLength == null
+                                                        ? 0
+                                                        : playbackPosition!.inMilliseconds / itemLength.inMilliseconds,
+                                                    child: DecoratedBox(
+                                                      decoration: ShapeDecoration(
+                                                        color: IconTheme.of(context).color!.withOpacity(0.75),
+                                                        shape: const RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.only(
+                                                            topRight: Radius.circular(12),
+                                                            bottomRight: Radius.circular(12),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
                                                   );
                                                 } else {
-                                                  return Container();
+                                                  return SizedBox.shrink();
                                                 }
                                               },
                                             ),

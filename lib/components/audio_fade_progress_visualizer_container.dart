@@ -15,6 +15,7 @@ class AudioFadeProgressVisualizerContainer extends StatefulWidget {
     this.borderRadius,
     this.width,
     this.height,
+    this.color,
   });
 
   final Widget child;
@@ -22,6 +23,7 @@ class AudioFadeProgressVisualizerContainer extends StatefulWidget {
   final BorderRadius? borderRadius;
   final double? width;
   final double? height;
+  final Color? color;
 
   @override
   State<AudioFadeProgressVisualizerContainer> createState() => _AudioFadeProgressVisualizerContainerState();
@@ -133,7 +135,7 @@ class _AudioFadeProgressVisualizerContainerState extends State<AudioFadeProgress
                   (_controller.status == AnimationStatus.forward || _controller.status == AnimationStatus.reverse) &&
                       !MediaQuery.of(context).disableAnimations
                   ? ProgressBorder.all(
-                      color: IconTheme.of(context).color!.withAlpha(128),
+                      color: widget.color ?? Theme.of(context).textTheme.bodyMedium!.color!.withAlpha(128),
                       width: 4,
                       progress: _animation.value,
                     )

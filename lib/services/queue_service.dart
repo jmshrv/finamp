@@ -326,10 +326,7 @@ class QueueService {
     }
     _queueServiceLogger.finest("Loading stored queue: $info");
 
-    // After loading queue, do not begin overwriting latest until the user modifies
-    // the queue or begins playback.  This prevents saving unused queues that
-    // had loading errors or were immediately overwritten.
-    SavedQueueState? finalState = SavedQueueState.pendingSave;
+    SavedQueueState? finalState = SavedQueueState.failed;
     try {
       _savedQueueState = SavedQueueState.loading;
       if (info.trackCount == 0) {
@@ -413,15 +410,22 @@ class QueueService {
         await seekFuture;
       }
       _queueServiceLogger.info("Loaded saved queue.");
-      if (loadedTracks == 0 && info.trackCount > 0) {
-        finalState = SavedQueueState.failed;
-        _failedSavedQueue = info;
-      } else if (droppedTracks > 0) {
-        GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.queueRestoreError(droppedTracks));
+      if (loadedTracks > 0 || info.trackCount == 0) {
+        // After loading queue, do not begin overwriting latest until the user modifies
+        // the queue or begins playback.  This prevents saving unused queues that
+        // had loading errors or were immediately overwritten.
+        finalState = SavedQueueState.pendingSave;
+
+        if (droppedTracks > 0) {
+          GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.queueRestoreError(droppedTracks));
+        }
       }
     } finally {
       if (finalState != null) {
         _savedQueueState = finalState;
+      }
+      if (finalState == SavedQueueState.failed) {
+        _failedSavedQueue = info;
       }
       refreshQueueStream();
       await Future<void>.delayed(const Duration(seconds: 1)).then((_) {

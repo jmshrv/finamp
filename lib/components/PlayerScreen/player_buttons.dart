@@ -76,6 +76,7 @@ class PlayerButtons extends StatelessWidget {
                   borderRadius: BorderRadius.all(
                     Radius.circular(controller.shouldShow(PlayerHideable.bigPlayButton) ? 16 : 12),
                   ),
+                  color: IconTheme.of(context).color!.withAlpha(128),
                   child: Icon(
                     playbackState.playing
                         ? fadeState.fadeDirection != FadeDirection.fadeOut
