@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/components/AlbumScreen/track_list_tile.dart';
-import 'package:finamp/components/audio_fade_progress_visualizer_container.dart';
-import 'package:finamp/menus/track_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
+import 'package:finamp/components/audio_fade_progress_visualizer_container.dart';
 import 'package:finamp/components/one_line_marquee_helper.dart';
 import 'package:finamp/components/print_duration.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/main.dart';
+import 'package:finamp/menus/track_menu.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/screens/blurred_player_screen_background.dart';
 import 'package:finamp/services/feedback_helper.dart';
@@ -697,33 +697,26 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                       alignment: Alignment.center,
                       children: [
                         if (ref.watch(finampSettingsProvider.showProgressOnNowPlayingBar))
-                          Positioned.fill(
-                            child: ColoredBox(color: IconTheme.of(context).color!.withOpacity(0.75)),
-                          ),
+                          Positioned.fill(child: ColoredBox(color: IconTheme.of(context).color!.withOpacity(0.75))),
                         AlbumImage(borderRadius: BorderRadius.zero, imageListenable: currentAlbumImageProvider),
-                        Container(
+                        AudioFadeProgressVisualizerContainer(
+                          key: const Key("AlbumArtAudioFadeProgressVisualizer"),
                           width: albumImageSize,
                           height: albumImageSize,
-                          decoration: const ShapeDecoration(shape: Border(), color: Color.fromRGBO(0, 0, 0, 0.3)),
-                          child: AudioFadeProgressVisualizerContainer(
-                            key: const Key("AlbumArtAudioFadeProgressVisualizer"),
-                            width: albumImageSize,
-                            height: albumImageSize,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(12.0),
-                              bottomLeft: Radius.circular(12.0),
-                            ),
-                            color: IconTheme.of(context).color!.withAlpha(128),
-                            child: IconButton(
-                              onPressed: () {
-                                FeedbackHelper.feedback(FeedbackType.selection);
-                                _audioHandler.togglePlayback();
-                              },
-                              icon: mediaState!.playbackState.playing
-                                  ? const Icon(TablerIcons.player_pause, size: 32)
-                                  : const Icon(TablerIcons.player_play, size: 32),
-                              color: Colors.white,
-                            ),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(12.0),
+                            bottomLeft: Radius.circular(12.0),
+                          ),
+                          color: Colors.white,
+                          child: IconButton(
+                            onPressed: () {
+                              FeedbackHelper.feedback(FeedbackType.selection);
+                              _audioHandler.togglePlayback();
+                            },
+                            icon: mediaState!.playbackState.playing
+                                ? const Icon(TablerIcons.player_pause, size: 32)
+                                : const Icon(TablerIcons.player_play, size: 32),
+                            color: Colors.white,
                           ),
                         ),
                       ],
@@ -731,35 +724,32 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                     Expanded(
                       child: Stack(
                         children: [
-                          Positioned(
-                            left: 0,
-                            top: 0,
+                          Positioned.fill(
                             child: StreamBuilder<Duration>(
                               stream: AudioService.position.startWith(_audioHandler.playbackState.value.position),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   playbackPosition = snapshot.data;
-                                  final screenSize = MediaQuery.of(context).size;
-                                  return Container(
-                                    // rather hacky workaround, using LayoutBuilder would be nice but I couldn't get it to work...
-                                    width:
-                                        (screenSize.width - 2 * horizontalPadding - albumImageSize) *
-                                        ((playbackPosition?.inMilliseconds ?? 0) /
-                                            (mediaState?.mediaItem?.duration ?? const Duration(seconds: 0))
-                                                .inMilliseconds),
-                                    height: 70.0,
-                                    decoration: ShapeDecoration(
-                                      color: IconTheme.of(context).color!.withOpacity(0.75),
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(12),
-                                          bottomRight: Radius.circular(12),
+                                  var itemLength = mediaState?.mediaItem?.duration;
+                                  return FractionallySizedBox(
+                                    alignment: AlignmentDirectional.centerStart,
+                                    widthFactor: itemLength == null
+                                        ? 0
+                                        : playbackPosition!.inMilliseconds / itemLength.inMilliseconds,
+                                    child: DecoratedBox(
+                                      decoration: ShapeDecoration(
+                                        color: IconTheme.of(context).color!.withOpacity(0.75),
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(12),
+                                            bottomRight: Radius.circular(12),
+                                          ),
                                         ),
                                       ),
                                     ),
                                   );
                                 } else {
-                                  return Container();
+                                  return SizedBox.shrink();
                                 }
                               },
                             ),
