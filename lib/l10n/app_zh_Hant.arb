@@ -2526,8 +2526,88 @@
   "@clearQueueOnStopEventSubtitle": {
     "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
   },
-  "syncPlaybackSpeedAndPitchLabel": "同步速度與音調",
+  "syncPlaybackSpeedAndPitchLabel": "音調與速度同步",
   "@syncPlaybackSpeedAndPitchLabel": {
     "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
+  },
+  "serverSharingMenuTitle": "區域網路伺服器共享",
+  "@serverSharingMenuTitle": {
+    "description": "Title for the server sharing menu that allows the user to share their server address with other devices on the local network"
+  },
+  "serverSharingMenuButtonTitle": "伺服器分享",
+  "@serverSharingMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the server sharing menu"
+  },
+  "serverSharingMenuConfirmationDialogText": "您確定要在離線模式下啟用伺服器分享嗎？這將使 Finamp 在區域網路中傳輸資料。",
+  "@serverSharingMenuConfirmationDialogText": {
+    "description": "Dialog text shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuConfirmationDialogConfirmationButtonLabel": "確認並啟用",
+  "@serverSharingMenuConfirmationDialogConfirmationButtonLabel": {
+    "description": "Positive action label for the dialog shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuControlTitleSharingEnabled": "伺服器分享",
+  "@serverSharingMenuControlTitleSharingEnabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuControlSubtitleSharingDisabled": "點擊分享",
+  "@serverSharingMenuControlSubtitleSharingDisabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlTitleSharingDisabled": "尚未分享",
+  "@serverSharingMenuControlTitleSharingDisabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlSubtitleSharingEnabled": "點擊停止",
+  "@serverSharingMenuControlSubtitleSharingEnabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuDescription": "分享伺服器位址有助於您在不在同一區域網路的設備上快速設定新的用戶端，像是飯店電視、公司電腦，或是您外出時手機裡的新裝置。",
+  "@serverSharingMenuDescription": {
+    "description": "Description text shown in the server sharing menu, right below the controls"
+  },
+  "serverSharingMenuDetails": "此功能會在區域網路中回應其他裝置的伺服器搜尋請求，並提供您設定的 Jellyfin 位址。\n如果同時設定了區域網路與外部網路，Finamp 會一併回傳兩者。",
+  "@serverSharingMenuDetails": {
+    "description": "Description text shown in the server sharing menu, below the description"
+  },
+  "quickConnectAuthorizationMenuButtonTitle": "快速連接",
+  "@quickConnectAuthorizationMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuPrompt": "輸入快速連接代碼",
+  "@quickConnectAuthorizationMenuPrompt": {
+    "description": "Title for the button in server sharing menu that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuTitle": "授權快速連接請求",
+  "@quickConnectAuthorizationMenuTitle": {
+    "description": "Title for the quick connect authorization menu that allows the user to authorize a quick connect request from another device"
+  },
+  "quickConnectAuthorizationMenuInputLabel": "快速連接代碼",
+  "@quickConnectAuthorizationMenuInputLabel": {
+    "description": "Label for the quick connect code input, shown below the input field"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleIdle": "請輸入或貼上下方的代碼",
+  "@quickConnectAuthorizationMenuStateSubtitleIdle": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) while the code hasn't been submitted yet"
+  },
+  "quickConnectAuthorizationMenuStateTitleProcessing": "正在處理授權請求",
+  "@quickConnectAuthorizationMenuStateTitleProcessing": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) while a request is being processed"
+  },
+  "quickConnectAuthorizationMenuStateTitleSuccess": "授權成功",
+  "@quickConnectAuthorizationMenuStateTitleSuccess": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was successful"
+  },
+  "quickConnectAuthorizationMenuStateTitleFailed": "快速連接代碼無效",
+  "@quickConnectAuthorizationMenuStateTitleFailed": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleFailed": "請重新確認您輸入的代碼，再次嘗試連線",
+  "@quickConnectAuthorizationMenuStateSubtitleFailed": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuDescription": "若您想透過快速連接登入其他 Jellyfin 裝置，請在上方輸入 6 位數代碼。系統將授權該裝置登入，並使用您目前在 Finamp 的帳號。",
+  "@quickConnectAuthorizationMenuDescription": {
+    "description": "Description for the quick connect authorization menu, shown at the bottom"
   }
 }
