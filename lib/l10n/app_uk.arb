@@ -2496,7 +2496,7 @@
   "@preferLocalNetworkTargetAddressLocalSettingTitle": {},
   "preferLocalNetworkTargetAddressLocalSettingDescription": "Цільова адреса сервера Jellyfin у вашій локальній мережі",
   "@preferLocalNetworkTargetAddressLocalSettingDescription": {},
-  "sleepTimerRemainingTime": "Сон у {time,plural,=1{<1 Хвилина} other{{time} хвилин}}",
+  "sleepTimerRemainingTime": "Сон у {time,plural,=1{<1 хвилина} other{{time} хвилин}}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -2529,5 +2529,85 @@
   "syncPlaybackSpeedAndPitchLabel": "Синхронізація швидкості та висоти тону",
   "@syncPlaybackSpeedAndPitchLabel": {
     "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
+  },
+  "serverSharingMenuTitle": "Спільний доступ до локального мережевого сервера",
+  "@serverSharingMenuTitle": {
+    "description": "Title for the server sharing menu that allows the user to share their server address with other devices on the local network"
+  },
+  "serverSharingMenuButtonTitle": "Спільний сервер",
+  "@serverSharingMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the server sharing menu"
+  },
+  "serverSharingMenuConfirmationDialogText": "Ви впевнені, що хочете ввімкнути спільний доступ до сервера, навіть якщо ви перебуваєте в автономному режимі? Це призведе до того, що Finamp надсилатиме дані через локальну мережу.",
+  "@serverSharingMenuConfirmationDialogText": {
+    "description": "Dialog text shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuConfirmationDialogConfirmationButtonLabel": "Підтвердити та увімкнути",
+  "@serverSharingMenuConfirmationDialogConfirmationButtonLabel": {
+    "description": "Positive action label for the dialog shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuControlTitleSharingEnabled": "Сервер спільного доступу",
+  "@serverSharingMenuControlTitleSharingEnabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuControlSubtitleSharingDisabled": "Натисніть, щоб поділитися",
+  "@serverSharingMenuControlSubtitleSharingDisabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlTitleSharingDisabled": "Не поширюється",
+  "@serverSharingMenuControlTitleSharingDisabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlSubtitleSharingEnabled": "Натисніть, щоб зупинити",
+  "@serverSharingMenuControlSubtitleSharingEnabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuDescription": "Спільне використання адреси вашого сервера може бути корисним для налаштування нових клієнтів, які не знаходяться в тій самій локальній мережі, що й ваш сервер Jellyfin, тобто готельних телевізорів, вашого ПК на роботі або нового клієнта на вашому телефоні, коли ви в дорозі.",
+  "@serverSharingMenuDescription": {
+    "description": "Description text shown in the server sharing menu, right below the controls"
+  },
+  "serverSharingMenuDetails": "Він працює, прослуховуючи запити на виявлення серверів від інших клієнтів у локальній мережі, а потім надсилаючи на ці запити налаштовану адресу вашого сервера Jellyfin.\nЯкщо у вас налаштовано як локальну, так і публічну адресу, Finamp надасть обидві клієнту, який надсилає запит.",
+  "@serverSharingMenuDetails": {
+    "description": "Description text shown in the server sharing menu, below the description"
+  },
+  "quickConnectAuthorizationMenuButtonTitle": "Швидке підключення",
+  "@quickConnectAuthorizationMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuPrompt": "Введіть код швидкого підключення",
+  "@quickConnectAuthorizationMenuPrompt": {
+    "description": "Title for the button in server sharing menu that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuTitle": "Авторизувати запит на швидке підключення",
+  "@quickConnectAuthorizationMenuTitle": {
+    "description": "Title for the quick connect authorization menu that allows the user to authorize a quick connect request from another device"
+  },
+  "quickConnectAuthorizationMenuInputLabel": "Код швидкого підключення",
+  "@quickConnectAuthorizationMenuInputLabel": {
+    "description": "Label for the quick connect code input, shown below the input field"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleIdle": "Будь ласка, введіть або вставте код нижче",
+  "@quickConnectAuthorizationMenuStateSubtitleIdle": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) while the code hasn't been submitted yet"
+  },
+  "quickConnectAuthorizationMenuStateTitleProcessing": "Спроба авторизації запиту",
+  "@quickConnectAuthorizationMenuStateTitleProcessing": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) while a request is being processed"
+  },
+  "quickConnectAuthorizationMenuStateTitleSuccess": "Запит успішно авторизовано",
+  "@quickConnectAuthorizationMenuStateTitleSuccess": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was successful"
+  },
+  "quickConnectAuthorizationMenuStateTitleFailed": "Недійсний код швидкого підключення",
+  "@quickConnectAuthorizationMenuStateTitleFailed": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleFailed": "Будь ласка, перевірте код і спробуйте ще раз",
+  "@quickConnectAuthorizationMenuStateSubtitleFailed": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuDescription": "Якщо ви намагаєтеся увійти в інший клієнт Jellyfin через Quick Connect, ви можете ввести або вставити 6-значний код у поле вище. Це авторизує запит на вхід іншого клієнта та дозволить вам увійти в той самий обліковий запис, який ви використовуєте для Finamp.",
+  "@quickConnectAuthorizationMenuDescription": {
+    "description": "Description for the quick connect authorization menu, shown at the bottom"
   }
 }
