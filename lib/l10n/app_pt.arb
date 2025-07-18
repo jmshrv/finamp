@@ -825,7 +825,7 @@
       }
     }
   },
-  "sleepTimerRemainingTime": "Adormecer em {time,plural,=1{<1 Minute} other{{time} minutes}}",
+  "sleepTimerRemainingTime": "Adormecer em {time,plural,=1{<1 minuto} other{{time} minutos}}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -2537,5 +2537,85 @@
   "syncPlaybackSpeedAndPitchLabel": "Sincronizar Velocidade & Pitch",
   "@syncPlaybackSpeedAndPitchLabel": {
     "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
+  },
+  "serverSharingMenuTitle": "Partilha de Servidor em Rede Local",
+  "@serverSharingMenuTitle": {
+    "description": "Title for the server sharing menu that allows the user to share their server address with other devices on the local network"
+  },
+  "serverSharingMenuButtonTitle": "Partilhar Servidor",
+  "@serverSharingMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the server sharing menu"
+  },
+  "serverSharingMenuConfirmationDialogText": "Tem certeza que deseja ativar a partilha de servidor mesmo estando em Modo Offline? Isto irá fazer o Finamp enviar dados para a rede local.",
+  "@serverSharingMenuConfirmationDialogText": {
+    "description": "Dialog text shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuConfirmationDialogConfirmationButtonLabel": "Confirmar e Ativar",
+  "@serverSharingMenuConfirmationDialogConfirmationButtonLabel": {
+    "description": "Positive action label for the dialog shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuControlTitleSharingEnabled": "A Partilhar Servidor",
+  "@serverSharingMenuControlTitleSharingEnabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuControlSubtitleSharingDisabled": "Toque para Partilhar",
+  "@serverSharingMenuControlSubtitleSharingDisabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlTitleSharingDisabled": "A Não Partilhar",
+  "@serverSharingMenuControlTitleSharingDisabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlSubtitleSharingEnabled": "Toque para Parar",
+  "@serverSharingMenuControlSubtitleSharingEnabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "quickConnectAuthorizationMenuButtonTitle": "Ligação Rápida",
+  "@quickConnectAuthorizationMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuPrompt": "Insira Código de Ligação Rápida",
+  "@quickConnectAuthorizationMenuPrompt": {
+    "description": "Title for the button in server sharing menu that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuTitle": "Autorizar Pedido de Ligação Rápida",
+  "@quickConnectAuthorizationMenuTitle": {
+    "description": "Title for the quick connect authorization menu that allows the user to authorize a quick connect request from another device"
+  },
+  "quickConnectAuthorizationMenuInputLabel": "Código de Ligação Rápida",
+  "@quickConnectAuthorizationMenuInputLabel": {
+    "description": "Label for the quick connect code input, shown below the input field"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleIdle": "Por favor insira ou cole o código em baixo",
+  "@quickConnectAuthorizationMenuStateSubtitleIdle": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) while the code hasn't been submitted yet"
+  },
+  "quickConnectAuthorizationMenuStateTitleProcessing": "A Tentar Autorizar Pedido",
+  "@quickConnectAuthorizationMenuStateTitleProcessing": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) while a request is being processed"
+  },
+  "quickConnectAuthorizationMenuStateTitleSuccess": "Pedido Autorizado com Sucesso",
+  "@quickConnectAuthorizationMenuStateTitleSuccess": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was successful"
+  },
+  "quickConnectAuthorizationMenuStateTitleFailed": "Código de Ligação Rápida Inválido",
+  "@quickConnectAuthorizationMenuStateTitleFailed": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleFailed": "Por favor verifique o código e tente de novo",
+  "@quickConnectAuthorizationMenuStateSubtitleFailed": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "serverSharingMenuDescription": "Partilhar o seu endereço de servidor pode ser útil para configurar novos clientes que não estão na mesma rede local que o seu servidor Jellyfin , isto é, TVs de hotel, o seu PC no trabalho, ou um novo cliente no seu telefone enquanto você está fora.",
+  "@serverSharingMenuDescription": {
+    "description": "Description text shown in the server sharing menu, right below the controls"
+  },
+  "serverSharingMenuDetails": "Funciona ao escutar pedidos de descoberta de servidor por outros clientes na rede local, e depois respondendo a esses pedidos com o endereço configurado do seu servidor Jellyfin.\nSe você tem ambos endereço local e público configurados, o Finamp irá fornecer ambos ao cliente que pede.",
+  "@serverSharingMenuDetails": {
+    "description": "Description text shown in the server sharing menu, below the description"
+  },
+  "quickConnectAuthorizationMenuDescription": "Se você está a tentar aceder com outro cliente Jellyfin via Ligação Rápida, você pode inserir ou colar o código de 6 dígitos no campo em cima. Isto irá autorizar o pedido de acesso do outro ciente, e iniciar sessão na mesma conta que você está a usar para o Finamp.",
+  "@quickConnectAuthorizationMenuDescription": {
+    "description": "Description for the quick connect authorization menu, shown at the bottom"
   }
 }
