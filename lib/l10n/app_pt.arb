@@ -2617,5 +2617,9 @@
   "quickConnectAuthorizationMenuDescription": "Se você está a tentar aceder com outro cliente Jellyfin via Ligação Rápida, você pode inserir ou colar o código de 6 dígitos no campo em cima. Isto irá autorizar o pedido de acesso do outro ciente, e iniciar sessão na mesma conta que você está a usar para o Finamp.",
   "@quickConnectAuthorizationMenuDescription": {
     "description": "Description for the quick connect authorization menu, shown at the bottom"
+  },
+  "createPlaylistFromCurrentQueue": "Salvar Fila como Lista de Reprodução",
+  "@createPlaylistFromCurrentQueue": {
+    "description": "Label for a button that creates a new playlist from the current queue."
   }
 }
