@@ -12,9 +12,10 @@ import '../../services/jellyfin_api_helper.dart';
 import '../global_snackbar.dart';
 
 class NewPlaylistDialog extends StatefulWidget {
-  const NewPlaylistDialog({super.key, required this.itemToAdd});
+  const NewPlaylistDialog({super.key, required this.itemsToAdd, this.initialName});
 
-  final BaseItemId itemToAdd;
+  final List<BaseItemId> itemsToAdd;
+  final String? initialName;
 
   @override
   State<NewPlaylistDialog> createState() => _NewPlaylistDialogState();
@@ -47,6 +48,7 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
                 }
                 return null;
               },
+              initialValue: widget.initialName,
               onFieldSubmitted: (_) async => await _submit(),
               onSaved: (newValue) => _name = newValue,
             ),
@@ -89,7 +91,7 @@ class _NewPlaylistDialogState extends State<NewPlaylistDialog> {
           var newId = await _jellyfinApiHelper.createNewPlaylist(
             NewPlaylist(
               name: _name,
-              ids: [widget.itemToAdd],
+              ids: widget.itemsToAdd,
               userId: _finampUserHelper.currentUser!.id,
               isPublic: _public,
             ),

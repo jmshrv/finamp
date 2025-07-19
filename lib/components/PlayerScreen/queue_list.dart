@@ -883,7 +883,7 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                                         isInPlaylist: queueItemInPlaylist(currentTrack),
                                         parentItem: currentTrack?.source.item,
                                         confirmPlaylistRemoval: true,
-                                        showClearQueue: true,
+                                        showQueueActions: true,
                                       );
                                     },
                                   ),

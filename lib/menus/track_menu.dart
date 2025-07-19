@@ -7,6 +7,7 @@ import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/components/menuEntries/adaptive_download_lock_delete_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/add_to_playlist_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/clear_queue_menu_entry.dart';
+import 'package:finamp/menus/components/menuEntries/create_playlist_from_current_queue.dart';
 import 'package:finamp/menus/components/menuEntries/delete_from_server_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/instant_mix_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/remove_from_current_playlist_menu_entry.dart';
@@ -46,7 +47,7 @@ Future<void> showModalTrackMenu({
   BaseItemDto? parentItem,
   VoidCallback? onRemoveFromList,
   bool confirmPlaylistRemoval = true,
-  bool showClearQueue = false,
+  bool showQueueActions = false,
   FinampStorableQueueInfo? queueInfo,
 }) async {
   final isOffline = FinampSettingsHelper.finampSettings.isOffline;
@@ -71,7 +72,7 @@ Future<void> showModalTrackMenu({
         canGoToGenre: canGoToGenre,
         onRemoveFromList: onRemoveFromList,
         confirmPlaylistRemoval: confirmPlaylistRemoval,
-        showClearQueue: showClearQueue,
+        showQueueActions: showQueueActions,
         childBuilder: childBuilder,
         dragController: dragController,
         queueInfo: queueInfo,
@@ -96,7 +97,7 @@ class TrackMenu extends ConsumerStatefulWidget {
     required this.canGoToGenre,
     required this.onRemoveFromList,
     required this.confirmPlaylistRemoval,
-    required this.showClearQueue,
+    required this.showQueueActions,
     this.parentItem,
     required this.childBuilder,
     required this.dragController,
@@ -113,7 +114,7 @@ class TrackMenu extends ConsumerStatefulWidget {
   final bool canGoToGenre;
   final VoidCallback? onRemoveFromList;
   final bool confirmPlaylistRemoval;
-  final bool showClearQueue;
+  final bool showQueueActions;
   final ScrollBuilder childBuilder;
   final DraggableScrollableController dragController;
   final FinampStorableQueueInfo? queueInfo;
@@ -243,8 +244,9 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
       InstantMixMenuEntry(baseItem: widget.item),
       AdaptiveDownloadLockDeleteMenuEntry(baseItem: widget.item),
       ToggleFavoriteMenuEntry(baseItem: widget.item),
+      if (widget.showQueueActions) CreatePlaylistFromCurrentQueueMenuEntry(),
+      if (widget.showQueueActions) ClearQueueMenuEntry(baseItem: widget.item),
       DeleteFromServerMenuEntry(baseItem: widget.item),
-      if (widget.showClearQueue) ClearQueueMenuEntry(baseItem: widget.item),
     ];
   }
 
