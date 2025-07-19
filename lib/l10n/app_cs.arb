@@ -2607,5 +2607,9 @@
   "quickConnectAuthorizationMenuDescription": "Pokud se pokoušíte přihlásit do jiného klienta Jellyfin pomocí Rychlého připojení, můžete zadat nebo vložit 6ciferný kód do pole výše. Tím autorizujete žádost druhého klienta a přihlásíte se do stejného účtu, který používáte v aplikaci Finamp.",
   "@quickConnectAuthorizationMenuDescription": {
     "description": "Description for the quick connect authorization menu, shown at the bottom"
+  },
+  "createPlaylistFromCurrentQueue": "Uložit frontu jako seznam skladeb",
+  "@createPlaylistFromCurrentQueue": {
+    "description": "Label for a button that creates a new playlist from the current queue."
   }
 }
