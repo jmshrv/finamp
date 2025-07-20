@@ -2047,7 +2047,7 @@
       }
     }
   },
-  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks, plural, =1{1 трек} few{{amount} трека} other{{amountUndownloadedTracks} треков}} будет удалено из очереди, потому что они не скачаны.",
+  "autoReloadPromptMissingTracks": "{amountUndownloadedTracks, plural, =1{1 трек} few{{amountUndownloadedTracks} трека} other{{amountUndownloadedTracks} треков}} будет удалено из очереди, потому что они не скачаны.",
   "@autoReloadPromptMissingTracks": {
     "description": "Additional prompt text shown when the queue needs to be reloaded after changing network settings and some undownloaded tracks are in the queue",
     "placeholders": {
@@ -2613,5 +2613,9 @@
   "performingArtists": "Участвующие Исполнители",
   "@performingArtists": {},
   "performingArtist": "Участвующий Исполнитель",
-  "@performingArtist": {}
+  "@performingArtist": {},
+  "createPlaylistFromCurrentQueue": "Сохранить Очередь как Плейлист",
+  "@createPlaylistFromCurrentQueue": {
+    "description": "Label for a button that creates a new playlist from the current queue."
+  }
 }
