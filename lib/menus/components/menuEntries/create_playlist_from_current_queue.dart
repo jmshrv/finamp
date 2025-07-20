@@ -9,7 +9,6 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 class CreatePlaylistFromCurrentQueueMenuEntry extends ConsumerWidget implements HideableMenuEntry {
-
   const CreatePlaylistFromCurrentQueueMenuEntry({super.key});
 
   @override
