@@ -3,6 +3,7 @@ package com.unicornsonlsd.finamp
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.mediarouter.app.SystemOutputSwitcherDialogController
 import androidx.mediarouter.media.MediaRouter
 import com.ryanheise.audioservice.AudioServiceActivity
@@ -12,6 +13,8 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : AudioServiceActivity() {
     companion object {
         private const val OUTPUT_SWITCHER_CHANNEL = "com.unicornsonlsd.finamp/output_switcher"
+
+        private const val OUTPUT_SWITCHER_CHANNEL_LOG_TAG = "OutputSwitcherChannel"
     }
 
     private lateinit var mediaRouter: MediaRouter
@@ -28,7 +31,7 @@ class MainActivity : AudioServiceActivity() {
             flutterEngine.dartExecutor.binaryMessenger,
             OUTPUT_SWITCHER_CHANNEL,
         ).setMethodCallHandler { call, result ->
-            println("calling method: '${call.method}'")
+            Log.d(OUTPUT_SWITCHER_CHANNEL_LOG_TAG, "Calling method: '${call.method}'")
             when (call.method) {
                 "showOutputSwitcherDialog" -> {
                     showOutputSwitcherDialog()
@@ -84,7 +87,7 @@ class MainActivity : AudioServiceActivity() {
                     result.success(null)
                 }
                 else -> {
-                    println("Method not found: '${call.method}'")
+                    Log.e(OUTPUT_SWITCHER_CHANNEL_LOG_TAG, "Method not found: '${call.method}'")
                     result.notImplemented()
                 }
             }
@@ -93,7 +96,10 @@ class MainActivity : AudioServiceActivity() {
 
     private fun List<MediaRouter.RouteInfo>.log() {
         forEach { route ->
-            println("Route: ${route.name}, connection state: ${route.connectionState}, system route: ${route.isSystemRoute}, default: ${route.isDefault}, device speaker: ${route.isDeviceSpeaker}, bluetooth: ${route.isBluetooth}, volume: ${route.volume}, provider: ${route.provider.packageName}")
+            Log.d(
+                OUTPUT_SWITCHER_CHANNEL_LOG_TAG,
+                "Route: ${route.name}, connection state: ${route.connectionState}, system route: ${route.isSystemRoute}, default: ${route.isDefault}, device speaker: ${route.isDeviceSpeaker}, bluetooth: ${route.isBluetooth}, volume: ${route.volume}, provider: ${route.provider.packageName}"
+            )
         }
     }
 
