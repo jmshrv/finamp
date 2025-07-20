@@ -36,9 +36,7 @@ class MainActivity : AudioServiceActivity() {
                 }
                 "getRoutes" -> {
                     val routes = mediaRouter.routes
-                    routes.forEach { route ->
-                        println("Route: ${route.name}, connection state: ${route.connectionState}, system route: ${route.isSystemRoute}, default: ${route.isDefault}, device speaker: ${route.isDeviceSpeaker}, bluetooth: ${route.isBluetooth}, volume: ${route.volume}, provider: ${route.provider.packageName}")
-                    }
+                    routes.log()
                     result.success(routes.map { route ->
                         mapOf(
                             "name" to route.name,
@@ -60,27 +58,21 @@ class MainActivity : AudioServiceActivity() {
                 }
                 "setOutputToDeviceSpeaker" -> {
                     val routes = mediaRouter.routes
-                    routes.forEach { route ->
-                        println("Route: ${route.name}, connection state: ${route.connectionState}, system route: ${route.isSystemRoute}, default: ${route.isDefault}, device speaker: ${route.isDeviceSpeaker}, bluetooth: ${route.isBluetooth}, volume: ${route.volume}, provider: ${route.provider.packageName}")
-                    }
+                    routes.log()
                     val deviceSpeakerRoute = routes.first { route -> route.isDeviceSpeaker }
                     mediaRouter.selectRoute(deviceSpeakerRoute)
                     result.success(null)
                 }
                 "setOutputToBluetoothDevice" -> {
                     val routes = mediaRouter.routes
-                    routes.forEach { route ->
-                        println("Route: ${route.name}, connection state: ${route.connectionState}, system route: ${route.isSystemRoute}, default: ${route.isDefault}, device speaker: ${route.isDeviceSpeaker}, bluetooth: ${route.isBluetooth}, volume: ${route.volume}, provider: ${route.provider.packageName}")
-                    }
+                    routes.log()
                     val bluetoothRoute = routes.first { route -> route.isBluetooth }
                     mediaRouter.selectRoute(bluetoothRoute)
                     result.success(null)
                 }
                 "setOutputToRouteByName" -> {
                     val routes = mediaRouter.routes
-                    routes.forEach { route ->
-                        println("Route: ${route.name}, connection state: ${route.connectionState}, system route: ${route.isSystemRoute}, default: ${route.isDefault}, device speaker: ${route.isDeviceSpeaker}, bluetooth: ${route.isBluetooth}, volume: ${route.volume}, provider: ${route.provider.packageName}")
-                    }
+                    routes.log()
                     val targetRoute = routes.first { route ->
                         route.name == call.argument<String>("name")
                     }
@@ -96,6 +88,12 @@ class MainActivity : AudioServiceActivity() {
                     result.notImplemented()
                 }
             }
+        }
+    }
+
+    private fun List<MediaRouter.RouteInfo>.log() {
+        forEach { route ->
+            println("Route: ${route.name}, connection state: ${route.connectionState}, system route: ${route.isSystemRoute}, default: ${route.isDefault}, device speaker: ${route.isDeviceSpeaker}, bluetooth: ${route.isBluetooth}, volume: ${route.volume}, provider: ${route.provider.packageName}")
         }
     }
 
