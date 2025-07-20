@@ -1,6 +1,7 @@
 package com.unicornsonlsd.finamp
 
 import android.content.Intent
+import android.os.Bundle
 import android.provider.Settings
 import androidx.mediarouter.app.SystemOutputSwitcherDialogController
 import androidx.mediarouter.media.MediaRouter
@@ -11,6 +12,14 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : AudioServiceActivity() {
     companion object {
         private const val OUTPUT_SWITCHER_CHANNEL = "com.unicornsonlsd.finamp/output_switcher"
+    }
+
+    private lateinit var mediaRouter: MediaRouter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        mediaRouter = MediaRouter.getInstance(this)
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
@@ -26,8 +35,7 @@ class MainActivity : AudioServiceActivity() {
                     result.success(null)
                 }
                 "getRoutes" -> {
-                    val router = MediaRouter.getInstance(this)
-                    val routes = router.routes
+                    val routes = mediaRouter.routes
                     routes.forEach { route ->
                         println("Route: ${route.name}, connection state: ${route.connectionState}, system route: ${route.isSystemRoute}, default: ${route.isDefault}, device speaker: ${route.isDeviceSpeaker}, bluetooth: ${route.isBluetooth}, volume: ${route.volume}, provider: ${route.provider.packageName}")
                     }
@@ -51,35 +59,32 @@ class MainActivity : AudioServiceActivity() {
                     })
                 }
                 "setOutputToDeviceSpeaker" -> {
-                    val router = MediaRouter.getInstance(this)
-                    val routes = router.routes
+                    val routes = mediaRouter.routes
                     routes.forEach { route ->
                         println("Route: ${route.name}, connection state: ${route.connectionState}, system route: ${route.isSystemRoute}, default: ${route.isDefault}, device speaker: ${route.isDeviceSpeaker}, bluetooth: ${route.isBluetooth}, volume: ${route.volume}, provider: ${route.provider.packageName}")
                     }
                     val deviceSpeakerRoute = routes.first { route -> route.isDeviceSpeaker }
-                    router.selectRoute(deviceSpeakerRoute)
+                    mediaRouter.selectRoute(deviceSpeakerRoute)
                     result.success(null)
                 }
                 "setOutputToBluetoothDevice" -> {
-                    val router = MediaRouter.getInstance(this)
-                    val routes = router.routes
+                    val routes = mediaRouter.routes
                     routes.forEach { route ->
                         println("Route: ${route.name}, connection state: ${route.connectionState}, system route: ${route.isSystemRoute}, default: ${route.isDefault}, device speaker: ${route.isDeviceSpeaker}, bluetooth: ${route.isBluetooth}, volume: ${route.volume}, provider: ${route.provider.packageName}")
                     }
                     val bluetoothRoute = routes.first { route -> route.isBluetooth }
-                    router.selectRoute(bluetoothRoute)
+                    mediaRouter.selectRoute(bluetoothRoute)
                     result.success(null)
                 }
                 "setOutputToRouteByName" -> {
-                    val router = MediaRouter.getInstance(this)
-                    val routes = router.routes
+                    val routes = mediaRouter.routes
                     routes.forEach { route ->
                         println("Route: ${route.name}, connection state: ${route.connectionState}, system route: ${route.isSystemRoute}, default: ${route.isDefault}, device speaker: ${route.isDeviceSpeaker}, bluetooth: ${route.isBluetooth}, volume: ${route.volume}, provider: ${route.provider.packageName}")
                     }
                     val targetRoute = routes.first { route ->
                         route.name == call.argument<String>("name")
                     }
-                    router.selectRoute(targetRoute)
+                    mediaRouter.selectRoute(targetRoute)
                     result.success(null)
                 }
                 "openBluetoothSettings" -> {
