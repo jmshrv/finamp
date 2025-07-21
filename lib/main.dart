@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:app_links/app_links.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:background_downloader/background_downloader.dart';
@@ -443,10 +444,27 @@ class Finamp extends StatefulWidget {
 
 class _FinampState extends State<Finamp> with WindowListener {
   static final Logger windowManagerLogger = Logger("WindowManager");
+  static final Logger linkHandlingLogger = Logger("LinkHandling");
+
+  StreamSubscription<Uri>? _uriLinkSubscription;
 
   @override
   void initState() {
     super.initState();
+    // Subscribe to all events (initial link and further)
+    _uriLinkSubscription = AppLinks().uriLinkStream.listen((uri) {
+      linkHandlingLogger.info("Received link: $uri");
+      final parsedUrl = Uri.parse(uri.toString());
+      if (parsedUrl.host == "internal") {
+        Navigator.of(GlobalSnackbar.materialAppNavigatorKey.currentContext!).pushNamed(
+          parsedUrl.path,
+        );
+      } else {
+        //TODO eventually we could do something here, but for now we just log the link
+      }
+    });
+
+    // If the app is running on desktop, we add a listener to the window manager
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       WindowManager.instance.addListener(this);
       // windowManager.setPreventClose(true); //!!! destroying the window manager instance doesn't seem to work on Windows release builds, the app just freezes instead
@@ -455,6 +473,8 @@ class _FinampState extends State<Finamp> with WindowListener {
 
   @override
   void dispose() {
+    _uriLinkSubscription?.cancel();
+
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       WindowManager.instance.removeListener(this);
     }

@@ -115,6 +115,7 @@ dependencies:
   visibility_detector: ^0.4.0+2
   gaimon: ^1.4.0
   http: ^1.4.0
+  app_links: ^6.4.0
 
 dev_dependencies:
   flutter_test:
@@ -222,3 +223,4 @@ msix_config:
   certificate_password: finamp
   # Building during msix:create is currently bugged, so build manually beforehand.
   build_windows: false
+  protocol_activation: finamp # the protocols to activate the app
