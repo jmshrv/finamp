@@ -94,14 +94,26 @@ class ItemCollectionListTile extends ConsumerWidget {
       );
     }
 
-    final additionalBaseItemInfos = ref.watch(finampSettingsProvider.additionalBaseItemInfo);
-    final additionalBaseItemInfo = additionalBaseItemInfos[itemType] ?? AdditionalBaseItemInfoTypes.adaptive;
+    TabContentType? associatedTabContentType;
+    try {
+      associatedTabContentType = TabContentType.fromItemType(itemType.idString ?? "");
+    } on FormatException {
+      associatedTabContentType = null;
+    }
 
-    SortBy? additionalInfoSortBy = switch (additionalBaseItemInfo) {
-      AdditionalBaseItemInfoTypes.dateReleased => SortBy.dateCreated,
-      AdditionalBaseItemInfoTypes.dateAdded => SortBy.dateCreated,
-      AdditionalBaseItemInfoTypes.duration => SortBy.runtime,
-      AdditionalBaseItemInfoTypes.none => null,
+    final tileAdditionalInfoSetting = associatedTabContentType != null
+        ? ref.watch(finampSettingsProvider.tileAdditionalInfoType(associatedTabContentType))
+        : null;
+    final tileAdditionalInfoType =
+        (associatedTabContentType == TabContentType.albums && albumShowsYearAndDurationInstead)
+        ? TileAdditionalInfoType.none
+        : (tileAdditionalInfoSetting ?? TileAdditionalInfoType.adaptive);
+
+    SortBy? additionalInfoSortBy = switch (tileAdditionalInfoType) {
+      TileAdditionalInfoType.dateReleased => SortBy.premiereDate,
+      TileAdditionalInfoType.dateAdded => SortBy.dateCreated,
+      TileAdditionalInfoType.duration => SortBy.runtime,
+      TileAdditionalInfoType.none => null,
       _ => adaptiveAdditionalInfoSortBy,
     };
 

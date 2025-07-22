@@ -384,21 +384,38 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
         useHighContrastColors: fields[120] == null
             ? false
             : fields[120] as bool,
+<<<<<<< HEAD
+<<<<<<< HEAD
         hasCompletedDownloadsFileOwnerMigration: fields[121] == null
             ? false
             : fields[121] as bool,
 =======
         additionalBaseItemInfo: fields[120] == null
+=======
+        tileAdditionalInfo: fields[121] == null
+>>>>>>> 4fda0f52 (apply review suggestions)
+=======
+        tileAdditionalInfoType: fields[121] == null
+>>>>>>> 631de3f0 (Fix Fixes :P)
             ? {
-                BaseItemDtoType.track: AdditionalBaseItemInfoTypes.adaptive,
-                BaseItemDtoType.album: AdditionalBaseItemInfoTypes.adaptive,
-                BaseItemDtoType.artist: AdditionalBaseItemInfoTypes.adaptive,
-                BaseItemDtoType.playlist: AdditionalBaseItemInfoTypes.adaptive,
-                BaseItemDtoType.genre: AdditionalBaseItemInfoTypes.adaptive,
+                TabContentType.tracks: TileAdditionalInfoType.adaptive,
+                TabContentType.albums: TileAdditionalInfoType.adaptive,
+                TabContentType.artists: TileAdditionalInfoType.adaptive,
+                TabContentType.playlists: TileAdditionalInfoType.adaptive,
+                TabContentType.genres: TileAdditionalInfoType.adaptive,
               }
+<<<<<<< HEAD
             : (fields[120] as Map)
                   .cast<BaseItemDtoType, AdditionalBaseItemInfoTypes>(),
 >>>>>>> 0edd799d (Add Settings for Additional Item Info.)
+=======
+            : (fields[121] as Map)
+<<<<<<< HEAD
+                  .cast<TabContentType, AdditionalBaseItemInfoTypes>(),
+>>>>>>> 2dc54e3d (Use TabContentType instead of BaseItemDtoType for storing the settings. Auto-generate settings.)
+=======
+                  .cast<TabContentType, TileAdditionalInfoType>(),
+>>>>>>> 4fda0f52 (apply review suggestions)
       )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -645,10 +662,18 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
 <<<<<<< HEAD
       ..write(obj.useHighContrastColors)
       ..writeByte(121)
+<<<<<<< HEAD
+<<<<<<< HEAD
       ..write(obj.hasCompletedDownloadsFileOwnerMigration);
 =======
       ..write(obj.additionalBaseItemInfo);
 >>>>>>> 0edd799d (Add Settings for Additional Item Info.)
+=======
+      ..write(obj.tileAdditionalInfo);
+>>>>>>> 4fda0f52 (apply review suggestions)
+=======
+      ..write(obj.tileAdditionalInfoType);
+>>>>>>> 631de3f0 (Fix Fixes :P)
   }
 
   @override
@@ -2737,49 +2762,49 @@ class SleepTimerTypeAdapter extends TypeAdapter<SleepTimerType> {
           typeId == other.typeId;
 }
 
-class AdditionalBaseItemInfoTypesAdapter
-    extends TypeAdapter<AdditionalBaseItemInfoTypes> {
+class TileAdditionalInfoTypeAdapter
+    extends TypeAdapter<TileAdditionalInfoType> {
   @override
   final typeId = 100;
 
   @override
-  AdditionalBaseItemInfoTypes read(BinaryReader reader) {
+  TileAdditionalInfoType read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return AdditionalBaseItemInfoTypes.adaptive;
+        return TileAdditionalInfoType.adaptive;
       case 1:
-        return AdditionalBaseItemInfoTypes.dateAdded;
+        return TileAdditionalInfoType.dateAdded;
       case 2:
-        return AdditionalBaseItemInfoTypes.dateReleased;
+        return TileAdditionalInfoType.dateReleased;
       case 3:
-        return AdditionalBaseItemInfoTypes.duration;
+        return TileAdditionalInfoType.duration;
       case 4:
-        return AdditionalBaseItemInfoTypes.playCount;
+        return TileAdditionalInfoType.playCount;
       case 5:
-        return AdditionalBaseItemInfoTypes.dateLastPlayed;
+        return TileAdditionalInfoType.dateLastPlayed;
       case 6:
-        return AdditionalBaseItemInfoTypes.none;
+        return TileAdditionalInfoType.none;
       default:
-        return AdditionalBaseItemInfoTypes.adaptive;
+        return TileAdditionalInfoType.adaptive;
     }
   }
 
   @override
-  void write(BinaryWriter writer, AdditionalBaseItemInfoTypes obj) {
+  void write(BinaryWriter writer, TileAdditionalInfoType obj) {
     switch (obj) {
-      case AdditionalBaseItemInfoTypes.adaptive:
+      case TileAdditionalInfoType.adaptive:
         writer.writeByte(0);
-      case AdditionalBaseItemInfoTypes.dateAdded:
+      case TileAdditionalInfoType.dateAdded:
         writer.writeByte(1);
-      case AdditionalBaseItemInfoTypes.dateReleased:
+      case TileAdditionalInfoType.dateReleased:
         writer.writeByte(2);
-      case AdditionalBaseItemInfoTypes.duration:
+      case TileAdditionalInfoType.duration:
         writer.writeByte(3);
-      case AdditionalBaseItemInfoTypes.playCount:
+      case TileAdditionalInfoType.playCount:
         writer.writeByte(4);
-      case AdditionalBaseItemInfoTypes.dateLastPlayed:
+      case TileAdditionalInfoType.dateLastPlayed:
         writer.writeByte(5);
-      case AdditionalBaseItemInfoTypes.none:
+      case TileAdditionalInfoType.none:
         writer.writeByte(6);
     }
   }
@@ -2790,7 +2815,7 @@ class AdditionalBaseItemInfoTypesAdapter
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AdditionalBaseItemInfoTypesAdapter &&
+      other is TileAdditionalInfoTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

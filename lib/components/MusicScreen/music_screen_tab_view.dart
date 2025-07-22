@@ -443,10 +443,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                 isOnGenreScreen: (widget.genreFilter != null) ? true : false,
                                 parentItem: widget.genreFilter,
                                 forceAlbumArtists: (sortBy == SortBy.albumArtist),
-                                showPlayCountAdaptive: (!settings.isOffline && sortBy == SortBy.playCount),
-                                showReleaseDateAdaptive: (sortBy == SortBy.premiereDate),
-                                showDateAddedAdaptive: (sortBy == SortBy.dateCreated),
-                                showDateLastPlayedAdaptive: (!settings.isOffline && sortBy == SortBy.datePlayed),
+                                adaptiveAdditionalInfoSortBy: sortBy,
                               )
                             : ItemCollectionWrapper(
                                 key: ValueKey(item.id),

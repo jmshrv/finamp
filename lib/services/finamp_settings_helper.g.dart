@@ -1011,6 +1011,8 @@ extension FinampSetters on FinampSettingsHelper {
     ).put("FinampSettings", finampSettingsTemp);
   }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
   static void setHasCompletedDownloadsFileOwnerMigration(
     bool newHasCompletedDownloadsFileOwnerMigration,
   ) {
@@ -1019,11 +1021,27 @@ extension FinampSetters on FinampSettingsHelper {
         newHasCompletedDownloadsFileOwnerMigration;
 =======
   static void setAdditionalBaseItemInfo(
-    Map<BaseItemDtoType, AdditionalBaseItemInfoTypes> newAdditionalBaseItemInfo,
+    Map<TabContentType, AdditionalBaseItemInfoTypes> newAdditionalBaseItemInfo,
   ) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.additionalBaseItemInfo = newAdditionalBaseItemInfo;
 >>>>>>> 0edd799d (Add Settings for Additional Item Info.)
+=======
+  static void setTileAdditionalInfo(
+=======
+  static void setTileAdditionalInfoType(
+>>>>>>> 631de3f0 (Fix Fixes :P)
+    TabContentType tabContentType,
+    TileAdditionalInfoType tileAdditionalInfoType,
+  ) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+<<<<<<< HEAD
+    finampSettingsTemp.tileAdditionalInfo[tabContentType] = tileAdditionalInfo;
+>>>>>>> 4fda0f52 (apply review suggestions)
+=======
+    finampSettingsTemp.tileAdditionalInfoType[tabContentType] =
+        tileAdditionalInfoType;
+>>>>>>> 631de3f0 (Fix Fixes :P)
     Hive.box<FinampSettings>(
       "FinampSettings",
     ).put("FinampSettings", finampSettingsTemp);
@@ -1397,14 +1415,32 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
 <<<<<<< HEAD
   ProviderListenable<bool> get useHighContrastColors => finampSettingsProvider
       .select((value) => value.requireValue.useHighContrastColors);
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
   ProviderListenable<bool> get hasCompletedDownloadsFileOwnerMigration =>
       finampSettingsProvider.select(
         (value) => value.requireValue.hasCompletedDownloadsFileOwnerMigration,
       );
 =======
   ProviderListenable<Map<BaseItemDtoType, AdditionalBaseItemInfoTypes>>
+=======
+  ProviderListenable<Map<TabContentType, AdditionalBaseItemInfoTypes>>
+>>>>>>> 2dc54e3d (Use TabContentType instead of BaseItemDtoType for storing the settings. Auto-generate settings.)
   get additionalBaseItemInfo => finampSettingsProvider.select(
     (value) => value.requireValue.additionalBaseItemInfo,
+=======
+  ProviderListenable<TileAdditionalInfoType?> tileAdditionalInfo(
+    TabContentType tabContentType,
+  ) => finampSettingsProvider.select(
+    (value) => value.requireValue.tileAdditionalInfo[tabContentType],
+>>>>>>> 4fda0f52 (apply review suggestions)
+=======
+  ProviderListenable<TileAdditionalInfoType?> tileAdditionalInfoType(
+    TabContentType tabContentType,
+  ) => finampSettingsProvider.select(
+    (value) => value.requireValue.tileAdditionalInfoType[tabContentType],
+>>>>>>> 631de3f0 (Fix Fixes :P)
   );
 >>>>>>> 0edd799d (Add Settings for Additional Item Info.)
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>

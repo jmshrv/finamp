@@ -9,7 +9,6 @@ import 'package:finamp/models/jellyfin_models.dart';
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
     registerAdapter(AccessScheduleAdapter());
-    registerAdapter(AdditionalBaseItemInfoTypesAdapter());
     registerAdapter(ArtistItemSectionsAdapter());
     registerAdapter(ArtistTypeAdapter());
     registerAdapter(AuthenticationResultAdapter());
@@ -85,6 +84,7 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(SortOrderAdapter());
     registerAdapter(SubtitleProfileAdapter());
     registerAdapter(TabContentTypeAdapter());
+    registerAdapter(TileAdditionalInfoTypeAdapter());
     registerAdapter(TranscodeDownloadsSettingAdapter());
     registerAdapter(TranscodingProfileAdapter());
     registerAdapter(UserConfigurationAdapter());
@@ -99,7 +99,6 @@ extension HiveRegistrar on HiveInterface {
 extension IsolatedHiveRegistrar on IsolatedHiveInterface {
   void registerAdapters() {
     registerAdapter(AccessScheduleAdapter());
-    registerAdapter(AdditionalBaseItemInfoTypesAdapter());
     registerAdapter(ArtistItemSectionsAdapter());
     registerAdapter(ArtistTypeAdapter());
     registerAdapter(AuthenticationResultAdapter());
@@ -175,6 +174,7 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
     registerAdapter(SortOrderAdapter());
     registerAdapter(SubtitleProfileAdapter());
     registerAdapter(TabContentTypeAdapter());
+    registerAdapter(TileAdditionalInfoTypeAdapter());
     registerAdapter(TranscodeDownloadsSettingAdapter());
     registerAdapter(TranscodingProfileAdapter());
     registerAdapter(UserConfigurationAdapter());
