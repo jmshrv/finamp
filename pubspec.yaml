@@ -115,6 +115,7 @@ dependencies:
   visibility_detector: ^0.4.0+2
   gaimon: ^1.4.0
   http: ^1.4.0
+  flutter_discord_rpc: ^1.0.0
 
 dev_dependencies:
   flutter_test:
