@@ -710,6 +710,26 @@ class DownloadsService {
           await deleteBuffer.deleteDownload(item);
       }
     }
+    // Clean up missing download locations.  Download location delete verification should theoretically prevent
+    // this from being needed outside dev builds.
+    _isar.writeTxnSync(() {
+      var userDownloadedItems = _isar.downloadItems.filter().userTranscodingProfileIsNotNull().findAllSync();
+      for (var item in userDownloadedItems) {
+        var locationId = item.userTranscodingProfile!.downloadLocationId;
+        if (!FinampSettingsHelper.finampSettings.downloadLocationsMap.containsKey(locationId)) {
+          _downloadsLogger.severe(
+            "Could not find download location $locationId for ${item.name}, resetting to internal directory",
+          );
+          item.userTranscodingProfile = DownloadProfile(
+            downloadLocationId: FinampSettingsHelper.finampSettings.internalTrackDir.id,
+            transcodeCodec: item.userTranscodingProfile!.codec,
+            bitrate: item.userTranscodingProfile!.stereoBitrate,
+          );
+          _isar.downloadItems.putSync(item);
+        }
+      }
+    });
+
     _isar.writeTxnSync(() {
       var itemsWithChildren = _isar.downloadItems
           .where()

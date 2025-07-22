@@ -395,9 +395,7 @@ class FinampSettings {
   // @HiveField(14, defaultValue: DefaultSettings.sleepTimerSeconds) //!!! don't reuse this hive ID!
 
   @HiveField(15, defaultValue: <String, DownloadLocation>{})
-  @SettingsHelperIgnore(
-    "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.",
-  )
+  @SettingsHelperIgnore("This map is read and modified in an unusual way, so helper methods are defined manually.")
   Map<String, DownloadLocation> downloadLocationsMap;
 
   /// Whether or not to use blurred cover art as background on player screen.
