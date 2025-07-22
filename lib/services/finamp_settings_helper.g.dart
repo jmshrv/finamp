@@ -1002,6 +1002,7 @@ extension FinampSetters on FinampSettingsHelper {
     ).put("FinampSettings", finampSettingsTemp);
   }
 
+<<<<<<< HEAD
   static void setUseHighContrastColors(bool newUseHighContrastColors) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.useHighContrastColors = newUseHighContrastColors;
@@ -1016,6 +1017,13 @@ extension FinampSetters on FinampSettingsHelper {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.hasCompletedDownloadsFileOwnerMigration =
         newHasCompletedDownloadsFileOwnerMigration;
+=======
+  static void setAdditionalBaseItemInfo(
+    Map<BaseItemDtoType, AdditionalBaseItemInfoTypes> newAdditionalBaseItemInfo,
+  ) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.additionalBaseItemInfo = newAdditionalBaseItemInfo;
+>>>>>>> 0edd799d (Add Settings for Additional Item Info.)
     Hive.box<FinampSettings>(
       "FinampSettings",
     ).put("FinampSettings", finampSettingsTemp);
@@ -1386,12 +1394,19 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       finampSettingsProvider.select(
         (value) => value.requireValue.syncPlaybackSpeedAndPitch,
       );
+<<<<<<< HEAD
   ProviderListenable<bool> get useHighContrastColors => finampSettingsProvider
       .select((value) => value.requireValue.useHighContrastColors);
   ProviderListenable<bool> get hasCompletedDownloadsFileOwnerMigration =>
       finampSettingsProvider.select(
         (value) => value.requireValue.hasCompletedDownloadsFileOwnerMigration,
       );
+=======
+  ProviderListenable<Map<BaseItemDtoType, AdditionalBaseItemInfoTypes>>
+  get additionalBaseItemInfo => finampSettingsProvider.select(
+    (value) => value.requireValue.additionalBaseItemInfo,
+  );
+>>>>>>> 0edd799d (Add Settings for Additional Item Info.)
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider.select(
         (value) => value.requireValue.downloadTranscodingProfile,

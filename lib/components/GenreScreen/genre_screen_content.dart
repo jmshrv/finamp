@@ -277,6 +277,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
             ),
           ),
         ),
+
         /// TODO:
         /// Once we have better handling of large queues (maybe with lazy-loading/adding?)
         /// and once we redesigned the play/shuffle buttons, they should get added here

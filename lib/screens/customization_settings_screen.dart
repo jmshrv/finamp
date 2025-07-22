@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:finamp/components/LayoutSettingsScreen/CustomizationSettingsScreen/additional_base_item_info_dropdown_list_tile.dart';
 import 'package:finamp/components/LayoutSettingsScreen/CustomizationSettingsScreen/playback_speed_control_visibility_dropdown_list_tile.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -40,6 +41,12 @@ class _CustomizationSettingsScreenState extends State<CustomizationSettingsScree
           const ShowSeekControlsOnMediaNotificationToggle(),
           const OneLineMarqueeTextSwitch(),
           const ReleaseDateFormatDropdownListTile(),
+          const AdditionalBaseItemInfoTitleListTile(),
+          const AdditionalBaseItemInfoDropdownListTile(baseItemDtoType: BaseItemDtoType.track),
+          const AdditionalBaseItemInfoDropdownListTile(baseItemDtoType: BaseItemDtoType.album),
+          const AdditionalBaseItemInfoDropdownListTile(baseItemDtoType: BaseItemDtoType.artist),
+          const AdditionalBaseItemInfoDropdownListTile(baseItemDtoType: BaseItemDtoType.playlist),
+          const AdditionalBaseItemInfoDropdownListTile(baseItemDtoType: BaseItemDtoType.genre),
         ],
       ),
     );

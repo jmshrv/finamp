@@ -283,6 +283,8 @@
   "@defaultOrder": {
     "description": "Default sorting order for playlists (server order)"
   },
+  "adaptive": "Adaptive",
+  "@adaptive": {},
   "formattedRelativeTime": "{type, select, just_now{just now} minutes{{value} min ago} hours{{value} h ago} yesterday{yesterday} days{{value, plural, =1{1 day ago} other{{value} days ago}}} other{value}}",
   "@formattedRelativeTime": {
     "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
@@ -570,6 +572,8 @@
   "@list": {},
   "grid": "Grid",
   "@grid": {},
+  "none": "None",
+  "@none": {},
   "customizationSettingsTitle": "Customization",
   "@customizationSettingsTitle": {
     "description": "Title for the customization settings screen"
@@ -2343,7 +2347,15 @@
   },
   "releaseDateFormatSubtitle": "Controls the format of all release dates shown in the app.",
   "@releaseDateFormatSubtitle": {
-    "description": "Title for the setting that controls the format release dates throughout the app."
+    "description": "Subtitle for the setting that controls the format release dates throughout the app."
+  },
+  "additionalBaseItemInfoTitle": "Additional Item Info",
+  "@additionalBaseItemInfoTitle": {
+    "description": "Title for the setting that controls the displayed additional item info."
+  },
+  "additionalBaseItemInfoSubtitle": "Controls which type of additional info is shown in item lists for each item type. When set to \"Adaptive\", the info is chosen automatically based on the current sorting or context.",
+  "@additionalBaseItemInfoSubtitle": {
+    "description": "Subtitle for the setting that controls the displayed additional item info."
   },
   "noReleaseDate": "No Release Date",
   "@noReleaseDate": {

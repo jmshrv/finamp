@@ -380,12 +380,25 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
         clearQueueOnStopEvent: fields[117] == null
             ? false
             : fields[117] as bool,
+<<<<<<< HEAD
         useHighContrastColors: fields[120] == null
             ? false
             : fields[120] as bool,
         hasCompletedDownloadsFileOwnerMigration: fields[121] == null
             ? false
             : fields[121] as bool,
+=======
+        additionalBaseItemInfo: fields[120] == null
+            ? {
+                BaseItemDtoType.track: AdditionalBaseItemInfoTypes.adaptive,
+                BaseItemDtoType.album: AdditionalBaseItemInfoTypes.adaptive,
+                BaseItemDtoType.artist: AdditionalBaseItemInfoTypes.adaptive,
+                BaseItemDtoType.playlist: AdditionalBaseItemInfoTypes.adaptive,
+                BaseItemDtoType.genre: AdditionalBaseItemInfoTypes.adaptive,
+              }
+            : (fields[120] as Map)
+                  .cast<BaseItemDtoType, AdditionalBaseItemInfoTypes>(),
+>>>>>>> 0edd799d (Add Settings for Additional Item Info.)
       )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -397,7 +410,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
+<<<<<<< HEAD
       ..writeByte(115)
+=======
+      ..writeByte(114)
+>>>>>>> 0edd799d (Add Settings for Additional Item Info.)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -625,9 +642,13 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(119)
       ..write(obj.syncPlaybackSpeedAndPitch)
       ..writeByte(120)
+<<<<<<< HEAD
       ..write(obj.useHighContrastColors)
       ..writeByte(121)
       ..write(obj.hasCompletedDownloadsFileOwnerMigration);
+=======
+      ..write(obj.additionalBaseItemInfo);
+>>>>>>> 0edd799d (Add Settings for Additional Item Info.)
   }
 
   @override
@@ -2712,6 +2733,64 @@ class SleepTimerTypeAdapter extends TypeAdapter<SleepTimerType> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is SleepTimerTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class AdditionalBaseItemInfoTypesAdapter
+    extends TypeAdapter<AdditionalBaseItemInfoTypes> {
+  @override
+  final typeId = 100;
+
+  @override
+  AdditionalBaseItemInfoTypes read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return AdditionalBaseItemInfoTypes.adaptive;
+      case 1:
+        return AdditionalBaseItemInfoTypes.dateAdded;
+      case 2:
+        return AdditionalBaseItemInfoTypes.dateReleased;
+      case 3:
+        return AdditionalBaseItemInfoTypes.duration;
+      case 4:
+        return AdditionalBaseItemInfoTypes.playCount;
+      case 5:
+        return AdditionalBaseItemInfoTypes.dateLastPlayed;
+      case 6:
+        return AdditionalBaseItemInfoTypes.none;
+      default:
+        return AdditionalBaseItemInfoTypes.adaptive;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, AdditionalBaseItemInfoTypes obj) {
+    switch (obj) {
+      case AdditionalBaseItemInfoTypes.adaptive:
+        writer.writeByte(0);
+      case AdditionalBaseItemInfoTypes.dateAdded:
+        writer.writeByte(1);
+      case AdditionalBaseItemInfoTypes.dateReleased:
+        writer.writeByte(2);
+      case AdditionalBaseItemInfoTypes.duration:
+        writer.writeByte(3);
+      case AdditionalBaseItemInfoTypes.playCount:
+        writer.writeByte(4);
+      case AdditionalBaseItemInfoTypes.dateLastPlayed:
+        writer.writeByte(5);
+      case AdditionalBaseItemInfoTypes.none:
+        writer.writeByte(6);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AdditionalBaseItemInfoTypesAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

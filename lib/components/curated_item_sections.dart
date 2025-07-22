@@ -190,10 +190,10 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
                   TracksSliverList(
                     childrenForList: widget.tracks!,
                     childrenForQueue: widget.childrenForQueue!,
-                    showPlayCount: (widget.selectedFilter?.getSortBy() == SortBy.playCount),
-                    showReleaseDate: (widget.selectedFilter?.getSortBy() == SortBy.premiereDate),
-                    showDateLastPlayed: (widget.selectedFilter?.getSortBy() == SortBy.datePlayed),
-                    showDateAdded: (widget.selectedFilter?.getSortBy() == SortBy.dateCreated),
+                    showPlayCountAdaptive: (widget.selectedFilter?.getSortBy() == SortBy.playCount),
+                    showReleaseDateAdaptive: (widget.selectedFilter?.getSortBy() == SortBy.premiereDate),
+                    showDateLastPlayedAdaptive: (widget.selectedFilter?.getSortBy() == SortBy.datePlayed),
+                    showDateAddedAdaptive: (widget.selectedFilter?.getSortBy() == SortBy.dateCreated),
                     parent: widget.parent,
                     isOnArtistScreen: widget.isOnArtistScreen,
                     isOnGenreScreen: widget.isOnGenreScreen,
@@ -397,7 +397,7 @@ class _ItemsSectionState extends ConsumerState<CollectionsSection> {
                     parent: widget.parent,
                     genreFilter: widget.genreFilter,
                     albumShowsYearAndDurationInstead: widget.albumsShowYearAndDurationInstead,
-                    showAdditionalInfoForSortBy: widget.selectedFilter?.getSortBy(),
+                    adaptiveAdditionalInfoSortBy: widget.selectedFilter?.getSortBy(),
                   )
                 else
                   SliverToBoxAdapter(

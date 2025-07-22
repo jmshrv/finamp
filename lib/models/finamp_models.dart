@@ -219,6 +219,13 @@ class DefaultSettings {
   static const genreFilterPlaylists = false;
   static const clearQueueOnStopEvent = false;
   static const useHighContrastColors = false;
+  static const additionalBaseItemInfo = {
+    BaseItemDtoType.track: AdditionalBaseItemInfoTypes.adaptive,
+    BaseItemDtoType.album: AdditionalBaseItemInfoTypes.adaptive,
+    BaseItemDtoType.artist: AdditionalBaseItemInfoTypes.adaptive,
+    BaseItemDtoType.playlist: AdditionalBaseItemInfoTypes.adaptive,
+    BaseItemDtoType.genre: AdditionalBaseItemInfoTypes.adaptive,
+  };
 }
 
 @HiveType(typeId: 28)
@@ -340,6 +347,7 @@ class FinampSettings {
     this.useHighContrastColors = DefaultSettings.useHighContrastColors,
     // !!! Don't touch this default value, it's supposed to be hard coded to run the migration only once
     this.hasCompletedDownloadsFileOwnerMigration = true,
+    this.additionalBaseItemInfo = DefaultSettings.additionalBaseItemInfo,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -719,6 +727,9 @@ class FinampSettings {
   // Whether the downloads file owner migration has been completed.
   @HiveField(121, defaultValue: false)
   bool hasCompletedDownloadsFileOwnerMigration;
+
+  @HiveField(122, defaultValue: DefaultSettings.additionalBaseItemInfo)
+  Map<BaseItemDtoType, AdditionalBaseItemInfoTypes> additionalBaseItemInfo;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -3271,4 +3282,67 @@ enum SleepTimerType {
 
   @HiveField(1)
   tracks,
+}
+
+@HiveType(typeId: 100)
+enum AdditionalBaseItemInfoTypes {
+  @HiveField(0)
+  adaptive,
+  @HiveField(1)
+  dateAdded,
+  @HiveField(2)
+  dateReleased,
+  @HiveField(3)
+  duration,
+  @HiveField(4)
+  playCount,
+  @HiveField(5)
+  dateLastPlayed,
+  @HiveField(6)
+  none;
+
+  /// Human-readable version of this enum.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(AdditionalBaseItemInfoTypes additionalInfoType) {
+    switch (additionalInfoType) {
+      case AdditionalBaseItemInfoTypes.adaptive:
+        return "Adaptive";
+      case AdditionalBaseItemInfoTypes.dateAdded:
+        return "Date Added";
+      case AdditionalBaseItemInfoTypes.dateReleased:
+        return "Release Date";
+      case AdditionalBaseItemInfoTypes.duration:
+        return "Duration";
+      case AdditionalBaseItemInfoTypes.playCount:
+        return "Play Count";
+      case AdditionalBaseItemInfoTypes.dateLastPlayed:
+        return "Date Last Played";
+      case AdditionalBaseItemInfoTypes.none:
+        return "None";
+    }
+  }
+
+  String _humanReadableLocalisedName(AdditionalBaseItemInfoTypes additionalInfoType, BuildContext context) {
+    switch (additionalInfoType) {
+      case AdditionalBaseItemInfoTypes.adaptive:
+        return AppLocalizations.of(context)!.adaptive;
+      case AdditionalBaseItemInfoTypes.dateAdded:
+        return AppLocalizations.of(context)!.dateAdded;
+      case AdditionalBaseItemInfoTypes.dateReleased:
+        return AppLocalizations.of(context)!.premiereDate;
+      case AdditionalBaseItemInfoTypes.duration:
+        return AppLocalizations.of(context)!.duration;
+      case AdditionalBaseItemInfoTypes.playCount:
+        return AppLocalizations.of(context)!.playCount;
+      case AdditionalBaseItemInfoTypes.dateLastPlayed:
+        return AppLocalizations.of(context)!.datePlayed;
+      case AdditionalBaseItemInfoTypes.none:
+        return AppLocalizations.of(context)!.none;
+    }
+  }
 }

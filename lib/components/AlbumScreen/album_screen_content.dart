@@ -170,10 +170,10 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                 childrenForQueue: queueChildren,
                 parent: widget.parent,
                 onRemoveFromList: onDelete,
-                showDateAdded: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.dateCreated),
-                showPlayCount: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.playCount),
-                showDateLastPlayed: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.datePlayed),
-                showReleaseDate: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.premiereDate),
+                showDateAddedAdaptive: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.dateCreated),
+                showPlayCountAdaptive: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.playCount),
+                showDateLastPlayedAdaptive: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.datePlayed),
+                showReleaseDateAdaptive: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.premiereDate),
                 forceAlbumArtists: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.albumArtist),
               ),
             )
@@ -183,10 +183,10 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             childrenForQueue: queueChildren,
             parent: widget.parent,
             onRemoveFromList: onDelete,
-            showDateAdded: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.dateCreated),
-            showPlayCount: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.playCount),
-            showDateLastPlayed: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.datePlayed),
-            showReleaseDate: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.premiereDate),
+            showDateAddedAdaptive: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.dateCreated),
+            showPlayCountAdaptive: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.playCount),
+            showDateLastPlayedAdaptive: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.datePlayed),
+            showReleaseDateAdaptive: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.premiereDate),
             forceAlbumArtists: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.albumArtist),
           )
         else
@@ -204,10 +204,10 @@ class TracksSliverList extends ConsumerStatefulWidget {
     required this.parent,
     this.onRemoveFromList,
     this.forceAlbumArtists = false,
-    this.showPlayCount = false,
-    this.showDateAdded = false,
-    this.showDateLastPlayed = false,
-    this.showReleaseDate = false,
+    this.showPlayCountAdaptive = false,
+    this.showDateAddedAdaptive = false,
+    this.showDateLastPlayedAdaptive = false,
+    this.showReleaseDateAdaptive = false,
     this.isOnArtistScreen = false,
     this.isOnGenreScreen = false,
   });
@@ -217,10 +217,10 @@ class TracksSliverList extends ConsumerStatefulWidget {
   final BaseItemDto parent;
   final BaseItemDtoCallback? onRemoveFromList;
   final bool forceAlbumArtists;
-  final bool showPlayCount;
-  final bool showDateAdded;
-  final bool showDateLastPlayed;
-  final bool showReleaseDate;
+  final bool showPlayCountAdaptive;
+  final bool showDateAddedAdaptive;
+  final bool showDateLastPlayedAdaptive;
+  final bool showReleaseDateAdaptive;
   final bool isOnArtistScreen;
   final bool isOnGenreScreen;
 
@@ -290,10 +290,10 @@ class _TracksSliverListState extends ConsumerState<TracksSliverList> {
           isOnArtistScreen: widget.isOnArtistScreen,
           isOnGenreScreen: widget.isOnGenreScreen,
           forceAlbumArtists: widget.forceAlbumArtists,
-          showPlayCount: widget.showPlayCount,
-          showDateAdded: widget.showDateAdded,
-          showDateLastPlayed: widget.showDateLastPlayed,
-          showReleaseDate: widget.showReleaseDate,
+          showPlayCountAdaptive: widget.showPlayCountAdaptive,
+          showDateAddedAdaptive: widget.showDateAddedAdaptive,
+          showDateLastPlayedAdaptive: widget.showDateLastPlayedAdaptive,
+          showReleaseDateAdaptive: widget.showReleaseDateAdaptive,
         );
       }, childCount: widget.childrenForList.length),
     );
