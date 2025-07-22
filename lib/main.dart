@@ -454,11 +454,8 @@ class _FinampState extends State<Finamp> with WindowListener {
     // Subscribe to all events (initial link and further)
     _uriLinkSubscription = AppLinks().uriLinkStream.listen((uri) {
       linkHandlingLogger.info("Received link: $uri");
-      final parsedUrl = Uri.parse(uri.toString());
-      if (parsedUrl.host == "internal") {
-        Navigator.of(GlobalSnackbar.materialAppNavigatorKey.currentContext!).pushNamed(
-          parsedUrl.path,
-        );
+      if (uri.host == "internal") {
+        Navigator.of(GlobalSnackbar.materialAppNavigatorKey.currentContext!).pushNamed(uri.path);
       } else {
         //TODO eventually we could do something here, but for now we just log the link
       }
