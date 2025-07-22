@@ -114,7 +114,7 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
     return SliverStickyHeader(
       header: Container(
         padding: EdgeInsets.fromLTRB(6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        color: Theme.of(context).colorScheme.surface,
         child: GestureDetector(
           onTap: () {
             if (_isExpandable) {
@@ -318,7 +318,7 @@ class _ItemsSectionState extends ConsumerState<CollectionsSection> {
     return SliverStickyHeader(
       header: Container(
         padding: EdgeInsets.fromLTRB(6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        color: Theme.of(context).colorScheme.surface,
         child: GestureDetector(
           onTap: () {
             if (_isExpandable) {

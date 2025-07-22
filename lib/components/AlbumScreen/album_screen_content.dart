@@ -159,7 +159,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             SliverStickyHeader(
               header: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                color: Theme.of(context).colorScheme.surface,
                 child: Text(
                   AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
                   style: const TextStyle(fontSize: 20.0),
