@@ -189,8 +189,8 @@ Future<void> _setupDownloadsHelper() async {
   await Future.wait(
     FinampSettingsHelper.finampSettings.downloadLocationsMap.values.map((element) => element.updateCurrentPath()),
   );
-  FileDownloader(persistentStorage: IsarPersistentStorage());
-  await FileDownloader().ready;
+  final fileDownloader = FileDownloader(persistentStorage: IsarPersistentStorage());
+  await fileDownloader.ready;
   WidgetsFlutterBinding.ensureInitialized();
   // There is additional FileDownloader setup inside downloadsService constructor
   GetIt.instance.registerSingleton(DownloadsService());
@@ -217,8 +217,10 @@ Future<void> _setupDownloadsHelper() async {
     }
   }
 
-  await FileDownloader().configure(globalConfig: (Config.checkAvailableSpace, 1024));
-  await FileDownloader().resumeFromBackground();
+  await _migrateDownloadsFileOwner();
+
+  await fileDownloader.configure(globalConfig: (Config.checkAvailableSpace, 1024));
+  await fileDownloader.resumeFromBackground();
   await downloadsService.startQueues();
 
   if (!FinampSettingsHelper.finampSettings.hasDownloadedPlaylistInfo) {
@@ -424,6 +426,22 @@ void _migrateSortOptions() {
 
   if (changed) {
     FinampSettingsHelper.overwriteFinampSettings(finampSettings);
+  }
+}
+
+Future<void> _migrateDownloadsFileOwner() async {
+  if (!Platform.isAndroid) {
+    // Only Android needs this migration
+    return;
+  }
+  if (!FinampSettingsHelper.finampSettings.hasCompletedDownloadsFileOwnerMigration) {
+    var downloadsServiceChannel = MethodChannel("com.unicornsonlsd.finamp/downloads_service");
+    var downloadLocations = FinampSettingsHelper.finampSettings.downloadLocationsMap;
+    var downloadPaths = downloadLocations.values.map((e) => e.currentPath).toList();
+    await downloadsServiceChannel.invokeMethod("fixDownloadsFileOwner", <String, dynamic>{
+      'download_locations': downloadPaths,
+    });
+    FinampSetters.setHasCompletedDownloadsFileOwnerMigration(true);
   }
 }
 
