@@ -652,6 +652,7 @@ class DownloadsSyncService {
   final DownloadsService _downloadsService;
   final _syncLogger = Logger("SyncBuffer");
   final _jellyfinApiData = GetIt.instance<JellyfinApiHelper>();
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   /// Currently processing syncs.  Will be null if no syncs are executing.
   final Set<int> _activeSyncs = {};
@@ -727,7 +728,10 @@ class DownloadsSyncService {
             .sortByAge() // Prioritize required nodes
             .limit(_batchSize)
             .findAllSync();
-        if (wrappedSyncs.isEmpty || !_downloadsService.allowSyncs || FinampSettingsHelper.finampSettings.isOffline) {
+        if (wrappedSyncs.isEmpty ||
+            !_downloadsService.allowSyncs ||
+            FinampSettingsHelper.finampSettings.isOffline ||
+            _finampUserHelper.currentUser == null) {
           assert(_isar.isarTaskDatas.where().typeEqualTo(type).countSync() >= _activeSyncs.length);
           if (_activeSyncs.isEmpty && _callbacksComplete != null) {
             _callbacksComplete!.complete(null);
@@ -771,6 +775,7 @@ class DownloadsSyncService {
                     );
                   }
                 }
+                if (_finampUserHelper.currentUser == null) break;
               }
             }
           } catch (e, stack) {

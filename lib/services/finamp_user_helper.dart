@@ -106,5 +106,8 @@ class FinampUserHelper {
     _isar.writeTxnSync(() {
       _isar.finampUsers.filter().idEqualTo(id).deleteAllSync();
     });
+    if (_currentUserCache?.id == id) {
+      _currentUserCache = null;
+    }
   }
 }

@@ -28,6 +28,7 @@ const repairStepTrackingName = "repairStep";
 class DownloadsService {
   final _downloadsLogger = Logger("downloadsService");
   final _isar = GetIt.instance<Isar>();
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   final _anchor = DownloadStub.fromId(id: BaseItemId("Anchor"), type: DownloadItemType.anchor, name: null);
   late final downloadTaskQueue = IsarTaskQueue(this);
@@ -385,23 +386,22 @@ class DownloadsService {
     await downloadTaskQueue.initializeQueue();
 
     // Wait a few seconds to not slow initial library load
-    unawaited(
-      Future.delayed(const Duration(seconds: 10), () async {
-        try {
-          await syncBuffer.executeSyncs();
-          await deleteBuffer.executeDeletes();
-          await downloadTaskQueue.executeDownloads();
-        } catch (e) {
-          _downloadsLogger.severe("Error $e while restarting download/delete queues on startup.");
-        }
-      }),
-    );
+    _finampUserHelper.runUserHook(() async {
+      await Future<void>.delayed(const Duration(seconds: 10));
+      try {
+        await syncBuffer.executeSyncs();
+        await deleteBuffer.executeDeletes();
+        await downloadTaskQueue.executeDownloads();
+      } catch (e) {
+        _downloadsLogger.severe("Error $e while restarting download/delete queues on startup.");
+      }
+    });
   }
 
   /// Attempt to resume syncing/downloading.  Called when leaving offline mode,
   /// coming out of background, and switching to downloads screen
   void restartDownloads() {
-    if (!FinampSettingsHelper.finampSettings.isOffline) {
+    if (!FinampSettingsHelper.finampSettings.isOffline && _finampUserHelper.currentUser != null) {
       unawaited(
         Future.sync(() async {
           try {
@@ -1457,7 +1457,7 @@ class DownloadsService {
       favoriteIds = _getFavoriteIds() ?? [];
     }
     if (fullyDownloaded) {
-      final libraryId = GetIt.instance<FinampUserHelper>().currentUser?.currentViewId;
+      final libraryId = _finampUserHelper.currentUser?.currentViewId;
       libraryFilteredIds = _isar.downloadItems
           .where()
           .typeEqualTo(DownloadItemType.finampCollection)

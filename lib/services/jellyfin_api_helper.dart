@@ -99,7 +99,7 @@ class JellyfinApiHelper {
     if (output is T) {
       return output;
     }
-    GlobalSnackbar.error(output);
+    _jellyfinApiHelperLogger.severe("Error in background isolate:", output);
     throw output as Object;
   }
 
@@ -212,15 +212,7 @@ class JellyfinApiHelper {
     int? startIndex,
     int? limit,
   }) async {
-    final currentUserId = _finampUserHelper.currentUser?.id;
-    if (currentUserId == null) {
-      // When logging out, this request causes errors since currentUser is
-      // required sometimes. We just return an fake api response that is empty,
-      // since this error usually happens because the listeners on MusicScreenTabView
-      // update milliseconds before the page is popped.
-      // This shouldn't happen in normal use.
-      return QueryResult_BaseItemDto(totalRecordCount: 0, startIndex: 0, items: []);
-    }
+    final currentUserId = _finampUserHelper.currentUser!.id;
     assert(_verifyCallable());
     assert(itemIds == null || parentItem == null);
     fields ??=
