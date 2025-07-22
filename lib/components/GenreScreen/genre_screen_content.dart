@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/curated_item_filter_row.dart';
+import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/services/genre_screen_provider.dart';
 import 'package:finamp/components/curated_item_sections.dart';
 import 'package:finamp/components/GenreScreen/genre_count_column.dart';
@@ -11,6 +14,7 @@ import 'package:finamp/screens/music_screen.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
@@ -32,6 +36,7 @@ class GenreScreenContent extends ConsumerStatefulWidget {
 
 class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   StreamSubscription<void>? _refreshStream;
   final Set<CuratedItemSelectionType> _disabledTrackFilters = {};
   final Set<CuratedItemSelectionType> _disabledAlbumFilters = {};
@@ -272,9 +277,34 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
             ),
           ),
         ),
-        // TODO:
-        // Once we have a better handling of large queues (maybe with lazy-loading/adding?)
-        // and once we redesigned the play/shuffle buttons, they should get added here
+        /// TODO:
+        /// Once we have better handling of large queues (maybe with lazy-loading/adding?)
+        /// and once we redesigned the play/shuffle buttons, they should get added here
+        /// for now as a temporary solution, I've added a single Shuffle Button, as users kept asking about it
+        /// it basically is the same as the Shuffle All button on the tracks tab + genrefilter
+        /// so the limit defined in the settings applies here as well to prevent crashing
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8, right: 8, top: 16),
+            child: Center(
+              child: CTAMedium(
+                text: AppLocalizations.of(context)!.shuffleButtonLabel,
+                icon: TablerIcons.arrows_shuffle,
+                onPressed: () async {
+                  try {
+                    await _audioServiceHelper.shuffleAll(
+                      onlyShowFavorites: ref.read(finampSettingsProvider.onlyShowFavorites),
+                      genreFilter: widget.parent,
+                    );
+                  } catch (e) {
+                    GlobalSnackbar.error(e);
+                  }
+                },
+                minWidth: MediaQuery.of(context).size.width * 0.5,
+              ),
+            ),
+          ),
+        ),
         if (!isLoading)
           ...genreItemSectionsOrder.map((type) {
             switch (type) {
