@@ -1931,7 +1931,7 @@
   "@startupErrorWorkaround": {
     "description": "The subtitle for how to manually recover from a startup error"
   },
-  "startupErrorTitle": "Algo deu errado na inicialização!\nSentimos muito pelo transtorno...",
+  "startupErrorTitle": "Algo deu errado na inicialização!",
   "@startupErrorTitle": {
     "description": "The title for the error screen that shows when startup fails."
   },
