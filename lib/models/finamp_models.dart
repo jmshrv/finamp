@@ -337,7 +337,7 @@ class FinampSettings {
     this.playlistTracksSortOrder = DefaultSettings.playlistTracksSortOrder,
     this.genreFilterPlaylists = DefaultSettings.genreFilterPlaylists,
     this.clearQueueOnStopEvent = DefaultSettings.clearQueueOnStopEvent,
-    this.rpcEnabled = DefaultSettings.rpcEnabled
+    this.rpcEnabled = DefaultSettings.rpcEnabled,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)

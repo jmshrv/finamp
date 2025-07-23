@@ -39,7 +39,7 @@ class _PlaybackReportingSettingsScreenState extends State<PlaybackReportingSetti
           const PlayOnStaleDelayEditor(),
           const PlayOnReconnectionDelayEditor(),
           const Divider(),
-          const EnabledDiscordRpc()
+          const EnabledDiscordRpc(),
         ],
       ),
     );

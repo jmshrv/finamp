@@ -240,10 +240,10 @@ Future<void> _setupPlayOnService() async {
   GetIt.instance.registerSingleton(playOnService);
   GetIt.instance<FinampUserHelper>().runUserHook(playOnService.initialize);
 }
+
 Future<void> _setupDiscordRpc() async {
   DiscordRpc.initialize();
 }
-
 
 Future<void> _setupKeepScreenOnHelper() async {
   GetIt.instance.registerSingleton(KeepScreenOnHelper());

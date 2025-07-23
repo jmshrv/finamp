@@ -1,15 +1,11 @@
 import 'dart:async';
 import 'dart:core';
 
-import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/media_state_stream.dart';
-import 'package:finamp/services/queue_service.dart';
-import 'package:flutter/cupertino.dart';
 
 import 'package:flutter_discord_rpc/flutter_discord_rpc.dart';
 import 'package:get_it/get_it.dart';
@@ -23,16 +19,6 @@ RPCActivity? currentState;
 Timer? _timer;
 final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 BaseItemDto? artistItem;
-
-bool _inRange(int? a, int? b) {
-  int range = 2;
-  if (b == null || a == null) return false;
-
-  var min = a - range;
-  var max = a + range;
-
-  return b < max && b > min;
-}
 
 class DiscordRpc {
   static void initialize() {
@@ -55,7 +41,9 @@ class DiscordRpc {
       _rpcLogger.info("Starting RPC");
       await FlutterDiscordRPC.instance.connect(autoRetry: true);
       // updates the rpc regularly to fix potential desyncs, keeps conection alive and also to prevent ratelimits
-      _timer = Timer.periodic(Duration(seconds: 5), (Timer time) {_updateRPC();});
+      _timer = Timer.periodic(Duration(seconds: 5), (Timer time) {
+        _updateRPC();
+      });
       _startListener();
     }
   }
@@ -66,24 +54,22 @@ class DiscordRpc {
       _running = false;
       _timer?.cancel();
       _timer = null;
+      artistItem = null;
       await _listener?.cancel();
       await FlutterDiscordRPC.instance.clearActivity();
       await FlutterDiscordRPC.instance.disconnect();
       await FlutterDiscordRPC.instance.dispose();
     }
   }
-  
+
   static Future<void> _updateRPC() async {
     if (!FlutterDiscordRPC.instance.isConnected) return;
     if (currentState == null) {
-      // if (_isDuplicate(null)) return;
       _rpcLogger.finer("Update: Not playing anymore, clearing activity");
       await FlutterDiscordRPC.instance.clearActivity();
       lastState = currentState;
       return;
     }
-
-    // if (_isDuplicate(currentState)) return;
 
     await FlutterDiscordRPC.instance.setActivity(activity: currentState!);
     lastState = currentState;
@@ -91,37 +77,14 @@ class DiscordRpc {
     _rpcLogger.finer("Updated");
   }
 
-  // static bool _isDuplicate() {
-  //   if (currentState == null) {
-  //     bool alreadyNull = lastState == null;
-  //     lastState = null;
-  //     return alreadyNull;
-  //   }
-  //   if (lastState == null) {
-  //     lastState = currentState;
-  //     return false;
-  //   }
-
-  //   bool details = currentState!.details == lastState?.details;
-  //   bool end = _inRange(currentState!.timestamps?.end, lastState?.timestamps?.end);
-  //   bool start = _inRange(currentState!.timestamps?.start, lastState?.timestamps?.start);
-  //   bool largeImage = currentState!.assets?.largeImage == lastState?.assets?.largeImage;
-  //   bool smallImage = currentState!.assets?.smallImage == lastState?.assets?.smallImage;
-  //   bool largeText = currentState!.assets?.largeText == lastState?.assets?.largeText;
-  //   bool smallText = currentState!.assets?.smallText == lastState?.assets?.smallText;
-
-  //   lastState = currentState;
-  //   return details && end && start && largeImage && smallImage && largeText && smallText;
-  // }
-
-
   static void _startListener() {
     _listener = mediaStateStream.listen((state) async {
       if (!state.playbackState.playing) {
         if (lastState != null) {
           currentState = null;
           await _updateRPC();
-        };
+        }
+        ;
         return;
       }
 
@@ -155,7 +118,7 @@ class DiscordRpc {
           smallImage: local ? null : smallImage,
           smallText: local ? null : artist,
           largeImage: local ? "finamp" : largeImage,
-          largeText: album == artist ? null : album
+          largeText: album == artist ? null : album,
         ),
         timestamps: RPCTimestamps(start: start, end: end),
       );
