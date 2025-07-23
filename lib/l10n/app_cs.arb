@@ -2611,5 +2611,17 @@
   "createPlaylistFromCurrentQueue": "Uložit frontu jako seznam skladeb",
   "@createPlaylistFromCurrentQueue": {
     "description": "Label for a button that creates a new playlist from the current queue."
+  },
+  "accessibility": "Přístupnost",
+  "@accessibility": {
+    "description": "Title for the accessibility settings screen"
+  },
+  "useHighContrastColorsTitle": "Použít barvy s vysokým kontrastem",
+  "@useHighContrastColorsTitle": {
+    "description": "Title for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "useHighContrastColorsSubtitle": "Použít dynamické barvy s vysokým kontrastem pro lepší viditelnost.",
+  "@useHighContrastColorsSubtitle": {
+    "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
   }
 }
