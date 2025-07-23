@@ -380,7 +380,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
         clearQueueOnStopEvent: fields[117] == null
             ? false
             : fields[117] as bool,
-        rpcEnabled: fields[120] == null ? false : fields[120] as bool,
+        useHighContrastColors: fields[120] == null
+            ? false
+            : fields[120] as bool,
+        rpcEnabled: fields[121] == null ? false : fields[121] as bool,
       )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -620,6 +623,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(119)
       ..write(obj.syncPlaybackSpeedAndPitch)
       ..writeByte(120)
+      ..write(obj.useHighContrastColors);
+      ..writeByte(121)
       ..write(obj.rpcEnabled);
   }
 

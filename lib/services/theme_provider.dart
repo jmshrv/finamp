@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:finamp/at_contrast.dart';
 import 'package:finamp/services/album_image_provider.dart';
 import 'package:finamp/services/current_album_image_provider.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -160,7 +161,7 @@ class FinampThemeFromImage extends _$FinampThemeFromImage {
   ColorScheme build(ThemeRequestFromImage request) {
     var brightness = ref.watch(brightnessProvider);
     if (request.image == null) {
-      return getGreyTheme(brightness);
+      return getGrayTheme(brightness);
     }
     Future.sync(() async {
       var image = await _fetchImage(request.image!);
@@ -173,7 +174,7 @@ class FinampThemeFromImage extends _$FinampThemeFromImage {
       }
       return scheme;
     }).then((value) => state = value);
-    return getGreyTheme(brightness);
+    return getGrayTheme(brightness);
   }
 
   Future<ImageInfo?> _fetchImage(ImageProvider image) {
@@ -227,7 +228,11 @@ class FinampThemeFromImage extends _$FinampThemeFromImage {
       accent,
     );
 
-    accent = accent.atContrast(4.5, background, lighter);
+    accent = accent.atContrast(
+      ref.watch(finampSettingsProvider.useHighContrastColors) ? 8.0 : 4.5,
+      background,
+      lighter,
+    );
     return ColorScheme.fromSwatch(
       primarySwatch: generateMaterialColor(accent),
       accentColor: accent,
@@ -237,10 +242,21 @@ class FinampThemeFromImage extends _$FinampThemeFromImage {
   }
 }
 
-ColorScheme getGreyTheme(Brightness brightness) {
+ColorScheme getGrayTheme(Brightness brightness) {
+  final grayForDarkTheme = const Color.fromARGB(255, 133, 133, 133);
+  final grayForLightTheme = const Color.fromARGB(255, 61, 61, 61);
+
   Color accent = brightness == Brightness.dark
-      ? const Color.fromARGB(255, 133, 133, 133)
-      : const Color.fromARGB(255, 61, 61, 61);
+      ? grayForDarkTheme.atContrast(
+          FinampSettingsHelper.finampSettings.useHighContrastColors ? 8.0 : 4.5,
+          Color.alphaBlend(Colors.black.withOpacity(0.675), grayForDarkTheme),
+          true,
+        )
+      : grayForLightTheme.atContrast(
+          FinampSettingsHelper.finampSettings.useHighContrastColors ? 8.0 : 4.5,
+          Color.alphaBlend(Colors.white.withOpacity(0.675), grayForLightTheme),
+          true,
+        );
 
   return ColorScheme.fromSwatch(
     primarySwatch: generateMaterialColor(accent),

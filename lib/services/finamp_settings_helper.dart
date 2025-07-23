@@ -214,8 +214,6 @@ class FinampSettingsHelper {
     finampSettingsTemp.startInstantMixForIndividualTracks = DefaultSettings.startInstantMixForIndividualTracks;
     finampSettingsTemp.applyFilterOnGenreChipTap = DefaultSettings.applyFilterOnGenreChipTap;
     FinampSetters.setShowFastScroller(DefaultSettings.showFastScroller);
-    FinampSetters.setDisableGesture(DefaultSettings.disableGesture);
-    FinampSetters.setEnableVibration(DefaultSettings.enableVibration);
     FinampSetters.setKeepScreenOnOption(DefaultSettings.keepScreenOnOption);
     FinampSetters.setKeepScreenOnWhilePluggedIn(DefaultSettings.keepScreenOnWhilePluggedIn);
 
@@ -229,6 +227,12 @@ class FinampSettingsHelper {
       newPreferLocalNetwork: DefaultSettings.preferLocalNetwork,
     );
     FinampSetters.setAutoOffline(DefaultSettings.autoOffline);
+  }
+
+  static void resetAccessibilitySettings() {
+    FinampSetters.setUseHighContrastColors(DefaultSettings.useHighContrastColors);
+    FinampSetters.setDisableGesture(DefaultSettings.disableGesture);
+    FinampSetters.setEnableVibration(DefaultSettings.enableVibration);
   }
 
   static void resetAllSettings() {

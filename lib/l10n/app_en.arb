@@ -2648,5 +2648,17 @@
   "quickConnectAuthorizationMenuDescription": "If you're trying to sign into another Jellyfin client via Quick Connect, you can enter or paste the 6 digit code into the field above. This will authorize the sign in request of the other client, and log you into the same account as you're using for Finamp.",
   "@quickConnectAuthorizationMenuDescription": {
     "description": "Description for the quick connect authorization menu, shown at the bottom"
+  },
+  "accessibility": "Accessibility",
+  "@accessibility": {
+    "description": "Title for the accessibility settings screen"
+  },
+  "useHighContrastColorsTitle": "Use High Contrast Colors",
+  "@useHighContrastColorsTitle": {
+    "description": "Title for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "useHighContrastColorsSubtitle": "Use high contrast dynamic colors for better visibility.",
+  "@useHighContrastColorsSubtitle": {
+    "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
   }
 }

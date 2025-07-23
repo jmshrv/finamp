@@ -1,6 +1,7 @@
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/quick_connect_authorization_menu.dart';
 import 'package:finamp/menus/server_sharing_menu.dart';
+import 'package:finamp/screens/accessibility_settings_screen.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/network_settings_screen.dart';
 import 'package:flutter/gestures.dart';
@@ -170,6 +171,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             leading: const Icon(Icons.widgets),
             title: Text(AppLocalizations.of(context)!.layoutAndTheme),
             onTap: () => Navigator.of(context).pushNamed(LayoutSettingsScreen.routeName),
+          ),
+          ListTile(
+            leading: const Icon(TablerIcons.accessible),
+            title: Text(AppLocalizations.of(context)!.accessibility),
+            onTap: () => Navigator.of(context).pushNamed(AccessibilitySettingsScreen.routeName),
           ),
           ListTile(
             leading: const Icon(Icons.library_music),

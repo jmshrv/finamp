@@ -218,6 +218,7 @@ class DefaultSettings {
   static const playlistTracksSortOrder = SortOrder.ascending;
   static const genreFilterPlaylists = false;
   static const clearQueueOnStopEvent = false;
+  static const useHighContrastColors = false;
   static const rpcEnabled = false;
 }
 
@@ -337,6 +338,7 @@ class FinampSettings {
     this.playlistTracksSortOrder = DefaultSettings.playlistTracksSortOrder,
     this.genreFilterPlaylists = DefaultSettings.genreFilterPlaylists,
     this.clearQueueOnStopEvent = DefaultSettings.clearQueueOnStopEvent,
+    this.useHighContrastColors = DefaultSettings.useHighContrastColors,
     this.rpcEnabled = DefaultSettings.rpcEnabled,
   });
 
@@ -712,9 +714,12 @@ class FinampSettings {
   @HiveField(119, defaultValue: DefaultSettings.syncPlaybackSpeedAndPitch)
   bool syncPlaybackSpeedAndPitch;
 
-  @HiveField(120, defaultValue: DefaultSettings.rpcEnabled)
-  bool rpcEnabled;
+  @HiveField(120, defaultValue: DefaultSettings.useHighContrastColors)
+  bool useHighContrastColors;
 
+  @HiveField(121, defaultValue: DefaultSettings.rpcEnabled)
+  bool rpcEnabled;
+  
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
       name: DownloadLocation.internalStorageName,

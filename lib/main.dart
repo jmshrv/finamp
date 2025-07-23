@@ -11,6 +11,7 @@ import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/hive_registrar.g.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/locale_adapter.dart';
+import 'package:finamp/screens/accessibility_settings_screen.dart';
 import 'package:finamp/screens/album_settings_screen.dart';
 import 'package:finamp/screens/artist_settings_screen.dart';
 import 'package:finamp/screens/downloads_settings_screen.dart';
@@ -538,6 +539,7 @@ class _FinampState extends State<Finamp> with WindowListener {
                       ArtistSettingsScreen.routeName: (context) => const ArtistSettingsScreen(),
                       GenreSettingsScreen.routeName: (context) => const GenreSettingsScreen(),
                       NetworkSettingsScreen.routeName: (context) => const NetworkSettingsScreen(),
+                      AccessibilitySettingsScreen.routeName: (context) => const AccessibilitySettingsScreen(),
                     },
                     initialRoute: SplashScreen.routeName,
                     navigatorObservers: [SplitScreenNavigatorObserver(), KeepScreenOnObserver()],
