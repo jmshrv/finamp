@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:finamp/components/PlaybackReportingSettingsScreen/enabled_discord_rpc.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/discord_rpc.dart';
@@ -20,6 +22,8 @@ class PlaybackReportingSettingsScreen extends StatefulWidget {
 class _PlaybackReportingSettingsScreenState extends State<PlaybackReportingSettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    bool hasRpcSupport = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.playbackReportingSettingsTitle),
@@ -38,8 +42,8 @@ class _PlaybackReportingSettingsScreenState extends State<PlaybackReportingSetti
           const ReportQueueToServerToggle(),
           const PlayOnStaleDelayEditor(),
           const PlayOnReconnectionDelayEditor(),
-          const Divider(),
-          const EnabledDiscordRpc(),
+          if (hasRpcSupport) const Divider(),
+          if (hasRpcSupport) const EnabledDiscordRpc(),
         ],
       ),
     );

@@ -10,7 +10,9 @@ class EnabledDiscordRpc extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text("Discord RPC"),
-      subtitle: Text(""),
+      subtitle: Text(
+        "Enable Discord Rich Presence to show what you are playing in your discord status. Wont connect to discord if Offline Mode is enabled. May consume more resources than you expect.",
+      ),
       value: ref.watch(finampSettingsProvider.rpcEnabled),
       onChanged: FinampSetters.setRpcEnabled,
     );

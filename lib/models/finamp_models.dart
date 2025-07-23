@@ -719,7 +719,7 @@ class FinampSettings {
 
   @HiveField(121, defaultValue: DefaultSettings.rpcEnabled)
   bool rpcEnabled;
-  
+
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
       name: DownloadLocation.internalStorageName,
