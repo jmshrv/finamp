@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:core';
 
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/media_state_stream.dart';
+import 'package:finamp/services/queue_service.dart';
 
 import 'package:flutter_discord_rpc/flutter_discord_rpc.dart';
 import 'package:get_it/get_it.dart';
@@ -90,6 +92,7 @@ class DiscordRpc {
 
   static void startListener() {
     final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+    final queueService = GetIt.instance<QueueService>();
     _listener = mediaStateStream.listen((state) async {
       if (!state.playbackState.playing) {
         if (isDuplicate(null)) return;
@@ -100,6 +103,7 @@ class DiscordRpc {
 
       final baseItem = BaseItemDto.fromJson(state.mediaItem!.extras!["itemJson"] as Map<String, dynamic>);
       final artistItem = await jellyfinApiHelper.getItemById(baseItem.artistItems!.first.id);
+      final queue = queueService.getQueue();
 
       final now = (DateTime.now().millisecondsSinceEpoch / 1000).truncate();
       final progress = state.playbackState.position.inSeconds;
@@ -119,8 +123,9 @@ class DiscordRpc {
           smallImage: jellyfinApiHelper.getImageUrl(item: artistItem, maxHeight: 128, maxWidth: 128).toString(),
           smallText: artist,
           largeImage: jellyfinApiHelper.getImageUrl(item: baseItem, maxHeight: 512, maxWidth: 512).toString(),
-          largeText: album,
-          // largeText: baseItem.album ?? baseItem.name ?? "Finamp",
+          largeText: GlobalSnackbar.materialAppScaffoldKey.currentContext != null
+              ? queue.source.name.getLocalized(GlobalSnackbar.materialAppScaffoldKey.currentContext!)
+              : album,
         ),
         timestamps: RPCTimestamps(start: start, end: end),
       );
