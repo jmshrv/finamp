@@ -5,8 +5,8 @@ import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
-import 'package:finamp/services/media_state_stream.dart';
 import 'package:finamp/services/music_player_background_task.dart';
+import 'package:flutter/material.dart';
 
 import 'package:flutter_discord_rpc/flutter_discord_rpc.dart';
 import 'package:get_it/get_it.dart';
@@ -17,12 +17,9 @@ RPCActivity? lastState;
 Timer? _timer;
 final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 BaseItemDto? artistItem;
-enum _RpcStatus {
-    running,
-    starting,
-    stopped,
-    stopping
-}
+
+enum _RpcStatus { running, starting, stopped, stopping }
+
 _RpcStatus _status = _RpcStatus.stopped;
 
 class DiscordRpc {
@@ -38,27 +35,30 @@ class DiscordRpc {
   static void _reEvaluate() {
     final enabled = FinampSettingsHelper.finampSettings.rpcEnabled;
     final offline = FinampSettingsHelper.finampSettings.isOffline;
-    (enabled && !offline) ? _start() : _stop();
+    (enabled && !offline) ? start() : stop();
   }
 
-  static Future<void> _start() async {
+  static Future<void> start() async {
     if (_status == _RpcStatus.stopped) {
       _status = _RpcStatus.starting;
       _rpcLogger.info("Starting RPC");
       await FlutterDiscordRPC.instance.connect(autoRetry: true);
       _rpcLogger.info("Connected");
-      // updates the rpc regularly to fix potential desyncs, keeps conection alive and also to prevent ratelimits
-      _timer = Timer.periodic(Duration(seconds: 5), (Timer time) {
+      // updates the rpc regularly to fix potential desyncs, keeps connection alive and also to prevent ratelimiting
+      // From my research the most mentioned ratelimit is 15 seconds (though inconsistently? a lot of the time rpc can be updated faster, just not all the time)
+      // One of the repos which mention 15 seconds is this one: https://github.com/dhinakg/vm-rpc
+      // I couldn't find any official ratelimit regarding RPC :/
+      _timer = Timer.periodic(Duration(seconds: 15), (Timer time) {
         _updateRPC();
       });
       _status = _RpcStatus.running;
     }
     if (_status == _RpcStatus.stopping) {
-      await Future.delayed(const Duration(seconds: 1), _start);
+      await Future.delayed(const Duration(seconds: 1), start);
     }
   }
 
-  static Future<void> _stop() async {
+  static Future<void> stop() async {
     if (_status == _RpcStatus.running) {
       _status = _RpcStatus.stopping;
       _timer?.cancel();
@@ -71,7 +71,7 @@ class DiscordRpc {
       _rpcLogger.info("Stopped RPC");
     }
     if (_status == _RpcStatus.starting) {
-      await Future.delayed(const Duration(seconds: 1), _stop);
+      await Future.delayed(const Duration(seconds: 1), stop);
     }
   }
 
@@ -137,7 +137,7 @@ class DiscordRpc {
         smallImage: smallImage,
         smallText: local ? null : artist,
         largeImage: largeImage,
-        largeText: album == artist ? null : album,
+        largeText: (album == artist || album == title) ? null : album,
       ),
       timestamps: RPCTimestamps(start: start, end: end),
     );
