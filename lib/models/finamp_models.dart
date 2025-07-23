@@ -218,6 +218,7 @@ class DefaultSettings {
   static const playlistTracksSortOrder = SortOrder.ascending;
   static const genreFilterPlaylists = false;
   static const clearQueueOnStopEvent = false;
+  static const rpcEnabled = false;
 }
 
 @HiveType(typeId: 28)
@@ -336,6 +337,7 @@ class FinampSettings {
     this.playlistTracksSortOrder = DefaultSettings.playlistTracksSortOrder,
     this.genreFilterPlaylists = DefaultSettings.genreFilterPlaylists,
     this.clearQueueOnStopEvent = DefaultSettings.clearQueueOnStopEvent,
+    this.rpcEnabled = DefaultSettings.rpcEnabled
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -709,6 +711,9 @@ class FinampSettings {
 
   @HiveField(119, defaultValue: DefaultSettings.syncPlaybackSpeedAndPitch)
   bool syncPlaybackSpeedAndPitch;
+
+  @HiveField(120, defaultValue: DefaultSettings.rpcEnabled)
+  bool rpcEnabled;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

@@ -1,4 +1,6 @@
+import 'package:finamp/components/PlaybackReportingSettingsScreen/enabled_discord_rpc.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/discord_rpc.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -36,6 +38,8 @@ class _PlaybackReportingSettingsScreenState extends State<PlaybackReportingSetti
           const ReportQueueToServerToggle(),
           const PlayOnStaleDelayEditor(),
           const PlayOnReconnectionDelayEditor(),
+          const Divider(),
+          const EnabledDiscordRpc()
         ],
       ),
     );
