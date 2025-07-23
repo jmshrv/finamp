@@ -13,11 +13,17 @@ import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
 Logger _rpcLogger = Logger("DiscordRPC");
-var _running = false;
 RPCActivity? lastState;
 Timer? _timer;
 final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 BaseItemDto? artistItem;
+enum _RpcStatus {
+    running,
+    starting,
+    stopped,
+    stopping
+}
+_RpcStatus status = _RpcStatus.stopped;
 
 class DiscordRpc {
   static void initialize() {
@@ -36,8 +42,8 @@ class DiscordRpc {
   }
 
   static Future<void> _start() async {
-    if (!_running) {
-      _running = true;
+    if (status == _RpcStatus.stopped) {
+      status = _RpcStatus.starting;
       _rpcLogger.info("Starting RPC");
       await FlutterDiscordRPC.instance.connect(autoRetry: true);
       _rpcLogger.info("Connected");
@@ -45,19 +51,27 @@ class DiscordRpc {
       _timer = Timer.periodic(Duration(seconds: 5), (Timer time) {
         _updateRPC();
       });
+      status = _RpcStatus.running;
+    }
+    if (status == _RpcStatus.stopping) {
+      await Future.delayed(const Duration(seconds: 1), _start);
     }
   }
 
   static Future<void> _stop() async {
-    if (_running) {
+    if (status == _RpcStatus.running) {
+      status = _RpcStatus.stopping;
       _timer?.cancel();
-      _running = false;
       _timer = null;
       artistItem = null;
       await FlutterDiscordRPC.instance.clearActivity();
       await FlutterDiscordRPC.instance.disconnect();
       await FlutterDiscordRPC.instance.dispose();
+      status = _RpcStatus.stopping;
       _rpcLogger.info("Stopped RPC");
+    }
+    if (status == _RpcStatus.starting) {
+      await Future.delayed(const Duration(seconds: 1), _stop);
     }
   }
 
