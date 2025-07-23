@@ -2621,5 +2621,17 @@
   "createPlaylistFromCurrentQueue": "Salvar Fila como Lista de Reprodução",
   "@createPlaylistFromCurrentQueue": {
     "description": "Label for a button that creates a new playlist from the current queue."
+  },
+  "accessibility": "Acessibilidade",
+  "@accessibility": {
+    "description": "Title for the accessibility settings screen"
+  },
+  "useHighContrastColorsTitle": "Usar Cores de Alto Contraste",
+  "@useHighContrastColorsTitle": {
+    "description": "Title for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "useHighContrastColorsSubtitle": "Usa cores dinâmicas de alto contraste para melhor visibilidade.",
+  "@useHighContrastColorsSubtitle": {
+    "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
   }
 }
