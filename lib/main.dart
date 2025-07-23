@@ -462,10 +462,11 @@ class _FinampState extends State<Finamp> with WindowListener {
   }
 
   @override
-  void dispose() {
+  Future<void> dispose() async {
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       WindowManager.instance.removeListener(this);
     }
+    await DiscordRpc.stop().timeout(Duration(milliseconds: 500));
     super.dispose();
   }
 
