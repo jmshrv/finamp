@@ -623,7 +623,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(119)
       ..write(obj.syncPlaybackSpeedAndPitch)
       ..writeByte(120)
-      ..write(obj.useHighContrastColors);
+      ..write(obj.useHighContrastColors)
       ..writeByte(121)
       ..write(obj.rpcEnabled);
   }
