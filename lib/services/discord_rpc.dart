@@ -1,10 +1,15 @@
 import 'dart:async';
 import 'dart:core';
 
+import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/media_state_stream.dart';
 
 import 'package:flutter_discord_rpc/flutter_discord_rpc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
 
@@ -39,7 +44,7 @@ class DiscordRpc {
     if (!_running) {
       _rpcLogger.info("Starting RPC");
       _running = true;
-      await FlutterDiscordRPC.initialize("1363567299948314906");
+      await FlutterDiscordRPC.initialize("1397542416201945221");
       await FlutterDiscordRPC.instance.connect(autoRetry: true);
       startListener();
     } else {
@@ -79,9 +84,10 @@ class DiscordRpc {
     bool details = state.details == lastState?.details;
     bool end = _inRange(state.timestamps?.end, lastState?.timestamps?.end);
     bool start = _inRange(state.timestamps?.start, lastState?.timestamps?.start);
-    
+    bool image = state.assets?.largeImage == lastState?.assets?.largeImage;
+
     lastState = state;
-    return details && end && start;
+    return details && end && start && image;
   }
 
   static void startListener() {
@@ -93,6 +99,8 @@ class DiscordRpc {
         return;
       }
 
+      final publicURL = Uri.parse(GetIt.instance<FinampUserHelper>().currentUser!.publicAddress);
+
 
 
       final now = (DateTime.now().millisecondsSinceEpoch / 1000).truncate();
@@ -101,9 +109,11 @@ class DiscordRpc {
       final start = now - progress;
       final end = now + (duration - progress);
 
-      final details = state.mediaItem!.title;
+      final details = state.mediaItem!.displayTitle;
       final state2 = state.mediaItem!.artist;
 
+      final baseItem = BaseItemDto.fromJson(state.mediaItem!.extras!["itemJson"] as Map<String, dynamic>);
+      final largeImgURL = publicURL.replace(path: "/Items/${baseItem.id}/Images/Primary").toString();
 
 
       RPCActivity rpc = RPCActivity(
@@ -113,6 +123,11 @@ class DiscordRpc {
         timestamps: RPCTimestamps(
           start: start,
           end: end
+        ),
+        assets: RPCAssets(
+          smallImage: "finamp",
+          smallText: "Finamp",
+          largeImage: largeImgURL
         )
       );
 
