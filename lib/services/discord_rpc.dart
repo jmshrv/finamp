@@ -30,7 +30,7 @@ class DiscordRpc extends _$DiscordRpc {
   static Future<void> start() async {
     if (!running) {
       running = true;
-      await FlutterDiscordRPC.initialize("1363567299948314906");
+      await FlutterDiscordRPC.initialize("1397542416201945221");
       await FlutterDiscordRPC.instance.connect(autoRetry: true);
       startListener();
     }
