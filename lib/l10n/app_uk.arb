@@ -2613,5 +2613,17 @@
   "createPlaylistFromCurrentQueue": "Зберегти чергу як список відтворення",
   "@createPlaylistFromCurrentQueue": {
     "description": "Label for a button that creates a new playlist from the current queue."
+  },
+  "accessibility": "Доступність",
+  "@accessibility": {
+    "description": "Title for the accessibility settings screen"
+  },
+  "useHighContrastColorsTitle": "Використовуйте кольори високої контрастності",
+  "@useHighContrastColorsTitle": {
+    "description": "Title for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "useHighContrastColorsSubtitle": "Використовуйте динамічні кольори з високою контрастністю для кращої видимості.",
+  "@useHighContrastColorsSubtitle": {
+    "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
   }
 }
