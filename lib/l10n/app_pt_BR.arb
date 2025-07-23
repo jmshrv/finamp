@@ -456,7 +456,7 @@
   "@aboutTranslations": {
     "description": "Link to the translation project, shown in the about screen."
   },
-  "loginFlowWelcomeHeading": "Bem-vindo ao",
+  "loginFlowWelcomeHeading": "Bem-vindo ao {styledName}",
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
