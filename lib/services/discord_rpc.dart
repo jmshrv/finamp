@@ -14,7 +14,6 @@ import 'package:logging/logging.dart';
 
 Logger _rpcLogger = Logger("DiscordRPC");
 var _running = false;
-StreamSubscription<MediaState>? _listener;
 RPCActivity? lastState;
 Timer? _timer;
 final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
@@ -51,11 +50,10 @@ class DiscordRpc {
 
   static Future<void> _stop() async {
     if (_running) {
+      _timer?.cancel();
       _running = false;
       _timer = null;
       artistItem = null;
-      _timer?.cancel();
-      await _listener?.cancel();
       await FlutterDiscordRPC.instance.clearActivity();
       await FlutterDiscordRPC.instance.disconnect();
       await FlutterDiscordRPC.instance.dispose();
