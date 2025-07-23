@@ -23,7 +23,7 @@ enum _RpcStatus {
     stopped,
     stopping
 }
-_RpcStatus status = _RpcStatus.stopped;
+_RpcStatus _status = _RpcStatus.stopped;
 
 class DiscordRpc {
   static void initialize() {
@@ -42,8 +42,8 @@ class DiscordRpc {
   }
 
   static Future<void> _start() async {
-    if (status == _RpcStatus.stopped) {
-      status = _RpcStatus.starting;
+    if (_status == _RpcStatus.stopped) {
+      _status = _RpcStatus.starting;
       _rpcLogger.info("Starting RPC");
       await FlutterDiscordRPC.instance.connect(autoRetry: true);
       _rpcLogger.info("Connected");
@@ -51,26 +51,26 @@ class DiscordRpc {
       _timer = Timer.periodic(Duration(seconds: 5), (Timer time) {
         _updateRPC();
       });
-      status = _RpcStatus.running;
+      _status = _RpcStatus.running;
     }
-    if (status == _RpcStatus.stopping) {
+    if (_status == _RpcStatus.stopping) {
       await Future.delayed(const Duration(seconds: 1), _start);
     }
   }
 
   static Future<void> _stop() async {
-    if (status == _RpcStatus.running) {
-      status = _RpcStatus.stopping;
+    if (_status == _RpcStatus.running) {
+      _status = _RpcStatus.stopping;
       _timer?.cancel();
       _timer = null;
       artistItem = null;
       await FlutterDiscordRPC.instance.clearActivity();
       await FlutterDiscordRPC.instance.disconnect();
       await FlutterDiscordRPC.instance.dispose();
-      status = _RpcStatus.stopping;
+      _status = _RpcStatus.stopped;
       _rpcLogger.info("Stopped RPC");
     }
-    if (status == _RpcStatus.starting) {
+    if (_status == _RpcStatus.starting) {
       await Future.delayed(const Duration(seconds: 1), _stop);
     }
   }
