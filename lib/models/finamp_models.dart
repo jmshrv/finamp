@@ -218,6 +218,7 @@ class DefaultSettings {
   static const playlistTracksSortOrder = SortOrder.ascending;
   static const genreFilterPlaylists = false;
   static const clearQueueOnStopEvent = false;
+  static const useHighContrastColors = false;
 }
 
 @HiveType(typeId: 28)
@@ -336,6 +337,7 @@ class FinampSettings {
     this.playlistTracksSortOrder = DefaultSettings.playlistTracksSortOrder,
     this.genreFilterPlaylists = DefaultSettings.genreFilterPlaylists,
     this.clearQueueOnStopEvent = DefaultSettings.clearQueueOnStopEvent,
+    this.useHighContrastColors = DefaultSettings.useHighContrastColors,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -709,6 +711,9 @@ class FinampSettings {
 
   @HiveField(119, defaultValue: DefaultSettings.syncPlaybackSpeedAndPitch)
   bool syncPlaybackSpeedAndPitch;
+
+  @HiveField(120, defaultValue: DefaultSettings.useHighContrastColors)
+  bool useHighContrastColors;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
