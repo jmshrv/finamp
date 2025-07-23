@@ -106,7 +106,7 @@ class DiscordRpc {
     }
 
     final baseItem = BaseItemDto.fromJson(mediaItem!.extras!["itemJson"] as Map<String, dynamic>);
-    if (artistItem == null || !baseItem.artists!.any((v) => v == artistItem?.name)) {
+    if (artistItem == null || !baseItem.artistItems!.any((v) => v.id == artistItem?.id)) {
       artistItem = await _jellyfinApiHelper.getItemById(baseItem.artistItems!.first.id);
     }
 
