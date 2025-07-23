@@ -4,14 +4,12 @@ import 'dart:core';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
-import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/media_state_stream.dart';
 
 import 'package:flutter_discord_rpc/flutter_discord_rpc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
-
 
 Logger _rpcLogger = Logger("DiscordRPC");
 var _running = false;
@@ -65,10 +63,9 @@ class DiscordRpc {
     }
   }
 
-  static Future<void> stopListener( ) async {
+  static Future<void> stopListener() async {
     await _listener?.cancel();
   }
-
 
   static bool isDuplicate(RPCActivity? state) {
     if (state == null) {
@@ -79,7 +76,8 @@ class DiscordRpc {
     if (lastState == null) {
       lastState = state;
       return false;
-    };
+    }
+    ;
 
     bool details = state.details == lastState?.details;
     bool end = _inRange(state.timestamps?.end, lastState?.timestamps?.end);
@@ -91,6 +89,7 @@ class DiscordRpc {
   }
 
   static void startListener() {
+    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
     _listener = mediaStateStream.listen((state) async {
       if (!state.playbackState.playing) {
         if (isDuplicate(null)) return;
@@ -99,9 +98,8 @@ class DiscordRpc {
         return;
       }
 
-      final publicURL = Uri.parse(GetIt.instance<FinampUserHelper>().currentUser!.publicAddress);
-
-
+      final baseItem = BaseItemDto.fromJson(state.mediaItem!.extras!["itemJson"] as Map<String, dynamic>);
+      final artistItem = await jellyfinApiHelper.getItemById(baseItem.artistItems!.first.id);
 
       final now = (DateTime.now().millisecondsSinceEpoch / 1000).truncate();
       final progress = state.playbackState.position.inSeconds;
@@ -109,32 +107,27 @@ class DiscordRpc {
       final start = now - progress;
       final end = now + (duration - progress);
 
-      final details = state.mediaItem!.displayTitle;
-      final state2 = state.mediaItem!.artist;
-
-      final baseItem = BaseItemDto.fromJson(state.mediaItem!.extras!["itemJson"] as Map<String, dynamic>);
-      final largeImgURL = publicURL.replace(path: "/Items/${baseItem.id}/Images/Primary").toString();
-
+      final title = state.mediaItem!.title;
+      final artist = state.mediaItem!.artist;
+      final album = state.mediaItem!.album;
 
       RPCActivity rpc = RPCActivity(
         activityType: ActivityType.listening,
-        details: details,
-        state: state2,
-        timestamps: RPCTimestamps(
-          start: start,
-          end: end
-        ),
+        details: title,
+        state: artist,
         assets: RPCAssets(
-          smallImage: "finamp",
-          smallText: "Finamp",
-          largeImage: largeImgURL
-        )
+          smallImage: jellyfinApiHelper.getImageUrl(item: artistItem, maxHeight: 128, maxWidth: 128).toString(),
+          smallText: artist,
+          largeImage: jellyfinApiHelper.getImageUrl(item: baseItem, maxHeight: 512, maxWidth: 512).toString(),
+          largeText: album,
+          // largeText: baseItem.album ?? baseItem.name ?? "Finamp",
+        ),
+        timestamps: RPCTimestamps(start: start, end: end),
       );
 
       if (isDuplicate(rpc)) return;
-      _rpcLogger.info("Update: start=$start end=$end details=$details state=$state2");
+      _rpcLogger.info("Update: start=$start end=$end details=${rpc.details} state=${rpc.state}");
       await FlutterDiscordRPC.instance.setActivity(activity: rpc);
     });
   }
-
 }
