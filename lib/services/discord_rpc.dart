@@ -22,6 +22,7 @@ RPCActivity? lastState;
 RPCActivity? currentState;
 Timer? _timer;
 final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+BaseItemDto? artistItem;
 
 bool _inRange(int? a, int? b) {
   int range = 2;
@@ -42,11 +43,6 @@ class DiscordRpc {
     _rpcLogger.info("Initialized");
   }
 
-  static void _createTimer() {
-    // updates the rpc regularly to fix potential desyncs, keeps conection alive and also to prevent ratelimits
-    _timer = Timer.periodic(Duration(seconds: 5), (Timer time) {_updateRPC();});
-  }
-
   static void _reEvaluate() {
     final enabled = FinampSettingsHelper.finampSettings.rpcEnabled;
     final offline = FinampSettingsHelper.finampSettings.isOffline;
@@ -55,13 +51,12 @@ class DiscordRpc {
 
   static Future<void> _start() async {
     if (!_running) {
-      _rpcLogger.info("Starting RPC");
       _running = true;
-      _createTimer(); 
+      _rpcLogger.info("Starting RPC");
       await FlutterDiscordRPC.instance.connect(autoRetry: true);
+      // updates the rpc regularly to fix potential desyncs, keeps conection alive and also to prevent ratelimits
+      _timer = Timer.periodic(Duration(seconds: 5), (Timer time) {_updateRPC();});
       _startListener();
-    } else {
-      _rpcLogger.info("Attempted to Start RPC even though its already running");
     }
   }
 
@@ -71,12 +66,10 @@ class DiscordRpc {
       _running = false;
       _timer?.cancel();
       _timer = null;
-      await _stopListener();
+      await _listener?.cancel();
       await FlutterDiscordRPC.instance.clearActivity();
       await FlutterDiscordRPC.instance.disconnect();
       await FlutterDiscordRPC.instance.dispose();
-    } else {
-      _rpcLogger.info("Attempted to Stop RPC even though its already stopped");
     }
   }
   
@@ -96,10 +89,6 @@ class DiscordRpc {
     lastState = currentState;
 
     _rpcLogger.finer("Updated");
-  }
-
-  static Future<void> _stopListener() async {
-    await _listener?.cancel();
   }
 
   // static bool _isDuplicate() {
@@ -127,8 +116,6 @@ class DiscordRpc {
 
 
   static void _startListener() {
-    
-
     _listener = mediaStateStream.listen((state) async {
       if (!state.playbackState.playing) {
         if (lastState != null) {
@@ -139,7 +126,9 @@ class DiscordRpc {
       }
 
       final baseItem = BaseItemDto.fromJson(state.mediaItem!.extras!["itemJson"] as Map<String, dynamic>);
-      final artistItem = await _jellyfinApiHelper.getItemById(baseItem.artistItems!.first.id);
+      if (artistItem == null || !baseItem.artists!.any((v) => v == artistItem?.name)) {
+        artistItem = await _jellyfinApiHelper.getItemById(baseItem.artistItems!.first.id);
+      }
 
       final now = (DateTime.now().millisecondsSinceEpoch / 1000).truncate();
       final progress = state.playbackState.position.inSeconds;
@@ -151,7 +140,7 @@ class DiscordRpc {
       final title = state.mediaItem!.title;
       final artist = state.mediaItem!.artist;
 
-      final smallImage = _jellyfinApiHelper.getImageUrl(item: artistItem, maxHeight: 128, maxWidth: 128).toString();
+      final smallImage = _jellyfinApiHelper.getImageUrl(item: artistItem!, maxHeight: 128, maxWidth: 128).toString();
       final largeImage = _jellyfinApiHelper.getImageUrl(item: baseItem, maxHeight: 128, maxWidth: 128).toString();
 
       final album = state.mediaItem!.album;
