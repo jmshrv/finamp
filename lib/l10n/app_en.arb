@@ -2660,5 +2660,13 @@
   "useHighContrastColorsSubtitle": "Use high contrast dynamic colors for better visibility.",
   "@useHighContrastColorsSubtitle": {
     "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "discordRPCSettingTitle": "Discord RPC",
+  "@discordRPCSettingTitle": {
+    "description": "Title for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCSettingDescription": "Enable Discord Rich Presence to show what you are playing in your discord status. Wont connect to discord if Offline Mode is enabled.",
+  "@discordRPCSettingDescription": {
+    "description": "Description for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
   }
 }
