@@ -53,7 +53,7 @@ class FinampUserHelper {
       var currentUser = Hive.box<FinampUser>("FinampUsers").get(currentUserId);
       if (currentUser != null) {
         _isar.writeTxnSync(() {
-          _isar.finampUsers.putSync(currentUser);
+          _isar.finampUsers.putSync(currentUser, saveLinks: false);
         });
       }
     }
@@ -62,7 +62,7 @@ class FinampUserHelper {
   /// Saves a new user to the Hive box and sets the CurrentUserId.
   Future<void> saveUser(FinampUser newUser) async {
     _isar.writeTxnSync(() {
-      _isar.finampUsers.putSync(newUser);
+      _isar.finampUsers.putSync(newUser, saveLinks: false);
     });
     await setAuthHeader();
     while (_postUserHooks.isNotEmpty) {
@@ -86,7 +86,7 @@ class FinampUserHelper {
     currentUserTemp.currentViewId = currentUserTemp.views.keys.first;
 
     _isar.writeTxnSync(() {
-      _isar.finampUsers.putSync(currentUserTemp);
+      _isar.finampUsers.putSync(currentUserTemp, saveLinks: false);
     });
   }
 
@@ -96,7 +96,7 @@ class FinampUserHelper {
     currentUserTemp.currentViewId = newViewId;
 
     _isar.writeTxnSync(() {
-      _isar.finampUsers.putSync(currentUserTemp);
+      _isar.finampUsers.putSync(currentUserTemp, saveLinks: false);
     });
   }
 

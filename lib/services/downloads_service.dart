@@ -460,10 +460,10 @@ class DownloadsService {
     _isar.writeTxnSync(() {
       DownloadItem canonItem = _isar.downloadItems.getSync(stub.isarId) ?? stub.asItem(transcodeProfile);
       canonItem.userTranscodingProfile = transcodeProfile;
-      _isar.downloadItems.putSync(canonItem);
+      _isar.downloadItems.putSync(canonItem, saveLinks: false);
       var anchorItem = _anchor.asItem(null);
       // This may be the first download ever, so the anchor might not be present
-      _isar.downloadItems.putSync(anchorItem);
+      _isar.downloadItems.putSync(anchorItem, saveLinks: false);
       anchorItem.requires.updateSync(link: [canonItem]);
       // Update download location id/transcode profile for all our children
       syncItemDownloadSettings(canonItem);
@@ -485,12 +485,12 @@ class DownloadsService {
         return;
       }
       // This is required to trigger status recalculation
-      _isar.downloadItems.putSync(anchorItem);
+      _isar.downloadItems.putSync(anchorItem, saveLinks: false);
       deleteBuffer.addAll([stub.isarId]);
       // Actual item is not required for updating links
       anchorItem.requires.updateSync(unlink: [canonItem!]);
       canonItem!.userTranscodingProfile = null;
-      _isar.downloadItems.putSync(canonItem!);
+      _isar.downloadItems.putSync(canonItem!, saveLinks: false);
     });
     if (canonItem == null) {
       return;
@@ -725,7 +725,7 @@ class DownloadsService {
             transcodeCodec: item.userTranscodingProfile!.codec,
             bitrate: item.userTranscodingProfile!.stereoBitrate,
           );
-          _isar.downloadItems.putSync(item);
+          _isar.downloadItems.putSync(item, saveLinks: false);
         }
       }
     });
@@ -794,7 +794,7 @@ class DownloadsService {
         var canonItem = _isar.downloadItems.getSync(id);
         if (canonItem != null && idsWithLyrics[id] != null) {
           final lyricsItem = DownloadedLyrics.fromItem(isarId: canonItem.isarId, item: idsWithLyrics[id]!);
-          _isar.downloadedLyrics.putSync(lyricsItem);
+          _isar.downloadedLyrics.putSync(lyricsItem, saveLinks: false);
         }
       }
     });
@@ -872,7 +872,7 @@ class DownloadsService {
           _isar.writeTxnSync(() {
             var canonItem = _isar.downloadItems.getSync(item.isarId);
             canonItem!.fileTranscodingProfile!.downloadLocationId = location.id;
-            _isar.downloadItems.putSync(canonItem);
+            _isar.downloadItems.putSync(canonItem, saveLinks: false);
           });
           _downloadsLogger.info("${item.name} found in unexpected location ${location.name}");
           return true;
@@ -896,7 +896,7 @@ class DownloadsService {
   void updateItemState(DownloadItem item, DownloadItemState newState, {bool alwaysPut = false}) {
     if (item.state == newState) {
       if (alwaysPut) {
-        _isar.downloadItems.putSync(item);
+        _isar.downloadItems.putSync(item, saveLinks: false);
       }
     } else {
       if (item.type.hasFiles) {
@@ -913,7 +913,7 @@ class DownloadsService {
         }
       }
       item.state = newState;
-      _isar.downloadItems.putSync(item);
+      _isar.downloadItems.putSync(item, saveLinks: false);
       List<DownloadItem> parents = _isar.downloadItems
           .where()
           .typeNotEqualTo(DownloadItemType.track)
@@ -1025,7 +1025,7 @@ class DownloadsService {
         }
         syncBuffer.addAll([item.isarId], [], null);
       } else {
-        _isar.downloadItems.putSync(item);
+        _isar.downloadItems.putSync(item, saveLinks: false);
       }
       var children = item.requires.filter().findAllSync();
       if (syncImages) {
@@ -1155,7 +1155,7 @@ class DownloadsService {
     }
 
     _isar.writeTxnSync(() {
-      _isar.downloadItems.putAllSync(nodes);
+      _isar.downloadItems.putAllSync(nodes, saveLinks: false);
     });
   }
 
@@ -1213,7 +1213,7 @@ class DownloadsService {
     }
 
     _isar.writeTxnSync(() {
-      _isar.downloadItems.putAllSync(nodes);
+      _isar.downloadItems.putAllSync(nodes, saveLinks: false);
       for (var node in nodes) {
         if (node.baseItem?.blurHash != null) {
           var image = _isar.downloadItems.getSync(
@@ -1270,12 +1270,12 @@ class DownloadsService {
       }
 
       _isar.writeTxnSync(() {
-        _isar.downloadItems.putSync(isarItem);
+        _isar.downloadItems.putSync(isarItem, saveLinks: false);
         var anchorItem = _anchor.asItem(null);
-        _isar.downloadItems.putSync(anchorItem);
+        _isar.downloadItems.putSync(anchorItem, saveLinks: false);
         anchorItem.requires.updateSync(link: [isarItem]);
         var existing = _isar.downloadItems.getAllSync(required.map((e) => e.isarId).toList());
-        _isar.downloadItems.putAllSync(required.toSet().difference(existing.toSet()).toList());
+        _isar.downloadItems.putAllSync(required.toSet().difference(existing.toSet()).toList(), saveLinks: false);
         isarItem.requires.addAll(required);
         isarItem.requires.saveSync();
         isarItem.info.addAll(required);
