@@ -2631,5 +2631,7 @@
   "useHighContrastColorsSubtitle": "Usa cores dinâmicas de alto contraste para melhor visibilidade.",
   "@useHighContrastColorsSubtitle": {
     "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
-  }
+  },
+  "logoutButtonSubtitle": "Registar-se num servidor diferente irá apagar as descargas existentes",
+  "@logoutButtonSubtitle": {}
 }
