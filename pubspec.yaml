@@ -162,6 +162,11 @@ flutter:
     - images/finamp_cropped.png
     - images/finamp_cropped.svg
     - images/jellyfin-icon-transparent.png
+    - assets/icon/icon_square_bg-black.png # preview image for Discord RPC Fallback Icon Setting
+    - assets/icon/icon_combined.png        # preview image for Discord RPC Fallback Icon Setting
+    - assets/icon/icon_square_bg-white.png # preview image for Discord RPC Fallback Icon Setting
+    - assets/icon/icon_foreground.png      # preview image for Discord RPC Fallback Icon Setting
+    - assets/icon/icon_white_noborder.png  # preview image for Discord RPC Fallback Icon Setting
   #   - images/a_dot_ham.jpeg
 
   generate: true

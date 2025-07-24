@@ -26,6 +26,7 @@ class DiscordRpcIconSelector extends ConsumerWidget {
             FinampSetters.setRpcIcon(value);
           }
         },
+        icon: Image.asset(option.toImage(), width: 32, height: 32, alignment: Alignment.topRight ,),
       ),
     );
   }

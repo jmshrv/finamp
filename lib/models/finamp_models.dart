@@ -3306,6 +3306,17 @@ enum DiscordRpcIcon {
     }
   }
 
+  String toImage() {
+    switch (this) {
+      case dark: return "assets/icon/icon_combined.png";
+      case black: return "assets/icon/icon_square_bg-black.png";
+      case light: return "assets/icon/icon_square_bg-white.png";
+      case transparent: return "assets/icon/icon_foreground.png";
+      case transparentWhite: return "assets/icon/icon_white_noborder.png";
+      case jellyfinTransparent: return ""; // missing
+    }
+  }
+
   String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
 
   String _humanReadableLocalisedName(DiscordRpcIcon icon, BuildContext context) {
