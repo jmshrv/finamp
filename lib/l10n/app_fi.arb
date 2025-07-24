@@ -2533,5 +2533,101 @@
   "syncPlaybackSpeedAndPitchLabel": "Synkronoi nopeus & sävelkorkeus",
   "@syncPlaybackSpeedAndPitchLabel": {
     "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
+  },
+  "createPlaylistFromCurrentQueue": "Tallenna jono soittolistana",
+  "@createPlaylistFromCurrentQueue": {
+    "description": "Label for a button that creates a new playlist from the current queue."
+  },
+  "serverSharingMenuTitle": "Palvelimen jako paikallisverkossa",
+  "@serverSharingMenuTitle": {
+    "description": "Title for the server sharing menu that allows the user to share their server address with other devices on the local network"
+  },
+  "serverSharingMenuButtonTitle": "Jaa palvelin",
+  "@serverSharingMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the server sharing menu"
+  },
+  "serverSharingMenuConfirmationDialogText": "Oletko varma, että haluat kytkeä palvelimen jaon päälle, vaikka olet offline-tilassa? Tämä saa Finampin lähettämään dataa paikallisverkossa.",
+  "@serverSharingMenuConfirmationDialogText": {
+    "description": "Dialog text shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuConfirmationDialogConfirmationButtonLabel": "Vahvista ja kytke päälle",
+  "@serverSharingMenuConfirmationDialogConfirmationButtonLabel": {
+    "description": "Positive action label for the dialog shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuControlTitleSharingEnabled": "Jaetaan palvelinta",
+  "@serverSharingMenuControlTitleSharingEnabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuControlSubtitleSharingDisabled": "Palvelinjako päälle",
+  "@serverSharingMenuControlSubtitleSharingDisabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlTitleSharingDisabled": "Ei jaa",
+  "@serverSharingMenuControlTitleSharingDisabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlSubtitleSharingEnabled": "Paina lopettaaksesi",
+  "@serverSharingMenuControlSubtitleSharingEnabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuDescription": "Palvelinosoitteen jakaminen voi olla hyödyllistä uusien palvelinasiakkaiden määrittämiseksi, jotka eivät ole samassa paikallisverkossa Jellyfin-palvelimen kanssa. Esim. hotellien TV:t, työpaikan kone, tai uusi client puhelimessasi, kun olet reissun päällä.",
+  "@serverSharingMenuDescription": {
+    "description": "Description text shown in the server sharing menu, right below the controls"
+  },
+  "serverSharingMenuDetails": "Tämä toimii kuuntelemalla muiden asiakkaiden lähettämiä palvelimen löytöpyyntökä paikallisverkossa, ja sitten vastaamalla noihin pyyntöihin Jellyfin palvelimen asetetulla osoittella.\nJos sinulla on sekä paikallinen, että julkinen osoite määritetty, Finamp lähettää molemmat pyytävälle clientille.",
+  "@serverSharingMenuDetails": {
+    "description": "Description text shown in the server sharing menu, below the description"
+  },
+  "quickConnectAuthorizationMenuButtonTitle": "Nopea yhdistys",
+  "@quickConnectAuthorizationMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuPrompt": "Syötä nopean yhdistämisen koodi",
+  "@quickConnectAuthorizationMenuPrompt": {
+    "description": "Title for the button in server sharing menu that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuTitle": "Vahvista nopean yhdistämisen pyyntö",
+  "@quickConnectAuthorizationMenuTitle": {
+    "description": "Title for the quick connect authorization menu that allows the user to authorize a quick connect request from another device"
+  },
+  "quickConnectAuthorizationMenuInputLabel": "Nopean yhdistämisen koodi",
+  "@quickConnectAuthorizationMenuInputLabel": {
+    "description": "Label for the quick connect code input, shown below the input field"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleIdle": "Ole hyvä ja syötä tai liitä koodi alle",
+  "@quickConnectAuthorizationMenuStateSubtitleIdle": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) while the code hasn't been submitted yet"
+  },
+  "quickConnectAuthorizationMenuStateTitleProcessing": "Yritetään vahvistaa pyyntöä",
+  "@quickConnectAuthorizationMenuStateTitleProcessing": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) while a request is being processed"
+  },
+  "quickConnectAuthorizationMenuStateTitleSuccess": "Pyyntö vahvistettu onnistuneesti",
+  "@quickConnectAuthorizationMenuStateTitleSuccess": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was successful"
+  },
+  "quickConnectAuthorizationMenuStateTitleFailed": "Nopean yhdistämisen koodi virheellinen",
+  "@quickConnectAuthorizationMenuStateTitleFailed": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleFailed": "Tarkista koodi ja yritä uudestaan",
+  "@quickConnectAuthorizationMenuStateSubtitleFailed": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuDescription": "Jos yrität kirjautua toiseen Jellyfin-clientiin pikayhdistämistä käyttäen, voit syöttää tai liittää 6-merkkisen koodin kenttään yllä. Tämä vahvistaa toisen clientin kirjautumisen, ja kirjaa tämän sisään samalla tilillä, jolla käytät Finampia.",
+  "@quickConnectAuthorizationMenuDescription": {
+    "description": "Description for the quick connect authorization menu, shown at the bottom"
+  },
+  "accessibility": "Saavutettavuus",
+  "@accessibility": {
+    "description": "Title for the accessibility settings screen"
+  },
+  "useHighContrastColorsTitle": "Käytä korkean kontrastin värejä",
+  "@useHighContrastColorsTitle": {
+    "description": "Title for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "useHighContrastColorsSubtitle": "Käytä korkean kontrastin dynaamisia värejä saadaksesi selkeämmän näkymän.",
+  "@useHighContrastColorsSubtitle": {
+    "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
   }
 }
