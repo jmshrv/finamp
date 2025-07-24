@@ -1020,7 +1020,8 @@ class DownloadsSyncService {
             item: newBaseItem,
             viewId: viewId,
             orderedChildItems: orderedChildItems,
-            forceCopy: _downloadsService.forceFullSync,
+            // Force an update if we are in a downloads repair and haven't already processed this node
+            forceCopy: _downloadsService.forceFullSync && (!asRequired || !infoCompleted.contains(parent.isarId)),
           );
           // copyWith returns null if no updates to important fields are needed
           if (newParent != null) {

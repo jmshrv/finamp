@@ -67,6 +67,8 @@ class JellyfinApiHelper {
       [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema],
       directory: dir.path,
       name: isarDatabaseName,
+      compactOnLaunch: CompactCondition(minBytes: 5 * 1024 * 1024),
+      relaxedDurability: true,
     );
     GetIt.instance.registerSingleton(isar);
     GetIt.instance.registerSingleton(FinampUserHelper());

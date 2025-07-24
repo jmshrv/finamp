@@ -1648,7 +1648,7 @@ class DownloadsService {
     // Pass the download location map, as settings cannot be accessed in background
     var map = FinampSettingsHelper.finampSettings.downloadLocationsMap;
     return (dynamic _) async {
-      var canonItem = await GetIt.instance<Isar>().downloadItems.get(isarId);
+      var canonItem = GetIt.instance<Isar>().downloadItems.getSync(isarId);
       if (canonItem == null) return 0;
       Set<DownloadItem> info = {};
       Set<DownloadItem> required = {};
