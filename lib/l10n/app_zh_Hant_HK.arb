@@ -351,8 +351,6 @@
   "@addDownloads": {},
   "downloadsQueued": "開始下載檔案。",
   "@downloadsQueued": {},
-  "downloadedTracksWillNotBeDeleted": "已下載的歌曲並不會被刪除",
-  "@downloadedTracksWillNotBeDeleted": {},
   "customLocation": "自訂位置",
   "@customLocation": {},
   "customLocationsBuggy": "自訂位置功能並不保證可正常運作。如非必要，建議不要使用。使用系統的「音樂」資料夾會因權限問題而令專輯封面圖無法儲存。",

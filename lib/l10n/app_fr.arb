@@ -214,8 +214,6 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Déconnexion",
   "@logOut": {},
-  "downloadedTracksWillNotBeDeleted": "Les chansons téléchargées ne seront pas supprimées",
-  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Êtes-vous sûr ?",
   "@areYouSure": {},
   "enableTranscoding": "Activer le transcodage",

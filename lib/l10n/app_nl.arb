@@ -256,8 +256,6 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Uitloggen",
   "@logOut": {},
-  "downloadedTracksWillNotBeDeleted": "Gedownloade nummers worden niet verwijderd",
-  "@downloadedTracksWillNotBeDeleted": {},
   "selectDirectory": "Selecteer map",
   "@selectDirectory": {},
   "unknownError": "Onbekende Fout",

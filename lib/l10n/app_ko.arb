@@ -159,8 +159,6 @@
   "@interactions": {},
   "layoutAndTheme": "레이아웃 & 테마",
   "@layoutAndTheme": {},
-  "downloadedTracksWillNotBeDeleted": "다운로드한 곡(들)은 삭제되지 않습니다",
-  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "확실한가요?",
   "@areYouSure": {},
   "enableTranscoding": "트랜스코딩 활성화",

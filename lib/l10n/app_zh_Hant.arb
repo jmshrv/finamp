@@ -210,8 +210,6 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "登出",
   "@logOut": {},
-  "downloadedTracksWillNotBeDeleted": "已下載的歌曲不會被刪除",
-  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "你確定嗎？",
   "@areYouSure": {},
   "enableTranscoding": "啟用轉碼",

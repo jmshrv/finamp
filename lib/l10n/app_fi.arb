@@ -145,8 +145,6 @@
   "@areYouSure": {},
   "logOut": "Kirjaudu ulos",
   "@logOut": {},
-  "downloadedTracksWillNotBeDeleted": "Ladattuja kappaleita ei poisteta",
-  "@downloadedTracksWillNotBeDeleted": {},
   "enableTranscoding": "Ota transkoodaus käyttöön",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "Transkoodaa musiikin suoratoistoa varten palvelimen päässä.",

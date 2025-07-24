@@ -71,8 +71,6 @@
   "@bitrate": {},
   "directoryMustBeEmpty": "Adresář musí být prázdný",
   "@directoryMustBeEmpty": {},
-  "downloadedTracksWillNotBeDeleted": "Stažené skladby nebudou odstraněny",
-  "@downloadedTracksWillNotBeDeleted": {},
   "gridCrossAxisCountSubtitle": "Počet položek mřížky na řádek {value}.",
   "@gridCrossAxisCountSubtitle": {
     "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",

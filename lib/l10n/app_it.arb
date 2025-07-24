@@ -276,8 +276,6 @@
       }
     }
   },
-  "downloadedTracksWillNotBeDeleted": "I brani scaricati non saranno cancellati",
-  "@downloadedTracksWillNotBeDeleted": {},
   "downloads": "Download",
   "@downloads": {},
   "internalExternalIpExplanation": "Se vuoi accedere al tuo server di Jellyfin da remoto devi usare il tuo IP pubblico.\n\nSe il tuo server usa una porta HTTP di default (80/443) o la porta di default di Jellyfin (8096) non è necessario specificare la porta.\n\nSe l'URL è corretto dovresti vedere comparire qualche informazione riguardo il tuo server al di sotto della casella di testo.",

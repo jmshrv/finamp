@@ -88,8 +88,6 @@
       }
     }
   },
-  "downloadedTracksWillNotBeDeleted": "Las canciones descargadas no serán eliminadas",
-  "@downloadedTracksWillNotBeDeleted": {},
   "downloads": "Descargas",
   "@downloads": {},
   "goToAlbum": "Ir al álbum",

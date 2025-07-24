@@ -158,8 +158,6 @@
   },
   "notAvailableInOfflineMode": "Não disponível no modo offline",
   "@notAvailableInOfflineMode": {},
-  "downloadedTracksWillNotBeDeleted": "Faixas transferidas não serão apagadas",
-  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Tem certeza?",
   "@areYouSure": {},
   "required": "Obrigatório",

@@ -25,8 +25,6 @@
   "@location": {},
   "downloadsQueued": "A descarregar ficheiros",
   "@downloadsQueued": {},
-  "downloadedTracksWillNotBeDeleted": "As músicas transferidas não serão eliminadas",
-  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Tem a certeza?",
   "@areYouSure": {},
   "bitrateSubtitle": "Uma taxa de bits mais alta oferece áudio de melhor qualidade à custa de maior largura de banda. Isto não se aplica a codecs de baixa perda, ex. FLAC",

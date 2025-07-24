@@ -1398,8 +1398,6 @@
       }
     }
   },
-  "downloadedTracksWillNotBeDeleted": "डाउनलोड किए गए ट्रैक को मिटाया नहीं जाएगा",
-  "@downloadedTracksWillNotBeDeleted": {},
   "playbackSpeedIncreaseLabel": "प्लेबैक गति बढ़ाएं",
   "@playbackSpeedIncreaseLabel": {
     "description": "Label for the button in the speed menu that increases the playback speed."

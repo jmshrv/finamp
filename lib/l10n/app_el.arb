@@ -196,8 +196,6 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Έξοδος",
   "@logOut": {},
-  "downloadedTracksWillNotBeDeleted": "Κατεβασμένα τραγούδια δεν θα διαγραφούν",
-  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Είσαι σίγουρος?",
   "@areYouSure": {},
   "location": "Τοποθεσία",

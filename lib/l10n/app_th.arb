@@ -346,8 +346,6 @@
   "@areYouSure": {},
   "addDownloadLocation": "เพิ่มตำแหน่งสำหรับดาวน์โหลด",
   "@addDownloadLocation": {},
-  "downloadedTracksWillNotBeDeleted": "เพลงที่ดาวน์โหลดแล้วจะไม่ถูกลบ",
-  "@downloadedTracksWillNotBeDeleted": {},
   "bufferDurationSubtitle": "ตัวเล่นเพลงควรจะอ่านไฟล์ล่วงหน้าเท่าไร ระบุเป็นวินาที หากเปลี่ยนต้องรีสตาร์ท",
   "@bufferDurationSubtitle": {},
   "unknownError": "ข้อผิดพลาดที่ไม่รู้จัก",

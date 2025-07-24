@@ -105,8 +105,6 @@
   "@layoutAndTheme": {},
   "logOut": "Выйти",
   "@logOut": {},
-  "downloadedTracksWillNotBeDeleted": "Загруженные композиции не будут удалены",
-  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Вы уверены?",
   "@areYouSure": {},
   "enableTranscoding": "Включить транскодирование",
