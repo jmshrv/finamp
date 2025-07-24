@@ -1018,6 +1018,14 @@ extension FinampSetters on FinampSettingsHelper {
     ).put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setRpcIcon(DiscordRpcIcon newRpcIcon) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.rpcIcon = newRpcIcon;
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -1387,6 +1395,8 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       .select((value) => value.requireValue.useHighContrastColors);
   ProviderListenable<bool> get rpcEnabled =>
       finampSettingsProvider.select((value) => value.requireValue.rpcEnabled);
+  ProviderListenable<DiscordRpcIcon> get rpcIcon =>
+      finampSettingsProvider.select((value) => value.requireValue.rpcIcon);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider.select(
         (value) => value.requireValue.downloadTranscodingProfile,

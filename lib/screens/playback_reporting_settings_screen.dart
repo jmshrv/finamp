@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:finamp/components/PlaybackReportingSettingsScreen/discord_rpc_icon_selector.dart';
 import 'package:finamp/components/PlaybackReportingSettingsScreen/enabled_discord_rpc.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/discord_rpc.dart';
@@ -44,6 +45,7 @@ class _PlaybackReportingSettingsScreenState extends State<PlaybackReportingSetti
           const PlayOnReconnectionDelayEditor(),
           if (hasRpcSupport) const Divider(),
           if (hasRpcSupport) const EnabledDiscordRpc(),
+          if (hasRpcSupport) const DiscordRpcIconSelector(),
         ],
       ),
     );

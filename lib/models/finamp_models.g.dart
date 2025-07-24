@@ -384,6 +384,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
             ? false
             : fields[120] as bool,
         rpcEnabled: fields[121] == null ? false : fields[121] as bool,
+        rpcIcon: fields[122] == null
+            ? DiscordRpcIcon.transparent
+            : fields[122] as DiscordRpcIcon,
       )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -395,7 +398,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(115)
+      ..writeByte(116)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -625,7 +628,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(120)
       ..write(obj.useHighContrastColors)
       ..writeByte(121)
-      ..write(obj.rpcEnabled);
+      ..write(obj.rpcEnabled)
+      ..writeByte(122)
+      ..write(obj.rpcIcon);
   }
 
   @override
@@ -2710,6 +2715,59 @@ class SleepTimerTypeAdapter extends TypeAdapter<SleepTimerType> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is SleepTimerTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class DiscordRpcIconAdapter extends TypeAdapter<DiscordRpcIcon> {
+  @override
+  final typeId = 100;
+
+  @override
+  DiscordRpcIcon read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return DiscordRpcIcon.black;
+      case 1:
+        return DiscordRpcIcon.dark;
+      case 2:
+        return DiscordRpcIcon.light;
+      case 3:
+        return DiscordRpcIcon.jellyfinTransparent;
+      case 4:
+        return DiscordRpcIcon.transparent;
+      case 5:
+        return DiscordRpcIcon.transparentWhite;
+      default:
+        return DiscordRpcIcon.black;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, DiscordRpcIcon obj) {
+    switch (obj) {
+      case DiscordRpcIcon.black:
+        writer.writeByte(0);
+      case DiscordRpcIcon.dark:
+        writer.writeByte(1);
+      case DiscordRpcIcon.light:
+        writer.writeByte(2);
+      case DiscordRpcIcon.jellyfinTransparent:
+        writer.writeByte(3);
+      case DiscordRpcIcon.transparent:
+        writer.writeByte(4);
+      case DiscordRpcIcon.transparentWhite:
+        writer.writeByte(5);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DiscordRpcIconAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
