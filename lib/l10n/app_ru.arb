@@ -2617,5 +2617,17 @@
   "createPlaylistFromCurrentQueue": "Сохранить Очередь как Плейлист",
   "@createPlaylistFromCurrentQueue": {
     "description": "Label for a button that creates a new playlist from the current queue."
+  },
+  "accessibility": "Доступность",
+  "@accessibility": {
+    "description": "Title for the accessibility settings screen"
+  },
+  "useHighContrastColorsTitle": "Использовать Цвета с Высокой Контрастностью",
+  "@useHighContrastColorsTitle": {
+    "description": "Title for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "useHighContrastColorsSubtitle": "Использовать цвета с высокой контрастностью для лучшей читаемости.",
+  "@useHighContrastColorsSubtitle": {
+    "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
   }
 }
