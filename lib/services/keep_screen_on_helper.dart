@@ -4,6 +4,7 @@ import 'package:finamp/screens/lyrics_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -41,10 +42,9 @@ class KeepScreenOnHelper {
       }
     });
 
-    FinampSettingsHelper.finampSettingsListener.addListener(() {
-      // When a settings change occurs, check keepScreenOnState.
-      setKeepScreenOn();
-    });
+    final container = GetIt.instance<ProviderContainer>();
+    container.listen(finampSettingsProvider.keepScreenOnOption, (_, __) => setKeepScreenOn);
+    container.listen(finampSettingsProvider.keepScreenOnWhilePluggedIn, (_, __) => setKeepScreenOn);
   }
 
   void setKeepScreenOn() {

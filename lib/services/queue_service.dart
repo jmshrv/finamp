@@ -330,6 +330,7 @@ class QueueService {
     try {
       _savedQueueState = SavedQueueState.loading;
       if (info.trackCount == 0) {
+        finalState = SavedQueueState.pendingSave;
         return;
       }
       refreshQueueStream();

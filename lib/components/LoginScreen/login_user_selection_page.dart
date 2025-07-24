@@ -1,5 +1,5 @@
 import 'package:finamp/components/Buttons/simple_button.dart';
-import 'package:finamp/components/LoginScreen/login_server_selection_page.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
@@ -9,7 +9,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 
 import 'login_flow.dart';
 
@@ -53,6 +52,16 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
     widget.onAuthenticated?.call();
   }
 
+  late Future<bool> canQuickConnect;
+  late Future<PublicUsersResponse> publicUsers;
+
+  @override
+  void initState() {
+    super.initState();
+    canQuickConnect = jellyfinApiHelper.checkQuickConnect();
+    publicUsers = jellyfinApiHelper.loadPublicUsers();
+  }
+
   @override
   Widget build(BuildContext context) {
     jellyfinApiHelper.baseUrlTemp = Uri.parse(widget.serverState.baseUrl!);
@@ -87,7 +96,7 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
                 ),
               ),
               FutureBuilder<bool>(
-                future: jellyfinApiHelper.checkQuickConnect(),
+                future: canQuickConnect,
                 builder: (context, snapshot) {
                   final quickConnectAvailable = snapshot.data ?? false;
                   if (snapshot.hasData && quickConnectAvailable) {
@@ -136,7 +145,7 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
                 child: Text(AppLocalizations.of(context)!.loginFlowSelectAUser, textAlign: TextAlign.center),
               ),
               FutureBuilder(
-                future: jellyfinApiHelper.loadPublicUsers(),
+                future: publicUsers,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final users = snapshot.data!.users;
@@ -175,14 +184,6 @@ class _LoginUserSelectionPageState extends State<LoginUserSelectionPage> {
           ),
         ),
       ),
-    );
-  }
-
-  JellyfinServerSelectionWidget _buildJellyfinServerConnectionWidget() {
-    return JellyfinServerSelectionWidget(
-      baseUrl: jellyfinApiHelper.baseUrlTemp.toString(),
-      serverInfo: widget.serverState.selectedServer,
-      connected: widget.connectionState.isConnected,
     );
   }
 }
@@ -256,7 +257,7 @@ class JellyfinUserWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final avatarUrl = user != null
-        ? JellyfinApiHelper().getUserImageUrl(baseUrl: jellyfinApiHelper.baseUrlTemp!, user: user!)?.toString()
+        ? jellyfinApiHelper.getUserImageUrl(baseUrl: jellyfinApiHelper.baseUrlTemp!, user: user!)?.toString()
         : null;
 
     const double avatarSize = 72.0;

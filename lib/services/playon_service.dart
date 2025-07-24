@@ -95,7 +95,9 @@ class PlayOnService {
   Future<void> startListener() async {
     abortConnect = false;
     try {
-      if (!FinampSettingsHelper.finampSettings.isOffline && FinampSettingsHelper.finampSettings.enablePlayon) {
+      if (!FinampSettingsHelper.finampSettings.isOffline &&
+          FinampSettingsHelper.finampSettings.enablePlayon &&
+          _finampUserHelper.currentUser != null) {
         assert(socketState == SocketState.disconnected);
         _playOnServiceLogger.info("Attempting to start PlayOn listener");
         socketState = SocketState.connecting;

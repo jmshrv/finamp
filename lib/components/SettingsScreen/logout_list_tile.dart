@@ -25,10 +25,7 @@ class LogoutListTile extends ConsumerWidget {
       ),
       subtitle: ref.watch(finampSettingsProvider.isOffline)
           ? Text(AppLocalizations.of(context)!.notAvailableInOfflineMode)
-          : Text(
-              AppLocalizations.of(context)!.downloadedTracksWillNotBeDeleted,
-              style: const TextStyle(color: Colors.red),
-            ),
+          : Text(AppLocalizations.of(context)!.logoutButtonSubtitle, style: const TextStyle(color: Colors.red)),
       enabled: !ref.watch(finampSettingsProvider.isOffline),
       onTap: () {
         showDialog(
