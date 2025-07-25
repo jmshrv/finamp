@@ -12,7 +12,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
 Logger _rpcLogger = Logger("DiscordRPC");
-RPCActivity? lastState;
+bool lastState = false;
 Timer? _timer;
 final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 BaseItemDto? artistItem;
@@ -52,9 +52,7 @@ class DiscordRpc {
       // From my research the most mentioned ratelimit is 15 seconds (though inconsistently? a lot of the time rpc can be updated faster, just not all the time)
       // One of the repos which mention 15 seconds is this one: https://github.com/dhinakg/vm-rpc
       // I couldn't find any official ratelimit regarding RPC :/
-      _timer = Timer.periodic(Duration(seconds: 15), (Timer time) {
-        _updateRPC();
-      });
+      _timer = Timer.periodic(Duration(seconds: 15), _updateRPC);
       _status = _RpcStatus.running;
 
       if (_targetStatus == _RpcStatus.stopped) stop();
@@ -78,22 +76,27 @@ class DiscordRpc {
     }
   }
 
-  static Future<void> _updateRPC() async {
+  static Future<void> _updateRPC(Timer _) async {
     if (!FlutterDiscordRPC.instance.isConnected) return;
-
-    RPCActivity? currentState = await _render();
+    RPCActivity? currentState;
+    try {
+      currentState = await _render();
+    } catch (e) {
+      _rpcLogger.warning("Something went wrong during RPC rendering", e);
+      return;
+    }
 
     if (currentState == null) {
-      if (lastState != null) {
-        _rpcLogger.finer("Update: Not playing anymore, clearing activity");
+      if (lastState) {
+        _rpcLogger.finer("Not playing anymore, clearing activity");
         await FlutterDiscordRPC.instance.clearActivity();
-        lastState = currentState;
+        lastState = false;
       }
       return;
     }
 
     await FlutterDiscordRPC.instance.setActivity(activity: currentState);
-    lastState = currentState;
+    lastState = true;
 
     _rpcLogger.finest("Updated");
   }
@@ -174,8 +177,6 @@ class DiscordRpc {
     final artist = mediaItem.artist;
 
     final images = _fetchImageUrls(baseItem);
-    final smallImage = images[0];
-    final largeImage = images[1];
 
     final local = GetIt.instance<FinampUserHelper>().currentUser!.isLocal;
 
@@ -186,9 +187,9 @@ class DiscordRpc {
       details: title,
       state: artist,
       assets: RPCAssets(
-        smallImage: smallImage,
+        smallImage: images[0],
         smallText: local ? null : artist,
-        largeImage: largeImage,
+        largeImage: images[1],
         largeText: (album == artist || album == title) ? null : album,
       ),
       timestamps: RPCTimestamps(start: start, end: end),
