@@ -2623,5 +2623,7 @@
   "useHighContrastColorsSubtitle": "Використовуйте динамічні кольори з високою контрастністю для кращої видимості.",
   "@useHighContrastColorsSubtitle": {
     "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
-  }
+  },
+  "logoutButtonSubtitle": "Вхід на інший сервер призведе до видалення наявних завантажень",
+  "@logoutButtonSubtitle": {}
 }
