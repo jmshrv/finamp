@@ -2607,5 +2607,23 @@
   "quickConnectAuthorizationMenuDescription": "若您想透過快速連接登入其他 Jellyfin 裝置，請在上方輸入 6 位數代碼。系統將授權該裝置登入，並使用您目前在 Finamp 的帳號。",
   "@quickConnectAuthorizationMenuDescription": {
     "description": "Description for the quick connect authorization menu, shown at the bottom"
+  },
+  "logoutButtonSubtitle": "登入另一個伺服器時，現有下載內容將被清除",
+  "@logoutButtonSubtitle": {},
+  "createPlaylistFromCurrentQueue": "將播放佇列儲存為播放清單",
+  "@createPlaylistFromCurrentQueue": {
+    "description": "Label for a button that creates a new playlist from the current queue."
+  },
+  "accessibility": "無障礙設定",
+  "@accessibility": {
+    "description": "Title for the accessibility settings screen"
+  },
+  "useHighContrastColorsTitle": "使用高對比色彩",
+  "@useHighContrastColorsTitle": {
+    "description": "Title for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "useHighContrastColorsSubtitle": "使用高對比動態色彩以提升可視性。",
+  "@useHighContrastColorsSubtitle": {
+    "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
   }
 }
