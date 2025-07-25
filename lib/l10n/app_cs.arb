@@ -2621,5 +2621,7 @@
   "useHighContrastColorsSubtitle": "Použít dynamické barvy s vysokým kontrastem pro lepší viditelnost.",
   "@useHighContrastColorsSubtitle": {
     "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
-  }
+  },
+  "logoutButtonSubtitle": "Přihlášením se na jiný server se smažou existující stažené soubory",
+  "@logoutButtonSubtitle": {}
 }
