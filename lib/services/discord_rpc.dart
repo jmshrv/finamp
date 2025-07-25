@@ -161,7 +161,7 @@ class DiscordRpc {
     }
 
     final baseItem = BaseItemDto.fromJson(mediaItem!.extras!["itemJson"] as Map<String, dynamic>);
-    final local = _finampUserHelper.currentUser!.isLocal;
+
     if (artistItem == null || !baseItem.artistItems!.any((v) => v.id == artistItem?.id)) {
       artistItem = await _jellyfinApiHelper.getItemById(baseItem.artistItems!.first.id);
     }
@@ -183,7 +183,7 @@ class DiscordRpc {
       state: artist,
       assets: RPCAssets(
         smallImage: images.$1,
-        smallText: local ? null : artist,
+        smallText: images.$1 == null ? null : artist,
         largeImage: images.$2,
         largeText: (album == artist || album == title) ? null : album,
       ),
