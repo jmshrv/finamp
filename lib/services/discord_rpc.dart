@@ -14,6 +14,7 @@ Logger _rpcLogger = Logger("DiscordRPC");
 bool lastState = false;
 Timer? _timer;
 final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 BaseItemDto? artistItem;
 
 enum _RpcStatus { running, transition, stopped }
@@ -126,14 +127,14 @@ class DiscordRpc {
     String? smallImage = null;
     String? largeImage;
 
-    final activeAddress = GetIt.instance<FinampUserHelper>().currentUser!.baseURL;
+    final activeAddress = _finampUserHelper.currentUser!.baseURL;
     final activeAddressIsPrivate = isAddressInLocalAddressRange(activeAddress);
 
     bool forcePublicAddress = false;
     bool skipUrlGetting = false;
 
     if (activeAddressIsPrivate) {
-      final publicAddress = GetIt.instance<FinampUserHelper>().currentUser!.publicAddress;
+      final publicAddress = _finampUserHelper.currentUser!.publicAddress;
       final publicAddressIsPrivate = isAddressInLocalAddressRange(publicAddress);
       if (publicAddressIsPrivate) {
         skipUrlGetting = true;
@@ -164,7 +165,7 @@ class DiscordRpc {
     }
 
     final baseItem = BaseItemDto.fromJson(mediaItem!.extras!["itemJson"] as Map<String, dynamic>);
-    final local = GetIt.instance<FinampUserHelper>().currentUser!.isLocal;
+    final local = _finampUserHelper.currentUser!.isLocal;
     if (artistItem == null || !baseItem.artistItems!.any((v) => v.id == artistItem?.id)) {
       artistItem = await _jellyfinApiHelper.getItemById(baseItem.artistItems!.first.id);
     }
