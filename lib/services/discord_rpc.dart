@@ -123,9 +123,9 @@ class DiscordRpc {
     return regex.hasMatch(host);
   }
 
-  static List<String?> _fetchImageUrls(BaseItemDto baseItem) {
-    String? smallImage = null;
-    String? largeImage;
+  static (String?, String) _fetchImageUrls(BaseItemDto baseItem) {
+    String? smallImage;
+    String largeImage = FinampSettingsHelper.finampSettings.rpcIcon.toString();
 
     final activeAddress = _finampUserHelper.currentUser!.baseURL;
     final activeAddressIsPrivate = isAddressInLocalAddressRange(activeAddress);
@@ -136,12 +136,8 @@ class DiscordRpc {
     if (activeAddressIsPrivate) {
       final publicAddress = _finampUserHelper.currentUser!.publicAddress;
       final publicAddressIsPrivate = isAddressInLocalAddressRange(publicAddress);
-      if (publicAddressIsPrivate) {
-        skipUrlGetting = true;
-        largeImage = FinampSettingsHelper.finampSettings.rpcIcon.toString();
-      } else {
-        forcePublicAddress = true;
-      }
+      forcePublicAddress = true;
+      skipUrlGetting = publicAddressIsPrivate;
     }
     if (!skipUrlGetting) {
       smallImage = _jellyfinApiHelper
@@ -152,7 +148,7 @@ class DiscordRpc {
           .toString();
     }
 
-    return [smallImage, largeImage];
+    return (smallImage, largeImage);
   }
 
   static Future<RPCActivity?> _render() async {
@@ -186,9 +182,9 @@ class DiscordRpc {
       details: title,
       state: artist,
       assets: RPCAssets(
-        smallImage: images[0],
+        smallImage: images.$1,
         smallText: local ? null : artist,
-        largeImage: images[1],
+        largeImage: images.$2,
         largeText: (album == artist || album == title) ? null : album,
       ),
       timestamps: RPCTimestamps(start: start, end: end),
