@@ -44,16 +44,23 @@ class DiscordRpc {
       _status = _RpcStatus.transition;
       _rpcLogger.info("Starting RPC");
 
-      await FlutterDiscordRPC.instance.connect(autoRetry: true, retryDelay: Duration(seconds: 20));
+      await FlutterDiscordRPC.instance.connect(autoRetry: true, retryDelay: Duration(seconds: 3));
       await FlutterDiscordRPC.instance.clearActivity();
+      StreamSubscription<bool>? isConnectedStreamSubscription;
+      isConnectedStreamSubscription = FlutterDiscordRPC.instance.isConnectedStream.listen((connected) {
+        isConnectedStreamSubscription?.cancel();
+        if (connected) {
+          updateRPC();
+          _rpcLogger.info("Connected, ${FlutterDiscordRPC.instance.isConnected}");
+        }
+      });
 
-      _rpcLogger.info("Connected");
 
       // updates the rpc regularly to fix potential desyncs, keeps connection alive and also to prevent ratelimiting
       // From my research the most mentioned ratelimit is 15 seconds (though inconsistently? a lot of the time rpc can be updated faster, just not all the time)
       // One of the repos which mention 15 seconds is this one: https://github.com/dhinakg/vm-rpc
       // I couldn't find any official ratelimit regarding RPC :/
-      _timer = Timer.periodic(Duration(seconds: 15), _updateRPC);
+      _timer = Timer.periodic(Duration(seconds: 15), (timer) => updateRPC());
       _status = _RpcStatus.running;
 
       if (_targetStatus == _RpcStatus.stopped) stop();
@@ -79,7 +86,7 @@ class DiscordRpc {
     }
   }
 
-  static Future<void> _updateRPC(Timer _) async {
+  static Future<void> updateRPC() async {
     if (!FlutterDiscordRPC.instance.isConnected) return;
     RPCActivity? currentState;
     try {
@@ -105,7 +112,6 @@ class DiscordRpc {
   }
 
   /// Known limitations:
-  /// - doesnt match something like `jellyfin:8096`
   /// - may not work on custom DNS
   /// - may not work for selfhosted VPNs depending on configuration
   ///
@@ -120,12 +126,14 @@ class DiscordRpc {
     // regex from https://stackoverflow.com/a/2814102
     final regex = RegExp(r"(^127\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^192\.168\.)");
     final host = Uri.parse(address).host;
-    return regex.hasMatch(host);
+    final isPrivateIp = regex.hasMatch(host);
+    final isPrivateDomain = host.split('.').length == 1; // match something like `jellyfin:8096`
+    return isPrivateIp || isPrivateDomain; 
   }
 
   static (String?, String) _fetchImageUrls(BaseItemDto baseItem) {
     String? smallImage;
-    String largeImage = FinampSettingsHelper.finampSettings.rpcIcon.toString();
+    String? largeImage;
 
     final activeAddress = _finampUserHelper.currentUser!.baseURL;
     final activeAddressIsPrivate = isAddressInLocalAddressRange(activeAddress);
@@ -139,22 +147,25 @@ class DiscordRpc {
       forcePublicAddress = true;
       skipUrlGetting = publicAddressIsPrivate;
     }
+    
     if (!skipUrlGetting) {
       smallImage = _jellyfinApiHelper
           .getImageUrl(item: artistItem!, maxHeight: 128, maxWidth: 128, forcePublicAddress: forcePublicAddress)
-          .toString();
+          ?.toString();
       largeImage = _jellyfinApiHelper
           .getImageUrl(item: baseItem, maxHeight: 128, maxWidth: 128, forcePublicAddress: forcePublicAddress)
-          .toString();
+          ?.toString();
     }
+
+    largeImage ??= FinampSettingsHelper.finampSettings.rpcIcon.toString();
 
     return (smallImage, largeImage);
   }
 
   static Future<RPCActivity?> _render() async {
-    final state = GetIt.instance<MusicPlayerBackgroundTask>();
-    final playbackState = state.playbackState.valueOrNull;
-    final mediaItem = state.mediaItem.valueOrNull;
+    final audioService = GetIt.instance<MusicPlayerBackgroundTask>();
+    final playbackState = audioService.playbackState.valueOrNull;
+    final mediaItem = audioService.mediaItem.valueOrNull;
 
     if (playbackState?.playing == null || !playbackState!.playing) {
       return null;
@@ -185,7 +196,7 @@ class DiscordRpc {
         smallImage: images.$1,
         smallText: images.$1 == null ? null : artist,
         largeImage: images.$2,
-        largeText: (album == artist || album == title) ? null : album,
+        largeText: album,
       ),
       timestamps: RPCTimestamps(start: start, end: end),
     );
