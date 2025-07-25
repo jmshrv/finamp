@@ -30,7 +30,7 @@ class _PlaybackReportingSettingsScreenState extends State<PlaybackReportingSetti
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, () {
             setState(() {
-              FinampSettingsHelper.resetNormalizationSettings();
+              FinampSettingsHelper.resetPlaybackReportingSettings();
             });
           }),
         ],
