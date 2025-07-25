@@ -95,21 +95,6 @@ class DownloadsService {
     return isar.downloadItems.watchObject(stub.isarId, fireImmediately: true).map((event) => event?.state).distinct();
   });
 
-  late final infoForAnchorProvider = StreamProvider.family.autoDispose<bool, DownloadStub>((ref, stub) {
-    assert(stub.type != DownloadItemType.image && stub.type != DownloadItemType.anchor);
-    // Refresh on addDownload/removeDownload as well as state change
-    ref.watch(_anchorProvider);
-    return _isar.downloadItems.watchObjectLazy(stub.isarId, fireImmediately: true).map((event) {
-      return _isar.downloadItems
-              .where()
-              .isarIdEqualTo(_anchor.isarId)
-              .filter()
-              .info((q) => q.isarIdEqualTo(stub.isarId))
-              .countSync() >
-          0;
-    }).distinct();
-  });
-
   /// Provider for the download status of an item.  See [getStatus] for details.
   /// This provider relies on the fact that [_syncDownload] always re-inserts
   /// processed items into Isar to know when to re-check status.
@@ -135,47 +120,38 @@ class DownloadsService {
 
   /// Provider for user-downloaded items of a specific category.
   /// Used to show and group downloaded items on the downloads screen.
-  late final userDownloadedItemsProvider = StreamProvider.family
-      .autoDispose<List<DownloadStub>, DownloadsScreenCategory>((ref, category) {
-        final query = _isar.downloadItems
-            .where()
+  late final userDownloadedItemsProvider = FutureProvider.family
+      .autoDispose<List<DownloadStub>, DownloadsScreenCategory>((ref, category) async {
+        // Refresh lists when addDownload or removeDownload is called.
+        ref.watch(_anchorProvider);
+        final allItems = await _isar.downloadItems
             .filter()
             .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
             .sortByName()
-            .build()
-            .watch(fireImmediately: true);
+            .findAll();
 
-        return query.map((allItems) {
-          switch (category) {
-            case DownloadsScreenCategory.special:
-              return allItems.where((item) {
-                return (item.type == category.type) &&
-                    item.finampCollection?.type != FinampCollectionType.collectionWithLibraryFilter;
-              }).toList();
+        return allItems
+            .where(
+              (item) => switch (category) {
+                DownloadsScreenCategory.special =>
+                  item.type == category.type &&
+                      item.finampCollection?.type != FinampCollectionType.collectionWithLibraryFilter,
 
-            case DownloadsScreenCategory.artists:
-              return allItems.where((item) {
-                return (item.type == category.type &&
-                        (category.baseItemType == null || item.baseItemType == category.baseItemType)) ||
-                    (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
-                        BaseItemDtoType.fromItem(item.finampCollection!.item!) == BaseItemDtoType.artist);
-              }).toList();
+                DownloadsScreenCategory.artists =>
+                  (item.type == category.type && item.baseItemType == category.baseItemType) ||
+                      (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
+                          BaseItemDtoType.fromItem(item.finampCollection!.item!) == BaseItemDtoType.artist),
 
-            case DownloadsScreenCategory.genres:
-              return allItems.where((item) {
-                return (item.type == category.type &&
-                        (category.baseItemType == null || item.baseItemType == category.baseItemType)) ||
-                    (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
-                        BaseItemDtoType.fromItem(item.finampCollection!.item!) == BaseItemDtoType.genre);
-              }).toList();
-
-            default:
-              return allItems.where((item) {
-                return item.type == category.type &&
-                    (category.baseItemType == null || item.baseItemType == category.baseItemType);
-              }).toList();
-          }
-        });
+                DownloadsScreenCategory.genres =>
+                  (item.type == category.type && item.baseItemType == category.baseItemType) ||
+                      (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
+                          BaseItemDtoType.fromItem(item.finampCollection!.item!) == BaseItemDtoType.genre),
+                _ =>
+                  item.type == category.type &&
+                      (category.baseItemType == null || item.baseItemType == category.baseItemType),
+              },
+            )
+            .toList();
       });
 
   /// Constructs the service.  startQueues should also be called to complete initialization.
@@ -1627,15 +1603,16 @@ class DownloadsService {
 
   /// Returns a stream of the list of downloads of a given state. Used to display
   /// active/failed/enqueued downloads on the active downloads screen.
-  Stream<List<DownloadStub>> getDownloadList(DownloadItemState? state) {
+  Stream<List<DownloadStub>> getDownloadList(DownloadItemState state) {
     return _isar.downloadItems
         .where()
+        .stateEqualTo(state)
+        .filter()
         .optional(
           state != DownloadItemState.syncFailed,
           (q) => q.typeEqualTo(DownloadItemType.track).or().typeEqualTo(DownloadItemType.image),
         )
-        .filter()
-        .optional(state != null, (q) => q.stateEqualTo(state!))
+        // Watching queries is expensive and seems to have a memory link.  Avoid using if possible.
         .watch(fireImmediately: true);
   }
 
