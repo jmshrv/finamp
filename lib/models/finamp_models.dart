@@ -3297,23 +3297,35 @@ enum DiscordRpcIcon {
   @override
   String toString() {
     switch (this) {
-      case dark: return "dark";
-      case black: return "black";
-      case light: return "light";
-      case transparent: return "transparent";
-      case transparentWhite: return "transparent-white";
-      case jellyfinTransparent: return "jellyfin-transparent";
+      case dark:
+        return "dark";
+      case black:
+        return "black";
+      case light:
+        return "light";
+      case transparent:
+        return "transparent";
+      case transparentWhite:
+        return "transparent-white";
+      case jellyfinTransparent:
+        return "jellyfin-transparent";
     }
   }
 
   String toImage() {
     switch (this) {
-      case dark: return "assets/icon/icon_combined.png";
-      case black: return "assets/icon/icon_square_bg-black.png";
-      case light: return "assets/icon/icon_square_bg-white.png";
-      case transparent: return "assets/icon/icon_foreground.png";
-      case transparentWhite: return "assets/icon/icon_white_noborder.png";
-      case jellyfinTransparent: return ""; // missing
+      case dark:
+        return "assets/icon/icon_combined.png";
+      case black:
+        return "assets/icon/icon_square_bg-black.png";
+      case light:
+        return "assets/icon/icon_square_bg-white.png";
+      case transparent:
+        return "assets/icon/icon_foreground.png";
+      case transparentWhite:
+        return "assets/icon/icon_white_noborder.png";
+      case jellyfinTransparent:
+        return ""; // missing
     }
   }
 
@@ -3321,12 +3333,18 @@ enum DiscordRpcIcon {
 
   String _humanReadableLocalisedName(DiscordRpcIcon icon, BuildContext context) {
     switch (icon) {
-      case dark: return AppLocalizations.of(context)!.discordRPCIconDark;
-      case black: return AppLocalizations.of(context)!.discordRPCIconBlack;
-      case light: return AppLocalizations.of(context)!.discordRPCIconLight;
-      case jellyfinTransparent: return AppLocalizations.of(context)!.discordRPCIconJFTransparent;
-      case transparent: return AppLocalizations.of(context)!.discordRPCIconTransparent;
-      case transparentWhite: return AppLocalizations.of(context)!.discordRPCIconWhiteTransparent;
+      case dark:
+        return AppLocalizations.of(context)!.discordRPCIconDark;
+      case black:
+        return AppLocalizations.of(context)!.discordRPCIconBlack;
+      case light:
+        return AppLocalizations.of(context)!.discordRPCIconLight;
+      case jellyfinTransparent:
+        return AppLocalizations.of(context)!.discordRPCIconJFTransparent;
+      case transparent:
+        return AppLocalizations.of(context)!.discordRPCIconTransparent;
+      case transparentWhite:
+        return AppLocalizations.of(context)!.discordRPCIconWhiteTransparent;
     }
   }
 }

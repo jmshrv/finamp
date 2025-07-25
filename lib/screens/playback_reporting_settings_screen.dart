@@ -44,7 +44,7 @@ class _PlaybackReportingSettingsScreenState extends State<PlaybackReportingSetti
           const PlayOnReconnectionDelayEditor(),
           if (hasRpcSupport) const Divider(),
           if (hasRpcSupport) const EnabledDiscordRpc(),
-          if (hasRpcSupport) const DiscordRpcIconSelector()
+          if (hasRpcSupport) const DiscordRpcIconSelector(),
         ],
       ),
     );

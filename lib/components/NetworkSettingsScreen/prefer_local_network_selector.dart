@@ -22,7 +22,7 @@ class LocalNetworkSelector extends ConsumerWidget {
       onChanged: (value) async {
         GetIt.instance<FinampUserHelper>().currentUser?.update(newPreferLocalNetwork: value);
         await changeTargetUrl();
-      }
+      },
     );
   }
 }

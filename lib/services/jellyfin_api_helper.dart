@@ -1002,16 +1002,15 @@ class JellyfinApiHelper {
     int? maxHeight,
     int? quality = 90,
     String? format = "jpg",
-    bool forcePublicAddress = false
+    bool forcePublicAddress = false,
   }) {
     if (item.imageId == null) {
       return null;
     }
 
     final parsedBaseUrl = forcePublicAddress
-      ? Uri.parse(_finampUserHelper.currentUser!.publicAddress)
-      : Uri.parse(_finampUserHelper.currentUser!.baseURL);
-
+        ? Uri.parse(_finampUserHelper.currentUser!.publicAddress)
+        : Uri.parse(_finampUserHelper.currentUser!.baseURL);
 
     List<String> builtPath = List<String>.from(parsedBaseUrl.pathSegments);
     builtPath.addAll(["Items", item.imageId!, "Images", "Primary"]);

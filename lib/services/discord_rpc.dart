@@ -6,7 +6,6 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
-
 import 'package:flutter_discord_rpc/flutter_discord_rpc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -22,9 +21,7 @@ enum _RpcStatus { running, transition, stopped }
 _RpcStatus _status = _RpcStatus.stopped;
 _RpcStatus _targetStatus = _RpcStatus.stopped;
 
-
 class DiscordRpc {
-
   static void initialize() {
     var settingsListener = FinampSettingsHelper.finampSettingsListener;
     // Chaphasilor owns the Discord App in case of any issues with that :)
@@ -45,9 +42,12 @@ class DiscordRpc {
     if (_status == _RpcStatus.stopped) {
       _status = _RpcStatus.transition;
       _rpcLogger.info("Starting RPC");
+
       await FlutterDiscordRPC.instance.connect(autoRetry: true, retryDelay: Duration(seconds: 20));
       await FlutterDiscordRPC.instance.clearActivity();
+
       _rpcLogger.info("Connected");
+
       // updates the rpc regularly to fix potential desyncs, keeps connection alive and also to prevent ratelimiting
       // From my research the most mentioned ratelimit is 15 seconds (though inconsistently? a lot of the time rpc can be updated faster, just not all the time)
       // One of the repos which mention 15 seconds is this one: https://github.com/dhinakg/vm-rpc
@@ -66,9 +66,11 @@ class DiscordRpc {
       _timer?.cancel();
       _timer = null;
       artistItem = null;
+
       await FlutterDiscordRPC.instance.clearActivity();
       await FlutterDiscordRPC.instance.disconnect();
       await FlutterDiscordRPC.instance.dispose();
+
       _status = _RpcStatus.stopped;
       _rpcLogger.info("Stopped RPC");
 
@@ -105,17 +107,13 @@ class DiscordRpc {
   /// - doesnt match something like `jellyfin:8096`
   /// - may not work on custom DNS
   /// - may not work for selfhosted VPNs depending on configuration
-  /// 
+  ///
   /// Only Matches:
-  /// 
+  ///
   /// *Note: `.X` values **ARENT** validated.*
+  ///
   /// - `127.X.X.X`
-  /// - `172.16.X.X`
-  /// - `172.19.X.X`
-  /// - `172.20.X.X`
-  /// - `172.29.X.X`
-  /// - `172.30.X.X`
-  /// - `172.31.X.X`
+  /// - `172.16.X.X` - `172.19.X.X` - `172.20.X.X` - `172.29.X.X` - `172.30.X.X` - `172.31.X.X`
   /// - `192.168.X.X`
   static bool isAddressInLocalAddressRange(String address) {
     // regex from https://stackoverflow.com/a/2814102
@@ -128,25 +126,29 @@ class DiscordRpc {
     String? smallImage = null;
     String? largeImage;
 
-    bool forcePublicAddress = false;
-    bool skipUrlGetting = false;
-
     final activeAddress = GetIt.instance<FinampUserHelper>().currentUser!.baseURL;
     final activeAddressIsPrivate = isAddressInLocalAddressRange(activeAddress);
 
+    bool forcePublicAddress = false;
+    bool skipUrlGetting = false;
+
     if (activeAddressIsPrivate) {
-        final publicAddress = GetIt.instance<FinampUserHelper>().currentUser!.publicAddress;
-        final publicAddressIsPrivate = isAddressInLocalAddressRange(publicAddress);
-        if (publicAddressIsPrivate) {
-            skipUrlGetting = true;
-            largeImage = FinampSettingsHelper.finampSettings.rpcIcon.toString();
-        } else {
-            forcePublicAddress = true;
-        }
+      final publicAddress = GetIt.instance<FinampUserHelper>().currentUser!.publicAddress;
+      final publicAddressIsPrivate = isAddressInLocalAddressRange(publicAddress);
+      if (publicAddressIsPrivate) {
+        skipUrlGetting = true;
+        largeImage = FinampSettingsHelper.finampSettings.rpcIcon.toString();
+      } else {
+        forcePublicAddress = true;
+      }
     }
     if (!skipUrlGetting) {
-        smallImage = _jellyfinApiHelper.getImageUrl(item: artistItem!, maxHeight: 128, maxWidth: 128, forcePublicAddress: forcePublicAddress).toString();
-        largeImage = _jellyfinApiHelper.getImageUrl(item: baseItem, maxHeight: 128, maxWidth: 128, forcePublicAddress: forcePublicAddress).toString();
+      smallImage = _jellyfinApiHelper
+          .getImageUrl(item: artistItem!, maxHeight: 128, maxWidth: 128, forcePublicAddress: forcePublicAddress)
+          .toString();
+      largeImage = _jellyfinApiHelper
+          .getImageUrl(item: baseItem, maxHeight: 128, maxWidth: 128, forcePublicAddress: forcePublicAddress)
+          .toString();
     }
 
     return [smallImage, largeImage];
@@ -162,6 +164,7 @@ class DiscordRpc {
     }
 
     final baseItem = BaseItemDto.fromJson(mediaItem!.extras!["itemJson"] as Map<String, dynamic>);
+    final local = GetIt.instance<FinampUserHelper>().currentUser!.isLocal;
     if (artistItem == null || !baseItem.artistItems!.any((v) => v.id == artistItem?.id)) {
       artistItem = await _jellyfinApiHelper.getItemById(baseItem.artistItems!.first.id);
     }
@@ -170,16 +173,11 @@ class DiscordRpc {
     final progress = playbackState.position.inSeconds;
     final duration = mediaItem.duration!.inSeconds;
 
+    final images = _fetchImageUrls(baseItem);
     final start = now - progress;
     final end = now + (duration - progress);
-
     final title = mediaItem.title;
     final artist = mediaItem.artist;
-
-    final images = _fetchImageUrls(baseItem);
-
-    final local = GetIt.instance<FinampUserHelper>().currentUser!.isLocal;
-
     final album = mediaItem.album;
 
     return RPCActivity(
