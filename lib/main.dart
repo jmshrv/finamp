@@ -47,6 +47,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:flutter_user_certificates_android/flutter_user_certificates_android.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -106,6 +107,8 @@ void main() async {
     _migrateDownloadLocations();
     _migrateSortOptions();
     _mainLog.info("Completed applicable migrations");
+    await _trustAndroidUserCerts();
+    _mainLog.info("Trusted Android user certs");
     await _setupFinampUserHelper();
     _mainLog.info("Setup user helper");
     await _setupJellyfinApiData();
@@ -421,6 +424,13 @@ void _migrateSortOptions() {
   if (changed) {
     FinampSettingsHelper.overwriteFinampSettings(finampSettings);
   }
+}
+
+Future<void> _trustAndroidUserCerts() async {
+  // Extend the default security context to trust Android user certificates.
+  // This is a workaround for <https://github.com/dart-lang/sdk/issues/50435>.
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterUserCertificatesAndroid().trustAndroidUserCertificates(SecurityContext.defaultContext);
 }
 
 Future<void> _setupFinampUserHelper() async {
