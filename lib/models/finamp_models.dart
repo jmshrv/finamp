@@ -3321,11 +3321,11 @@ enum DiscordRpcIcon {
       case light:
         return "assets/icon/icon_square_bg-white.png";
       case transparent:
-        return "assets/icon/icon_foreground.png";
+        return "images/finamp_cropped.png";
       case transparentWhite:
         return "assets/icon/icon_white_noborder.png";
       case jellyfinTransparent:
-        return ""; // missing
+        return "images/jellyfin-icon-transparent.png"; // missing
     }
   }
 
