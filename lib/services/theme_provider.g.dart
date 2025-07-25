@@ -149,7 +149,7 @@ class _FinampThemeProviderElement
   ThemeInfo get request => (origin as FinampThemeProvider).request;
 }
 
-String _$themeImageHash() => r'a272002f5ed1a8b542f8c25651c6cf33101616df';
+String _$themeImageHash() => r'04c1d0732624c1a8779243b5cdd17a2ffe1fde4e';
 
 /// See also [themeImage].
 @ProviderFor(themeImage)
