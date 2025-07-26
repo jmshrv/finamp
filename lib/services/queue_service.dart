@@ -498,7 +498,6 @@ class QueueService {
       _queueNextUp.clear();
       _currentTrack = null;
       playlistRemovalsCache.clear();
-      _savedQueueState = SavedQueueState.saving;
 
       List<FinampQueueItem> newItems = [];
       List<int> newLinearOrder = [];
