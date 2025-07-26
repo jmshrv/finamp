@@ -67,7 +67,7 @@ dependencies:
   flutter_user_certificates_android:
     git:
       url: https://github.com/jfly/flutter_user_certificates_android.git
-      ref: "add-trusting"
+      ref: db81e4ff3222a7db1308ed03c4bc3142c0d271d5
   device_info_plus: ^11.3.3
   app_set_id: ^1.2.1
   package_info_plus: ^8.3.0
