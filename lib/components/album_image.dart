@@ -123,7 +123,7 @@ class _AlbumImageState extends ConsumerState<AlbumImage> {
 
               listenable = albumImageProvider(
                 AlbumImageRequest(item: widget.item!, maxWidth: physicalWidth, maxHeight: physicalHeight),
-              ).select((value) => ThemeImage(value.value, widget.item?.blurHash));
+              ).select((value) => ThemeImage(value, widget.item?.blurHash));
             }
           }
 

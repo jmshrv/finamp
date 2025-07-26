@@ -152,13 +152,13 @@ ThemeImage themeImage(Ref ref, ThemeInfo request) {
     if (albumRequestsCache[cacheKey] == null) {
       return ThemeImage.empty();
     }
-    image = ref.watch(albumImageProvider(albumRequestsCache[cacheKey]!)).value;
+    image = ref.watch(albumImageProvider(albumRequestsCache[cacheKey]!));
   } else {
     // Use blurhash if possible, otherwise fetch 100x100
     if (item.blurHash != null) {
       image = BlurHashImage(item.blurHash!);
     } else if (item.imageId != null) {
-      image = ref.watch(albumImageProvider(AlbumImageRequest(item: item, maxHeight: 100, maxWidth: 100))).value;
+      image = ref.watch(albumImageProvider(AlbumImageRequest(item: item, maxHeight: 100, maxWidth: 100)));
     }
   }
   return ThemeImage(image, item.blurHash, useIsolate: request.useIsolate);

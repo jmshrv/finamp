@@ -17,7 +17,7 @@ final currentAlbumImageProvider = Provider<ThemeImage>((ref) {
     BaseItemDto? base = itemToPrecache.baseItem;
     if (base != null) {
       final request = AlbumImageRequest(item: base);
-      var image = ref.watch(albumImageProvider(request)).value;
+      var image = ref.watch(albumImageProvider(request));
       if (image != null) {
         // Cache the returned image
         var stream = image.resolve(const ImageConfiguration(devicePixelRatio: 1.0));
@@ -33,7 +33,7 @@ final currentAlbumImageProvider = Provider<ThemeImage>((ref) {
   final currentTrack = ref.watch(currentTrackProvider).value?.baseItem;
   if (currentTrack != null) {
     final request = AlbumImageRequest(item: currentTrack);
-    return ThemeImage(ref.watch(albumImageProvider(request)).value, currentTrack.blurHash);
+    return ThemeImage(ref.watch(albumImageProvider(request)), currentTrack.blurHash);
   }
   return ThemeImage.empty();
 });
