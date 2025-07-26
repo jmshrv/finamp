@@ -338,6 +338,8 @@ class FinampSettings {
     this.genreFilterPlaylists = DefaultSettings.genreFilterPlaylists,
     this.clearQueueOnStopEvent = DefaultSettings.clearQueueOnStopEvent,
     this.useHighContrastColors = DefaultSettings.useHighContrastColors,
+    // !!! Don't touch this default value, it's supposed to be hard coded to run the migration only once
+    this.hasCompletedDownloadsFileOwnerMigration = true,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -712,6 +714,11 @@ class FinampSettings {
 
   @HiveField(120, defaultValue: DefaultSettings.useHighContrastColors)
   bool useHighContrastColors;
+
+  // !!! Don't touch this default value, it's supposed to be hard coded to run the migration only once
+  // Whether the downloads file owner migration has been completed.
+  @HiveField(121, defaultValue: false)
+  bool hasCompletedDownloadsFileOwnerMigration;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
