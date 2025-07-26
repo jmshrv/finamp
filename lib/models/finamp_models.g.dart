@@ -380,23 +380,13 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
         clearQueueOnStopEvent: fields[117] == null
             ? false
             : fields[117] as bool,
-<<<<<<< HEAD
         useHighContrastColors: fields[120] == null
             ? false
             : fields[120] as bool,
-<<<<<<< HEAD
-<<<<<<< HEAD
         hasCompletedDownloadsFileOwnerMigration: fields[121] == null
             ? false
             : fields[121] as bool,
-=======
-        additionalBaseItemInfo: fields[120] == null
-=======
-        tileAdditionalInfo: fields[121] == null
->>>>>>> 4fda0f52 (apply review suggestions)
-=======
-        tileAdditionalInfoType: fields[121] == null
->>>>>>> 631de3f0 (Fix Fixes :P)
+        tileAdditionalInfoType: fields[122] == null
             ? {
                 TabContentType.tracks: TileAdditionalInfoType.adaptive,
                 TabContentType.albums: TileAdditionalInfoType.adaptive,
@@ -404,18 +394,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
                 TabContentType.playlists: TileAdditionalInfoType.adaptive,
                 TabContentType.genres: TileAdditionalInfoType.adaptive,
               }
-<<<<<<< HEAD
-            : (fields[120] as Map)
-                  .cast<BaseItemDtoType, AdditionalBaseItemInfoTypes>(),
->>>>>>> 0edd799d (Add Settings for Additional Item Info.)
-=======
-            : (fields[121] as Map)
-<<<<<<< HEAD
-                  .cast<TabContentType, AdditionalBaseItemInfoTypes>(),
->>>>>>> 2dc54e3d (Use TabContentType instead of BaseItemDtoType for storing the settings. Auto-generate settings.)
-=======
+            : (fields[122] as Map)
                   .cast<TabContentType, TileAdditionalInfoType>(),
->>>>>>> 4fda0f52 (apply review suggestions)
       )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -427,11 +407,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-<<<<<<< HEAD
-      ..writeByte(115)
-=======
-      ..writeByte(114)
->>>>>>> 0edd799d (Add Settings for Additional Item Info.)
+      ..writeByte(116)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -659,21 +635,11 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(119)
       ..write(obj.syncPlaybackSpeedAndPitch)
       ..writeByte(120)
-<<<<<<< HEAD
       ..write(obj.useHighContrastColors)
       ..writeByte(121)
-<<<<<<< HEAD
-<<<<<<< HEAD
-      ..write(obj.hasCompletedDownloadsFileOwnerMigration);
-=======
-      ..write(obj.additionalBaseItemInfo);
->>>>>>> 0edd799d (Add Settings for Additional Item Info.)
-=======
-      ..write(obj.tileAdditionalInfo);
->>>>>>> 4fda0f52 (apply review suggestions)
-=======
+      ..write(obj.hasCompletedDownloadsFileOwnerMigration)
+      ..writeByte(122)
       ..write(obj.tileAdditionalInfoType);
->>>>>>> 631de3f0 (Fix Fixes :P)
   }
 
   @override

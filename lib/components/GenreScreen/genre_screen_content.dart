@@ -196,6 +196,8 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
     final countsBorderColor = Theme.of(context).colorScheme.onSurface.withOpacity(0.2);
     final countsBackgroundColor = Theme.of(context).colorScheme.surface;
 
+    final tracksShuffleMaxCount = ref.read(finampSettingsProvider.trackShuffleItemCount);
+
     return PaddedCustomScrollview(
       slivers: <Widget>[
         SliverAppBar(
@@ -284,28 +286,28 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
         /// for now as a temporary solution, I've added a single Shuffle Button, as users kept asking about it
         /// it basically is the same as the Shuffle All button on the tracks tab + genrefilter
         /// so the limit defined in the settings applies here as well to prevent crashing
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8, top: 16),
-            child: Center(
-              child: CTAMedium(
-                text: AppLocalizations.of(context)!.shuffleButtonLabel,
-                icon: TablerIcons.arrows_shuffle,
-                onPressed: () async {
-                  try {
-                    await _audioServiceHelper.shuffleAll(
-                      onlyShowFavorites: ref.read(finampSettingsProvider.onlyShowFavorites),
-                      genreFilter: widget.parent,
-                    );
-                  } catch (e) {
-                    GlobalSnackbar.error(e);
-                  }
-                },
-                minWidth: MediaQuery.of(context).size.width * 0.5,
+        if (!isLoading)
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8, top: 16),
+              child: Center(
+                child: CTAMedium(
+                  text: (trackCount == null || trackCount <= tracksShuffleMaxCount)
+                      ? AppLocalizations.of(context)!.shuffleAll
+                      : AppLocalizations.of(context)!.shuffleCountButton(tracksShuffleMaxCount),
+                  icon: TablerIcons.arrows_shuffle,
+                  onPressed: () async {
+                    try {
+                      await _audioServiceHelper.shuffleAll(onlyShowFavorites: false, genreFilter: widget.parent);
+                    } catch (e) {
+                      GlobalSnackbar.error(e);
+                    }
+                  },
+                  minWidth: MediaQuery.of(context).size.width * 0.5,
+                ),
               ),
             ),
           ),
-        ),
         if (!isLoading)
           ...genreItemSectionsOrder.map((type) {
             switch (type) {

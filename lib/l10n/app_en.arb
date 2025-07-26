@@ -424,6 +424,14 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Shuffle",
   "@shuffleButtonLabel": {},
+  "shuffleCountButton": "Shuffle ({count,plural,=1{{count} Track} other{{count} Tracks}})",
+  "@shuffleCountButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "playbackActionPagePlay": "Play",
   "@playbackActionPagePlay": {
     "description": "Label for the playback action page that contains all actions related to playing in order"
@@ -562,7 +570,7 @@
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "shuffleAllTrackCount": "Shuffle All Track Count",
   "@shuffleAllTrackCount": {},
-  "shuffleAllTrackCountSubtitle": "Amount of tracks to load when using the shuffle all tracks button.",
+  "shuffleAllTrackCountSubtitle": "Amount of tracks to load when using the shuffle all button on the tracks tab or genre screen.",
   "@shuffleAllTrackCountSubtitle": {},
   "viewType": "View Type",
   "@viewType": {},
