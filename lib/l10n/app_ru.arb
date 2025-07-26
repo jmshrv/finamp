@@ -478,7 +478,7 @@
   "@aboutThanks": {
     "description": "Thank you message shown in the about screen."
   },
-  "loginFlowWelcomeHeading": "Добро пожаловать {styledName}",
+  "loginFlowWelcomeHeading": "Добро пожаловать в {styledName}",
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
@@ -2627,5 +2627,7 @@
   "useHighContrastColorsSubtitle": "Использовать цвета с высокой контрастностью для лучшей читаемости.",
   "@useHighContrastColorsSubtitle": {
     "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
-  }
+  },
+  "logoutButtonSubtitle": "Вход в аккаунт другого сервера удалит скачанные файлы",
+  "@logoutButtonSubtitle": {}
 }
