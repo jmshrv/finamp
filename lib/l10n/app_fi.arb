@@ -2627,5 +2627,7 @@
   "useHighContrastColorsSubtitle": "Käytä korkean kontrastin dynaamisia värejä saadaksesi selkeämmän näkymän.",
   "@useHighContrastColorsSubtitle": {
     "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
-  }
+  },
+  "logoutButtonSubtitle": "Kirjautuminen eri palvelimelle aiheuttaa ladattujen tiedostojen poistamisen",
+  "@logoutButtonSubtitle": {}
 }
