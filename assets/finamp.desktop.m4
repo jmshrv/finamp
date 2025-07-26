@@ -8,4 +8,4 @@ Exec=__INSTALL_PATH__/finamp
 Terminal=false
 Categories=AudioVideo;Audio;Player;Music;
 Comment=An open source Jellyfin music player
-MimeType=x-scheme-handler/finamp; # necessary so that the flutter app can open custom urls of type finamp://...
+MimeType=x-scheme-handler/finamp;
