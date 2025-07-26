@@ -622,7 +622,7 @@ packages:
     description:
       path: "."
       ref: add-trusting
-      resolved-ref: e122aad81ddbd9bf22623f125389498570de2a25
+      resolved-ref: db81e4ff3222a7db1308ed03c4bc3142c0d271d5
       url: "https://github.com/jfly/flutter_user_certificates_android.git"
     source: git
     version: "0.0.1"
