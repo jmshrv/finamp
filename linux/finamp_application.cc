@@ -17,6 +17,15 @@ G_DEFINE_TYPE(FinampApplication, finamp_application, GTK_TYPE_APPLICATION)
 // Implements GApplication::activate.
 static void finamp_application_activate(GApplication* application) {
   FinampApplication* self = FINAMP_APPLICATION(application);
+
+  // handle link handling
+  GList* windows = gtk_application_get_windows(GTK_APPLICATION(application));
+  if (windows) {
+    gtk_window_present(GTK_WINDOW(windows->data));
+    // If there is already a window, we just present it and do not create a new one.
+    return;
+  }
+
   GtkWindow* window =
       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
 
@@ -77,7 +86,7 @@ static gboolean finamp_application_local_command_line(GApplication* application,
   g_application_activate(application);
   *exit_status = 0;
 
-  return TRUE;
+  return FALSE; // We handled the command line arguments, so we return FALSE to indicate that we don't want the default handling.
 }
 
 // Implements GObject::dispose.
@@ -98,6 +107,6 @@ static void finamp_application_init(FinampApplication* self) {}
 FinampApplication* finamp_application_new() {
   return FINAMP_APPLICATION(g_object_new(finamp_application_get_type(),
                                      "application-id", APPLICATION_ID,
-                                     "flags", G_APPLICATION_NON_UNIQUE,
+                                     "flags", G_APPLICATION_HANDLES_COMMAND_LINE | G_APPLICATION_HANDLES_OPEN,
                                      nullptr));
 }

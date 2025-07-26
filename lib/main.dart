@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:app_links/app_links.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:background_downloader/background_downloader.dart';
@@ -453,10 +454,31 @@ class Finamp extends StatefulWidget {
 
 class _FinampState extends State<Finamp> with WindowListener {
   static final Logger windowManagerLogger = Logger("WindowManager");
+  static final Logger linkHandlingLogger = Logger("LinkHandling");
+
+  StreamSubscription<Uri>? _uriLinkSubscription;
 
   @override
   void initState() {
     super.initState();
+    // Subscribe to all events (initial link and further)
+    _uriLinkSubscription = AppLinks().uriLinkStream.listen((uri) async {
+      linkHandlingLogger.info("Received link: $uri");
+      int attempts = 0;
+      do {
+        var context = GlobalSnackbar.materialAppNavigatorKey.currentContext;
+        if (context != null) {
+          if (uri.host == "internal") {
+            await Navigator.of(context).pushNamed(uri.path);
+          }
+          break;
+        }
+        // Wait for the context to be available
+        await Future<void>.delayed(const Duration(milliseconds: 250));
+      } while (++attempts < 10);
+    });
+
+    // If the app is running on desktop, we add a listener to the window manager
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       WindowManager.instance.addListener(this);
       // windowManager.setPreventClose(true); //!!! destroying the window manager instance doesn't seem to work on Windows release builds, the app just freezes instead
@@ -465,6 +487,8 @@ class _FinampState extends State<Finamp> with WindowListener {
 
   @override
   void dispose() {
+    _uriLinkSubscription?.cancel();
+
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       WindowManager.instance.removeListener(this);
     }
