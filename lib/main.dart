@@ -25,6 +25,7 @@ import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/playback_reporting_settings_screen.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
+import 'package:finamp/services/album_image_provider.dart';
 import 'package:finamp/services/android_auto_helper.dart';
 import 'package:finamp/services/audio_service_smtc.dart';
 import 'package:finamp/services/data_source_service.dart';
@@ -289,6 +290,8 @@ Future<void> _setupProviders() async {
 
   DataSourceService.create();
   AutoOffline.startWatching();
+
+  fallbackImageFile = await getImageFile("images/placeholder-art.png");
 }
 
 Future<void> _setupOSIntegration() async {

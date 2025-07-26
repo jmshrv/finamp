@@ -1,12 +1,16 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'dart:async';
 
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../models/jellyfin_models.dart';
 import 'downloads_service.dart';
@@ -14,6 +18,8 @@ import 'finamp_settings_helper.dart';
 import 'jellyfin_api_helper.dart';
 
 final albumImageProviderLogger = Logger("AlbumImageProvider");
+/// This file is used as a fallback if no image is available for an album or track. It needs to be resolved asynchronously, so this is done in `_setupProviders` in main.dart
+late File fallbackImageFile;
 
 class AlbumImageRequest {
   const AlbumImageRequest({required this.item, this.maxWidth, this.maxHeight}) : super();
@@ -58,17 +64,17 @@ final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest> albumImagePro
       });
 
       if (request.item.imageId == null) {
-        return null;
+        return FileImage(fallbackImageFile, scale: 0.25);
       }
 
       final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-      final isardownloader = GetIt.instance<DownloadsService>();
+      final isarDownloader = GetIt.instance<DownloadsService>();
 
-      DownloadItem? downloadedImage = isardownloader.getImageDownload(item: request.item);
+      DownloadItem? downloadedImage = isarDownloader.getImageDownload(item: request.item);
 
       if (downloadedImage?.file == null) {
         if (ref.watch(finampSettingsProvider.isOffline)) {
-          return null;
+          return FileImage(fallbackImageFile, scale: 0.25);
         }
 
         Uri? imageUrl = jellyfinApiHelper.getImageUrl(
@@ -78,7 +84,7 @@ final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest> albumImagePro
         );
 
         if (imageUrl == null) {
-          return null;
+          return getResizedImage(FileImage(fallbackImageFile), request);
         }
 
         String? key;
@@ -91,21 +97,47 @@ final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest> albumImagePro
 
       // downloads are already de-dupped by blurHash and do not need CachedImage
       // Allow drawing albums up to 4X intrinsic size by setting scale
-      ImageProvider out = FileImage(downloadedImage!.file!, scale: 0.25);
-      if (request.maxWidth != null && request.maxHeight != null) {
-        // Limit memory cached image size to twice displayed size
-        // This helps keep cache usage by fileImages in check
-        // Caching smaller at 2X size results in blurriness comparable to
-        // NetworkImages fetched with display size
-        out = ResizeImage(
-          out,
-          width: request.maxWidth! * 2,
-          height: request.maxHeight! * 2,
-          policy: ResizeImagePolicy.fit,
-        );
-      }
+      ImageProvider out = getResizedImage(FileImage(downloadedImage!.file!, scale: 0.25), request);
+
       return out;
     });
+
+ImageProvider getResizedImage(ImageProvider image, AlbumImageRequest request) {
+  if (request.maxWidth != null && request.maxHeight != null) {
+    // Limit memory cached image size to twice displayed size
+    // This helps keep cache usage by fileImages in check
+    // Caching smaller at 2X size results in blurriness comparable to
+    // NetworkImages fetched with display size
+    return ResizeImage(
+      image,
+      width: request.maxWidth! * 2,
+      height: request.maxHeight! * 2,
+      policy: ResizeImagePolicy.fit,
+    );
+  } else {
+    return image;
+  }
+}
+
+Future<File> getImageFile(String imagePath) async {
+  final Directory tempDir = await getTemporaryDirectory();
+  final String tempPath = tempDir.path;
+  final String fileName = imagePath.split('/').last;
+
+  // test if file already exists
+  final File file = File('$tempPath/$fileName');
+  if (await file.existsSync()) {
+    return file;
+  }
+
+  // if not, load asset and write to file
+  final ByteData byteData = await rootBundle.load(imagePath);
+  final Uint8List bytes = byteData.buffer.asUint8List();
+
+  await file.writeAsBytes(bytes);
+
+  return file;
+}
 
 class CachedImage extends ImageProvider<CachedImage> {
   CachedImage(ImageProvider base, this.cacheKey) : _base = base;
