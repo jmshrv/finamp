@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +18,8 @@ import 'finamp_settings_helper.dart';
 import 'jellyfin_api_helper.dart';
 
 final albumImageProviderLogger = Logger("AlbumImageProvider");
+/// This file is used as a fallback if no image is available for an album or track. It needs to be resolved asynchronously, so this is done in `_setupProviders` in main.dart
+late File fallbackImageFile;
 
 class AlbumImageRequest {
   const AlbumImageRequest({required this.item, this.maxWidth, this.maxHeight}) : super();
@@ -43,8 +44,8 @@ class AlbumImageRequest {
 
 final Map<String?, AlbumImageRequest> albumRequestsCache = {};
 
-final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest> albumImageProvider = FutureProvider.autoDispose
-    .family<ImageProvider?, AlbumImageRequest>((ref, request) async {
+final AutoDisposeProviderFamily<ImageProvider?, AlbumImageRequest> albumImageProvider = Provider.autoDispose
+    .family<ImageProvider?, AlbumImageRequest>((ref, request) {
       String? requestCacheKey = request.item.blurHash ?? request.item.imageId;
 
       if (albumRequestsCache.containsKey(requestCacheKey)) {
@@ -63,7 +64,7 @@ final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest> albumIm
       });
 
       if (request.item.imageId == null) {
-        return FileImage(await getFallbackImageFile());
+        return FileImage(fallbackImageFile, scale: 0.25);
       }
 
       final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
@@ -73,7 +74,7 @@ final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest> albumIm
 
       if (downloadedImage?.file == null) {
         if (ref.watch(finampSettingsProvider.isOffline)) {
-          return FileImage(await getFallbackImageFile());
+          return FileImage(fallbackImageFile, scale: 0.25);
         }
 
         Uri? imageUrl = jellyfinApiHelper.getImageUrl(
@@ -83,7 +84,7 @@ final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest> albumIm
         );
 
         if (imageUrl == null) {
-          return FileImage(await getFallbackImageFile());
+          return getResizedImage(FileImage(fallbackImageFile), request);
         }
 
         String? key;
@@ -96,24 +97,26 @@ final AutoDisposeFutureProviderFamily<ImageProvider?, AlbumImageRequest> albumIm
 
       // downloads are already de-dupped by blurHash and do not need CachedImage
       // Allow drawing albums up to 4X intrinsic size by setting scale
-      ImageProvider out = FileImage(downloadedImage!.file!, scale: 0.25);
-      if (request.maxWidth != null && request.maxHeight != null) {
-        // Limit memory cached image size to twice displayed size
-        // This helps keep cache usage by fileImages in check
-        // Caching smaller at 2X size results in blurriness comparable to
-        // NetworkImages fetched with display size
-        out = ResizeImage(
-          out,
-          width: request.maxWidth! * 2,
-          height: request.maxHeight! * 2,
-          policy: ResizeImagePolicy.fit,
-        );
-      }
+      ImageProvider out = getResizedImage(FileImage(downloadedImage!.file!, scale: 0.25), request);
+
       return out;
     });
 
-Future<File> getFallbackImageFile() async {
-  return await getImageFile("images/placeholder-art.png");
+ImageProvider getResizedImage(ImageProvider image, AlbumImageRequest request) {
+  if (request.maxWidth != null && request.maxHeight != null) {
+    // Limit memory cached image size to twice displayed size
+    // This helps keep cache usage by fileImages in check
+    // Caching smaller at 2X size results in blurriness comparable to
+    // NetworkImages fetched with display size
+    return ResizeImage(
+      image,
+      width: request.maxWidth! * 2,
+      height: request.maxHeight! * 2,
+      policy: ResizeImagePolicy.fit,
+    );
+  } else {
+    return image;
+  }
 }
 
 Future<File> getImageFile(String imagePath) async {
