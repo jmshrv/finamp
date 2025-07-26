@@ -2584,7 +2584,7 @@
   "@quickConnectAuthorizationMenuInputLabel": {
     "description": "Label for the quick connect code input, shown below the input field"
   },
-  "quickConnectAuthorizationMenuStateSubtitleIdle": "請輸入或貼上下方的代碼",
+  "quickConnectAuthorizationMenuStateSubtitleIdle": "請在下方欄位輸入或貼上代碼",
   "@quickConnectAuthorizationMenuStateSubtitleIdle": {
     "description": "Subtitle for the quick connect authorization menu state info (above the input field) while the code hasn't been submitted yet"
   },
@@ -2608,7 +2608,7 @@
   "@quickConnectAuthorizationMenuDescription": {
     "description": "Description for the quick connect authorization menu, shown at the bottom"
   },
-  "logoutButtonSubtitle": "登入另一個伺服器時，現有下載內容將被清除",
+  "logoutButtonSubtitle": "登入新的伺服器時，原本下載的檔案將被刪除",
   "@logoutButtonSubtitle": {},
   "createPlaylistFromCurrentQueue": "將播放佇列儲存為播放清單",
   "@createPlaylistFromCurrentQueue": {
@@ -2622,7 +2622,7 @@
   "@useHighContrastColorsTitle": {
     "description": "Title for the setting that controls if high contrast colors are used throughout the app"
   },
-  "useHighContrastColorsSubtitle": "使用高對比動態色彩以提升可視性。",
+  "useHighContrastColorsSubtitle": "使用高對比且可自動調整的色彩，以提升可視性。",
   "@useHighContrastColorsSubtitle": {
     "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
   }
