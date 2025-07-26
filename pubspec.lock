@@ -812,8 +812,8 @@ packages:
     dependency: "direct dev"
     description:
       path: "packages/isar_generator"
-      ref: ad574f60ed6f39d2995cd16fc7dc3de9a646ef30
-      resolved-ref: ad574f60ed6f39d2995cd16fc7dc3de9a646ef30
+      ref: f070a067378c215b9212a2a22ea593293671c9c9
+      resolved-ref: f070a067378c215b9212a2a22ea593293671c9c9
       url: "https://github.com/callumw-k/isar.git"
     source: git
     version: "3.1.8"
