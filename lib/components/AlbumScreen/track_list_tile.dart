@@ -64,11 +64,8 @@ class TrackListTile extends ConsumerWidget {
     /// Whether we are in the tracks tab, as opposed to a playlist/album
     this.isTrack = false,
     this.onRemoveFromList,
-    this.showPlayCount = false,
+    this.adaptiveAdditionalInfoSortBy,
     this.forceAlbumArtists = false,
-    this.showReleaseDate = false,
-    this.showDateAdded = false,
-    this.showDateLastPlayed = false,
 
     /// Whether this widget is being displayed in a playlist. If true, will show
     /// the remove from playlist button.
@@ -90,10 +87,7 @@ class TrackListTile extends ConsumerWidget {
   final BaseItemDto? parentItem;
   final VoidCallback? onRemoveFromList;
   final bool forceAlbumArtists;
-  final bool showPlayCount;
-  final bool showReleaseDate;
-  final bool showDateAdded;
-  final bool showDateLastPlayed;
+  final SortBy? adaptiveAdditionalInfoSortBy;
   final bool isInPlaylist;
   final bool isOnArtistScreen;
   final bool isOnGenreScreen;
@@ -319,10 +313,7 @@ class TrackListTile extends ConsumerWidget {
       showCover: showCover,
       showArtists: (forceAlbumArtists || parentItem?.isArtist != true),
       forceAlbumArtists: forceAlbumArtists,
-      showReleaseDate: showReleaseDate,
-      showDateAdded: showDateAdded,
-      showDateLastPlayed: showDateLastPlayed,
-      showPlayCount: showPlayCount,
+      adaptiveAdditionalInfoSortBy: adaptiveAdditionalInfoSortBy,
       isInPlaylist: isInPlaylist,
       allowReorder: false,
       allowDismiss: allowDismiss,
@@ -403,10 +394,7 @@ class TrackListItem extends ConsumerStatefulWidget {
   final bool showCover;
   final bool showArtists;
   final bool forceAlbumArtists;
-  final bool showPlayCount;
-  final bool showReleaseDate;
-  final bool showDateAdded;
-  final bool showDateLastPlayed;
+  final SortBy? adaptiveAdditionalInfoSortBy;
   final bool isInPlaylist;
   final bool allowReorder;
   final bool allowDismiss;
@@ -433,10 +421,7 @@ class TrackListItem extends ConsumerStatefulWidget {
     this.showCover = true,
     this.showArtists = true,
     this.forceAlbumArtists = false,
-    this.showPlayCount = false,
-    this.showReleaseDate = false,
-    this.showDateAdded = false,
-    this.showDateLastPlayed = false,
+    this.adaptiveAdditionalInfoSortBy,
     this.highlightCurrentTrack = true,
     this.onRemoveFromList,
     this.leftSwipeBackground = const SizedBox.shrink(),
@@ -484,10 +469,7 @@ class TrackListItemState extends ConsumerState<TrackListItem> with SingleTickerP
           showArtists: widget.showArtists,
           forceAlbumArtists: widget.forceAlbumArtists,
           showAlbum: showAlbum,
-          showPlayCount: widget.showPlayCount,
-          showReleaseDate: widget.showReleaseDate,
-          showDateAdded: widget.showDateAdded,
-          showDateLastPlayed: widget.showDateLastPlayed,
+          adaptiveAdditionalInfoSortBy: widget.adaptiveAdditionalInfoSortBy,
           isCurrentTrack: isCurrentlyPlaying,
           highlightCurrentTrack: widget.highlightCurrentTrack,
           allowReorder: widget.allowReorder,
@@ -595,10 +577,7 @@ class TrackListItemTile extends ConsumerWidget {
     this.showArtists = true,
     this.forceAlbumArtists = false,
     this.showAlbum = true,
-    this.showPlayCount = false,
-    this.showReleaseDate = false,
-    this.showDateAdded = false,
-    this.showDateLastPlayed = false,
+    this.adaptiveAdditionalInfoSortBy,
     this.highlightCurrentTrack = true,
   });
 
@@ -612,10 +591,7 @@ class TrackListItemTile extends ConsumerWidget {
   final bool showArtists;
   final bool forceAlbumArtists;
   final bool showAlbum;
-  final bool showPlayCount;
-  final bool showReleaseDate;
-  final bool showDateAdded;
-  final bool showDateLastPlayed;
+  final SortBy? adaptiveAdditionalInfoSortBy;
   final bool highlightCurrentTrack;
   final void Function() onTap;
 
@@ -626,6 +602,29 @@ class TrackListItemTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final highlightTrack = isCurrentTrack && highlightCurrentTrack;
     final isOnDesktop = Platform.isMacOS || Platform.isWindows || Platform.isLinux;
+    final tileAdditionalInfoType =
+        ref.watch(finampSettingsProvider.tileAdditionalInfoType(TabContentType.tracks)) ??
+        TileAdditionalInfoType.adaptive;
+
+    bool showPlayCount = tileAdditionalInfoType == TileAdditionalInfoType.playCount;
+    bool showReleaseDate = tileAdditionalInfoType == TileAdditionalInfoType.dateReleased;
+    bool showDateAdded = tileAdditionalInfoType == TileAdditionalInfoType.dateAdded;
+    bool showDateLastPlayed = tileAdditionalInfoType == TileAdditionalInfoType.dateLastPlayed;
+
+    if (tileAdditionalInfoType == TileAdditionalInfoType.adaptive) {
+      showPlayCount = showPlayCount || adaptiveAdditionalInfoSortBy == SortBy.playCount;
+      showReleaseDate = showReleaseDate || adaptiveAdditionalInfoSortBy == SortBy.premiereDate;
+      showDateAdded = showDateAdded || adaptiveAdditionalInfoSortBy == SortBy.dateCreated;
+      showDateLastPlayed = showDateLastPlayed || adaptiveAdditionalInfoSortBy == SortBy.datePlayed;
+    }
+
+    if (showPlayCount || showDateLastPlayed) {
+      if (ref.watch(finampSettingsProvider.isOffline)) {
+        showPlayCount = false;
+        showDateLastPlayed = false;
+      }
+    }
+
     final bool secondRowNeeded =
         showArtists || showAlbum || showPlayCount || showReleaseDate || showDateAdded || showDateLastPlayed;
 

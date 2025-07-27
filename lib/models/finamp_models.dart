@@ -219,6 +219,13 @@ class DefaultSettings {
   static const genreFilterPlaylists = false;
   static const clearQueueOnStopEvent = false;
   static const useHighContrastColors = false;
+  static const tileAdditionalInfoType = {
+    TabContentType.tracks: TileAdditionalInfoType.adaptive,
+    TabContentType.albums: TileAdditionalInfoType.adaptive,
+    TabContentType.artists: TileAdditionalInfoType.adaptive,
+    TabContentType.playlists: TileAdditionalInfoType.adaptive,
+    TabContentType.genres: TileAdditionalInfoType.adaptive,
+  };
 }
 
 @HiveType(typeId: 28)
@@ -340,6 +347,7 @@ class FinampSettings {
     this.useHighContrastColors = DefaultSettings.useHighContrastColors,
     // !!! Don't touch this default value, it's supposed to be hard coded to run the migration only once
     this.hasCompletedDownloadsFileOwnerMigration = true,
+    this.tileAdditionalInfoType = DefaultSettings.tileAdditionalInfoType,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -719,6 +727,10 @@ class FinampSettings {
   // Whether the downloads file owner migration has been completed.
   @HiveField(121, defaultValue: false)
   bool hasCompletedDownloadsFileOwnerMigration;
+
+  @HiveField(122, defaultValue: DefaultSettings.tileAdditionalInfoType)
+  @SettingsHelperMap("tabContentType", "tileAdditionalInfoType")
+  Map<TabContentType, TileAdditionalInfoType> tileAdditionalInfoType;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -3271,4 +3283,67 @@ enum SleepTimerType {
 
   @HiveField(1)
   tracks,
+}
+
+@HiveType(typeId: 100)
+enum TileAdditionalInfoType {
+  @HiveField(0)
+  adaptive,
+  @HiveField(1)
+  dateAdded,
+  @HiveField(2)
+  dateReleased,
+  @HiveField(3)
+  duration,
+  @HiveField(4)
+  playCount,
+  @HiveField(5)
+  dateLastPlayed,
+  @HiveField(6)
+  none;
+
+  /// Human-readable version of this enum.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(TileAdditionalInfoType additionalInfoType) {
+    switch (additionalInfoType) {
+      case TileAdditionalInfoType.adaptive:
+        return "Adaptive";
+      case TileAdditionalInfoType.dateAdded:
+        return "Date Added";
+      case TileAdditionalInfoType.dateReleased:
+        return "Release Date";
+      case TileAdditionalInfoType.duration:
+        return "Duration";
+      case TileAdditionalInfoType.playCount:
+        return "Play Count";
+      case TileAdditionalInfoType.dateLastPlayed:
+        return "Date Last Played";
+      case TileAdditionalInfoType.none:
+        return "None";
+    }
+  }
+
+  String _humanReadableLocalisedName(TileAdditionalInfoType additionalInfoType, BuildContext context) {
+    switch (additionalInfoType) {
+      case TileAdditionalInfoType.adaptive:
+        return AppLocalizations.of(context)!.adaptive;
+      case TileAdditionalInfoType.dateAdded:
+        return AppLocalizations.of(context)!.dateAdded;
+      case TileAdditionalInfoType.dateReleased:
+        return AppLocalizations.of(context)!.premiereDate;
+      case TileAdditionalInfoType.duration:
+        return AppLocalizations.of(context)!.duration;
+      case TileAdditionalInfoType.playCount:
+        return AppLocalizations.of(context)!.playCount;
+      case TileAdditionalInfoType.dateLastPlayed:
+        return AppLocalizations.of(context)!.datePlayed;
+      case TileAdditionalInfoType.none:
+        return AppLocalizations.of(context)!.none;
+    }
+  }
 }
