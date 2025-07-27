@@ -43,11 +43,11 @@ class DiscordRpc {
     if (_status == _RpcStatus.stopped) {
       _status = _RpcStatus.transition;
       _rpcLogger.info("Starting RPC");
-      
+
       try {
         await FlutterDiscordRPC.instance.connect(autoRetry: true, retryDelay: Duration(seconds: 3));
         await FlutterDiscordRPC.instance.clearActivity();
-      } catch(e) {
+      } catch (e) {
         _rpcLogger.severe("Failed to Start", e);
         _targetStatus = _RpcStatus.stopped;
         await stop();
@@ -84,7 +84,7 @@ class DiscordRpc {
       _timer?.cancel();
       _timer = null;
       artistItem = null;
-      
+
       try {
         await FlutterDiscordRPC.instance.clearActivity();
         await FlutterDiscordRPC.instance.disconnect();
@@ -141,7 +141,7 @@ class DiscordRpc {
     final host = Uri.parse(address).host;
     final isPrivateIp = regex.hasMatch(host);
     final isPrivateDomain = host.split('.').length == 1; // match something like `jellyfin:8096`
-    return isPrivateIp || isPrivateDomain; 
+    return isPrivateIp || isPrivateDomain;
   }
 
   static (String?, String) _fetchImageUrls(BaseItemDto baseItem) {
@@ -160,7 +160,7 @@ class DiscordRpc {
       forcePublicAddress = true;
       skipUrlGetting = publicAddressIsPrivate;
     }
-    
+
     if (!skipUrlGetting) {
       smallImage = _jellyfinApiHelper
           .getImageUrl(item: artistItem!, maxHeight: 128, maxWidth: 128, forcePublicAddress: forcePublicAddress)
