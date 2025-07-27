@@ -1010,6 +1010,14 @@ extension FinampSetters on FinampSettingsHelper {
     ).put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setAutoExpandPlayerScreen(bool newAutoExpandPlayerScreen) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.autoExpandPlayerScreen = newAutoExpandPlayerScreen;
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -1377,6 +1385,8 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       );
   ProviderListenable<bool> get useHighContrastColors => finampSettingsProvider
       .select((value) => value.requireValue.useHighContrastColors);
+  ProviderListenable<bool> get autoExpandPlayerScreen => finampSettingsProvider
+      .select((value) => value.requireValue.autoExpandPlayerScreen);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider.select(
         (value) => value.requireValue.downloadTranscodingProfile,

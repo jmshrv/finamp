@@ -50,7 +50,8 @@ class FinampUser {
   @Name("baseUrl")
   String publicAddress;
 
-  String get baseURL => isLocal && preferLocalNetwork ? localAddress : publicAddress;
+  String get baseURL =>
+      isLocal && preferLocalNetwork ? localAddress : publicAddress;
 
   @HiveField(2)
   String accessToken;
@@ -61,7 +62,8 @@ class FinampUser {
   BaseItemId? currentViewId;
   @Name("currentViewId")
   String? get isarCurrentViewId => currentViewId?.raw;
-  set isarCurrentViewId(String? id) => currentViewId = id == null ? null : BaseItemId(id);
+  set isarCurrentViewId(String? id) =>
+      currentViewId = id == null ? null : BaseItemId(id);
   @ignore
   @HiveField(5)
   Map<BaseItemId, BaseItemDto> views;
@@ -78,14 +80,20 @@ class FinampUser {
   // We only need 1 user, the current user
   final Id isarId = 0;
   String get isarViews => jsonEncode(views);
-  set isarViews(String json) => views = (jsonDecode(json) as Map<BaseItemId, dynamic>).map(
-    (k, v) => MapEntry(k, BaseItemDto.fromJson(v as Map<String, dynamic>)),
-  );
+  set isarViews(String json) =>
+      views = (jsonDecode(json) as Map<BaseItemId, dynamic>).map(
+        (k, v) => MapEntry(k, BaseItemDto.fromJson(v as Map<String, dynamic>)),
+      );
 
   @ignore
   BaseItemDto? get currentView => views[currentViewId];
 
-  void update({bool? newIsLocal, String? newLocalAddress, String? newPublicAddress, bool? newPreferLocalNetwork}) {
+  void update({
+    bool? newIsLocal,
+    String? newLocalAddress,
+    String? newPublicAddress,
+    bool? newPreferLocalNetwork,
+  }) {
     isLocal = newIsLocal ?? isLocal;
     localAddress = newLocalAddress ?? localAddress;
     publicAddress = newPublicAddress ?? publicAddress;
@@ -123,6 +131,7 @@ class DefaultSettings {
   static const showArtistsTracksSection = true;
   static const disableGesture = false;
   static const showFastScroller = true;
+  static const autoExpandPlayerScreen = false;
   static const bufferDisableSizeConstraints = false;
   static const bufferDurationSeconds = 600;
   static const bufferSizeMegabytes = 50;
@@ -164,7 +173,8 @@ class DefaultSettings {
   static const keepScreenOnOption = KeepScreenOnOption.whileLyrics;
   static const keepScreenOnWhilePluggedIn = true;
   static const hasDownloadedPlaylistInfo = false;
-  static const transcodingStreamingFormat = FinampTranscodingStreamingFormat.aacFragmentedMp4;
+  static const transcodingStreamingFormat =
+      FinampTranscodingStreamingFormat.aacFragmentedMp4;
   static const featureChipsConfiguration = FinampFeatureChipsConfiguration(
     enabled: true,
     features: [
@@ -202,16 +212,22 @@ class DefaultSettings {
   static const preferLocalNetwork = false;
   static const localNetworkAddress = "http://0.0.0.0:8096";
   static const autoReloadQueue = false;
-  static const genreCuratedItemSelectionTypeTracks = CuratedItemSelectionType.mostPlayed;
-  static const genreCuratedItemSelectionTypeAlbums = CuratedItemSelectionType.latestReleases;
-  static const genreCuratedItemSelectionTypeArtists = CuratedItemSelectionType.favorites;
+  static const genreCuratedItemSelectionTypeTracks =
+      CuratedItemSelectionType.mostPlayed;
+  static const genreCuratedItemSelectionTypeAlbums =
+      CuratedItemSelectionType.latestReleases;
+  static const genreCuratedItemSelectionTypeArtists =
+      CuratedItemSelectionType.favorites;
   static const genreItemSectionsOrder = GenreItemSections.values;
   static const genreFilterArtistScreens = true;
   static const genreListsInheritSorting = true;
-  static const genreItemSectionFilterChipOrder = CuratedItemSelectionType.values;
+  static const genreItemSectionFilterChipOrder =
+      CuratedItemSelectionType.values;
   static const applyFilterOnGenreChipTap = false;
-  static const artistCuratedItemSelectionType = CuratedItemSelectionType.mostPlayed;
-  static const artistItemSectionFilterChipOrder = CuratedItemSelectionType.values;
+  static const artistCuratedItemSelectionType =
+      CuratedItemSelectionType.mostPlayed;
+  static const artistItemSectionFilterChipOrder =
+      CuratedItemSelectionType.values;
   static const artistItemSectionsOrder = ArtistItemSections.values;
   static const autoSwitchItemCurationType = true;
   static const playlistTracksSortBy = SortBy.defaultOrder;
@@ -231,25 +247,31 @@ class FinampSettings {
     // default values. create() is used to return a FinampSettings with
     // downloadLocations.
     required this.downloadLocations,
-    this.androidStopForegroundOnPause = DefaultSettings.androidStopForegroundOnPause,
+    this.androidStopForegroundOnPause =
+        DefaultSettings.androidStopForegroundOnPause,
     required this.showTabs,
     this.onlyShowFavorites = DefaultSettings.onlyShowFavorites,
     this.sortBy = SortBy.sortName,
     this.sortOrder = SortOrder.ascending,
     this.trackShuffleItemCount = DefaultSettings.trackShuffleItemCount,
     this.volumeNormalizationActive = DefaultSettings.volumeNormalizationActive,
-    this.volumeNormalizationIOSBaseGain = DefaultSettings.volumeNormalizationIOSBaseGain,
+    this.volumeNormalizationIOSBaseGain =
+        DefaultSettings.volumeNormalizationIOSBaseGain,
     this.volumeNormalizationMode = DefaultSettings.volumeNormalizationMode,
     this.contentViewType = DefaultSettings.contentViewType,
     this.playbackSpeedVisibility = DefaultSettings.playbackSpeedVisibility,
-    this.contentGridViewCrossAxisCountPortrait = DefaultSettings.contentGridViewCrossAxisCountPortrait,
-    this.contentGridViewCrossAxisCountLandscape = DefaultSettings.contentGridViewCrossAxisCountLandscape,
+    this.contentGridViewCrossAxisCountPortrait =
+        DefaultSettings.contentGridViewCrossAxisCountPortrait,
+    this.contentGridViewCrossAxisCountLandscape =
+        DefaultSettings.contentGridViewCrossAxisCountLandscape,
     this.showTextOnGridView = DefaultSettings.showTextOnGridView,
     required this.downloadLocationsMap,
     this.useCoverAsBackground = DefaultSettings.useCoverAsBackground,
-    this.playerScreenCoverMinimumPadding = DefaultSettings.playerScreenCoverMinimumPadding,
+    this.playerScreenCoverMinimumPadding =
+        DefaultSettings.playerScreenCoverMinimumPadding,
     this.showArtistsTracksSection = DefaultSettings.showArtistsTracksSection,
-    this.bufferDisableSizeConstraints = DefaultSettings.bufferDisableSizeConstraints,
+    this.bufferDisableSizeConstraints =
+        DefaultSettings.bufferDisableSizeConstraints,
     this.bufferDurationSeconds = DefaultSettings.bufferDurationSeconds,
     this.bufferSizeMegabytes = DefaultSettings.bufferSizeMegabytes,
     required this.tabSortBy,
@@ -259,12 +281,14 @@ class FinampSettings {
     this.playbackPitch = DefaultSettings.playbackPitch,
     this.syncPlaybackSpeedAndPitch = DefaultSettings.syncPlaybackSpeedAndPitch,
     this.tabOrder = DefaultSettings.tabOrder,
-    this.autoloadLastQueueOnStartup = DefaultSettings.autoLoadLastQueueOnStartup,
+    this.autoloadLastQueueOnStartup =
+        DefaultSettings.autoLoadLastQueueOnStartup,
     this.hasCompletedDownloadsServiceMigration =
         true, //!!! don't touch this default value, it's supposed to be hard coded to run the migration only once
     this.requireWifiForDownloads = DefaultSettings.requireWifiForDownloads,
     this.onlyShowFullyDownloaded = DefaultSettings.onlyShowFullyDownloaded,
-    this.showDownloadsWithUnknownLibrary = DefaultSettings.showDownloadsWithUnknownLibrary,
+    this.showDownloadsWithUnknownLibrary =
+        DefaultSettings.showDownloadsWithUnknownLibrary,
     this.maxConcurrentDownloads = DefaultSettings.maxConcurrentDownloads,
     this.downloadWorkers = DefaultSettings.downloadWorkers,
     this.resyncOnStartup = DefaultSettings.resyncOnStartup,
@@ -274,9 +298,12 @@ class FinampSettings {
     this.downloadTranscodingCodec,
     this.downloadTranscodeBitrate,
     this.shouldTranscodeDownloads = DefaultSettings.shouldTranscodeDownloads,
-    this.shouldRedownloadTranscodes = DefaultSettings.shouldRedownloadTranscodes,
-    this.itemSwipeActionLeftToRight = DefaultSettings.itemSwipeActionLeftToRight,
-    this.itemSwipeActionRightToLeft = DefaultSettings.itemSwipeActionRightToLeft,
+    this.shouldRedownloadTranscodes =
+        DefaultSettings.shouldRedownloadTranscodes,
+    this.itemSwipeActionLeftToRight =
+        DefaultSettings.itemSwipeActionLeftToRight,
+    this.itemSwipeActionRightToLeft =
+        DefaultSettings.itemSwipeActionRightToLeft,
     this.useFixedSizeGridTiles = DefaultSettings.useFixedSizeGridTiles,
     this.fixedGridTileSize = DefaultSettings.fixedGridTileSize,
     this.allowSplitScreen = DefaultSettings.allowSplitScreen,
@@ -286,33 +313,44 @@ class FinampSettings {
     this.suppressPlayerPadding = DefaultSettings.suppressPlayerPadding,
     this.hidePlayerBottomActions = DefaultSettings.hidePlayerBottomActions,
     this.reportQueueToServer = DefaultSettings.reportQueueToServer,
-    this.periodicPlaybackSessionUpdateFrequencySeconds = DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds,
+    this.periodicPlaybackSessionUpdateFrequencySeconds =
+        DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds,
     this.playOnStaleDelay = DefaultSettings.playOnStaleDelay,
     this.playOnReconnectionDelay = DefaultSettings.playOnReconnectionDelay,
     this.enablePlayon = DefaultSettings.enablePlayon,
     this.currentVolume = DefaultSettings.currentVolume,
     this.showArtistChipImage = DefaultSettings.showArtistChipImage,
     this.trackOfflineFavorites = DefaultSettings.trackOfflineFavorites,
-    this.showProgressOnNowPlayingBar = DefaultSettings.showProgressOnNowPlayingBar,
-    this.startInstantMixForIndividualTracks = DefaultSettings.startInstantMixForIndividualTracks,
+    this.showProgressOnNowPlayingBar =
+        DefaultSettings.showProgressOnNowPlayingBar,
+    this.startInstantMixForIndividualTracks =
+        DefaultSettings.startInstantMixForIndividualTracks,
     this.showLyricsTimestamps = DefaultSettings.showLyricsTimestamps,
     this.lyricsAlignment = DefaultSettings.lyricsAlignment,
     this.lyricsFontSize = DefaultSettings.lyricsFontSize,
-    this.showLyricsScreenAlbumPrelude = DefaultSettings.showLyricsScreenAlbumPrelude,
-    this.showStopButtonOnMediaNotification = DefaultSettings.showStopButtonOnMediaNotification,
-    this.showShuffleButtonOnMediaNotification = DefaultSettings.showShuffleButtonOnMediaNotification,
-    this.showFavoriteButtonOnMediaNotification = DefaultSettings.showFavoriteButtonOnMediaNotification,
-    this.showSeekControlsOnMediaNotification = DefaultSettings.showSeekControlsOnMediaNotification,
+    this.showLyricsScreenAlbumPrelude =
+        DefaultSettings.showLyricsScreenAlbumPrelude,
+    this.showStopButtonOnMediaNotification =
+        DefaultSettings.showStopButtonOnMediaNotification,
+    this.showShuffleButtonOnMediaNotification =
+        DefaultSettings.showShuffleButtonOnMediaNotification,
+    this.showFavoriteButtonOnMediaNotification =
+        DefaultSettings.showFavoriteButtonOnMediaNotification,
+    this.showSeekControlsOnMediaNotification =
+        DefaultSettings.showSeekControlsOnMediaNotification,
     this.keepScreenOnOption = DefaultSettings.keepScreenOnOption,
-    this.keepScreenOnWhilePluggedIn = DefaultSettings.keepScreenOnWhilePluggedIn,
+    this.keepScreenOnWhilePluggedIn =
+        DefaultSettings.keepScreenOnWhilePluggedIn,
     this.featureChipsConfiguration = DefaultSettings.featureChipsConfiguration,
     this.showCoversOnAlbumScreen = DefaultSettings.showCoversOnAlbumScreen,
     this.hasDownloadedPlaylistInfo = DefaultSettings.hasDownloadedPlaylistInfo,
-    this.transcodingStreamingFormat = DefaultSettings.transcodingStreamingFormat,
+    this.transcodingStreamingFormat =
+        DefaultSettings.transcodingStreamingFormat,
     this.downloadSizeWarningCutoff = DefaultSettings.downloadSizeWarningCutoff,
     this.allowDeleteFromServer = DefaultSettings.allowDeleteFromServer,
     this.oneLineMarqueeTextButton = DefaultSettings.oneLineMarqueeTextButton,
-    this.showAlbumReleaseDateOnPlayerScreen = DefaultSettings.showAlbumReleaseDateOnPlayerScreen,
+    this.showAlbumReleaseDateOnPlayerScreen =
+        DefaultSettings.showAlbumReleaseDateOnPlayerScreen,
     this.releaseDateFormat = DefaultSettings.releaseDateFormat,
     this.defaultArtistType = DefaultSettings.defaultArtistType,
     this.autoOffline = DefaultSettings.autoOffline,
@@ -321,18 +359,25 @@ class FinampSettings {
     this.audioFadeInDuration = DefaultSettings.audioFadeInDuration,
     this.autoReloadQueue = DefaultSettings.autoReloadQueue,
     this.screenSize,
-    this.genreCuratedItemSelectionTypeTracks = DefaultSettings.genreCuratedItemSelectionTypeTracks,
-    this.genreCuratedItemSelectionTypeAlbums = DefaultSettings.genreCuratedItemSelectionTypeAlbums,
-    this.genreCuratedItemSelectionTypeArtists = DefaultSettings.genreCuratedItemSelectionTypeArtists,
+    this.genreCuratedItemSelectionTypeTracks =
+        DefaultSettings.genreCuratedItemSelectionTypeTracks,
+    this.genreCuratedItemSelectionTypeAlbums =
+        DefaultSettings.genreCuratedItemSelectionTypeAlbums,
+    this.genreCuratedItemSelectionTypeArtists =
+        DefaultSettings.genreCuratedItemSelectionTypeArtists,
     this.genreItemSectionsOrder = DefaultSettings.genreItemSectionsOrder,
     this.genreFilterArtistScreens = DefaultSettings.genreFilterArtistScreens,
     this.genreListsInheritSorting = DefaultSettings.genreListsInheritSorting,
-    this.genreItemSectionFilterChipOrder = DefaultSettings.genreItemSectionFilterChipOrder,
+    this.genreItemSectionFilterChipOrder =
+        DefaultSettings.genreItemSectionFilterChipOrder,
     this.applyFilterOnGenreChipTap = DefaultSettings.applyFilterOnGenreChipTap,
-    this.artistCuratedItemSelectionType = DefaultSettings.artistCuratedItemSelectionType,
-    this.artistItemSectionFilterChipOrder = DefaultSettings.artistItemSectionFilterChipOrder,
+    this.artistCuratedItemSelectionType =
+        DefaultSettings.artistCuratedItemSelectionType,
+    this.artistItemSectionFilterChipOrder =
+        DefaultSettings.artistItemSectionFilterChipOrder,
     this.artistItemSectionsOrder = DefaultSettings.artistItemSectionsOrder,
-    this.autoSwitchItemCurationType = DefaultSettings.autoSwitchItemCurationType,
+    this.autoSwitchItemCurationType =
+        DefaultSettings.autoSwitchItemCurationType,
     this.playlistTracksSortBy = DefaultSettings.playlistTracksSortBy,
     this.playlistTracksSortOrder = DefaultSettings.playlistTracksSortOrder,
     this.genreFilterPlaylists = DefaultSettings.genreFilterPlaylists,
@@ -382,11 +427,17 @@ class FinampSettings {
   ContentViewType contentViewType;
 
   /// Amount of grid tiles to use per-row when portrait.
-  @HiveField(11, defaultValue: DefaultSettings.contentGridViewCrossAxisCountPortrait)
+  @HiveField(
+    11,
+    defaultValue: DefaultSettings.contentGridViewCrossAxisCountPortrait,
+  )
   int contentGridViewCrossAxisCountPortrait;
 
   /// Amount of grid tiles to use per-row when landscape.
-  @HiveField(12, defaultValue: DefaultSettings.contentGridViewCrossAxisCountLandscape)
+  @HiveField(
+    12,
+    defaultValue: DefaultSettings.contentGridViewCrossAxisCountLandscape,
+  )
   int contentGridViewCrossAxisCountLandscape;
 
   /// Whether or not to show the text (title, artist etc) on the grid music
@@ -490,7 +541,8 @@ class FinampSettings {
   bool enableVibration;
 
   @HiveField(48, defaultValue: DefaultSettings.playerScreenCoverMinimumPadding)
-  double playerScreenCoverMinimumPadding = DefaultSettings.playerScreenCoverMinimumPadding;
+  double playerScreenCoverMinimumPadding =
+      DefaultSettings.playerScreenCoverMinimumPadding;
 
   @HiveField(49, defaultValue: DefaultSettings.prioritizeCoverFactor)
   double prioritizeCoverFactor;
@@ -504,8 +556,14 @@ class FinampSettings {
   @HiveField(52, defaultValue: DefaultSettings.reportQueueToServer)
   bool reportQueueToServer;
 
-  @HiveField(53, defaultValue: DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds)
-  @HiveField(53, defaultValue: DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds)
+  @HiveField(
+    53,
+    defaultValue: DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds,
+  )
+  @HiveField(
+    53,
+    defaultValue: DefaultSettings.periodicPlaybackSessionUpdateFrequencySeconds,
+  )
   int periodicPlaybackSessionUpdateFrequencySeconds;
 
   @HiveField(54, defaultValue: DefaultSettings.showArtistsTracksSection)
@@ -542,7 +600,10 @@ class FinampSettings {
   @HiveField(64, defaultValue: DefaultSettings.showProgressOnNowPlayingBar)
   bool showProgressOnNowPlayingBar;
 
-  @HiveField(65, defaultValue: DefaultSettings.startInstantMixForIndividualTracks)
+  @HiveField(
+    65,
+    defaultValue: DefaultSettings.startInstantMixForIndividualTracks,
+  )
   bool startInstantMixForIndividualTracks;
 
   @HiveField(66, defaultValue: DefaultSettings.showLyricsTimestamps)
@@ -551,10 +612,16 @@ class FinampSettings {
   @HiveField(67, defaultValue: DefaultSettings.lyricsAlignment)
   LyricsAlignment lyricsAlignment;
 
-  @HiveField(68, defaultValue: DefaultSettings.showStopButtonOnMediaNotification)
+  @HiveField(
+    68,
+    defaultValue: DefaultSettings.showStopButtonOnMediaNotification,
+  )
   bool showStopButtonOnMediaNotification;
 
-  @HiveField(69, defaultValue: DefaultSettings.showSeekControlsOnMediaNotification)
+  @HiveField(
+    69,
+    defaultValue: DefaultSettings.showSeekControlsOnMediaNotification,
+  )
   bool showSeekControlsOnMediaNotification;
 
   @HiveField(70, defaultValue: DefaultSettings.lyricsFontSize)
@@ -596,7 +663,10 @@ class FinampSettings {
   @HiveField(82, defaultValue: DefaultSettings.oneLineMarqueeTextButton)
   bool oneLineMarqueeTextButton;
 
-  @HiveField(83, defaultValue: DefaultSettings.showAlbumReleaseDateOnPlayerScreen)
+  @HiveField(
+    83,
+    defaultValue: DefaultSettings.showAlbumReleaseDateOnPlayerScreen,
+  )
   bool showAlbumReleaseDateOnPlayerScreen;
 
   @HiveField(84, defaultValue: DefaultSettings.releaseDateFormat)
@@ -646,22 +716,37 @@ class FinampSettings {
   @HiveField(97, defaultValue: DefaultSettings.autoReloadQueue)
   bool autoReloadQueue;
 
-  @HiveField(98, defaultValue: DefaultSettings.showShuffleButtonOnMediaNotification)
+  @HiveField(
+    98,
+    defaultValue: DefaultSettings.showShuffleButtonOnMediaNotification,
+  )
   bool showShuffleButtonOnMediaNotification;
 
-  @HiveField(99, defaultValue: DefaultSettings.showFavoriteButtonOnMediaNotification)
+  @HiveField(
+    99,
+    defaultValue: DefaultSettings.showFavoriteButtonOnMediaNotification,
+  )
   bool showFavoriteButtonOnMediaNotification;
 
   @HiveField(100)
   ScreenSize? screenSize;
 
-  @HiveField(101, defaultValue: DefaultSettings.genreCuratedItemSelectionTypeTracks)
+  @HiveField(
+    101,
+    defaultValue: DefaultSettings.genreCuratedItemSelectionTypeTracks,
+  )
   CuratedItemSelectionType genreCuratedItemSelectionTypeTracks;
 
-  @HiveField(102, defaultValue: DefaultSettings.genreCuratedItemSelectionTypeAlbums)
+  @HiveField(
+    102,
+    defaultValue: DefaultSettings.genreCuratedItemSelectionTypeAlbums,
+  )
   CuratedItemSelectionType genreCuratedItemSelectionTypeAlbums;
 
-  @HiveField(103, defaultValue: DefaultSettings.genreCuratedItemSelectionTypeArtists)
+  @HiveField(
+    103,
+    defaultValue: DefaultSettings.genreCuratedItemSelectionTypeArtists,
+  )
   CuratedItemSelectionType genreCuratedItemSelectionTypeArtists;
 
   @HiveField(104, defaultValue: DefaultSettings.genreItemSectionsOrder)
@@ -682,7 +767,10 @@ class FinampSettings {
   @HiveField(109, defaultValue: DefaultSettings.artistCuratedItemSelectionType)
   CuratedItemSelectionType artistCuratedItemSelectionType;
 
-  @HiveField(110, defaultValue: DefaultSettings.artistItemSectionFilterChipOrder)
+  @HiveField(
+    110,
+    defaultValue: DefaultSettings.artistItemSectionFilterChipOrder,
+  )
   List<CuratedItemSelectionType> artistItemSectionFilterChipOrder;
 
   @HiveField(111, defaultValue: DefaultSettings.artistItemSectionsOrder)
@@ -715,6 +803,9 @@ class FinampSettings {
   @HiveField(120, defaultValue: DefaultSettings.useHighContrastColors)
   bool useHighContrastColors;
 
+  @HiveField(121, defaultValue: DefaultSettings.autoExpandPlayerScreen)
+  bool autoExpandPlayerScreen = DefaultSettings.autoExpandPlayerScreen;
+
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
       name: DownloadLocation.internalStorageName,
@@ -724,7 +815,9 @@ class FinampSettings {
     return FinampSettings(
       downloadLocations: [],
       // Create a map of TabContentType from TabContentType's values.
-      showTabs: Map.fromEntries(TabContentType.values.map((e) => MapEntry(e, true))),
+      showTabs: Map.fromEntries(
+        TabContentType.values.map((e) => MapEntry(e, true)),
+      ),
       downloadLocationsMap: {downloadLocation.id: downloadLocation},
       tabSortBy: {},
       tabSortOrder: {},
@@ -732,18 +825,24 @@ class FinampSettings {
     );
   }
 
-  DownloadProfile get downloadTranscodingProfile =>
-      DownloadProfile(transcodeCodec: downloadTranscodingCodec, bitrate: downloadTranscodeBitrate);
+  DownloadProfile get downloadTranscodingProfile => DownloadProfile(
+    transcodeCodec: downloadTranscodingCodec,
+    bitrate: downloadTranscodeBitrate,
+  );
 
   /// Returns the DownloadLocation that is the internal track dir. This can
   /// technically throw a StateError, but that should never happen™.
-  DownloadLocation get internalTrackDir => downloadLocationsMap.values.firstWhere(
-    (element) => element.baseDirectory == DownloadLocationType.platformDefaultDirectory,
-  );
+  DownloadLocation get internalTrackDir =>
+      downloadLocationsMap.values.firstWhere(
+        (element) =>
+            element.baseDirectory ==
+            DownloadLocationType.platformDefaultDirectory,
+      );
 
   Duration get bufferDuration => Duration(seconds: bufferDurationSeconds);
 
-  set bufferDuration(Duration duration) => bufferDurationSeconds = duration.inSeconds;
+  set bufferDuration(Duration duration) =>
+      bufferDurationSeconds = duration.inSeconds;
 
   SortBy getTabSortBy(TabContentType tabType) {
     return tabSortBy[tabType] ?? SortBy.sortName;
@@ -910,7 +1009,8 @@ enum TabContentType {
   @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
 
-  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
   String _humanReadableName(TabContentType tabContentType) {
     switch (tabContentType) {
@@ -927,7 +1027,10 @@ enum TabContentType {
     }
   }
 
-  String _humanReadableLocalisedName(TabContentType tabContentType, BuildContext context) {
+  String _humanReadableLocalisedName(
+    TabContentType tabContentType,
+    BuildContext context,
+  ) {
     switch (tabContentType) {
       case TabContentType.tracks:
         return AppLocalizations.of(context)!.tracks;
@@ -974,7 +1077,8 @@ enum ContentViewType {
   @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
 
-  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
   String _humanReadableName(ContentViewType contentViewType) {
     switch (contentViewType) {
@@ -985,7 +1089,10 @@ enum ContentViewType {
     }
   }
 
-  String _humanReadableLocalisedName(ContentViewType contentViewType, BuildContext context) {
+  String _humanReadableLocalisedName(
+    ContentViewType contentViewType,
+    BuildContext context,
+  ) {
     switch (contentViewType) {
       case ContentViewType.list:
         return AppLocalizations.of(context)!.list;
@@ -1052,7 +1159,8 @@ class DownloadedTrack {
   @HiveField(8)
   String? downloadLocationId;
 
-  factory DownloadedTrack.fromJson(Map<String, dynamic> json) => _$DownloadedTrackFromJson(json);
+  factory DownloadedTrack.fromJson(Map<String, dynamic> json) =>
+      _$DownloadedTrackFromJson(json);
 
   Map<String, dynamic> toJson() => _$DownloadedTrackToJson(this);
 }
@@ -1060,7 +1168,11 @@ class DownloadedTrack {
 @HiveType(typeId: 4)
 @Deprecated("Hive download schemas are only present to enable migration.")
 class DownloadedParent {
-  DownloadedParent({required this.item, required this.downloadedChildren, required this.viewId});
+  DownloadedParent({
+    required this.item,
+    required this.downloadedChildren,
+    required this.viewId,
+  });
 
   @HiveField(0)
   BaseItemDto item;
@@ -1126,7 +1238,12 @@ class DownloadedImage {
 /// A reference to a downloadable item with no state.  Can be freely created
 /// from a BaseItemDto at any time.  DownloadStubs/DownloadItems are considered
 /// equivalent if their types and ids match.
-@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true, constructor: "_build")
+@JsonSerializable(
+  fieldRename: FieldRename.pascal,
+  explicitToJson: true,
+  anyMap: true,
+  constructor: "_build",
+)
 class DownloadStub {
   DownloadStub._build({
     required this.id,
@@ -1136,7 +1253,10 @@ class DownloadStub {
     required this.name,
     required this.baseItemType,
   }) {
-    assert(_verifyEnums(), "$type $baseItemType ${baseItem?.toJson().toString()}");
+    assert(
+      _verifyEnums(),
+      "$type $baseItemType ${baseItem?.toJson().toString()}",
+    );
   }
 
   bool _verifyEnums() {
@@ -1153,27 +1273,45 @@ class DownloadStub {
       case DownloadItemType.image:
         return baseItem != null;
       case DownloadItemType.finampCollection:
-        return baseItem == null && baseItemType == BaseItemDtoType.noItem && finampCollection != null;
+        return baseItem == null &&
+            baseItemType == BaseItemDtoType.noItem &&
+            finampCollection != null;
       case DownloadItemType.anchor:
-        return baseItem == null && baseItemType == BaseItemDtoType.noItem && id == "Anchor";
+        return baseItem == null &&
+            baseItemType == BaseItemDtoType.noItem &&
+            id == "Anchor";
     }
   }
 
-  factory DownloadStub.fromItem({required DownloadItemType type, required BaseItemDto item}) {
+  factory DownloadStub.fromItem({
+    required DownloadItemType type,
+    required BaseItemDto item,
+  }) {
     assert(type.requiresItem);
-    assert(type != DownloadItemType.image || (item.blurHash != null || item.imageId != null));
-    String id = (type == DownloadItemType.image) ? item.blurHash ?? item.imageId! : item.id.raw;
+    assert(
+      type != DownloadItemType.image ||
+          (item.blurHash != null || item.imageId != null),
+    );
+    String id = (type == DownloadItemType.image)
+        ? item.blurHash ?? item.imageId!
+        : item.id.raw;
     return DownloadStub._build(
       id: id,
       isarId: getHash(id, type),
       jsonItem: jsonEncode(item.toJson()),
       type: type,
-      name: (type == DownloadItemType.image) ? "Image for ${item.name}" : item.name ?? id,
+      name: (type == DownloadItemType.image)
+          ? "Image for ${item.name}"
+          : item.name ?? id,
       baseItemType: BaseItemDtoType.fromItem(item),
     );
   }
 
-  factory DownloadStub.fromId({required BaseItemId id, required DownloadItemType type, required String? name}) {
+  factory DownloadStub.fromId({
+    required BaseItemId id,
+    required DownloadItemType type,
+    required String? name,
+  }) {
     assert(!type.requiresItem);
     return DownloadStub._build(
       id: id.raw,
@@ -1225,7 +1363,8 @@ class DownloadStub {
   final String? jsonItem;
 
   @ignore
-  BaseItemDto? get baseItem => _baseItemCached ??= ((jsonItem == null || !type.requiresItem)
+  BaseItemDto? get baseItem =>
+      _baseItemCached ??= ((jsonItem == null || !type.requiresItem)
       ? null
       : BaseItemDto.fromJson(jsonDecode(jsonItem!) as Map<String, dynamic>));
 
@@ -1233,17 +1372,25 @@ class DownloadStub {
   BaseItemDto? _baseItemCached;
 
   @ignore
-  FinampCollection? get finampCollection => _finampCollectionCached ??= (type != DownloadItemType.finampCollection
+  FinampCollection? get finampCollection =>
+      _finampCollectionCached ??= (type != DownloadItemType.finampCollection
       ? null
       : jsonItem == null
       // Switch on ID to allow legacy collections to continue syncing
       ? switch (id) {
           "Favorites" => FinampCollection(type: FinampCollectionType.favorites),
-          "All Playlists" => FinampCollection(type: FinampCollectionType.allPlaylists),
-          "5 Latest Albums" => FinampCollection(type: FinampCollectionType.latest5Albums),
-          _ => throw "Invalid FinampCollection DownloadItem: no attached collection",
+          "All Playlists" => FinampCollection(
+            type: FinampCollectionType.allPlaylists,
+          ),
+          "5 Latest Albums" => FinampCollection(
+            type: FinampCollectionType.latest5Albums,
+          ),
+          _ =>
+            throw "Invalid FinampCollection DownloadItem: no attached collection",
         }
-      : FinampCollection.fromJson(jsonDecode(jsonItem!) as Map<String, dynamic>));
+      : FinampCollection.fromJson(
+          jsonDecode(jsonItem!) as Map<String, dynamic>,
+        ));
 
   @ignore
   FinampCollection? _finampCollectionCached;
@@ -1301,7 +1448,8 @@ class DownloadStub {
     );
   }
 
-  factory DownloadStub.fromJson(Map<String, dynamic> json) => _$DownloadStubFromJson(json);
+  factory DownloadStub.fromJson(Map<String, dynamic> json) =>
+      _$DownloadStubFromJson(json);
   Map<String, dynamic> toJson() => _$DownloadStubToJson(this);
 }
 
@@ -1327,7 +1475,11 @@ class DownloadItem extends DownloadStub {
     required this.syncTranscodingProfile,
     required this.fileTranscodingProfile,
   }) : super._build() {
-    assert(!(type == DownloadItemType.collection && baseItemType == BaseItemDtoType.playlist) || viewId == null);
+    assert(
+      !(type == DownloadItemType.collection &&
+              baseItemType == BaseItemDtoType.playlist) ||
+          viewId == null,
+    );
   }
 
   final requires = IsarLinks<DownloadItem>();
@@ -1370,12 +1522,14 @@ class DownloadItem extends DownloadStub {
   DownloadProfile? fileTranscodingProfile;
 
   @ignore
-  DownloadLocation? get fileDownloadLocation =>
-      FinampSettingsHelper.finampSettings.downloadLocationsMap[fileTranscodingProfile?.downloadLocationId];
+  DownloadLocation? get fileDownloadLocation => FinampSettingsHelper
+      .finampSettings
+      .downloadLocationsMap[fileTranscodingProfile?.downloadLocationId];
 
   @ignore
-  DownloadLocation? get syncDownloadLocation =>
-      FinampSettingsHelper.finampSettings.downloadLocationsMap[syncTranscodingProfile?.downloadLocationId];
+  DownloadLocation? get syncDownloadLocation => FinampSettingsHelper
+      .finampSettings
+      .downloadLocationsMap[syncTranscodingProfile?.downloadLocationId];
 
   @ignore
   File? get file {
@@ -1566,7 +1720,9 @@ enum DownloadItemStatus {
   DeleteType toDeleteType() {
     return isRequired
         ? DeleteType.canDelete
-        : (outdated || isIncidental ? DeleteType.cantDelete : DeleteType.notDownloaded);
+        : (outdated || isIncidental
+              ? DeleteType.cantDelete
+              : DeleteType.notDownloaded);
   }
 
   final bool isRequired;
@@ -1583,7 +1739,10 @@ enum BaseItemDtoType {
   playlist("Playlist", true, [track], DownloadItemType.collection),
   genre("MusicGenre", true, [album, track], DownloadItemType.collection),
   track("Audio", false, [], DownloadItemType.track),
-  library("CollectionFolder", true, [album, track], DownloadItemType.collection),
+  library("CollectionFolder", true, [
+    album,
+    track,
+  ], DownloadItemType.collection),
   folder("Folder", true, null, DownloadItemType.collection),
   musicVideo("MusicVideo", false, [], DownloadItemType.track),
   audioBook("AudioBook", false, [], DownloadItemType.track),
@@ -1601,14 +1760,20 @@ enum BaseItemDtoType {
   // "PlaylistsFolder" "Program" "Recording" "Season" "Series" "Studio" "Trailer" "TvChannel"
   // "TvProgram" "UserRootFolder" "UserView" "Video" "Year"
 
-  const BaseItemDtoType(this.idString, this.expectChanges, this.childTypes, this.downloadType);
+  const BaseItemDtoType(
+    this.idString,
+    this.expectChanges,
+    this.childTypes,
+    this.downloadType,
+  );
 
   final String? idString;
   final bool expectChanges;
   final List<BaseItemDtoType>? childTypes;
   final DownloadItemType? downloadType;
 
-  bool get expectChangesInChildren => childTypes?.any((x) => x.expectChanges) ?? true;
+  bool get expectChangesInChildren =>
+      childTypes?.any((x) => x.expectChanges) ?? true;
 
   bool get hasChildren => childTypes?.isNotEmpty ?? false;
 
@@ -1811,12 +1976,17 @@ class QueueItemSource {
     return QueueItemSource(
       type: type,
       name: nameType != null
-          ? QueueItemSourceName(type: nameType, localizationParameter: baseItem.name ?? "")
+          ? QueueItemSourceName(
+              type: nameType,
+              localizationParameter: baseItem.name ?? "",
+            )
           : QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
               pretranslatedName:
                   baseItem.name ??
-                  AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)!.placeholderSource,
+                  AppLocalizations.of(
+                    GlobalSnackbar.materialAppScaffoldKey.currentContext!,
+                  )!.placeholderSource,
             ),
       id: baseItem.id,
       item: baseItem,
@@ -1915,7 +2085,11 @@ class QueueItemSourceName {
 
 @HiveType(typeId: 57)
 class FinampQueueItem {
-  FinampQueueItem({required this.item, required this.source, this.type = QueueItemQueueType.queue}) {
+  FinampQueueItem({
+    required this.item,
+    required this.source,
+    this.type = QueueItemQueueType.queue,
+  }) {
     id = const Uuid().v4();
   }
 
@@ -2004,7 +2178,8 @@ class FinampQueueInfo {
   @HiveField(6)
   String id;
 
-  int get currentTrackIndex => previousTracks.length + (currentTrack == null ? 0 : 1);
+  int get currentTrackIndex =>
+      previousTracks.length + (currentTrack == null ? 0 : 1);
   int get remainingTrackCount => nextUp.length + queue.length;
   int get trackCount => currentTrackIndex + remainingTrackCount;
   List<FinampQueueItem> get fullQueue => CombinedIterableView([
@@ -2025,7 +2200,10 @@ class FinampQueueInfo {
 
   Duration getDurationUntil(int offset) {
     var total = 0;
-    for (var item in CombinedIterableView([nextUp, queue]).take(max(offset - 1, 0))) {
+    for (var item in CombinedIterableView([
+      nextUp,
+      queue,
+    ]).take(max(offset - 1, 0))) {
       total += item.item.duration?.inMicroseconds ?? 0;
     }
     return Duration(microseconds: total);
@@ -2051,13 +2229,21 @@ class FinampQueueInfo {
   }
 
   int get undownloadedTracks {
-    return fullQueue.where((e) => e.item.extras?["android.media.extra.DOWNLOAD_STATUS"] != 2).length;
+    return fullQueue
+        .where(
+          (e) => e.item.extras?["android.media.extra.DOWNLOAD_STATUS"] != 2,
+        )
+        .length;
   }
 }
 
 @HiveType(typeId: 60)
 class FinampHistoryItem {
-  FinampHistoryItem({required this.item, required this.startTime, this.endTime});
+  FinampHistoryItem({
+    required this.item,
+    required this.startTime,
+    this.endTime,
+  });
 
   @HiveField(0)
   FinampQueueItem item;
@@ -2082,10 +2268,14 @@ class FinampStorableQueueInfo {
   });
 
   FinampStorableQueueInfo.fromQueueInfo(FinampQueueInfo info, int? seek)
-    : previousTracks = info.previousTracks.map<BaseItemId>((track) => track.baseItemId).toList(),
+    : previousTracks = info.previousTracks
+          .map<BaseItemId>((track) => track.baseItemId)
+          .toList(),
       currentTrack = info.currentTrack?.baseItemId,
       currentTrackSeek = seek,
-      nextUp = info.nextUp.map<BaseItemId>((track) => track.baseItemId).toList(),
+      nextUp = info.nextUp
+          .map<BaseItemId>((track) => track.baseItemId)
+          .toList(),
       queue = info.queue.map<BaseItemId>((track) => track.baseItemId).toList(),
       creation = DateTime.now().millisecondsSinceEpoch,
       source = info.source;
@@ -2118,7 +2308,10 @@ class FinampStorableQueueInfo {
   }
 
   int get trackCount {
-    return previousTracks.length + ((currentTrack == null) ? 0 : 1) + nextUp.length + queue.length;
+    return previousTracks.length +
+        ((currentTrack == null) ? 0 : 1) +
+        nextUp.length +
+        queue.length;
   }
 }
 
@@ -2171,7 +2364,11 @@ enum DownloadLocationType {
   @HiveField(6)
   cache(false, false, BaseDirectory.root);
 
-  const DownloadLocationType(this.needsPath, this.useHumanReadableNames, this.baseDirectory);
+  const DownloadLocationType(
+    this.needsPath,
+    this.useHumanReadableNames,
+    this.baseDirectory,
+  );
 
   /// true if the download location path must be supplied in the constructer,
   /// false if it is calculated from the baseDirectory
@@ -2180,7 +2377,9 @@ enum DownloadLocationType {
   final BaseDirectory baseDirectory;
 
   static DownloadLocationType get platformDefaultDirectory =>
-      (Platform.isIOS || Platform.isAndroid) ? DownloadLocationType.internalSupport : DownloadLocationType.cache;
+      (Platform.isIOS || Platform.isAndroid)
+      ? DownloadLocationType.internalSupport
+      : DownloadLocationType.cache;
 }
 
 @HiveType(typeId: 65)
@@ -2195,7 +2394,11 @@ enum FinampTranscodingCodec {
   // Container is null to fall back to real original container per track
   original(null, true, 99999999);
 
-  const FinampTranscodingCodec(this.container, this.iosCompatible, this.quality);
+  const FinampTranscodingCodec(
+    this.container,
+    this.iosCompatible,
+    this.quality,
+  );
 
   /// The container to use for the given codec
   final String? container;
@@ -2208,11 +2411,18 @@ enum FinampTranscodingCodec {
 
 @embedded
 class DownloadProfile {
-  DownloadProfile({FinampTranscodingCodec? transcodeCodec, int? bitrate, this.downloadLocationId}) {
+  DownloadProfile({
+    FinampTranscodingCodec? transcodeCodec,
+    int? bitrate,
+    this.downloadLocationId,
+  }) {
     codec =
         transcodeCodec ??
-        (Platform.isIOS || Platform.isMacOS ? FinampTranscodingCodec.aac : FinampTranscodingCodec.opus);
-    stereoBitrate = bitrate ?? (Platform.isIOS || Platform.isMacOS ? 256000 : 128000);
+        (Platform.isIOS || Platform.isMacOS
+            ? FinampTranscodingCodec.aac
+            : FinampTranscodingCodec.opus);
+    stereoBitrate =
+        bitrate ?? (Platform.isIOS || Platform.isMacOS ? 256000 : 128000);
   }
 
   /// The codec to use for the given transcoding job
@@ -2251,20 +2461,26 @@ class DownloadProfile {
   String get bitrateKbps => "${stereoBitrate ~/ 1000}kbps";
 
   @ignore
-  double get quality => codec == FinampTranscodingCodec.original ? 9999999999999 : codec.quality * stereoBitrate;
+  double get quality => codec == FinampTranscodingCodec.original
+      ? 9999999999999
+      : codec.quality * stereoBitrate;
 
   @override
   bool operator ==(Object other) {
     return other is DownloadProfile &&
-        (codec == FinampTranscodingCodec.original || other.stereoBitrate == stereoBitrate) &&
+        (codec == FinampTranscodingCodec.original ||
+            other.stereoBitrate == stereoBitrate) &&
         other.codec == codec &&
         other.downloadLocationId == downloadLocationId;
   }
 
   @override
   @ignore
-  int get hashCode =>
-      Object.hash(codec == FinampTranscodingCodec.original ? 0 : stereoBitrate, codec, downloadLocationId);
+  int get hashCode => Object.hash(
+    codec == FinampTranscodingCodec.original ? 0 : stereoBitrate,
+    codec,
+    downloadLocationId,
+  );
 }
 
 @HiveType(typeId: 66)
@@ -2282,8 +2498,14 @@ enum TranscodeDownloadsSetting {
 class DownloadedLyrics {
   DownloadedLyrics({required this.jsonItem, required this.isarId});
 
-  factory DownloadedLyrics.fromItem({required LyricDto item, required int isarId}) {
-    return DownloadedLyrics(isarId: isarId, jsonItem: jsonEncode(item.toJson()));
+  factory DownloadedLyrics.fromItem({
+    required LyricDto item,
+    required int isarId,
+  }) {
+    return DownloadedLyrics(
+      isarId: isarId,
+      jsonItem: jsonEncode(item.toJson()),
+    );
   }
 
   /// The integer ID used as a database key by Isar
@@ -2317,7 +2539,8 @@ enum PlaybackSpeedVisibility {
   @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
 
-  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
   String _humanReadableName(PlaybackSpeedVisibility playbackSpeedVisibility) {
     switch (playbackSpeedVisibility) {
@@ -2330,7 +2553,10 @@ enum PlaybackSpeedVisibility {
     }
   }
 
-  String _humanReadableLocalisedName(PlaybackSpeedVisibility playbackSpeedVisibility, BuildContext context) {
+  String _humanReadableLocalisedName(
+    PlaybackSpeedVisibility playbackSpeedVisibility,
+    BuildContext context,
+  ) {
     switch (playbackSpeedVisibility) {
       case PlaybackSpeedVisibility.automatic:
         return AppLocalizations.of(context)!.automatic;
@@ -2355,12 +2581,21 @@ enum FinampCollectionType {
   final bool hasAudio;
 }
 
-@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true, includeIfNull: false)
+@JsonSerializable(
+  fieldRename: FieldRename.pascal,
+  explicitToJson: true,
+  anyMap: true,
+  includeIfNull: false,
+)
 class FinampCollection {
   FinampCollection({required this.type, this.library, this.item}) {
     assert(
-      (type == FinampCollectionType.libraryImages && library != null && item == null) ||
-          (type == FinampCollectionType.collectionWithLibraryFilter && library != null && item != null) ||
+      (type == FinampCollectionType.libraryImages &&
+              library != null &&
+              item == null) ||
+          (type == FinampCollectionType.collectionWithLibraryFilter &&
+              library != null &&
+              item != null) ||
           (type != FinampCollectionType.libraryImages &&
               type != FinampCollectionType.collectionWithLibraryFilter &&
               item == null &&
@@ -2379,21 +2614,32 @@ class FinampCollection {
     FinampCollectionType.latest5Albums => "5 Latest Albums",
     FinampCollectionType.libraryImages => "Cache Library Images:${library!.id}",
     FinampCollectionType.allPlaylistsMetadata => "All Playlists Metadata",
-    FinampCollectionType.collectionWithLibraryFilter => "Collection with Library Filter:${library!.id}:${item!.id}",
+    FinampCollectionType.collectionWithLibraryFilter =>
+      "Collection with Library Filter:${library!.id}:${item!.id}",
   };
 
   String getName(BuildContext context) => switch (type) {
-    FinampCollectionType.favorites => AppLocalizations.of(context)!.finampCollectionNames("favorites"),
-    FinampCollectionType.allPlaylists => AppLocalizations.of(context)!.finampCollectionNames("allPlaylists"),
-    FinampCollectionType.latest5Albums => AppLocalizations.of(context)!.finampCollectionNames("fiveLatestAlbums"),
-    FinampCollectionType.libraryImages => AppLocalizations.of(context)!.cacheLibraryImagesName(library!.name ?? ""),
+    FinampCollectionType.favorites => AppLocalizations.of(
+      context,
+    )!.finampCollectionNames("favorites"),
+    FinampCollectionType.allPlaylists => AppLocalizations.of(
+      context,
+    )!.finampCollectionNames("allPlaylists"),
+    FinampCollectionType.latest5Albums => AppLocalizations.of(
+      context,
+    )!.finampCollectionNames("fiveLatestAlbums"),
+    FinampCollectionType.libraryImages => AppLocalizations.of(
+      context,
+    )!.cacheLibraryImagesName(library!.name ?? ""),
     FinampCollectionType.allPlaylistsMetadata => AppLocalizations.of(
       context,
     )!.finampCollectionNames("allPlaylistsMetadata"),
-    FinampCollectionType.collectionWithLibraryFilter => item!.name ?? "Unkown Item",
+    FinampCollectionType.collectionWithLibraryFilter =>
+      item!.name ?? "Unkown Item",
   };
 
-  factory FinampCollection.fromJson(Map<String, dynamic> json) => _$FinampCollectionFromJson(json);
+  factory FinampCollection.fromJson(Map<String, dynamic> json) =>
+      _$FinampCollectionFromJson(json);
   Map<String, dynamic> toJson() => _$FinampCollectionToJson(this);
 }
 
@@ -2410,7 +2656,12 @@ enum MediaItemParentType {
 @JsonSerializable(converters: [BaseItemIdConverter()])
 @HiveType(typeId: 69)
 class MediaItemId {
-  MediaItemId({required this.contentType, required this.parentType, this.itemId, this.parentId});
+  MediaItemId({
+    required this.contentType,
+    required this.parentType,
+    this.itemId,
+    this.parentId,
+  });
 
   @HiveField(0)
   TabContentType contentType;
@@ -2424,7 +2675,8 @@ class MediaItemId {
   @HiveField(3)
   BaseItemId? parentId;
 
-  factory MediaItemId.fromJson(Map<String, dynamic> json) => _$MediaItemIdFromJson(json);
+  factory MediaItemId.fromJson(Map<String, dynamic> json) =>
+      _$MediaItemIdFromJson(json);
 
   Map<String, dynamic> toJson() => _$MediaItemIdToJson(this);
 
@@ -2448,7 +2700,8 @@ enum LyricsAlignment {
   @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
 
-  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
   String _humanReadableName(LyricsAlignment lyricsAlignment) {
     switch (lyricsAlignment) {
@@ -2461,7 +2714,10 @@ enum LyricsAlignment {
     }
   }
 
-  String _humanReadableLocalisedName(LyricsAlignment lyricsAlignment, BuildContext context) {
+  String _humanReadableLocalisedName(
+    LyricsAlignment lyricsAlignment,
+    BuildContext context,
+  ) {
     switch (lyricsAlignment) {
       case LyricsAlignment.start:
         return AppLocalizations.of(context)!.alignmentOptionStart;
@@ -2487,7 +2743,8 @@ enum LyricsFontSize {
   @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
 
-  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
   String _humanReadableName(LyricsFontSize lyricsFontSize) {
     switch (lyricsFontSize) {
@@ -2500,7 +2757,10 @@ enum LyricsFontSize {
     }
   }
 
-  String _humanReadableLocalisedName(LyricsFontSize lyricsFontSize, BuildContext context) {
+  String _humanReadableLocalisedName(
+    LyricsFontSize lyricsFontSize,
+    BuildContext context,
+  ) {
     switch (lyricsFontSize) {
       case LyricsFontSize.small:
         return AppLocalizations.of(context)!.fontSizeOptionSmall;
@@ -2530,7 +2790,8 @@ enum KeepScreenOnOption {
   @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
 
-  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
   String _humanReadableName(KeepScreenOnOption keepScreenOnOption) {
     switch (keepScreenOnOption) {
@@ -2545,7 +2806,10 @@ enum KeepScreenOnOption {
     }
   }
 
-  String _humanReadableLocalisedName(KeepScreenOnOption keepScreenOnOption, BuildContext context) {
+  String _humanReadableLocalisedName(
+    KeepScreenOnOption keepScreenOnOption,
+    BuildContext context,
+  ) {
     switch (keepScreenOnOption) {
       case KeepScreenOnOption.disabled:
         return AppLocalizations.of(context)!.keepScreenOnDisabled;
@@ -2608,7 +2872,8 @@ enum FinampFeatureChipType {
   @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
 
-  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
   String _humanReadableName(FinampFeatureChipType featureChipType) {
     switch (featureChipType) {
@@ -2633,7 +2898,10 @@ enum FinampFeatureChipType {
     }
   }
 
-  String _humanReadableLocalisedName(FinampFeatureChipType featureChipType, BuildContext context) {
+  String _humanReadableLocalisedName(
+    FinampFeatureChipType featureChipType,
+    BuildContext context,
+  ) {
     switch (featureChipType) {
       case FinampFeatureChipType.playCount:
         return AppLocalizations.of(context)!.playCount;
@@ -2660,7 +2928,10 @@ enum FinampFeatureChipType {
 @JsonSerializable()
 @HiveType(typeId: 75)
 class FinampFeatureChipsConfiguration {
-  const FinampFeatureChipsConfiguration({required this.enabled, required this.features});
+  const FinampFeatureChipsConfiguration({
+    required this.enabled,
+    required this.features,
+  });
 
   @HiveField(0)
   final bool enabled;
@@ -2671,7 +2942,8 @@ class FinampFeatureChipsConfiguration {
   factory FinampFeatureChipsConfiguration.fromJson(Map<String, dynamic> json) =>
       _$FinampFeatureChipsConfigurationFromJson(json);
 
-  Map<String, dynamic> toJson() => _$FinampFeatureChipsConfigurationToJson(this);
+  Map<String, dynamic> toJson() =>
+      _$FinampFeatureChipsConfigurationToJson(this);
 
   @override
   String toString() {
@@ -2679,8 +2951,14 @@ class FinampFeatureChipsConfiguration {
   }
 
   // implement copyWith
-  FinampFeatureChipsConfiguration copyWith({bool? enabled, List<FinampFeatureChipType>? features}) {
-    return FinampFeatureChipsConfiguration(enabled: enabled ?? this.enabled, features: features ?? this.features);
+  FinampFeatureChipsConfiguration copyWith({
+    bool? enabled,
+    List<FinampFeatureChipType>? features,
+  }) {
+    return FinampFeatureChipsConfiguration(
+      enabled: enabled ?? this.enabled,
+      features: features ?? this.features,
+    );
   }
 }
 
@@ -2713,7 +2991,8 @@ enum ReleaseDateFormat {
   @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
 
-  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
   String _humanReadableName(ReleaseDateFormat releaseDateFormat) {
     switch (releaseDateFormat) {
@@ -2728,7 +3007,10 @@ enum ReleaseDateFormat {
     }
   }
 
-  String _humanReadableLocalisedName(ReleaseDateFormat releaseDateFormat, BuildContext context) {
+  String _humanReadableLocalisedName(
+    ReleaseDateFormat releaseDateFormat,
+    BuildContext context,
+  ) {
     switch (releaseDateFormat) {
       case ReleaseDateFormat.year:
         return AppLocalizations.of(context)!.releaseDateFormatYear;
@@ -2753,9 +3035,13 @@ enum AutoOfflineOption {
   @HiveField(3)
   unreachable;
 
-  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
-  String _humanReadableLocalisedName(AutoOfflineOption offlineOption, BuildContext context) {
+  String _humanReadableLocalisedName(
+    AutoOfflineOption offlineOption,
+    BuildContext context,
+  ) {
     switch (offlineOption) {
       case AutoOfflineOption.disabled:
         // return AppLocalizations.of(context)!.keepScreenOnDisabled;
@@ -2788,7 +3074,8 @@ enum ItemSwipeActions {
   @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
 
-  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
   String _humanReadableName(ItemSwipeActions itemSwipeAction) {
     switch (itemSwipeAction) {
@@ -2803,10 +3090,15 @@ enum ItemSwipeActions {
     }
   }
 
-  String _humanReadableLocalisedName(ItemSwipeActions itemSwipeAction, BuildContext context) {
+  String _humanReadableLocalisedName(
+    ItemSwipeActions itemSwipeAction,
+    BuildContext context,
+  ) {
     switch (itemSwipeAction) {
       case ItemSwipeActions.nothing:
-        return AppLocalizations.of(context)!.keepScreenOnDisabled; // reused here
+        return AppLocalizations.of(
+          context,
+        )!.keepScreenOnDisabled; // reused here
       case ItemSwipeActions.addToQueue:
         return AppLocalizations.of(context)!.addToQueue;
       case ItemSwipeActions.addToNextUp:
@@ -2946,10 +3238,13 @@ enum CuratedItemSelectionType {
   @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
 
-  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
-  String toLocalisedSectionTitle(BuildContext context, BaseItemDtoType baseType) =>
-      _toLocalisedSectionTitle(this, context, baseType);
+  String toLocalisedSectionTitle(
+    BuildContext context,
+    BaseItemDtoType baseType,
+  ) => _toLocalisedSectionTitle(this, context, baseType);
 
   String _humanReadableName(CuratedItemSelectionType curatedItemSelectionType) {
     switch (curatedItemSelectionType) {
@@ -2968,7 +3263,10 @@ enum CuratedItemSelectionType {
     }
   }
 
-  String _humanReadableLocalisedName(CuratedItemSelectionType curatedItemSelectionType, BuildContext context) {
+  String _humanReadableLocalisedName(
+    CuratedItemSelectionType curatedItemSelectionType,
+    BuildContext context,
+  ) {
     switch (curatedItemSelectionType) {
       case CuratedItemSelectionType.mostPlayed:
         return AppLocalizations.of(context)!.mostPlayed;
@@ -3007,18 +3305,38 @@ enum CuratedItemSelectionType {
 
     switch (curatedItemSelectionType) {
       case CuratedItemSelectionType.mostPlayed:
-        return getTitle(loc.topTracks, loc.topAlbums, loc.topArtists) ?? "Unsupported Type";
+        return getTitle(loc.topTracks, loc.topAlbums, loc.topArtists) ??
+            "Unsupported Type";
       case CuratedItemSelectionType.favorites:
-        return getTitle(loc.favoriteTracks, loc.favoriteAlbums, loc.favoriteArtists) ?? "Unsupported Type";
+        return getTitle(
+              loc.favoriteTracks,
+              loc.favoriteAlbums,
+              loc.favoriteArtists,
+            ) ??
+            "Unsupported Type";
       case CuratedItemSelectionType.random:
-        return getTitle(loc.tracks, loc.albums, loc.artists) ?? "Unsupported Type";
+        return getTitle(loc.tracks, loc.albums, loc.artists) ??
+            "Unsupported Type";
       case CuratedItemSelectionType.latestReleases:
-        return getTitle(loc.latestTracks, loc.latestAlbums, loc.latestArtists) ?? "Unsupported Type";
+        return getTitle(
+              loc.latestTracks,
+              loc.latestAlbums,
+              loc.latestArtists,
+            ) ??
+            "Unsupported Type";
       case CuratedItemSelectionType.recentlyAdded:
-        return getTitle(loc.recentlyAddedTracks, loc.recentlyAddedAlbums, loc.recentlyAddedArtists) ??
+        return getTitle(
+              loc.recentlyAddedTracks,
+              loc.recentlyAddedAlbums,
+              loc.recentlyAddedArtists,
+            ) ??
             "Unsupported Type";
       case CuratedItemSelectionType.recentlyPlayed:
-        return getTitle(loc.recentlyPlayedTracks, loc.recentlyPlayedAlbums, loc.recentlyPlayedArtists) ??
+        return getTitle(
+              loc.recentlyPlayedTracks,
+              loc.recentlyPlayedAlbums,
+              loc.recentlyPlayedArtists,
+            ) ??
             "Unsupported Type";
     }
   }
@@ -3055,7 +3373,8 @@ enum GenreItemSections {
   @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
 
-  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
   String _humanReadableName(GenreItemSections genreItemSection) {
     switch (genreItemSection) {
@@ -3068,7 +3387,10 @@ enum GenreItemSections {
     }
   }
 
-  String _humanReadableLocalisedName(GenreItemSections genreItemSection, BuildContext context) {
+  String _humanReadableLocalisedName(
+    GenreItemSections genreItemSection,
+    BuildContext context,
+  ) {
     switch (genreItemSection) {
       case GenreItemSections.tracks:
         return AppLocalizations.of(context)!.tracks;
@@ -3094,10 +3416,13 @@ enum ArtistItemSections {
   @Deprecated("Use toLocalisedString when possible")
   String toString() => _humanReadableName(this);
 
-  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
-  String toLocalisedSectionTitle(BuildContext context, CuratedItemSelectionType? curatedItemSelectionType) =>
-      _toLocalisedSectionTitle(this, context, curatedItemSelectionType);
+  String toLocalisedSectionTitle(
+    BuildContext context,
+    CuratedItemSelectionType? curatedItemSelectionType,
+  ) => _toLocalisedSectionTitle(this, context, curatedItemSelectionType);
 
   String _humanReadableName(ArtistItemSections artistItemSection) {
     switch (artistItemSection) {
@@ -3110,7 +3435,10 @@ enum ArtistItemSections {
     }
   }
 
-  String _humanReadableLocalisedName(ArtistItemSections artistItemSection, BuildContext context) {
+  String _humanReadableLocalisedName(
+    ArtistItemSections artistItemSection,
+    BuildContext context,
+  ) {
     switch (artistItemSection) {
       case ArtistItemSections.tracks:
         return AppLocalizations.of(context)!.tracks;
@@ -3141,19 +3469,34 @@ enum ArtistItemSections {
 
     switch (curatedItemSelectionType) {
       case CuratedItemSelectionType.mostPlayed:
-        return getTitle(loc.topTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+        return getTitle(loc.topTracks, loc.albums, loc.appearsOnAlbums) ??
+            "Unsupported Type";
       case CuratedItemSelectionType.favorites:
-        return getTitle(loc.favoriteTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+        return getTitle(loc.favoriteTracks, loc.albums, loc.appearsOnAlbums) ??
+            "Unsupported Type";
       case CuratedItemSelectionType.random:
-        return getTitle(loc.randomTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+        return getTitle(loc.randomTracks, loc.albums, loc.appearsOnAlbums) ??
+            "Unsupported Type";
       case CuratedItemSelectionType.latestReleases:
-        return getTitle(loc.latestTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+        return getTitle(loc.latestTracks, loc.albums, loc.appearsOnAlbums) ??
+            "Unsupported Type";
       case CuratedItemSelectionType.recentlyAdded:
-        return getTitle(loc.recentlyAddedTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+        return getTitle(
+              loc.recentlyAddedTracks,
+              loc.albums,
+              loc.appearsOnAlbums,
+            ) ??
+            "Unsupported Type";
       case CuratedItemSelectionType.recentlyPlayed:
-        return getTitle(loc.recentlyPlayedTracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+        return getTitle(
+              loc.recentlyPlayedTracks,
+              loc.albums,
+              loc.appearsOnAlbums,
+            ) ??
+            "Unsupported Type";
       case null:
-        return getTitle(loc.tracks, loc.albums, loc.appearsOnAlbums) ?? "Unsupported Type";
+        return getTitle(loc.tracks, loc.albums, loc.appearsOnAlbums) ??
+            "Unsupported Type";
     }
   }
 }
@@ -3184,7 +3527,12 @@ class SleepTimer {
   SleepTimer(this.secondsLength, this.tracksLength);
 
   Future<void> start(Function callback) async {
-    assert(_timer == null && _tracksRemaining == null && _startTime == null && _timer == null);
+    assert(
+      _timer == null &&
+          _tracksRemaining == null &&
+          _startTime == null &&
+          _timer == null,
+    );
     _startTime = DateTime.now();
     _callback = callback;
 
@@ -3212,7 +3560,9 @@ class SleepTimer {
       _tracksRemaining = tracksLength;
     }
 
-    sleepTimerLogger.info("Sleep timer started for ${Duration(seconds: secondsLength)}, $tracksLength tracks");
+    sleepTimerLogger.info(
+      "Sleep timer started for ${Duration(seconds: secondsLength)}, $tracksLength tracks",
+    );
   }
 
   void onTrackCompleted() {
@@ -3242,7 +3592,8 @@ class SleepTimer {
     if (_startTime == null) return Duration.zero;
     final diff = _startTime!.add(totalDuration).difference(DateTime.now());
     // we want to make sure playback ends when specified, so we need to be done fading by then
-    final remaining = diff - FinampSettingsHelper.finampSettings.audioFadeOutDuration;
+    final remaining =
+        diff - FinampSettingsHelper.finampSettings.audioFadeOutDuration;
     return diff.isNegative ? Duration.zero : remaining;
   }
 
@@ -3253,7 +3604,9 @@ class SleepTimer {
       final minutes = (remainingDuration.inSeconds / 60).ceil();
       return AppLocalizations.of(context)!.sleepTimerRemainingTime(minutes);
     } else {
-      return AppLocalizations.of(context)!.sleepTimerRemainingTracks(_tracksRemaining ?? 0);
+      return AppLocalizations.of(
+        context,
+      )!.sleepTimerRemainingTracks(_tracksRemaining ?? 0);
     }
   }
 }

@@ -388,13 +388,16 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
       ..defaultDownloadLocation = fields[58] as String?
       ..lastUsedDownloadLocationId = fields[85] as String?
-      ..sleepTimer = fields[116] as SleepTimer?;
+      ..sleepTimer = fields[116] as SleepTimer?
+      ..autoExpandPlayerScreen = fields[121] == null
+          ? false
+          : fields[121] as bool;
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(114)
+      ..writeByte(115)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -622,7 +625,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(119)
       ..write(obj.syncPlaybackSpeedAndPitch)
       ..writeByte(120)
-      ..write(obj.useHighContrastColors);
+      ..write(obj.useHighContrastColors)
+      ..writeByte(121)
+      ..write(obj.autoExpandPlayerScreen);
   }
 
   @override
