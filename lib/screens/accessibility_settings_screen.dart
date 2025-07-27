@@ -16,7 +16,7 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.interactions),
+        title: Text(AppLocalizations.of(context)!.accessibility),
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(
             context,
