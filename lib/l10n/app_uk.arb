@@ -2645,5 +2645,45 @@
   "additionalBaseItemInfoSubtitle": "Контролює, який тип додаткової інформації відображається у списках елементів для кожного типу елемента. Якщо встановлено значення «Адаптивний», інформація вибирається автоматично на основі поточного сортування або контексту.",
   "@additionalBaseItemInfoSubtitle": {
     "description": "Subtitle for the setting that controls the displayed additional item info."
+  },
+  "discordRPCSettingTitle": "RPC в Discord",
+  "@discordRPCSettingTitle": {
+    "description": "Title for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCSettingDescription": "Увімкніть Discord Rich Presence, щоб у вашому статусі Discord відображалося, у що ви граєте. Не вийде підключитися до Discord, якщо ввімкнено офлайн-режим.",
+  "@discordRPCSettingDescription": {
+    "description": "Description for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCIconSettingTitle": "Піктограма резервного RPC",
+  "@discordRPCIconSettingTitle": {
+    "description": "Title for the setting that controls which icon gets shown in the Discord RPC (Rich Presence) in case the local address is in use"
+  },
+  "discordRPCIconSettingDescription": "Значок резервного варіанту, який відображається, коли публічна адреса не виявлена. (Оскільки Discord не може завантажити зображення з локальної адреси та використовуватиме резервний варіант)",
+  "@discordRPCIconSettingDescription": {
+    "description": "Description for the setting that controls which Icon the discord RPC displays as a Fallback in case no public address is detected (it doenst matter what connection is active)."
+  },
+  "discordRPCIconDark": "Finamp – Темний",
+  "@discordRPCIconDark": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with the Dark-Theme Background"
+  },
+  "discordRPCIconBlack": "Finamp - Чорний",
+  "@discordRPCIconBlack": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Black Background"
+  },
+  "discordRPCIconLight": "Finamp - Білий",
+  "@discordRPCIconLight": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a White Background"
+  },
+  "discordRPCIconJFTransparent": "Jellyfin - прозорий",
+  "@discordRPCIconJFTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Jellyfin logo with a Transparent Background"
+  },
+  "discordRPCIconTransparent": "Finamp - Прозорий",
+  "@discordRPCIconTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Transparent Background"
+  },
+  "discordRPCIconWhiteTransparent": "Білий Finamp - прозорий",
+  "@discordRPCIconWhiteTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
   }
 }
