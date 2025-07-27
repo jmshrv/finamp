@@ -2568,7 +2568,7 @@
   "@serverSharingMenuDetails": {
     "description": "Description text shown in the server sharing menu, below the description"
   },
-  "quickConnectAuthorizationMenuButtonTitle": "Швидке підключення",
+  "quickConnectAuthorizationMenuButtonTitle": "Авторизувати швидке підключення",
   "@quickConnectAuthorizationMenuButtonTitle": {
     "description": "Title for the button in the drawer that opens the quick connect authorization menu"
   },
