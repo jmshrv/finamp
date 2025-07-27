@@ -373,7 +373,7 @@
   "@enterLowPriorityStateOnPause": {},
   "shuffleAllTrackCount": "Kaikkien sekoitettujen kappaleiden määrä",
   "@shuffleAllTrackCount": {},
-  "shuffleAllTrackCountSubtitle": "Ladattavien kappaleiden määrä, kun käytät sekoita kaikki kappaleet-painiketta.",
+  "shuffleAllTrackCountSubtitle": "Ladattavien kappaleiden määrä, kun käytät \"sekoita kaikki kappaleet\" -painiketta kappaleet-välilehdellä tai tyylilajit-näkymässä.",
   "@shuffleAllTrackCountSubtitle": {},
   "gridCrossAxisCount": "{value} Ruudukon poikittaisakselien lukumäärä",
   "@gridCrossAxisCount": {
@@ -2233,7 +2233,7 @@
   "@playbackActionPagePlay": {
     "description": "Label for the playback action page that contains all actions related to playing in order"
   },
-  "genreFilterPlaylistScreensSubtitle": "Kun päällä, soittolistat (genrevalikon kautta avattuna) näyttävät vain raidat, jotka täsmäävät genreen jota paraikaa selaat. (Genresuodattimen saa aina käsin pois päältä näyttääksesi kaikki raidat.)",
+  "genreFilterPlaylistScreensSubtitle": "Kun päällä, soittolistat (tyylilajivalikon kautta avattuna) näyttävät vain raidat, jotka täsmäävät tyylilajiin jota paraikaa selaat. (Tyylilajisuodattimen saa aina käsin pois päältä näyttääksesi kaikki raidat.)",
   "@genreFilterPlaylistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
   },
@@ -2271,7 +2271,7 @@
   "@showArtistsTracksSection": {},
   "showArtistsTracksSectionSubtitle": "Näytetäänkö osio, jossa enintään viisi raitaa. Kun päällä, voit valita näytetäänkö osiossa eniten toistettuja, suosikkeja, satunnaisia, viimeksi julkaistuja, viimeksi lisättyjä vai viimeksi toistettuja raitoja.",
   "@showArtistsTracksSectionSubtitle": {},
-  "autoSwitchItemCurationTypeSubtitle": "Kun tämä on päällä, artistien ja genrejen näyttöjen kohdeosiot vaihtavat automaattisesti toiseen järjestelytapaan, jos kohteita ei ole saatavilla (esim. ei suosikkeja tietylle artistille).",
+  "autoSwitchItemCurationTypeSubtitle": "Kun tämä on päällä, artistien ja tyylilajien näyttöjen kohdeosiot vaihtavat automaattisesti toiseen järjestelytapaan, jos kohteita ei ole saatavilla (esim. ei suosikkeja tietylle artistille).",
   "@autoSwitchItemCurationTypeSubtitle": {},
   "topAlbums": "Suosituimmat albumit",
   "@topAlbums": {},
@@ -2311,7 +2311,7 @@
   "@artistItemSectionFilterChipOrderTitle": {
     "description": "Label for the setting that controls the order of the tracks sections filter chips."
   },
-  "genreFilterArtistScreensSubtitle": "Kun päällä, Artistit (genrevalikon kautta valittuna) näyttää vain raidat ja albumit jotka täsmäävät genreen jota paraikaa selaat. (Genresuodattimen voi poistaa aina käsin näyttääksesi kaikki raidat ja albumit.)",
+  "genreFilterArtistScreensSubtitle": "Kun päällä, Artistit (tyylilajivalikon kautta valittuna) näyttää vain raidat ja albumit jotka täsmäävät tyylilajiin jota paraikaa selaat. (Tyylilajisuodattimen voi poistaa aina käsin näyttääksesi kaikki raidat ja albumit.)",
   "@genreFilterArtistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
@@ -2323,7 +2323,7 @@
   "@curatedItemsMostPlayedOfflineTooltip": {
     "description": "Tooltip for Most Played on Curated Items in Offline Mode."
   },
-  "genreListsInheritSortingSubtitle": "Kun päällä, \"Näytä kaikki\"-listat perivät järjestys- ja suodatusasetukset genrenäkymästä. Kun kytketty pois päältä, liittyvän kirjastovälilehden asetuksia sovelletaan sen sijaan. Täyden listan järjestelyasetuksineen saa näkyviin genrenäkymän yläreunan laskuria näpäyttämällä, tai \"selaa soittolistoja\"-napista.",
+  "genreListsInheritSortingSubtitle": "Kun päällä, \"Näytä kaikki\"-listat perivät järjestys- ja suodatusasetukset tyylilajinäkymästä. Kun kytketty pois päältä, liittyvän kirjastovälilehden asetuksia sovelletaan sen sijaan. Täyden listan järjestelyasetuksineen saa näkyviin tyylilajinäkymän yläreunan laskuria näpäyttämällä, tai \"selaa soittolistoja\"-napista.",
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
@@ -2629,5 +2629,25 @@
     "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
   },
   "logoutButtonSubtitle": "Kirjautuminen eri palvelimelle aiheuttaa ladattujen tiedostojen poistamisen",
-  "@logoutButtonSubtitle": {}
+  "@logoutButtonSubtitle": {},
+  "shuffleCountButton": "Sekoita ({count,plural,=1{{count} kappale} other{{count} kappaletta}})",
+  "@shuffleCountButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "additionalBaseItemInfoTitle": "Kohteen lisätiedot",
+  "@additionalBaseItemInfoTitle": {
+    "description": "Title for the setting that controls the displayed additional item info."
+  },
+  "additionalBaseItemInfoSubtitle": "Määrittää, minkä tyyppisiä lisätietoja näytetään kohdeluetteloissa kullekin kohteen tyypille. Kun asetukseksi valitaan \"Mukautuva\", tiedot valitaan automaattisesti nykyisen lajittelun tai kontekstin perusteella.",
+  "@additionalBaseItemInfoSubtitle": {
+    "description": "Subtitle for the setting that controls the displayed additional item info."
+  },
+  "adaptive": "Mukautuva",
+  "@adaptive": {},
+  "none": "Ei mitään",
+  "@none": {}
 }
