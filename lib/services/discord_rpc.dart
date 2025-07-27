@@ -85,8 +85,10 @@ class DiscordRpc {
       artistItem = null;
 
       try {
-        await FlutterDiscordRPC.instance.clearActivity();
-        await FlutterDiscordRPC.instance.disconnect();
+        if (FlutterDiscordRPC.instance.isConnected) {
+            await FlutterDiscordRPC.instance.clearActivity();
+            await FlutterDiscordRPC.instance.disconnect();
+        }
         await FlutterDiscordRPC.instance.dispose();
       } catch (e) {
         _rpcLogger.severe("Failed to Stop", e);
