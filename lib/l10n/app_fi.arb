@@ -2649,5 +2649,17 @@
   "adaptive": "Mukautuva",
   "@adaptive": {},
   "none": "Ei mitään",
-  "@none": {}
+  "@none": {},
+  "discordRPCSettingTitle": "Discord tilatieto",
+  "@discordRPCSettingTitle": {
+    "description": "Title for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCSettingDescription": "Kytke päälle Discord tilatieto näyttääksesi Discordin statustekstissä mitä kuuntelet. Ei yhdistä Discordiin, mikäli offline-tila on päällä.",
+  "@discordRPCSettingDescription": {
+    "description": "Description for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCIconSettingTitle": "Tilatiedon varaikoni",
+  "@discordRPCIconSettingTitle": {
+    "description": "Title for the setting that controls which icon gets shown in the Discord RPC (Rich Presence) in case the local address is in use"
+  }
 }
