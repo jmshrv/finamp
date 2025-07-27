@@ -43,46 +43,59 @@ class DiscordRpc {
     if (_status == _RpcStatus.stopped) {
       _status = _RpcStatus.transition;
       _rpcLogger.info("Starting RPC");
+      
+      try {
+        await FlutterDiscordRPC.instance.connect(autoRetry: true, retryDelay: Duration(seconds: 3));
+        await FlutterDiscordRPC.instance.clearActivity();
+      } catch(e) {
+        _rpcLogger.severe("Failed to Start", e);
+        _targetStatus = _RpcStatus.stopped;
+        await stop();
+        return;
+      }
 
-      await FlutterDiscordRPC.instance.connect(autoRetry: true, retryDelay: Duration(seconds: 3));
-      await FlutterDiscordRPC.instance.clearActivity();
+      // wait for connection to update RPC and start Interval
       StreamSubscription<bool>? isConnectedStreamSubscription;
       isConnectedStreamSubscription = FlutterDiscordRPC.instance.isConnectedStream.listen((connected) {
         isConnectedStreamSubscription?.cancel();
         if (connected) {
           updateRPC();
+          // updates the rpc regularly to fix potential desyncs, keeps connection alive and also to prevent ratelimiting
+          // From my research the most mentioned ratelimit is 15 seconds (though inconsistently? a lot of the time rpc can be updated faster, just not all the time)
+          // One of the repos which mention 15 seconds is this one: https://github.com/dhinakg/vm-rpc
+          // I couldn't find any official ratelimit regarding RPC :/
+          _timer = Timer.periodic(Duration(seconds: 15), (timer) => updateRPC());
           _rpcLogger.info("Connected, ${FlutterDiscordRPC.instance.isConnected}");
         }
       });
 
-
-      // updates the rpc regularly to fix potential desyncs, keeps connection alive and also to prevent ratelimiting
-      // From my research the most mentioned ratelimit is 15 seconds (though inconsistently? a lot of the time rpc can be updated faster, just not all the time)
-      // One of the repos which mention 15 seconds is this one: https://github.com/dhinakg/vm-rpc
-      // I couldn't find any official ratelimit regarding RPC :/
-      _timer = Timer.periodic(Duration(seconds: 15), (timer) => updateRPC());
       _status = _RpcStatus.running;
 
-      if (_targetStatus == _RpcStatus.stopped) stop();
+      if (_targetStatus == _RpcStatus.stopped) await stop();
     }
   }
 
   static Future<void> stop() async {
     _targetStatus = _RpcStatus.stopped;
     if (_status == _RpcStatus.running) {
+      _rpcLogger.info("Stopping RPC");
+
       _status = _RpcStatus.transition;
       _timer?.cancel();
       _timer = null;
       artistItem = null;
-
-      await FlutterDiscordRPC.instance.clearActivity();
-      await FlutterDiscordRPC.instance.disconnect();
-      await FlutterDiscordRPC.instance.dispose();
+      
+      try {
+        await FlutterDiscordRPC.instance.clearActivity();
+        await FlutterDiscordRPC.instance.disconnect();
+        await FlutterDiscordRPC.instance.dispose();
+      } catch (e) {
+        _rpcLogger.severe("Failed to Stop", e);
+      }
 
       _status = _RpcStatus.stopped;
-      _rpcLogger.info("Stopped RPC");
 
-      if (_targetStatus == _RpcStatus.running) start();
+      if (_targetStatus == _RpcStatus.running) await start();
     }
   }
 
