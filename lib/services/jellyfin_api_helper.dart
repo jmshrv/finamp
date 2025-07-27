@@ -63,9 +63,7 @@ class JellyfinApiHelper {
 
     // Extend the default security context to trust Android user certificates.
     // This is a workaround for <https://github.com/dart-lang/sdk/issues/50435>.
-    if (Platform.isAndroid) {
-      await FlutterUserCertificatesAndroid().trustAndroidUserCertificates(SecurityContext.defaultContext);
-    }
+    await FlutterUserCertificatesAndroid().trustAndroidUserCertificates(SecurityContext.defaultContext);
 
     input.$1.send(requestPort.sendPort);
     final dir = (Platform.isAndroid || Platform.isIOS)
