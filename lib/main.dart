@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:app_links/app_links.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:background_downloader/background_downloader.dart';
@@ -42,17 +43,13 @@ import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/ui_overlay_setter_observer.dart';
 import 'package:finamp/services/widget_bindings_observer_provider.dart';
 import 'package:flutter/foundation.dart';
-import 'package:finamp/services/server_client_discovery_service.dart';
-import 'package:finamp/services/theme_provider.dart';
-import 'package:audio_service/audio_service.dart';
-import 'package:audio_session/audio_session.dart';
-import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:flutter_user_certificates_android/flutter_user_certificates_android.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -112,6 +109,8 @@ void main() async {
     _migrateDownloadLocations();
     _migrateSortOptions();
     _mainLog.info("Completed applicable migrations");
+    await _trustAndroidUserCerts();
+    _mainLog.info("Trusted Android user certs");
     await _setupFinampUserHelper();
     _mainLog.info("Setup user helper");
     await _setupJellyfinApiData();
@@ -193,8 +192,8 @@ Future<void> _setupDownloadsHelper() async {
   await Future.wait(
     FinampSettingsHelper.finampSettings.downloadLocationsMap.values.map((element) => element.updateCurrentPath()),
   );
-  FileDownloader(persistentStorage: IsarPersistentStorage());
-  await FileDownloader().ready;
+  final fileDownloader = FileDownloader(persistentStorage: IsarPersistentStorage());
+  await fileDownloader.ready;
   WidgetsFlutterBinding.ensureInitialized();
   // There is additional FileDownloader setup inside downloadsService constructor
   GetIt.instance.registerSingleton(DownloadsService());
@@ -221,8 +220,10 @@ Future<void> _setupDownloadsHelper() async {
     }
   }
 
-  await FileDownloader().configure(globalConfig: (Config.checkAvailableSpace, 1024));
-  await FileDownloader().resumeFromBackground();
+  await _migrateDownloadsFileOwner();
+
+  await fileDownloader.configure(globalConfig: (Config.checkAvailableSpace, 1024));
+  await fileDownloader.resumeFromBackground();
   await downloadsService.startQueues();
 
   if (!FinampSettingsHelper.finampSettings.hasDownloadedPlaylistInfo) {
@@ -282,6 +283,8 @@ Future<void> setupHive() async {
     [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema, DownloadedLyricsSchema],
     directory: dir.path,
     name: isarDatabaseName,
+    compactOnLaunch: CompactCondition(minBytes: 5 * 1024 * 1024),
+    relaxedDurability: true,
   );
   GetIt.instance.registerSingleton(isar);
 }
@@ -433,6 +436,31 @@ void _migrateSortOptions() {
   }
 }
 
+Future<void> _migrateDownloadsFileOwner() async {
+  if (!Platform.isAndroid) {
+    // Only Android needs this migration
+    return;
+  }
+  if (!FinampSettingsHelper.finampSettings.hasCompletedDownloadsFileOwnerMigration) {
+    var downloadsServiceChannel = MethodChannel("com.unicornsonlsd.finamp/downloads_service");
+    var downloadLocations = FinampSettingsHelper.finampSettings.downloadLocationsMap;
+    var downloadPaths = downloadLocations.values.map((e) => e.currentPath).toList();
+    await downloadsServiceChannel.invokeMethod("fixDownloadsFileOwner", <String, dynamic>{
+      'download_locations': downloadPaths,
+    });
+    FinampSetters.setHasCompletedDownloadsFileOwnerMigration(true);
+  }
+}
+
+Future<void> _trustAndroidUserCerts() async {
+  // Extend the default security context to trust Android user certificates.
+  // This is a workaround for <https://github.com/dart-lang/sdk/issues/50435>.
+  WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isAndroid) {
+    await FlutterUserCertificatesAndroid().trustAndroidUserCertificates(SecurityContext.defaultContext);
+  }
+}
+
 Future<void> _setupFinampUserHelper() async {
   GetIt.instance.registerSingleton(FinampUserHelper());
   if (!FinampSettingsHelper.finampSettings.hasCompletedIsarUserMigration) {
@@ -451,10 +479,31 @@ class Finamp extends StatefulWidget {
 
 class _FinampState extends State<Finamp> with WindowListener {
   static final Logger windowManagerLogger = Logger("WindowManager");
+  static final Logger linkHandlingLogger = Logger("LinkHandling");
+
+  StreamSubscription<Uri>? _uriLinkSubscription;
 
   @override
   void initState() {
     super.initState();
+    // Subscribe to all events (initial link and further)
+    _uriLinkSubscription = AppLinks().uriLinkStream.listen((uri) async {
+      linkHandlingLogger.info("Received link: $uri");
+      int attempts = 0;
+      do {
+        var context = GlobalSnackbar.materialAppNavigatorKey.currentContext;
+        if (context != null) {
+          if (uri.host == "internal") {
+            await Navigator.of(context).pushNamed(uri.path);
+          }
+          break;
+        }
+        // Wait for the context to be available
+        await Future<void>.delayed(const Duration(milliseconds: 250));
+      } while (++attempts < 10);
+    });
+
+    // If the app is running on desktop, we add a listener to the window manager
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       WindowManager.instance.addListener(this);
       // windowManager.setPreventClose(true); //!!! destroying the window manager instance doesn't seem to work on Windows release builds, the app just freezes instead
@@ -463,10 +512,12 @@ class _FinampState extends State<Finamp> with WindowListener {
 
   @override
   Future<void> dispose() async {
+    await DiscordRpc.stop().timeout(Duration(milliseconds: 500));
+    await _uriLinkSubscription?.cancel();
+
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       WindowManager.instance.removeListener(this);
     }
-    await DiscordRpc.stop().timeout(Duration(milliseconds: 500));
     super.dispose();
   }
 

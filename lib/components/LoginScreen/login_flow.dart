@@ -1,12 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:finamp/components/LoginScreen/login_server_selection_page.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/view_selector.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
-import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/server_client_discovery_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -42,7 +39,7 @@ class _LoginFlowState extends State<LoginFlow> {
     return PopScope(
       // handle going back inside the nested Navigator while not on the first page
       canPop: false,
-      onPopInvoked: (didPop) async {
+      onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
 
         if (context.mounted) {
@@ -57,7 +54,6 @@ class _LoginFlowState extends State<LoginFlow> {
         key: loginNavigatorKey,
         initialRoute: LoginSplashPage.routeName,
         onGenerateRoute: (RouteSettings settings) {
-          final queueService = GetIt.instance<QueueService>();
           Route route;
 
           Route createRoute(Widget page) => PageRouteBuilder(
@@ -114,7 +110,7 @@ class _LoginFlowState extends State<LoginFlow> {
                     loginNavigatorKey.currentState!.pushNamed(LoginAuthenticationPage.routeName);
                   },
                   onAuthenticated: () {
-                    Navigator.of(context).popAndPushNamed(ViewSelector.routeName);
+                    Navigator.of(context).pushReplacementNamed(ViewSelector.routeName);
                   },
                 ),
               );

@@ -114,7 +114,7 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
     return SliverStickyHeader(
       header: Container(
         padding: EdgeInsets.fromLTRB(6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        color: Theme.of(context).colorScheme.surface,
         child: GestureDetector(
           onTap: () {
             if (_isExpandable) {
@@ -190,10 +190,7 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
                   TracksSliverList(
                     childrenForList: widget.tracks!,
                     childrenForQueue: widget.childrenForQueue!,
-                    showPlayCount: (widget.selectedFilter?.getSortBy() == SortBy.playCount),
-                    showReleaseDate: (widget.selectedFilter?.getSortBy() == SortBy.premiereDate),
-                    showDateLastPlayed: (widget.selectedFilter?.getSortBy() == SortBy.datePlayed),
-                    showDateAdded: (widget.selectedFilter?.getSortBy() == SortBy.dateCreated),
+                    adaptiveAdditionalInfoSortBy: widget.selectedFilter?.getSortBy(),
                     parent: widget.parent,
                     isOnArtistScreen: widget.isOnArtistScreen,
                     isOnGenreScreen: widget.isOnGenreScreen,
@@ -318,7 +315,7 @@ class _ItemsSectionState extends ConsumerState<CollectionsSection> {
     return SliverStickyHeader(
       header: Container(
         padding: EdgeInsets.fromLTRB(6, widget.parent.type == "MusicGenre" ? 12 : 0, 6, 0),
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        color: Theme.of(context).colorScheme.surface,
         child: GestureDetector(
           onTap: () {
             if (_isExpandable) {
@@ -397,7 +394,7 @@ class _ItemsSectionState extends ConsumerState<CollectionsSection> {
                     parent: widget.parent,
                     genreFilter: widget.genreFilter,
                     albumShowsYearAndDurationInstead: widget.albumsShowYearAndDurationInstead,
-                    showAdditionalInfoForSortBy: widget.selectedFilter?.getSortBy(),
+                    adaptiveAdditionalInfoSortBy: widget.selectedFilter?.getSortBy(),
                   )
                 else
                   SliverToBoxAdapter(

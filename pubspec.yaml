@@ -26,7 +26,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  background_downloader: ^8.6.0
+  background_downloader: ^9.2.3
   json_annotation: ^4.8.1
   chopper: ^8.0.0
   get_it: ^7.2.0
@@ -61,6 +61,13 @@ dependencies:
   uuid: ^4.5.1
   infinite_scroll_pagination: ^4.0.0
   flutter_sticky_header: ^0.8.0
+  # TODO: switch to regular `flutter_user_certificates_android` when this PR is
+  # merged:
+  # <https://github.com/johnstef99/flutter_user_certificates_android/pull/2>.
+  flutter_user_certificates_android:
+    git:
+      url: https://github.com/jfly/flutter_user_certificates_android.git
+      ref: db81e4ff3222a7db1308ed03c4bc3142c0d271d5
   device_info_plus: ^11.3.3
   app_set_id: ^1.2.1
   package_info_plus: ^8.3.0
@@ -115,6 +122,7 @@ dependencies:
   visibility_detector: ^0.4.0+2
   gaimon: ^1.4.0
   http: ^1.4.0
+  app_links: ^6.4.0
   flutter_discord_rpc: ^1.0.0
 
 dev_dependencies:
@@ -134,7 +142,7 @@ dev_dependencies:
   isar_generator:
     git:
       url: https://github.com/callumw-k/isar.git
-      ref: ad574f60ed6f39d2995cd16fc7dc3de9a646ef30
+      ref: f070a067378c215b9212a2a22ea593293671c9c9
       path: packages/isar_generator
   msix: ^3.16.9
 
@@ -229,3 +237,4 @@ msix_config:
   certificate_password: finamp
   # Building during msix:create is currently bugged, so build manually beforehand.
   build_windows: false
+  protocol_activation: finamp # the protocols to activate the app

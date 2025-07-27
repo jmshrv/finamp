@@ -1,3 +1,5 @@
+// dart format width=120
+
 /// GENERATED CODE - DO NOT MODIFY BY HAND
 /// *****************************************************
 ///  FlutterGen
@@ -5,7 +7,7 @@
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
-// ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
+// ignore_for_file: deprecated_member_use,directives_ordering,implicit_dynamic_list_literal,unnecessary_import
 
 import 'package:flutter/widgets.dart';
 
@@ -31,19 +33,40 @@ class $ImagesGen {
   List<dynamic> get values => [albumWhite, finamp, finampCroppedPng, finampCroppedSvg, jellyfinIconTransparent];
 }
 
+class $AssetsIconGen {
+  const $AssetsIconGen();
+
+  /// File path: assets/icon/icon_combined.png
+  AssetGenImage get iconCombined => const AssetGenImage('assets/icon/icon_combined.png');
+
+  /// File path: assets/icon/icon_square_bg-black.png
+  AssetGenImage get iconSquareBgBlack => const AssetGenImage('assets/icon/icon_square_bg-black.png');
+
+  /// File path: assets/icon/icon_square_bg-white.png
+  AssetGenImage get iconSquareBgWhite => const AssetGenImage('assets/icon/icon_square_bg-white.png');
+
+  /// File path: assets/icon/icon_white_noborder.png
+  AssetGenImage get iconWhiteNoborder => const AssetGenImage('assets/icon/icon_white_noborder.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [iconCombined, iconSquareBgBlack, iconSquareBgWhite, iconWhiteNoborder];
+}
+
 class Assets {
   const Assets._();
 
+  static const $AssetsIconGen icon = $AssetsIconGen();
   static const $ImagesGen images = $ImagesGen();
 }
 
 class AssetGenImage {
-  const AssetGenImage(this._assetName, {this.size, this.flavors = const {}});
+  const AssetGenImage(this._assetName, {this.size, this.flavors = const {}, this.animation});
 
   final String _assetName;
 
   final Size? size;
   final Set<String> flavors;
+  final AssetGenImageAnimation? animation;
 
   Image image({
     Key? key,
@@ -105,4 +128,12 @@ class AssetGenImage {
   String get path => _assetName;
 
   String get keyName => _assetName;
+}
+
+class AssetGenImageAnimation {
+  const AssetGenImageAnimation({required this.isAnimation, required this.duration, required this.frames});
+
+  final bool isAnimation;
+  final Duration duration;
+  final int frames;
 }

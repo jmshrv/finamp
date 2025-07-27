@@ -220,6 +220,13 @@ class DefaultSettings {
   static const genreFilterPlaylists = false;
   static const clearQueueOnStopEvent = false;
   static const useHighContrastColors = false;
+  static const tileAdditionalInfoType = {
+    TabContentType.tracks: TileAdditionalInfoType.adaptive,
+    TabContentType.albums: TileAdditionalInfoType.adaptive,
+    TabContentType.artists: TileAdditionalInfoType.adaptive,
+    TabContentType.playlists: TileAdditionalInfoType.adaptive,
+    TabContentType.genres: TileAdditionalInfoType.adaptive,
+  };
   static const rpcEnabled = false;
   static const rpcIcon = DiscordRpcIcon.transparent;
 }
@@ -341,6 +348,9 @@ class FinampSettings {
     this.genreFilterPlaylists = DefaultSettings.genreFilterPlaylists,
     this.clearQueueOnStopEvent = DefaultSettings.clearQueueOnStopEvent,
     this.useHighContrastColors = DefaultSettings.useHighContrastColors,
+    // !!! Don't touch this default value, it's supposed to be hard coded to run the migration only once
+    this.hasCompletedDownloadsFileOwnerMigration = true,
+    this.tileAdditionalInfoType = DefaultSettings.tileAdditionalInfoType,
     this.rpcEnabled = DefaultSettings.rpcEnabled,
     this.rpcIcon = DefaultSettings.rpcIcon,
   });
@@ -402,9 +412,7 @@ class FinampSettings {
   // @HiveField(14, defaultValue: DefaultSettings.sleepTimerSeconds) //!!! don't reuse this hive ID!
 
   @HiveField(15, defaultValue: <String, DownloadLocation>{})
-  @SettingsHelperIgnore(
-    "Collections like array and maps are treated as immutable by Riverpod, so we need to manually select/watch the specific properties we care about.",
-  )
+  @SettingsHelperIgnore("This map is read and modified in an unusual way, so helper methods are defined manually.")
   Map<String, DownloadLocation> downloadLocationsMap;
 
   /// Whether or not to use blurred cover art as background on player screen.
@@ -720,10 +728,19 @@ class FinampSettings {
   @HiveField(120, defaultValue: DefaultSettings.useHighContrastColors)
   bool useHighContrastColors;
 
-  @HiveField(121, defaultValue: DefaultSettings.rpcEnabled)
+  // !!! Don't touch this default value, it's supposed to be hard coded to run the migration only once
+  // Whether the downloads file owner migration has been completed.
+  @HiveField(121, defaultValue: false)
+  bool hasCompletedDownloadsFileOwnerMigration;
+
+  @HiveField(122, defaultValue: DefaultSettings.tileAdditionalInfoType)
+  @SettingsHelperMap("tabContentType", "tileAdditionalInfoType")
+  Map<TabContentType, TileAdditionalInfoType> tileAdditionalInfoType;
+
+  @HiveField(123, defaultValue: DefaultSettings.rpcEnabled)
   bool rpcEnabled;
 
-  @HiveField(122, defaultValue: DefaultSettings.rpcIcon)
+  @HiveField(124, defaultValue: DefaultSettings.rpcIcon)
   DiscordRpcIcon rpcIcon;
 
   static Future<FinampSettings> create() async {
@@ -3280,6 +3297,69 @@ enum SleepTimerType {
 }
 
 @HiveType(typeId: 100)
+enum TileAdditionalInfoType {
+  @HiveField(0)
+  adaptive,
+  @HiveField(1)
+  dateAdded,
+  @HiveField(2)
+  dateReleased,
+  @HiveField(3)
+  duration,
+  @HiveField(4)
+  playCount,
+  @HiveField(5)
+  dateLastPlayed,
+  @HiveField(6)
+  none;
+
+  /// Human-readable version of this enum.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(TileAdditionalInfoType additionalInfoType) {
+    switch (additionalInfoType) {
+      case TileAdditionalInfoType.adaptive:
+        return "Adaptive";
+      case TileAdditionalInfoType.dateAdded:
+        return "Date Added";
+      case TileAdditionalInfoType.dateReleased:
+        return "Release Date";
+      case TileAdditionalInfoType.duration:
+        return "Duration";
+      case TileAdditionalInfoType.playCount:
+        return "Play Count";
+      case TileAdditionalInfoType.dateLastPlayed:
+        return "Date Last Played";
+      case TileAdditionalInfoType.none:
+        return "None";
+    }
+  }
+
+  String _humanReadableLocalisedName(TileAdditionalInfoType additionalInfoType, BuildContext context) {
+    switch (additionalInfoType) {
+      case TileAdditionalInfoType.adaptive:
+        return AppLocalizations.of(context)!.adaptive;
+      case TileAdditionalInfoType.dateAdded:
+        return AppLocalizations.of(context)!.dateAdded;
+      case TileAdditionalInfoType.dateReleased:
+        return AppLocalizations.of(context)!.premiereDate;
+      case TileAdditionalInfoType.duration:
+        return AppLocalizations.of(context)!.duration;
+      case TileAdditionalInfoType.playCount:
+        return AppLocalizations.of(context)!.playCount;
+      case TileAdditionalInfoType.dateLastPlayed:
+        return AppLocalizations.of(context)!.datePlayed;
+      case TileAdditionalInfoType.none:
+        return AppLocalizations.of(context)!.none;
+    }
+  }
+}
+
+@HiveType(typeId: 101)
 enum DiscordRpcIcon {
   @HiveField(0)
   black,

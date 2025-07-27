@@ -54,7 +54,13 @@ extension FinampSetters on FinampSettingsHelper {
 
   static void setShowTabs(TabContentType tabContentType, bool value) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.showTabs[tabContentType] = value;
+    try {
+      finampSettingsTemp.showTabs[tabContentType] = value;
+    } on UnsupportedError {
+      // We were using the default const map directly.  Clone to allow modifications.
+      finampSettingsTemp.showTabs = Map.from(finampSettingsTemp.showTabs);
+      finampSettingsTemp.showTabs[tabContentType] = value;
+    }
     Hive.box<FinampSettings>(
       "FinampSettings",
     ).put("FinampSettings", finampSettingsTemp);
@@ -140,7 +146,13 @@ extension FinampSetters on FinampSettingsHelper {
 
   static void setTabSortBy(TabContentType tabContentType, SortBy sortBy) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.tabSortBy[tabContentType] = sortBy;
+    try {
+      finampSettingsTemp.tabSortBy[tabContentType] = sortBy;
+    } on UnsupportedError {
+      // We were using the default const map directly.  Clone to allow modifications.
+      finampSettingsTemp.tabSortBy = Map.from(finampSettingsTemp.tabSortBy);
+      finampSettingsTemp.tabSortBy[tabContentType] = sortBy;
+    }
     Hive.box<FinampSettings>(
       "FinampSettings",
     ).put("FinampSettings", finampSettingsTemp);
@@ -151,7 +163,15 @@ extension FinampSetters on FinampSettingsHelper {
     SortOrder sortOrder,
   ) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.tabSortOrder[tabContentType] = sortOrder;
+    try {
+      finampSettingsTemp.tabSortOrder[tabContentType] = sortOrder;
+    } on UnsupportedError {
+      // We were using the default const map directly.  Clone to allow modifications.
+      finampSettingsTemp.tabSortOrder = Map.from(
+        finampSettingsTemp.tabSortOrder,
+      );
+      finampSettingsTemp.tabSortOrder[tabContentType] = sortOrder;
+    }
     Hive.box<FinampSettings>(
       "FinampSettings",
     ).put("FinampSettings", finampSettingsTemp);
@@ -1010,6 +1030,38 @@ extension FinampSetters on FinampSettingsHelper {
     ).put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setHasCompletedDownloadsFileOwnerMigration(
+    bool newHasCompletedDownloadsFileOwnerMigration,
+  ) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.hasCompletedDownloadsFileOwnerMigration =
+        newHasCompletedDownloadsFileOwnerMigration;
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setTileAdditionalInfoType(
+    TabContentType tabContentType,
+    TileAdditionalInfoType tileAdditionalInfoType,
+  ) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    try {
+      finampSettingsTemp.tileAdditionalInfoType[tabContentType] =
+          tileAdditionalInfoType;
+    } on UnsupportedError {
+      // We were using the default const map directly.  Clone to allow modifications.
+      finampSettingsTemp.tileAdditionalInfoType = Map.from(
+        finampSettingsTemp.tileAdditionalInfoType,
+      );
+      finampSettingsTemp.tileAdditionalInfoType[tabContentType] =
+          tileAdditionalInfoType;
+    }
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setRpcEnabled(bool newRpcEnabled) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.rpcEnabled = newRpcEnabled;
@@ -1393,6 +1445,15 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       );
   ProviderListenable<bool> get useHighContrastColors => finampSettingsProvider
       .select((value) => value.requireValue.useHighContrastColors);
+  ProviderListenable<bool> get hasCompletedDownloadsFileOwnerMigration =>
+      finampSettingsProvider.select(
+        (value) => value.requireValue.hasCompletedDownloadsFileOwnerMigration,
+      );
+  ProviderListenable<TileAdditionalInfoType?> tileAdditionalInfoType(
+    TabContentType tabContentType,
+  ) => finampSettingsProvider.select(
+    (value) => value.requireValue.tileAdditionalInfoType[tabContentType],
+  );
   ProviderListenable<bool> get rpcEnabled =>
       finampSettingsProvider.select((value) => value.requireValue.rpcEnabled);
   ProviderListenable<DiscordRpcIcon> get rpcIcon =>

@@ -2,10 +2,10 @@ import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/LoginScreen/login_user_selection_page.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter/material.dart' hide ConnectionState;
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
@@ -175,7 +175,7 @@ class _LoginAuthenticationPageState extends State<LoginAuthenticationPage> {
   }
 
   Future<void> sendForm() async {
-    if (formKey.currentState?.validate() == true) {
+    if ((formKey.currentState?.validate() ?? false) && !widget.connectionState!.isAuthenticating) {
       formKey.currentState!.save();
       setState(() {
         widget.connectionState!.isAuthenticating = true;

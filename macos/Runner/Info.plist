@@ -43,5 +43,18 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<!-- abstract name for this URL type (you can leave it blank) -->
+			<string>finamp_scheme</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<!-- your schemes -->
+				<string>finamp</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

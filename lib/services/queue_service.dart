@@ -330,6 +330,7 @@ class QueueService {
     try {
       _savedQueueState = SavedQueueState.loading;
       if (info.trackCount == 0) {
+        finalState = SavedQueueState.pendingSave;
         return;
       }
       refreshQueueStream();
@@ -389,6 +390,7 @@ class QueueService {
 
       if (loadedTracks > 0) {
         await _replaceWholeQueue(
+          saveQueue: false,
           itemList: items["previous"]! + items["current"]! + items["queue"]!,
           initialIndex: items["current"]!.isNotEmpty || items["queue"]!.isNotEmpty ? items["previous"]!.length : 0,
           beginPlaying: isReload && (_audioHandler.playbackState.valueOrNull?.playing ?? false),
@@ -463,9 +465,6 @@ class QueueService {
       }
     }
 
-    archiveSavedQueue();
-    _savedQueueState = SavedQueueState.saving;
-
     await _replaceWholeQueue(itemList: items, source: source, order: order, initialIndex: startingIndex);
     _queueServiceLogger.info(
       "Started playing '${GlobalSnackbar.materialAppScaffoldKey.currentContext != null ? source.name.getLocalized(GlobalSnackbar.materialAppScaffoldKey.currentContext!) : source.name.type}' (${source.type}) in order $order from index $startingIndex",
@@ -481,12 +480,18 @@ class QueueService {
     required int initialIndex,
     FinampPlaybackOrder? order,
     bool beginPlaying = true,
+    bool saveQueue = true,
   }) async {
     try {
       if (initialIndex >= itemList.length) {
         return Future.error("initialIndex is bigger than the itemList! ($initialIndex > ${itemList.length})");
       }
       _queueServiceLogger.finest("Replacing whole queue with ${itemList.length} items.");
+
+      if (saveQueue) {
+        archiveSavedQueue();
+        _savedQueueState = SavedQueueState.saving;
+      }
 
       _queue.clear(); // empty queue
       _queuePreviousTracks.clear();

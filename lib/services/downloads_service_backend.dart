@@ -84,7 +84,7 @@ class IsarPersistentStorage implements PersistentStorage {
     type.check(data); // Verify the data object has the correct type
     String json = jsonEncode(data.toJson());
     _isar.writeTxnSync(() {
-      _isar.isarTaskDatas.putSync(IsarTaskData(IsarTaskData.getHash(type, id), type, json, 0));
+      _isar.isarTaskDatas.putSync(IsarTaskData(IsarTaskData.getHash(type, id), type, json, 0), saveLinks: false);
     });
   }
 
@@ -428,7 +428,7 @@ class DownloadsDeleteService {
   /// This should only be called inside an isar write transaction
   void addAll(Iterable<int> isarIds) {
     var items = isarIds.map((e) => IsarTaskData.build(e.toString(), type, e)).toList();
-    _isar.isarTaskDatas.putAllSync(items);
+    _isar.isarTaskDatas.putAllSync(items, saveLinks: false);
   }
 
   /// Execute all pending deletes.
@@ -652,6 +652,7 @@ class DownloadsSyncService {
   final DownloadsService _downloadsService;
   final _syncLogger = Logger("SyncBuffer");
   final _jellyfinApiData = GetIt.instance<JellyfinApiHelper>();
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   /// Currently processing syncs.  Will be null if no syncs are executing.
   final Set<int> _activeSyncs = {};
@@ -681,7 +682,7 @@ class DownloadsSyncService {
         (e) => IsarTaskData.build("info $e", type, SyncNode(stubIsarId: e, required: false, viewId: viewId), age: 1),
       ),
     );
-    _isar.isarTaskDatas.putAllSync(items);
+    _isar.isarTaskDatas.putAllSync(items, saveLinks: false);
   }
 
   /// Execute all pending syncs.
@@ -727,7 +728,10 @@ class DownloadsSyncService {
             .sortByAge() // Prioritize required nodes
             .limit(_batchSize)
             .findAllSync();
-        if (wrappedSyncs.isEmpty || !_downloadsService.allowSyncs || FinampSettingsHelper.finampSettings.isOffline) {
+        if (wrappedSyncs.isEmpty ||
+            !_downloadsService.allowSyncs ||
+            FinampSettingsHelper.finampSettings.isOffline ||
+            _finampUserHelper.currentUser == null) {
           assert(_isar.isarTaskDatas.where().typeEqualTo(type).countSync() >= _activeSyncs.length);
           if (_activeSyncs.isEmpty && _callbacksComplete != null) {
             _callbacksComplete!.complete(null);
@@ -771,6 +775,7 @@ class DownloadsSyncService {
                     );
                   }
                 }
+                if (_finampUserHelper.currentUser == null) break;
               }
             }
           } catch (e, stack) {
@@ -782,7 +787,7 @@ class DownloadsSyncService {
 
         _isar.writeTxnSync(() {
           _isar.isarTaskDatas.deleteAllSync(wrappedSyncs.map((e) => e.id).toList());
-          _isar.isarTaskDatas.putAllSync(failedSyncs);
+          _isar.isarTaskDatas.putAllSync(failedSyncs, saveLinks: false);
         });
       } finally {
         _activeSyncs.removeAll(wrappedSyncs.map((e) => e.id));
@@ -1015,12 +1020,13 @@ class DownloadsSyncService {
             item: newBaseItem,
             viewId: viewId,
             orderedChildItems: orderedChildItems,
-            forceCopy: _downloadsService.forceFullSync,
+            // Force an update if we are in a downloads repair and haven't already processed this node
+            forceCopy: _downloadsService.forceFullSync && (!asRequired || !infoCompleted.contains(parent.isarId)),
           );
           // copyWith returns null if no updates to important fields are needed
           if (newParent != null) {
             _syncLogger.fine("Updating BaseItemDto for ${parent.name}");
-            _isar.downloadItems.putSync(newParent);
+            _isar.downloadItems.putSync(newParent, saveLinks: false);
             canonParent = newParent;
           }
         } catch (e) {
@@ -1142,7 +1148,7 @@ class DownloadsSyncService {
     if (oldChildIds.isNotEmpty && newChildIds.isEmpty) {
       _syncLogger.warning("Unlinking all ${required ? "required" : "info"} children of ${parent.name}");
     }
-    _isar.downloadItems.putAllSync(childrenToPutAndLink);
+    _isar.downloadItems.putAllSync(childrenToPutAndLink, saveLinks: false);
     _downloadsService.deleteBuffer.addAll(childrenToUnlink.map((e) => e.isarId));
     if (missingChildIds.isNotEmpty || childrenToUnlink.isNotEmpty) {
       links.updateSync(link: childrenToLink + childrenToPutAndLink, unlink: childrenToUnlink);
@@ -1544,7 +1550,7 @@ class DownloadsSyncService {
         _downloadsService.updateItemState(canonItem, DownloadItemState.enqueued, alwaysPut: true);
         if (lyrics != null) {
           final lyricsItem = DownloadedLyrics.fromItem(isarId: canonItem.isarId, item: lyrics);
-          _isar.downloadedLyrics.putSync(lyricsItem);
+          _isar.downloadedLyrics.putSync(lyricsItem, saveLinks: false);
         }
       }
     });
