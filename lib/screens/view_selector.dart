@@ -64,7 +64,6 @@ class _ViewSelectorState extends State<ViewSelector> {
                 },
               );
             }
-            print(_views);
             if (_views.isEmpty) {
               _views.addEntries(
                 snapshot.data!
@@ -73,7 +72,9 @@ class _ViewSelectorState extends State<ViewSelector> {
                       (e) => MapEntry(
                         e,
                         e.collectionType == "music" &&
-                            (_finampUserHelper.currentUser!.views.isEmpty||_finampUserHelper.currentUser!.views.keys.contains(e.id)),
+                            (_finampUserHelper.currentUser!.views.isEmpty ||
+                                _finampUserHelper.currentUser!.views.keys
+                                    .contains(e.id)),
                       ),
                     ),
               );
@@ -173,12 +174,6 @@ class _ViewSelectorState extends State<ViewSelector> {
       return;
     } else {
       try {
-        print(
-          _views.entries
-              .where((element) => element.value == true)
-              .map((e) => e.key)
-              .toList(),
-        );
         _finampUserHelper.setCurrentUserViews(
           _views.entries
               .where((element) => element.value == true)
