@@ -1,9 +1,8 @@
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../services/finamp_settings_helper.dart';
 
 class DiscordRpcIconSelector extends ConsumerWidget {
   const DiscordRpcIconSelector({super.key});
@@ -18,14 +17,24 @@ class DiscordRpcIconSelector extends ConsumerWidget {
       trailing: DropdownButton<DiscordRpcIcon>(
         value: option,
         items: DiscordRpcIcon.values
-            .map((e) => DropdownMenuItem<DiscordRpcIcon>(value: e, child: Text(e.toLocalisedString(context))))
+            .map(
+              (e) => DropdownMenuItem<DiscordRpcIcon>(
+                value: e,
+                child: Row(
+                  children: [
+                    Image.asset(e.toImage(), width: 32, height: 32),
+                    const SizedBox(width: 12),
+                    Text(e.toLocalisedString(context)),
+                  ],
+                ),
+              ),
+            )
             .toList(),
         onChanged: (value) {
           if (value != null) {
             FinampSetters.setRpcIcon(value);
           }
         },
-        icon: Image.asset(option.toImage(), width: 32, height: 32, alignment: Alignment.topRight),
       ),
     );
   }
