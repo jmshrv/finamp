@@ -15,7 +15,7 @@
   "@enterLowPriorityStateOnPause": {},
   "shuffleAllTrackCount": "Перемішати всі композиції",
   "@shuffleAllTrackCount": {},
-  "shuffleAllTrackCountSubtitle": "Кількість композицій для завантаження при використанні кнопки перемішування всіх пісень.",
+  "shuffleAllTrackCountSubtitle": "Кількість треків для завантаження під час використання кнопки перемішування всіх треків на вкладці треків або екрані жанрів.",
   "@shuffleAllTrackCountSubtitle": {},
   "viewTypeSubtitle": "Тип перегляду для музичного екрану",
   "@viewTypeSubtitle": {},
@@ -2625,5 +2625,25 @@
     "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
   },
   "logoutButtonSubtitle": "Вхід на інший сервер призведе до видалення наявних завантажень",
-  "@logoutButtonSubtitle": {}
+  "@logoutButtonSubtitle": {},
+  "adaptive": "Адаптивний",
+  "@adaptive": {},
+  "shuffleCountButton": "Перемішати ({count,plural,=1{{count} Трек} other{{count} Треки}})",
+  "@shuffleCountButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "none": "Жоден",
+  "@none": {},
+  "additionalBaseItemInfoTitle": "Додаткова інформація про товар",
+  "@additionalBaseItemInfoTitle": {
+    "description": "Title for the setting that controls the displayed additional item info."
+  },
+  "additionalBaseItemInfoSubtitle": "Контролює, який тип додаткової інформації відображається у списках елементів для кожного типу елемента. Якщо встановлено значення «Адаптивний», інформація вибирається автоматично на основі поточного сортування або контексту.",
+  "@additionalBaseItemInfoSubtitle": {
+    "description": "Subtitle for the setting that controls the displayed additional item info."
+  }
 }
