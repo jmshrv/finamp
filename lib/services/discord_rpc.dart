@@ -86,8 +86,8 @@ class DiscordRpc {
 
       try {
         if (FlutterDiscordRPC.instance.isConnected) {
-            await FlutterDiscordRPC.instance.clearActivity();
-            await FlutterDiscordRPC.instance.disconnect();
+          await FlutterDiscordRPC.instance.clearActivity();
+          await FlutterDiscordRPC.instance.disconnect();
         }
         await FlutterDiscordRPC.instance.dispose();
       } catch (e) {
