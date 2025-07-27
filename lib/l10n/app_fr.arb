@@ -1261,7 +1261,7 @@
     },
     "description": "Dropdown option to download transcoded version of tracks"
   },
-  "downloadInfo": "",
+  "downloadInfo": "{taille} {codec}{débit binaire, sélectionner, null{} autre{ @ {débit binaire} Transcodé}}{emplacement, sélectionner, null{} autre{ ({emplacement})}}",
   "@downloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -2414,5 +2414,195 @@
         "example": "5"
       }
     }
+  },
+  "adaptive": "Adaptatif",
+  "@adaptive": {},
+  "shuffleCountButton": "Lecture aléatoire ({count,plural,=1{{count} Piste} other{{count} Pistes}})",
+  "@shuffleCountButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "logoutButtonSubtitle": "La connexion à un autre serveur supprimera les téléchargements existants",
+  "@logoutButtonSubtitle": {},
+  "none": "Aucun",
+  "@none": {},
+  "sleepTimerRemainingTracks": "Mise en Veille {time,plural,=1{after this track} other{in {time} tracks}}",
+  "@sleepTimerRemainingTracks": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "createPlaylistFromCurrentQueue": "Enregistrer la file d'attente en tant que playlist",
+  "@createPlaylistFromCurrentQueue": {
+    "description": "Label for a button that creates a new playlist from the current queue."
+  },
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Running} failed{Failed} syncFailed{Repeatedly Unsynced} enqueued{Queued} other{}} {itemCount, plural, =1{Download} other{Downloads}}",
+  "@activeDownloadsListHeader": {
+    "description": "Header text for lists of active downloads of a particular state.",
+    "placeholders": {
+      "typeName": {
+        "type": "String"
+      },
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "genreNotFound": "Le genre n'a pas pu être trouvé. {additionalInfo, select, offline{ Il se peut qu'il ne soit pas téléchargeable ou qu'il appartienne à une autre bibliothèque.} other{ Il se peut qu'il appartienne à une autre bibliothèque.}}",
+  "@genreNotFound": {
+    "placeholders": {
+      "additionalInfo": {
+        "type": "String"
+      }
+    },
+    "description": "Message shown when a genre filter or open-genre action fails because the genre item could not be found."
+  },
+  "collectionDownloadInfo": "{taille}{codec, sélectionner, ORIGINAL{} autre{ comme {codec} à {débit binaire}}}{emplacement, sélectionner, null{} autre{ ({emplacement})}}",
+  "@collectionDownloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      },
+      "location": {
+        "type": "String",
+        "example": "Internal Storage"
+      }
+    },
+    "description": "Collection info line in downloads screen lists"
+  },
+  "additionalBaseItemInfoTitle": "Informations supplémentaires sur l'élément",
+  "@additionalBaseItemInfoTitle": {
+    "description": "Title for the setting that controls the displayed additional item info."
+  },
+  "additionalBaseItemInfoSubtitle": "Contrôle le type d'informations supplémentaires affichées dans les listes d'éléments pour chaque type d'élément. En mode « Adaptatif », les informations sont sélectionnées automatiquement en fonction du tri ou du contexte actuel.",
+  "@additionalBaseItemInfoSubtitle": {
+    "description": "Subtitle for the setting that controls the displayed additional item info."
+  },
+  "autoOfflineOptionUnreachable": "Inatteignable",
+  "@autoOfflineOptionUnreachable": {
+    "description": "This is shown when the autoOffline feature is set to Unreachable, this means offline mode will be automatically enabled when - after a network change - the server cant be pinged"
+  },
+  "clearQueueOnStopEventTitle": "Effacer la file d'attente lors d'un arrêt externe",
+  "@clearQueueOnStopEventTitle": {
+    "description": "Title for the setting that controls if OS stop commands clear the queue."
+  },
+  "clearQueueOnStopEventSubtitle": "Videz la file d'attente et fermez le lecteur si une commande « Stop » est reçue du système d'exploitation. Les actions d'arrêt dans l'application ferment systématiquement le lecteur et vident la file d'attente.",
+  "@clearQueueOnStopEventSubtitle": {
+    "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
+  },
+  "syncPlaybackSpeedAndPitchLabel": "Synchronisation de la vitesse et de la hauteur",
+  "@syncPlaybackSpeedAndPitchLabel": {
+    "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
+  },
+  "serverSharingMenuTitle": "Partage de serveur de réseau local",
+  "@serverSharingMenuTitle": {
+    "description": "Title for the server sharing menu that allows the user to share their server address with other devices on the local network"
+  },
+  "serverSharingMenuButtonTitle": "Serveur partagé",
+  "@serverSharingMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the server sharing menu"
+  },
+  "serverSharingMenuConfirmationDialogText": "Êtes-vous sûr de vouloir activer le partage de serveur même si vous êtes en mode hors ligne ? Finamp enverra alors des données sur le réseau local.",
+  "@serverSharingMenuConfirmationDialogText": {
+    "description": "Dialog text shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuConfirmationDialogConfirmationButtonLabel": "Confirmer et Activer",
+  "@serverSharingMenuConfirmationDialogConfirmationButtonLabel": {
+    "description": "Positive action label for the dialog shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuControlTitleSharingEnabled": "Serveur de partage",
+  "@serverSharingMenuControlTitleSharingEnabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuControlSubtitleSharingDisabled": "Appuyez pour partager",
+  "@serverSharingMenuControlSubtitleSharingDisabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlTitleSharingDisabled": "Ne pas partager",
+  "@serverSharingMenuControlTitleSharingDisabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlSubtitleSharingEnabled": "Appuyez pour arrêter",
+  "@serverSharingMenuControlSubtitleSharingEnabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuDescription": "Le partage de l'adresse de votre serveur peut être utile pour configurer de nouveaux clients qui ne sont pas sur le même réseau local que votre serveur Jellyfin, c'est-à-dire les téléviseurs d'hôtel, votre PC au travail ou un nouveau client sur votre téléphone lorsque vous êtes en déplacement.",
+  "@serverSharingMenuDescription": {
+    "description": "Description text shown in the server sharing menu, right below the controls"
+  },
+  "serverSharingMenuDetails": "Il fonctionne en écoutant les requêtes de découverte de serveur des autres clients du réseau local, puis en répondant à ces requêtes avec l'adresse configurée de votre serveur Jellyfin.\nSi vous avez configuré une adresse locale et une adresse publique, Finamp les fournira au client demandeur.",
+  "@serverSharingMenuDetails": {
+    "description": "Description text shown in the server sharing menu, below the description"
+  },
+  "quickConnectAuthorizationMenuButtonTitle": "»Autoriser la connexion rapide",
+  "@quickConnectAuthorizationMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuPrompt": "Entrez le code de connexion rapide",
+  "@quickConnectAuthorizationMenuPrompt": {
+    "description": "Title for the button in server sharing menu that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuTitle": "Autoriser la demande de connexion rapide",
+  "@quickConnectAuthorizationMenuTitle": {
+    "description": "Title for the quick connect authorization menu that allows the user to authorize a quick connect request from another device"
+  },
+  "quickConnectAuthorizationMenuInputLabel": "Code de connexion rapide",
+  "@quickConnectAuthorizationMenuInputLabel": {
+    "description": "Label for the quick connect code input, shown below the input field"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleIdle": "Veuillez saisir ou coller le code ci-dessous",
+  "@quickConnectAuthorizationMenuStateSubtitleIdle": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) while the code hasn't been submitted yet"
+  },
+  "quickConnectAuthorizationMenuStateTitleProcessing": "Tentative d'autorisation de la demande",
+  "@quickConnectAuthorizationMenuStateTitleProcessing": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) while a request is being processed"
+  },
+  "quickConnectAuthorizationMenuStateTitleSuccess": "Demande autorisée avec succès",
+  "@quickConnectAuthorizationMenuStateTitleSuccess": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was successful"
+  },
+  "quickConnectAuthorizationMenuStateTitleFailed": "Code de connexion rapide invalide",
+  "@quickConnectAuthorizationMenuStateTitleFailed": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleFailed": "Veuillez vérifier le code et réessayer",
+  "@quickConnectAuthorizationMenuStateSubtitleFailed": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuDescription": "Si vous essayez de vous connecter à un autre client Jellyfin via Quick Connect, vous pouvez saisir ou coller le code à 6 chiffres dans le champ ci-dessus. Cela autorisera la demande de connexion de l'autre client et vous connectera au même compte que celui que vous utilisez pour Finamp.",
+  "@quickConnectAuthorizationMenuDescription": {
+    "description": "Description for the quick connect authorization menu, shown at the bottom"
+  },
+  "accessibility": "Accessibilité",
+  "@accessibility": {
+    "description": "Title for the accessibility settings screen"
+  },
+  "useHighContrastColorsTitle": "Utilisez des couleurs à contraste élevé",
+  "@useHighContrastColorsTitle": {
+    "description": "Title for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "useHighContrastColorsSubtitle": "Utilisez des couleurs dynamiques à contraste élevé pour une meilleure visibilité.",
+  "@useHighContrastColorsSubtitle": {
+    "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "discordRPCSettingTitle": "RPC Discord",
+  "@discordRPCSettingTitle": {
+    "description": "Title for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
   }
 }
