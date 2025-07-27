@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
@@ -18,7 +18,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_to_airplay/flutter_to_airplay.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logging/logging.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
@@ -426,7 +425,6 @@ class _LyricLine extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lyricsLineLogger = Logger("LyricsLine");
     final finampSettings = ref.watch(finampSettingsProvider).value;
 
     final isSynchronized = line.start != null;
@@ -479,26 +477,36 @@ class _LyricLine extends ConsumerWidget {
               textDirection: TextDirection.ltr,
             )..setPlaceholderDimensions([]);
             linePainter.layout(minWidth: constraints.minWidth, maxWidth: constraints.maxWidth);
-            final text = line.text!;
-            lyricsLineLogger.info("Line: $text, ${text.length}");
-            final cues = line.cues ?? [];
-            for (int i = 0; i < cues.length - 1; i++) {
-              final cue = cues[i];
-              final nextCue = cues[i + 1];
-              final position = TextPosition(offset: cue.position, affinity: TextAffinity.downstream);
-              final endPosition = TextPosition(offset: nextCue.position, affinity: TextAffinity.upstream);
-              // TODO: use linePainter.computeLineMetrics(); if necessary
-              final offset = linePainter.getOffsetForCaret(position, Rect.zero);
-              final endOffset = linePainter.getOffsetForCaret(endPosition, Rect.zero);
-              // TODO: the min is required because server data is wrong…
-              final cueText = text.substring(cue.position, min(nextCue.position, text.length));
-              lyricsLineLogger.info(
-                "[${cue.position}:${nextCue.position}] $cueText: spans ${offset.dx}:${endOffset.dx} (${endOffset.dx - offset.dx})",
-              );
-            }
-            return CustomPaint(
-              size: Size(constraints.maxWidth, linePainter.height),
-              painter: LyricsLinePainter(linePainter),
+
+            return StreamBuilder<ProgressState>(
+              stream: progressStateStream,
+              builder: (context, snapshot) {
+                final currentMicros = snapshot.data?.position.inMicroseconds ?? 0;
+
+                return CustomPaint(
+                  size: Size(constraints.maxWidth, linePainter.height),
+                  painter: LyricsLinePainter(
+                    textPainter: linePainter,
+                    line: line,
+                    currentMicros: currentMicros,
+                    isCurrentLine: isCurrentLine,
+                    primaryColor: Theme.of(context).textTheme.bodyLarge?.color,
+                    highlightColor: Theme.of(context).colorScheme.primary,
+                    grayedColor: Colors.white,
+                    lowlightLine: lowlightLine,
+                    baseStyle: TextStyle(
+                      color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
+                      fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
+                      // Keep text width consistent across the different weights
+                      letterSpacing: lowlightLine || !isSynchronized ? 0.05 : -0.045,
+                      fontSize:
+                          lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) *
+                          (isSynchronized ? 1.0 : 0.75),
+                      height: 1.25,
+                    ),
+                  ),
+                );
+              },
             );
           },
         ),
@@ -509,18 +517,147 @@ class _LyricLine extends ConsumerWidget {
 
 class LyricsLinePainter extends ChangeNotifier implements CustomPainter {
   final TextPainter textPainter;
+  final LyricLine line;
+  final int currentMicros;
+  final bool isCurrentLine;
+  final Color? primaryColor;
+  final Color highlightColor;
+  final Color grayedColor;
+  final bool lowlightLine;
+  final TextStyle baseStyle;
 
-  LyricsLinePainter(this.textPainter);
+  LyricsLinePainter({
+    required this.textPainter,
+    required this.line,
+    required this.currentMicros,
+    required this.isCurrentLine,
+    required this.primaryColor,
+    required this.highlightColor,
+    required this.grayedColor,
+    required this.lowlightLine,
+    required this.baseStyle,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
-    textPainter.paint(canvas, Offset.zero);
+    // If we have word-level cues and this is the current line, paint word-by-word
+    if (line.cues != null && line.cues!.isNotEmpty && isCurrentLine && !lowlightLine) {
+      _paintWithWordHighlighting(canvas, size);
+    } else {
+      // Default painting for non-current lines or lines without cues
+      textPainter.paint(canvas, Offset.zero);
+    }
+  }
+
+  void _paintWithWordHighlighting(Canvas canvas, Size size) {
+    final text = line.text ?? "";
+    final cues = line.cues ?? [];
+
+    if (text.isEmpty || cues.isEmpty) {
+      textPainter.paint(canvas, Offset.zero);
+      return;
+    }
+
+    // Build a single TextSpan with different colored segments
+    final segments = <TextSpan>[];
+
+    int lastPosition = 0;
+
+    // Start by assuming all text should be grayed out, then highlight as needed
+    for (int i = 0; i < cues.length; i++) {
+      final cue = cues[i];
+      final nextCue = i < cues.length - 1 ? cues[i + 1] : null;
+
+      // Add any text before this cue that wasn't covered
+      if (cue.position > lastPosition) {
+        final beforeText = text.substring(lastPosition, cue.position);
+        if (beforeText.isNotEmpty) {
+          segments.add(
+            TextSpan(
+              text: beforeText,
+              style: baseStyle.copyWith(color: grayedColor),
+            ),
+          );
+        }
+      }
+
+      // Determine the end position for this cue
+      final endPosition = nextCue?.position ?? text.length;
+      final cueText = text.substring(cue.position, math.min(endPosition, text.length));
+
+      if (cueText.isNotEmpty) {
+        // Determine color based on timing - only highlight the currently active word
+        Color segmentColor;
+
+        // Check if this word is currently being sung
+        final hasReachedThisCue = currentMicros >= cue.startMicros;
+        final hasReachedNextCue = nextCue != null && currentMicros >= nextCue.startMicros;
+
+        if (hasReachedThisCue && !hasReachedNextCue) {
+          // This word/segment is currently active - highlight it
+          segmentColor = highlightColor;
+        } else {
+          // All other words (past and future) - use normal grayed color
+          segmentColor = grayedColor;
+        }
+
+        segments.add(
+          TextSpan(
+            text: cueText,
+            style: baseStyle.copyWith(color: segmentColor),
+          ),
+        );
+      }
+      lastPosition = math.max(lastPosition, math.min(endPosition, text.length));
+    }
+
+    // Add any remaining text after the last cue
+    if (lastPosition < text.length) {
+      final remainingText = text.substring(lastPosition);
+      if (remainingText.isNotEmpty) {
+        segments.add(
+          TextSpan(
+            text: remainingText,
+            style: baseStyle.copyWith(color: grayedColor),
+          ),
+        );
+      }
+    }
+
+    // Fallback: if we have no segments, just render the original text in grayed color
+    if (segments.isEmpty) {
+      segments.add(
+        TextSpan(
+          text: text,
+          style: baseStyle.copyWith(color: grayedColor),
+        ),
+      );
+    }
+
+    // Create a new TextPainter with the colored segments, using the same layout parameters
+    final coloredTextSpan = TextSpan(children: segments);
+    final coloredTextPainter = TextPainter(
+      text: coloredTextSpan,
+      textAlign: textPainter.textAlign,
+      textDirection: textPainter.textDirection,
+      textScaler: textPainter.textScaler, // Preserve text scaling
+      maxLines: textPainter.maxLines,
+    );
+
+    // Use the same layout constraints as the original
+    coloredTextPainter.layout(minWidth: textPainter.minIntrinsicWidth, maxWidth: textPainter.maxIntrinsicWidth);
+
+    // Paint the colored text
+    coloredTextPainter.paint(canvas, Offset.zero);
   }
 
   @override
   bool shouldRepaint(LyricsLinePainter oldDelegate) {
     return textPainter.text != oldDelegate.textPainter.text ||
-        textPainter.textAlign != oldDelegate.textPainter.textAlign;
+        textPainter.textAlign != oldDelegate.textPainter.textAlign ||
+        currentMicros != oldDelegate.currentMicros ||
+        isCurrentLine != oldDelegate.isCurrentLine ||
+        lowlightLine != oldDelegate.lowlightLine;
   }
 
   @override
