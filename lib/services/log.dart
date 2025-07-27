@@ -44,11 +44,13 @@ class DeviceInfo {
 
     if (Platform.isAndroid) {
       final info = await deviceInfoPlugin.androidInfo;
+      final isTV = info.systemFeatures.contains('android.software.leanback');
+      final isWatch = info.systemFeatures.contains('android.hardware.type.watch');
       return DeviceInfo(
         deviceName: info.brand,
         deviceModel: info.model,
         osVersion: info.version.release,
-        platform: 'Android',
+        platform: "Android${isTV ? ' (TV)' : ''}${isWatch ? ' (Watch)' : ''}",
       );
     } else if (Platform.isIOS) {
       final info = await deviceInfoPlugin.iosInfo;
