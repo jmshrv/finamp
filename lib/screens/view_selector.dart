@@ -73,10 +73,7 @@ class _ViewSelectorState extends State<ViewSelector> {
                       (e) => MapEntry(
                         e,
                         e.collectionType == "music" &&
-                            (_finampUserHelper.currentUser!.views.values.where(
-                                  (a) => e.id == a.id,
-                                )).length ==
-                                1,
+                            (_finampUserHelper.currentUser!.views.isEmpty||_finampUserHelper.currentUser!.views.keys.contains(e.id)),
                       ),
                     ),
               );
