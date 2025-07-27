@@ -254,7 +254,7 @@
   "@customLocationsBuggy": {},
   "shuffleAllTrackCount": "Contagem de Faixas em Misturar Todas",
   "@shuffleAllTrackCount": {},
-  "shuffleAllTrackCountSubtitle": "Quantidade de faixas a carregar quando se usa o botão misturar todas as faixas.",
+  "shuffleAllTrackCountSubtitle": "Quantidade de faixas a carregar quando se usa o botão baralhar todas no separador de pistas ou ecrã de estilo.",
   "@shuffleAllTrackCountSubtitle": {},
   "viewType": "Tipo de Visualização",
   "@viewType": {},
@@ -2633,5 +2633,65 @@
     "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
   },
   "logoutButtonSubtitle": "Registar-se num servidor diferente irá apagar as descargas existentes",
-  "@logoutButtonSubtitle": {}
+  "@logoutButtonSubtitle": {},
+  "adaptive": "Adaptativo",
+  "@adaptive": {},
+  "shuffleCountButton": "Baralhar ({count,plural,=1{{count} Pista} other{{count} Pistas}})",
+  "@shuffleCountButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "none": "Nenhum",
+  "@none": {},
+  "additionalBaseItemInfoTitle": "Informação de Item Adicional",
+  "@additionalBaseItemInfoTitle": {
+    "description": "Title for the setting that controls the displayed additional item info."
+  },
+  "additionalBaseItemInfoSubtitle": "Controla qual tipo de informação adicional é mostrado em listas de items para cada tipo de item. Quando definido para \"Adaptativo\", a informação é escolhida automaticamente co base na ordenação ou contexto actual.",
+  "@additionalBaseItemInfoSubtitle": {
+    "description": "Subtitle for the setting that controls the displayed additional item info."
+  },
+  "discordRPCSettingTitle": "RPC Discord",
+  "@discordRPCSettingTitle": {
+    "description": "Title for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCSettingDescription": "Activa Discord Rich Presence para mostrar o que está a tocar no seu estado do discord. Não vai ligar ao discord se estiver em Modo Offline.",
+  "@discordRPCSettingDescription": {
+    "description": "Description for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCIconSettingTitle": "Ícone de recurso de falha RPC",
+  "@discordRPCIconSettingTitle": {
+    "description": "Title for the setting that controls which icon gets shown in the Discord RPC (Rich Presence) in case the local address is in use"
+  },
+  "discordRPCIconSettingDescription": "Ícone de recurso que é mostrado quando nenhum endereço público é detetado. (Como o discord não pode carregar imagens a partir do endereço local e iria usar o seu recurso de falha)",
+  "@discordRPCIconSettingDescription": {
+    "description": "Description for the setting that controls which Icon the discord RPC displays as a Fallback in case no public address is detected (it doenst matter what connection is active)."
+  },
+  "discordRPCIconDark": "Finamp - Escuro",
+  "@discordRPCIconDark": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with the Dark-Theme Background"
+  },
+  "discordRPCIconBlack": "Finamp - Preto",
+  "@discordRPCIconBlack": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Black Background"
+  },
+  "discordRPCIconLight": "Finamp - Branco",
+  "@discordRPCIconLight": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a White Background"
+  },
+  "discordRPCIconJFTransparent": "Jellyfin - Transparente",
+  "@discordRPCIconJFTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Jellyfin logo with a Transparent Background"
+  },
+  "discordRPCIconTransparent": "Finamp - Transparente",
+  "@discordRPCIconTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Transparent Background"
+  },
+  "discordRPCIconWhiteTransparent": "Finamp Branco - Transparente",
+  "@discordRPCIconWhiteTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
+  }
 }
