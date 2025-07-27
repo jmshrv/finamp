@@ -621,7 +621,7 @@ class JellyfinApiHelper {
     var response = await jellyfinApi.getInstantMix(
       id: parentItem!.id,
       userId: _finampUserHelper.currentUser!.id,
-      limit: 200,
+      limit: FinampSettingsHelper.finampSettings.trackShuffleItemCount,
     );
 
     return (QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>).items);
