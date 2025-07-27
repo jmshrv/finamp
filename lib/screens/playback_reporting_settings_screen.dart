@@ -6,6 +6,7 @@ import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 
+import "package:super_sliver_list/super_sliver_list.dart";
 import '../components/PlaybackReportingSettingsScreen/enable_playon_toggle.dart';
 import '../components/PlaybackReportingSettingsScreen/periodic_playback_session_update_frequency_editor.dart';
 import '../components/PlaybackReportingSettingsScreen/play_on_reconnection_delay_editor.dart';
@@ -16,17 +17,21 @@ class PlaybackReportingSettingsScreen extends StatefulWidget {
   const PlaybackReportingSettingsScreen({super.key});
   static const routeName = "/settings/playback-reporting";
   @override
-  State<PlaybackReportingSettingsScreen> createState() => _PlaybackReportingSettingsScreenState();
+  State<PlaybackReportingSettingsScreen> createState() =>
+      _PlaybackReportingSettingsScreenState();
 }
 
-class _PlaybackReportingSettingsScreenState extends State<PlaybackReportingSettingsScreen> {
+class _PlaybackReportingSettingsScreenState
+    extends State<PlaybackReportingSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     bool hasRpcSupport = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.playbackReportingSettingsTitle),
+        title: Text(
+          AppLocalizations.of(context)!.playbackReportingSettingsTitle,
+        ),
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, () {
             setState(() {
@@ -35,7 +40,7 @@ class _PlaybackReportingSettingsScreenState extends State<PlaybackReportingSetti
           }),
         ],
       ),
-      body: ListView(
+      body: SuperListView(
         children: [
           const EnablePlayonToggle(),
           const PeriodicPlaybackSessionUpdateFrequencyEditor(),

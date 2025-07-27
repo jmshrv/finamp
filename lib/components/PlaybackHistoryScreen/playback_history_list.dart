@@ -4,6 +4,7 @@ import 'package:finamp/services/datetime_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import "package:super_sliver_list/super_sliver_list.dart";
 import '../../services/playback_history_service.dart';
 import '../padded_custom_scrollview.dart';
 
@@ -19,22 +20,24 @@ class PlaybackHistoryList extends StatelessWidget {
       stream: playbackHistoryService.historyStream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          groupedHistory = playbackHistoryService.getHistoryGroupedDynamically();
+          groupedHistory = playbackHistoryService
+              .getHistoryGroupedDynamically();
 
           return PaddedCustomScrollview(
             // use nested SliverList.builder()s to show history items grouped by date
             slivers: groupedHistory.indexed.map((indexedGroup) {
               final groupIndex = indexedGroup.$1;
               final group = indexedGroup.$2;
-              return SliverList(
+              return SuperSliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
                   final actualIndex = group.value.length - index - 1;
 
                   final historyItem = TrackListTile(
                     index: actualIndex,
                     item: group.value[actualIndex].item.baseItem!,
-                    isShownInSearchOrHistory: true,
-                    highlightCurrentTrack: groupIndex == 0 && index == 0, // only highlight first track
+                    highlightCurrentTrack:
+                        groupIndex == 0 &&
+                        index == 0, // only highlight first track
                   );
 
                   return index == 0
@@ -42,7 +45,11 @@ class PlaybackHistoryList extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 4.0),
+                              padding: const EdgeInsets.only(
+                                left: 16.0,
+                                top: 16.0,
+                                bottom: 4.0,
+                              ),
                               child: RelativeDateTimeText(
                                 dateTime: group.key,
                                 style: const TextStyle(fontSize: 16.0),

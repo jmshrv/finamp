@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import "package:super_sliver_list/super_sliver_list.dart";
 import 'package:collection/collection.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
@@ -21,7 +22,11 @@ import 'new_playlist_dialog.dart';
 import '../../menus/playlist_actions_menu.dart';
 
 class AddToPlaylistList extends StatefulWidget {
-  const AddToPlaylistList({super.key, required this.itemToAdd, required this.playlistsFuture});
+  const AddToPlaylistList({
+    super.key,
+    required this.itemToAdd,
+    required this.playlistsFuture,
+  });
 
   final BaseItemDto itemToAdd;
   final Future<List<BaseItemDto>> playlistsFuture;
@@ -34,7 +39,9 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
   @override
   void initState() {
     super.initState();
-    playlistsFuture = widget.playlistsFuture.then((value) => value.map((e) => (e, false, null as String?)).toList());
+    playlistsFuture = widget.playlistsFuture.then(
+      (value) => value.map((e) => (e, false, null as String?)).toList(),
+    );
   }
 
   // playlist, isLoading, playlistItemId
@@ -46,12 +53,13 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
       future: playlistsFuture,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return SliverList(
+          return SuperSliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
               if (index == snapshot.data!.length) {
                 return createNewPlaylistButton(context);
               }
-              final (playlist, isLoading, playListItemId) = snapshot.data![index];
+              final (playlist, isLoading, playListItemId) =
+                  snapshot.data![index];
               return AddToPlaylistTile(
                 playlist: playlist,
                 track: widget.itemToAdd,
@@ -62,14 +70,21 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
           );
         } else if (snapshot.hasError) {
           GlobalSnackbar.error(snapshot.error);
-          return const SliverToBoxAdapter(child: Center(heightFactor: 3.0, child: Icon(Icons.error, size: 64)));
+          return const SliverToBoxAdapter(
+            child: Center(
+              heightFactor: 3.0,
+              child: Icon(Icons.error, size: 64),
+            ),
+          );
         } else {
-          return SliverList(
+          return SuperSliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
               if (index == 1) {
                 return createNewPlaylistButton(context);
               } else {
-                return const Center(child: CircularProgressIndicator.adaptive());
+                return const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                );
               }
             }, childCount: 2),
           );
@@ -89,17 +104,28 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
             icon: TablerIcons.plus,
             //accentColor: Theme.of(context).colorScheme.primary,
             onPressed: () async {
-              var dialogResult = await showDialog<(Future<BaseItemId>, String?)?>(
-                context: context,
-                builder: (context) => NewPlaylistDialog(itemsToAdd: [widget.itemToAdd.id]),
-              );
+              var dialogResult =
+                  await showDialog<(Future<BaseItemId>, String?)?>(
+                    context: context,
+                    builder: (context) =>
+                        NewPlaylistDialog(itemsToAdd: [widget.itemToAdd.id]),
+                  );
               if (dialogResult != null) {
                 var oldFuture = playlistsFuture;
                 setState(() {
                   var loadingItem = [
-                    (BaseItemDto(id: BaseItemId("pending"), name: dialogResult.$2), true, null as String?),
+                    (
+                      BaseItemDto(
+                        id: BaseItemId("pending"),
+                        name: dialogResult.$2,
+                      ),
+                      true,
+                      null as String?,
+                    ),
                   ];
-                  playlistsFuture = oldFuture.then((value) => value + loadingItem);
+                  playlistsFuture = oldFuture.then(
+                    (value) => value + loadingItem,
+                  );
                 });
                 try {
                   var newId = await dialogResult.$1;
@@ -109,9 +135,17 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                   var playlist = await jellyfinApiHelper.getItemById(newId);
 
                   String? trackId;
-                  if (BaseItemDtoType.fromItem(widget.itemToAdd) == BaseItemDtoType.track) {
-                    var playlistItems = await jellyfinApiHelper.getItems(parentItem: playlist, fields: "");
-                    trackId = playlistItems?.firstWhere((element) => element.id == widget.itemToAdd.id).playlistItemId;
+                  if (BaseItemDtoType.fromItem(widget.itemToAdd) ==
+                      BaseItemDtoType.track) {
+                    var playlistItems = await jellyfinApiHelper.getItems(
+                      parentItem: playlist,
+                      fields: "",
+                    );
+                    trackId = playlistItems
+                        ?.firstWhere(
+                          (element) => element.id == widget.itemToAdd.id,
+                        )
+                        .playlistItemId;
                   } else {
                     // Provide a fake playlist id for playlists created with a non-track initial item.  It
                     // will not be used as non-tracks cannot be removed.
@@ -120,7 +154,9 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                   if (!context.mounted) return;
                   setState(() {
                     var newItem = [(playlist, false, trackId)];
-                    playlistsFuture = oldFuture.then((value) => value + newItem);
+                    playlistsFuture = oldFuture.then(
+                      (value) => value + newItem,
+                    );
                   });
                 } catch (e) {
                   GlobalSnackbar.error(e);
@@ -177,7 +213,10 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
         itemIsIncluded = true;
       } else {
         final downloadsService = GetIt.instance<DownloadsService>();
-        itemIsIncluded = downloadsService.checkIfInCollection(widget.playlist, widget.track);
+        itemIsIncluded = downloadsService.checkIfInCollection(
+          widget.playlist,
+          widget.track,
+        );
       }
     }
   }
@@ -205,9 +244,14 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
           // If playlistItemId is null, we need to fetch from the server before we can remove
           if (playlistItemId == null) {
             final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-            var newItems = await jellyfinApiHelper.getItems(parentItem: widget.playlist, fields: "");
+            var newItems = await jellyfinApiHelper.getItems(
+              parentItem: widget.playlist,
+              fields: "",
+            );
 
-            playlistItemId = newItems?.firstWhereOrNull((x) => x.id == widget.track.id)?.playlistItemId;
+            playlistItemId = newItems
+                ?.firstWhereOrNull((x) => x.id == widget.track.id)
+                ?.playlistItemId;
             if (playlistItemId == null) {
               // We were already not part of the playlist,. so removal is complete
               setState(() {
@@ -249,24 +293,37 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
             await showDialog(
               context: context,
               builder: (context) => ConfirmationPromptDialog(
-                promptText: AppLocalizations.of(
-                  context,
-                )!.confirmAddAlbumToPlaylist(itemType, widget.track.name ?? "Unknown"),
+                promptText: AppLocalizations.of(context)!
+                    .confirmAddAlbumToPlaylist(
+                      itemType,
+                      widget.track.name ?? "Unknown",
+                    ),
                 confirmButtonText: AppLocalizations.of(context)!.addButtonLabel,
-                abortButtonText: MaterialLocalizations.of(context).cancelButtonLabel,
+                abortButtonText: MaterialLocalizations.of(
+                  context,
+                ).cancelButtonLabel,
                 onConfirmed: () => confirmed = true,
                 onAborted: () {},
               ),
             );
             if (!confirmed || !context.mounted) return false;
           }
-          bool added = await addItemToPlaylist(context, widget.track, widget.playlist);
+          bool added = await addItemToPlaylist(
+            context,
+            widget.track,
+            widget.playlist,
+          );
           if (added) {
             final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-            var newItems = await jellyfinApiHelper.getItems(parentItem: widget.playlist, fields: "");
+            var newItems = await jellyfinApiHelper.getItems(
+              parentItem: widget.playlist,
+              fields: "",
+            );
             setState(() {
               childCount = newItems?.length ?? 0;
-              playlistItemId = newItems?.firstWhereOrNull((x) => x.id == widget.track.id)?.playlistItemId;
+              playlistItemId = newItems
+                  ?.firstWhereOrNull((x) => x.id == widget.track.id)
+                  ?.playlistItemId;
               itemIsIncluded = true;
             });
             return true; // this is called before the state is updated

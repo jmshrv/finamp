@@ -23,6 +23,7 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
+import "package:super_sliver_list/super_sliver_list.dart";
 import '../../models/jellyfin_models.dart' as jellyfin_models;
 import '../../services/current_album_image_provider.dart';
 import '../../services/media_state_stream.dart';
@@ -65,8 +66,13 @@ class QueueList extends StatefulWidget {
   State<QueueList> createState() => _QueueListState();
 }
 
-void scrollToKey({required GlobalKey key, required Duration duration, required BuildContext context}) {
-  var queueList = key.currentContext?.findAncestorStateOfType<_QueueListState>();
+void scrollToKey({
+  required GlobalKey key,
+  required Duration duration,
+  required BuildContext context,
+}) {
+  var queueList = key.currentContext
+      ?.findAncestorStateOfType<_QueueListState>();
   if (queueList != null && queueList.widget.previousTracksHeaderKey == key) {
     Future.delayed(Duration(milliseconds: duration.inMilliseconds + 10), () {
       queueList._currentTrackScroll = queueList.widget.scrollController.offset;
@@ -74,7 +80,9 @@ void scrollToKey({required GlobalKey key, required Duration duration, required B
   }
   Scrollable.ensureVisible(
     key.currentContext!,
-    duration: MediaQuery.of(context).disableAnimations ? Duration.zero : duration,
+    duration: MediaQuery.of(context).disableAnimations
+        ? Duration.zero
+        : duration,
     curve: Curves.easeInOutCubic,
   );
 }
@@ -122,7 +130,9 @@ class _QueueListState extends State<QueueList> {
         stream: isRecentTracksExpanded,
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data!) {
-            return PreviousTracksList(previousTracksHeaderKey: widget.previousTracksHeaderKey);
+            return PreviousTracksList(
+              previousTracksHeaderKey: widget.previousTracksHeaderKey,
+            );
           } else {
             return const SliverToBoxAdapter();
           }
@@ -134,13 +144,17 @@ class _QueueListState extends State<QueueList> {
           isRecentTracksExpanded: isRecentTracksExpanded,
           previousTracksHeaderKey: widget.previousTracksHeaderKey,
           onTap: () {
-            final oldBottomOffset = widget.scrollController.position.extentAfter;
+            final oldBottomOffset =
+                widget.scrollController.position.extentAfter;
             late StreamSubscription subscription;
             subscription = isRecentTracksExpanded.stream.listen((expanded) {
               final previousTracks = _queueService.getQueue().previousTracks;
               // a random delay isn't a great solution, but I'm not sure how to do this properly
               Future.delayed(Duration(milliseconds: expanded ? 5 : 50), () {
-                _currentTrackScroll = expanded ? 0 : widget.scrollController.position.maxScrollExtent - oldBottomOffset;
+                _currentTrackScroll = expanded
+                    ? 0
+                    : widget.scrollController.position.maxScrollExtent -
+                          oldBottomOffset;
                 widget.scrollController.jumpTo(
                   widget.scrollController.position.maxScrollExtent -
                       oldBottomOffset -
@@ -164,8 +178,13 @@ class _QueueListState extends State<QueueList> {
         builder: (context, snapshot) {
           if (snapshot.data != null && snapshot.data!.nextUp.isNotEmpty) {
             return SliverStickyHeader(
-              header: NextUpSectionHeader(controls: true, nextUpHeaderKey: widget.nextUpHeaderKey),
-              sliver: NextUpTracksList(previousTracksHeaderKey: widget.previousTracksHeaderKey),
+              header: NextUpSectionHeader(
+                controls: true,
+                nextUpHeaderKey: widget.nextUpHeaderKey,
+              ),
+              sliver: NextUpTracksList(
+                previousTracksHeaderKey: widget.previousTracksHeaderKey,
+              ),
             );
           } else {
             return const SliverToBoxAdapter();
@@ -184,7 +203,8 @@ class _QueueListState extends State<QueueList> {
               ),
               Flexible(
                 child: Text(
-                  _source?.name.getLocalized(context) ?? AppLocalizations.of(context)!.unknownName,
+                  _source?.name.getLocalized(context) ??
+                      AppLocalizations.of(context)!.unknownName,
                   style: const TextStyle(fontWeight: FontWeight.w500),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -196,14 +216,20 @@ class _QueueListState extends State<QueueList> {
           queueHeaderKey: widget.queueHeaderKey,
           scrollController: widget.scrollController,
         ),
-        sliver: QueueTracksList(previousTracksHeaderKey: widget.previousTracksHeaderKey),
+        sliver: QueueTracksList(
+          previousTracksHeaderKey: widget.previousTracksHeaderKey,
+        ),
       ),
     ];
 
     return ScrollbarTheme(
       data: ScrollbarThemeData(
-        thumbColor: WidgetStateProperty.all(Theme.of(context).colorScheme.primary.withOpacity(0.7)),
-        trackColor: WidgetStateProperty.all(Theme.of(context).colorScheme.primary.withOpacity(0.2)),
+        thumbColor: WidgetStateProperty.all(
+          Theme.of(context).colorScheme.primary.withOpacity(0.7),
+        ),
+        trackColor: WidgetStateProperty.all(
+          Theme.of(context).colorScheme.primary.withOpacity(0.2),
+        ),
         radius: const Radius.circular(6.0),
         thickness: WidgetStateProperty.all(12.0),
         // thumbVisibility: MaterialStateProperty.all(true),
@@ -232,7 +258,9 @@ Future<dynamic> showQueueBottomSheet(BuildContext context, WidgetRef ref) {
 
   return showModalBottomSheet(
     context: context,
-    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24.0))),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
+    ),
     isScrollControlled: true,
     enableDrag: true,
     useSafeArea: true,
@@ -261,9 +289,14 @@ Future<dynamic> showQueueBottomSheet(BuildContext context, WidgetRef ref) {
                 return Scaffold(
                   body: Stack(
                     children: [
-                      if (ref.watch(finampSettingsProvider.useCoverAsBackground))
+                      if (ref.watch(
+                        finampSettingsProvider.useCoverAsBackground,
+                      ))
                         BlurredPlayerScreenBackground(
-                          opacityFactor: Theme.of(context).brightness == Brightness.dark ? 1.0 : 0.85,
+                          opacityFactor:
+                              Theme.of(context).brightness == Brightness.dark
+                              ? 1.0
+                              : 0.85,
                         ),
                       Column(
                         mainAxisSize: MainAxisSize.min,
@@ -273,7 +306,9 @@ Future<dynamic> showQueueBottomSheet(BuildContext context, WidgetRef ref) {
                             width: 40,
                             height: 3.5,
                             decoration: BoxDecoration(
-                              color: Theme.of(context).textTheme.bodySmall!.color!,
+                              color: Theme.of(
+                                context,
+                              ).textTheme.bodySmall!.color!,
                               borderRadius: BorderRadius.circular(3.5),
                             ),
                           ),
@@ -281,7 +316,9 @@ Future<dynamic> showQueueBottomSheet(BuildContext context, WidgetRef ref) {
                           Text(
                             AppLocalizations.of(context)!.queue,
                             style: TextStyle(
-                              color: Theme.of(context).textTheme.bodyLarge!.color!,
+                              color: Theme.of(
+                                context,
+                              ).textTheme.bodyLarge!.color!,
                               fontSize: 18,
                               fontWeight: FontWeight.w400,
                             ),
@@ -348,15 +385,23 @@ class JumpToCurrentButtonState extends State<JumpToCurrentButton> {
               );
             },
             backgroundColor: IconTheme.of(context).color!.withOpacity(0.70),
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16.0)),
+            ),
             icon: Icon(
-              _jumpToCurrentTrackDirection < 0 ? TablerIcons.arrow_bar_to_up : TablerIcons.arrow_bar_to_down,
+              _jumpToCurrentTrackDirection < 0
+                  ? TablerIcons.arrow_bar_to_up
+                  : TablerIcons.arrow_bar_to_down,
               size: 28.0,
               color: Colors.white.withOpacity(0.9),
             ),
             label: Text(
               AppLocalizations.of(context)!.scrollToCurrentTrack,
-              style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 14.0, fontWeight: FontWeight.w500),
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.9),
+                fontSize: 14.0,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           )
         : const SizedBox.shrink();
@@ -372,7 +417,8 @@ class PreviousTracksList extends StatefulWidget {
   State<PreviousTracksList> createState() => _PreviousTracksListState();
 }
 
-class _PreviousTracksListState extends State<PreviousTracksList> with TickerProviderStateMixin {
+class _PreviousTracksListState extends State<PreviousTracksList>
+    with TickerProviderStateMixin {
   final _queueService = GetIt.instance<QueueService>();
   List<FinampQueueItem>? _previousTracks;
 
@@ -394,9 +440,15 @@ class _PreviousTracksListState extends State<PreviousTracksList> with TickerProv
                 setState(() {
                   // temporarily update internal queue
                   FinampQueueItem tmp = _previousTracks!.removeAt(oldIndex);
-                  _previousTracks!.insert(newIndex < oldIndex ? newIndex : newIndex - 1, tmp);
+                  _previousTracks!.insert(
+                    newIndex < oldIndex ? newIndex : newIndex - 1,
+                    tmp,
+                  );
                   // update external queue to commit changes, results in a rebuild
-                  _queueService.reorderByOffset(draggingOffset, newPositionOffset);
+                  _queueService.reorderByOffset(
+                    draggingOffset,
+                    newPositionOffset,
+                  );
                 });
               }
             },
@@ -407,7 +459,9 @@ class _PreviousTracksListState extends State<PreviousTracksList> with TickerProv
               key = key as GlobalObjectKey;
               final ValueKey<String> valueKey = key.value as ValueKey<String>;
               // search from the back as this is probably more efficient for previous tracks
-              final index = _previousTracks!.lastIndexWhere((item) => item.id == valueKey.value);
+              final index = _previousTracks!.lastIndexWhere(
+                (item) => item.id == valueKey.value,
+              );
               if (index == -1) return null;
               return index;
             },
@@ -424,7 +478,8 @@ class _PreviousTracksListState extends State<PreviousTracksList> with TickerProv
                 indexOffset: indexOffset,
                 isInPlaylist: queueItemInPlaylist(item),
                 parentItem: item.source.item,
-                allowReorder: _queueService.playbackOrder == FinampPlaybackOrder.linear,
+                allowReorder:
+                    _queueService.playbackOrder == FinampPlaybackOrder.linear,
                 onTap: (bool playable) async {
                   FeedbackHelper.feedback(FeedbackType.selection);
                   await _queueService.skipByOffset(indexOffset);
@@ -439,7 +494,7 @@ class _PreviousTracksListState extends State<PreviousTracksList> with TickerProv
             },
           );
         } else {
-          return SliverList(delegate: SliverChildListDelegate([]));
+          return SuperSliverList(delegate: SliverChildListDelegate([]));
         }
       },
     );
@@ -481,9 +536,15 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                     setState(() {
                       // temporarily update internal queue
                       FinampQueueItem tmp = _nextUp!.removeAt(oldIndex);
-                      _nextUp!.insert(newIndex < oldIndex ? newIndex : newIndex - 1, tmp);
+                      _nextUp!.insert(
+                        newIndex < oldIndex ? newIndex : newIndex - 1,
+                        tmp,
+                      );
                       // update external queue to commit changes, results in a rebuild
-                      _queueService.reorderByOffset(draggingOffset, newPositionOffset);
+                      _queueService.reorderByOffset(
+                        draggingOffset,
+                        newPositionOffset,
+                      );
                     });
                   }
                 },
@@ -492,8 +553,11 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                 },
                 findChildIndexCallback: (Key key) {
                   key = key as GlobalObjectKey;
-                  final ValueKey<String> valueKey = key.value as ValueKey<String>;
-                  final index = _nextUp!.indexWhere((item) => item.id == valueKey.value);
+                  final ValueKey<String> valueKey =
+                      key.value as ValueKey<String>;
+                  final index = _nextUp!.indexWhere(
+                    (item) => item.id == valueKey.value,
+                  );
                   if (index == -1) return null;
                   return index;
                 },
@@ -510,7 +574,9 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                     indexOffset: indexOffset,
                     isInPlaylist: queueItemInPlaylist(item),
                     parentItem: item.source.item,
-                    allowReorder: _queueService.playbackOrder == FinampPlaybackOrder.linear,
+                    allowReorder:
+                        _queueService.playbackOrder ==
+                        FinampPlaybackOrder.linear,
                     onTap: (bool playable) async {
                       FeedbackHelper.feedback(FeedbackType.selection);
                       await _queueService.skipByOffset(indexOffset);
@@ -526,7 +592,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
               ),
             );
           } else {
-            return SliverList(delegate: SliverChildListDelegate([]));
+            return SuperSliverList(delegate: SliverChildListDelegate([]));
           }
         },
       ),
@@ -567,12 +633,18 @@ class _QueueTracksListState extends State<QueueTracksList> {
                 print("$draggingOffset -> $newPositionOffset");
                 if (mounted) {
                   // update external queue to commit changes, but don't await it
-                  _queueService.reorderByOffset(draggingOffset, newPositionOffset);
+                  _queueService.reorderByOffset(
+                    draggingOffset,
+                    newPositionOffset,
+                  );
                   FeedbackHelper.feedback(FeedbackType.heavy);
                   setState(() {
                     // temporarily update internal queue
                     FinampQueueItem tmp = _queue!.removeAt(oldIndex);
-                    _queue!.insert(newIndex < oldIndex ? newIndex : newIndex - 1, tmp);
+                    _queue!.insert(
+                      newIndex < oldIndex ? newIndex : newIndex - 1,
+                      tmp,
+                    );
                   });
                 }
               },
@@ -583,7 +655,9 @@ class _QueueTracksListState extends State<QueueTracksList> {
               findChildIndexCallback: (Key key) {
                 key = key as GlobalObjectKey;
                 final ValueKey<String> valueKey = key.value as ValueKey<String>;
-                final index = _queue!.indexWhere((item) => item.id == valueKey.value);
+                final index = _queue!.indexWhere(
+                  (item) => item.id == valueKey.value,
+                );
                 if (index == -1) return null;
                 return index;
               },
@@ -600,7 +674,8 @@ class _QueueTracksListState extends State<QueueTracksList> {
                   indexOffset: indexOffset,
                   isInPlaylist: queueItemInPlaylist(item),
                   parentItem: item.source.item,
-                  allowReorder: _queueService.playbackOrder == FinampPlaybackOrder.linear,
+                  allowReorder:
+                      _queueService.playbackOrder == FinampPlaybackOrder.linear,
                   onTap: (bool playable) async {
                     FeedbackHelper.feedback(FeedbackType.selection);
                     await _queueService.skipByOffset(indexOffset);
@@ -615,7 +690,7 @@ class _QueueTracksListState extends State<QueueTracksList> {
               },
             );
           } else {
-            return SliverList(delegate: SliverChildListDelegate([]));
+            return SuperSliverList(delegate: SliverChildListDelegate([]));
           }
         },
       ),
@@ -648,11 +723,12 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
     Duration? playbackPosition;
 
     return StreamBuilder<QueueListStreamState>(
-      stream: Rx.combineLatest2<MediaState, FinampQueueInfo?, QueueListStreamState>(
-        mediaStateStream,
-        _queueService.getQueueStream(),
-        (a, b) => QueueListStreamState(a, b),
-      ),
+      stream:
+          Rx.combineLatest2<MediaState, FinampQueueInfo?, QueueListStreamState>(
+            mediaStateStream,
+            _queueService.getQueueStream(),
+            (a, b) => QueueListStreamState(a, b),
+          ),
       builder: (context, snapshot) {
         var data = snapshot.data;
         currentTrack = data?.queueInfo?.currentTrack;
@@ -676,7 +752,9 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
             flexibleSpace: Container(
               // width: 58,
               height: albumImageSize,
-              padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+              padding: const EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+              ),
               child: Container(
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
@@ -684,9 +762,13 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                     Theme.of(context).brightness == Brightness.dark
                         ? IconTheme.of(context).color!.withOpacity(0.35)
                         : IconTheme.of(context).color!.withOpacity(0.65),
-                    Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white,
+                    Theme.of(context).brightness == Brightness.dark
+                        ? Colors.black
+                        : Colors.white,
                   ),
-                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12.0))),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                  ),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -696,9 +778,20 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                     Stack(
                       alignment: Alignment.center,
                       children: [
-                        if (ref.watch(finampSettingsProvider.showProgressOnNowPlayingBar))
-                          Positioned.fill(child: ColoredBox(color: IconTheme.of(context).color!.withOpacity(0.75))),
-                        AlbumImage(borderRadius: BorderRadius.zero, imageListenable: currentAlbumImageProvider),
+                        if (ref.watch(
+                          finampSettingsProvider.showProgressOnNowPlayingBar,
+                        ))
+                          Positioned.fill(
+                            child: ColoredBox(
+                              color: IconTheme.of(
+                                context,
+                              ).color!.withOpacity(0.75),
+                            ),
+                          ),
+                        AlbumImage(
+                          borderRadius: BorderRadius.zero,
+                          imageListenable: currentAlbumImageProvider,
+                        ),
                         AudioFadeProgressVisualizerContainer(
                           key: const Key("AlbumArtAudioFadeProgressVisualizer"),
                           width: albumImageSize,
@@ -726,19 +819,25 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                         children: [
                           Positioned.fill(
                             child: StreamBuilder<Duration>(
-                              stream: AudioService.position.startWith(_audioHandler.playbackState.value.position),
+                              stream: AudioService.position.startWith(
+                                _audioHandler.playbackState.value.position,
+                              ),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   playbackPosition = snapshot.data;
-                                  var itemLength = mediaState?.mediaItem?.duration;
+                                  var itemLength =
+                                      mediaState?.mediaItem?.duration;
                                   return FractionallySizedBox(
                                     alignment: AlignmentDirectional.centerStart,
                                     widthFactor: itemLength == null
                                         ? 0
-                                        : playbackPosition!.inMilliseconds / itemLength.inMilliseconds,
+                                        : playbackPosition!.inMilliseconds /
+                                              itemLength.inMilliseconds,
                                     child: DecoratedBox(
                                       decoration: ShapeDecoration(
-                                        color: IconTheme.of(context).color!.withOpacity(0.75),
+                                        color: IconTheme.of(
+                                          context,
+                                        ).color!.withOpacity(0.75),
                                         shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.only(
                                             topRight: Radius.circular(12),
@@ -761,22 +860,32 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                               Expanded(
                                 child: Container(
                                   height: albumImageSize,
-                                  padding: const EdgeInsets.only(left: 12, right: 4),
+                                  padding: const EdgeInsets.only(
+                                    left: 12,
+                                    right: 4,
+                                  ),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(
                                         height: 20,
                                         child: OneLineMarqueeHelper(
                                           key: ValueKey(currentTrack?.item.id),
-                                          text: currentTrack?.item.title ?? AppLocalizations.of(context)!.unknownName,
+                                          text:
+                                              currentTrack?.item.title ??
+                                              AppLocalizations.of(
+                                                context,
+                                              )!.unknownName,
                                           style: TextStyle(
                                             fontSize: 16,
                                             height: 26 / 20,
                                             color: Colors.white,
-                                            fontWeight: Theme.of(context).brightness == Brightness.light
+                                            fontWeight:
+                                                Theme.of(context).brightness ==
+                                                    Brightness.light
                                                 ? FontWeight.w500
                                                 : FontWeight.w600,
                                           ),
@@ -784,13 +893,18 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                                       ),
                                       const SizedBox(height: 4),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Expanded(
                                             child: Text(
-                                              processArtist(currentTrack!.item.artist, context),
+                                              processArtist(
+                                                currentTrack!.item.artist,
+                                                context,
+                                              ),
                                               style: TextStyle(
-                                                color: (Colors.white).withOpacity(0.85),
+                                                color: (Colors.white)
+                                                    .withOpacity(0.85),
                                                 fontSize: 13,
                                                 fontWeight: FontWeight.w300,
                                                 overflow: TextOverflow.ellipsis,
@@ -800,26 +914,39 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                                           Row(
                                             children: [
                                               StreamBuilder<Duration>(
-                                                stream: AudioService.position.startWith(
-                                                  _audioHandler.playbackState.value.position,
-                                                ),
+                                                stream: AudioService.position
+                                                    .startWith(
+                                                      _audioHandler
+                                                          .playbackState
+                                                          .value
+                                                          .position,
+                                                    ),
                                                 builder: (context, snapshot) {
-                                                  final TextStyle style = TextStyle(
-                                                    color: (Colors.white).withOpacity(0.8),
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w400,
-                                                  );
+                                                  final TextStyle style =
+                                                      TextStyle(
+                                                        color: (Colors.white)
+                                                            .withOpacity(0.8),
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      );
                                                   if (snapshot.hasData) {
-                                                    playbackPosition = snapshot.data;
+                                                    playbackPosition =
+                                                        snapshot.data;
                                                     return Text(
                                                       // '0:00',
-                                                      playbackPosition!.inHours >= 1.0
+                                                      playbackPosition!
+                                                                  .inHours >=
+                                                              1.0
                                                           ? "${playbackPosition?.inHours.toString()}:${((playbackPosition?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
                                                           : "${playbackPosition?.inMinutes.toString()}:${((playbackPosition?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
                                                       style: style,
                                                     );
                                                   } else {
-                                                    return Text("0:00", style: style);
+                                                    return Text(
+                                                      "0:00",
+                                                      style: style,
+                                                    );
                                                   }
                                                 },
                                               ),
@@ -827,7 +954,8 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                                               Text(
                                                 '/',
                                                 style: TextStyle(
-                                                  color: (Colors.white).withOpacity(0.8),
+                                                  color: (Colors.white)
+                                                      .withOpacity(0.8),
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w400,
                                                 ),
@@ -835,11 +963,17 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                                               const SizedBox(width: 2),
                                               Text(
                                                 // '3:44',
-                                                (mediaState?.mediaItem?.duration?.inHours ?? 0.0) >= 1.0
+                                                (mediaState
+                                                                ?.mediaItem
+                                                                ?.duration
+                                                                ?.inHours ??
+                                                            0.0) >=
+                                                        1.0
                                                     ? "${mediaState?.mediaItem?.duration?.inHours.toString()}:${((mediaState?.mediaItem?.duration?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
                                                     : "${mediaState?.mediaItem?.duration?.inMinutes.toString()}:${((mediaState?.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
                                                 style: TextStyle(
-                                                  color: (Colors.white).withOpacity(0.8),
+                                                  color: (Colors.white)
+                                                      .withOpacity(0.8),
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w400,
                                                 ),
@@ -862,12 +996,16 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                                       queueItem: currentTrack,
                                       color: Colors.white,
                                       size: 28,
-                                      visualDensity: const VisualDensity(horizontal: -4),
+                                      visualDensity: const VisualDensity(
+                                        horizontal: -4,
+                                      ),
                                     ),
                                   ),
                                   IconButton(
                                     iconSize: 28,
-                                    visualDensity: const VisualDensity(horizontal: -4),
+                                    visualDensity: const VisualDensity(
+                                      horizontal: -4,
+                                    ),
                                     // visualDensity: VisualDensity.compact,
                                     icon: const Icon(
                                       TablerIcons.dots_vertical,
@@ -880,7 +1018,9 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                                       showModalTrackMenu(
                                         context: context,
                                         item: currentTrackBaseItem,
-                                        isInPlaylist: queueItemInPlaylist(currentTrack),
+                                        isInPlaylist: queueItemInPlaylist(
+                                          currentTrack,
+                                        ),
                                         parentItem: currentTrack?.source.item,
                                         confirmPlaylistRemoval: true,
                                         showQueueActions: true,
@@ -900,7 +1040,7 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
             ),
           );
         } else {
-          return SliverList(delegate: SliverChildListDelegate([]));
+          return SuperSliverList(delegate: SliverChildListDelegate([]));
         }
       },
     );
@@ -958,14 +1098,22 @@ class QueueSectionHeader extends StatelessWidget {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           var remaining = snapshot.data!.remainingDuration;
-                          var remainText = printDuration(remaining, leadingZeroes: false);
+                          var remainText = printDuration(
+                            remaining,
+                            leadingZeroes: false,
+                          );
                           final remainingLabelFullHours = (remaining.inHours);
-                          final remainingLabelFullMinutes = (remaining.inMinutes) % 60;
-                          final remainingLabelSeconds = (remaining.inSeconds) % 60;
+                          final remainingLabelFullMinutes =
+                              (remaining.inMinutes) % 60;
+                          final remainingLabelSeconds =
+                              (remaining.inSeconds) % 60;
                           final remainingLabelString =
                               "${remainingLabelFullHours > 0 ? "$remainingLabelFullHours ${AppLocalizations.of(context)!.hours} " : ""}${remainingLabelFullMinutes > 0 ? "$remainingLabelFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$remainingLabelSeconds ${AppLocalizations.of(context)!.seconds}";
                           return Padding(
-                            padding: const EdgeInsets.only(top: 4.0, right: 8.0),
+                            padding: const EdgeInsets.only(
+                              top: 4.0,
+                              right: 8.0,
+                            ),
                             child: Text(
                               "${snapshot.data!.currentTrackIndex} / ${snapshot.data!.trackCount}  (${AppLocalizations.of(context)!.remainingDuration(remainText)})",
                               semanticsLabel:
@@ -1006,7 +1154,9 @@ class QueueSectionHeader extends StatelessWidget {
                           : (const Icon(TablerIcons.arrows_right)),
                       color: info?.order == FinampPlaybackOrder.shuffled
                           ? IconTheme.of(context).color!
-                          : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white).withOpacity(0.85),
+                          : (Theme.of(context).textTheme.bodyMedium?.color ??
+                                    Colors.white)
+                                .withOpacity(0.85),
                       onPressed: () {
                         queueService.togglePlaybackOrder();
                         FeedbackHelper.feedback(FeedbackType.selection);
@@ -1031,7 +1181,9 @@ class QueueSectionHeader extends StatelessWidget {
                           : (const Icon(TablerIcons.repeat_off)),
                       color: info?.loop != FinampLoopMode.none
                           ? IconTheme.of(context).color!
-                          : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white).withOpacity(0.85),
+                          : (Theme.of(context).textTheme.bodyMedium?.color ??
+                                    Colors.white)
+                                .withOpacity(0.85),
                       onPressed: () {
                         queueService.toggleLoopMode();
                         FeedbackHelper.feedback(FeedbackType.selection);
@@ -1051,7 +1203,11 @@ class NextUpSectionHeader extends StatelessWidget {
   final bool controls;
   final GlobalKey nextUpHeaderKey;
 
-  const NextUpSectionHeader({super.key, required this.nextUpHeaderKey, this.controls = false});
+  const NextUpSectionHeader({
+    super.key,
+    required this.nextUpHeaderKey,
+    this.controls = false,
+  });
 
   static MenuMaskHeight defaultHeight = MenuMaskHeight(114.0);
 
@@ -1078,7 +1234,9 @@ class NextUpSectionHeader extends StatelessWidget {
               icon: TablerIcons.x,
               iconPosition: IconPosition.end,
               iconSize: 32.0,
-              iconColor: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
+              iconColor: Theme.of(context).brightness == Brightness.light
+                  ? Colors.black
+                  : Colors.white,
               onPressed: () {
                 queueService.clearNextUp();
                 FeedbackHelper.feedback(FeedbackType.success);
@@ -1108,7 +1266,12 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
   @override
   Widget build(context, double shrinkOffset, bool overlapsContent) {
     return Padding(
-      padding: const EdgeInsets.only(left: 14.0, right: 14.0, bottom: 12.0, top: 8.0),
+      padding: const EdgeInsets.only(
+        left: 14.0,
+        right: 14.0,
+        bottom: 12.0,
+        top: 8.0,
+      ),
       child: GestureDetector(
         onTap: () {
           try {
@@ -1136,13 +1299,17 @@ class PreviousTracksSectionHeader extends SliverPersistentHeaderDelegate {
                   return Icon(
                     TablerIcons.chevron_up,
                     size: 28.0,
-                    color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Colors.black
+                        : Colors.white,
                   );
                 } else {
                   return Icon(
                     TablerIcons.chevron_down,
                     size: 28.0,
-                    color: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Colors.black
+                        : Colors.white,
                   );
                 }
               },

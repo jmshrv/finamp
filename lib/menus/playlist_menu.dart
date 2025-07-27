@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import "package:super_sliver_list/super_sliver_list.dart";
 import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/menus/components/menuEntries/adaptive_download_lock_delete_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/add_to_playlist_menu_entry.dart';
@@ -17,7 +18,9 @@ import 'package:flutter/material.dart';
 
 import 'components/menuEntries/menu_entry.dart';
 
-const Duration playlistMenuDefaultAnimationDuration = Duration(milliseconds: 750);
+const Duration playlistMenuDefaultAnimationDuration = Duration(
+  milliseconds: 750,
+);
 const Curve playlistMenuDefaultInCurve = Curves.easeOutCubic;
 const Curve playlistMenuDefaultOutCurve = Curves.easeInCubic;
 const playlistMenuRouteName = "/playlist-menu";
@@ -42,18 +45,27 @@ Future<void> showModalPlaylistMenu({
 
   (double, List<Widget>) getMenuProperties(BuildContext context) {
     final menuEntries = getMenuEntries(context);
-    final stackHeight = ThemedBottomSheet.calculateStackHeight(context: context, menuEntries: menuEntries);
+    final stackHeight = ThemedBottomSheet.calculateStackHeight(
+      context: context,
+      menuEntries: menuEntries,
+    );
 
     final pageViewController = PageController();
 
     List<Widget> menu = [
-      SliverPersistentHeader(delegate: MenuItemInfoSliverHeader(item: baseItem), pinned: true),
+      SliverPersistentHeader(
+        delegate: MenuItemInfoSliverHeader(item: baseItem),
+        pinned: true,
+      ),
       MenuMask(
         height: MenuItemInfoSliverHeader.defaultHeight,
         child: SliverToBoxAdapter(
           child: PlaybackActionRow(
             controller: pageViewController,
-            playbackActionPages: getPlaybackActionPages(context: context, baseItem: baseItem),
+            playbackActionPages: getPlaybackActionPages(
+              context: context,
+              baseItem: baseItem,
+            ),
           ),
         ),
       ),
@@ -61,7 +73,9 @@ Future<void> showModalPlaylistMenu({
         height: MenuItemInfoSliverHeader.defaultHeight,
         child: SliverPadding(
           padding: const EdgeInsets.only(left: 8.0),
-          sliver: SliverList(delegate: SliverChildListDelegate(menuEntries)),
+          sliver: SuperSliverList(
+            delegate: SliverChildListDelegate(menuEntries),
+          ),
         ),
       ),
     ];

@@ -1,5 +1,5 @@
 import 'dart:collection';
-
+import "package:super_sliver_list/super_sliver_list.dart";
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:locale_names/locale_names.dart';
@@ -37,7 +37,7 @@ class _LanguageListState extends State<LanguageList> {
             // language as the system language (e.g., system to English on a
             // device set to English)
             // ignore: prefer_const_constructors
-            SliverList(
+            SuperSliverList(
               // ignore: prefer_const_constructors
               delegate: SliverChildListDelegate.fixed([
                 // ignore: prefer_const_constructors
@@ -45,7 +45,7 @@ class _LanguageListState extends State<LanguageList> {
                 const Divider(),
               ]),
             ),
-            SliverList(
+            SuperSliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
                 final locale = locales.values.elementAt(index);
 
@@ -67,7 +67,10 @@ class LanguageListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RadioListTile<Locale?>(
-      title: Text(locale?.nativeDisplayLanguageScript ?? AppLocalizations.of(context)!.system),
+      title: Text(
+        locale?.nativeDisplayLanguageScript ??
+            AppLocalizations.of(context)!.system,
+      ),
       subtitle: locale != null
           ? Text(
               LocaleHelper.locale != null

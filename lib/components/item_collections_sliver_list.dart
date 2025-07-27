@@ -4,6 +4,7 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import "package:super_sliver_list/super_sliver_list.dart";
 import '../../models/jellyfin_models.dart';
 
 class CollectionsSliverList extends ConsumerStatefulWidget {
@@ -27,7 +28,8 @@ class CollectionsSliverList extends ConsumerStatefulWidget {
 }
 
 class _ItemsSliverListState extends ConsumerState<CollectionsSliverList> {
-  final GlobalKey<SliverAnimatedListState> sliverListKey = GlobalKey<SliverAnimatedListState>();
+  final GlobalKey<SliverAnimatedListState> sliverListKey =
+      GlobalKey<SliverAnimatedListState>();
 
   @override
   void initState() {
@@ -36,8 +38,10 @@ class _ItemsSliverListState extends ConsumerState<CollectionsSliverList> {
 
   @override
   Widget build(BuildContext context) {
-    final filterArtistScreens = ref.watch(finampSettingsProvider.genreFilterArtistScreens);
-    return SliverList(
+    final filterArtistScreens = ref.watch(
+      finampSettingsProvider.genreFilterArtistScreens,
+    );
+    return SuperSliverList(
       delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
         final BaseItemDto item = widget.childrenForList[index];
         final itemType = BaseItemDtoType.fromItem(item);
@@ -45,9 +49,13 @@ class _ItemsSliverListState extends ConsumerState<CollectionsSliverList> {
           key: ValueKey(item.id),
           item: item,
           isPlaylist: false,
-          genreFilter: (itemType == BaseItemDtoType.artist && filterArtistScreens) ? widget.genreFilter : null,
-          albumShowsYearAndDurationInstead: widget.albumShowsYearAndDurationInstead,
-          adaptiveAdditionalInfoSortBy: widget.adaptiveAdditionalInfoSortBy,
+          genreFilter:
+              (itemType == BaseItemDtoType.artist && filterArtistScreens)
+              ? widget.genreFilter
+              : null,
+          albumShowsYearAndDurationInstead:
+              widget.albumShowsYearAndDurationInstead,
+          showAdditionalInfoForSortBy: widget.showAdditionalInfoForSortBy,
         );
       }, childCount: widget.childrenForList.length),
     );

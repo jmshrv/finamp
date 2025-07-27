@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import "package:super_sliver_list/super_sliver_list.dart";
 import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/menus/components/menuEntries/adaptive_download_lock_delete_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/add_to_playlist_menu_entry.dart';
@@ -45,7 +46,10 @@ Future<void> showModalGenreMenu({
     final pageViewController = PageController();
 
     List<Widget> menu = [
-      SliverPersistentHeader(delegate: MenuItemInfoSliverHeader(item: baseItem), pinned: true),
+      SliverPersistentHeader(
+        delegate: MenuItemInfoSliverHeader(item: baseItem),
+        pinned: true,
+      ),
       //!!! temporarily disabled due to performance issues with large queues
       // MenuMask(
       //   height: MenuMask.defaultHeight,
@@ -63,7 +67,9 @@ Future<void> showModalGenreMenu({
         height: MenuItemInfoSliverHeader.defaultHeight,
         child: SliverPadding(
           padding: const EdgeInsets.only(left: 8.0),
-          sliver: SliverList(delegate: SliverChildListDelegate(menuEntries)),
+          sliver: SuperSliverList(
+            delegate: SliverChildListDelegate(menuEntries),
+          ),
         ),
       ),
     ];

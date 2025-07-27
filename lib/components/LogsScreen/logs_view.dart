@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../services/finamp_logs_helper.dart';
 import 'log_tile.dart';
+import "package:super_sliver_list/super_sliver_list.dart";
 
 class LogsView extends StatelessWidget {
   const LogsView({super.key});
@@ -11,11 +12,13 @@ class LogsView extends StatelessWidget {
   Widget build(BuildContext context) {
     FinampLogsHelper finampLogsHelper = GetIt.instance<FinampLogsHelper>();
 
-    return ListView.builder(
+    return SuperListView.builder(
       itemCount: finampLogsHelper.logs.length,
       reverse: true,
       itemBuilder: (context, index) {
-        return LogTile(logRecord: finampLogsHelper.logs.reversed.elementAt(index));
+        return LogTile(
+          logRecord: finampLogsHelper.logs.reversed.elementAt(index),
+        );
       },
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:hive_ce/hive.dart';
 
+import "package:super_sliver_list/super_sliver_list.dart";
 import '../components/QueueRestoreScreen/queue_restore_tile.dart';
 import '../models/finamp_models.dart';
 
@@ -20,8 +21,13 @@ class QueueRestoreScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.queuesScreen)),
-      body: ListView.builder(
-        padding: const EdgeInsets.only(left: 0.0, right: 0.0, top: 30.0, bottom: 45.0),
+      body: SuperListView.builder(
+        padding: const EdgeInsets.only(
+          left: 0.0,
+          right: 0.0,
+          top: 30.0,
+          bottom: 45.0,
+        ),
         itemCount: queueList.length,
         itemBuilder: (context, index) {
           return QueueRestoreTile(info: queueList.elementAt(index));

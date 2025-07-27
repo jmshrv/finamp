@@ -3,15 +3,20 @@ import 'package:finamp/screens/layout_settings_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import "package:super_sliver_list/super_sliver_list.dart";
+
+import "package:super_sliver_list/super_sliver_list.dart";
 
 class AccessibilitySettingsScreen extends StatefulWidget {
   const AccessibilitySettingsScreen({super.key});
   static const routeName = "/settings/accessibility";
   @override
-  State<AccessibilitySettingsScreen> createState() => _AccessibilitySettingsScreenState();
+  State<AccessibilitySettingsScreen> createState() =>
+      _AccessibilitySettingsScreenState();
 }
 
-class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScreen> {
+class _AccessibilitySettingsScreenState
+    extends State<AccessibilitySettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,8 +29,12 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
           ),
         ],
       ),
-      body: ListView(
-        children: const [UseHighContrastColorsToggle(), DisableGestureSelector(), DisableVibrationSelector()],
+      body: SuperListView(
+        children: const [
+          UseHighContrastColorsToggle(),
+          DisableGestureSelector(),
+          DisableVibrationSelector(),
+        ],
       ),
     );
   }
@@ -38,7 +47,9 @@ class UseHighContrastColorsToggle extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.useHighContrastColorsTitle),
-      subtitle: Text(AppLocalizations.of(context)!.useHighContrastColorsSubtitle),
+      subtitle: Text(
+        AppLocalizations.of(context)!.useHighContrastColorsSubtitle,
+      ),
       value: ref.watch(finampSettingsProvider.useHighContrastColors),
       onChanged: FinampSetters.setUseHighContrastColors,
     );

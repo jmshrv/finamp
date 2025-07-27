@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import "package:super_sliver_list/super_sliver_list.dart";
 import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
 
@@ -19,10 +20,13 @@ class _LyricsSettingsScreenState extends State<LyricsSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.lyricsScreen),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetLyricsSettings),
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetLyricsSettings,
+          ),
         ],
       ),
-      body: ListView(
+      body: SuperListView(
         children: const [
           ShowLyricsTimestampsToggle(),
           ShowLyricsScreenAlbumPreludeToggle(),
@@ -41,7 +45,9 @@ class ShowLyricsTimestampsToggle extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.showLyricsTimestampsTitle),
-      subtitle: Text(AppLocalizations.of(context)!.showLyricsTimestampsSubtitle),
+      subtitle: Text(
+        AppLocalizations.of(context)!.showLyricsTimestampsSubtitle,
+      ),
       value: ref.watch(finampSettingsProvider.showLyricsTimestamps),
       onChanged: FinampSetters.setShowLyricsTimestamps,
     );
@@ -59,7 +65,12 @@ class LyricsAlignmentSelector extends ConsumerWidget {
       trailing: DropdownButton<LyricsAlignment>(
         value: ref.watch(finampSettingsProvider.lyricsAlignment),
         items: LyricsAlignment.values
-            .map((e) => DropdownMenuItem<LyricsAlignment>(value: e, child: Text(e.toLocalisedString(context))))
+            .map(
+              (e) => DropdownMenuItem<LyricsAlignment>(
+                value: e,
+                child: Text(e.toLocalisedString(context)),
+              ),
+            )
             .toList(),
         onChanged: FinampSetters.setLyricsAlignment.ifNonNull,
       ),
@@ -78,7 +89,12 @@ class LyricsFontSizeSelector extends ConsumerWidget {
       trailing: DropdownButton<LyricsFontSize>(
         value: ref.watch(finampSettingsProvider.lyricsFontSize),
         items: LyricsFontSize.values
-            .map((e) => DropdownMenuItem<LyricsFontSize>(value: e, child: Text(e.toLocalisedString(context))))
+            .map(
+              (e) => DropdownMenuItem<LyricsFontSize>(
+                value: e,
+                child: Text(e.toLocalisedString(context)),
+              ),
+            )
             .toList(),
         onChanged: FinampSetters.setLyricsFontSize.ifNonNull,
       ),
@@ -92,8 +108,12 @@ class ShowLyricsScreenAlbumPreludeToggle extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
-      title: Text(AppLocalizations.of(context)!.showLyricsScreenAlbumPreludeTitle),
-      subtitle: Text(AppLocalizations.of(context)!.showLyricsScreenAlbumPreludeSubtitle),
+      title: Text(
+        AppLocalizations.of(context)!.showLyricsScreenAlbumPreludeTitle,
+      ),
+      subtitle: Text(
+        AppLocalizations.of(context)!.showLyricsScreenAlbumPreludeSubtitle,
+      ),
       value: ref.watch(finampSettingsProvider.showLyricsScreenAlbumPrelude),
       onChanged: FinampSetters.setShowLyricsScreenAlbumPrelude,
     );

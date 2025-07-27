@@ -1,10 +1,11 @@
 import 'dart:io';
 
+import "package:super_sliver_list/super_sliver_list.dart";
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import "package:super_sliver_list/super_sliver_list.dart";
 import '../components/AudioServiceSettingsScreen/buffer_duration_list_tile.dart';
 import '../components/AudioServiceSettingsScreen/loadQueueOnStartup_selector.dart';
 import '../components/AudioServiceSettingsScreen/stop_foreground_selector.dart';
@@ -14,10 +15,12 @@ class AudioServiceSettingsScreen extends StatefulWidget {
   const AudioServiceSettingsScreen({super.key});
   static const routeName = "/settings/audioservice";
   @override
-  State<AudioServiceSettingsScreen> createState() => _AudioServiceSettingsScreenState();
+  State<AudioServiceSettingsScreen> createState() =>
+      _AudioServiceSettingsScreenState();
 }
 
-class _AudioServiceSettingsScreenState extends State<AudioServiceSettingsScreen> {
+class _AudioServiceSettingsScreenState
+    extends State<AudioServiceSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +34,7 @@ class _AudioServiceSettingsScreenState extends State<AudioServiceSettingsScreen>
           }),
         ],
       ),
-      body: ListView(
+      body: SuperListView(
         children: [
           if (Platform.isAndroid) const StopForegroundSelector(),
           const TrackShuffleItemCountEditor(),
@@ -55,8 +58,12 @@ class BufferDisableSizeConstraintsSelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
-      title: Text(AppLocalizations.of(context)!.bufferDisableSizeConstraintsTitle),
-      subtitle: Text(AppLocalizations.of(context)!.bufferDisableSizeConstraintsSubtitle),
+      title: Text(
+        AppLocalizations.of(context)!.bufferDisableSizeConstraintsTitle,
+      ),
+      subtitle: Text(
+        AppLocalizations.of(context)!.bufferDisableSizeConstraintsSubtitle,
+      ),
       value: ref.watch(finampSettingsProvider.bufferDisableSizeConstraints),
       onChanged: FinampSetters.setBufferDisableSizeConstraints,
     );
@@ -117,10 +124,12 @@ class AudioFadeInDurationListTile extends ConsumerStatefulWidget {
   const AudioFadeInDurationListTile({super.key});
 
   @override
-  ConsumerState<AudioFadeInDurationListTile> createState() => _AudioFadeInDurationListTileState();
+  ConsumerState<AudioFadeInDurationListTile> createState() =>
+      _AudioFadeInDurationListTileState();
 }
 
-class _AudioFadeInDurationListTileState extends ConsumerState<AudioFadeInDurationListTile> {
+class _AudioFadeInDurationListTileState
+    extends ConsumerState<AudioFadeInDurationListTile> {
   final _controller = TextEditingController();
 
   @override
@@ -135,8 +144,12 @@ class _AudioFadeInDurationListTileState extends ConsumerState<AudioFadeInDuratio
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(AppLocalizations.of(context)!.audioFadeInDurationSettingTitle),
-      subtitle: Text(AppLocalizations.of(context)!.audioFadeInDurationSettingSubtitle),
+      title: Text(
+        AppLocalizations.of(context)!.audioFadeInDurationSettingTitle,
+      ),
+      subtitle: Text(
+        AppLocalizations.of(context)!.audioFadeInDurationSettingSubtitle,
+      ),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(
@@ -147,7 +160,9 @@ class _AudioFadeInDurationListTileState extends ConsumerState<AudioFadeInDuratio
             final valueInt = int.tryParse(value);
 
             if (valueInt != null && !valueInt.isNegative) {
-              FinampSetters.setAudioFadeInDuration(Duration(milliseconds: valueInt));
+              FinampSetters.setAudioFadeInDuration(
+                Duration(milliseconds: valueInt),
+              );
             }
           },
         ),
@@ -160,10 +175,12 @@ class AudioFadeOutDurationListTile extends ConsumerStatefulWidget {
   const AudioFadeOutDurationListTile({super.key});
 
   @override
-  ConsumerState<AudioFadeOutDurationListTile> createState() => _AudioFadeOutDurationListTileState();
+  ConsumerState<AudioFadeOutDurationListTile> createState() =>
+      _AudioFadeOutDurationListTileState();
 }
 
-class _AudioFadeOutDurationListTileState extends ConsumerState<AudioFadeOutDurationListTile> {
+class _AudioFadeOutDurationListTileState
+    extends ConsumerState<AudioFadeOutDurationListTile> {
   final _controller = TextEditingController();
 
   @override
@@ -178,8 +195,12 @@ class _AudioFadeOutDurationListTileState extends ConsumerState<AudioFadeOutDurat
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(AppLocalizations.of(context)!.audioFadeOutDurationSettingTitle),
-      subtitle: Text(AppLocalizations.of(context)!.audioFadeOutDurationSettingSubtitle),
+      title: Text(
+        AppLocalizations.of(context)!.audioFadeOutDurationSettingTitle,
+      ),
+      subtitle: Text(
+        AppLocalizations.of(context)!.audioFadeOutDurationSettingSubtitle,
+      ),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(
@@ -190,7 +211,9 @@ class _AudioFadeOutDurationListTileState extends ConsumerState<AudioFadeOutDurat
             final valueInt = int.tryParse(value);
 
             if (valueInt != null && !valueInt.isNegative) {
-              FinampSetters.setAudioFadeOutDuration(Duration(milliseconds: valueInt));
+              FinampSetters.setAudioFadeOutDuration(
+                Duration(milliseconds: valueInt),
+              );
             }
           },
         ),
@@ -220,7 +243,9 @@ class ClearQueueOnStopToggle extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.clearQueueOnStopEventTitle),
-      subtitle: Text(AppLocalizations.of(context)!.clearQueueOnStopEventSubtitle),
+      subtitle: Text(
+        AppLocalizations.of(context)!.clearQueueOnStopEventSubtitle,
+      ),
       value: ref.watch(finampSettingsProvider.clearQueueOnStopEvent),
       onChanged: FinampSetters.setClearQueueOnStopEvent,
     );

@@ -10,6 +10,8 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import "package:super_sliver_list/super_sliver_list.dart";
+
 class NetworkSettingsScreen extends StatefulWidget {
   const NetworkSettingsScreen({super.key});
   static const routeName = "/settings/network";
@@ -25,10 +27,13 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.networkSettingsTitle),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetNetworkSettings),
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetNetworkSettings,
+          ),
         ],
       ),
-      body: ListView(
+      body: SuperListView(
         children: [
           AutoOfflineSelector(),
           Divider(),
@@ -44,10 +49,14 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
               ]);
 
               GlobalSnackbar.message(
-                (context) => AppLocalizations.of(context)!.ping("${public.toString()}_${private.toString()}"),
+                (context) => AppLocalizations.of(
+                  context,
+                )!.ping("${public.toString()}_${private.toString()}"),
               );
             },
-            child: Text(AppLocalizations.of(context)!.testConnectionButtonLabel),
+            child: Text(
+              AppLocalizations.of(context)!.testConnectionButtonLabel,
+            ),
           ),
         ],
       ),

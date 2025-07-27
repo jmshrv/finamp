@@ -2,12 +2,14 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import "package:super_sliver_list/super_sliver_list.dart";
 
 class GenreSettingsScreen extends ConsumerStatefulWidget {
   const GenreSettingsScreen({super.key});
   static const routeName = "/settings/genre";
   @override
-  ConsumerState<GenreSettingsScreen> createState() => _GenreSettingsScreenState();
+  ConsumerState<GenreSettingsScreen> createState() =>
+      _GenreSettingsScreenState();
 }
 
 class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
@@ -17,7 +19,10 @@ class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.genreScreen),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetGenreSettings),
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetGenreSettings,
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -30,29 +35,48 @@ class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
               children: [
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.itemSectionsOrder),
-                  subtitle: Text(AppLocalizations.of(context)!.itemSectionsOrderSubtitle),
+                  subtitle: Text(
+                    AppLocalizations.of(context)!.itemSectionsOrderSubtitle,
+                  ),
                 ),
                 ReorderableListView.builder(
                   buildDefaultDragHandles: false,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: FinampSettingsHelper.finampSettings.genreItemSectionsOrder.length,
+                  itemCount: FinampSettingsHelper
+                      .finampSettings
+                      .genreItemSectionsOrder
+                      .length,
                   itemBuilder: (context, index) {
                     return ReorderableDelayedDragStartListener(
-                      key: ValueKey(FinampSettingsHelper.finampSettings.genreItemSectionsOrder[index]),
+                      key: ValueKey(
+                        FinampSettingsHelper
+                            .finampSettings
+                            .genreItemSectionsOrder[index],
+                      ),
                       index: index,
                       child: ListTile(
                         title: Text(
-                          FinampSettingsHelper.finampSettings.genreItemSectionsOrder[index].toLocalisedString(context),
+                          FinampSettingsHelper
+                              .finampSettings
+                              .genreItemSectionsOrder[index]
+                              .toLocalisedString(context),
                         ),
-                        leading: ReorderableDragStartListener(index: index, child: const Icon(Icons.drag_handle)),
+                        leading: ReorderableDragStartListener(
+                          index: index,
+                          child: const Icon(Icons.drag_handle),
+                        ),
                       ),
                     );
                   },
                   onReorder: (oldIndex, newIndex) {
                     setState(() {
                       if (oldIndex < newIndex) newIndex -= 1;
-                      final currentOrder = List.of(FinampSettingsHelper.finampSettings.genreItemSectionsOrder);
+                      final currentOrder = List.of(
+                        FinampSettingsHelper
+                            .finampSettings
+                            .genreItemSectionsOrder,
+                      );
                       final movedItem = currentOrder.removeAt(oldIndex);
                       currentOrder.insert(newIndex, movedItem);
                       FinampSetters.setGenreItemSectionsOrder(currentOrder);
@@ -64,15 +88,25 @@ class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
             SizedBox(height: 12),
             SizedBox(height: 8),
             SwitchListTile.adaptive(
-              title: Text(AppLocalizations.of(context)!.genreFilterArtistScreens),
-              subtitle: Text(AppLocalizations.of(context)!.genreFilterArtistScreensSubtitle),
+              title: Text(
+                AppLocalizations.of(context)!.genreFilterArtistScreens,
+              ),
+              subtitle: Text(
+                AppLocalizations.of(context)!.genreFilterArtistScreensSubtitle,
+              ),
               value: ref.watch(finampSettingsProvider.genreFilterArtistScreens),
               onChanged: FinampSetters.setGenreFilterArtistScreens,
             ),
             SizedBox(height: 8),
             SwitchListTile.adaptive(
-              title: Text(AppLocalizations.of(context)!.genreFilterPlaylistScreens),
-              subtitle: Text(AppLocalizations.of(context)!.genreFilterPlaylistScreensSubtitle),
+              title: Text(
+                AppLocalizations.of(context)!.genreFilterPlaylistScreens,
+              ),
+              subtitle: Text(
+                AppLocalizations.of(
+                  context,
+                )!.genreFilterPlaylistScreensSubtitle,
+              ),
               value: ref.watch(finampSettingsProvider.genreFilterPlaylists),
               onChanged: FinampSetters.setGenreFilterPlaylists,
             ),
@@ -81,35 +115,60 @@ class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ListTile(
-                  title: Text(AppLocalizations.of(context)!.genreItemSectionFilterChipOrderTitle),
-                  subtitle: Text(AppLocalizations.of(context)!.genreItemSectionFilterChipOrderSubtitle),
+                  title: Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.genreItemSectionFilterChipOrderTitle,
+                  ),
+                  subtitle: Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.genreItemSectionFilterChipOrderSubtitle,
+                  ),
                 ),
                 ReorderableListView.builder(
                   buildDefaultDragHandles: false,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: FinampSettingsHelper.finampSettings.genreItemSectionFilterChipOrder.length,
+                  itemCount: FinampSettingsHelper
+                      .finampSettings
+                      .genreItemSectionFilterChipOrder
+                      .length,
                   itemBuilder: (context, index) {
                     return ReorderableDelayedDragStartListener(
-                      key: ValueKey(FinampSettingsHelper.finampSettings.genreItemSectionFilterChipOrder[index]),
+                      key: ValueKey(
+                        FinampSettingsHelper
+                            .finampSettings
+                            .genreItemSectionFilterChipOrder[index],
+                      ),
                       index: index,
                       child: ListTile(
                         title: Text(
-                          FinampSettingsHelper.finampSettings.genreItemSectionFilterChipOrder[index].toLocalisedString(
-                            context,
-                          ),
+                          FinampSettingsHelper
+                              .finampSettings
+                              .genreItemSectionFilterChipOrder[index]
+                              .toLocalisedString(context),
                         ),
-                        leading: ReorderableDragStartListener(index: index, child: const Icon(Icons.drag_handle)),
+                        leading: ReorderableDragStartListener(
+                          index: index,
+                          child: const Icon(Icons.drag_handle),
+                        ),
                       ),
                     );
                   },
                   onReorder: (oldIndex, newIndex) {
                     setState(() {
                       if (oldIndex < newIndex) newIndex -= 1;
-                      final currentOrder = List.of(FinampSettingsHelper.finampSettings.genreItemSectionFilterChipOrder);
+                      final currentOrder = List.of(
+                        FinampSettingsHelper
+                            .finampSettings
+                            .genreItemSectionFilterChipOrder,
+                      );
                       final movedItem = currentOrder.removeAt(oldIndex);
                       currentOrder.insert(newIndex, movedItem);
-                      FinampSetters.setGenreItemSectionFilterChipOrder(currentOrder);
+                      FinampSetters.setGenreItemSectionFilterChipOrder(
+                        currentOrder,
+                      );
                     });
                   },
                 ),
@@ -117,8 +176,12 @@ class _GenreSettingsScreenState extends ConsumerState<GenreSettingsScreen> {
             ),
             SizedBox(height: 12),
             SwitchListTile.adaptive(
-              title: Text(AppLocalizations.of(context)!.genreListsInheritSorting),
-              subtitle: Text(AppLocalizations.of(context)!.genreListsInheritSortingSubtitle),
+              title: Text(
+                AppLocalizations.of(context)!.genreListsInheritSorting,
+              ),
+              subtitle: Text(
+                AppLocalizations.of(context)!.genreListsInheritSortingSubtitle,
+              ),
               value: ref.watch(finampSettingsProvider.genreListsInheritSorting),
               onChanged: FinampSetters.setGenreListsInheritSorting,
             ),

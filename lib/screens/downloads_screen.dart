@@ -9,6 +9,8 @@ import '../components/DownloadsScreen/repair_downloads_button.dart';
 import '../components/DownloadsScreen/sync_downloads_button.dart';
 import '../components/padded_custom_scrollview.dart';
 
+import "package:super_sliver_list/super_sliver_list.dart";
+
 class DownloadsScreen extends StatelessWidget {
   const DownloadsScreen({super.key});
 
@@ -20,11 +22,15 @@ class DownloadsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.downloads),
-        actions: const [SyncDownloadsButton(), RepairDownloadsButton(), DownloadErrorScreenButton()],
+        actions: const [
+          SyncDownloadsButton(),
+          RepairDownloadsButton(),
+          DownloadErrorScreenButton(),
+        ],
       ),
       body: PaddedCustomScrollview(
         slivers: [
-          SliverList(
+          SuperSliverList(
             delegate: SliverChildListDelegate([
               const Padding(
                 // We don't have bottom padding here since the divider already provides bottom padding
