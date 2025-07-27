@@ -9,6 +9,7 @@ import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/services/discord_rpc.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -226,6 +227,8 @@ class DefaultSettings {
     TabContentType.playlists: TileAdditionalInfoType.adaptive,
     TabContentType.genres: TileAdditionalInfoType.adaptive,
   };
+  static const rpcEnabled = false;
+  static const rpcIcon = DiscordRpcIcon.transparent;
 }
 
 @HiveType(typeId: 28)
@@ -348,6 +351,8 @@ class FinampSettings {
     // !!! Don't touch this default value, it's supposed to be hard coded to run the migration only once
     this.hasCompletedDownloadsFileOwnerMigration = true,
     this.tileAdditionalInfoType = DefaultSettings.tileAdditionalInfoType,
+    this.rpcEnabled = DefaultSettings.rpcEnabled,
+    this.rpcIcon = DefaultSettings.rpcIcon,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -731,6 +736,12 @@ class FinampSettings {
   @HiveField(122, defaultValue: DefaultSettings.tileAdditionalInfoType)
   @SettingsHelperMap("tabContentType", "tileAdditionalInfoType")
   Map<TabContentType, TileAdditionalInfoType> tileAdditionalInfoType;
+
+  @HiveField(123, defaultValue: DefaultSettings.rpcEnabled)
+  bool rpcEnabled;
+
+  @HiveField(124, defaultValue: DefaultSettings.rpcIcon)
+  DiscordRpcIcon rpcIcon;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -3344,6 +3355,76 @@ enum TileAdditionalInfoType {
         return AppLocalizations.of(context)!.datePlayed;
       case TileAdditionalInfoType.none:
         return AppLocalizations.of(context)!.none;
+    }
+  }
+}
+
+@HiveType(typeId: 101)
+enum DiscordRpcIcon {
+  @HiveField(0)
+  black,
+  @HiveField(1)
+  dark,
+  @HiveField(2)
+  light,
+  @HiveField(3)
+  transparent,
+  @HiveField(4)
+  transparentWhite,
+  @HiveField(5)
+  jellyfinTransparent;
+
+  @override
+  String toString() {
+    switch (this) {
+      case dark:
+        return "dark";
+      case black:
+        return "black";
+      case light:
+        return "light";
+      case transparent:
+        return "transparent";
+      case transparentWhite:
+        return "transparent-white";
+      case jellyfinTransparent:
+        return "jellyfin-transparent";
+    }
+  }
+
+  String toImage() {
+    switch (this) {
+      case dark:
+        return "assets/icon/icon_combined.png";
+      case black:
+        return "assets/icon/icon_square_bg-black.png";
+      case light:
+        return "assets/icon/icon_square_bg-white.png";
+      case transparent:
+        return "images/finamp_cropped.png";
+      case transparentWhite:
+        return "assets/icon/icon_white_noborder.png";
+      case jellyfinTransparent:
+        return "images/jellyfin-icon-transparent.png"; // missing
+    }
+  }
+
+  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+
+  String _humanReadableLocalisedName(DiscordRpcIcon icon, BuildContext context) {
+    switch (icon) {
+      case dark:
+        return AppLocalizations.of(context)!.discordRPCIconDark;
+      case black:
+        return AppLocalizations.of(context)!.discordRPCIconBlack;
+      case light:
+        return AppLocalizations.of(context)!.discordRPCIconLight;
+      case jellyfinTransparent:
+        return AppLocalizations.of(context)!.discordRPCIconJFTransparent;
+      case transparent:
+        return AppLocalizations.of(context)!.discordRPCIconTransparent;
+      case transparentWhite:
+        return AppLocalizations.of(context)!.discordRPCIconWhiteTransparent;
     }
   }
 }

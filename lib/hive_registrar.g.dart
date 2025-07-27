@@ -25,6 +25,7 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(DeviceInfoAdapter());
     registerAdapter(DeviceProfileAdapter());
     registerAdapter(DirectPlayProfileAdapter());
+    registerAdapter(DiscordRpcIconAdapter());
     registerAdapter(DownloadLocationAdapter());
     registerAdapter(DownloadLocationTypeAdapter());
     registerAdapter(DownloadedImageAdapter());
@@ -115,6 +116,7 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
     registerAdapter(DeviceInfoAdapter());
     registerAdapter(DeviceProfileAdapter());
     registerAdapter(DirectPlayProfileAdapter());
+    registerAdapter(DiscordRpcIconAdapter());
     registerAdapter(DownloadLocationAdapter());
     registerAdapter(DownloadLocationTypeAdapter());
     registerAdapter(DownloadedImageAdapter());

@@ -123,6 +123,7 @@ dependencies:
   gaimon: ^1.4.0
   http: ^1.4.0
   app_links: ^6.4.0
+  flutter_discord_rpc: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -169,6 +170,12 @@ flutter:
     - images/finamp_cropped.png
     - images/finamp_cropped.svg
     - images/jellyfin-icon-transparent.png
+    - assets/icon/icon_square_bg-black.png # preview image for Discord RPC Fallback Icon Setting
+    - assets/icon/icon_combined.png        # preview image for Discord RPC Fallback Icon Setting
+    - assets/icon/icon_square_bg-white.png # preview image for Discord RPC Fallback Icon Setting
+    - images/finamp_cropped.png            # preview image for Discord RPC Fallback Icon Setting
+    - assets/icon/icon_white_noborder.png  # preview image for Discord RPC Fallback Icon Setting
+    - images/jellyfin-icon-transparent.png # preview image for Discord RPC Fallback Icon Setting
   #   - images/a_dot_ham.jpeg
 
   generate: true

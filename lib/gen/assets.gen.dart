@@ -33,9 +33,29 @@ class $ImagesGen {
   List<dynamic> get values => [albumWhite, finamp, finampCroppedPng, finampCroppedSvg, jellyfinIconTransparent];
 }
 
+class $AssetsIconGen {
+  const $AssetsIconGen();
+
+  /// File path: assets/icon/icon_combined.png
+  AssetGenImage get iconCombined => const AssetGenImage('assets/icon/icon_combined.png');
+
+  /// File path: assets/icon/icon_square_bg-black.png
+  AssetGenImage get iconSquareBgBlack => const AssetGenImage('assets/icon/icon_square_bg-black.png');
+
+  /// File path: assets/icon/icon_square_bg-white.png
+  AssetGenImage get iconSquareBgWhite => const AssetGenImage('assets/icon/icon_square_bg-white.png');
+
+  /// File path: assets/icon/icon_white_noborder.png
+  AssetGenImage get iconWhiteNoborder => const AssetGenImage('assets/icon/icon_white_noborder.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [iconCombined, iconSquareBgBlack, iconSquareBgWhite, iconWhiteNoborder];
+}
+
 class Assets {
   const Assets._();
 
+  static const $AssetsIconGen icon = $AssetsIconGen();
   static const $ImagesGen images = $ImagesGen();
 }
 

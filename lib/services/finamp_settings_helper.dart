@@ -193,6 +193,8 @@ class FinampSettingsHelper {
     FinampSetters.setAudioFadeInDuration(DefaultSettings.audioFadeInDuration);
     FinampSetters.setAudioFadeOutDuration(DefaultSettings.audioFadeOutDuration);
     FinampSetters.setPlayOnReconnectionDelay(DefaultSettings.playOnReconnectionDelay);
+    FinampSetters.setRpcEnabled(DefaultSettings.rpcEnabled);
+    FinampSetters.setRpcIcon(DefaultSettings.rpcIcon);
   }
 
   static void resetNormalizationSettings() {
@@ -242,7 +244,7 @@ class FinampSettingsHelper {
     resetAudioServiceSettings();
     resetNormalizationSettings();
     resetInteractionsSettings();
-
+    resetPlaybackReportingSettings();
     resetLayoutSettings();
     resetCustomizationSettings();
     resetPlayerScreenSettings();

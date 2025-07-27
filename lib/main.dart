@@ -28,6 +28,7 @@ import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:finamp/services/android_auto_helper.dart';
 import 'package:finamp/services/audio_service_smtc.dart';
 import 'package:finamp/services/data_source_service.dart';
+import 'package:finamp/services/discord_rpc.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/downloads_service_backend.dart';
 import 'package:finamp/services/finamp_logs_helper.dart';
@@ -128,6 +129,8 @@ void main() async {
     _mainLog.info("Setup audio player");
     await _setupKeepScreenOnHelper();
     _mainLog.info("Setup KeepScreenOnHelper");
+    await _setupDiscordRpc();
+    _mainLog.info("Setup Discord RPC");
   } catch (error, trace) {
     hasFailed = true;
     Logger("ErrorApp").severe(error, null, trace);
@@ -238,6 +241,10 @@ Future<void> _setupPlayOnService() async {
   final playOnService = PlayOnService();
   GetIt.instance.registerSingleton(playOnService);
   GetIt.instance<FinampUserHelper>().runUserHook(playOnService.initialize);
+}
+
+Future<void> _setupDiscordRpc() async {
+  DiscordRpc.initialize();
 }
 
 Future<void> _setupKeepScreenOnHelper() async {
@@ -504,8 +511,9 @@ class _FinampState extends State<Finamp> with WindowListener {
   }
 
   @override
-  void dispose() {
-    _uriLinkSubscription?.cancel();
+  Future<void> dispose() async {
+    await DiscordRpc.stop().timeout(Duration(milliseconds: 500));
+    await _uriLinkSubscription?.cancel();
 
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       WindowManager.instance.removeListener(this);

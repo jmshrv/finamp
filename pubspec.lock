@@ -543,6 +543,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.4.1"
+  flutter_discord_rpc:
+    dependency: "direct main"
+    description:
+      name: flutter_discord_rpc
+      sha256: "9363a803863d56fd89c0a21639c70b126245fcbafaeb0a3d091e7ac06951d03f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   flutter_gen_core:
     dependency: transitive
     description:
