@@ -54,17 +54,13 @@ class NowPlayingBar extends StatelessWidget {
             Theme.of(ref.context).brightness == Brightness.dark
                 ? IconTheme.of(ref.context).color!.withOpacity(0.35)
                 : IconTheme.of(ref.context).color!.withOpacity(0.5),
-            Theme.of(ref.context).brightness == Brightness.dark
-                ? Colors.black
-                : Colors.white,
+            Theme.of(ref.context).brightness == Brightness.dark ? Colors.black : Colors.white,
           )
         : IconTheme.of(ref.context).color!.withOpacity(0.85);
   }
 
   Widget buildLoadingQueueBar(WidgetRef ref, Function()? retryCallback) {
-    final progressBackgroundColor = getProgressBackgroundColor(
-      ref,
-    ).withOpacity(0.5);
+    final progressBackgroundColor = getProgressBackgroundColor(ref).withOpacity(0.5);
     var context = ref.context;
 
     return SimpleGestureDetector(
@@ -79,9 +75,9 @@ class NowPlayingBar extends StatelessWidget {
         child: Container(
           decoration: getShadow(ref.context),
           child: Material(
-            shadowColor: Theme.of(context).colorScheme.primary.withOpacity(
-              Theme.of(context).brightness == Brightness.light ? 0.75 : 0.3,
-            ),
+            shadowColor: Theme.of(
+              context,
+            ).colorScheme.primary.withOpacity(Theme.of(context).brightness == Brightness.light ? 0.75 : 0.3),
             borderRadius: BorderRadius.circular(12.0),
             clipBehavior: Clip.antiAlias,
             color: Theme.of(context).brightness == Brightness.dark
@@ -96,9 +92,7 @@ class NowPlayingBar extends StatelessWidget {
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
                   color: progressBackgroundColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -108,15 +102,10 @@ class NowPlayingBar extends StatelessWidget {
                     Container(
                       width: albumImageSize,
                       height: albumImageSize,
-                      decoration: const ShapeDecoration(
-                        shape: Border(),
-                        color: Color.fromRGBO(0, 0, 0, 0.3),
-                      ),
+                      decoration: const ShapeDecoration(shape: Border(), color: Color.fromRGBO(0, 0, 0, 0.3)),
                       child: (retryCallback != null)
                           ? const Icon(Icons.refresh, size: albumImageSize)
-                          : const Center(
-                              child: CircularProgressIndicator.adaptive(),
-                            ),
+                          : const Center(child: CircularProgressIndicator.adaptive()),
                     ),
                     Expanded(
                       child: Container(
@@ -126,9 +115,7 @@ class NowPlayingBar extends StatelessWidget {
                         child: Text(
                           (retryCallback != null)
                               ? AppLocalizations.of(context)!.queueRetryMessage
-                              : AppLocalizations.of(
-                                  context,
-                                )!.queueLoadingMessage,
+                              : AppLocalizations.of(context)!.queueLoadingMessage,
                         ),
                       ),
                     ),
@@ -142,34 +129,29 @@ class NowPlayingBar extends StatelessWidget {
     );
   }
 
-  static Future openPlayerScreen(BuildContext context) =>
-      Navigator.of(context).push(
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const PlayerScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            if (MediaQuery.of(context).disableAnimations) {
-              return child;
-            }
-            const begin = Offset(0.0, 1.0);
-            const end = Offset.zero;
+  static Future openPlayerScreen(BuildContext context) => Navigator.of(context).push(
+    PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const PlayerScreen(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        if (MediaQuery.of(context).disableAnimations) {
+          return child;
+        }
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
 
-            var tween = Tween(
-              begin: begin,
-              end: end,
-            ).chain(CurveTween(curve: Curves.easeInOutQuad));
-            var offsetAnimation = animation.drive(tween);
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: Curves.easeInOutQuad));
+        var offsetAnimation = animation.drive(tween);
 
-            if (animation.status == AnimationStatus.reverse) {
-              // dismiss animation
-              return FadeTransition(opacity: animation, child: child);
-            } else {
-              return SlideTransition(position: offsetAnimation, child: child);
-            }
-          },
-          settings: const RouteSettings(name: PlayerScreen.routeName),
-        ),
-      );
+        if (animation.status == AnimationStatus.reverse) {
+          // dismiss animation
+          return FadeTransition(opacity: animation, child: child);
+        } else {
+          return SlideTransition(position: offsetAnimation, child: child);
+        }
+      },
+      settings: const RouteSettings(name: PlayerScreen.routeName),
+    ),
+  );
 
   Widget buildNowPlayingBar(WidgetRef ref, FinampQueueItem currentTrack) {
     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
@@ -178,9 +160,7 @@ class NowPlayingBar extends StatelessWidget {
     Duration? playbackPosition;
 
     final currentTrackBaseItem = currentTrack.item.extras?["itemJson"] != null
-        ? jellyfin_models.BaseItemDto.fromJson(
-            currentTrack.item.extras!["itemJson"] as Map<String, dynamic>,
-          )
+        ? jellyfin_models.BaseItemDto.fromJson(currentTrack.item.extras!["itemJson"] as Map<String, dynamic>)
         : null;
     var context = ref.context;
 
@@ -190,10 +170,7 @@ class NowPlayingBar extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(left: 12.0, bottom: 12.0, right: 12.0),
         child: Semantics.fromProperties(
-          properties: SemanticsProperties(
-            label: AppLocalizations.of(context)!.nowPlayingBarTooltip,
-            button: true,
-          ),
+          properties: SemanticsProperties(label: AppLocalizations.of(context)!.nowPlayingBarTooltip, button: true),
           child: SimpleGestureDetector(
             onTap: () async => await openPlayerScreen(context),
             child: Dismissible(
@@ -210,10 +187,7 @@ class NowPlayingBar extends StatelessWidget {
                 }
                 return false;
               },
-              dismissThresholds: const {
-                DismissDirection.up: 0.15,
-                DismissDirection.down: 0.7,
-              },
+              dismissThresholds: const {DismissDirection.up: 0.15, DismissDirection.down: 0.7},
               child: Container(
                 clipBehavior: Clip.antiAlias,
                 decoration: getShadow(context),
@@ -234,12 +208,9 @@ class NowPlayingBar extends StatelessWidget {
                     return false;
                   },
                   child: Material(
-                    shadowColor: Theme.of(context).colorScheme.primary
-                        .withOpacity(
-                          Theme.of(context).brightness == Brightness.light
-                              ? 0.75
-                              : 0.3,
-                        ),
+                    shadowColor: Theme.of(
+                      context,
+                    ).colorScheme.primary.withOpacity(Theme.of(context).brightness == Brightness.light ? 0.75 : 0.3),
                     borderRadius: BorderRadius.circular(12.0),
                     clipBehavior: Clip.antiAlias,
                     color: Theme.of(context).brightness == Brightness.dark
@@ -247,9 +218,7 @@ class NowPlayingBar extends StatelessWidget {
                         : Theme.of(context).cardColor,
                     elevation: 8.0,
                     child: StreamBuilder<MediaState>(
-                      stream: mediaStateStream.where(
-                        (event) => event.mediaItem != null,
-                      ),
+                      stream: mediaStateStream.where((event) => event.mediaItem != null),
                       initialData: MediaState(
                         audioHandler.mediaItem.valueOrNull,
                         audioHandler.playbackState.value,
@@ -271,9 +240,7 @@ class NowPlayingBar extends StatelessWidget {
                               clipBehavior: Clip.antiAlias,
                               decoration: ShapeDecoration(
                                 color: progressBackgroundColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -283,28 +250,17 @@ class NowPlayingBar extends StatelessWidget {
                                   Stack(
                                     alignment: Alignment.center,
                                     children: [
-                                      if (ref.watch(
-                                        finampSettingsProvider
-                                            .showProgressOnNowPlayingBar,
-                                      ))
+                                      if (ref.watch(finampSettingsProvider.showProgressOnNowPlayingBar))
                                         Positioned.fill(
-                                          child: ColoredBox(
-                                            color: IconTheme.of(
-                                              context,
-                                            ).color!.withOpacity(0.75),
-                                          ),
+                                          child: ColoredBox(color: IconTheme.of(context).color!.withOpacity(0.75)),
                                         ),
                                       AlbumImage(
-                                        placeholderBuilder: (_) =>
-                                            const SizedBox.shrink(),
-                                        imageListenable:
-                                            currentAlbumImageProvider,
+                                        placeholderBuilder: (_) => const SizedBox.shrink(),
+                                        imageListenable: currentAlbumImageProvider,
                                         borderRadius: BorderRadius.zero,
                                       ),
                                       AudioFadeProgressVisualizerContainer(
-                                        key: const Key(
-                                          "AlbumArtAudioFadeProgressVisualizer",
-                                        ),
+                                        key: const Key("AlbumArtAudioFadeProgressVisualizer"),
                                         width: albumImageSize,
                                         height: albumImageSize,
                                         borderRadius: BorderRadius.only(
@@ -312,22 +268,15 @@ class NowPlayingBar extends StatelessWidget {
                                           bottomLeft: Radius.circular(12.0),
                                         ),
                                         child: IconButton(
-                                          tooltip: AppLocalizations.of(
-                                            context,
-                                          )!.togglePlaybackButtonTooltip,
+                                          tooltip: AppLocalizations.of(context)!.togglePlaybackButtonTooltip,
                                           onPressed: () {
-                                            FeedbackHelper.feedback(
-                                              FeedbackType.light,
-                                            );
-                                            unawaited(
-                                              audioHandler.togglePlayback(),
-                                            );
+                                            FeedbackHelper.feedback(FeedbackType.light);
+                                            unawaited(audioHandler.togglePlayback());
                                           },
                                           color: Colors.white,
                                           icon: Icon(
                                             playbackState.playing
-                                                ? fadeState.fadeDirection !=
-                                                          FadeDirection.fadeOut
+                                                ? fadeState.fadeDirection != FadeDirection.fadeOut
                                                       ? TablerIcons.player_pause
                                                       : TablerIcons.player_play
                                                 : TablerIcons.player_play,
@@ -340,56 +289,28 @@ class NowPlayingBar extends StatelessWidget {
                                   Expanded(
                                     child: Stack(
                                       children: [
-                                        if (ref.watch(
-                                          finampSettingsProvider
-                                              .showProgressOnNowPlayingBar,
-                                        ))
+                                        if (ref.watch(finampSettingsProvider.showProgressOnNowPlayingBar))
                                           Positioned.fill(
                                             child: StreamBuilder<Duration>(
                                               stream: AudioService.position,
-                                              initialData: audioHandler
-                                                  .playbackState
-                                                  .value
-                                                  .position,
+                                              initialData: audioHandler.playbackState.value.position,
                                               builder: (context, snapshot) {
                                                 if (snapshot.hasData) {
-                                                  playbackPosition =
-                                                      snapshot.data;
-                                                  var itemLength = mediaState
-                                                      .mediaItem
-                                                      ?.duration;
+                                                  playbackPosition = snapshot.data;
+                                                  var itemLength = mediaState.mediaItem?.duration;
                                                   return FractionallySizedBox(
-                                                    alignment:
-                                                        AlignmentDirectional
-                                                            .centerStart,
-                                                    widthFactor:
-                                                        itemLength == null
+                                                    alignment: AlignmentDirectional.centerStart,
+                                                    widthFactor: itemLength == null
                                                         ? 0
-                                                        : playbackPosition!
-                                                                  .inMilliseconds /
-                                                              itemLength
-                                                                  .inMilliseconds,
+                                                        : playbackPosition!.inMilliseconds / itemLength.inMilliseconds,
                                                     child: DecoratedBox(
                                                       decoration: ShapeDecoration(
-                                                        color:
-                                                            IconTheme.of(
-                                                                  context,
-                                                                ).color!
-                                                                .withOpacity(
-                                                                  0.75,
-                                                                ),
+                                                        color: IconTheme.of(context).color!.withOpacity(0.75),
                                                         shape: const RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                                topRight:
-                                                                    Radius.circular(
-                                                                      12,
-                                                                    ),
-                                                                bottomRight:
-                                                                    Radius.circular(
-                                                                      12,
-                                                                    ),
-                                                              ),
+                                                          borderRadius: BorderRadius.only(
+                                                            topRight: Radius.circular(12),
+                                                            bottomRight: Radius.circular(12),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
@@ -402,43 +323,27 @@ class NowPlayingBar extends StatelessWidget {
                                           ),
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Expanded(
                                               child: Container(
                                                 height: albumImageSize,
-                                                padding: const EdgeInsets.only(
-                                                  left: 12,
-                                                  right: 4,
-                                                ),
+                                                padding: const EdgeInsets.only(left: 12, right: 4),
                                                 child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     SizedBox(
                                                       height: 20,
                                                       child: OneLineMarqueeHelper(
-                                                        key: ValueKey(
-                                                          currentTrack.item.id,
-                                                        ),
-                                                        text: currentTrack
-                                                            .item
-                                                            .title,
+                                                        key: ValueKey(currentTrack.item.id),
+                                                        text: currentTrack.item.title,
                                                         style: TextStyle(
                                                           fontSize: 16,
                                                           height: 26 / 20,
                                                           color: Colors.white,
-                                                          fontWeight:
-                                                              Theme.of(
-                                                                    context,
-                                                                  ).brightness ==
-                                                                  Brightness
-                                                                      .light
+                                                          fontWeight: Theme.of(context).brightness == Brightness.light
                                                               ? FontWeight.w500
                                                               : FontWeight.w600,
                                                         ),
@@ -446,130 +351,67 @@ class NowPlayingBar extends StatelessWidget {
                                                     ),
                                                     const SizedBox(height: 4),
                                                     Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
                                                         Expanded(
                                                           child: Text(
-                                                            processArtist(
-                                                              currentTrack
-                                                                  .item
-                                                                  .artist,
-                                                              context,
-                                                            ),
+                                                            processArtist(currentTrack.item.artist, context),
                                                             style: TextStyle(
-                                                              color: Colors
-                                                                  .white
-                                                                  .withOpacity(
-                                                                    0.85,
-                                                                  ),
+                                                              color: Colors.white.withOpacity(0.85),
                                                               fontSize: 13,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w300,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
+                                                              fontWeight: FontWeight.w300,
+                                                              overflow: TextOverflow.ellipsis,
                                                             ),
                                                           ),
                                                         ),
                                                         StreamBuilder<Duration>(
-                                                          stream: AudioService
-                                                              .position,
-                                                          initialData:
-                                                              audioHandler
-                                                                  .playbackState
-                                                                  .value
-                                                                  .position,
+                                                          stream: AudioService.position,
+                                                          initialData: audioHandler.playbackState.value.position,
                                                           builder: (context, snapshot) {
-                                                            if (snapshot
-                                                                .hasData) {
-                                                              playbackPosition =
-                                                                  snapshot.data;
+                                                            if (snapshot.hasData) {
+                                                              playbackPosition = snapshot.data;
                                                               final positionFullMinutes =
-                                                                  (playbackPosition
-                                                                          ?.inMinutes ??
-                                                                      0) %
-                                                                  60;
+                                                                  (playbackPosition?.inMinutes ?? 0) % 60;
                                                               final positionFullHours =
-                                                                  (playbackPosition
-                                                                      ?.inHours ??
-                                                                  0);
+                                                                  (playbackPosition?.inHours ?? 0);
                                                               final positionSeconds =
-                                                                  (playbackPosition
-                                                                          ?.inSeconds ??
-                                                                      0) %
-                                                                  60;
+                                                                  (playbackPosition?.inSeconds ?? 0) % 60;
                                                               final durationFullHours =
-                                                                  (mediaState
-                                                                      .mediaItem
-                                                                      ?.duration
-                                                                      ?.inHours ??
-                                                                  0);
+                                                                  (mediaState.mediaItem?.duration?.inHours ?? 0);
                                                               final durationFullMinutes =
-                                                                  (mediaState
-                                                                          .mediaItem
-                                                                          ?.duration
-                                                                          ?.inMinutes ??
-                                                                      0) %
-                                                                  60;
+                                                                  (mediaState.mediaItem?.duration?.inMinutes ?? 0) % 60;
                                                               final durationSeconds =
-                                                                  (mediaState
-                                                                          .mediaItem
-                                                                          ?.duration
-                                                                          ?.inSeconds ??
-                                                                      0) %
-                                                                  60;
+                                                                  (mediaState.mediaItem?.duration?.inSeconds ?? 0) % 60;
                                                               return Semantics.fromProperties(
-                                                                properties:
-                                                                    SemanticsProperties(
-                                                                      label:
-                                                                          "${positionFullHours > 0 ? "$positionFullHours hours " : ""}${positionFullMinutes > 0 ? "$positionFullMinutes minutes " : ""}$positionSeconds seconds of ${durationFullHours > 0 ? "$durationFullHours hours " : ""}${durationFullMinutes > 0 ? "$durationFullMinutes minutes " : ""}$durationSeconds seconds",
-                                                                    ),
-                                                                excludeSemantics:
-                                                                    true,
+                                                                properties: SemanticsProperties(
+                                                                  label:
+                                                                      "${positionFullHours > 0 ? "$positionFullHours hours " : ""}${positionFullMinutes > 0 ? "$positionFullMinutes minutes " : ""}$positionSeconds seconds of ${durationFullHours > 0 ? "$durationFullHours hours " : ""}${durationFullMinutes > 0 ? "$durationFullMinutes minutes " : ""}$durationSeconds seconds",
+                                                                ),
+                                                                excludeSemantics: true,
                                                                 container: true,
                                                                 child: Row(
                                                                   children: [
                                                                     Text(
                                                                       printDuration(
                                                                         playbackPosition,
-                                                                        leadingZeroes:
-                                                                            false,
+                                                                        leadingZeroes: false,
                                                                       ),
                                                                       style: TextStyle(
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight.w400,
-                                                                        color: Colors
-                                                                            .white
-                                                                            .withOpacity(
-                                                                              0.8,
-                                                                            ),
+                                                                        fontSize: 14,
+                                                                        fontWeight: FontWeight.w400,
+                                                                        color: Colors.white.withOpacity(0.8),
                                                                       ),
                                                                     ),
-                                                                    const SizedBox(
-                                                                      width: 2,
-                                                                    ),
+                                                                    const SizedBox(width: 2),
                                                                     Text(
                                                                       '/',
                                                                       style: TextStyle(
-                                                                        color: Colors
-                                                                            .white
-                                                                            .withOpacity(
-                                                                              0.8,
-                                                                            ),
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight.w400,
+                                                                        color: Colors.white.withOpacity(0.8),
+                                                                        fontSize: 14,
+                                                                        fontWeight: FontWeight.w400,
                                                                       ),
                                                                     ),
-                                                                    const SizedBox(
-                                                                      width: 2,
-                                                                    ),
+                                                                    const SizedBox(width: 2),
                                                                     Text(
                                                                       // '3:44',
                                                                       (mediaState.mediaItem?.duration?.inHours ??
@@ -578,15 +420,9 @@ class NowPlayingBar extends StatelessWidget {
                                                                           ? "${mediaState.mediaItem?.duration?.inHours.toString()}:${((mediaState.mediaItem?.duration?.inMinutes ?? 0) % 60).toString().padLeft(2, '0')}:${((mediaState.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}"
                                                                           : "${mediaState.mediaItem?.duration?.inMinutes.toString()}:${((mediaState.mediaItem?.duration?.inSeconds ?? 0) % 60).toString().padLeft(2, '0')}",
                                                                       style: TextStyle(
-                                                                        color: Colors
-                                                                            .white
-                                                                            .withOpacity(
-                                                                              0.8,
-                                                                            ),
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight.w400,
+                                                                        color: Colors.white.withOpacity(0.8),
+                                                                        fontSize: 14,
+                                                                        fontWeight: FontWeight.w400,
                                                                       ),
                                                                     ),
                                                                   ],
@@ -604,24 +440,16 @@ class NowPlayingBar extends StatelessWidget {
                                               ),
                                             ),
                                             Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
+                                              mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
                                                 Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                        top: 4.0,
-                                                        right: 4.0,
-                                                      ),
+                                                  padding: const EdgeInsets.only(top: 4.0, right: 4.0),
                                                   child: AddToPlaylistButton(
                                                     item: currentTrackBaseItem,
                                                     queueItem: currentTrack,
                                                     color: Colors.white,
                                                     size: 28,
-                                                    visualDensity:
-                                                        const VisualDensity(
-                                                          horizontal: -4,
-                                                        ),
+                                                    visualDensity: const VisualDensity(horizontal: -4),
                                                   ),
                                                 ),
                                               ],
@@ -664,10 +492,7 @@ class NowPlayingBar extends StatelessWidget {
           // Use consumer inside PlayerScreenTheme to generate ref
           child: Consumer(
             builder: (context, ref, child) {
-              ref.listen(
-                currentTrackMetadataProvider,
-                (metadataOrNull, metadata) {},
-              ); // keep provider alive
+              ref.listen(currentTrackMetadataProvider, (metadataOrNull, metadata) {}); // keep provider alive
 
               return StreamBuilder<FinampQueueInfo?>(
                 stream: queueService.getQueueStream(),
@@ -680,17 +505,9 @@ class NowPlayingBar extends StatelessWidget {
                   } else if (snapshot.hasData &&
                       snapshot.data!.saveState == SavedQueueState.failed &&
                       !usingPlayerSplitScreen) {
-                    return buildLoadingQueueBar(
-                      ref,
-                      queueService.retryQueueLoad,
-                    );
-                  } else if (snapshot.hasData &&
-                      snapshot.data!.currentTrack != null &&
-                      !usingPlayerSplitScreen) {
-                    return buildNowPlayingBar(
-                      ref,
-                      snapshot.data!.currentTrack!,
-                    );
+                    return buildLoadingQueueBar(ref, queueService.retryQueueLoad);
+                  } else if (snapshot.hasData && snapshot.data!.currentTrack != null && !usingPlayerSplitScreen) {
+                    return buildNowPlayingBar(ref, snapshot.data!.currentTrack!);
                   } else {
                     return const SizedBox.shrink();
                   }
