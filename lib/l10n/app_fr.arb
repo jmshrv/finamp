@@ -1537,7 +1537,7 @@
   },
   "transcodingStreamingFormatSubtitle": "Sélectionnez le format à utiliser lors du streaming audio transcodé. Les morceaux déjà en file d'attente ne seront pas affectés.",
   "@transcodingStreamingFormatSubtitle": {},
-  "periodicPlaybackSessionUpdateFrequencyDetails": "Si le serveur Jellyfin ne reçoit aucune mise à jour d’un client pendant plus de 5 minutes, il suppose que la lecture est terminée. Cela signifie que pour les morceaux durant plus de 5 minutes, la lecture peut être considérée comme terminée, ce qui peut fausser les données de rapport de lecture.",
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Si le serveur Jellyfin n'a reçu aucune mise à jour d'un client au cours des 5 dernières minutes, il considère que la lecture est terminée. Cela signifie que pour les pistes de plus de 5 minutes, la lecture pourrait être signalée à tort comme terminée, ce qui réduirait la qualité des données de lecture.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
