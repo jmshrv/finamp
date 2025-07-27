@@ -49,8 +49,7 @@ class DiscordRpc {
         await FlutterDiscordRPC.instance.clearActivity();
       } catch (e) {
         _rpcLogger.severe("Failed to Start", e);
-        _targetStatus = _RpcStatus.stopped;
-        await stop();
+        await stop(force: true);
         return;
       }
 
@@ -75,9 +74,9 @@ class DiscordRpc {
     }
   }
 
-  static Future<void> stop() async {
+  static Future<void> stop({bool force = false}) async {
     _targetStatus = _RpcStatus.stopped;
-    if (_status == _RpcStatus.running) {
+    if (_status == _RpcStatus.running || force) {
       _rpcLogger.info("Stopping RPC");
 
       _status = _RpcStatus.transition;
