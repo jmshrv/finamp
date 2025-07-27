@@ -244,7 +244,7 @@
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "shuffleAllTrackCount": "Nombre de titres à mélanger",
   "@shuffleAllTrackCount": {},
-  "shuffleAllTrackCountSubtitle": "Nombre de chansons à charger lors de l'utilisation du bouton 'Tout mélanger'.",
+  "shuffleAllTrackCountSubtitle": "Nombre de pistes à charger lors de l'utilisation du bouton de lecture aléatoire de l'onglet Pistes ou de l'écran de genre.",
   "@shuffleAllTrackCountSubtitle": {},
   "viewType": "Disposition de l'affichage",
   "@viewType": {},
@@ -308,7 +308,7 @@
   "@yesButtonLabel": {},
   "noButtonLabel": "Non",
   "@noButtonLabel": {},
-  "setSleepTimer": "Pause après la lecture",
+  "setSleepTimer": "Mettre la lecture en pause après",
   "@setSleepTimer": {},
   "minutes": "Minutes",
   "@minutes": {},
@@ -583,7 +583,7 @@
   "@timeFractionTooltip": {
     "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
   },
-  "sleepTimerRemainingTime": "Dors dans {time, plural, =1{<1 minute} other{{time} minutes}}",
+  "sleepTimerRemainingTime": "Mise en Veille dans {time,plural,=1{<1 minute} autre{{time} minutes}}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -824,7 +824,7 @@
   "@volumeNormalizationSettingsTitle": {
     "description": "Title for the replay gain settings screen"
   },
-  "queueRestoreButtonLabel": "Restorer",
+  "queueRestoreButtonLabel": "Restaurer cette file d'attente",
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
@@ -1005,7 +1005,7 @@
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
   },
-  "reportQueueToServerSubtitle": "Lorsque cette option est activée, Finamp envoie la file d'attente actuelle au serveur. Cela pourrait améliorer le contrôle à distance et permettre une restauration de la file d'attente côté serveur. Laisser cocher seulement si la fonctionnalité 'Play On' est active.",
+  "reportQueueToServerSubtitle": "Lorsqu'il est activé, Finamp envoie la file d'attente actuelle au serveur. Cela améliore le contrôle à distance et permet la restauration de la file d'attente côté serveur. Cette option est toujours activée si la fonctionnalité « Lecture activée » est activée.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1040,7 +1040,7 @@
   "@queuesScreen": {
     "description": "Title for the screen where older now playing queues can be restored"
   },
-  "periodicPlaybackSessionUpdateFrequency": "Fréquence de mise à jour de la session",
+  "periodicPlaybackSessionUpdateFrequency": "Fréquence de mise à jour des sessions de lecture",
   "@periodicPlaybackSessionUpdateFrequency": {
     "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -2604,5 +2604,41 @@
   "discordRPCSettingTitle": "RPC Discord",
   "@discordRPCSettingTitle": {
     "description": "Title for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCSettingDescription": "Activez la présence enrichie sur Discord pour afficher vos morceaux en cours de lecture dans votre statut Discord. Impossible de se connecter à Discord si le mode hors ligne est activé.",
+  "@discordRPCSettingDescription": {
+    "description": "Description for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCIconSettingTitle": "Icône de secours RPC",
+  "@discordRPCIconSettingTitle": {
+    "description": "Title for the setting that controls which icon gets shown in the Discord RPC (Rich Presence) in case the local address is in use"
+  },
+  "discordRPCIconSettingDescription": "Icône de secours qui s'affiche lorsqu'aucune adresse publique n'est détectée. (Discord ne peut pas charger les images depuis l'adresse locale et utiliserait leur adresse de secours.)",
+  "@discordRPCIconSettingDescription": {
+    "description": "Description for the setting that controls which Icon the discord RPC displays as a Fallback in case no public address is detected (it doenst matter what connection is active)."
+  },
+  "discordRPCIconDark": "Finamp - Sombre",
+  "@discordRPCIconDark": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with the Dark-Theme Background"
+  },
+  "discordRPCIconBlack": "Finamp - Noir",
+  "@discordRPCIconBlack": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Black Background"
+  },
+  "discordRPCIconLight": "Finamp - Blanc",
+  "@discordRPCIconLight": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a White Background"
+  },
+  "discordRPCIconJFTransparent": "Jellyfin - Transparent",
+  "@discordRPCIconJFTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Jellyfin logo with a Transparent Background"
+  },
+  "discordRPCIconTransparent": "Finamp - Transparent",
+  "@discordRPCIconTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Transparent Background"
+  },
+  "discordRPCIconWhiteTransparent": "Finamp Blanc - Transparent",
+  "@discordRPCIconWhiteTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
   }
 }
