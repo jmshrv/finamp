@@ -124,6 +124,7 @@ dependencies:
   http: ^1.4.0
   app_links: ^6.4.0
   flutter_discord_rpc: ^1.0.0
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:

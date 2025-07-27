@@ -12,7 +12,6 @@ import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:get_it/get_it.dart';
 
 class FinampLogsHelper {
   final List<LogRecord> logs = [];
@@ -66,10 +65,12 @@ class FinampLogsHelper {
     final logMeta = await Log.create();
 
     // Use the on-demand censored metadata, which fetches server info/version as needed
-    final censoredMeta = await logMeta.toCensoredJson();
+    final meta = await logMeta.toJson();
     
     // Prepend this metadata to the logs
-    fullLogsBuffer.writeln(jsonEncode(censoredMeta));
+    fullLogsBuffer.writeln("Metadata:");
+    fullLogsBuffer.writeln(jsonEncode(meta));
+    fullLogsBuffer.writeln("\nLogs:");
   
     if (_logFileWriter != null) {
       final basePath = (Platform.isAndroid || Platform.isIOS)

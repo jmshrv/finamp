@@ -3,15 +3,20 @@
 
 import 'dart:io' show Platform;
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:get_it/get_it.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'finamp_user_helper.dart';
 import 'jellyfin_api.dart';
 
 part 'log.g.dart';
+
+const _SharedPreferencesVersionHistoryKey = 'version_history';
 
 /// -------------------- DEVICE INFO --------------------
 
@@ -108,22 +113,18 @@ class AppInfo {
   /// Detects app metadata using package_info_plus and updates stored version history.
   static Future<AppInfo> fromPlatform() async {
     final packageInfo = await PackageInfo.fromPlatform();
-    final box = Hive.box<dynamic>('app_info');
-    final currentVersion = packageInfo.version;
+    final currentVersion = "${packageInfo.version} (${packageInfo.buildNumber})";
 
-    final previousVersion = box.get('previous_version') as String?;
+    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
+
     final history = List<String>.from(
-      box.get('version_history', defaultValue: <String>[]) as List<dynamic>,
+      (await prefs.getStringList(_SharedPreferencesVersionHistoryKey) ?? <String>[]),
     );
+    final previousVersion = history.isNotEmpty ? history.last : null;
 
-    if (previousVersion != null && previousVersion != currentVersion) {
-      final timestamp = DateTime.now().toIso8601String();
-      history.add('$timestamp - v$currentVersion');
-      await box.put('previous_version', currentVersion);
-      await box.put('version_history', history);
-    } else if (previousVersion == null) {
-      await box.put('previous_version', currentVersion);
-      await box.put('version_history', history);
+    if (previousVersion != currentVersion) {
+      history.add(currentVersion);
+      await prefs.setStringList(_SharedPreferencesVersionHistoryKey, history);
     }
 
     return AppInfo(
@@ -141,14 +142,16 @@ class AppInfo {
 /// Contains information about the Jellyfin server in use.
 @JsonSerializable()
 class ServerInfo {
-  final String serverAddress;
+  final String serverAddressType;
   final int serverPort;
   final String serverProtocol;
+  final String serverVersion;
 
   ServerInfo({
-    required this.serverAddress,
+    required this.serverAddressType,
     required this.serverPort,
     required this.serverProtocol,
+    required this.serverVersion,
   });
 
   factory ServerInfo.fromJson(Map<String, dynamic> json) => _$ServerInfoFromJson(json);
@@ -156,38 +159,28 @@ class ServerInfo {
 
   /// Extracts server info from the current user's base URL.
   static Future<ServerInfo?> fromServer() async {
-    final userHelper = GetIt.instance<FinampUserHelper>();
-    final user = userHelper.currentUser;
+    final userHelper = GetIt.instance.isRegistered<FinampUserHelper>() ? GetIt.instance<FinampUserHelper>() : null;
+    final jellyfinApiHelper = GetIt.instance.isRegistered<JellyfinApiHelper>()
+        ? GetIt.instance<JellyfinApiHelper>()
+        : null;
+    final user = userHelper?.currentUser;
     if (user == null) return null;
+
+    final serverInfo = await jellyfinApiHelper?.loadServerPublicInfo();
 
     final uri = Uri.parse(user.baseURL);
     return ServerInfo(
-      serverAddress: uri.host,
+      serverAddressType: RegExp(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$').hasMatch(uri.host)
+          ? 'ipv4'
+          : RegExp(r'^[\da-fA-F:]+$').hasMatch(uri.host) && uri.host.contains(':')
+          ? 'ipv6'
+          : (uri.host.contains('.') ? 'domainWithTld' : 'customDomain'),
       serverPort: uri.hasPort ? uri.port : (uri.scheme == 'https' ? 443 : 80),
       serverProtocol: uri.scheme,
+      serverVersion: serverInfo?.version ?? 'Unknown',
     );
   }
 
-  /// Queries the server API for the current version.
-  static Future<String?> fetchServerVersion() async {
-    try {
-      final api = GetIt.instance<JellyfinApi>();
-      final response = await api.getPublicServerInfo();
-      final version = response.body?['Version'] ?? response.body?['version'];
-      return version?.toString();
-    } catch (_) {
-      return null;
-    }
-  }
-
-  Map<String, dynamic> toCensoredJson() {
-      return {
-        'serverAddress': 'REDACTED',
-        'serverPort': serverPort,
-        'serverProtocol': serverProtocol,
-        'serverVersion': fetchServerVersion(),
-      };
-  }
 }
 
 /// -------------------- LOG WRAPPER --------------------
@@ -225,26 +218,4 @@ class Log {
       'serverInfo': serverInfo?.toJson(),
     };
   }
-}
-
-/// Censored version of Metadata, hiding Server address.
-extension LogCensor on Log {
-  Future<Map<String, dynamic>> toCensoredJson() async {
-    final serverInfo = await ServerInfo.fromServer();
-
-    return {
-      'deviceInfo': deviceInfo.toJson(),
-      'appInfo': appInfo.toJson(),
-      'serverInfo': serverInfo?.toCensoredJson(),
-    };
-  }
-
-  /// Logs metadata at startup.
-  Future<void> logMetadata() async {
-    final metadata = await toCensoredJson();
-    final logger = Logger('Startup');
-
-    logger.info('App Metadata on startup:\n$metadata');
-  }
-
 }

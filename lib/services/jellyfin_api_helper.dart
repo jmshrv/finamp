@@ -467,7 +467,7 @@ class JellyfinApiHelper {
   /// Can be used to check if the server is online / the URL is correct.
   Future<PublicSystemInfoResult?> loadServerPublicInfo() async {
     // Some users won't have a password.
-    if (baseUrlTemp == null) {
+    if (_finampUserHelper.currentUser?.baseURL == null && baseUrlTemp == null) {
       return null;
     }
 
@@ -499,7 +499,7 @@ class JellyfinApiHelper {
   /// Fetch all public users from the server.
   Future<PublicUsersResponse> loadPublicUsers() async {
     // Some users won't have a password.
-    if (baseUrlTemp == null) {
+    if (_finampUserHelper.currentUser?.baseURL == null && baseUrlTemp == null) {
       return PublicUsersResponse(users: []);
     }
 
