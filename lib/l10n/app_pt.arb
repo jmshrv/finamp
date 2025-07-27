@@ -2568,7 +2568,7 @@
   "@serverSharingMenuControlSubtitleSharingEnabled": {
     "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
   },
-  "quickConnectAuthorizationMenuButtonTitle": "Ligação Rápida",
+  "quickConnectAuthorizationMenuButtonTitle": "Autorizar Ligação Rápida",
   "@quickConnectAuthorizationMenuButtonTitle": {
     "description": "Title for the button in the drawer that opens the quick connect authorization menu"
   },
