@@ -13,14 +13,14 @@ class CollectionsSliverList extends ConsumerStatefulWidget {
     required this.parent,
     this.genreFilter,
     this.albumShowsYearAndDurationInstead = false,
-    this.showAdditionalInfoForSortBy,
+    this.adaptiveAdditionalInfoSortBy,
   });
 
   final List<BaseItemDto> childrenForList;
   final BaseItemDto parent;
   final BaseItemDto? genreFilter;
   final bool albumShowsYearAndDurationInstead;
-  final SortBy? showAdditionalInfoForSortBy;
+  final SortBy? adaptiveAdditionalInfoSortBy;
 
   @override
   ConsumerState<CollectionsSliverList> createState() => _ItemsSliverListState();
@@ -47,7 +47,7 @@ class _ItemsSliverListState extends ConsumerState<CollectionsSliverList> {
           isPlaylist: false,
           genreFilter: (itemType == BaseItemDtoType.artist && filterArtistScreens) ? widget.genreFilter : null,
           albumShowsYearAndDurationInstead: widget.albumShowsYearAndDurationInstead,
-          showAdditionalInfoForSortBy: widget.showAdditionalInfoForSortBy,
+          adaptiveAdditionalInfoSortBy: widget.adaptiveAdditionalInfoSortBy,
         );
       }, childCount: widget.childrenForList.length),
     );

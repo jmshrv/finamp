@@ -141,10 +141,10 @@ packages:
     dependency: "direct main"
     description:
       name: background_downloader
-      sha256: c3814aa0466368a4c1c32d24bc73ded752edacf06731ead43857a3ac992ed52d
+      sha256: c59bff0b66a6704bed8bfb09c67571df88167906e0f5543a722373b3d180a743
       url: "https://pub.dev"
     source: hosted
-    version: "8.9.5"
+    version: "9.2.3"
   balanced_text:
     dependency: "direct main"
     description:
@@ -653,7 +653,7 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: add-trusting
+      ref: db81e4ff3222a7db1308ed03c4bc3142c0d271d5
       resolved-ref: db81e4ff3222a7db1308ed03c4bc3142c0d271d5
       url: "https://github.com/jfly/flutter_user_certificates_android.git"
     source: git

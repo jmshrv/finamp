@@ -27,7 +27,7 @@ class ItemCollectionListTile extends ConsumerWidget {
     this.parentType,
     this.onTap,
     this.albumShowsYearAndDurationInstead = false,
-    this.showAdditionalInfoForSortBy,
+    this.adaptiveAdditionalInfoSortBy,
     this.showFavoriteIconOnlyWhenFilterDisabled = false,
   });
 
@@ -35,7 +35,7 @@ class ItemCollectionListTile extends ConsumerWidget {
   final String? parentType;
   final void Function()? onTap;
   final bool albumShowsYearAndDurationInstead;
-  final SortBy? showAdditionalInfoForSortBy;
+  final SortBy? adaptiveAdditionalInfoSortBy;
   final bool showFavoriteIconOnlyWhenFilterDisabled;
 
   @override
@@ -94,18 +94,41 @@ class ItemCollectionListTile extends ConsumerWidget {
       );
     }
 
-    final additionalInfoIcon = buildAdditionalInfoIcon(showAdditionalInfoForSortBy);
+    TabContentType? associatedTabContentType;
+    try {
+      associatedTabContentType = TabContentType.fromItemType(itemType.idString ?? "");
+    } on FormatException {
+      associatedTabContentType = null;
+    }
+
+    final tileAdditionalInfoSetting = associatedTabContentType != null
+        ? ref.watch(finampSettingsProvider.tileAdditionalInfoType(associatedTabContentType))
+        : null;
+    final tileAdditionalInfoType =
+        (associatedTabContentType == TabContentType.albums && albumShowsYearAndDurationInstead)
+        ? TileAdditionalInfoType.none
+        : (tileAdditionalInfoSetting ?? TileAdditionalInfoType.adaptive);
+
+    SortBy? additionalInfoSortBy = switch (tileAdditionalInfoType) {
+      TileAdditionalInfoType.dateReleased => SortBy.premiereDate,
+      TileAdditionalInfoType.dateAdded => SortBy.dateCreated,
+      TileAdditionalInfoType.duration => SortBy.runtime,
+      TileAdditionalInfoType.none => null,
+      _ => adaptiveAdditionalInfoSortBy,
+    };
+
+    final additionalInfoIcon = buildAdditionalInfoIcon(additionalInfoSortBy);
 
     final additionalInfo = (() {
       final l10n = AppLocalizations.of(context)!;
       if ((itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) ||
-          showAdditionalInfoForSortBy == SortBy.premiereDate) {
+          additionalInfoSortBy == SortBy.premiereDate) {
         return TextSpan(
           text: ReleaseDateHelper.autoFormat(item) ?? l10n.noReleaseDate,
           style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7)),
         );
       }
-      switch (showAdditionalInfoForSortBy) {
+      switch (additionalInfoSortBy) {
         case SortBy.runtime:
           return TextSpan(
             text: printDuration(item.runTimeTicksDuration()),

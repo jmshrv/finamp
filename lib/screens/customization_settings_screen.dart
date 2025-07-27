@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:finamp/components/LayoutSettingsScreen/CustomizationSettingsScreen/tile_additional_info_type_dropdown_list_tile.dart';
 import 'package:finamp/components/LayoutSettingsScreen/CustomizationSettingsScreen/playback_speed_control_visibility_dropdown_list_tile.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -40,6 +41,8 @@ class _CustomizationSettingsScreenState extends State<CustomizationSettingsScree
           const ShowSeekControlsOnMediaNotificationToggle(),
           const OneLineMarqueeTextSwitch(),
           const ReleaseDateFormatDropdownListTile(),
+          const TileAdditionalInfoTypeTitleListTile(),
+          ...TabContentType.values.map((type) => TileAdditionalInfoTypeDropdownListTile(tabContentType: type)),
         ],
       ),
     );

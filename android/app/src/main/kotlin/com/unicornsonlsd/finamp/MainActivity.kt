@@ -3,17 +3,27 @@ package com.unicornsonlsd.finamp
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.system.ErrnoException
+import android.system.Os
 import android.util.Log
+import androidx.annotation.WorkerThread
+import androidx.lifecycle.lifecycleScope
 import androidx.mediarouter.app.SystemOutputSwitcherDialogController
 import androidx.mediarouter.media.MediaRouter
 import com.ryanheise.audioservice.AudioServiceActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 
 class MainActivity : AudioServiceActivity() {
     companion object {
-        private const val OUTPUT_SWITCHER_CHANNEL = "com.unicornsonlsd.finamp/output_switcher"
+        private const val DOWNLOADS_SERVICE_CHANNEL = "com.unicornsonlsd.finamp/downloads_service"
+        private const val DOWNLOADS_SERVICE_CHANNEL_LOG_TAG = "DownloadsServiceChannel"
 
+        private const val OUTPUT_SWITCHER_CHANNEL = "com.unicornsonlsd.finamp/output_switcher"
         private const val OUTPUT_SWITCHER_CHANNEL_LOG_TAG = "OutputSwitcherChannel"
     }
 
@@ -27,6 +37,26 @@ class MainActivity : AudioServiceActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            DOWNLOADS_SERVICE_CHANNEL,
+        ).setMethodCallHandler { call, result ->
+            when (call.method) {
+                "fixDownloadsFileOwner" -> {
+                    val downloadLocations = call.argument<List<String>?>("download_locations").orEmpty()
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            fixDownloadsFileOwner(downloadLocations)
+                        }
+                    }
+                    result.success(null)
+                }
+                else -> {
+                    Log.e(DOWNLOADS_SERVICE_CHANNEL_LOG_TAG, "Method not found: '${call.method}'")
+                    result.notImplemented()
+                }
+            }
+        }
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             OUTPUT_SWITCHER_CHANNEL,
@@ -89,6 +119,45 @@ class MainActivity : AudioServiceActivity() {
                 else -> {
                     Log.e(OUTPUT_SWITCHER_CHANNEL_LOG_TAG, "Method not found: '${call.method}'")
                     result.notImplemented()
+                }
+            }
+        }
+    }
+
+    /**
+     * Fixes the owner of downloaded files.
+     *
+     * Originally, files downloaded by the app were set to a special "cache" user group,
+     * which caused the system to count all downloads as cache files.
+     * Manually setting the group to the app's UID (which is equal to the gid) fixes this behavior for past downloads.
+     */
+    @WorkerThread
+    private fun fixDownloadsFileOwner(downloadLocations: List<String>) {
+        val appUid = applicationInfo.uid
+        val cacheGid = try {
+            Os.stat(context.cacheDir.absolutePath).st_gid
+        } catch (e: ErrnoException) {
+            Log.e(DOWNLOADS_SERVICE_CHANNEL_LOG_TAG, "Failed to get cache directory GID", e)
+            return
+        }
+        for (downloadLocation in downloadLocations) {
+            val downloadDirectory = File(downloadLocation)
+            if (!downloadDirectory.isDirectory) {
+                Log.w(DOWNLOADS_SERVICE_CHANNEL_LOG_TAG, "Download location is not a directory: $downloadLocation")
+                continue
+            }
+
+            for (file in downloadDirectory.walkTopDown()) {
+                try {
+                    if (!file.isFile) continue
+
+                    // Skip files not owned by the cache group
+                    val gid = Os.stat(file.absolutePath).st_gid
+                    if (gid != cacheGid) continue
+
+                    Os.chown(file.absolutePath, -1, appUid) // uid -1 keeps current owner
+                } catch (e: ErrnoException) {
+                    Log.e(DOWNLOADS_SERVICE_CHANNEL_LOG_TAG, "Failed to fix owner for: ${file.absolutePath}", e)
                 }
             }
         }

@@ -56,12 +56,18 @@ class _ViewSelectorState extends State<ViewSelector> {
                 },
               );
             }
-
             if (_views.isEmpty) {
               _views.addEntries(
                 snapshot.data!
                     .where((element) => element.collectionType != "playlists")
-                    .map((e) => MapEntry(e, e.collectionType == "music")),
+                    .map(
+                      (e) => MapEntry(
+                        e,
+                        e.collectionType == "music" &&
+                            (_finampUserHelper.currentUser!.views.isEmpty ||
+                                _finampUserHelper.currentUser!.views.keys.contains(e.id)),
+                      ),
+                    ),
               );
 
               // If only one music library is available and user doesn't have a
@@ -147,6 +153,7 @@ class _ViewSelectorState extends State<ViewSelector> {
         _finampUserHelper.setCurrentUserViews(
           _views.entries.where((element) => element.value == true).map((e) => e.key).toList(),
         );
+
         // allow calling _submitChoice() while selector is being built by delaying
         // navigation changes
         Future.microtask(() => Navigator.of(context).pushNamedAndRemoveUntil(MusicScreen.routeName, (route) => false));

@@ -159,7 +159,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             SliverStickyHeader(
               header: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                color: Theme.of(context).colorScheme.surface,
                 child: Text(
                   AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
                   style: const TextStyle(fontSize: 20.0),
@@ -170,10 +170,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                 childrenForQueue: queueChildren,
                 parent: widget.parent,
                 onRemoveFromList: onDelete,
-                showDateAdded: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.dateCreated),
-                showPlayCount: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.playCount),
-                showDateLastPlayed: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.datePlayed),
-                showReleaseDate: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.premiereDate),
+                adaptiveAdditionalInfoSortBy: (widget.parent.type == "Playlist") ? playlistSortBy : null,
                 forceAlbumArtists: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.albumArtist),
               ),
             )
@@ -183,10 +180,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             childrenForQueue: queueChildren,
             parent: widget.parent,
             onRemoveFromList: onDelete,
-            showDateAdded: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.dateCreated),
-            showPlayCount: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.playCount),
-            showDateLastPlayed: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.datePlayed),
-            showReleaseDate: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.premiereDate),
+            adaptiveAdditionalInfoSortBy: (widget.parent.type == "Playlist") ? playlistSortBy : null,
             forceAlbumArtists: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.albumArtist),
           )
         else
@@ -204,10 +198,7 @@ class TracksSliverList extends ConsumerStatefulWidget {
     required this.parent,
     this.onRemoveFromList,
     this.forceAlbumArtists = false,
-    this.showPlayCount = false,
-    this.showDateAdded = false,
-    this.showDateLastPlayed = false,
-    this.showReleaseDate = false,
+    this.adaptiveAdditionalInfoSortBy,
     this.isOnArtistScreen = false,
     this.isOnGenreScreen = false,
   });
@@ -217,10 +208,7 @@ class TracksSliverList extends ConsumerStatefulWidget {
   final BaseItemDto parent;
   final BaseItemDtoCallback? onRemoveFromList;
   final bool forceAlbumArtists;
-  final bool showPlayCount;
-  final bool showDateAdded;
-  final bool showDateLastPlayed;
-  final bool showReleaseDate;
+  final SortBy? adaptiveAdditionalInfoSortBy;
   final bool isOnArtistScreen;
   final bool isOnGenreScreen;
 
@@ -290,10 +278,7 @@ class _TracksSliverListState extends ConsumerState<TracksSliverList> {
           isOnArtistScreen: widget.isOnArtistScreen,
           isOnGenreScreen: widget.isOnGenreScreen,
           forceAlbumArtists: widget.forceAlbumArtists,
-          showPlayCount: widget.showPlayCount,
-          showDateAdded: widget.showDateAdded,
-          showDateLastPlayed: widget.showDateLastPlayed,
-          showReleaseDate: widget.showReleaseDate,
+          adaptiveAdditionalInfoSortBy: widget.adaptiveAdditionalInfoSortBy,
         );
       }, childCount: widget.childrenForList.length),
     );
