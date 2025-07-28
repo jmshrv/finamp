@@ -21,9 +21,9 @@ class OfflineModeSwitchListTile extends ConsumerWidget {
       } else if (automation == AutoOfflineOption.disabled) {
         return TablerIcons.cloud_off;
       } else if (activeDelays > 0) {
-        return TablerIcons.cloud_search;
-      } else {
         return Icons.cloud_sync_outlined;
+      } else {
+        return TablerIcons.cloud_search;
       }
     }
 
