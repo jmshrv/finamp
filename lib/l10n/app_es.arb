@@ -349,7 +349,7 @@
       }
     }
   },
-  "shuffleAllTrackCountSubtitle": "Cantidad de canciones a cargar cuando se use el botón de reproducir todo aleatoriamente.",
+  "shuffleAllTrackCountSubtitle": "Cantidad de canciones a cargar cuando se use el botón de mezclar todo en la pestaña de canciones o en la pantalla de géneros.",
   "@shuffleAllTrackCountSubtitle": {},
   "showTextOnGridViewSubtitle": "Muestra el texto (título, artista, etc) en la pantalla de música al usar la vista de cuadrícula.",
   "@showTextOnGridViewSubtitle": {},
@@ -1436,7 +1436,7 @@
     },
     "description": "Dropdown option to download transcoded version of tracks"
   },
-  "queueRestoreButtonLabel": "Restaurar",
+  "queueRestoreButtonLabel": "Restaurar esta cola",
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
@@ -2199,7 +2199,7 @@
   },
   "transcodingStreamingFormatSubtitle": "Selecciona el formato a utilizar al transmitir audio transcodificado. Las canciones que estén actualmente en la cola no se verán afectadas.",
   "@transcodingStreamingFormatSubtitle": {},
-  "autoOfflineOptionNetwork": "Red local",
+  "autoOfflineOptionNetwork": "Red Local",
   "@autoOfflineOptionNetwork": {
     "description": "This is shown when the autoOffline feature is set to \"local Network\", this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
   },
@@ -2207,7 +2207,7 @@
   "@autoOfflineOptionDisconnected": {
     "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
   },
-  "autoOfflineSettingDescription": "Activar automáticamente el modo sin conexión.\nDesactivado: No activará automáticamente el modo sin conexión. Puede ahorrar batería.\nRed: Activar el modo sin conexión cuando no esté conectado a Wi-Fi o Ethernet.\nDesconectado: Activar el modo sin conexión cuando no esté conectado a ninguna red.\nSiempre puede activar manualmente el modo sin conexión, lo que pausará la automatización hasta que vuelva a desactivar el modo sin conexión",
+  "autoOfflineSettingDescription": "Activar automáticamente el modo sin conexión.\nDesactivado: No activará automáticamente el modo sin conexión. Puede ahorrar batería.\nRed: Activar el modo sin conexión cuando no esté conectado a Wi-Fi o Ethernet.\nDesconectado: Activar el modo sin conexión cuando no esté conectado a ninguna red.\nInalcanzable: Activar el modo sin conexión cuando no se pueda hacer ping al servidor después de cambiar de redes\nSiempre puede activar manualmente el modo sin conexión, lo que pausará la automatización hasta que vuelva a desactivar el modo sin conexión",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
@@ -2312,7 +2312,7 @@
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
-  "showFavoriteButtonOnMediaNotificationSubtitle": "Controla que la notificación multimedia tenga un botón de favorito. Esto te permitirá añadir/quitar la canción actual de favoritos sin tener que abrir la aplicación.",
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Controla que la notificación multimedia tenga un botón de favorito. Esto te permitirá añadir/quitar la canción actual de favoritos sin tener que abrir la aplicación. Oculto en modo offline.",
   "@showFavoriteButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a favorite button."
   },
@@ -2504,5 +2504,188 @@
   "downloadPaused": "Descargas pausadas por que el dispositivo no está conectado a una red WiFi",
   "@downloadPaused": {
     "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
+  },
+  "logoutButtonSubtitle": "Iniciar sesión en un servidor diferente eliminará las descargas existentes",
+  "@logoutButtonSubtitle": {},
+  "none": "Ninguno",
+  "@none": {},
+  "createPlaylistFromCurrentQueue": "Guardar la cola como playlist",
+  "@createPlaylistFromCurrentQueue": {
+    "description": "Label for a button that creates a new playlist from the current queue."
+  },
+  "additionalBaseItemInfoSubtitle": "Controla qué tipo de información adicional se muestra en las listas de elementos para cada tipo de elemento. Cuando se establece en \"Adpatativo\", la información es escogida automáticamente según la clasificación o el contexto actual.",
+  "@additionalBaseItemInfoSubtitle": {
+    "description": "Subtitle for the setting that controls the displayed additional item info."
+  },
+  "autoOfflineOptionUnreachable": "Inalcanzable",
+  "@autoOfflineOptionUnreachable": {
+    "description": "This is shown when the autoOffline feature is set to Unreachable, this means offline mode will be automatically enabled when - after a network change - the server cant be pinged"
+  },
+  "clearQueueOnStopEventTitle": "Limpiar Cola al Detener Externamente",
+  "@clearQueueOnStopEventTitle": {
+    "description": "Title for the setting that controls if OS stop commands clear the queue."
+  },
+  "clearQueueOnStopEventSubtitle": "Limpiar la cola y cerrar el reproductor si se recibe un comande de 'detener' del sistema operativo. Las acciones de detener dentro de la aplicación siempre cerrarán el reproductor y limpiarán la cola.",
+  "@clearQueueOnStopEventSubtitle": {
+    "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
+  },
+  "syncPlaybackSpeedAndPitchLabel": "Sincronizar Velocidad y Tono",
+  "@syncPlaybackSpeedAndPitchLabel": {
+    "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
+  },
+  "serverSharingMenuTitle": "Compartir Servidor en la Red Local",
+  "@serverSharingMenuTitle": {
+    "description": "Title for the server sharing menu that allows the user to share their server address with other devices on the local network"
+  },
+  "serverSharingMenuButtonTitle": "Compartir Servidor",
+  "@serverSharingMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the server sharing menu"
+  },
+  "serverSharingMenuConfirmationDialogText": "¿Estás seguro de que deseas habilitar la compartición del servidor aunque estés en modo offline? Esto hará que Finamp envíe datos a través de la red local.",
+  "@serverSharingMenuConfirmationDialogText": {
+    "description": "Dialog text shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuConfirmationDialogConfirmationButtonLabel": "Confirmar y Activar",
+  "@serverSharingMenuConfirmationDialogConfirmationButtonLabel": {
+    "description": "Positive action label for the dialog shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuControlTitleSharingEnabled": "Compartiendo Servidor",
+  "@serverSharingMenuControlTitleSharingEnabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuControlSubtitleSharingDisabled": "Toca para Compartir",
+  "@serverSharingMenuControlSubtitleSharingDisabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlTitleSharingDisabled": "No Compartiendo",
+  "@serverSharingMenuControlTitleSharingDisabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlSubtitleSharingEnabled": "Toca para Detener",
+  "@serverSharingMenuControlSubtitleSharingEnabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuDescription": "Compartir la dirección de tu servidor puede ser útil para configurar nuevos clientes que no están en la misma red local que tu servidor de Jellyfin, es decir, televisores en hoteles, tu PC en el trabajo o un nuevo cliente en tu teléfono mientras estás fuera de casa.",
+  "@serverSharingMenuDescription": {
+    "description": "Description text shown in the server sharing menu, right below the controls"
+  },
+  "serverSharingMenuDetails": "Funcjona escuchando las solicitudes de descubrimiento del servidor por parte de otros clientes en la red local y luego respondiendo a esas solicitudes con la dirección configurada de tu servidor de Jellyifin.\nSi tienes configuradas tanto una dirección local como una pública, Finamp proporcionará ambas al cliente que lo solicite.",
+  "@serverSharingMenuDetails": {
+    "description": "Description text shown in the server sharing menu, below the description"
+  },
+  "quickConnectAuthorizationMenuButtonTitle": "Autorizar Conexión Rápida",
+  "@quickConnectAuthorizationMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuPrompt": "Ingresar Código de Conexión Rápida",
+  "@quickConnectAuthorizationMenuPrompt": {
+    "description": "Title for the button in server sharing menu that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuTitle": "Autorizar Solicitud de Conexión Rápida",
+  "@quickConnectAuthorizationMenuTitle": {
+    "description": "Title for the quick connect authorization menu that allows the user to authorize a quick connect request from another device"
+  },
+  "quickConnectAuthorizationMenuInputLabel": "Código de Conexión Rápida",
+  "@quickConnectAuthorizationMenuInputLabel": {
+    "description": "Label for the quick connect code input, shown below the input field"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleIdle": "Por favor, ingresa o pega el código a continuación",
+  "@quickConnectAuthorizationMenuStateSubtitleIdle": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) while the code hasn't been submitted yet"
+  },
+  "quickConnectAuthorizationMenuStateTitleProcessing": "Intentando Autorizar Solicitud",
+  "@quickConnectAuthorizationMenuStateTitleProcessing": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) while a request is being processed"
+  },
+  "quickConnectAuthorizationMenuStateTitleSuccess": "Solicitud Autorizada Exitosamente",
+  "@quickConnectAuthorizationMenuStateTitleSuccess": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was successful"
+  },
+  "quickConnectAuthorizationMenuStateTitleFailed": "Código de Conexión Rápida Inválido",
+  "@quickConnectAuthorizationMenuStateTitleFailed": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleFailed": "Por favor, verifica el código e intenta nuevamente",
+  "@quickConnectAuthorizationMenuStateSubtitleFailed": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuDescription": "Si estás intentando iniciar sesión en otro cliente de Jellyfin a través de Conexión Rápida, puedes ingresar o pegar el código de 6 dígitos en el campo de arriba. Esto autorizará la solicitud de inicio de sesión del otro cliente y te conectará a la misma cuenta que estás utilizando para Finamp.",
+  "@quickConnectAuthorizationMenuDescription": {
+    "description": "Description for the quick connect authorization menu, shown at the bottom"
+  },
+  "accessibility": "Accesibilidad",
+  "@accessibility": {
+    "description": "Title for the accessibility settings screen"
+  },
+  "useHighContrastColorsTitle": "Usar Colores de Alto Contraste",
+  "@useHighContrastColorsTitle": {
+    "description": "Title for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "useHighContrastColorsSubtitle": "Usar colores dinámicos de alto contraste para una mejor visibilidad.",
+  "@useHighContrastColorsSubtitle": {
+    "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "discordRPCSettingTitle": "Discord RPC",
+  "@discordRPCSettingTitle": {
+    "description": "Title for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCSettingDescription": "Habilita el Rich Presence de Discord para mostrar lo que estás reproduciendo en tu estado de Discord. No se conectará a Discord si el modo offline está habilitado.",
+  "@discordRPCSettingDescription": {
+    "description": "Description for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCIconSettingTitle": "Ícono de Respaldo de RPC",
+  "@discordRPCIconSettingTitle": {
+    "description": "Title for the setting that controls which icon gets shown in the Discord RPC (Rich Presence) in case the local address is in use"
+  },
+  "discordRPCIconSettingDescription": "Ícono de respaldo que se muestra cuando no se detecta una dirección pública. (Dado que Discord no puede cargar imágenes desde una dirección local, utilizaría un ícono de respaldo)",
+  "@discordRPCIconSettingDescription": {
+    "description": "Description for the setting that controls which Icon the discord RPC displays as a Fallback in case no public address is detected (it doenst matter what connection is active)."
+  },
+  "discordRPCIconDark": "Finamp - Oscuro",
+  "@discordRPCIconDark": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with the Dark-Theme Background"
+  },
+  "discordRPCIconBlack": "Finamp - Negro",
+  "@discordRPCIconBlack": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Black Background"
+  },
+  "discordRPCIconLight": "Finamp - Blanco",
+  "@discordRPCIconLight": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a White Background"
+  },
+  "discordRPCIconJFTransparent": "Jellyfin - Transparente",
+  "@discordRPCIconJFTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Jellyfin logo with a Transparent Background"
+  },
+  "discordRPCIconTransparent": "Finamp - Transparente",
+  "@discordRPCIconTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Transparent Background"
+  },
+  "discordRPCIconWhiteTransparent": "Finamp Blanco - Transparente",
+  "@discordRPCIconWhiteTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
+  },
+  "adaptive": "Adaptativo",
+  "@adaptive": {},
+  "sleepTimerRemainingTracks": "Durmiendo {time,plural,=1{después de esta canción} other{en {time} canciones}}",
+  "@sleepTimerRemainingTracks": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "additionalBaseItemInfoTitle": "Información Adicional del Elemento",
+  "@additionalBaseItemInfoTitle": {
+    "description": "Title for the setting that controls the displayed additional item info."
+  },
+  "shuffleCountButton": "Mezclar ({count,plural,=1{{count} Canción} other{{count} Canciones}})",
+  "@shuffleCountButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }
