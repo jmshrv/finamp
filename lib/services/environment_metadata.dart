@@ -7,20 +7,17 @@ import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:hive_ce/hive.dart';
 import 'package:get_it/get_it.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'finamp_user_helper.dart';
-import 'jellyfin_api.dart';
 
-part 'log.g.dart';
+part 'environment_metadata.g.dart';
 
 const _SharedPreferencesVersionHistoryKey = 'version_history';
+final _environmentMetadataLogger = Logger('EnvironmentMetadata');
 
-/// -------------------- DEVICE INFO --------------------
-
-/// Contains information about the current device (model, OS, platform).
+/// Contains information about the current device (id, model, OS, platform).
 @JsonSerializable()
 class DeviceInfo {
   final String deviceName;
@@ -28,12 +25,7 @@ class DeviceInfo {
   final String osVersion;
   final String platform;
 
-  DeviceInfo({
-    required this.deviceName,
-    required this.deviceModel,
-    required this.osVersion,
-    required this.platform,
-  });
+  DeviceInfo({required this.deviceName, required this.deviceModel, required this.osVersion, required this.platform});
 
   factory DeviceInfo.fromJson(Map<String, dynamic> json) => _$DeviceInfoFromJson(json);
   Map<String, dynamic> toJson() => _$DeviceInfoToJson(this);
@@ -54,12 +46,7 @@ class DeviceInfo {
       );
     } else if (Platform.isIOS) {
       final info = await deviceInfoPlugin.iosInfo;
-      return DeviceInfo(
-        deviceName: info.name,
-        deviceModel: info.model,
-        osVersion: info.systemVersion,
-        platform: 'iOS',
-      );
+      return DeviceInfo(deviceName: info.name, deviceModel: info.model, osVersion: info.systemVersion, platform: 'iOS');
     } else if (Platform.isMacOS) {
       final info = await deviceInfoPlugin.macOsInfo;
       return DeviceInfo(
@@ -88,18 +75,23 @@ class DeviceInfo {
 
     throw UnsupportedError("Unsupported platform");
   }
+
+  String get pretty =>
+      "Device Info:\n"
+      "  Device Name: $deviceName\n"
+      "  Device Model: $deviceModel\n"
+      "  OS Version: $osVersion\n"
+      "  Platform: $platform";
 }
 
-/// -------------------- APP INFO --------------------
-
-/// Contains information about the app itself (name, version, history).
+/// Contains information about the app itself (name, version, version history).
 @JsonSerializable()
 class AppInfo {
   final String appName;
   final String packageName;
   final String version;
   final String buildNumber;
-  final List<String> versionHistory;
+  final List<String>? versionHistory;
 
   AppInfo({
     required this.appName,
@@ -119,14 +111,17 @@ class AppInfo {
 
     final SharedPreferencesAsync prefs = SharedPreferencesAsync();
 
-    final history = List<String>.from(
-      (await prefs.getStringList(_SharedPreferencesVersionHistoryKey) ?? <String>[]),
-    );
-    final previousVersion = history.isNotEmpty ? history.last : null;
+    List<String>? history;
+    try {
+      history = List<String>.from((await prefs.getStringList(_SharedPreferencesVersionHistoryKey) ?? <String>[]));
+      final previousVersion = history.isNotEmpty ? history.last : null;
 
-    if (previousVersion != currentVersion) {
-      history.add(currentVersion);
-      await prefs.setStringList(_SharedPreferencesVersionHistoryKey, history);
+      if (previousVersion != currentVersion) {
+        history.add(currentVersion);
+        await prefs.setStringList(_SharedPreferencesVersionHistoryKey, history);
+      }
+    } catch (e) {
+      _environmentMetadataLogger.warning("Failed to update version history: $e");
     }
 
     return AppInfo(
@@ -137,9 +132,15 @@ class AppInfo {
       versionHistory: history,
     );
   }
-}
 
-/// -------------------- SERVER INFO --------------------
+  String get pretty =>
+      "App Info:\n"
+      "  App Name: $appName\n"
+      "  Package Name: $packageName\n"
+      "  Version: $version\n"
+      "  Build Number: $buildNumber\n"
+      "  Version History: ${versionHistory?.join(", ") ?? "n/a"}";
+}
 
 /// Contains information about the Jellyfin server in use.
 @JsonSerializable()
@@ -166,9 +167,17 @@ class ServerInfo {
         ? GetIt.instance<JellyfinApiHelper>()
         : null;
     final user = userHelper?.currentUser;
-    if (user == null) return null;
+    if (user == null) {
+      // without the user helper, we don't know the server URL
+      return null;
+    }
 
-    final serverInfo = await jellyfinApiHelper?.loadServerPublicInfo();
+    PublicSystemInfoResult? serverInfo;
+    try {
+      serverInfo = await jellyfinApiHelper?.loadServerPublicInfo(timeout: Duration(microseconds: 2500));
+    } catch (e) {
+      _environmentMetadataLogger.warning("Failed to load server info: $e");
+    }
 
     final uri = Uri.parse(user.baseURL);
     return ServerInfo(
@@ -183,41 +192,33 @@ class ServerInfo {
     );
   }
 
+  String get pretty =>
+      "Server Info:\n"
+      "  Address Type: $serverAddressType\n"
+      "  Port: $serverPort\n"
+      "  Protocol: $serverProtocol\n"
+      "  Version: $serverVersion";
 }
 
-/// -------------------- LOG WRAPPER --------------------
-
-/// Encapsulates device and app info for logging.
-class Log {
+/// Encapsulates device, app, and server info for logging.
+@JsonSerializable()
+class EnvironmentMetadata {
   final DeviceInfo deviceInfo;
   final AppInfo appInfo;
   final ServerInfo? serverInfo;
-  Log({
-    required this.deviceInfo,
-    required this.appInfo,
-    required this.serverInfo
-  });
+  EnvironmentMetadata({required this.deviceInfo, required this.appInfo, required this.serverInfo});
 
   /// Constructs a full log instance from platform and server metadata.
-  static Future<Log> create() async {
+  static Future<EnvironmentMetadata> create({bool fetchServerInfo = true}) async {
     final deviceInfo = await DeviceInfo.fromPlatform();
     final appInfo = await AppInfo.fromPlatform();
-    final serverInfo = await ServerInfo.fromServer();
-    
-    return Log(
-      deviceInfo: deviceInfo, 
-      appInfo: appInfo, 
-      serverInfo: serverInfo
-    );
+    final serverInfo = fetchServerInfo ? await ServerInfo.fromServer() : null;
+
+    return EnvironmentMetadata(deviceInfo: deviceInfo, appInfo: appInfo, serverInfo: serverInfo);
   }
 
   /// Serializes log to JSON
-  Future<Map<String, dynamic>> toJson() async {
-    final serverInfo = await ServerInfo.fromServer();
-    return {
-      'deviceInfo': deviceInfo.toJson(),
-      'appInfo': appInfo.toJson(),
-      'serverInfo': serverInfo?.toJson(),
-    };
+  Map<String, dynamic> toJson() {
+    return _$EnvironmentMetadataToJson(this);
   }
 }

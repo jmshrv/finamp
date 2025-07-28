@@ -465,13 +465,21 @@ class JellyfinApiHelper {
 
   /// Fetch the public server info from the server.
   /// Can be used to check if the server is online / the URL is correct.
-  Future<PublicSystemInfoResult?> loadServerPublicInfo() async {
+  Future<PublicSystemInfoResult?> loadServerPublicInfo({Duration? timeout}) async {
     // Some users won't have a password.
     if (_finampUserHelper.currentUser?.baseURL == null && baseUrlTemp == null) {
       return null;
     }
 
     var response = await jellyfinApi.getPublicServerInfo();
+    if (timeout != null) {
+      response = response.timeout(
+        timeout,
+        onTimeout: () {
+          throw TimeoutException("Failed to fetch server info within the timeout period.");
+        },
+      );
+    }
 
     PublicSystemInfoResult publicSystemInfoResult = PublicSystemInfoResult.fromJson(response as Map<String, dynamic>);
 

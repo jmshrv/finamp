@@ -5,7 +5,7 @@
 // dart format off
 
 
-part of 'log.dart';
+part of 'environment_metadata.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -31,8 +31,8 @@ AppInfo _$AppInfoFromJson(Map<String, dynamic> json) => AppInfo(
   packageName: json['packageName'] as String,
   version: json['version'] as String,
   buildNumber: json['buildNumber'] as String,
-  versionHistory: (json['versionHistory'] as List<dynamic>)
-      .map((e) => e as String)
+  versionHistory: (json['versionHistory'] as List<dynamic>?)
+      ?.map((e) => e as String)
       .toList(),
 );
 
@@ -58,3 +58,22 @@ Map<String, dynamic> _$ServerInfoToJson(ServerInfo instance) =>
       'serverProtocol': instance.serverProtocol,
       'serverVersion': instance.serverVersion,
     };
+
+EnvironmentMetadata _$EnvironmentMetadataFromJson(Map<String, dynamic> json) =>
+    EnvironmentMetadata(
+      deviceInfo: DeviceInfo.fromJson(
+        json['deviceInfo'] as Map<String, dynamic>,
+      ),
+      appInfo: AppInfo.fromJson(json['appInfo'] as Map<String, dynamic>),
+      serverInfo: json['serverInfo'] == null
+          ? null
+          : ServerInfo.fromJson(json['serverInfo'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$EnvironmentMetadataToJson(
+  EnvironmentMetadata instance,
+) => <String, dynamic>{
+  'deviceInfo': instance.deviceInfo,
+  'appInfo': instance.appInfo,
+  'serverInfo': instance.serverInfo,
+};

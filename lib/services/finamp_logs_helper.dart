@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:clipboard/clipboard.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:finamp/services/censored_log.dart';
-import 'package:finamp/services/log.dart';
+import 'package:finamp/services/environment_metadata.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
@@ -62,16 +62,20 @@ class FinampLogsHelper {
     final fullLogsBuffer = StringBuffer();
 
     // Get the Log instance and add its metadata at the top
-    final logMeta = await Log.create();
+    final logMeta = await EnvironmentMetadata.create();
 
-    // Use the on-demand censored metadata, which fetches server info/version as needed
-    final meta = await logMeta.toJson();
-    
     // Prepend this metadata to the logs
-    fullLogsBuffer.writeln("Metadata:");
-    fullLogsBuffer.writeln(jsonEncode(meta));
-    fullLogsBuffer.writeln("\nLogs:");
-  
+    fullLogsBuffer.writeln(jsonEncode(logMeta.toJson()));
+    fullLogsBuffer.writeln("=== METADATA ===");
+    fullLogsBuffer.writeln("Device Info: ${logMeta.deviceInfo.pretty}");
+    fullLogsBuffer.writeln("App Info: ${logMeta.appInfo.pretty}");
+    if (logMeta.serverInfo != null) {
+      fullLogsBuffer.writeln("Server Info: ${logMeta.serverInfo!.pretty}");
+    } else {
+      fullLogsBuffer.writeln("Server Info: Not available");
+    }
+    fullLogsBuffer.writeln("=== LOGS ===");
+
     if (_logFileWriter != null) {
       final basePath = (Platform.isAndroid || Platform.isIOS)
           ? await getApplicationDocumentsDirectory()
