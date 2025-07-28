@@ -358,19 +358,17 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                                 setState(() {
                                   isAutoScrollEnabled = true;
                                 });
-                                if (previousLineIndex != null) {
-                                  unawaited(
-                                    autoScrollController.scrollToIndex(
-                                      previousLineIndex!,
-                                      preferPosition: AutoScrollPosition.middle,
-                                      duration: MediaQuery.of(context).disableAnimations
-                                          ? const Duration(
-                                              milliseconds: 1,
-                                            ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
-                                          : const Duration(milliseconds: 500),
-                                    ),
-                                  );
-                                }
+                                unawaited(
+                                  autoScrollController.scrollToIndex(
+                                    index,
+                                    preferPosition: AutoScrollPosition.middle,
+                                    duration: MediaQuery.of(context).disableAnimations
+                                        ? const Duration(
+                                            milliseconds: 1,
+                                          ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
+                                        : const Duration(milliseconds: 500),
+                                  ),
+                                );
                               },
                             ),
                           ),
@@ -432,37 +430,17 @@ class _LyricLine extends ConsumerWidget {
     final lowlightLine = isSynchronized && !isCurrentLine;
 
     final textSpan = TextSpan(
-      children: [
-        // TODO: the timestamps currently crash the painter, they should probably be extracted to a Row anyways.
-        if (showTimestamp && false)
-          WidgetSpan(
-            alignment: PlaceholderAlignment.bottom,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Text(
-                "${Duration(microseconds: line.startMicros).inMinutes}:${(Duration(microseconds: line.startMicros).inSeconds % 60).toString().padLeft(2, '0')}",
-                style: TextStyle(
-                  color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
-                  fontSize: 16,
-                  height: 1.75 * (lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) / 26),
-                ),
-              ),
-            ),
-          ),
-        TextSpan(
-          text: line.text ?? "<missing lyric line>",
-          style: TextStyle(
-            color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
-            fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
-            // Keep text width consistent across the different weights
-            letterSpacing: lowlightLine || !isSynchronized ? 0.05 : -0.045,
-            fontSize:
-                lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) *
-                (isSynchronized ? 1.0 : 0.75),
-            height: 1.25,
-          ),
-        ),
-      ],
+      text: line.text ?? "<missing lyric line>",
+      style: TextStyle(
+        color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
+        fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
+        // Keep text width consistent across the different weights
+        letterSpacing: lowlightLine || !isSynchronized ? 0.02 : -0.4,
+        fontSize:
+            lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) *
+            (isSynchronized ? 1.0 : 0.75),
+        height: 1.25,
+      ),
     );
 
     return GestureDetector(
@@ -471,40 +449,68 @@ class _LyricLine extends ConsumerWidget {
         padding: EdgeInsets.symmetric(vertical: isSynchronized ? 10.0 : 6.0),
         child: LayoutBuilder(
           builder: (context, constraints) {
+            // Calculate available width for lyrics (accounting for timestamp if shown)
+            final availableWidth = constraints.maxWidth - (showTimestamp ? 60 : 0);
+            
             final linePainter = TextPainter(
               text: textSpan,
               textAlign: lyricsAlignmentToTextAlign(finampSettings?.lyricsAlignment ?? LyricsAlignment.start),
               textDirection: TextDirection.ltr,
             )..setPlaceholderDimensions([]);
-            linePainter.layout(minWidth: constraints.minWidth, maxWidth: constraints.maxWidth);
+            linePainter.layout(minWidth: 0, maxWidth: availableWidth);
 
             return StreamBuilder<ProgressState>(
               stream: progressStateStream,
               builder: (context, snapshot) {
                 final currentMicros = snapshot.data?.position.inMicroseconds ?? 0;
 
-                return CustomPaint(
-                  size: Size(constraints.maxWidth, linePainter.height),
-                  painter: LyricsLinePainter(
-                    textPainter: linePainter,
-                    line: line,
-                    currentMicros: currentMicros,
-                    isCurrentLine: isCurrentLine,
-                    primaryColor: Theme.of(context).textTheme.bodyLarge?.color,
-                    highlightColor: Theme.of(context).colorScheme.primary,
-                    grayedColor: Colors.white,
-                    lowlightLine: lowlightLine,
-                    baseStyle: TextStyle(
-                      color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
-                      fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
-                      // Keep text width consistent across the different weights
-                      letterSpacing: lowlightLine || !isSynchronized ? 0.05 : -0.045,
-                      fontSize:
-                          lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) *
-                          (isSynchronized ? 1.0 : 0.75),
-                      height: 1.25,
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (showTimestamp)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Text(
+                          "${Duration(microseconds: line.startMicros).inMinutes}:${(Duration(microseconds: line.startMicros).inSeconds % 60).toString().padLeft(2, '0')}",
+                          style: TextStyle(
+                            color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
+                            fontSize: 16,
+                            height:
+                                1.75 *
+                                (lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) / 26),
+                          ),
+                        ),
+                      ),
+                    Expanded(
+                      child: CustomPaint(
+                        size: Size(availableWidth, linePainter.height),
+                        painter: LyricsLinePainter(
+                          textPainter: linePainter,
+                          line: line,
+                          currentMicros: currentMicros,
+                          isCurrentLine: isCurrentLine,
+                          primaryColor: Theme.of(context).textTheme.bodyLarge?.color,
+                          highlightColor: Theme.of(context).colorScheme.primary,
+                          grayedColor: Colors.white,
+                          lowlightLine: lowlightLine,
+                          maxWidth: availableWidth,
+                          textAlign: lyricsAlignmentToTextAlign(
+                            finampSettings?.lyricsAlignment ?? LyricsAlignment.start,
+                          ),
+                          baseStyle: TextStyle(
+                            color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
+                            fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
+                            // Keep text width consistent across the different weights
+                            letterSpacing: lowlightLine || !isSynchronized ? 0.02 : -0.4,
+                            fontSize:
+                                lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) *
+                                (isSynchronized ? 1.0 : 0.75),
+                            height: 1.25,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 );
               },
             );
@@ -525,6 +531,8 @@ class LyricsLinePainter extends ChangeNotifier implements CustomPainter {
   final Color grayedColor;
   final bool lowlightLine;
   final TextStyle baseStyle;
+  final double maxWidth;
+  final TextAlign textAlign;
 
   LyricsLinePainter({
     required this.textPainter,
@@ -536,6 +544,8 @@ class LyricsLinePainter extends ChangeNotifier implements CustomPainter {
     required this.grayedColor,
     required this.lowlightLine,
     required this.baseStyle,
+    required this.maxWidth,
+    required this.textAlign,
   });
 
   @override
@@ -545,7 +555,25 @@ class LyricsLinePainter extends ChangeNotifier implements CustomPainter {
       _paintWithWordHighlighting(canvas, size);
     } else {
       // Default painting for non-current lines or lines without cues
-      textPainter.paint(canvas, Offset.zero);
+      // Calculate the offset based on text alignment for consistent alignment
+      double offsetX = 0.0;
+      switch (textAlign) {
+        case TextAlign.start:
+        case TextAlign.left:
+          offsetX = 0.0;
+          break;
+        case TextAlign.center:
+          offsetX = (size.width - textPainter.width) / 2.0;
+          break;
+        case TextAlign.end:
+        case TextAlign.right:
+          offsetX = size.width - textPainter.width;
+          break;
+        case TextAlign.justify:
+          offsetX = 0.0; // Justify behaves like start for single lines
+          break;
+      }
+      textPainter.paint(canvas, Offset(offsetX, 0.0));
     }
   }
 
@@ -638,26 +666,47 @@ class LyricsLinePainter extends ChangeNotifier implements CustomPainter {
     final coloredTextSpan = TextSpan(children: segments);
     final coloredTextPainter = TextPainter(
       text: coloredTextSpan,
-      textAlign: textPainter.textAlign,
+      textAlign: textAlign, // Use the passed text alignment
       textDirection: textPainter.textDirection,
       textScaler: textPainter.textScaler, // Preserve text scaling
       maxLines: textPainter.maxLines,
     );
 
-    // Use the same layout constraints as the original
-    coloredTextPainter.layout(minWidth: textPainter.minIntrinsicWidth, maxWidth: textPainter.maxIntrinsicWidth);
+    // Use the exact same layout constraints as the original to ensure identical line breaking
+    // Use the maxWidth that was passed to ensure consistency with the original layout
+    coloredTextPainter.layout(minWidth: 0, maxWidth: maxWidth);
 
-    // Paint the colored text
-    coloredTextPainter.paint(canvas, Offset.zero);
+    // Calculate the offset based on text alignment
+    double offsetX = 0.0;
+    switch (textAlign) {
+      case TextAlign.start:
+      case TextAlign.left:
+        offsetX = 0.0;
+        break;
+      case TextAlign.center:
+        offsetX = (size.width - coloredTextPainter.width) / 2.0;
+        break;
+      case TextAlign.end:
+      case TextAlign.right:
+        offsetX = size.width - coloredTextPainter.width;
+        break;
+      case TextAlign.justify:
+        offsetX = 0.0; // Justify behaves like start for single lines
+        break;
+    }
+
+    // Paint the colored text with the calculated offset
+    coloredTextPainter.paint(canvas, Offset(offsetX, 0.0));
   }
 
   @override
   bool shouldRepaint(LyricsLinePainter oldDelegate) {
     return textPainter.text != oldDelegate.textPainter.text ||
-        textPainter.textAlign != oldDelegate.textPainter.textAlign ||
+        textAlign != oldDelegate.textAlign ||
         currentMicros != oldDelegate.currentMicros ||
         isCurrentLine != oldDelegate.isCurrentLine ||
-        lowlightLine != oldDelegate.lowlightLine;
+        lowlightLine != oldDelegate.lowlightLine ||
+        maxWidth != oldDelegate.maxWidth;
   }
 
   @override
