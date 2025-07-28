@@ -614,27 +614,67 @@ class LyricsLinePainter extends ChangeNotifier implements CustomPainter {
       final cueText = text.substring(cue.position, math.min(endPosition, text.length));
 
       if (cueText.isNotEmpty) {
-        // Determine color based on timing - only highlight the currently active word
+        // Determine color based on timing with fade-in effect
         Color segmentColor;
 
         // Check if this word is currently being sung
         final hasReachedThisCue = currentMicros >= cue.startMicros;
         final hasReachedNextCue = nextCue != null && currentMicros >= nextCue.startMicros;
 
+        // Calculate fade-in timing (0.5 seconds = 500,000 microseconds before the cue)
+        const fadeInDurationMicros = 500000; // 0.5 seconds
+        final fadeInStartTime = cue.startMicros - fadeInDurationMicros;
+        final isInFadeInPeriod = currentMicros >= fadeInStartTime && currentMicros < cue.startMicros;
+
         if (hasReachedThisCue && !hasReachedNextCue) {
           // This word/segment is currently active - highlight it
           segmentColor = highlightColor;
+        } else if (isInFadeInPeriod) {
+          // This word is about to become active - fade it in letter by letter with color change
+          final fadeProgress = (currentMicros - fadeInStartTime) / fadeInDurationMicros;
+          final clampedProgress = fadeProgress.clamp(0.0, 1.0);
+
+          // Calculate how many letters should be highlighted based on progress
+          final totalLetters = cueText.length;
+          final highlightedLetters = (totalLetters * clampedProgress).round();
+
+          // Split the text into highlighted and non-highlighted parts
+          if (highlightedLetters > 0) {
+            final highlightedText = cueText.substring(0, highlightedLetters);
+            segments.add(
+              TextSpan(
+                text: highlightedText,
+                style: baseStyle.copyWith(color: Color.alphaBlend(highlightColor.withOpacity(0.6), grayedColor)),
+              ),
+            );
+          }
+
+          if (highlightedLetters < totalLetters) {
+            final remainingText = cueText.substring(highlightedLetters);
+            segments.add(
+              TextSpan(
+                text: remainingText,
+                style: baseStyle.copyWith(color: grayedColor),
+              ),
+            );
+          }
+
+          lastPosition = math.max(lastPosition, math.min(endPosition, text.length));
+          continue;
         } else {
           // All other words (past and future) - use normal grayed color
           segmentColor = grayedColor;
         }
 
-        segments.add(
-          TextSpan(
-            text: cueText,
-            style: baseStyle.copyWith(color: segmentColor),
-          ),
-        );
+        // Add the segment for non-fade-in cases
+        if (!isInFadeInPeriod) {
+          segments.add(
+            TextSpan(
+              text: cueText,
+              style: baseStyle.copyWith(color: segmentColor),
+            ),
+          );
+        }
       }
       lastPosition = math.max(lastPosition, math.min(endPosition, text.length));
     }
