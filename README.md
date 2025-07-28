@@ -1,24 +1,35 @@
 ![Banner](./GitHub_Banner.png)
 
-## Finamplify - Finamp's First Hackathon!
+## Help Make Jellyfin Mixes Smarter - Introducing [AudioMuse](https://github.com/NeptuneHub/AudioMuse-AI)
 
-From Saturday, March 29th (2025-03-29) until the end of Sunday, April 6th (2025-04-06), we are holding Finamp's first hackathon - called *Finamplify*.  
-This is 9 days of intensive work on Finamp, by new and existing contributors!
+We, especially @NeptuneHub, are currently trying to make Jellyfin understand your music library better by analyzing how your tracks actually sound!  
+You might already be familiar with this from Plex's "Sonic Analysis" feature.
 
-Here are the most important infos:
+We already got a good proof-of-concept, but we need **your help** to refine the algorithms!  
+All you need to do is try it out and give us feedback about what you like and don't like, specifically for *your* music library!  
 
-- The Hackathon is about making progress on Finamp's *redesign*, which is currently in beta.  
-  Therefore, please **make sure to base your changes on the `redesign` branch when working on new features or fixes!**. We won't accept new features targeting the `main` branch, as the branches have diverged quite a bit.
-- We would like to send out stickers to everyone who contributed to Finamp during this Hackathon! We'll mail the stickers to you for free, and this is entirely optional. Only significant contributions will be counted, so simply fixing a typo will not qualify you, sorry!  
-  To send you the stickers we'll need your physical address. Here's a survey where you can enter your details: TODO 
-  Please make sure to include your GitHub and/or Discord user name so we can ensure you actually contributed :)
-- The Hackathon is happening here on GitHub and on our [Finamp Beta Testers Discord server](https://discord.gg/xh9SZ73jWk). Ideally you should participate on both platforms, but either works. For any *code contributions* you'll have to contribute on GitHub though, via a regular Pull Request. Design contributions a fine via Discord.
+**To help testing**, just do the following:
 
-**All other details can be found on [our Hackathon project page](https://github.com/users/jmshrv/projects/5/views/2?pane=info)!**  
-There you can also find an overview of issues: <https://github.com/users/jmshrv/projects/5/views/2>  
-This also includes a category and difficulty for each issue to help you find one that works well for your skillset!
+1. Install AudioMuse as a separate service next to Jellyfin, using Docker or Kubernetes: <https://neptunehub.github.io/AudioMuse-AI/>
+2. Once the containers are ready, go to `http://<server ip>:8000` to open the AudioMuse dashboard
+3. Now, scroll down to click the "Start Analysis" button. AudioMuse will now analyze your entire library, that might take a few hours or even days. Please leave this running.
+  
+We've prepared a GitHub Issues form here: <https://github.com/NeptuneHub/AudioMuse-AI/issues/new?template=support-in-test.yml>  
+This will guide you through which parameters to apply, and how to evaluate the results.
 
-And be sure to take a look at [`CONTRIBUTING.md`](https://github.com/jmshrv/finamp/blob/redesign/CONTRIBUTING.md) to learn everything you need to start working on Finamp!
+- You need to use the "Advanced" tab at the top right in the AudioMuse dashboard to change all required parameters
+- Please double-check your parameters before starting to make sure the results are valid
+- The basic process is as follows:
+  1. Take the first (or next) test from "2. Test Parameters" and configure them in AudioMuse
+  2. Scroll down and click the "Start Clustering" button, then wait for the task to finish (will take a few minutes to hours)
+  3. Fill out the corresponding line in "2.1 Performance Properties"
+  4. Go through the generated playlists (bottom of the AudioMuse dashboard) and get a good overview. Try to judge if the tracks in the playlists fit together well or not. You can also listen to the playlists, they are automatically created in Jellyfin. Just copy the playlists name and search for it.
+  5. Evaluate the playlists/parameters via "3. Playlist Evaluation"
+  6. Add any additional feedback via "4. Additional Feedback"
+  7. Repeat for all tests (or more!)
+- You can create/submit the issue after your first test, and then later edit the issue for each new test
+
+**It would be amazing if you could help out with this! Thank you!**
 
 ---
 
