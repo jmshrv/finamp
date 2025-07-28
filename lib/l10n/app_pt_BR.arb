@@ -1968,5 +1968,29 @@
     "description": "Title for the special downloads section on the downloads screen."
   },
   "favorites": "Favoritos",
-  "@favorites": {}
+  "@favorites": {},
+  "adaptive": "Adaptativo",
+  "@adaptive": {},
+  "libraryDownloads": "Downloads da Biblioteca",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "playbackActionPagePlay": "Reproduzir",
+  "@playbackActionPagePlay": {
+    "description": "Label for the playback action page that contains all actions related to playing in order"
+  },
+  "playbackActionPageShuffle": "Embaralhar",
+  "@playbackActionPageShuffle": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled"
+  },
+  "playbackActionPageShuffleAlbums": "Embaralhar Álbuns",
+  "@playbackActionPageShuffleAlbums": {
+    "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+  },
+  "exportLogs": "Salvar logs",
+  "@exportLogs": {},
+  "playbackReporting": "Relatório de reprodução",
+  "@playbackReporting": {},
+  "notAvailable": "Não disponível",
+  "@notAvailable": {}
 }
