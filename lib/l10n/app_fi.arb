@@ -2576,7 +2576,7 @@
   "@serverSharingMenuDetails": {
     "description": "Description text shown in the server sharing menu, below the description"
   },
-  "quickConnectAuthorizationMenuButtonTitle": "Nopea yhdistys",
+  "quickConnectAuthorizationMenuButtonTitle": "Valtuuta nopea yhdistys",
   "@quickConnectAuthorizationMenuButtonTitle": {
     "description": "Title for the button in the drawer that opens the quick connect authorization menu"
   },
@@ -2662,7 +2662,7 @@
   "@discordRPCIconSettingTitle": {
     "description": "Title for the setting that controls which icon gets shown in the Discord RPC (Rich Presence) in case the local address is in use"
   },
-  "discordRPCIconSettingDescription": "Varaikoni, joka näytetään kun julkista osoitetta ei ole havaittu. (Koska discord ei voi ladata kuvia paikallisverkon osoitteesta)",
+  "discordRPCIconSettingDescription": "Varaikoni, joka näytetään, kun julkista osoitetta ei havaita. (Koska Discord ei voi ladata kuvia paikallisesta osoitteesta ja käyttäisi sen vuoksi omaa varaikoniaan)",
   "@discordRPCIconSettingDescription": {
     "description": "Description for the setting that controls which Icon the discord RPC displays as a Fallback in case no public address is detected (it doenst matter what connection is active)."
   },
