@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:clipboard/clipboard.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:finamp/services/censored_log.dart';
+import 'package:finamp/services/environment_metadata.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
@@ -59,6 +60,14 @@ class FinampLogsHelper {
 
   Future<String> getFullLogs() async {
     final fullLogsBuffer = StringBuffer();
+
+    // Get the Log instance and add its metadata at the top
+    final logMeta = await EnvironmentMetadata.create();
+
+    // Prepend this metadata to the logs
+    fullLogsBuffer.writeln(logMeta.pretty);
+    fullLogsBuffer.writeln("=== LOGS ===");
+
     if (_logFileWriter != null) {
       final basePath = (Platform.isAndroid || Platform.isIOS)
           ? await getApplicationDocumentsDirectory()
