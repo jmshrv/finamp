@@ -383,6 +383,23 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
         useHighContrastColors: fields[120] == null
             ? false
             : fields[120] as bool,
+        hasCompletedDownloadsFileOwnerMigration: fields[121] == null
+            ? false
+            : fields[121] as bool,
+        tileAdditionalInfoType: fields[122] == null
+            ? {
+                TabContentType.tracks: TileAdditionalInfoType.adaptive,
+                TabContentType.albums: TileAdditionalInfoType.adaptive,
+                TabContentType.artists: TileAdditionalInfoType.adaptive,
+                TabContentType.playlists: TileAdditionalInfoType.adaptive,
+                TabContentType.genres: TileAdditionalInfoType.adaptive,
+              }
+            : (fields[122] as Map)
+                  .cast<TabContentType, TileAdditionalInfoType>(),
+        rpcEnabled: fields[123] == null ? false : fields[123] as bool,
+        rpcIcon: fields[124] == null
+            ? DiscordRpcIcon.transparent
+            : fields[124] as DiscordRpcIcon,
       )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -397,7 +414,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(115)
+      ..writeByte(118)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -627,6 +644,14 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(120)
       ..write(obj.useHighContrastColors)
       ..writeByte(121)
+      ..write(obj.hasCompletedDownloadsFileOwnerMigration)
+      ..writeByte(122)
+      ..write(obj.tileAdditionalInfoType)
+      ..writeByte(123)
+      ..write(obj.rpcEnabled)
+      ..writeByte(124)
+      ..write(obj.rpcIcon);
+      ..writeByte(125)
       ..write(obj.autoExpandPlayerScreen);
   }
 
@@ -2712,6 +2737,117 @@ class SleepTimerTypeAdapter extends TypeAdapter<SleepTimerType> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is SleepTimerTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class TileAdditionalInfoTypeAdapter
+    extends TypeAdapter<TileAdditionalInfoType> {
+  @override
+  final typeId = 100;
+
+  @override
+  TileAdditionalInfoType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return TileAdditionalInfoType.adaptive;
+      case 1:
+        return TileAdditionalInfoType.dateAdded;
+      case 2:
+        return TileAdditionalInfoType.dateReleased;
+      case 3:
+        return TileAdditionalInfoType.duration;
+      case 4:
+        return TileAdditionalInfoType.playCount;
+      case 5:
+        return TileAdditionalInfoType.dateLastPlayed;
+      case 6:
+        return TileAdditionalInfoType.none;
+      default:
+        return TileAdditionalInfoType.adaptive;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, TileAdditionalInfoType obj) {
+    switch (obj) {
+      case TileAdditionalInfoType.adaptive:
+        writer.writeByte(0);
+      case TileAdditionalInfoType.dateAdded:
+        writer.writeByte(1);
+      case TileAdditionalInfoType.dateReleased:
+        writer.writeByte(2);
+      case TileAdditionalInfoType.duration:
+        writer.writeByte(3);
+      case TileAdditionalInfoType.playCount:
+        writer.writeByte(4);
+      case TileAdditionalInfoType.dateLastPlayed:
+        writer.writeByte(5);
+      case TileAdditionalInfoType.none:
+        writer.writeByte(6);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TileAdditionalInfoTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class DiscordRpcIconAdapter extends TypeAdapter<DiscordRpcIcon> {
+  @override
+  final typeId = 101;
+
+  @override
+  DiscordRpcIcon read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return DiscordRpcIcon.black;
+      case 1:
+        return DiscordRpcIcon.dark;
+      case 2:
+        return DiscordRpcIcon.light;
+      case 3:
+        return DiscordRpcIcon.transparent;
+      case 4:
+        return DiscordRpcIcon.transparentWhite;
+      case 5:
+        return DiscordRpcIcon.jellyfinTransparent;
+      default:
+        return DiscordRpcIcon.black;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, DiscordRpcIcon obj) {
+    switch (obj) {
+      case DiscordRpcIcon.black:
+        writer.writeByte(0);
+      case DiscordRpcIcon.dark:
+        writer.writeByte(1);
+      case DiscordRpcIcon.light:
+        writer.writeByte(2);
+      case DiscordRpcIcon.transparent:
+        writer.writeByte(3);
+      case DiscordRpcIcon.transparentWhite:
+        writer.writeByte(4);
+      case DiscordRpcIcon.jellyfinTransparent:
+        writer.writeByte(5);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DiscordRpcIconAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

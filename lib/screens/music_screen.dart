@@ -10,12 +10,12 @@ import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
 import '../components/MusicScreen/artist_type_selection_row.dart';
-import '../menus/music_screen_drawer.dart';
 import '../components/MusicScreen/music_screen_tab_view.dart';
 import '../components/MusicScreen/sort_by_menu_button.dart';
 import '../components/MusicScreen/sort_order_button.dart';
 import '../components/global_snackbar.dart';
 import '../components/now_playing_bar.dart';
+import '../menus/music_screen_drawer.dart';
 import '../models/finamp_models.dart';
 import '../services/audio_service_helper.dart';
 import '../services/finamp_settings_helper.dart';
@@ -207,7 +207,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen> with TickerProviderSt
 
     return PopScope(
       canPop: !isSearching,
-      onPopInvoked: (popped) {
+      onPopInvokedWithResult: (popped, result) {
         if (isSearching) {
           _stopSearching();
         }

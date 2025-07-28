@@ -14,6 +14,7 @@ import 'package:logging/logging.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../models/finamp_models.dart';
 import '../models/jellyfin_models.dart';
 import 'widget_bindings_observer_provider.dart';
 
@@ -49,11 +50,19 @@ class PlayerScreenTheme extends StatelessWidget {
           if (item == null) {
             return null;
           }
-          return ThemeInfo(item, largeThemeImage: true);
+          return ThemeInfo(item, largeThemeImage: true, useIsolate: false);
         }),
       ],
       child: Consumer(
         builder: (context, ref, child) {
+          // precache adjacent themes
+          final List<FinampQueueItem> precacheItems = GetIt.instance<QueueService>().peekQueue(next: 1, previous: 1);
+          for (final itemToPrecache in precacheItems) {
+            BaseItemDto? base = itemToPrecache.baseItem;
+            if (base != null) {
+              ref.listen(finampThemeProvider(ThemeInfo(base)), (_, __) {});
+            }
+          }
           var theme = Theme.of(context).copyWith(
             colorScheme: ref.watch(localThemeProvider),
             iconTheme: Theme.of(context).iconTheme.copyWith(color: ref.watch(localThemeProvider).primary),

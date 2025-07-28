@@ -283,6 +283,8 @@
   "@defaultOrder": {
     "description": "Default sorting order for playlists (server order)"
   },
+  "adaptive": "Adaptive",
+  "@adaptive": {},
   "formattedRelativeTime": "{type, select, just_now{just now} minutes{{value} min ago} hours{{value} h ago} yesterday{yesterday} days{{value, plural, =1{1 day ago} other{{value} days ago}}} other{value}}",
   "@formattedRelativeTime": {
     "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
@@ -422,6 +424,14 @@
   "@playButtonLabel": {},
   "shuffleButtonLabel": "Shuffle",
   "@shuffleButtonLabel": {},
+  "shuffleCountButton": "Shuffle ({count,plural,=1{{count} Track} other{{count} Tracks}})",
+  "@shuffleCountButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "playbackActionPagePlay": "Play",
   "@playbackActionPagePlay": {
     "description": "Label for the playback action page that contains all actions related to playing in order"
@@ -526,8 +536,8 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Log Out",
   "@logOut": {},
-  "downloadedTracksWillNotBeDeleted": "Downloaded tracks will not be deleted",
-  "@downloadedTracksWillNotBeDeleted": {},
+  "logoutButtonSubtitle": "Logging in to a different server will delete existing downloads",
+  "@logoutButtonSubtitle": {},
   "areYouSure": "Are you sure?",
   "@areYouSure": {},
   "enableTranscoding": "Enable Transcoding",
@@ -560,7 +570,7 @@
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "shuffleAllTrackCount": "Shuffle All Track Count",
   "@shuffleAllTrackCount": {},
-  "shuffleAllTrackCountSubtitle": "Amount of tracks to load when using the shuffle all tracks button.",
+  "shuffleAllTrackCountSubtitle": "Amount of tracks to load when using the shuffle all button on the tracks tab or genre screen.",
   "@shuffleAllTrackCountSubtitle": {},
   "viewType": "View Type",
   "@viewType": {},
@@ -570,6 +580,8 @@
   "@list": {},
   "grid": "Grid",
   "@grid": {},
+  "none": "None",
+  "@none": {},
   "customizationSettingsTitle": "Customization",
   "@customizationSettingsTitle": {
     "description": "Title for the customization settings screen"
@@ -2343,7 +2355,15 @@
   },
   "releaseDateFormatSubtitle": "Controls the format of all release dates shown in the app.",
   "@releaseDateFormatSubtitle": {
-    "description": "Title for the setting that controls the format release dates throughout the app."
+    "description": "Subtitle for the setting that controls the format release dates throughout the app."
+  },
+  "additionalBaseItemInfoTitle": "Additional Item Info",
+  "@additionalBaseItemInfoTitle": {
+    "description": "Title for the setting that controls the displayed additional item info."
+  },
+  "additionalBaseItemInfoSubtitle": "Controls which type of additional info is shown in item lists for each item type. When set to \"Adaptive\", the info is chosen automatically based on the current sorting or context.",
+  "@additionalBaseItemInfoSubtitle": {
+    "description": "Subtitle for the setting that controls the displayed additional item info."
   },
   "noReleaseDate": "No Release Date",
   "@noReleaseDate": {
@@ -2609,7 +2629,7 @@
   "@serverSharingMenuDetails": {
     "description": "Description text shown in the server sharing menu, below the description"
   },
-  "quickConnectAuthorizationMenuButtonTitle": "Quick Connect",
+  "quickConnectAuthorizationMenuButtonTitle": "Authorize Quick Connect",
   "@quickConnectAuthorizationMenuButtonTitle": {
     "description": "Title for the button in the drawer that opens the quick connect authorization menu"
   },
@@ -2661,5 +2681,45 @@
   "@useHighContrastColorsSubtitle": {
     "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
   },
-  "autoExpandPlayerScreen": "Open the Player directly after clicking on a song."
+  "autoExpandPlayerScreen": "Open the Player directly after clicking on a song.",
+  "discordRPCSettingTitle": "Discord RPC",
+  "@discordRPCSettingTitle": {
+    "description": "Title for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCSettingDescription": "Enable Discord Rich Presence to show what you are playing in your discord status. Wont connect to discord if Offline Mode is enabled.",
+  "@discordRPCSettingDescription": {
+    "description": "Description for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCIconSettingTitle": "RPC Fallback Icon",
+  "@discordRPCIconSettingTitle": {
+    "description": "Title for the setting that controls which icon gets shown in the Discord RPC (Rich Presence) in case the local address is in use"
+  },
+  "discordRPCIconSettingDescription": "Fallback Icon which gets displayed when no public address is detected. (Since discord cant load Images from the local address and would use their Fallback)",
+  "@discordRPCIconSettingDescription": {
+    "description": "Description for the setting that controls which Icon the discord RPC displays as a Fallback in case no public address is detected (it doenst matter what connection is active)."
+  },
+  "discordRPCIconDark": "Finamp - Dark",
+  "@discordRPCIconDark": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with the Dark-Theme Background"
+  },
+  "discordRPCIconBlack": "Finamp - Black",
+  "@discordRPCIconBlack": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Black Background"
+  },
+  "discordRPCIconLight": "Finamp - White",
+  "@discordRPCIconLight": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a White Background"
+  },
+  "discordRPCIconJFTransparent": "Jellyfin - Transparent",
+  "@discordRPCIconJFTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Jellyfin logo with a Transparent Background"
+  },
+  "discordRPCIconTransparent": "Finamp - Transparent",
+  "@discordRPCIconTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Transparent Background"
+  },
+  "discordRPCIconWhiteTransparent": "White Finamp - Transparent",
+  "@discordRPCIconWhiteTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
+  }
 }

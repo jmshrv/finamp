@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/services/discord_rpc.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/playon_service.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -371,6 +372,7 @@ class PlaybackHistoryService {
         // don't log start event to offline listen log helper, as only stop events are logged
       }
     }
+    await DiscordRpc.updateRPC();
   }
 
   /// Report track changes to the Jellyfin Server if the user is not offline.
@@ -440,6 +442,7 @@ class PlaybackHistoryService {
         _playbackHistoryServiceLogger.warning(e);
         await _offlineListenLogHelper.logOfflineListen(_currentTrack!.item.item);
       }
+      await DiscordRpc.updateRPC();
     }
   }
 
@@ -461,6 +464,7 @@ class PlaybackHistoryService {
       } catch (e) {
         _playbackHistoryServiceLogger.warning(e);
       }
+      await DiscordRpc.updateRPC();
     }
   }
 

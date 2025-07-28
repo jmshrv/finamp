@@ -28,6 +28,7 @@ const repairStepTrackingName = "repairStep";
 class DownloadsService {
   final _downloadsLogger = Logger("downloadsService");
   final _isar = GetIt.instance<Isar>();
+  final _finampUserHelper = GetIt.instance<FinampUserHelper>();
 
   final _anchor = DownloadStub.fromId(id: BaseItemId("Anchor"), type: DownloadItemType.anchor, name: null);
   late final downloadTaskQueue = IsarTaskQueue(this);
@@ -94,21 +95,6 @@ class DownloadsService {
     return isar.downloadItems.watchObject(stub.isarId, fireImmediately: true).map((event) => event?.state).distinct();
   });
 
-  late final infoForAnchorProvider = StreamProvider.family.autoDispose<bool, DownloadStub>((ref, stub) {
-    assert(stub.type != DownloadItemType.image && stub.type != DownloadItemType.anchor);
-    // Refresh on addDownload/removeDownload as well as state change
-    ref.watch(_anchorProvider);
-    return _isar.downloadItems.watchObjectLazy(stub.isarId, fireImmediately: true).map((event) {
-      return _isar.downloadItems
-              .where()
-              .isarIdEqualTo(_anchor.isarId)
-              .filter()
-              .info((q) => q.isarIdEqualTo(stub.isarId))
-              .countSync() >
-          0;
-    }).distinct();
-  });
-
   /// Provider for the download status of an item.  See [getStatus] for details.
   /// This provider relies on the fact that [_syncDownload] always re-inserts
   /// processed items into Isar to know when to re-check status.
@@ -134,47 +120,38 @@ class DownloadsService {
 
   /// Provider for user-downloaded items of a specific category.
   /// Used to show and group downloaded items on the downloads screen.
-  late final userDownloadedItemsProvider = StreamProvider.family
-      .autoDispose<List<DownloadStub>, DownloadsScreenCategory>((ref, category) {
-        final query = _isar.downloadItems
-            .where()
+  late final userDownloadedItemsProvider = FutureProvider.family
+      .autoDispose<List<DownloadStub>, DownloadsScreenCategory>((ref, category) async {
+        // Refresh lists when addDownload or removeDownload is called.
+        ref.watch(_anchorProvider);
+        final allItems = await _isar.downloadItems
             .filter()
             .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
             .sortByName()
-            .build()
-            .watch(fireImmediately: true);
+            .findAll();
 
-        return query.map((allItems) {
-          switch (category) {
-            case DownloadsScreenCategory.special:
-              return allItems.where((item) {
-                return (item.type == category.type) &&
-                    item.finampCollection?.type != FinampCollectionType.collectionWithLibraryFilter;
-              }).toList();
+        return allItems
+            .where(
+              (item) => switch (category) {
+                DownloadsScreenCategory.special =>
+                  item.type == category.type &&
+                      item.finampCollection?.type != FinampCollectionType.collectionWithLibraryFilter,
 
-            case DownloadsScreenCategory.artists:
-              return allItems.where((item) {
-                return (item.type == category.type &&
-                        (category.baseItemType == null || item.baseItemType == category.baseItemType)) ||
-                    (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
-                        BaseItemDtoType.fromItem(item.finampCollection!.item!) == BaseItemDtoType.artist);
-              }).toList();
+                DownloadsScreenCategory.artists =>
+                  (item.type == category.type && item.baseItemType == category.baseItemType) ||
+                      (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
+                          BaseItemDtoType.fromItem(item.finampCollection!.item!) == BaseItemDtoType.artist),
 
-            case DownloadsScreenCategory.genres:
-              return allItems.where((item) {
-                return (item.type == category.type &&
-                        (category.baseItemType == null || item.baseItemType == category.baseItemType)) ||
-                    (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
-                        BaseItemDtoType.fromItem(item.finampCollection!.item!) == BaseItemDtoType.genre);
-              }).toList();
-
-            default:
-              return allItems.where((item) {
-                return item.type == category.type &&
-                    (category.baseItemType == null || item.baseItemType == category.baseItemType);
-              }).toList();
-          }
-        });
+                DownloadsScreenCategory.genres =>
+                  (item.type == category.type && item.baseItemType == category.baseItemType) ||
+                      (item.finampCollection?.type == FinampCollectionType.collectionWithLibraryFilter &&
+                          BaseItemDtoType.fromItem(item.finampCollection!.item!) == BaseItemDtoType.genre),
+                _ =>
+                  item.type == category.type &&
+                      (category.baseItemType == null || item.baseItemType == category.baseItemType),
+              },
+            )
+            .toList();
       });
 
   /// Constructs the service.  startQueues should also be called to complete initialization.
@@ -385,23 +362,22 @@ class DownloadsService {
     await downloadTaskQueue.initializeQueue();
 
     // Wait a few seconds to not slow initial library load
-    unawaited(
-      Future.delayed(const Duration(seconds: 10), () async {
-        try {
-          await syncBuffer.executeSyncs();
-          await deleteBuffer.executeDeletes();
-          await downloadTaskQueue.executeDownloads();
-        } catch (e) {
-          _downloadsLogger.severe("Error $e while restarting download/delete queues on startup.");
-        }
-      }),
-    );
+    _finampUserHelper.runUserHook(() async {
+      await Future<void>.delayed(const Duration(seconds: 10));
+      try {
+        await syncBuffer.executeSyncs();
+        await deleteBuffer.executeDeletes();
+        await downloadTaskQueue.executeDownloads();
+      } catch (e) {
+        _downloadsLogger.severe("Error $e while restarting download/delete queues on startup.");
+      }
+    });
   }
 
   /// Attempt to resume syncing/downloading.  Called when leaving offline mode,
   /// coming out of background, and switching to downloads screen
   void restartDownloads() {
-    if (!FinampSettingsHelper.finampSettings.isOffline) {
+    if (!FinampSettingsHelper.finampSettings.isOffline && _finampUserHelper.currentUser != null) {
       unawaited(
         Future.sync(() async {
           try {
@@ -460,10 +436,10 @@ class DownloadsService {
     _isar.writeTxnSync(() {
       DownloadItem canonItem = _isar.downloadItems.getSync(stub.isarId) ?? stub.asItem(transcodeProfile);
       canonItem.userTranscodingProfile = transcodeProfile;
-      _isar.downloadItems.putSync(canonItem);
+      _isar.downloadItems.putSync(canonItem, saveLinks: false);
       var anchorItem = _anchor.asItem(null);
       // This may be the first download ever, so the anchor might not be present
-      _isar.downloadItems.putSync(anchorItem);
+      _isar.downloadItems.putSync(anchorItem, saveLinks: false);
       anchorItem.requires.updateSync(link: [canonItem]);
       // Update download location id/transcode profile for all our children
       syncItemDownloadSettings(canonItem);
@@ -485,12 +461,12 @@ class DownloadsService {
         return;
       }
       // This is required to trigger status recalculation
-      _isar.downloadItems.putSync(anchorItem);
+      _isar.downloadItems.putSync(anchorItem, saveLinks: false);
       deleteBuffer.addAll([stub.isarId]);
       // Actual item is not required for updating links
       anchorItem.requires.updateSync(unlink: [canonItem!]);
       canonItem!.userTranscodingProfile = null;
-      _isar.downloadItems.putSync(canonItem!);
+      _isar.downloadItems.putSync(canonItem!, saveLinks: false);
     });
     if (canonItem == null) {
       return;
@@ -710,6 +686,26 @@ class DownloadsService {
           await deleteBuffer.deleteDownload(item);
       }
     }
+    // Clean up missing download locations.  Download location delete verification should theoretically prevent
+    // this from being needed outside dev builds.
+    _isar.writeTxnSync(() {
+      var userDownloadedItems = _isar.downloadItems.filter().userTranscodingProfileIsNotNull().findAllSync();
+      for (var item in userDownloadedItems) {
+        var locationId = item.userTranscodingProfile!.downloadLocationId;
+        if (!FinampSettingsHelper.finampSettings.downloadLocationsMap.containsKey(locationId)) {
+          _downloadsLogger.severe(
+            "Could not find download location $locationId for ${item.name}, resetting to internal directory",
+          );
+          item.userTranscodingProfile = DownloadProfile(
+            downloadLocationId: FinampSettingsHelper.finampSettings.internalTrackDir.id,
+            transcodeCodec: item.userTranscodingProfile!.codec,
+            bitrate: item.userTranscodingProfile!.stereoBitrate,
+          );
+          _isar.downloadItems.putSync(item, saveLinks: false);
+        }
+      }
+    });
+
     _isar.writeTxnSync(() {
       var itemsWithChildren = _isar.downloadItems
           .where()
@@ -774,7 +770,7 @@ class DownloadsService {
         var canonItem = _isar.downloadItems.getSync(id);
         if (canonItem != null && idsWithLyrics[id] != null) {
           final lyricsItem = DownloadedLyrics.fromItem(isarId: canonItem.isarId, item: idsWithLyrics[id]!);
-          _isar.downloadedLyrics.putSync(lyricsItem);
+          _isar.downloadedLyrics.putSync(lyricsItem, saveLinks: false);
         }
       }
     });
@@ -852,7 +848,7 @@ class DownloadsService {
           _isar.writeTxnSync(() {
             var canonItem = _isar.downloadItems.getSync(item.isarId);
             canonItem!.fileTranscodingProfile!.downloadLocationId = location.id;
-            _isar.downloadItems.putSync(canonItem);
+            _isar.downloadItems.putSync(canonItem, saveLinks: false);
           });
           _downloadsLogger.info("${item.name} found in unexpected location ${location.name}");
           return true;
@@ -876,7 +872,7 @@ class DownloadsService {
   void updateItemState(DownloadItem item, DownloadItemState newState, {bool alwaysPut = false}) {
     if (item.state == newState) {
       if (alwaysPut) {
-        _isar.downloadItems.putSync(item);
+        _isar.downloadItems.putSync(item, saveLinks: false);
       }
     } else {
       if (item.type.hasFiles) {
@@ -893,7 +889,7 @@ class DownloadsService {
         }
       }
       item.state = newState;
-      _isar.downloadItems.putSync(item);
+      _isar.downloadItems.putSync(item, saveLinks: false);
       List<DownloadItem> parents = _isar.downloadItems
           .where()
           .typeNotEqualTo(DownloadItemType.track)
@@ -1005,7 +1001,7 @@ class DownloadsService {
         }
         syncBuffer.addAll([item.isarId], [], null);
       } else {
-        _isar.downloadItems.putSync(item);
+        _isar.downloadItems.putSync(item, saveLinks: false);
       }
       var children = item.requires.filter().findAllSync();
       if (syncImages) {
@@ -1135,7 +1131,7 @@ class DownloadsService {
     }
 
     _isar.writeTxnSync(() {
-      _isar.downloadItems.putAllSync(nodes);
+      _isar.downloadItems.putAllSync(nodes, saveLinks: false);
     });
   }
 
@@ -1193,7 +1189,7 @@ class DownloadsService {
     }
 
     _isar.writeTxnSync(() {
-      _isar.downloadItems.putAllSync(nodes);
+      _isar.downloadItems.putAllSync(nodes, saveLinks: false);
       for (var node in nodes) {
         if (node.baseItem?.blurHash != null) {
           var image = _isar.downloadItems.getSync(
@@ -1250,12 +1246,12 @@ class DownloadsService {
       }
 
       _isar.writeTxnSync(() {
-        _isar.downloadItems.putSync(isarItem);
+        _isar.downloadItems.putSync(isarItem, saveLinks: false);
         var anchorItem = _anchor.asItem(null);
-        _isar.downloadItems.putSync(anchorItem);
+        _isar.downloadItems.putSync(anchorItem, saveLinks: false);
         anchorItem.requires.updateSync(link: [isarItem]);
         var existing = _isar.downloadItems.getAllSync(required.map((e) => e.isarId).toList());
-        _isar.downloadItems.putAllSync(required.toSet().difference(existing.toSet()).toList());
+        _isar.downloadItems.putAllSync(required.toSet().difference(existing.toSet()).toList(), saveLinks: false);
         isarItem.requires.addAll(required);
         isarItem.requires.saveSync();
         isarItem.info.addAll(required);
@@ -1457,7 +1453,7 @@ class DownloadsService {
       favoriteIds = _getFavoriteIds() ?? [];
     }
     if (fullyDownloaded) {
-      final libraryId = GetIt.instance<FinampUserHelper>().currentUser?.currentViewId;
+      final libraryId = _finampUserHelper.currentUser?.currentViewId;
       libraryFilteredIds = _isar.downloadItems
           .where()
           .typeEqualTo(DownloadItemType.finampCollection)
@@ -1607,15 +1603,16 @@ class DownloadsService {
 
   /// Returns a stream of the list of downloads of a given state. Used to display
   /// active/failed/enqueued downloads on the active downloads screen.
-  Stream<List<DownloadStub>> getDownloadList(DownloadItemState? state) {
+  Stream<List<DownloadStub>> getDownloadList(DownloadItemState state) {
     return _isar.downloadItems
         .where()
+        .stateEqualTo(state)
+        .filter()
         .optional(
           state != DownloadItemState.syncFailed,
           (q) => q.typeEqualTo(DownloadItemType.track).or().typeEqualTo(DownloadItemType.image),
         )
-        .filter()
-        .optional(state != null, (q) => q.stateEqualTo(state!))
+        // Watching queries is expensive and seems to have a memory link.  Avoid using if possible.
         .watch(fireImmediately: true);
   }
 
@@ -1628,7 +1625,7 @@ class DownloadsService {
     // Pass the download location map, as settings cannot be accessed in background
     var map = FinampSettingsHelper.finampSettings.downloadLocationsMap;
     return (dynamic _) async {
-      var canonItem = await GetIt.instance<Isar>().downloadItems.get(isarId);
+      var canonItem = GetIt.instance<Isar>().downloadItems.getSync(isarId);
       if (canonItem == null) return 0;
       Set<DownloadItem> info = {};
       Set<DownloadItem> required = {};

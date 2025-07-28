@@ -10,6 +10,7 @@ import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_user_certificates_android/flutter_user_certificates_android.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/io_client.dart' as http;
 import 'package:isar/isar.dart';
@@ -59,6 +60,11 @@ class JellyfinApiHelper {
   static Future<void> _processRequestsBackground((SendPort, RootIsolateToken) input) async {
     BackgroundIsolateBinaryMessenger.ensureInitialized(input.$2);
     ReceivePort requestPort = ReceivePort();
+
+    // Extend the default security context to trust Android user certificates.
+    // This is a workaround for <https://github.com/dart-lang/sdk/issues/50435>.
+    await FlutterUserCertificatesAndroid().trustAndroidUserCertificates(SecurityContext.defaultContext);
+
     input.$1.send(requestPort.sendPort);
     final dir = (Platform.isAndroid || Platform.isIOS)
         ? await getApplicationDocumentsDirectory()
@@ -67,6 +73,8 @@ class JellyfinApiHelper {
       [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema],
       directory: dir.path,
       name: isarDatabaseName,
+      compactOnLaunch: CompactCondition(minBytes: 5 * 1024 * 1024),
+      relaxedDurability: true,
     );
     GetIt.instance.registerSingleton(isar);
     GetIt.instance.registerSingleton(FinampUserHelper());
@@ -99,7 +107,7 @@ class JellyfinApiHelper {
     if (output is T) {
       return output;
     }
-    GlobalSnackbar.error(output);
+    _jellyfinApiHelperLogger.severe("Error in background isolate:", output);
     throw output as Object;
   }
 
@@ -212,15 +220,7 @@ class JellyfinApiHelper {
     int? startIndex,
     int? limit,
   }) async {
-    final currentUserId = _finampUserHelper.currentUser?.id;
-    if (currentUserId == null) {
-      // When logging out, this request causes errors since currentUser is
-      // required sometimes. We just return an fake api response that is empty,
-      // since this error usually happens because the listeners on MusicScreenTabView
-      // update milliseconds before the page is popped.
-      // This shouldn't happen in normal use.
-      return QueryResult_BaseItemDto(totalRecordCount: 0, startIndex: 0, items: []);
-    }
+    final currentUserId = _finampUserHelper.currentUser!.id;
     assert(_verifyCallable());
     assert(itemIds == null || parentItem == null);
     fields ??=
@@ -619,7 +619,7 @@ class JellyfinApiHelper {
     var response = await jellyfinApi.getInstantMix(
       id: parentItem!.id,
       userId: _finampUserHelper.currentUser!.id,
-      limit: 200,
+      limit: FinampSettingsHelper.finampSettings.trackShuffleItemCount,
     );
 
     return (QueryResult_BaseItemDto.fromJson(response as Map<String, dynamic>).items);
@@ -1002,12 +1002,16 @@ class JellyfinApiHelper {
     int? maxHeight,
     int? quality = 90,
     String? format = "jpg",
+    bool forcePublicAddress = false,
   }) {
     if (item.imageId == null) {
       return null;
     }
 
-    final parsedBaseUrl = Uri.parse(_finampUserHelper.currentUser!.baseURL);
+    final parsedBaseUrl = forcePublicAddress
+        ? Uri.parse(_finampUserHelper.currentUser!.publicAddress)
+        : Uri.parse(_finampUserHelper.currentUser!.baseURL);
+
     List<String> builtPath = List<String>.from(parsedBaseUrl.pathSegments);
     builtPath.addAll(["Items", item.imageId!, "Images", "Primary"]);
     return Uri(

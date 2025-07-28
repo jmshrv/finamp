@@ -62,7 +62,13 @@ class _FinampSettingsGenerator extends Generator {
             settersCode +=
                 '''static void set$paramName($keyType ${mapAnnotation.keyName}, $valueType ${mapAnnotation.valueName}){
           FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-          finampSettingsTemp.${property.displayName}[${mapAnnotation.keyName}]=${mapAnnotation.valueName};
+          try {
+            finampSettingsTemp.${property.displayName}[${mapAnnotation.keyName}]=${mapAnnotation.valueName};
+          } on UnsupportedError{
+            // We were using the default const map directly.  Clone to allow modifications.
+            finampSettingsTemp.${property.displayName}=Map.from(finampSettingsTemp.${property.displayName});
+            finampSettingsTemp.${property.displayName}[${mapAnnotation.keyName}]=${mapAnnotation.valueName};
+          }
           Hive.box<FinampSettings>("FinampSettings").put("FinampSettings", finampSettingsTemp);
         }
         ''';
@@ -78,6 +84,10 @@ class _FinampSettingsGenerator extends Generator {
         }
 
         if (property.isGetter) {
+          assert(
+            !property.returnType.isDartCoreMap || mapAnnotationObj != null,
+            "Maps must have either a SettingsHelperMap or SettingsHelperIgnore annotation.",
+          );
           if (mapAnnotationObj != null) {
             final mapAnnotation = SettingsHelperMap(
               mapAnnotationObj.getField("keyName")!.toStringValue()!,

@@ -63,6 +63,7 @@ class FinampSettingsHelper {
     finampSettingsTemp.showStopButtonOnMediaNotification = DefaultSettings.showStopButtonOnMediaNotification;
     finampSettingsTemp.showSeekControlsOnMediaNotification = DefaultSettings.showSeekControlsOnMediaNotification;
     finampSettingsTemp.oneLineMarqueeTextButton = DefaultSettings.oneLineMarqueeTextButton;
+    finampSettingsTemp.tileAdditionalInfoType = DefaultSettings.tileAdditionalInfoType;
 
     Hive.box<FinampSettings>("FinampSettings").put("FinampSettings", finampSettingsTemp);
   }
@@ -192,6 +193,8 @@ class FinampSettingsHelper {
     FinampSetters.setAudioFadeInDuration(DefaultSettings.audioFadeInDuration);
     FinampSetters.setAudioFadeOutDuration(DefaultSettings.audioFadeOutDuration);
     FinampSetters.setPlayOnReconnectionDelay(DefaultSettings.playOnReconnectionDelay);
+    FinampSetters.setRpcEnabled(DefaultSettings.rpcEnabled);
+    FinampSetters.setRpcIcon(DefaultSettings.rpcIcon);
   }
 
   static void resetNormalizationSettings() {
@@ -242,7 +245,7 @@ class FinampSettingsHelper {
     resetAudioServiceSettings();
     resetNormalizationSettings();
     resetInteractionsSettings();
-
+    resetPlaybackReportingSettings();
     resetLayoutSettings();
     resetCustomizationSettings();
     resetPlayerScreenSettings();

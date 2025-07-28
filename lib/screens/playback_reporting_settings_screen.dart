@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:finamp/components/PlaybackReportingSettingsScreen/discord_rpc_icon_selector.dart';
+import 'package:finamp/components/PlaybackReportingSettingsScreen/enabled_discord_rpc.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
@@ -18,13 +22,15 @@ class PlaybackReportingSettingsScreen extends StatefulWidget {
 class _PlaybackReportingSettingsScreenState extends State<PlaybackReportingSettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    bool hasRpcSupport = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.playbackReportingSettingsTitle),
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, () {
             setState(() {
-              FinampSettingsHelper.resetNormalizationSettings();
+              FinampSettingsHelper.resetPlaybackReportingSettings();
             });
           }),
         ],
@@ -36,6 +42,9 @@ class _PlaybackReportingSettingsScreenState extends State<PlaybackReportingSetti
           const ReportQueueToServerToggle(),
           const PlayOnStaleDelayEditor(),
           const PlayOnReconnectionDelayEditor(),
+          if (hasRpcSupport) const Divider(),
+          if (hasRpcSupport) const EnabledDiscordRpc(),
+          if (hasRpcSupport) const DiscordRpcIconSelector(),
         ],
       ),
     );

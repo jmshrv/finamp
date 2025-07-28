@@ -39,6 +39,33 @@
   </screenshots>
   <launchable type="desktop-id">com.unicornsonlsd.finamp.desktop</launchable>
   <releases>
+    <release version="0.9.19-beta" date="2025-07-28">
+      <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.19-beta</url>
+      <description>
+        <p>
+          New Features
+        </p>
+        <ul>
+          <li>"Unreachable" mode for auto-offline</li>
+          <li>Share server address within local network</li>
+          <li>Authorize Quick Connect requests</li>
+          <li>Discord Rich Presence support</li>
+          <li>Many other improvements!</li>
+        </ul>
+        <p>
+          Bug Fixes
+        </p>
+        <ul>
+          <li>Fixed crashes during large downloads</li>
+          <li>Fix playback pausing when cancelling a sleep timer</li>
+          <li>Fixed issues with stopping (app staying active, notification being still shown)</li>
+          <li>Fixed lyrics not scrolling automatically when animations are disabled</li>
+        </ul>
+        <p>
+          <em>Thank you for using Finamp!</em>
+        </p>
+      </description>
+    </release>
     <release version="0.9.18-beta" date="2025-06-14">
       <url type="details">https://github.com/jmshrv/finamp/releases/tag/0.9.18-beta</url>
       <description>
