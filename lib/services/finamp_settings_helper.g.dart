@@ -1030,11 +1030,6 @@ extension FinampSetters on FinampSettingsHelper {
     ).put("FinampSettings", finampSettingsTemp);
   }
 
-
-  static void setAutoExpandPlayerScreen(bool newAutoExpandPlayerScreen) {
-    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.autoExpandPlayerScreen = newAutoExpandPlayerScreen;
-
   static void setHasCompletedDownloadsFileOwnerMigration(
     bool newHasCompletedDownloadsFileOwnerMigration,
   ) {
@@ -1078,6 +1073,14 @@ extension FinampSetters on FinampSettingsHelper {
   static void setRpcIcon(DiscordRpcIcon newRpcIcon) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.rpcIcon = newRpcIcon;
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setAutoExpandPlayerScreen(bool newAutoExpandPlayerScreen) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.autoExpandPlayerScreen = newAutoExpandPlayerScreen;
     Hive.box<FinampSettings>(
       "FinampSettings",
     ).put("FinampSettings", finampSettingsTemp);
@@ -1450,8 +1453,6 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       );
   ProviderListenable<bool> get useHighContrastColors => finampSettingsProvider
       .select((value) => value.requireValue.useHighContrastColors);
-  ProviderListenable<bool> get autoExpandPlayerScreen => finampSettingsProvider
-      .select((value) => value.requireValue.autoExpandPlayerScreen);
   ProviderListenable<bool> get hasCompletedDownloadsFileOwnerMigration =>
       finampSettingsProvider.select(
         (value) => value.requireValue.hasCompletedDownloadsFileOwnerMigration,
@@ -1465,6 +1466,8 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       finampSettingsProvider.select((value) => value.requireValue.rpcEnabled);
   ProviderListenable<DiscordRpcIcon> get rpcIcon =>
       finampSettingsProvider.select((value) => value.requireValue.rpcIcon);
+  ProviderListenable<bool> get autoExpandPlayerScreen => finampSettingsProvider
+      .select((value) => value.requireValue.autoExpandPlayerScreen);
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider.select(
         (value) => value.requireValue.downloadTranscodingProfile,

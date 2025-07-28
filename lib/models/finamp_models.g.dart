@@ -406,15 +406,15 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..defaultDownloadLocation = fields[58] as String?
       ..lastUsedDownloadLocationId = fields[85] as String?
       ..sleepTimer = fields[116] as SleepTimer?
-      ..autoExpandPlayerScreen = fields[121] == null
+      ..autoExpandPlayerScreen = fields[125] == null
           ? false
-          : fields[121] as bool;
+          : fields[125] as bool;
   }
 
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(118)
+      ..writeByte(119)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -650,7 +650,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(123)
       ..write(obj.rpcEnabled)
       ..writeByte(124)
-      ..write(obj.rpcIcon);
+      ..write(obj.rpcIcon)
       ..writeByte(125)
       ..write(obj.autoExpandPlayerScreen);
   }
