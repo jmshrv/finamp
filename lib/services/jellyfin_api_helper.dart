@@ -471,15 +471,16 @@ class JellyfinApiHelper {
       return null;
     }
 
-    var response = await jellyfinApi.getPublicServerInfo();
+    var request = jellyfinApi.getPublicServerInfo();
     if (timeout != null) {
-      response = response.timeout(
+      request = request.timeout(
         timeout,
         onTimeout: () {
           throw TimeoutException("Failed to fetch server info within the timeout period.");
         },
       );
     }
+    var response = await request;
 
     PublicSystemInfoResult publicSystemInfoResult = PublicSystemInfoResult.fromJson(response as Map<String, dynamic>);
 

@@ -34,12 +34,10 @@ Future<void> setupLogging() async {
   final startupLogger = Logger("Startup");
 
   // Create and store the Log instance for later use
-  final log = await EnvironmentMetadata.create(
+  final metadata = await EnvironmentMetadata.create(
     fetchServerInfo:
         false, // we can't fetch server info yet, because the user helper isn't set up yet. it's also faster to skip this here
   );
-  startupLogger.info("=== METADATA ===");
-  startupLogger.info(log.appInfo.pretty);
-  startupLogger.info(log.deviceInfo.pretty);
+  startupLogger.info(metadata.pretty);
   startupLogger.info("=== LOGS ===");
 }

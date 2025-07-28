@@ -65,15 +65,7 @@ class FinampLogsHelper {
     final logMeta = await EnvironmentMetadata.create();
 
     // Prepend this metadata to the logs
-    fullLogsBuffer.writeln(jsonEncode(logMeta.toJson()));
-    fullLogsBuffer.writeln("=== METADATA ===");
-    fullLogsBuffer.writeln("Device Info: ${logMeta.deviceInfo.pretty}");
-    fullLogsBuffer.writeln("App Info: ${logMeta.appInfo.pretty}");
-    if (logMeta.serverInfo != null) {
-      fullLogsBuffer.writeln("Server Info: ${logMeta.serverInfo!.pretty}");
-    } else {
-      fullLogsBuffer.writeln("Server Info: Not available");
-    }
+    fullLogsBuffer.writeln(logMeta.pretty);
     fullLogsBuffer.writeln("=== LOGS ===");
 
     if (_logFileWriter != null) {

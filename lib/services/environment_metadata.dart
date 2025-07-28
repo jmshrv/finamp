@@ -221,4 +221,10 @@ class EnvironmentMetadata {
   Map<String, dynamic> toJson() {
     return _$EnvironmentMetadataToJson(this);
   }
+
+  String get pretty =>
+      "=== METADATA ===\n"
+      "Device Info: ${deviceInfo.pretty}\n"
+      "App Info: ${appInfo.pretty}\n"
+      "Server Info: ${serverInfo?.pretty ?? "Not available"}";
 }
