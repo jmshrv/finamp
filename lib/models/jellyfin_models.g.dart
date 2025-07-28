@@ -2711,19 +2711,22 @@ class LyricLineCueAdapter extends TypeAdapter<LyricLineCue> {
     return LyricLineCue(
       position: (fields[0] as num).toInt(),
       start: (fields[1] as num).toInt(),
-      end: (fields[2] as num?)?.toInt(),
+      endPosition: (fields[2] as num?)?.toInt(),
+      end: (fields[3] as num?)?.toInt(),
     );
   }
 
   @override
   void write(BinaryWriter writer, LyricLineCue obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.position)
       ..writeByte(1)
       ..write(obj.start)
       ..writeByte(2)
+      ..write(obj.endPosition)
+      ..writeByte(3)
       ..write(obj.end);
   }
 
@@ -4766,6 +4769,7 @@ Map<String, dynamic> _$LyricDtoToJson(LyricDto instance) => <String, dynamic>{
 LyricLineCue _$LyricLineCueFromJson(Map json) => LyricLineCue(
   position: (json['Position'] as num).toInt(),
   start: (json['Start'] as num).toInt(),
+  endPosition: (json['EndPosition'] as num?)?.toInt(),
   end: (json['End'] as num?)?.toInt(),
 );
 
@@ -4773,5 +4777,6 @@ Map<String, dynamic> _$LyricLineCueToJson(LyricLineCue instance) =>
     <String, dynamic>{
       'Position': instance.position,
       'Start': instance.start,
+      'EndPosition': instance.endPosition,
       'End': instance.end,
     };

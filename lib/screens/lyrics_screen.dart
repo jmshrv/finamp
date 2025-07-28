@@ -451,7 +451,7 @@ class _LyricLine extends ConsumerWidget {
           builder: (context, constraints) {
             // Calculate available width for lyrics (accounting for timestamp if shown)
             final availableWidth = constraints.maxWidth - (showTimestamp ? 60 : 0);
-            
+
             final linePainter = TextPainter(
               text: textSpan,
               textAlign: lyricsAlignmentToTextAlign(finampSettings?.lyricsAlignment ?? LyricsAlignment.start),
@@ -609,8 +609,8 @@ class LyricsLinePainter extends ChangeNotifier implements CustomPainter {
         }
       }
 
-      // Determine the end position for this cue
-      final endPosition = nextCue?.position ?? text.length;
+      // Determine the end position for this cue using endPosition if available, otherwise fallback to next cue's position
+      final endPosition = cue.endPosition ?? nextCue?.position ?? text.length;
       final cueText = text.substring(cue.position, math.min(endPosition, text.length));
 
       if (cueText.isNotEmpty) {

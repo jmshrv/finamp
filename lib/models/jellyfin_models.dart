@@ -3728,9 +3728,9 @@ class LyricDto {
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 49)
 class LyricLineCue {
-  LyricLineCue({required this.position, required this.start, this.end});
+  LyricLineCue({required this.position, required this.start, this.endPosition, this.end});
 
-  /// Gets the character index of the lyric.
+  /// Gets the character index of the start of the lyric.
   @HiveField(0)
   int position;
 
@@ -3738,8 +3738,12 @@ class LyricLineCue {
   @HiveField(1)
   int start;
 
-  /// Gets the end timestamp the lyric is synced to in ticks.
+  /// Gets the character index of the end of the lyric.
   @HiveField(2)
+  int? endPosition;
+
+  /// Gets the end timestamp the lyric is synced to in ticks.
+  @HiveField(3)
   int? end;
 
   int get startMicros => start ~/ 10;
