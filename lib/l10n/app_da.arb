@@ -143,8 +143,6 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Log af",
   "@logOut": {},
-  "downloadedTracksWillNotBeDeleted": "Overførte sange vil ikke blive slettet",
-  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Er du sikker?",
   "@areYouSure": {},
   "enableTranscoding": "Aktivér omkodning",

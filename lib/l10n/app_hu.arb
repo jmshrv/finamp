@@ -145,8 +145,6 @@
       }
     }
   },
-  "downloadedTracksWillNotBeDeleted": "A letöltött dalok nem törlődnek",
-  "@downloadedTracksWillNotBeDeleted": {},
   "downloadLocations": "Letöltési hely",
   "@downloadLocations": {},
   "downloadsQueued": "Letöltések hozzáadva.",

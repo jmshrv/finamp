@@ -245,8 +245,6 @@
   "@layoutAndTheme": {},
   "logOut": "خروج",
   "@logOut": {},
-  "downloadedTracksWillNotBeDeleted": "قطعه‌های بارگیری شده پاک نخواهند شد",
-  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "آیا مطمئن هستید؟",
   "@areYouSure": {},
   "transcoding": "رمزگردانی (transcoding)",

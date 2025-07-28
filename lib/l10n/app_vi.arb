@@ -181,8 +181,6 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Đăng xuất",
   "@logOut": {},
-  "downloadedTracksWillNotBeDeleted": "Các bài hát được tải xuống sẽ không bị xoá",
-  "@downloadedTracksWillNotBeDeleted": {},
   "enableTranscoding": "Bật chuyển đổi",
   "@enableTranscoding": {},
   "enableTranscodingSubtitle": "Chuyển đổi các luồng truyền phát nhạc trên phía máy chủ.",

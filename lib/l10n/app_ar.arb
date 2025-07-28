@@ -329,8 +329,6 @@
   "@password": {},
   "selectDirectory": "إختار المجلد",
   "@selectDirectory": {},
-  "downloadedTracksWillNotBeDeleted": "لن تزيل لأغني التي تم تنزيله",
-  "@downloadedTracksWillNotBeDeleted": {},
   "downloadsDeleted": "تم إزالة التنزيلات",
   "@downloadsDeleted": {},
   "failedToGetTrackFromDownloadId": "فشل ان يجد الاغنية من رقم التنزيل",

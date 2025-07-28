@@ -331,8 +331,6 @@
   "@addButtonLabel": {},
   "applicationLegalese": "Лиценз Mozilla Public License 2.0. Програмният код е достъпен на:\n\ngithub.com/jmshrv/finamp",
   "@applicationLegalese": {},
-  "downloadedTracksWillNotBeDeleted": "Изтеглените песни няма да бъдат изтрити",
-  "@downloadedTracksWillNotBeDeleted": {},
   "trackCount": "{count,plural,=1{{count} Песен} other{{count} Песни}}",
   "@trackCount": {
     "placeholders": {

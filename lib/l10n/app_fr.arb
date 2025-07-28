@@ -214,8 +214,6 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Déconnexion",
   "@logOut": {},
-  "downloadedTracksWillNotBeDeleted": "Les chansons téléchargées ne seront pas supprimées",
-  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Êtes-vous sûr ?",
   "@areYouSure": {},
   "enableTranscoding": "Activer le transcodage",
@@ -246,7 +244,7 @@
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "shuffleAllTrackCount": "Nombre de titres à mélanger",
   "@shuffleAllTrackCount": {},
-  "shuffleAllTrackCountSubtitle": "Nombre de chansons à charger lors de l'utilisation du bouton 'Tout mélanger'.",
+  "shuffleAllTrackCountSubtitle": "Nombre de pistes à charger lors de l'utilisation du bouton de lecture aléatoire de l'onglet Pistes ou de l'écran de genre.",
   "@shuffleAllTrackCountSubtitle": {},
   "viewType": "Disposition de l'affichage",
   "@viewType": {},
@@ -310,7 +308,7 @@
   "@yesButtonLabel": {},
   "noButtonLabel": "Non",
   "@noButtonLabel": {},
-  "setSleepTimer": "Pause après la lecture",
+  "setSleepTimer": "Mettre la lecture en pause après",
   "@setSleepTimer": {},
   "minutes": "Minutes",
   "@minutes": {},
@@ -430,7 +428,7 @@
   "@noMusicLibrariesBody": {},
   "refresh": "Rafraîchir",
   "@refresh": {},
-  "swipeInsertQueueNext": "Lire la chanson balayée à la suite",
+  "swipeInsertQueueNext": "Lire la piste balayée suivante",
   "@swipeInsertQueueNext": {},
   "swipeInsertQueueNextSubtitle": "Placer une chanson comme prochain élément de la file d'attente lorsqu'elle est balayée dans la liste des chansons, au lieu de l'ajouter à la fin de la liste.",
   "@swipeInsertQueueNextSubtitle": {},
@@ -585,7 +583,7 @@
   "@timeFractionTooltip": {
     "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
   },
-  "sleepTimerRemainingTime": "Dors dans {time, plural, =1{<1 minute} other{{time} minutes}}",
+  "sleepTimerRemainingTime": "Mise en Veille dans {time,plural,=1{<1 minute} autre{{time} minutes}}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -826,7 +824,7 @@
   "@volumeNormalizationSettingsTitle": {
     "description": "Title for the replay gain settings screen"
   },
-  "queueRestoreButtonLabel": "Restorer",
+  "queueRestoreButtonLabel": "Restaurer cette file d'attente",
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
@@ -875,7 +873,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "playingFromType": "Joué à partir {source, select, album{d'un Album} playlist{d'une Playlist} trackMix{d'une Track Mix} artistMix{d'un Artist Mix} albumMix{d'un Album Mix} genreMix{d'un Genre Mix} favorites{vos favorites} allTracks{toutes vos musiques} filteredList{vos musiques} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album in Next Up} nextUpPlaylist{Playlist in Next Up} nextUpArtist{Artist in Next Up} remoteClient{d'un autre appareil} other{}}",
+  "playingFromType": "Lecture depuis {source, select, album{Album} playlist{Playlist} trackMix{Track Mix} artistMix{Artist Mix} albumMix{Album Mix} genreMix{Genre Mix} favorites{Favorites} allTracks{All Tracks} filteredList{Tracks} genre{Genre} artist{Artist} track{Track} nextUpAlbum{Album dans la liste suivante} nextUpPlaylist{Playlist dans la liste suivante} nextUpArtist{Artiste dans la liste suivante} nextUpGenre{Genre dans la liste suivante} remoteClient{un client distant} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1007,7 +1005,7 @@
   "@autoloadLastQueueOnStartupSubtitle": {
     "description": "Description of the setting to restore last queue on startup"
   },
-  "reportQueueToServerSubtitle": "Lorsque cette option est activée, Finamp envoie la file d'attente actuelle au serveur. Cela pourrait améliorer le contrôle à distance et permettre une restauration de la file d'attente côté serveur. Laisser cocher seulement si la fonctionnalité 'Play On' est active.",
+  "reportQueueToServerSubtitle": "Lorsqu'il est activé, Finamp envoie la file d'attente actuelle au serveur. Cela améliore le contrôle à distance et permet la restauration de la file d'attente côté serveur. Cette option est toujours activée si la fonctionnalité « Lecture activée » est activée.",
   "@reportQueueToServerSubtitle": {
     "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
   },
@@ -1042,7 +1040,7 @@
   "@queuesScreen": {
     "description": "Title for the screen where older now playing queues can be restored"
   },
-  "periodicPlaybackSessionUpdateFrequency": "Fréquence de mise à jour de la session",
+  "periodicPlaybackSessionUpdateFrequency": "Fréquence de mise à jour des sessions de lecture",
   "@periodicPlaybackSessionUpdateFrequency": {
     "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1129,7 +1127,7 @@
   "@queueRetryMessage": {
     "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
   },
-  "shuffleAlbumsToNextUp": "Mélanger les albums en fin de file d'attente",
+  "shuffleAlbumsToNextUp": "Mélanger les albums jusqu'au suivant",
   "@shuffleAlbumsToNextUp": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
   },
@@ -1263,7 +1261,7 @@
     },
     "description": "Dropdown option to download transcoded version of tracks"
   },
-  "downloadInfo": "",
+  "downloadInfo": "{taille} {codec}{débit binaire, sélectionner, null{} autre{ @ {débit binaire} Transcodé}}{emplacement, sélectionner, null{} autre{ ({emplacement})}}",
   "@downloadInfo": {
     "placeholders": {
       "bitrate": {
@@ -1306,7 +1304,7 @@
   "@reportQueueToServer": {
     "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
   },
-  "startInstantMixForIndividualTracksSwitchSubtitle": "Lorsque activé, cliquer sur une musique dans l'onglet musiques lance un mix instantané de cette musique au lieu de la jouer seule.",
+  "startInstantMixForIndividualTracksSwitchSubtitle": "Lorsque cette option est activée, appuyer sur une piste dans l'onglet Pistes lancera un mixage instantané de cette piste au lieu de simplement lire une seule piste.",
   "@startInstantMixForIndividualTracksSwitchSubtitle": {},
   "repairDownloads": "Réparation des problèmes avec les fichiers téléchargés ou leurs métadonnées.",
   "@repairDownloads": {
@@ -1391,7 +1389,7 @@
   "@volumeNormalizationSwitchSubtitle": {
     "description": "Subtitle for the switch that toggles replay gain"
   },
-  "couldNotLoad": "Impossible de charger {source, select, album{album} playlist{playlist} trackMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allTracks{all tracks} filteredList{tracks} genre{genre} artist{artist} track{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} other{}}",
+  "couldNotLoad": "Impossible de charger {source, select, album{album} playlist{playlist} trackMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allTracks{all tracks} filteredList{tracks} genre{genre} artist{artist} track{track} nextUpAlbum{album dans le prochain album} nextUpPlaylist{playlist dans le prochain album} nextUpArtist{artiste dans le prochain album} nextUpGenre{genre dans le prochain album} other{}}",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -1433,13 +1431,13 @@
   "@lockDownload": {
     "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
   },
-  "oneLineMarqueeTextButtonSubtitle": "Défiler automatiquement les titres des musiques trop longs pour être afficher sur deux lignes",
+  "oneLineMarqueeTextButtonSubtitle": "Faire défiler automatiquement les titres des pistes trop longs pour être affichés sur deux lignes",
   "@oneLineMarqueeTextButtonSubtitle": {},
   "fixedGridSizeTitle": "Taille de la grille",
   "@fixedGridSizeTitle": {},
-  "hideQueueButtonSubtitle": "Cacher le bouton de la file d'attente dans le lecteur. Balayez vers le haut pour accéder à la file d'attente.",
+  "hideQueueButtonSubtitle": "Masquez le bouton de file d'attente sur l'écran du lecteur. Balayez vers le haut pour accéder à la file d'attente.",
   "@hideQueueButtonSubtitle": {},
-  "redownloadSubtitle": "Relance automatiquement le téléchargements des titres qui sont censés être de qualité différente à cause d'un changement de leur collection.",
+  "redownloadSubtitle": "Retéléchargez automatiquement les pistes qui devraient être d'une qualité différente en raison de modifications de la collection parente.",
   "@redownloadSubtitle": {
     "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
   },
@@ -1459,7 +1457,7 @@
   "@oneLineMarqueeTextButton": {},
   "marqueeOrTruncateButtonSubtitle": "Afficher ... à la fin des longs titres au lieu d'un défilement",
   "@marqueeOrTruncateButtonSubtitle": {},
-  "hidePlayerBottomActions": "Cacher les boutons de la partie inférieure",
+  "hidePlayerBottomActions": "Masquer les actions du bas",
   "@hidePlayerBottomActions": {},
   "hidePlayerBottomActionsSubtitle": "Cacher le bouton de file d'attente et des paroles sur le lecteur. Balayez vers le haut pour accéder à la file d'attente, balayez à gauche (en dessous de la pochette) pour afficher les paroles.",
   "@hidePlayerBottomActionsSubtitle": {},
@@ -1473,7 +1471,7 @@
   "@showArtistChipImage": {},
   "hideQueueButton": "Cacher le bouton de la file d'attente",
   "@hideQueueButton": {},
-  "marqueeOrTruncateButton": "Utiliser des ellipses pour les longs titres",
+  "marqueeOrTruncateButton": "Utilisez des points de suspension pour les titres longs",
   "@marqueeOrTruncateButton": {},
   "fiveLatestAlbumsSettingSubtitle": "Les téléchargements seront enlevés lorsqu'ils deviennent trop vieux. Verrouillez le téléchargement pour empêcher la suppression.",
   "@fiveLatestAlbumsSettingSubtitle": {},
@@ -1487,7 +1485,7 @@
   "@cacheLibraryImagesSettingsSubtitle": {},
   "cacheLibraryImagesSettings": "Mettre les images actuelles de la bibliothèque en cache",
   "@cacheLibraryImagesSettings": {},
-  "showStopButtonOnMediaNotificationTitle": "Afficher le bouton stop sur la notification du lecteur",
+  "showStopButtonOnMediaNotificationTitle": "Afficher le bouton Arrêter sur la notification multimédia",
   "@showStopButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
@@ -1495,7 +1493,7 @@
   "@showProgressOnNowPlayingBarTitle": {
     "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar"
   },
-  "showStopButtonOnMediaNotificationSubtitle": "Contrôle si la notification du lecteur a un bouton stop en plus d'un bouton pause. Cela vous permet d'arrêter la lecture sans ouvrir l'application.",
+  "showStopButtonOnMediaNotificationSubtitle": "Contrôle si la notification multimédia comporte un bouton d'arrêt. Cela vous permet d'arrêter la lecture sans ouvrir l'application.",
   "@showStopButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
@@ -1511,7 +1509,7 @@
   "@showLyricsTimestampsTitle": {
     "description": "Title for the setting that controls if timestamps are shown for lyrics"
   },
-  "showSeekControlsOnMediaNotificationTitle": "Afficher la barre de progression sur la notification du lecteur",
+  "showSeekControlsOnMediaNotificationTitle": "Autoriser la recherche sur la notification multimédia",
   "@showSeekControlsOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a seekable progress bar."
   },
@@ -1529,17 +1527,17 @@
   "@albumArtists": {},
   "performingArtists": "Artistes",
   "@performingArtists": {},
-  "swipeRightToLeftAction": "Balayer vers la gauche",
+  "swipeRightToLeftAction": "Action de balayage vers la gauche",
   "@swipeRightToLeftAction": {},
   "swipeRightToLeftActionSubtitle": "Action déclenchée lors du glissement d'un morceau de droite à gauche dans la liste.",
   "@swipeRightToLeftActionSubtitle": {},
-  "transcodingStreamingFormatTitle": "Sélectionner le format de transcodage",
+  "transcodingStreamingFormatTitle": "Sélectionnez le format de transcodage",
   "@transcodingStreamingFormatTitle": {
     "description": "Title for the dropdown that selects the format for transcoded streams"
   },
-  "transcodingStreamingFormatSubtitle": "Sélectionnez le format à utiliser lors du streaming audio transcodé. Les morceaux déjà en file d'attente ne seront pas affectés.",
+  "transcodingStreamingFormatSubtitle": "Sélectionnez le format à utiliser pour la diffusion audio transcodée. Les pistes déjà en file d'attente ne seront pas affectées.",
   "@transcodingStreamingFormatSubtitle": {},
-  "periodicPlaybackSessionUpdateFrequencyDetails": "Si le serveur Jellyfin ne reçoit aucune mise à jour d’un client pendant plus de 5 minutes, il suppose que la lecture est terminée. Cela signifie que pour les morceaux durant plus de 5 minutes, la lecture peut être considérée comme terminée, ce qui peut fausser les données de rapport de lecture.",
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Si le serveur Jellyfin n'a reçu aucune mise à jour d'un client au cours des 5 dernières minutes, il considère que la lecture est terminée. Cela signifie que pour les pistes de plus de 5 minutes, la lecture pourrait être signalée à tort comme terminée, ce qui réduirait la qualité des données de lecture.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1714,7 +1712,7 @@
   "@albumScreen": {
     "description": "Name for the view/screen that shows albums"
   },
-  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} track{Track} library{Library} unknown{Item} other{{itemType}}} {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Playlist} artiste{Artiste} genre{Genre} piste{Piste} bibliothèque{Bibliothèque} inconnu{Élément} autre{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {
@@ -1743,7 +1741,7 @@
   "@autoOfflineOptionOff": {
     "description": "This is shown when the autoOffline feature is turned off and has no effects"
   },
-  "downloadSizeWarningCutoff": "Seuil d'alerte de la taille du téléchargement",
+  "downloadSizeWarningCutoff": "Avertissement concernant la taille limite de téléchargement",
   "@downloadSizeWarningCutoff": {
     "description": "Title for the setting controlling when to warn about a large download"
   },
@@ -1783,7 +1781,7 @@
     },
     "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
   },
-  "trackOfflineFavorites": "Synchroniser le statut de tous les favoris",
+  "trackOfflineFavorites": "Synchroniser tous les statuts favoris",
   "@trackOfflineFavorites": {},
   "lyricsFontSizeSubtitle": "Contrôle la taille de police des paroles dans la vue des paroles.",
   "@lyricsFontSizeSubtitle": {
@@ -1809,7 +1807,7 @@
   "@allowDeleteFromServerSubtitle": {
     "description": "Subtitle for the setting that controls if items can be deleted from the server"
   },
-  "downloadSizeWarningCutoffSubtitle": "Un message d’avertissement s’affiche lorsque vous téléchargez plus de pistes à la fois.",
+  "downloadSizeWarningCutoffSubtitle": "Un message d'avertissement s'affichera lors du téléchargement de plus de ce nombre de pistes à la fois.",
   "@downloadSizeWarningCutoffSubtitle": {
     "description": "Subtitle for the setting controlling when to warn about a large download"
   },
@@ -1868,7 +1866,7 @@
   "@releaseDateFormatMonthYear": {
     "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
   },
-  "autoOfflineOptionNetwork": "Réseau",
+  "autoOfflineOptionNetwork": "Réseau local",
   "@autoOfflineOptionNetwork": {
     "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
   },
@@ -1932,7 +1930,7 @@
     },
     "description": "Tooltip for the album artwork on the player screen"
   },
-  "finampCollectionNames": "{itemType, select, favorites{Favorites} allPlaylists{All Playlists} fiveLatestAlbums{5 Latest Albums} allPlaylistsMetadata{Playlist Metadata} other{{itemType}} }",
+  "finampCollectionNames": "{itemType, select, favorites{Favoris} allPlaylists{Toutes les playlists} fiveLatestAlbums{5 derniers albums} allPlaylistsMetadata{Métadonnées de playlist} collectionWithLibraryFilter{Collection avec filtre de bibliothèque} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
       "itemType": {
@@ -1945,13 +1943,13 @@
   "@showSeekControlsOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
   },
-  "trackOfflineFavoritesSubtitle": "Cela permet d’afficher l'état des favoris plus à jour lorsque vous êtes hors ligne.  Ne télécharge aucun fichier supplémentaire.",
+  "trackOfflineFavoritesSubtitle": "Cela permet d'afficher des statuts favoris plus récents hors ligne. Aucun fichier supplémentaire n'est téléchargé.",
   "@trackOfflineFavoritesSubtitle": {},
   "showProgressOnNowPlayingBarSubtitle": "Contrôle si le mini-lecteur / la barre de lecture dans l’application en bas de l’écran de musique fonctionne comme une barre de progression.",
   "@showProgressOnNowPlayingBarSubtitle": {
     "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the bottom of the music screen functions as a progress bar"
   },
-  "showLyricsScreenAlbumPreludeSubtitle": "Contrôle si la pochette de l’album est affichée au-dessus des paroles avant le défilement de la page.",
+  "showLyricsScreenAlbumPreludeSubtitle": "Contrôle si la pochette de l'album est affichée au-dessus des paroles avant d'être défilée.",
   "@showLyricsScreenAlbumPreludeSubtitle": {
     "description": "Subtitle for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
   },
@@ -1967,7 +1965,7 @@
   "@deleteFromTargetDialogText": {
     "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
   },
-  "confirmAddAlbumToPlaylist": "Êtes-vous sûr que vous voulez ajouter toutes les pistes de {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} other{item}} '{itemName}' à cette playlist ?  Elles ne pourront être enlevées qu’individuellement.",
+  "confirmAddAlbumToPlaylist": "Voulez-vous vraiment ajouter tous les morceaux de {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} other{item}} '{itemName}' à cette playlist ? Ils ne peuvent être supprimés qu'individuellement.",
   "@confirmAddAlbumToPlaylist": {
     "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
     "placeholders": {
@@ -1980,7 +1978,7 @@
       }
     }
   },
-  "autoOfflineSettingDescription": "Activer automatiquement le mode hors ligne.\nDésactivé : Ne pas activer automatiquement le mode hors connexion. Peut économiser la batterie.\nRéseau : Activer le mode hors connexion lorsque vous n’êtes pas connecté au wifi ou à l’ethernet.\nDéconnecté : Activer le mode hors ligne lorsque vous n’êtes pas connecté à quoi que ce soit.\nVous pouvez toujours activer manuellement le mode hors connexion qui met en pause l’automatisation jusqu’à ce que vous désactiviez le mode hors connexion à nouveau",
+  "autoOfflineSettingDescription": "Activation automatique du mode hors ligne.\nDésactivé : Le mode hors ligne ne s'active pas automatiquement. Peut économiser la batterie.\nRéseau local : Activez le mode hors ligne lorsque vous n'êtes pas connecté au Wi-Fi ou à l'Ethernet.\nDéconnecté : Activez le mode hors ligne lorsque vous n'êtes connecté à aucun réseau.\nInjoignable : Activez le mode hors ligne lorsque le serveur ne peut pas être contacté après un changement de réseau.\nVous pouvez toujours activer manuellement le mode hors ligne, ce qui suspend l'automatisation jusqu'à sa désactivation.",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
@@ -2058,7 +2056,7 @@
   "@latestReleases": {},
   "unknown": "Inconnu",
   "@unknown": {},
-  "itemSectionsOrderSubtitle": "Contrôle l'ordre des sections de l'élément.",
+  "itemSectionsOrderSubtitle": "Contrôle l'ordre des sections d'éléments.",
   "@itemSectionsOrderSubtitle": {
     "description": "Description of the setting that controls the order of item sections on the screens."
   },
@@ -2256,7 +2254,7 @@
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   },
-  "showFavoriteButtonOnMediaNotificationSubtitle": "Contrôle si la notification multimédia comporte un bouton « Favori ». Cela vous permet d'ajouter ou de retirer le morceau en cours de vos favoris sans ouvrir l'application.",
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Contrôle si la notification multimédia comporte un bouton « Favori ». Cela vous permet d'ajouter ou de retirer le morceau en cours de vos favoris sans ouvrir l'application. Masqué en mode hors ligne.",
   "@showFavoriteButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a favorite button."
   },
@@ -2308,7 +2306,7 @@
   "@sleepTimerStartTimer": {
     "description": "Label for the button that starts the sleep timer"
   },
-  "curatedItemsNotListenedYet": "Vous n'avez écouté aucune tracks{itemType, select, artistGenreFilter{ de cet artiste dans ce genre} artist{ de cet artiste} genre{ dans ce genre} other{}}.",
+  "curatedItemsNotListenedYet": "Vous n'avez écouté aucun morceau{itemType, select, artistGenreFilter{ de cet artiste dans ce genre} artist{ de cet artiste} genre{ dans ce genre} other{}}.",
   "@curatedItemsNotListenedYet": {
     "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks.",
     "placeholders": {
@@ -2416,5 +2414,282 @@
         "example": "5"
       }
     }
+  },
+  "adaptive": "Adaptatif",
+  "@adaptive": {},
+  "shuffleCountButton": "Lecture aléatoire ({count,plural,=1{{count} Piste} other{{count} Pistes}})",
+  "@shuffleCountButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "logoutButtonSubtitle": "La connexion à un autre serveur supprimera les téléchargements existants",
+  "@logoutButtonSubtitle": {},
+  "none": "Aucun",
+  "@none": {},
+  "sleepTimerRemainingTracks": "Mise en Veille {time,plural,=1{after this track} other{in {time} tracks}}",
+  "@sleepTimerRemainingTracks": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "createPlaylistFromCurrentQueue": "Enregistrer la file d'attente en tant que playlist",
+  "@createPlaylistFromCurrentQueue": {
+    "description": "Label for a button that creates a new playlist from the current queue."
+  },
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{Running} failed{Failed} syncFailed{Repeatedly Unsynced} enqueued{Queued} other{}} {itemCount, plural, =1{Download} other{Downloads}}",
+  "@activeDownloadsListHeader": {
+    "description": "Header text for lists of active downloads of a particular state.",
+    "placeholders": {
+      "typeName": {
+        "type": "String"
+      },
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "genreNotFound": "Le genre n'a pas pu être trouvé. {additionalInfo, select, offline{ Il se peut qu'il ne soit pas téléchargeable ou qu'il appartienne à une autre bibliothèque.} other{ Il se peut qu'il appartienne à une autre bibliothèque.}}",
+  "@genreNotFound": {
+    "placeholders": {
+      "additionalInfo": {
+        "type": "String"
+      }
+    },
+    "description": "Message shown when a genre filter or open-genre action fails because the genre item could not be found."
+  },
+  "collectionDownloadInfo": "{taille}{codec, sélectionner, ORIGINAL{} autre{ comme {codec} à {débit binaire}}}{emplacement, sélectionner, null{} autre{ ({emplacement})}}",
+  "@collectionDownloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      },
+      "location": {
+        "type": "String",
+        "example": "Internal Storage"
+      }
+    },
+    "description": "Collection info line in downloads screen lists"
+  },
+  "additionalBaseItemInfoTitle": "Informations supplémentaires sur l'élément",
+  "@additionalBaseItemInfoTitle": {
+    "description": "Title for the setting that controls the displayed additional item info."
+  },
+  "additionalBaseItemInfoSubtitle": "Contrôle le type d'informations supplémentaires affichées dans les listes d'éléments pour chaque type d'élément. En mode « Adaptatif », les informations sont sélectionnées automatiquement en fonction du tri ou du contexte actuel.",
+  "@additionalBaseItemInfoSubtitle": {
+    "description": "Subtitle for the setting that controls the displayed additional item info."
+  },
+  "autoOfflineOptionUnreachable": "Inatteignable",
+  "@autoOfflineOptionUnreachable": {
+    "description": "This is shown when the autoOffline feature is set to Unreachable, this means offline mode will be automatically enabled when - after a network change - the server cant be pinged"
+  },
+  "clearQueueOnStopEventTitle": "Effacer la file d'attente lors d'un arrêt externe",
+  "@clearQueueOnStopEventTitle": {
+    "description": "Title for the setting that controls if OS stop commands clear the queue."
+  },
+  "clearQueueOnStopEventSubtitle": "Videz la file d'attente et fermez le lecteur si une commande « Stop » est reçue du système d'exploitation. Les actions d'arrêt dans l'application ferment systématiquement le lecteur et vident la file d'attente.",
+  "@clearQueueOnStopEventSubtitle": {
+    "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
+  },
+  "syncPlaybackSpeedAndPitchLabel": "Synchronisation de la vitesse et de la hauteur",
+  "@syncPlaybackSpeedAndPitchLabel": {
+    "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
+  },
+  "serverSharingMenuTitle": "Partage de serveur de réseau local",
+  "@serverSharingMenuTitle": {
+    "description": "Title for the server sharing menu that allows the user to share their server address with other devices on the local network"
+  },
+  "serverSharingMenuButtonTitle": "Serveur partagé",
+  "@serverSharingMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the server sharing menu"
+  },
+  "serverSharingMenuConfirmationDialogText": "Êtes-vous sûr de vouloir activer le partage de serveur même si vous êtes en mode hors ligne ? Finamp enverra alors des données sur le réseau local.",
+  "@serverSharingMenuConfirmationDialogText": {
+    "description": "Dialog text shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuConfirmationDialogConfirmationButtonLabel": "Confirmer et Activer",
+  "@serverSharingMenuConfirmationDialogConfirmationButtonLabel": {
+    "description": "Positive action label for the dialog shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuControlTitleSharingEnabled": "Serveur de partage",
+  "@serverSharingMenuControlTitleSharingEnabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuControlSubtitleSharingDisabled": "Appuyez pour partager",
+  "@serverSharingMenuControlSubtitleSharingDisabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlTitleSharingDisabled": "Ne pas partager",
+  "@serverSharingMenuControlTitleSharingDisabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlSubtitleSharingEnabled": "Appuyez pour arrêter",
+  "@serverSharingMenuControlSubtitleSharingEnabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuDescription": "Le partage de l'adresse de votre serveur peut être utile pour configurer de nouveaux clients qui ne sont pas sur le même réseau local que votre serveur Jellyfin, c'est-à-dire les téléviseurs d'hôtel, votre PC au travail ou un nouveau client sur votre téléphone lorsque vous êtes en déplacement.",
+  "@serverSharingMenuDescription": {
+    "description": "Description text shown in the server sharing menu, right below the controls"
+  },
+  "serverSharingMenuDetails": "Il fonctionne en écoutant les requêtes de découverte de serveur des autres clients du réseau local, puis en répondant à ces requêtes avec l'adresse configurée de votre serveur Jellyfin.\nSi vous avez configuré une adresse locale et une adresse publique, Finamp les fournira au client demandeur.",
+  "@serverSharingMenuDetails": {
+    "description": "Description text shown in the server sharing menu, below the description"
+  },
+  "quickConnectAuthorizationMenuButtonTitle": "»Autoriser la connexion rapide",
+  "@quickConnectAuthorizationMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuPrompt": "Entrez le code de connexion rapide",
+  "@quickConnectAuthorizationMenuPrompt": {
+    "description": "Title for the button in server sharing menu that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuTitle": "Autoriser la demande de connexion rapide",
+  "@quickConnectAuthorizationMenuTitle": {
+    "description": "Title for the quick connect authorization menu that allows the user to authorize a quick connect request from another device"
+  },
+  "quickConnectAuthorizationMenuInputLabel": "Code de connexion rapide",
+  "@quickConnectAuthorizationMenuInputLabel": {
+    "description": "Label for the quick connect code input, shown below the input field"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleIdle": "Veuillez saisir ou coller le code ci-dessous",
+  "@quickConnectAuthorizationMenuStateSubtitleIdle": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) while the code hasn't been submitted yet"
+  },
+  "quickConnectAuthorizationMenuStateTitleProcessing": "Tentative d'autorisation de la demande",
+  "@quickConnectAuthorizationMenuStateTitleProcessing": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) while a request is being processed"
+  },
+  "quickConnectAuthorizationMenuStateTitleSuccess": "Demande autorisée avec succès",
+  "@quickConnectAuthorizationMenuStateTitleSuccess": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was successful"
+  },
+  "quickConnectAuthorizationMenuStateTitleFailed": "Code de connexion rapide invalide",
+  "@quickConnectAuthorizationMenuStateTitleFailed": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleFailed": "Veuillez vérifier le code et réessayer",
+  "@quickConnectAuthorizationMenuStateSubtitleFailed": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuDescription": "Si vous essayez de vous connecter à un autre client Jellyfin via Quick Connect, vous pouvez saisir ou coller le code à 6 chiffres dans le champ ci-dessus. Cela autorisera la demande de connexion de l'autre client et vous connectera au même compte que celui que vous utilisez pour Finamp.",
+  "@quickConnectAuthorizationMenuDescription": {
+    "description": "Description for the quick connect authorization menu, shown at the bottom"
+  },
+  "accessibility": "Accessibilité",
+  "@accessibility": {
+    "description": "Title for the accessibility settings screen"
+  },
+  "useHighContrastColorsTitle": "Utilisez des couleurs à contraste élevé",
+  "@useHighContrastColorsTitle": {
+    "description": "Title for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "useHighContrastColorsSubtitle": "Utilisez des couleurs dynamiques à contraste élevé pour une meilleure visibilité.",
+  "@useHighContrastColorsSubtitle": {
+    "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "discordRPCSettingTitle": "RPC Discord",
+  "@discordRPCSettingTitle": {
+    "description": "Title for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCSettingDescription": "Activez la présence enrichie sur Discord pour afficher vos morceaux en cours de lecture dans votre statut Discord. Impossible de se connecter à Discord si le mode hors ligne est activé.",
+  "@discordRPCSettingDescription": {
+    "description": "Description for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCIconSettingTitle": "Icône de secours RPC",
+  "@discordRPCIconSettingTitle": {
+    "description": "Title for the setting that controls which icon gets shown in the Discord RPC (Rich Presence) in case the local address is in use"
+  },
+  "discordRPCIconSettingDescription": "Icône de secours qui s'affiche lorsqu'aucune adresse publique n'est détectée. (Discord ne peut pas charger les images depuis l'adresse locale et utiliserait leur adresse de secours.)",
+  "@discordRPCIconSettingDescription": {
+    "description": "Description for the setting that controls which Icon the discord RPC displays as a Fallback in case no public address is detected (it doenst matter what connection is active)."
+  },
+  "discordRPCIconDark": "Finamp - Sombre",
+  "@discordRPCIconDark": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with the Dark-Theme Background"
+  },
+  "discordRPCIconBlack": "Finamp - Noir",
+  "@discordRPCIconBlack": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Black Background"
+  },
+  "discordRPCIconLight": "Finamp - Blanc",
+  "@discordRPCIconLight": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a White Background"
+  },
+  "discordRPCIconJFTransparent": "Jellyfin - Transparent",
+  "@discordRPCIconJFTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Jellyfin logo with a Transparent Background"
+  },
+  "discordRPCIconTransparent": "Finamp - Transparent",
+  "@discordRPCIconTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Transparent Background"
+  },
+  "discordRPCIconWhiteTransparent": "Finamp Blanc - Transparent",
+  "@discordRPCIconWhiteTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
+  },
+  "numberAsBit": "{bit} bit",
+  "@numberAsBit": {
+    "description": "Value for the bit depth of a track, as amount of bit used",
+    "placeholders": {
+      "bit": {
+        "type": "int"
+      }
+    }
+  },
+  "itemDeletedSnackbar": "{itemType, select, album{Album} playlist{Playlist} artist{Artist} genre{Genre} track{Track} library{Library} other{Item}} a été supprimé de {deviceType, select, device{Device} server{Server} other{unknown}}",
+  "@itemDeletedSnackbar": {
+    "description": "Used whenever item gets deleted from the device or server, message in snackbar"
+  },
+  "deviceType": "{type, select, speaker{Appareil Haut-parleur} tv{TV} bluetooth{Bluetooth} autre{Inconnu}}",
+  "@deviceType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    },
+    "description": "Label for the type of device in the output menu"
+  },
+  "itemCount": "{childType, select, track{{quantité, pluriel, =1{1 piste} autre{{quantité} pistes}}} album{{quantité, pluriel, =1{1 album} autre{{quantité} albums}}} autre{{quantité, pluriel, =1{1 élément} autre{{quantité} éléments}}}}",
+  "@itemCount": {
+    "description": "Amount of various child item, like artist albums, performing artist tracks, or genre albums. Shown for example in the menu headers.",
+    "placeholders": {
+      "childType": {
+        "type": "String",
+        "example": "album",
+        "description": "Options match BaseItemDtoType.name"
+      },
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "itemCountLoading": "{childType, select, track{pistes} album{albums} autre{éléments}}",
+  "@itemCountLoading": {
+    "description": "Shown while the item count is being calculated.",
+    "placeholders": {
+      "childType": {
+        "type": "String",
+        "example": "album",
+        "description": "Options match BaseItemDtoType.name"
+      }
+    }
+  },
+  "ping": "{status, select, true_true{Les deux sont accessibles} true_false{Échec de l'accès à l'adresse locale} false_true{Échec de l'accès à l'adresse publique} false_false{Échec de l'accès aux deux} autre{inconnu}}",
+  "@ping": {
+    "description": "Gets shown in the Snackbar when using the Test Connection Button inside the Network Settings. true means reachable, false means unreachable. the first value is for the public address, the second value is fot the home address."
   }
 }

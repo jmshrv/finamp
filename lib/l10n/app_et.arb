@@ -202,8 +202,6 @@
   "@notAvailableInOfflineMode": {},
   "logOut": "Logi välja",
   "@logOut": {},
-  "downloadedTracksWillNotBeDeleted": "Allalaaditud lugusid ei kustutata",
-  "@downloadedTracksWillNotBeDeleted": {},
   "areYouSure": "Kas oled kindel?",
   "@areYouSure": {},
   "enableTranscoding": "Luba transkodeerimine",
