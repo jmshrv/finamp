@@ -555,25 +555,24 @@ class LyricsLinePainter extends ChangeNotifier implements CustomPainter {
       _paintWithWordHighlighting(canvas, size);
     } else {
       // Default painting for non-current lines or lines without cues
-      // Calculate the offset based on text alignment for consistent alignment
-      double offsetX = 0.0;
-      switch (textAlign) {
-        case TextAlign.start:
-        case TextAlign.left:
-          offsetX = 0.0;
-          break;
-        case TextAlign.center:
-          offsetX = (size.width - textPainter.width) / 2.0;
-          break;
-        case TextAlign.end:
-        case TextAlign.right:
-          offsetX = size.width - textPainter.width;
-          break;
-        case TextAlign.justify:
-          offsetX = 0.0; // Justify behaves like start for single lines
-          break;
-      }
+      final offsetX = _calculateTextAlignmentOffset(size.width, textPainter.width);
       textPainter.paint(canvas, Offset(offsetX, 0.0));
+    }
+  }
+
+  /// Calculates the horizontal offset for text alignment
+  double _calculateTextAlignmentOffset(double containerWidth, double textWidth) {
+    switch (textAlign) {
+      case TextAlign.start:
+      case TextAlign.left:
+        return 0.0;
+      case TextAlign.center:
+        return (containerWidth - textWidth) / 2.0;
+      case TextAlign.end:
+      case TextAlign.right:
+        return containerWidth - textWidth;
+      case TextAlign.justify:
+        return 0.0; // Justify behaves like start for single lines
     }
   }
 
@@ -717,23 +716,7 @@ class LyricsLinePainter extends ChangeNotifier implements CustomPainter {
     coloredTextPainter.layout(minWidth: 0, maxWidth: maxWidth);
 
     // Calculate the offset based on text alignment
-    double offsetX = 0.0;
-    switch (textAlign) {
-      case TextAlign.start:
-      case TextAlign.left:
-        offsetX = 0.0;
-        break;
-      case TextAlign.center:
-        offsetX = (size.width - coloredTextPainter.width) / 2.0;
-        break;
-      case TextAlign.end:
-      case TextAlign.right:
-        offsetX = size.width - coloredTextPainter.width;
-        break;
-      case TextAlign.justify:
-        offsetX = 0.0; // Justify behaves like start for single lines
-        break;
-    }
+    final offsetX = _calculateTextAlignmentOffset(size.width, coloredTextPainter.width);
 
     // Paint the colored text with the calculated offset
     coloredTextPainter.paint(canvas, Offset(offsetX, 0.0));
