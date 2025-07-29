@@ -55,6 +55,10 @@
             ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
             ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
             GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${androidSdk}/libexec/android-sdk/build-tools/${buildToolsVersion}/aapt2";
+            FLUTTER_ROOT = "${flutter}";
+            # finamp can't find libmpv on its own, even with `nix-shell -p mpv-unwrapped`
+            # still requires `cd build/linux/x64/release/bundle/lib/`
+            LD_LIBRARY_PATH = "${lib.makeLibraryPath [ pkgs.mpv-unwrapped ]}";
             buildInputs = [
               flutter
               androidSdk
