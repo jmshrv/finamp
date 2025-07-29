@@ -1345,3 +1345,14 @@ class NextUpShuffleOrder extends ShuffleOrder {
     indices.clear();
   }
 }
+
+extension SequentialTracks on FinampQueueInfo {
+  bool isCurrentlyPlayingTracksFromSameAlbum() {
+    final currentTrackAlbum = currentTrack?.baseItem?.parentId;
+    if (currentTrackAlbum == null) return false;
+    final previousTrackAlbum = previousTracks.lastOrNull?.baseItem?.parentId;
+    final nextTrackAlbum = (nextUp.firstOrNull ?? queue.firstOrNull)?.baseItem?.parentId;
+
+    return previousTrackAlbum == currentTrackAlbum || currentTrackAlbum == nextTrackAlbum;
+  }
+}

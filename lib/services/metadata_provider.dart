@@ -43,12 +43,14 @@ class MetadataProvider {
   LyricDto? lyrics;
   bool isDownloaded;
   bool qualifiesForPlaybackSpeedControl;
+  double? parentNormalizationGain;
 
   MetadataProvider({
     required this.mediaSourceInfo,
     this.lyrics,
     this.isDownloaded = false,
     this.qualifiesForPlaybackSpeedControl = false,
+    this.parentNormalizationGain,
   });
 
   bool get hasLyrics => mediaSourceInfo.mediaStreams.any((e) => e.type == "Lyric");
@@ -167,8 +169,7 @@ metadataProvider = FutureProvider.autoDispose.family<MetadataProvider?, Metadata
   }
 
   BaseItemDto? parent;
-  if (request.item.parentId != null &&
-      (request.checkIfSpeedControlNeeded && !metadata.qualifiesForPlaybackSpeedControl)) {
+  if (request.item.parentId != null) {
     if (!FinampSettingsHelper.finampSettings.isOffline) {
       try {
         parent = await jellyfinApiHelper.getItemById(request.item.parentId!);
@@ -200,6 +201,10 @@ metadataProvider = FutureProvider.autoDispose.family<MetadataProvider?, Metadata
       parent != null &&
       (parent.runTimeTicks ?? 0) > MetadataProvider.speedControlLongAlbumDuration.inMicroseconds * 10) {
     metadata.qualifiesForPlaybackSpeedControl = true;
+  }
+
+  if (parent != null) {
+    metadata.parentNormalizationGain = parent.normalizationGain;
   }
 
   if (request.includeLyrics && metadata.hasLyrics) {
