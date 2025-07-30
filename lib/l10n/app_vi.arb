@@ -519,7 +519,7 @@
   "@automatic": {
     "description": "Used as an option in the playback speed visibility settings"
   },
-  "loginFlowWelcomeHeading": "Chào mừng tới",
+  "loginFlowWelcomeHeading": "Chào mừng tới {styledName}",
   "@loginFlowWelcomeHeading": {
     "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
   },
@@ -656,5 +656,17 @@
   "playerScreenMinimumCoverPaddingEditorSubtitle": "Khoảng đệm tối thiểu xung quanh bìa album trên màn hình trình phát, tính bằng % chiều rộng màn hình.",
   "@playerScreenMinimumCoverPaddingEditorSubtitle": {
     "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+  },
+  "startupErrorTitle": "Đã có vấn đề xảy ra khi khởi động ứng dụng!",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorCallToAction": "Xin vui lòng tạo một báo cáo lỗi tại \"github.com/jmshrv/finamp\" kèm theo nhật kí hệ thống (sử dụng nút bên dưới) và ảnh chụp màn hình của trang này, để chúng tôi có thể khắc phục lỗi sớm nhất có thể.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "startupErrorWorkaround": "Để tạm thời khắc phục lỗi này, bạn có thể xoá dữ liệu và cài đặt lại ứng dụng. Lưu ý rằng trong trường hợp này, toàn bộ cài đặt và tệp tải xuống của bạn sẽ bị xoá.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
   }
 }
