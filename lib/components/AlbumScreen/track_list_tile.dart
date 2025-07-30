@@ -72,7 +72,7 @@ class TrackListTile extends ConsumerWidget {
     this.isInPlaylist = false,
     this.isOnArtistScreen = false,
     this.isOnGenreScreen = false,
-    this.isShownInSearch = false,
+    this.isShownInSearchOrHistory = false,
     this.allowDismiss = true,
     this.highlightCurrentTrack = true,
     this.genreFilter,
@@ -91,7 +91,7 @@ class TrackListTile extends ConsumerWidget {
   final bool isInPlaylist;
   final bool isOnArtistScreen;
   final bool isOnGenreScreen;
-  final bool isShownInSearch;
+  final bool isShownInSearchOrHistory;
   final bool allowDismiss;
   final bool highlightCurrentTrack;
   final BaseItemDto? genreFilter;
@@ -159,7 +159,7 @@ class TrackListTile extends ConsumerWidget {
 
           await queueService.startPlayback(
             items: items,
-            startingIndex: isShownInSearch ? items.indexWhere((element) => element.id == item.id) : index,
+            startingIndex: isShownInSearchOrHistory ? items.indexWhere((element) => element.id == item.id) : index,
             source: QueueItemSource(
               name: QueueItemSourceName(
                 type: item.name != null ? QueueItemSourceNameType.mix : QueueItemSourceNameType.instantMix,
