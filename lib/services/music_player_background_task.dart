@@ -778,6 +778,12 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
         title: _appLocalizations?.genres ?? TabContentType.genres.toString(),
         playable: false,
       ),
+      MediaItem(
+        id: MediaItemId(contentType: TabContentType.tracks, parentType: MediaItemParentType.rootCollection).toString(),
+        // ignore: deprecated_member_use_from_same_package
+        title: _appLocalizations?.tracks ?? TabContentType.tracks.toString(),
+        playable: false,
+      ),
     ];
   }
 
@@ -817,6 +823,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<void> playFromMediaId(String mediaId, [Map<String, dynamic>? extras]) async {
     try {
+      if (mediaId == QueueItemSourceNameType.shuffleAll.name) {
+        return await _androidAutoHelper.shuffleAllTracks();
+      }
       final mediaItemId = MediaItemId.fromJson(jsonDecode(mediaId) as Map<String, dynamic>);
 
       return await _androidAutoHelper.playFromMediaId(mediaItemId);

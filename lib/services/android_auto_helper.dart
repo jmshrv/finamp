@@ -267,7 +267,7 @@ class AndroidAutoHelper {
     final queueService = GetIt.instance<QueueService>();
 
     if (searchQuery.rawQuery.isEmpty) {
-      return await shuffleallTracks();
+      return await shuffleAllTracks();
     }
 
     BaseItemDtoType? itemType = TabContentType.tracks.itemType;
@@ -512,7 +512,7 @@ class AndroidAutoHelper {
     }
   }
 
-  Future<void> shuffleallTracks() async {
+  Future<void> shuffleAllTracks() async {
     final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
 
     try {
@@ -526,6 +526,18 @@ class AndroidAutoHelper {
     final queueService = GetIt.instance<QueueService>();
     final items = await getBaseItems(itemId);
     final List<MediaItem> mediaItems = [];
+
+    if (itemId.contentType == TabContentType.tracks && itemId.parentType == MediaItemParentType.rootCollection) {
+      mediaItems.add(
+        MediaItem(
+          id: QueueItemSourceNameType.shuffleAll.name,
+          title:
+              AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)?.shuffleAll ??
+              "Shuffle All Tracks",
+          playable: true,
+        ),
+      );
+    }
 
     for (final item in items) {
       final mediaItem = await queueService.generateMediaItem(
