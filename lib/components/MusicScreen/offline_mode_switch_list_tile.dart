@@ -13,17 +13,17 @@ class OfflineModeSwitchListTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     AutoOfflineOption automation = ref.watch(finampSettingsProvider.autoOffline);
     bool overrideActive = !ref.watch(finampSettingsProvider.autoOfflineListenerActive);
-    int activeDelays = ref.watch(autoOfflineStatusProvider);
+    bool reevaluating = ref.watch(autoOfflineStatusProvider) > 0;
 
     IconData getCurrentIcon() {
-      if (overrideActive) {
-        return TablerIcons.cloud_pause;
-      } else if (automation == AutoOfflineOption.disabled) {
+      if (automation == AutoOfflineOption.disabled) {
         return TablerIcons.cloud_off;
-      } else if (activeDelays > 0) {
-        return Icons.cloud_sync_outlined;
+      } else if (overrideActive) {
+        return TablerIcons.robot_off;
+      } else if (reevaluating) {
+        return Icons.sync_sharp;
       } else {
-        return TablerIcons.cloud_search;
+        return TablerIcons.robot;
       }
     }
 
