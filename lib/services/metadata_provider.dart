@@ -157,7 +157,6 @@ metadataProvider = FutureProvider.autoDispose.family<MetadataProvider?, Metadata
 
   final metadata = MetadataProvider(mediaSourceInfo: playbackInfo, isDownloaded: localPlaybackInfo != null);
 
-  // check if item qualifies for having playback speed control available
   if (request.checkIfSpeedControlNeeded) {
     for (final genre in request.item.genres ?? []) {
       if (MetadataProvider.speedControlGenres.contains(genre.toLowerCase())) {
@@ -170,30 +169,43 @@ metadataProvider = FutureProvider.autoDispose.family<MetadataProvider?, Metadata
             MetadataProvider.speedControlLongTrackDuration.inMicroseconds * 10) {
       // we might want playback speed control for long tracks (like podcasts or audiobook chapters)
       metadata.qualifiesForPlaybackSpeedControl = true;
+    }
+  }
+
+  BaseItemDto? parent;
+  if (request.item.parentId != null &&
+      (request.checkIfSpeedControlNeeded && !metadata.qualifiesForPlaybackSpeedControl)) {
+    if (!FinampSettingsHelper.finampSettings.isOffline) {
+      try {
+        parent = await jellyfinApiHelper.getItemById(request.item.parentId!);
+      } catch (e) {
+        metadataProviderLogger.warning(
+          "Failed to get parent item ('${request.item.parentId}') for '${request.item.name}' (${request.item.id})",
+          e,
+        );
+      }
     } else {
-      // check if "album" is long enough to qualify for playback speed control
-      if (request.item.parentId != null) {
-        if (FinampSettingsHelper.finampSettings.isOffline) {
-          final parent = await downloadsService.getCollectionInfo(id: request.item.parentId);
-          if ((parent?.baseItem?.runTimeTicks ?? 0) >
-              MetadataProvider.speedControlLongAlbumDuration.inMicroseconds * 10) {
-            metadata.qualifiesForPlaybackSpeedControl = true;
-          }
-        } else {
-          try {
-            final parent = await jellyfinApiHelper.getItemById(request.item.parentId!);
-            if ((parent.runTimeTicks ?? 0) > MetadataProvider.speedControlLongAlbumDuration.inMicroseconds * 10) {
-              metadata.qualifiesForPlaybackSpeedControl = true;
-            }
-          } catch (e) {
-            metadataProviderLogger.warning(
-              "Failed to check if '${request.item.name}' (${request.item.id}) qualifies for playback speed controls",
-              e,
-            );
-          }
-        }
+      final parentInfo = await downloadsService.getCollectionInfo(id: request.item.parentId!);
+      if (parentInfo == null) {
+        metadataProviderLogger.warning(
+          "Couldn't find parent collection '${request.item.parentId}' for track '${request.item.id}' in offline mode",
+        );
+      } else if (parentInfo.baseItem == null) {
+        metadataProviderLogger.warning(
+          "Offline metadata for '${request.item.parentId}' (parent of '${request.item.id}') does not include jellyfin BaseItemDto",
+        );
+      } else {
+        parent = parentInfo.baseItem;
       }
     }
+  }
+
+  // check if item qualifies for having playback speed control available
+  if (request.checkIfSpeedControlNeeded &&
+      !metadata.qualifiesForPlaybackSpeedControl &&
+      parent != null &&
+      (parent.runTimeTicks ?? 0) > MetadataProvider.speedControlLongAlbumDuration.inMicroseconds * 10) {
+    metadata.qualifiesForPlaybackSpeedControl = true;
   }
 
   if (request.includeLyrics && metadata.hasLyrics) {
