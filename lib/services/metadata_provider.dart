@@ -53,9 +53,6 @@ class MetadataProvider {
 
 final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest> metadataProvider = FutureProvider.autoDispose
     .family<MetadataProvider?, MetadataRequest>((ref, request) async {
-      // watch settings to trigger re-fetching metadata when offline mode changes
-      ref.watch(finampSettingsProvider.isOffline);
-
       Future<BaseItemDto?>? parentFuture;
       if (request.item.parentId != null) {
         parentFuture = ref.watch(albumProvider(request.item.parentId!).future);
@@ -119,7 +116,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest> metada
 
       //!!! only use offline metadata if the app is in offline mode
       // Finamp should always use the server metadata when online, if possible
-      if (FinampSettingsHelper.finampSettings.isOffline) {
+      if (ref.watch(finampSettingsProvider.isOffline)) {
         playbackInfo = localPlaybackInfo;
       } else {
         // fetch from server in online mode
@@ -185,7 +182,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest> metada
       if (request.includeLyrics && metadata.hasLyrics) {
         //!!! only use offline metadata if the app is in offline mode
         // Finamp should always use the server metadata when online, if possible
-        if (FinampSettingsHelper.finampSettings.isOffline) {
+        if (ref.watch(finampSettingsProvider.isOffline)) {
           DownloadedLyrics? downloadedLyrics;
           downloadedLyrics = await downloadsService.getLyricsDownload(baseItem: request.item);
           if (downloadedLyrics != null) {
