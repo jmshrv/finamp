@@ -12,8 +12,6 @@ import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
-import 'package:finamp/menus/server_sharing_menu.dart';
-import 'package:finamp/menus/quick_connect_authorization_menu.dart';
 
 class MusicScreenDrawer extends StatelessWidget {
   const MusicScreenDrawer({super.key});

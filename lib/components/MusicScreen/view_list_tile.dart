@@ -38,7 +38,10 @@ class ViewListTile extends ConsumerWidget {
           semanticsLabel: "", // covered by SemanticsProperties
           style: TextStyle(color: currentViewId == view.id ? Theme.of(context).colorScheme.primary : null),
         ),
-        onTap: () => finampUserHelper.setCurrentUserCurrentViewId(view.id),
+        onTap: () {
+          finampUserHelper.setCurrentUserCurrentViewId(view.id);
+          Navigator.of(context).pop();
+        },
         trailing: DownloadButton(
           isLibrary: true,
           item: DownloadStub.fromItem(item: view, type: DownloadItemType.collection),
