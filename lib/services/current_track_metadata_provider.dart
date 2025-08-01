@@ -12,16 +12,13 @@ final currentTrackMetadataProvider = AutoDisposeProvider<AsyncValue<MetadataProv
   for (final itemToPrecache in precacheItems) {
     BaseItemDto? base = itemToPrecache.baseItem;
     if (base != null) {
-      // only fetch lyrics for the current track
-      final request = MetadataRequest(item: base, includeLyrics: true);
-      ref.listen(metadataProvider(request), (_, __) {});
+      ref.listen(metadataProvider(base), (_, __) {});
     }
   }
 
   final currentTrack = ref.watch(currentTrackProvider).value;
   if (currentTrack?.baseItem != null) {
-    final request = MetadataRequest(item: currentTrack!.baseItem!, includeLyrics: true);
-    return ref.watch(metadataProvider(request));
+    return ref.watch(metadataProvider(currentTrack!.baseItem!));
   }
   return const AsyncValue.data(null);
 });

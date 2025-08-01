@@ -10,22 +10,6 @@ import 'jellyfin_api_helper.dart';
 
 final metadataProviderLogger = Logger("MetadataProvider");
 
-class MetadataRequest {
-  const MetadataRequest({required this.item, this.includeLyrics = false}) : super();
-
-  final BaseItemDto item;
-
-  final bool includeLyrics;
-
-  @override
-  bool operator ==(Object other) {
-    return other is MetadataRequest && other.includeLyrics == includeLyrics && other.item.id == item.id;
-  }
-
-  @override
-  int get hashCode => Object.hash(item.id, includeLyrics);
-}
-
 /// A storage container for metadata about a track.  The codec information will reflect
 /// the downloaded file if appropriate, even for transcoded downloads.  Online
 /// transcoding will not be reflected.
@@ -51,26 +35,26 @@ class MetadataProvider {
   bool get hasLyrics => mediaSourceInfo.mediaStreams.any((e) => e.type == "Lyric");
 }
 
-final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest> metadataProvider = FutureProvider.autoDispose
-    .family<MetadataProvider?, MetadataRequest>((ref, request) async {
+final AutoDisposeFutureProviderFamily<MetadataProvider?, BaseItemDto> metadataProvider = FutureProvider.autoDispose
+    .family<MetadataProvider?, BaseItemDto>((ref, item) async {
       Future<BaseItemDto?>? parentFuture;
-      if (request.item.parentId != null) {
-        parentFuture = ref.watch(albumProvider(request.item.parentId!).future);
+      if (item.parentId != null) {
+        parentFuture = ref.watch(albumProvider(item.parentId!).future);
       }
 
       final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
       final downloadsService = GetIt.instance<DownloadsService>();
 
-      metadataProviderLogger.fine("Fetching metadata for '${request.item.name}' (${request.item.id})");
+      metadataProviderLogger.fine("Fetching metadata for '${item.name}' (${item.id})");
 
       MediaSourceInfo? playbackInfo;
       MediaSourceInfo? localPlaybackInfo;
 
-      final downloadStub = await downloadsService.getTrackInfo(id: request.item.id);
+      final downloadStub = await downloadsService.getTrackInfo(id: item.id);
       if (downloadStub != null) {
         final downloadItem = await ref.watch(downloadsService.itemProvider(downloadStub).future);
         if (downloadItem != null && downloadItem.state.isComplete) {
-          metadataProviderLogger.fine("Got offline metadata for '${request.item.name}'");
+          metadataProviderLogger.fine("Got offline metadata for '${item.name}'");
           var profile = downloadItem.fileTranscodingProfile;
           // We could explicitly get a mediaSource of type Default, but just grabbing
           // the first seems to generally work?
@@ -121,12 +105,12 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest> metada
       } else {
         // fetch from server in online mode
         metadataProviderLogger.fine(
-          "Fetching metadata for '${request.item.name}' (${request.item.id}) from server due to missing attributes",
+          "Fetching metadata for '${item.name}' (${item.id}) from server due to missing attributes",
         );
         try {
-          playbackInfo = (await jellyfinApiHelper.getPlaybackInfo(request.item.id))?.first;
+          playbackInfo = (await jellyfinApiHelper.getPlaybackInfo(item.id))?.first;
         } catch (e) {
-          metadataProviderLogger.severe("Failed to fetch metadata for '${request.item.name}' (${request.item.id})", e);
+          metadataProviderLogger.severe("Failed to fetch metadata for '${item.name}' (${item.id})", e);
           return null;
         }
 
@@ -144,7 +128,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest> metada
       }
 
       if (playbackInfo == null) {
-        metadataProviderLogger.warning("Couldn't load metadata for '${request.item.name}' (${request.item.id})");
+        metadataProviderLogger.warning("Couldn't load metadata for '${item.name}' (${item.id})");
         return null;
       }
 
@@ -159,7 +143,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest> metada
         parentNormalizationGain: parent?.normalizationGain,
       );
 
-      for (final genre in request.item.genres ?? []) {
+      for (final genre in item.genres ?? []) {
         if (MetadataProvider.speedControlGenres.contains(genre.toLowerCase())) {
           metadata.qualifiesForPlaybackSpeedControl = true;
           break;
@@ -179,26 +163,26 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest> metada
         metadata.qualifiesForPlaybackSpeedControl = true;
       }
 
-      if (request.includeLyrics && metadata.hasLyrics) {
+      if (metadata.hasLyrics) {
         //!!! only use offline metadata if the app is in offline mode
         // Finamp should always use the server metadata when online, if possible
         if (ref.watch(finampSettingsProvider.isOffline)) {
           DownloadedLyrics? downloadedLyrics;
-          downloadedLyrics = await downloadsService.getLyricsDownload(baseItem: request.item);
+          downloadedLyrics = await downloadsService.getLyricsDownload(baseItem: item);
           if (downloadedLyrics != null) {
             metadata.lyrics = downloadedLyrics.lyricDto;
-            metadataProviderLogger.fine("Got offline lyrics for '${request.item.name}'");
+            metadataProviderLogger.fine("Got offline lyrics for '${item.name}'");
           } else {
-            metadataProviderLogger.fine("No offline lyrics for '${request.item.name}'");
+            metadataProviderLogger.fine("No offline lyrics for '${item.name}'");
           }
         } else {
-          metadataProviderLogger.fine("Fetching lyrics for '${request.item.name}' (${request.item.id})");
+          metadataProviderLogger.fine("Fetching lyrics for '${item.name}' (${item.id})");
           try {
-            final lyrics = await jellyfinApiHelper.getLyrics(itemId: request.item.id);
+            final lyrics = await jellyfinApiHelper.getLyrics(itemId: item.id);
             metadata.lyrics = lyrics;
           } catch (e) {
             metadataProviderLogger.warning(
-              "Failed to fetch lyrics for '${request.item.name}' (${request.item.id}). Metadata might be stale",
+              "Failed to fetch lyrics for '${item.name}' (${item.id}). Metadata might be stale",
               e,
             );
           }
@@ -206,7 +190,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, MetadataRequest> metada
       }
 
       metadataProviderLogger.fine(
-        "Fetched metadata for '${request.item.name}' (${request.item.id}): ${metadata.lyrics} ${metadata.hasLyrics}",
+        "Fetched metadata for '${item.name}' (${item.id}): ${metadata.lyrics} ${metadata.hasLyrics}",
       );
 
       return metadata;

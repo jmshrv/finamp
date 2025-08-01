@@ -1115,7 +1115,7 @@ double? getGainForCurrentPlayback(MediaItem currentTrack, jellyfin_models.BaseIt
       // along with `includeLyrics` always being true in currentTrackMetadataProvider
       // Otherwise, use code commented above
       final parentNormalizationGain = providerContainer
-          .read(metadataProvider(MetadataRequest(item: baseItem, includeLyrics: true)))
+          .read(metadataProvider(baseItem))
           .valueOrNull
           ?.parentNormalizationGain;
 
