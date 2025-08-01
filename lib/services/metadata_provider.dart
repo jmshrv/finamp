@@ -11,24 +11,19 @@ import 'jellyfin_api_helper.dart';
 final metadataProviderLogger = Logger("MetadataProvider");
 
 class MetadataRequest {
-  const MetadataRequest({required this.item, this.includeLyrics = false, this.checkIfSpeedControlNeeded = false})
-    : super();
+  const MetadataRequest({required this.item, this.includeLyrics = false}) : super();
 
   final BaseItemDto item;
 
   final bool includeLyrics;
-  final bool checkIfSpeedControlNeeded;
 
   @override
   bool operator ==(Object other) {
-    return other is MetadataRequest &&
-        other.includeLyrics == includeLyrics &&
-        other.checkIfSpeedControlNeeded == checkIfSpeedControlNeeded &&
-        other.item.id == item.id;
+    return other is MetadataRequest && other.includeLyrics == includeLyrics && other.item.id == item.id;
   }
 
   @override
-  int get hashCode => Object.hash(item.id, includeLyrics, checkIfSpeedControlNeeded);
+  int get hashCode => Object.hash(item.id, includeLyrics);
 }
 
 /// A storage container for metadata about a track.  The codec information will reflect
@@ -153,19 +148,17 @@ metadataProvider = FutureProvider.autoDispose.family<MetadataProvider?, Metadata
 
   final metadata = MetadataProvider(mediaSourceInfo: playbackInfo, isDownloaded: localPlaybackInfo != null);
 
-  if (request.checkIfSpeedControlNeeded) {
-    for (final genre in request.item.genres ?? []) {
-      if (MetadataProvider.speedControlGenres.contains(genre.toLowerCase())) {
-        metadata.qualifiesForPlaybackSpeedControl = true;
-        break;
-      }
-    }
-    if (!metadata.qualifiesForPlaybackSpeedControl &&
-        (metadata.mediaSourceInfo.runTimeTicks ?? 0) >
-            MetadataProvider.speedControlLongTrackDuration.inMicroseconds * 10) {
-      // we might want playback speed control for long tracks (like podcasts or audiobook chapters)
+  for (final genre in request.item.genres ?? []) {
+    if (MetadataProvider.speedControlGenres.contains(genre.toLowerCase())) {
       metadata.qualifiesForPlaybackSpeedControl = true;
+      break;
     }
+  }
+  if (!metadata.qualifiesForPlaybackSpeedControl &&
+      (metadata.mediaSourceInfo.runTimeTicks ?? 0) >
+          MetadataProvider.speedControlLongTrackDuration.inMicroseconds * 10) {
+    // we might want playback speed control for long tracks (like podcasts or audiobook chapters)
+    metadata.qualifiesForPlaybackSpeedControl = true;
   }
 
   BaseItemDto? parent;
@@ -196,8 +189,7 @@ metadataProvider = FutureProvider.autoDispose.family<MetadataProvider?, Metadata
   }
 
   // check if item qualifies for having playback speed control available
-  if (request.checkIfSpeedControlNeeded &&
-      !metadata.qualifiesForPlaybackSpeedControl &&
+  if (!metadata.qualifiesForPlaybackSpeedControl &&
       parent != null &&
       (parent.runTimeTicks ?? 0) > MetadataProvider.speedControlLongAlbumDuration.inMicroseconds * 10) {
     metadata.qualifiesForPlaybackSpeedControl = true;
