@@ -11,15 +11,10 @@ import 'jellyfin_api_helper.dart';
 final metadataProviderLogger = Logger("MetadataProvider");
 
 class MetadataRequest {
-  const MetadataRequest({
-    required this.item,
-    this.queueItem,
-    this.includeLyrics = false,
-    this.checkIfSpeedControlNeeded = false,
-  }) : super();
+  const MetadataRequest({required this.item, this.includeLyrics = false, this.checkIfSpeedControlNeeded = false})
+    : super();
 
   final BaseItemDto item;
-  final FinampQueueItem? queueItem;
 
   final bool includeLyrics;
   final bool checkIfSpeedControlNeeded;
@@ -29,12 +24,11 @@ class MetadataRequest {
     return other is MetadataRequest &&
         other.includeLyrics == includeLyrics &&
         other.checkIfSpeedControlNeeded == checkIfSpeedControlNeeded &&
-        other.item.id == item.id &&
-        other.queueItem?.id == queueItem?.id;
+        other.item.id == item.id;
   }
 
   @override
-  int get hashCode => Object.hash(item.id, queueItem?.id, includeLyrics, checkIfSpeedControlNeeded);
+  int get hashCode => Object.hash(item.id, includeLyrics, checkIfSpeedControlNeeded);
 }
 
 /// A storage container for metadata about a track.  The codec information will reflect

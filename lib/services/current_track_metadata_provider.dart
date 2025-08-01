@@ -16,7 +16,6 @@ final currentTrackMetadataProvider = AutoDisposeProvider<AsyncValue<MetadataProv
       // only fetch lyrics for the current track
       final request = MetadataRequest(
         item: base,
-        queueItem: itemToPrecache,
         includeLyrics: true,
         checkIfSpeedControlNeeded:
             ref.watch(finampSettingsProvider.playbackSpeedVisibility) == PlaybackSpeedVisibility.automatic,
@@ -29,7 +28,6 @@ final currentTrackMetadataProvider = AutoDisposeProvider<AsyncValue<MetadataProv
   if (currentTrack?.baseItem != null) {
     final request = MetadataRequest(
       item: currentTrack!.baseItem!,
-      queueItem: currentTrack,
       includeLyrics: true,
       checkIfSpeedControlNeeded:
           ref.watch(finampSettingsProvider.playbackSpeedVisibility) == PlaybackSpeedVisibility.automatic,
