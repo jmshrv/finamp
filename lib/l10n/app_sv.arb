@@ -114,8 +114,6 @@
   "@required": {},
   "playlistUpdated": "Spellistans namn uppdaterades.",
   "@playlistUpdated": {},
-  "downloadedTracksWillNotBeDeleted": "Nedladdade spår kommer inte att raderas",
-  "@downloadedTracksWillNotBeDeleted": {},
   "addButtonLabel": "Lägg till",
   "@addButtonLabel": {},
   "logOut": "Logga Ut",

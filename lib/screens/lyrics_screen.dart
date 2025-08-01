@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
+import 'package:finamp/extensions/string.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
@@ -245,20 +247,24 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
     } else if (!metadata.value!.hasLyrics) {
       return getEmptyState(message: "No lyrics available.", icon: TablerIcons.microphone_2_off);
     } else {
+      // We have lyrics that we can display
+      final lyricLines = metadata.value!.lyrics!.lyrics ?? [];
+
       progressStateStreamSubscription?.cancel();
       progressStateStreamSubscription = progressStateStream.listen((state) async {
         currentPosition = state.position;
+        final currentMicros = state.position.inMicroseconds;
 
         if (!_isSynchronizedLyrics || !_isVisible) {
           return;
         }
 
-        // find the closest line to the current position, clamping to the first and last lines
+        // Find the closest line to the current position, clamping to the first and last lines
         int closestLineIndex = -1;
-        for (int i = 0; i < metadata.value!.lyrics!.lyrics!.length; i++) {
+        for (int i = 0; i < lyricLines.length; i++) {
           closestLineIndex = i;
-          final line = metadata.value!.lyrics!.lyrics![i];
-          if ((line.start ?? 0) ~/ 10 > (currentPosition?.inMicroseconds ?? 0)) {
+          final line = lyricLines[i];
+          if (line.startMicros > currentMicros) {
             closestLineIndex = i - 1;
             break;
           }
@@ -269,10 +275,9 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
           setState(() {}); // Rebuild to update the current line
           if (autoScrollController.hasClients && isAutoScrollEnabled) {
             int clampedIndex = currentLineIndex ?? 0;
-            if (clampedIndex >= metadata.value!.lyrics!.lyrics!.length) {
-              clampedIndex = metadata.value!.lyrics!.lyrics!.length - 1;
+            if (clampedIndex >= lyricLines.length) {
+              clampedIndex = lyricLines.length - 1;
             }
-            // print("currentPosition: ${currentPosition?.inMicroseconds}, currentLineIndex: $currentLineIndex, line: ${metadata.value!.lyrics!.lyrics![clampedIndex].text}");
             if (clampedIndex < 0) {
               await autoScrollController.scrollToIndex(
                 -1,
@@ -281,18 +286,18 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                     ? const Duration(
                         milliseconds: 1,
                       ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
-                    : const Duration(milliseconds: 500),
+                    : const Duration(milliseconds: 300),
               );
             } else {
               unawaited(
                 autoScrollController.scrollToIndex(
-                  clampedIndex.clamp(0, metadata.value!.lyrics!.lyrics!.length - 1),
+                  clampedIndex.clamp(0, lyricLines.length - 1),
                   preferPosition: AutoScrollPosition.middle,
                   duration: MediaQuery.of(context).disableAnimations
                       ? const Duration(
                           milliseconds: 1,
                         ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
-                      : const Duration(milliseconds: 500),
+                      : const Duration(milliseconds: 300),
                 ),
               );
             }
@@ -310,16 +315,15 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                 LyricsListMask(
                   child: ListView.builder(
                     controller: autoScrollController,
-                    itemCount: metadata.value!.lyrics!.lyrics?.length ?? 0,
+                    itemCount: lyricLines.length,
                     itemBuilder: (context, index) {
-                      final line = metadata.value!.lyrics!.lyrics![index];
-                      final nextLine = index < metadata.value!.lyrics!.lyrics!.length - 1
-                          ? metadata.value!.lyrics!.lyrics![index + 1]
-                          : null;
+                      final currentMicros = currentPosition?.inMicroseconds ?? 0;
+                      final line = lyricLines[index];
+                      final nextLine = index < lyricLines.length - 1 ? lyricLines[index + 1] : null;
 
                       final isCurrentLine =
-                          (currentPosition?.inMicroseconds ?? 0) >= (line.start ?? 0) ~/ 10 &&
-                          (nextLine == null || (currentPosition?.inMicroseconds ?? 0) < (nextLine.start ?? 0) ~/ 10);
+                          currentMicros >= line.startMicros &&
+                          (nextLine == null || currentMicros < nextLine.startMicros);
 
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -350,28 +354,25 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                               isCurrentLine: isCurrentLine,
                               onTap: () async {
                                 // Seek to the start of the line
-                                await audioHandler.seek(Duration(microseconds: (line.start ?? 0) ~/ 10));
+                                await audioHandler.seek(Duration(microseconds: line.startMicros));
                                 setState(() {
                                   isAutoScrollEnabled = true;
                                 });
-                                if (previousLineIndex != null) {
-                                  unawaited(
-                                    autoScrollController.scrollToIndex(
-                                      previousLineIndex!,
-                                      preferPosition: AutoScrollPosition.middle,
-                                      duration: MediaQuery.of(context).disableAnimations
-                                          ? const Duration(
-                                              milliseconds: 1,
-                                            ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
-                                          : const Duration(milliseconds: 500),
-                                    ),
-                                  );
-                                }
+                                unawaited(
+                                  autoScrollController.scrollToIndex(
+                                    index,
+                                    preferPosition: AutoScrollPosition.middle,
+                                    duration: MediaQuery.of(context).disableAnimations
+                                        ? const Duration(
+                                            milliseconds: 1,
+                                          ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
+                                        : const Duration(milliseconds: 500),
+                                  ),
+                                );
                               },
                             ),
                           ),
-                          if (index == metadata.value!.lyrics!.lyrics!.length - 1)
-                            SizedBox(height: constraints.maxHeight * 0.2),
+                          if (index == lyricLines.length - 1) SizedBox(height: constraints.maxHeight * 0.2),
                         ],
                       );
                     },
@@ -422,57 +423,325 @@ class _LyricLine extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lowlightLine = !isCurrentLine && line.start != null;
-    final isSynchronized = line.start != null;
-
     final finampSettings = ref.watch(finampSettingsProvider).value;
+
+    final isSynchronized = line.start != null;
+    final showTimestamp = isSynchronized && !line.text.isNullOrBlank && (finampSettings?.showLyricsTimestamps ?? true);
+    final lowlightLine = isSynchronized && !isCurrentLine;
+
+    final textSpan = TextSpan(
+      text: line.text ?? "<missing lyric line>",
+      style: TextStyle(
+        color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
+        fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
+        // Keep text width consistent across the different weights
+        letterSpacing: lowlightLine || !isSynchronized ? 0.02 : -0.4,
+        fontSize:
+            lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) *
+            (isSynchronized ? 1.0 : 0.75),
+        height: 1.25,
+      ),
+    );
 
     return GestureDetector(
       onTap: isSynchronized ? onTap : null,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: isSynchronized ? 10.0 : 6.0),
-        child: Text.rich(
-          textAlign: lyricsAlignmentToTextAlign(finampSettings?.lyricsAlignment ?? LyricsAlignment.start),
-          softWrap: true,
-          TextSpan(
-            children: [
-              if (line.start != null &&
-                  (line.text?.trim().isNotEmpty ?? false) &&
-                  (finampSettings?.showLyricsTimestamps ?? true))
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.bottom,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Text(
-                      "${Duration(microseconds: (line.start ?? 0) ~/ 10).inMinutes}:${(Duration(microseconds: (line.start ?? 0) ~/ 10).inSeconds % 60).toString().padLeft(2, '0')}",
-                      style: TextStyle(
-                        color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
-                        fontSize: 16,
-                        height:
-                            1.75 * (lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) / 26),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            // Calculate available width for lyrics (accounting for timestamp if shown)
+            final availableWidth = constraints.maxWidth - (showTimestamp ? 60 : 0);
+
+            final linePainter = TextPainter(
+              text: textSpan,
+              textAlign: lyricsAlignmentToTextAlign(finampSettings?.lyricsAlignment ?? LyricsAlignment.start),
+              textDirection: TextDirection.ltr,
+            )..setPlaceholderDimensions([]);
+            linePainter.layout(minWidth: 0, maxWidth: availableWidth);
+
+            return StreamBuilder<ProgressState>(
+              stream: progressStateStream,
+              builder: (context, snapshot) {
+                final currentMicros = snapshot.data?.position.inMicroseconds ?? 0;
+
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (showTimestamp)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Text(
+                          "${Duration(microseconds: line.startMicros).inMinutes}:${(Duration(microseconds: line.startMicros).inSeconds % 60).toString().padLeft(2, '0')}",
+                          style: TextStyle(
+                            color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
+                            fontSize: 16,
+                            height:
+                                1.75 *
+                                (lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) / 26),
+                          ),
+                        ),
+                      ),
+                    Expanded(
+                      child: CustomPaint(
+                        size: Size(availableWidth, linePainter.height),
+                        painter: LyricsLinePainter(
+                          textPainter: linePainter,
+                          line: line,
+                          currentMicros: currentMicros,
+                          isCurrentLine: isCurrentLine,
+                          primaryColor: Theme.of(context).textTheme.bodyLarge?.color,
+                          highlightColor: Theme.of(context).colorScheme.primary,
+                          grayedColor: Colors.white,
+                          lowlightLine: lowlightLine,
+                          maxWidth: availableWidth,
+                          textAlign: lyricsAlignmentToTextAlign(
+                            finampSettings?.lyricsAlignment ?? LyricsAlignment.start,
+                          ),
+                          baseStyle: TextStyle(
+                            color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
+                            fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
+                            // Keep text width consistent across the different weights
+                            letterSpacing: lowlightLine || !isSynchronized ? 0.02 : -0.4,
+                            fontSize:
+                                lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) *
+                                (isSynchronized ? 1.0 : 0.75),
+                            height: 1.25,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              TextSpan(
-                text: line.text ?? "<missing lyric line>",
-                style: TextStyle(
-                  color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
-                  fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
-                  // Keep text width consistent across the different weights
-                  letterSpacing: lowlightLine || !isSynchronized ? 0.05 : -0.045,
-                  fontSize:
-                      lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) *
-                      (isSynchronized ? 1.0 : 0.75),
-                  height: 1.25,
-                ),
-              ),
-            ],
-          ),
+                  ],
+                );
+              },
+            );
+          },
         ),
       ),
     );
   }
+}
+
+class LyricsLinePainter extends ChangeNotifier implements CustomPainter {
+  final TextPainter textPainter;
+  final LyricLine line;
+  final int currentMicros;
+  final bool isCurrentLine;
+  final Color? primaryColor;
+  final Color highlightColor;
+  final Color grayedColor;
+  final bool lowlightLine;
+  final TextStyle baseStyle;
+  final double maxWidth;
+  final TextAlign textAlign;
+
+  LyricsLinePainter({
+    required this.textPainter,
+    required this.line,
+    required this.currentMicros,
+    required this.isCurrentLine,
+    required this.primaryColor,
+    required this.highlightColor,
+    required this.grayedColor,
+    required this.lowlightLine,
+    required this.baseStyle,
+    required this.maxWidth,
+    required this.textAlign,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // If we have word-level cues and this is the current line, paint word-by-word
+    if (line.cues != null && line.cues!.isNotEmpty && isCurrentLine && !lowlightLine) {
+      _paintWithWordHighlighting(canvas, size);
+    } else {
+      // Default painting for non-current lines or lines without cues
+      final offsetX = _calculateTextAlignmentOffset(size.width, textPainter.width);
+      textPainter.paint(canvas, Offset(offsetX, 0.0));
+    }
+  }
+
+  /// Calculates the horizontal offset for text alignment
+  double _calculateTextAlignmentOffset(double containerWidth, double textWidth) {
+    switch (textAlign) {
+      case TextAlign.start:
+      case TextAlign.left:
+        return 0.0;
+      case TextAlign.center:
+        return (containerWidth - textWidth) / 2.0;
+      case TextAlign.end:
+      case TextAlign.right:
+        return containerWidth - textWidth;
+      case TextAlign.justify:
+        return 0.0; // Justify behaves like start for single lines
+    }
+  }
+
+  void _paintWithWordHighlighting(Canvas canvas, Size size) {
+    final text = line.text ?? "";
+    final cues = line.cues ?? [];
+
+    if (text.isEmpty || cues.isEmpty) {
+      textPainter.paint(canvas, Offset.zero);
+      return;
+    }
+
+    // Build a single TextSpan with different colored segments
+    final segments = <TextSpan>[];
+
+    int lastPosition = 0;
+
+    // Start by assuming all text should be grayed out, then highlight as needed
+    for (int i = 0; i < cues.length; i++) {
+      final cue = cues[i];
+      final nextCue = i < cues.length - 1 ? cues[i + 1] : null;
+
+      // Add any text before this cue that wasn't covered
+      if (cue.position > lastPosition) {
+        final beforeText = text.substring(lastPosition, cue.position);
+        if (beforeText.isNotEmpty) {
+          segments.add(
+            TextSpan(
+              text: beforeText,
+              style: baseStyle.copyWith(color: grayedColor),
+            ),
+          );
+        }
+      }
+
+      // Determine the end position for this cue using endPosition if available, otherwise fallback to next cue's position
+      final endPosition = cue.endPosition ?? nextCue?.position ?? text.length;
+      final cueText = text.substring(cue.position, math.min(endPosition, text.length));
+
+      if (cueText.isNotEmpty) {
+        // Determine color based on timing with fade-in effect
+        Color segmentColor;
+
+        // Check if this word is currently being sung
+        final hasReachedThisCue = currentMicros >= cue.startMicros;
+        final hasReachedNextCue = nextCue != null && currentMicros >= nextCue.startMicros;
+
+        // Calculate fade-in timing (0.5 seconds = 500,000 microseconds before the cue)
+        const fadeInDurationMicros = 500000; // 0.5 seconds
+        final fadeInStartTime = cue.startMicros - fadeInDurationMicros;
+        final isInFadeInPeriod = currentMicros >= fadeInStartTime && currentMicros < cue.startMicros;
+
+        if (hasReachedThisCue && !hasReachedNextCue) {
+          // This word/segment is currently active - highlight it
+          segmentColor = highlightColor;
+        } else if (isInFadeInPeriod) {
+          // This word is about to become active - fade it in letter by letter with color change
+          final fadeProgress = (currentMicros - fadeInStartTime) / fadeInDurationMicros;
+          final clampedProgress = fadeProgress.clamp(0.0, 1.0);
+
+          // Calculate how many letters should be highlighted based on progress
+          final totalLetters = cueText.length;
+          final highlightedLetters = (totalLetters * clampedProgress).round();
+
+          // Split the text into highlighted and non-highlighted parts
+          if (highlightedLetters > 0) {
+            final highlightedText = cueText.substring(0, highlightedLetters);
+            segments.add(
+              TextSpan(
+                text: highlightedText,
+                style: baseStyle.copyWith(color: Color.alphaBlend(highlightColor.withOpacity(0.6), grayedColor)),
+              ),
+            );
+          }
+
+          if (highlightedLetters < totalLetters) {
+            final remainingText = cueText.substring(highlightedLetters);
+            segments.add(
+              TextSpan(
+                text: remainingText,
+                style: baseStyle.copyWith(color: grayedColor),
+              ),
+            );
+          }
+
+          lastPosition = math.max(lastPosition, math.min(endPosition, text.length));
+          continue;
+        } else {
+          // All other words (past and future) - use normal grayed color
+          segmentColor = grayedColor;
+        }
+
+        // Add the segment for non-fade-in cases
+        if (!isInFadeInPeriod) {
+          segments.add(
+            TextSpan(
+              text: cueText,
+              style: baseStyle.copyWith(color: segmentColor),
+            ),
+          );
+        }
+      }
+      lastPosition = math.max(lastPosition, math.min(endPosition, text.length));
+    }
+
+    // Add any remaining text after the last cue
+    if (lastPosition < text.length) {
+      final remainingText = text.substring(lastPosition);
+      if (remainingText.isNotEmpty) {
+        segments.add(
+          TextSpan(
+            text: remainingText,
+            style: baseStyle.copyWith(color: grayedColor),
+          ),
+        );
+      }
+    }
+
+    // Fallback: if we have no segments, just render the original text in grayed color
+    if (segments.isEmpty) {
+      segments.add(
+        TextSpan(
+          text: text,
+          style: baseStyle.copyWith(color: grayedColor),
+        ),
+      );
+    }
+
+    // Create a new TextPainter with the colored segments, using the same layout parameters
+    final coloredTextSpan = TextSpan(children: segments);
+    final coloredTextPainter = TextPainter(
+      text: coloredTextSpan,
+      textAlign: textAlign, // Use the passed text alignment
+      textDirection: textPainter.textDirection,
+      textScaler: textPainter.textScaler, // Preserve text scaling
+      maxLines: textPainter.maxLines,
+    );
+
+    // Use the exact same layout constraints as the original to ensure identical line breaking
+    // Use the maxWidth that was passed to ensure consistency with the original layout
+    coloredTextPainter.layout(minWidth: 0, maxWidth: maxWidth);
+
+    // Calculate the offset based on text alignment
+    final offsetX = _calculateTextAlignmentOffset(size.width, coloredTextPainter.width);
+
+    // Paint the colored text with the calculated offset
+    coloredTextPainter.paint(canvas, Offset(offsetX, 0.0));
+  }
+
+  @override
+  bool shouldRepaint(LyricsLinePainter oldDelegate) {
+    return textPainter.text != oldDelegate.textPainter.text ||
+        textAlign != oldDelegate.textAlign ||
+        currentMicros != oldDelegate.currentMicros ||
+        isCurrentLine != oldDelegate.isCurrentLine ||
+        lowlightLine != oldDelegate.lowlightLine ||
+        maxWidth != oldDelegate.maxWidth;
+  }
+
+  @override
+  SemanticsBuilderCallback? get semanticsBuilder => null;
+
+  @override
+  bool shouldRebuildSemantics(covariant LyricsLinePainter oldDelegate) {
+    return shouldRepaint(oldDelegate);
+  }
+
+  @override
+  bool? hitTest(Offset position) => null;
 }
 
 class LyricsListMask extends StatelessWidget {

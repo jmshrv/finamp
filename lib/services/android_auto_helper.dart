@@ -115,34 +115,34 @@ class AndroidAutoHelper {
     // fetch the online version if we can't get offline version
 
     // select the item type that each parent holds
-    String? includeItemTypes;
+    BaseItemDtoType includeItemTypes;
     if (itemId.parentType == MediaItemParentType.collection) {
       // if we are browsing a root library. e.g. browsing the list of all albums or artists
       switch (itemId.contentType) {
         case TabContentType.albums:
           // get an album's tracks
-          includeItemTypes = TabContentType.tracks.itemType.idString;
+          includeItemTypes = TabContentType.tracks.itemType;
           break;
         case TabContentType.artists:
           // get an artist's albums
-          includeItemTypes = TabContentType.albums.itemType.idString;
+          includeItemTypes = TabContentType.albums.itemType;
           break;
         case TabContentType.playlists:
           // get a playlist's tracks
-          includeItemTypes = TabContentType.tracks.itemType.idString;
+          includeItemTypes = TabContentType.tracks.itemType;
           break;
         case TabContentType.genres:
           // get a genre's albums
-          includeItemTypes = TabContentType.albums.itemType.idString;
+          includeItemTypes = TabContentType.albums.itemType;
           break;
         default:
           // if we don't have one of these categories, we are probably dealing with stray tracks
-          includeItemTypes = TabContentType.tracks.itemType.idString;
+          includeItemTypes = TabContentType.tracks.itemType;
           break;
       }
     } else {
       // get the root library
-      includeItemTypes = itemId.contentType.itemType.idString;
+      includeItemTypes = itemId.contentType.itemType;
     }
 
     // if parent id is defined, use that to get items.
@@ -153,9 +153,11 @@ class AndroidAutoHelper {
 
     final items = await _jellyfinApiHelper.getItems(
       parentItem: parentItem,
-      sortBy: sortBy.jellyfinName(itemId.contentType),
-      sortOrder: sortOrder.toString(),
-      includeItemTypes: includeItemTypes,
+      sortBy: includeItemTypes == BaseItemDtoType.track
+          ? "ParentIndexNumber,IndexNumber,${sortBy.jellyfinName(itemId.contentType)}"
+          : sortBy.jellyfinName(itemId.contentType),
+      sortOrder: includeItemTypes == BaseItemDtoType.track ? null : sortOrder.toString(),
+      includeItemTypes: includeItemTypes.idString,
       limit: onlineModeLimit,
     );
     return items ?? [];
@@ -265,7 +267,7 @@ class AndroidAutoHelper {
     final queueService = GetIt.instance<QueueService>();
 
     if (searchQuery.rawQuery.isEmpty) {
-      return await shuffleallTracks();
+      return await shuffleAllTracks();
     }
 
     BaseItemDtoType? itemType = TabContentType.tracks.itemType;
@@ -510,7 +512,7 @@ class AndroidAutoHelper {
     }
   }
 
-  Future<void> shuffleallTracks() async {
+  Future<void> shuffleAllTracks() async {
     final audioServiceHelper = GetIt.instance<AudioServiceHelper>();
 
     try {
@@ -524,6 +526,18 @@ class AndroidAutoHelper {
     final queueService = GetIt.instance<QueueService>();
     final items = await getBaseItems(itemId);
     final List<MediaItem> mediaItems = [];
+
+    if (itemId.contentType == TabContentType.tracks && itemId.parentType == MediaItemParentType.rootCollection) {
+      mediaItems.add(
+        MediaItem(
+          id: QueueItemSourceNameType.shuffleAll.name,
+          title:
+              AppLocalizations.of(GlobalSnackbar.materialAppScaffoldKey.currentContext!)?.shuffleAll ??
+              "Shuffle All Tracks",
+          playable: true,
+        ),
+      );
+    }
 
     for (final item in items) {
       final mediaItem = await queueService.generateMediaItem(

@@ -33,6 +33,7 @@ class PlaybackHistoryList extends StatelessWidget {
                   final historyItem = TrackListTile(
                     index: actualIndex,
                     item: group.value[actualIndex].item.baseItem!,
+                    isShownInSearchOrHistory: true,
                     highlightCurrentTrack: groupIndex == 0 && index == 0, // only highlight first track
                   );
 

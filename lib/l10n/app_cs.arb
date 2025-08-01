@@ -71,8 +71,6 @@
   "@bitrate": {},
   "directoryMustBeEmpty": "Adresář musí být prázdný",
   "@directoryMustBeEmpty": {},
-  "downloadedTracksWillNotBeDeleted": "Stažené skladby nebudou odstraněny",
-  "@downloadedTracksWillNotBeDeleted": {},
   "gridCrossAxisCountSubtitle": "Počet položek mřížky na řádek {value}.",
   "@gridCrossAxisCountSubtitle": {
     "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
@@ -2527,5 +2525,103 @@
   "syncPlaybackSpeedAndPitchLabel": "Synchronizovat rychlost a výšku",
   "@syncPlaybackSpeedAndPitchLabel": {
     "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
-  }
+  },
+  "serverSharingMenuTitle": "Sdílení serveru v místní síti",
+  "@serverSharingMenuTitle": {
+    "description": "Title for the server sharing menu that allows the user to share their server address with other devices on the local network"
+  },
+  "serverSharingMenuButtonTitle": "Sdílet server",
+  "@serverSharingMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the server sharing menu"
+  },
+  "serverSharingMenuConfirmationDialogText": "Opravdu chcete povolit sdílení serveru, i když se nacházíte v režimu offline? Tato možnost způsobí, že bude Finamp odesílat data přes místní síť.",
+  "@serverSharingMenuConfirmationDialogText": {
+    "description": "Dialog text shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuConfirmationDialogConfirmationButtonLabel": "Potvrdit a povolit",
+  "@serverSharingMenuConfirmationDialogConfirmationButtonLabel": {
+    "description": "Positive action label for the dialog shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuControlTitleSharingEnabled": "Sdílení serveru",
+  "@serverSharingMenuControlTitleSharingEnabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuControlSubtitleSharingDisabled": "Klepněte pro sdílení",
+  "@serverSharingMenuControlSubtitleSharingDisabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlTitleSharingDisabled": "Sdílení neprobíhá",
+  "@serverSharingMenuControlTitleSharingDisabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlSubtitleSharingEnabled": "Klepněte pro zastavení",
+  "@serverSharingMenuControlSubtitleSharingEnabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuDescription": "Sdílení adresy vašeho serveru může být užitečné pro nastavení nových klientů, kteří se nenachází na stejné místní síti, jako je váš server Jellyfin, např. hotelové televize, váš počítač v televizi nebo nový klient na vašem telefonu, během toho co jste na cestách.",
+  "@serverSharingMenuDescription": {
+    "description": "Description text shown in the server sharing menu, right below the controls"
+  },
+  "serverSharingMenuDetails": "Funguje to tak, že aplikace naslouchá požadavkům na vyhledání serveru od ostatních klientů v místní síti a poté na tyto požadavky odpovídá nakonfigurovanou adresou vašeho serveru Jellyfin.\nPokud máte nastavenou jak místní, tak veřejnou adresu, Finamp poskytne klientovi, který o ně požádal, obě adresy.",
+  "@serverSharingMenuDetails": {
+    "description": "Description text shown in the server sharing menu, below the description"
+  },
+  "quickConnectAuthorizationMenuButtonTitle": "Rychlé připojení",
+  "@quickConnectAuthorizationMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuPrompt": "Zadejte kód rychlého připojení",
+  "@quickConnectAuthorizationMenuPrompt": {
+    "description": "Title for the button in server sharing menu that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuTitle": "Autorizovat žádost o rychlé připojení",
+  "@quickConnectAuthorizationMenuTitle": {
+    "description": "Title for the quick connect authorization menu that allows the user to authorize a quick connect request from another device"
+  },
+  "quickConnectAuthorizationMenuInputLabel": "Kód rychlého připojení",
+  "@quickConnectAuthorizationMenuInputLabel": {
+    "description": "Label for the quick connect code input, shown below the input field"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleIdle": "Zadejte nebo vložte kód níže",
+  "@quickConnectAuthorizationMenuStateSubtitleIdle": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) while the code hasn't been submitted yet"
+  },
+  "quickConnectAuthorizationMenuStateTitleProcessing": "Pokouším se autorizovat žádost",
+  "@quickConnectAuthorizationMenuStateTitleProcessing": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) while a request is being processed"
+  },
+  "quickConnectAuthorizationMenuStateTitleSuccess": "Žádost úspěšně autorizována",
+  "@quickConnectAuthorizationMenuStateTitleSuccess": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was successful"
+  },
+  "quickConnectAuthorizationMenuStateTitleFailed": "Kód rychlého připojení je neplatný",
+  "@quickConnectAuthorizationMenuStateTitleFailed": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleFailed": "Zkontrolujte váš kód a zkuste to znovu",
+  "@quickConnectAuthorizationMenuStateSubtitleFailed": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuDescription": "Pokud se pokoušíte přihlásit do jiného klienta Jellyfin pomocí Rychlého připojení, můžete zadat nebo vložit 6ciferný kód do pole výše. Tím autorizujete žádost druhého klienta a přihlásíte se do stejného účtu, který používáte v aplikaci Finamp.",
+  "@quickConnectAuthorizationMenuDescription": {
+    "description": "Description for the quick connect authorization menu, shown at the bottom"
+  },
+  "createPlaylistFromCurrentQueue": "Uložit frontu jako seznam skladeb",
+  "@createPlaylistFromCurrentQueue": {
+    "description": "Label for a button that creates a new playlist from the current queue."
+  },
+  "accessibility": "Přístupnost",
+  "@accessibility": {
+    "description": "Title for the accessibility settings screen"
+  },
+  "useHighContrastColorsTitle": "Použít barvy s vysokým kontrastem",
+  "@useHighContrastColorsTitle": {
+    "description": "Title for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "useHighContrastColorsSubtitle": "Použít dynamické barvy s vysokým kontrastem pro lepší viditelnost.",
+  "@useHighContrastColorsSubtitle": {
+    "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "logoutButtonSubtitle": "Přihlášením se na jiný server se smažou existující stažené soubory",
+  "@logoutButtonSubtitle": {}
 }

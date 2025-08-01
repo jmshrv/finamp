@@ -169,8 +169,6 @@
   "@audioService": {},
   "logOut": "ログアウト",
   "@logOut": {},
-  "downloadedTracksWillNotBeDeleted": "ダウロード済みの曲は削除されません",
-  "@downloadedTracksWillNotBeDeleted": {},
   "enableTranscoding": "トランスコード有効",
   "@enableTranscoding": {},
   "bitrate": "ビットレート",

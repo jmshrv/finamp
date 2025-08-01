@@ -279,8 +279,6 @@
   },
   "directoryMustBeEmpty": "目录必须为空",
   "@directoryMustBeEmpty": {},
-  "downloadedTracksWillNotBeDeleted": "已下载的歌曲不会被删除",
-  "@downloadedTracksWillNotBeDeleted": {},
   "downloadMissingImages": "下载缺少的图片",
   "@downloadMissingImages": {},
   "hideTrackArtistsIfSameAsAlbumArtists": "如果歌曲艺术家与专辑艺术家相同，则隐藏歌曲艺术家",

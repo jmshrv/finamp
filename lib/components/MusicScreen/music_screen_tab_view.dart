@@ -435,7 +435,7 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                 item: item,
                                 isTrack: true,
                                 index: index,
-                                isShownInSearch: widget.searchTerm != null,
+                                isShownInSearchOrHistory: widget.searchTerm != null,
                                 // when the tabBar was filtered and we only have the tracks tab,
                                 // we can allow Dismiss gestures in the track list
                                 allowDismiss: widget.tabBarFiltered,

@@ -293,8 +293,6 @@
   "@theme": {},
   "dark": "Tamna",
   "@dark": {},
-  "downloadedTracksWillNotBeDeleted": "Preuzete pjesme se neće izbrisati",
-  "@downloadedTracksWillNotBeDeleted": {},
   "bitrate": "Brzina prijenosa",
   "@bitrate": {},
   "bitrateSubtitle": "Veća brzina prijenosa daje veću kvalitetu zvuka, ali troši veću količinu prometa.",

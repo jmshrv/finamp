@@ -15,7 +15,7 @@
   "@enterLowPriorityStateOnPause": {},
   "shuffleAllTrackCount": "Перемішати всі композиції",
   "@shuffleAllTrackCount": {},
-  "shuffleAllTrackCountSubtitle": "Кількість композицій для завантаження при використанні кнопки перемішування всіх пісень.",
+  "shuffleAllTrackCountSubtitle": "Кількість треків для завантаження під час використання кнопки перемішування всіх треків на вкладці треків або екрані жанрів.",
   "@shuffleAllTrackCountSubtitle": {},
   "viewTypeSubtitle": "Тип перегляду для музичного екрану",
   "@viewTypeSubtitle": {},
@@ -227,8 +227,6 @@
   "@transcoding": {},
   "logsCopied": "Логи скопійовано.",
   "@logsCopied": {},
-  "downloadedTracksWillNotBeDeleted": "Завантажені композиції не будуть видалені",
-  "@downloadedTracksWillNotBeDeleted": {},
   "shareLogs": "Поділитися логами",
   "@shareLogs": {},
   "downloadLocations": "Місце завантаження",
@@ -2496,7 +2494,7 @@
   "@preferLocalNetworkTargetAddressLocalSettingTitle": {},
   "preferLocalNetworkTargetAddressLocalSettingDescription": "Цільова адреса сервера Jellyfin у вашій локальній мережі",
   "@preferLocalNetworkTargetAddressLocalSettingDescription": {},
-  "sleepTimerRemainingTime": "Сон у {time,plural,=1{<1 Хвилина} other{{time} хвилин}}",
+  "sleepTimerRemainingTime": "Сон у {time,plural,=1{<1 хвилина} other{{time} хвилин}}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -2529,5 +2527,163 @@
   "syncPlaybackSpeedAndPitchLabel": "Синхронізація швидкості та висоти тону",
   "@syncPlaybackSpeedAndPitchLabel": {
     "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
+  },
+  "serverSharingMenuTitle": "Спільний доступ до локального мережевого сервера",
+  "@serverSharingMenuTitle": {
+    "description": "Title for the server sharing menu that allows the user to share their server address with other devices on the local network"
+  },
+  "serverSharingMenuButtonTitle": "Спільний сервер",
+  "@serverSharingMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the server sharing menu"
+  },
+  "serverSharingMenuConfirmationDialogText": "Ви впевнені, що хочете ввімкнути спільний доступ до сервера, навіть якщо ви перебуваєте в автономному режимі? Це призведе до того, що Finamp надсилатиме дані через локальну мережу.",
+  "@serverSharingMenuConfirmationDialogText": {
+    "description": "Dialog text shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuConfirmationDialogConfirmationButtonLabel": "Підтвердити та увімкнути",
+  "@serverSharingMenuConfirmationDialogConfirmationButtonLabel": {
+    "description": "Positive action label for the dialog shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuControlTitleSharingEnabled": "Сервер спільного доступу",
+  "@serverSharingMenuControlTitleSharingEnabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuControlSubtitleSharingDisabled": "Натисніть, щоб поділитися",
+  "@serverSharingMenuControlSubtitleSharingDisabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlTitleSharingDisabled": "Не поширюється",
+  "@serverSharingMenuControlTitleSharingDisabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlSubtitleSharingEnabled": "Натисніть, щоб зупинити",
+  "@serverSharingMenuControlSubtitleSharingEnabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuDescription": "Спільне використання адреси вашого сервера може бути корисним для налаштування нових клієнтів, які не знаходяться в тій самій локальній мережі, що й ваш сервер Jellyfin, тобто готельних телевізорів, вашого ПК на роботі або нового клієнта на вашому телефоні, коли ви в дорозі.",
+  "@serverSharingMenuDescription": {
+    "description": "Description text shown in the server sharing menu, right below the controls"
+  },
+  "serverSharingMenuDetails": "Він працює, прослуховуючи запити на виявлення серверів від інших клієнтів у локальній мережі, а потім надсилаючи на ці запити налаштовану адресу вашого сервера Jellyfin.\nЯкщо у вас налаштовано як локальну, так і публічну адресу, Finamp надасть обидві клієнту, який надсилає запит.",
+  "@serverSharingMenuDetails": {
+    "description": "Description text shown in the server sharing menu, below the description"
+  },
+  "quickConnectAuthorizationMenuButtonTitle": "Авторизувати швидке підключення",
+  "@quickConnectAuthorizationMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuPrompt": "Введіть код швидкого підключення",
+  "@quickConnectAuthorizationMenuPrompt": {
+    "description": "Title for the button in server sharing menu that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuTitle": "Авторизувати запит на швидке підключення",
+  "@quickConnectAuthorizationMenuTitle": {
+    "description": "Title for the quick connect authorization menu that allows the user to authorize a quick connect request from another device"
+  },
+  "quickConnectAuthorizationMenuInputLabel": "Код швидкого підключення",
+  "@quickConnectAuthorizationMenuInputLabel": {
+    "description": "Label for the quick connect code input, shown below the input field"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleIdle": "Будь ласка, введіть або вставте код нижче",
+  "@quickConnectAuthorizationMenuStateSubtitleIdle": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) while the code hasn't been submitted yet"
+  },
+  "quickConnectAuthorizationMenuStateTitleProcessing": "Спроба авторизації запиту",
+  "@quickConnectAuthorizationMenuStateTitleProcessing": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) while a request is being processed"
+  },
+  "quickConnectAuthorizationMenuStateTitleSuccess": "Запит успішно авторизовано",
+  "@quickConnectAuthorizationMenuStateTitleSuccess": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was successful"
+  },
+  "quickConnectAuthorizationMenuStateTitleFailed": "Недійсний код швидкого підключення",
+  "@quickConnectAuthorizationMenuStateTitleFailed": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleFailed": "Будь ласка, перевірте код і спробуйте ще раз",
+  "@quickConnectAuthorizationMenuStateSubtitleFailed": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuDescription": "Якщо ви намагаєтеся увійти в інший клієнт Jellyfin через Quick Connect, ви можете ввести або вставити 6-значний код у поле вище. Це авторизує запит на вхід іншого клієнта та дозволить вам увійти в той самий обліковий запис, який ви використовуєте для Finamp.",
+  "@quickConnectAuthorizationMenuDescription": {
+    "description": "Description for the quick connect authorization menu, shown at the bottom"
+  },
+  "createPlaylistFromCurrentQueue": "Зберегти чергу як список відтворення",
+  "@createPlaylistFromCurrentQueue": {
+    "description": "Label for a button that creates a new playlist from the current queue."
+  },
+  "accessibility": "Доступність",
+  "@accessibility": {
+    "description": "Title for the accessibility settings screen"
+  },
+  "useHighContrastColorsTitle": "Використовуйте кольори високої контрастності",
+  "@useHighContrastColorsTitle": {
+    "description": "Title for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "useHighContrastColorsSubtitle": "Використовуйте динамічні кольори з високою контрастністю для кращої видимості.",
+  "@useHighContrastColorsSubtitle": {
+    "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "logoutButtonSubtitle": "Вхід на інший сервер призведе до видалення наявних завантажень",
+  "@logoutButtonSubtitle": {},
+  "adaptive": "Адаптивний",
+  "@adaptive": {},
+  "shuffleCountButton": "Перемішати ({count,plural,=1{{count} Трек} other{{count} Треки}})",
+  "@shuffleCountButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "none": "Жоден",
+  "@none": {},
+  "additionalBaseItemInfoTitle": "Додаткова інформація про товар",
+  "@additionalBaseItemInfoTitle": {
+    "description": "Title for the setting that controls the displayed additional item info."
+  },
+  "additionalBaseItemInfoSubtitle": "Контролює, який тип додаткової інформації відображається у списках елементів для кожного типу елемента. Якщо встановлено значення «Адаптивний», інформація вибирається автоматично на основі поточного сортування або контексту.",
+  "@additionalBaseItemInfoSubtitle": {
+    "description": "Subtitle for the setting that controls the displayed additional item info."
+  },
+  "discordRPCSettingTitle": "RPC в Discord",
+  "@discordRPCSettingTitle": {
+    "description": "Title for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCSettingDescription": "Увімкніть Discord Rich Presence, щоб у вашому статусі Discord відображалося, у що ви граєте. Не вийде підключитися до Discord, якщо ввімкнено офлайн-режим.",
+  "@discordRPCSettingDescription": {
+    "description": "Description for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCIconSettingTitle": "Піктограма резервного RPC",
+  "@discordRPCIconSettingTitle": {
+    "description": "Title for the setting that controls which icon gets shown in the Discord RPC (Rich Presence) in case the local address is in use"
+  },
+  "discordRPCIconSettingDescription": "Значок резервного варіанту, який відображається, коли публічна адреса не виявлена. (Оскільки Discord не може завантажити зображення з локальної адреси та використовуватиме резервний варіант)",
+  "@discordRPCIconSettingDescription": {
+    "description": "Description for the setting that controls which Icon the discord RPC displays as a Fallback in case no public address is detected (it doenst matter what connection is active)."
+  },
+  "discordRPCIconDark": "Finamp – Темний",
+  "@discordRPCIconDark": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with the Dark-Theme Background"
+  },
+  "discordRPCIconBlack": "Finamp - Чорний",
+  "@discordRPCIconBlack": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Black Background"
+  },
+  "discordRPCIconLight": "Finamp - Білий",
+  "@discordRPCIconLight": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a White Background"
+  },
+  "discordRPCIconJFTransparent": "Jellyfin - прозорий",
+  "@discordRPCIconJFTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Jellyfin logo with a Transparent Background"
+  },
+  "discordRPCIconTransparent": "Finamp - Прозорий",
+  "@discordRPCIconTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Transparent Background"
+  },
+  "discordRPCIconWhiteTransparent": "Білий Finamp - прозорий",
+  "@discordRPCIconWhiteTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
   }
 }

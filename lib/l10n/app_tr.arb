@@ -363,8 +363,6 @@
   "@message": {},
   "areYouSure": "Emin misiniz?",
   "@areYouSure": {},
-  "downloadedTracksWillNotBeDeleted": "İndirilen parçalar silinmeyecek",
-  "@downloadedTracksWillNotBeDeleted": {},
   "applicationLegalese": "Mozilla Kamu Lisansı 2.0 ile lisanslanmıştır.\nKaynak kodu {sourceCodeLink} adresinde mevcuttur.",
   "@applicationLegalese": {},
   "audioService": "Ses Servisi",
