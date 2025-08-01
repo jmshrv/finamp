@@ -129,7 +129,7 @@
   "@customLocationsBuggy": {},
   "enterLowPriorityStateOnPauseSubtitle": "Позволяет смахнуть уведомление на паузе. Также позволяет Android остановить сервис на паузе.",
   "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllTrackCountSubtitle": "Количество композиций для загрузки в режиме случайного проигрывания.",
+  "shuffleAllTrackCountSubtitle": "Количество композиций для загрузки по нажатии на кнопку \"перемешать все\" в разделе композиций или жанров.",
   "@shuffleAllTrackCountSubtitle": {},
   "viewType": "Способ отображения",
   "@viewType": {},
@@ -2564,7 +2564,7 @@
   "@serverSharingMenuDetails": {
     "description": "Description text shown in the server sharing menu, below the description"
   },
-  "quickConnectAuthorizationMenuButtonTitle": "Быстрое Подключение",
+  "quickConnectAuthorizationMenuButtonTitle": "Авторизовать Быстрое Подключение",
   "@quickConnectAuthorizationMenuButtonTitle": {
     "description": "Title for the button in the drawer that opens the quick connect authorization menu"
   },
@@ -2629,5 +2629,65 @@
     "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
   },
   "logoutButtonSubtitle": "Вход в аккаунт другого сервера удалит скачанные файлы",
-  "@logoutButtonSubtitle": {}
+  "@logoutButtonSubtitle": {},
+  "additionalBaseItemInfoTitle": "Дополнительная информация",
+  "@additionalBaseItemInfoTitle": {
+    "description": "Title for the setting that controls the displayed additional item info."
+  },
+  "additionalBaseItemInfoSubtitle": "Тип дополнительной информации, отображаемый для каждого объекта. При установке значения на \"Адаптивный\" информация выбирается автоматически на основе текущей сортировки или контекста.",
+  "@additionalBaseItemInfoSubtitle": {
+    "description": "Subtitle for the setting that controls the displayed additional item info."
+  },
+  "adaptive": "Адаптивный",
+  "@adaptive": {},
+  "shuffleCountButton": "Пермешать ({count,plural,=1{{count} Трек} few{{count} Трека} other{{count} Треков}})",
+  "@shuffleCountButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "none": "Ничего",
+  "@none": {},
+  "discordRPCSettingTitle": "Активность Discord",
+  "@discordRPCSettingTitle": {
+    "description": "Title for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCSettingDescription": "Включает активность Discord, отображающую, в вашем статусе Discord что вы слушаете. Не будет подключаться к Discord, в оффлайн режиме.",
+  "@discordRPCSettingDescription": {
+    "description": "Description for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCIconSettingTitle": "Запасная иконка активности",
+  "@discordRPCIconSettingTitle": {
+    "description": "Title for the setting that controls which icon gets shown in the Discord RPC (Rich Presence) in case the local address is in use"
+  },
+  "discordRPCIconSettingDescription": "Запасная иконка, которая будет отображаться в статусе если не найден публичный адрес. (Поскольку Discord не может загружать картинки с локального адреса, он будет использовать запасную)",
+  "@discordRPCIconSettingDescription": {
+    "description": "Description for the setting that controls which Icon the discord RPC displays as a Fallback in case no public address is detected (it doenst matter what connection is active)."
+  },
+  "discordRPCIconDark": "Finamp - Тёмный",
+  "@discordRPCIconDark": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with the Dark-Theme Background"
+  },
+  "discordRPCIconBlack": "Finamp - Чёрный",
+  "@discordRPCIconBlack": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Black Background"
+  },
+  "discordRPCIconLight": "Finamp - Белый",
+  "@discordRPCIconLight": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a White Background"
+  },
+  "discordRPCIconJFTransparent": "Jellyfin - Прозрачный",
+  "@discordRPCIconJFTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Jellyfin logo with a Transparent Background"
+  },
+  "discordRPCIconTransparent": "Finamp - Прозрачный",
+  "@discordRPCIconTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Transparent Background"
+  },
+  "discordRPCIconWhiteTransparent": "Белый Finamp - Прозрачный",
+  "@discordRPCIconWhiteTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
+  }
 }
