@@ -122,16 +122,13 @@ class TrackListTile extends ConsumerWidget {
             name: QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
               pretranslatedName:
-                  ((isInPlaylist || isOnArtistScreen || isOnGenreScreen)
-                      ? parentItem?.name
-                      : item.album) ??
+                  ((isInPlaylist || isOnArtistScreen || isOnGenreScreen) ? parentItem?.name : item.album) ??
                   AppLocalizations.of(context)!.placeholderSource,
             ),
             id: parentItem?.id.raw ?? "",
             item: parentItem,
             // we're playing from an album, so we should use the album's normalization gain.
-            contextNormalizationGain:
-                (isInPlaylist || isOnArtistScreen || isOnGenreScreen)
+            contextNormalizationGain: (isInPlaylist || isOnArtistScreen || isOnGenreScreen)
                 ? null
                 : parentItem?.normalizationGain,
           ),
@@ -150,8 +147,7 @@ class TrackListTile extends ConsumerWidget {
             // nameFilter: widget.searchTerm,
             viewFilter: finampUserHelper.currentUser?.currentView?.id,
             nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
-            onlyFavorites:
-                settings.onlyShowFavorites && settings.trackOfflineFavorites,
+            onlyFavorites: settings.onlyShowFavorites && settings.trackOfflineFavorites,
             genreFilter: genreFilter,
           );
 
@@ -165,14 +161,10 @@ class TrackListTile extends ConsumerWidget {
 
           await queueService.startPlayback(
             items: items,
-            startingIndex: isShownInSearch
-                ? items.indexWhere((element) => element.id == item.id)
-                : index,
+            startingIndex: isShownInSearch ? items.indexWhere((element) => element.id == item.id) : index,
             source: QueueItemSource(
               name: QueueItemSourceName(
-                type: item.name != null
-                    ? QueueItemSourceNameType.mix
-                    : QueueItemSourceNameType.instantMix,
+                type: item.name != null ? QueueItemSourceNameType.mix : QueueItemSourceNameType.instantMix,
                 localizationParameter: item.name ?? "",
               ),
               type: QueueItemSourceType.allTracks,
@@ -180,18 +172,13 @@ class TrackListTile extends ConsumerWidget {
             ),
           );
         } else {
-          if (FinampSettingsHelper
-              .finampSettings
-              .startInstantMixForIndividualTracks) {
+          if (FinampSettingsHelper.finampSettings.startInstantMixForIndividualTracks) {
             await audioServiceHelper.startInstantMixForItem(item);
           } else {
             await queueService.startPlayback(
               items: [item],
               source: QueueItemSource(
-                name: QueueItemSourceName(
-                  type: QueueItemSourceNameType.preTranslated,
-                  pretranslatedName: item.name,
-                ),
+                name: QueueItemSourceName(type: QueueItemSourceNameType.preTranslated, pretranslatedName: item.name),
                 type: QueueItemSourceType.track,
                 id: item.id,
               ),
@@ -225,8 +212,7 @@ class TrackListTile extends ConsumerWidget {
             ),
           );
           GlobalSnackbar.message(
-            (scaffold) =>
-                AppLocalizations.of(scaffold)!.confirmAddToNextUp("track"),
+            (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp("track"),
             isConfirmation: true,
           );
           break;
@@ -246,8 +232,7 @@ class TrackListTile extends ConsumerWidget {
             ),
           );
           GlobalSnackbar.message(
-            (scaffold) =>
-                AppLocalizations.of(scaffold)!.confirmPlayNext("track"),
+            (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext("track"),
             isConfirmation: true,
           );
           break;
@@ -267,8 +252,7 @@ class TrackListTile extends ConsumerWidget {
             ),
           );
           GlobalSnackbar.message(
-            (scaffold) =>
-                AppLocalizations.of(scaffold)!.confirmAddToQueue("track"),
+            (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue("track"),
             isConfirmation: true,
           );
           break;
@@ -291,10 +275,7 @@ class TrackListTile extends ConsumerWidget {
       }
     }
 
-    Widget buildSwipeActionBackground(
-      BuildContext context,
-      DismissDirection direction,
-    ) {
+    Widget buildSwipeActionBackground(BuildContext context, DismissDirection direction) {
       final action = (direction == DismissDirection.startToEnd)
           ? ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight)
           : ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft);
@@ -304,9 +285,7 @@ class TrackListTile extends ConsumerWidget {
 
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-        alignment: (direction == DismissDirection.startToEnd)
-            ? Alignment.centerLeft
-            : Alignment.centerRight,
+        alignment: (direction == DismissDirection.startToEnd) ? Alignment.centerLeft : Alignment.centerRight,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: (direction == DismissDirection.startToEnd)
@@ -314,32 +293,14 @@ class TrackListTile extends ConsumerWidget {
               : MainAxisAlignment.end,
           children: direction == DismissDirection.startToEnd
               ? [
-                  Icon(
-                    icon,
-                    color: Theme.of(context).colorScheme.secondary,
-                    size: 40,
-                  ),
+                  Icon(icon, color: Theme.of(context).colorScheme.secondary, size: 40),
                   const SizedBox(width: 4.0),
-                  Text(
-                    label,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
                 ]
               : [
-                  Text(
-                    label,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
                   const SizedBox(width: 4.0),
-                  Icon(
-                    icon,
-                    color: Theme.of(context).colorScheme.secondary,
-                    size: 40,
-                  ),
+                  Icon(icon, color: Theme.of(context).colorScheme.secondary, size: 40),
                 ],
         ),
       );
@@ -362,14 +323,8 @@ class TrackListTile extends ConsumerWidget {
       onRemoveFromList: onRemoveFromList,
       onTap: trackListTileOnTap,
       confirmDismiss: trackListTileConfirmDismiss,
-      leftSwipeBackground: buildSwipeActionBackground(
-        context,
-        DismissDirection.startToEnd,
-      ),
-      rightSwipeBackground: buildSwipeActionBackground(
-        context,
-        DismissDirection.endToStart,
-      ),
+      leftSwipeBackground: buildSwipeActionBackground(context, DismissDirection.startToEnd),
+      rightSwipeBackground: buildSwipeActionBackground(context, DismissDirection.endToStart),
     );
   }
 }
@@ -479,20 +434,14 @@ class TrackListItem extends ConsumerStatefulWidget {
   ConsumerState<TrackListItem> createState() => TrackListItemState();
 }
 
-class TrackListItemState extends ConsumerState<TrackListItem>
-    with SingleTickerProviderStateMixin {
+class TrackListItemState extends ConsumerState<TrackListItem> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     bool playable;
     if (ref.watch(finampSettingsProvider.isOffline)) {
       playable = ref.watch(
         GetIt.instance<DownloadsService>()
-            .stateProvider(
-              DownloadStub.fromItem(
-                type: DownloadItemType.track,
-                item: widget.baseItem,
-              ),
-            )
+            .stateProvider(DownloadStub.fromItem(type: DownloadItemType.track, item: widget.baseItem))
             .select((value) => value.value?.isComplete ?? false),
       );
     } else {
@@ -502,9 +451,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
     final bool showAlbum = widget.baseItem.albumId != widget.parentItem?.id;
 
     final isCurrentlyPlaying = ref.watch(
-      currentTrackProvider.select(
-        (queueItem) => queueItem.valueOrNull?.baseItemId == widget.baseItem.id,
-      ),
+      currentTrackProvider.select((queueItem) => queueItem.valueOrNull?.baseItemId == widget.baseItem.id),
     );
 
     var listItem = Opacity(
@@ -551,11 +498,9 @@ class TrackListItemState extends ConsumerState<TrackListItem>
         }
 
         final swipeLeftEnabled =
-            ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight) !=
-            ItemSwipeActions.nothing;
+            ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight) != ItemSwipeActions.nothing;
         final swipeRightEnabled =
-            ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft) !=
-            ItemSwipeActions.nothing;
+            ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft) != ItemSwipeActions.nothing;
         final allowedDismissDirection = (swipeLeftEnabled && swipeRightEnabled)
             ? DismissDirection.horizontal
             : swipeLeftEnabled
@@ -567,10 +512,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
         return GestureDetector(
           onTapDown: (_) {
             // Begin precalculating theme for song menu
-            ref.listenManual(
-              finampThemeProvider(ThemeInfo(widget.baseItem)),
-              (_, __) {},
-            );
+            ref.listenManual(finampThemeProvider(ThemeInfo(widget.baseItem)), (_, __) {});
           },
           onLongPressStart: (details) => menuCallback(),
           onSecondaryTapDown: (details) => menuCallback(),
@@ -578,15 +520,10 @@ class TrackListItemState extends ConsumerState<TrackListItem>
               ? listItem
               : Dismissible(
                   key: Key(widget.listIndex.toString()),
-                  direction:
-                      ref.watch(finampSettingsProvider.disableGesture) ||
-                          !widget.allowDismiss
+                  direction: ref.watch(finampSettingsProvider.disableGesture) || !widget.allowDismiss
                       ? DismissDirection.none
                       : allowedDismissDirection,
-                  dismissThresholds: const {
-                    DismissDirection.startToEnd: 0.65,
-                    DismissDirection.endToStart: 0.65,
-                  },
+                  dismissThresholds: const {DismissDirection.startToEnd: 0.65, DismissDirection.endToStart: 0.65},
                   // no background, dismissing really dismisses here
                   confirmDismiss: widget.confirmDismiss,
                   background: widget.leftSwipeBackground,
@@ -616,9 +553,7 @@ class TrackListItemState extends ConsumerState<TrackListItem>
                         imageTheme.brightness == Brightness.light ? 0.5 : 0.1,
                       )),
                       imageTheme.textTheme.bodyLarge?.color ??
-                          (imageTheme.brightness == Brightness.light
-                              ? Colors.black
-                              : Colors.white),
+                          (imageTheme.brightness == Brightness.light ? Colors.black : Colors.white),
                     ),
                   ),
                 ),
@@ -668,34 +603,21 @@ class TrackListItemTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final highlightTrack = isCurrentTrack && highlightCurrentTrack;
-    final isOnDesktop =
-        Platform.isMacOS || Platform.isWindows || Platform.isLinux;
+    final isOnDesktop = Platform.isMacOS || Platform.isWindows || Platform.isLinux;
     final tileAdditionalInfoType =
-        ref.watch(
-          finampSettingsProvider.tileAdditionalInfoType(TabContentType.tracks),
-        ) ??
+        ref.watch(finampSettingsProvider.tileAdditionalInfoType(TabContentType.tracks)) ??
         TileAdditionalInfoType.adaptive;
 
-    bool showPlayCount =
-        tileAdditionalInfoType == TileAdditionalInfoType.playCount;
-    bool showReleaseDate =
-        tileAdditionalInfoType == TileAdditionalInfoType.dateReleased;
-    bool showDateAdded =
-        tileAdditionalInfoType == TileAdditionalInfoType.dateAdded;
-    bool showDateLastPlayed =
-        tileAdditionalInfoType == TileAdditionalInfoType.dateLastPlayed;
+    bool showPlayCount = tileAdditionalInfoType == TileAdditionalInfoType.playCount;
+    bool showReleaseDate = tileAdditionalInfoType == TileAdditionalInfoType.dateReleased;
+    bool showDateAdded = tileAdditionalInfoType == TileAdditionalInfoType.dateAdded;
+    bool showDateLastPlayed = tileAdditionalInfoType == TileAdditionalInfoType.dateLastPlayed;
 
     if (tileAdditionalInfoType == TileAdditionalInfoType.adaptive) {
-      showPlayCount =
-          showPlayCount || adaptiveAdditionalInfoSortBy == SortBy.playCount;
-      showReleaseDate =
-          showReleaseDate ||
-          adaptiveAdditionalInfoSortBy == SortBy.premiereDate;
-      showDateAdded =
-          showDateAdded || adaptiveAdditionalInfoSortBy == SortBy.dateCreated;
-      showDateLastPlayed =
-          showDateLastPlayed ||
-          adaptiveAdditionalInfoSortBy == SortBy.datePlayed;
+      showPlayCount = showPlayCount || adaptiveAdditionalInfoSortBy == SortBy.playCount;
+      showReleaseDate = showReleaseDate || adaptiveAdditionalInfoSortBy == SortBy.premiereDate;
+      showDateAdded = showDateAdded || adaptiveAdditionalInfoSortBy == SortBy.dateCreated;
+      showDateLastPlayed = showDateLastPlayed || adaptiveAdditionalInfoSortBy == SortBy.datePlayed;
     }
 
     if (showPlayCount || showDateLastPlayed) {
@@ -706,50 +628,34 @@ class TrackListItemTile extends ConsumerWidget {
     }
 
     final bool secondRowNeeded =
-        showArtists ||
-        showAlbum ||
-        showPlayCount ||
-        showReleaseDate ||
-        showDateAdded ||
-        showDateLastPlayed;
+        showArtists || showAlbum || showPlayCount || showReleaseDate || showDateAdded || showDateLastPlayed;
 
-    final durationLabelFullHours =
-        (baseItem.runTimeTicksDuration()?.inHours ?? 0);
-    final durationLabelFullMinutes =
-        (baseItem.runTimeTicksDuration()?.inMinutes ?? 0) % 60;
-    final durationLabelSeconds =
-        (baseItem.runTimeTicksDuration()?.inSeconds ?? 0) % 60;
+    final durationLabelFullHours = (baseItem.runTimeTicksDuration()?.inHours ?? 0);
+    final durationLabelFullMinutes = (baseItem.runTimeTicksDuration()?.inMinutes ?? 0) % 60;
+    final durationLabelSeconds = (baseItem.runTimeTicksDuration()?.inSeconds ?? 0) % 60;
     final durationLabelString =
         "${durationLabelFullHours > 0 ? "$durationLabelFullHours ${AppLocalizations.of(context)!.hours} " : ""}${durationLabelFullMinutes > 0 ? "$durationLabelFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$durationLabelSeconds ${AppLocalizations.of(context)!.seconds}";
 
     final artistsString = (forceAlbumArtists)
-        ? (baseItem.albumArtists?.map((e) => e.name).join(", ") ??
-              AppLocalizations.of(context)!.unknownArtist)
+        ? (baseItem.albumArtists?.map((e) => e.name).join(", ") ?? AppLocalizations.of(context)!.unknownArtist)
         : (baseItem.artists?.isNotEmpty ?? false)
         ? baseItem.artists?.join(", ")
-        : (baseItem.albumArtists?.map((e) => e.name).join(", ") ??
-              AppLocalizations.of(context)!.unknownArtist);
+        : (baseItem.albumArtists?.map((e) => e.name).join(", ") ?? AppLocalizations.of(context)!.unknownArtist);
 
     final downloadedIndicator = DownloadedIndicator(
       item: DownloadStub.fromItem(item: baseItem, type: DownloadItemType.track),
       size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 1,
     );
     final addSpaceAfterSpecialIcons =
-        (downloadedIndicator.isVisible(ref) || (baseItem.hasLyrics ?? false)) &&
-        (showDateAdded || showDateLastPlayed);
+        (downloadedIndicator.isVisible(ref) || (baseItem.hasLyrics ?? false)) && (showDateAdded || showDateLastPlayed);
 
     return ListTileTheme(
-      tileColor: highlightTrack
-          ? Theme.of(context).colorScheme.surfaceContainer
-          : Colors.transparent,
+      tileColor: highlightTrack ? Theme.of(context).colorScheme.surfaceContainer : Colors.transparent,
       child: ListTile(
         visualDensity: const VisualDensity(horizontal: 0.0, vertical: 0.5),
         minVerticalPadding: 0.0,
         horizontalTitleGap: defaultTitleGap,
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 0.0,
-          horizontal: 0.0,
-        ),
+        contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
         // tileColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
         leading: Row(
           mainAxisSize: MainAxisSize.min,
@@ -776,12 +682,7 @@ class TrackListItemTile extends ConsumerWidget {
                 ),
               ),
             if (showCover)
-              AlbumImage(
-                item: baseItem,
-                borderRadius: highlightTrack
-                    ? BorderRadius.zero
-                    : BorderRadius.circular(8.0),
-              ),
+              AlbumImage(item: baseItem, borderRadius: highlightTrack ? BorderRadius.zero : BorderRadius.circular(8.0)),
           ],
         ),
         title: ConstrainedBox(
@@ -819,9 +720,7 @@ class TrackListItemTile extends ConsumerWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 2.0),
                           child: Transform.translate(
-                            offset: isOnDesktop
-                                ? Offset(-1.5, 1.7)
-                                : Offset(-1.5, 0.4),
+                            offset: isOnDesktop ? Offset(-1.5, 1.7) : Offset(-1.5, 0.4),
                             child: downloadedIndicator,
                           ),
                         ),
@@ -829,64 +728,44 @@ class TrackListItemTile extends ConsumerWidget {
                         baseline: TextBaseline.alphabetic,
                       ),
                       if (downloadedIndicator.isVisible(ref) &&
-                          (baseItem.hasLyrics == null ||
-                              baseItem.hasLyrics == false))
+                          (baseItem.hasLyrics == null || baseItem.hasLyrics == false))
                         const WidgetSpan(child: SizedBox(width: 4.5)),
                       if (baseItem.hasLyrics ?? false)
                         WidgetSpan(
                           child: Padding(
                             padding: const EdgeInsets.only(right: 2.0),
                             child: Transform.translate(
-                              offset: isOnDesktop
-                                  ? Offset(-1.5, 1.7)
-                                  : Offset(-1.5, 0.4),
+                              offset: isOnDesktop ? Offset(-1.5, 1.7) : Offset(-1.5, 0.4),
                               child: Icon(
                                 TablerIcons.microphone_2,
-                                size:
-                                    Theme.of(
-                                      context,
-                                    ).textTheme.bodyMedium!.fontSize! +
-                                    1,
+                                size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 1,
                               ),
                             ),
                           ),
                           alignment: PlaceholderAlignment.baseline,
                           baseline: TextBaseline.alphabetic,
                         ),
-                      if (baseItem.hasLyrics ?? false)
-                        const WidgetSpan(child: SizedBox(width: 5)),
-                      if (addSpaceAfterSpecialIcons)
-                        const WidgetSpan(child: SizedBox(width: 5)),
+                      if (baseItem.hasLyrics ?? false) const WidgetSpan(child: SizedBox(width: 5)),
+                      if (addSpaceAfterSpecialIcons) const WidgetSpan(child: SizedBox(width: 5)),
                       if (showPlayCount)
                         TextSpan(
-                          text: AppLocalizations.of(
-                            context,
-                          )!.playCountValue(baseItem.userData?.playCount ?? 0),
+                          text: AppLocalizations.of(context)!.playCountValue(baseItem.userData?.playCount ?? 0),
                           style: TextStyle(
-                            color: Theme.of(
-                              context,
-                            ).textTheme.bodyMedium!.color!.withOpacity(0.75),
+                            color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.75),
                             fontSize: 13,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                      if (showPlayCount)
-                        const WidgetSpan(child: SizedBox(width: 10.0)),
+                      if (showPlayCount) const WidgetSpan(child: SizedBox(width: 10.0)),
                       if (showDateLastPlayed)
                         WidgetSpan(
                           child: Padding(
                             padding: const EdgeInsets.only(right: 2.0),
                             child: Transform.translate(
-                              offset: isOnDesktop
-                                  ? Offset(-1.5, 1.8)
-                                  : Offset(-1.5, 0.3),
+                              offset: isOnDesktop ? Offset(-1.5, 1.8) : Offset(-1.5, 0.3),
                               child: Icon(
                                 TablerIcons.clock,
-                                size:
-                                    Theme.of(
-                                      context,
-                                    ).textTheme.bodyMedium!.fontSize! +
-                                    1,
+                                size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 1,
                               ),
                             ),
                           ),
@@ -899,56 +778,36 @@ class TrackListItemTile extends ConsumerWidget {
                           baseline: TextBaseline.alphabetic,
                           child: RelativeDateTimeTextFromString(
                             dateString: baseItem.userData?.lastPlayedDate,
-                            fallback: AppLocalizations.of(
-                              context,
-                            )!.noDateLastPlayed,
+                            fallback: AppLocalizations.of(context)!.noDateLastPlayed,
                             style: TextStyle(
-                              color: Theme.of(
-                                context,
-                              ).textTheme.bodyMedium!.color!.withOpacity(0.75),
+                              color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.75),
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                             ),
                             disableTextScaling: true,
                           ),
                         ),
-                      if (showDateLastPlayed)
-                        const WidgetSpan(child: SizedBox(width: 10.0)),
+                      if (showDateLastPlayed) const WidgetSpan(child: SizedBox(width: 10.0)),
                       if (showReleaseDate)
                         TextSpan(
-                          text:
-                              (ReleaseDateHelper.autoFormat(baseItem) ??
-                              AppLocalizations.of(context)!.noReleaseDate),
+                          text: (ReleaseDateHelper.autoFormat(baseItem) ?? AppLocalizations.of(context)!.noReleaseDate),
                           style: TextStyle(
-                            color: Theme.of(
-                              context,
-                            ).textTheme.bodyMedium!.color!.withOpacity(0.75),
+                            color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.75),
                             fontSize: 13,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                      if (showReleaseDate)
-                        const WidgetSpan(child: SizedBox(width: 10.0)),
+                      if (showReleaseDate) const WidgetSpan(child: SizedBox(width: 10.0)),
                       if (showDateAdded)
                         WidgetSpan(
                           child: Padding(
                             padding: const EdgeInsets.only(right: 3),
                             child: Transform.translate(
-                              offset: isOnDesktop
-                                  ? Offset(-1.5, 1.28)
-                                  : Offset(-1.5, 0),
+                              offset: isOnDesktop ? Offset(-1.5, 1.28) : Offset(-1.5, 0),
                               child: Icon(
                                 TablerIcons.calendar_plus,
-                                size:
-                                    Theme.of(
-                                      context,
-                                    ).textTheme.bodyMedium!.fontSize! +
-                                    1,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .color!
-                                    .withOpacity(0.75),
+                                size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 1,
+                                color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.75),
                               ),
                             ),
                           ),
@@ -963,24 +822,19 @@ class TrackListItemTile extends ConsumerWidget {
                             dateString: baseItem.dateCreated,
                             fallback: AppLocalizations.of(context)!.noDateAdded,
                             style: TextStyle(
-                              color: Theme.of(
-                                context,
-                              ).textTheme.bodyMedium!.color!.withOpacity(0.75),
+                              color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.75),
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                             ),
                             disableTextScaling: true,
                           ),
                         ),
-                      if (showDateAdded)
-                        const WidgetSpan(child: SizedBox(width: 10.0)),
+                      if (showDateAdded) const WidgetSpan(child: SizedBox(width: 10.0)),
                       if (showArtists)
                         TextSpan(
                           text: artistsString,
                           style: TextStyle(
-                            color: Theme.of(
-                              context,
-                            ).textTheme.bodyMedium!.color!.withOpacity(0.75),
+                            color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.75),
                             fontSize: 13,
                             fontWeight: FontWeight.w400,
                             overflow: TextOverflow.ellipsis,
@@ -991,22 +845,17 @@ class TrackListItemTile extends ConsumerWidget {
                         TextSpan(
                           text: artistsString,
                           style: TextStyle(
-                            color: Theme.of(
-                              context,
-                            ).textTheme.bodyMedium!.color!.withOpacity(0.75),
+                            color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.75),
                             fontSize: 13,
                             fontWeight: FontWeight.w300,
                           ),
                         ),
-                      if (showArtists)
-                        const WidgetSpan(child: SizedBox(width: 10.0)),
+                      if (showArtists) const WidgetSpan(child: SizedBox(width: 10.0)),
                       if (showAlbum)
                         TextSpan(
                           text: baseItem.album,
                           style: TextStyle(
-                            color: Theme.of(
-                              context,
-                            ).textTheme.bodyMedium!.color!.withOpacity(0.6),
+                            color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.6),
                             fontSize: 13,
                             fontWeight: FontWeight.w300,
                           ),
@@ -1027,15 +876,10 @@ class TrackListItemTile extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                printDuration(
-                  baseItem.runTimeTicksDuration(),
-                  leadingZeroes: false,
-                ),
+                printDuration(baseItem.runTimeTicksDuration(), leadingZeroes: false),
                 semanticsLabel: durationLabelString,
                 textAlign: TextAlign.end,
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.bodySmall?.color,
-                ),
+                style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
               ),
               Semantics(
                 excludeSemantics: true,
@@ -1054,9 +898,7 @@ class TrackListItemTile extends ConsumerWidget {
                     padding: const EdgeInsets.only(left: 6.0),
                     child: Icon(
                       TablerIcons.grip_horizontal,
-                      color:
-                          Theme.of(context).textTheme.bodyMedium?.color ??
-                          Colors.white,
+                      color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
                       size: 28.0,
                       weight: 1.5,
                     ),
