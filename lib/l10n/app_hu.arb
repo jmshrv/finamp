@@ -1523,5 +1523,35 @@
         "type": "int"
       }
     }
+  },
+  "editItemTitle": "{itemType, select, playlist{Lejátszási lista} other{}} szerkesztése",
+  "@editItemTitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    }
+  },
+  "playbackReporting": "Lejátszási jelentés",
+  "@playbackReporting": {},
+  "interactions": "Interakciók",
+  "@interactions": {},
+  "notAvailable": "Nem elérhető",
+  "@notAvailable": {},
+  "createPlaylistFromCurrentQueue": "Sor mentése lejátszási listaként",
+  "@createPlaylistFromCurrentQueue": {
+    "description": "Label for a button that creates a new playlist from the current queue."
+  },
+  "playingFrom": "Lejátszás:",
+  "@playingFrom": {
+    "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+  },
+  "playNext": "Következő lejátszása",
+  "@playNext": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "addToNextUp": "Hozzáadás a sor végére",
+  "@addToNextUp": {
+    "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
   }
 }
