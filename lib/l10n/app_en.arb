@@ -2681,7 +2681,7 @@
   "@useHighContrastColorsSubtitle": {
     "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
   },
-  "autoExpandPlayerScreenTitle": "Open the player screen on playback start",
+  "autoExpandPlayerScreenTitle": "Open Player Screen on Playback Start",
   "@autoExpandPlayerScreenTitle": {
     "description": "Title for the setting that controls if the player screen is opened directly after starting a new queue"
   },
