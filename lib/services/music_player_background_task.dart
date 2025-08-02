@@ -343,6 +343,15 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       }
     });
 
+    // This is called each time queue (or at least previous and next items in it)
+    // This unintended behavior is actually used to recalculate the `Dynamic` 4
+    // normalization gain mode.
+    // if user adds a track from the same album next to queue or makes previous
+    // and next track in the queue not from the same album anymore (e.g. by
+    // removing them from queue), volume gain is recalculated instantly so that
+    // it is not changed on track change (where gapless playback will regress to
+    // audible volume change).
+    // This is possible because this callback is called on each queue change
     mediaItem.listen((currentTrack) {
       sleepTimer?.onTrackCompleted();
 
