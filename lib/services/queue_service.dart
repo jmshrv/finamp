@@ -402,7 +402,6 @@ class QueueService {
                 name: const QueueItemSourceName(type: QueueItemSourceNameType.savedQueue),
                 id: "savedqueue",
               ),
-          order: info.order,
         );
 
         Future<void> seekFuture = Future.value();
@@ -559,10 +558,8 @@ class QueueService {
       _queueServiceLogger.fine("Order items length: ${_order.items.length}");
 
       // set playback order to trigger shuffle if necessary (fixes indices being wrong when starting with shuffle enabled)
-
-      if (order != null) {
-        playbackOrder = order;
-      }
+      order ??= FinampPlaybackOrder.linear;
+      playbackOrder = order;
 
       // _queueStream.add(getQueue());
       _queueFromConcatenatingAudioSource();
