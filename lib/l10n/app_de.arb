@@ -2518,7 +2518,6 @@
   "@syncPlaybackSpeedAndPitchLabel": {
     "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
   },
-  "autoExpandPlayerScreen": "Öffne den Player direkt beim Klicken auf einen Song",
   "adaptive": "Adaptiv",
   "@adaptive": {},
   "shuffleCountButton": "Zufällig ({count,plural,=1{{count} Titel} other{{count} Titel}})",

@@ -1,5 +1,5 @@
 {
-  "applicationLegalese": "A Mozilla Public License 2.0 licenccel. A forráskód elérhető:\n\ngithub.com/jmshrv/finamp",
+  "applicationLegalese": "A Mozilla Public License 2.0 licenc alapján.\nA forráskód elérhető a {sourceCodeLink} címen.",
   "@applicationLegalese": {},
   "sleepTimerTooltip": "Elalvás időzítő",
   "@sleepTimerTooltip": {},
@@ -43,7 +43,7 @@
   "@criticRating": {},
   "dateAdded": "Hozzáadás dátuma",
   "@dateAdded": {},
-  "datePlayed": "Lejátszva ekkor",
+  "datePlayed": "Utolsó lejátszás dátuma",
   "@datePlayed": {},
   "downloadMissingImages": "Töltse le a hiányzó képeket",
   "@downloadMissingImages": {},
@@ -195,7 +195,7 @@
   },
   "addDownloadLocation": "Letöltési hely hozzáadása",
   "@addDownloadLocation": {},
-  "bitrateSubtitle": "A nagyobb bitráta jobb hangminőséget biztosít nagyobb sávszélesség mellett.",
+  "bitrateSubtitle": "A nagyobb bitráta jobb hangminőséget biztosít nagyobb sávszélesség mellett. Nem vonatkozik a veszteségmentes codec-ekre, pl. FLAC",
   "@bitrateSubtitle": {},
   "gridCrossAxisCountSubtitle": "A soronként használandó rácscsempék száma {value} esetén.",
   "@gridCrossAxisCountSubtitle": {
@@ -213,7 +213,7 @@
   "@appDirectory": {},
   "customLocation": "Egyéni hely",
   "@customLocation": {},
-  "customLocationsBuggy": "Az egyéni helyek rendkívül bugosak az engedélyekkel kapcsolatos problémák miatt. Gondolkozom a megoldáson, de egyelőre nem javaslom ezek használatát.",
+  "customLocationsBuggy": "Az egyéni helyek rendkívül problémásak lehetnek, és a legtöbb esetben nem ajánlottak. A rendszer 'Music' mappán belül az operációs rendszer korlátai miatt nem teszik lehetővé az albumborítók mentését.",
   "@customLocationsBuggy": {},
   "directoryMustBeEmpty": "A könyvtárnak üresnek kell lennie",
   "@directoryMustBeEmpty": {},
@@ -323,7 +323,7 @@
   "@tabs": {},
   "unknownArtist": "Ismeretlen Előadó",
   "@unknownArtist": {},
-  "addButtonLabel": "HOZZÁADÁS",
+  "addButtonLabel": "Hozzáadás",
   "@addButtonLabel": {},
   "createButtonLabel": "LÉTREHOZÁS",
   "@createButtonLabel": {},
@@ -1553,5 +1553,672 @@
   "addToNextUp": "Hozzáadás a sor végére",
   "@addToNextUp": {
     "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+  },
+  "shuffleNext": "Keverés a következőhöz",
+  "@shuffleNext": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
+  "shuffleToNextUp": "Keverés a sor végére",
+  "@shuffleToNextUp": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+  },
+  "placeholderSource": "Ismeretlen",
+  "@placeholderSource": {
+    "description": "Placeholder text used when the source of the current track/queue is unknown"
+  },
+  "playbackHistory": "Lejátszási előzmények",
+  "@playbackHistory": {
+    "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+  },
+  "shareOfflineListens": "Offline lejátszások megosztása",
+  "@shareOfflineListens": {
+    "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+  },
+  "yourLikes": "Kedvenceid",
+  "@yourLikes": {
+    "description": "Title for the queue source when the user is playing their liked tracks"
+  },
+  "mix": "{mixSource} - Mix",
+  "@mix": {
+    "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+    "placeholders": {
+      "mixSource": {
+        "type": "String",
+        "example": "Never Gonna Give You Up"
+      }
+    }
+  },
+  "tracksFormerNextUp": "A soron következővel hozzáadott számok",
+  "@tracksFormerNextUp": {
+    "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+  },
+  "savedQueue": "Mentett lejátszási lista",
+  "@savedQueue": {
+    "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+  },
+  "playingFromType": "Lejátszás {source, select, album{albumból} playlist{lejátszási listáról} trackMix{szám mixből} artistMix{előadó mixből} albumMix{album mixből} genreMix{műfaj mixből} favorites{kedvencekből} allTracks{minden számból} filteredList{számok közül} genre{műfajból} artist{előadóból} track{számból} nextUpAlbum{soron következő albumból} nextUpPlaylist{soron következő lejátszási listáról} nextUpArtist{soron következő előadóból} nextUpGenre{soron következő műfajból} remoteClient{a távoli kliensről} other{}}",
+  "@playingFromType": {
+    "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "shuffleAllQueueSource": "Minden keverése",
+  "@shuffleAllQueueSource": {
+    "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+  },
+  "playbackOrderLinearButtonLabel": "Lejátszás sorrendben",
+  "@playbackOrderLinearButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderLinearButtonTooltip": "Lejátszás sorrendben. Koppintson a keveréshez.",
+  "@playbackOrderLinearButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+  },
+  "playbackOrderShuffledButtonLabel": "Számok keverése",
+  "@playbackOrderShuffledButtonLabel": {
+    "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackOrderShuffledButtonTooltip": "Számok keverése. Koppintson a sorrendben történő lejátszáshoz.",
+  "@playbackOrderShuffledButtonTooltip": {
+    "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+  },
+  "playbackSpeedButtonLabel": "Lejátszás x{speed} sebességgel",
+  "@playbackSpeedButtonLabel": {
+    "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "playbackSpeedFeatureText": "x{speed} sebesség",
+  "@playbackSpeedFeatureText": {
+    "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+    "placeholders": {
+      "speed": {
+        "type": "double"
+      }
+    }
+  },
+  "currentVolumeFeatureText": "{volume}% hangerő",
+  "@currentVolumeFeatureText": {
+    "description": "Label for the feature chip that is shown if the volume is not 100%",
+    "placeholders": {
+      "volume": {
+        "type": "int",
+        "description": "The current volume level, in percent"
+      }
+    }
+  },
+  "playbackSpeedDecreaseLabel": "Lejátszás sebességének csökkentése",
+  "@playbackSpeedDecreaseLabel": {
+    "description": "Label for the button in the speed menu that decreases the playback speed."
+  },
+  "playbackSpeedIncreaseLabel": "Lejátszás sebességének növelése",
+  "@playbackSpeedIncreaseLabel": {
+    "description": "Label for the button in the speed menu that increases the playback speed."
+  },
+  "loopModeNoneButtonLabel": "Nincs ismétlés",
+  "@loopModeNoneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+  },
+  "loopModeOneButtonLabel": "A szám ismétlése",
+  "@loopModeOneButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+  },
+  "loopModeAllButtonLabel": "Minden ismétlése",
+  "@loopModeAllButtonLabel": {
+    "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+  },
+  "queuesScreen": "Most játszottak visszaállítása",
+  "@queuesScreen": {
+    "description": "Title for the screen where older now playing queues can be restored"
+  },
+  "queueRestoreButtonLabel": "Lejátszási sor visszaállítása",
+  "@queueRestoreButtonLabel": {
+    "description": "Button to restore archived now playing queue, overwriting current queue"
+  },
+  "queueRestoreTitle": "Mentve {date}",
+  "@queueRestoreTitle": {
+    "description": "Description of when a saved queue was saved",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yyy-MM-dd hh:mm",
+        "isCustomDateFormat": "true"
+      }
+    }
+  },
+  "queueRestoreSubtitle1": "Lejátszás: {track}",
+  "@queueRestoreSubtitle1": {
+    "description": "Description of playing track in a saved queue",
+    "placeholders": {
+      "track": {
+        "type": "String"
+      }
+    }
+  },
+  "queueRestoreSubtitle2": "{count,plural,=1{1 szám} other{{count} szám}}, {remaining} nem lejátszott",
+  "@queueRestoreSubtitle2": {
+    "description": "Description of length of a saved queue",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "queueLoadingMessage": "Sor visszaállítása…",
+  "@queueLoadingMessage": {
+    "description": "Message displayed on now-playing bar when a saved queue is loading."
+  },
+  "queueRetryMessage": "A sor visszaállítása sikertelen. Újra?",
+  "@queueRetryMessage": {
+    "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+  },
+  "autoloadLastQueueOnStartup": "Legutóbbi sor automatikus visszaállítása",
+  "@autoloadLastQueueOnStartup": {
+    "description": "Setting to restore last queue on startup"
+  },
+  "autoloadLastQueueOnStartupSubtitle": "Az alkalmazás indításakor megpróbálja visszaállítani a legutóbb lejátszott várólistát.",
+  "@autoloadLastQueueOnStartupSubtitle": {
+    "description": "Description of the setting to restore last queue on startup"
+  },
+  "reportQueueToServer": "Jelentse az aktuális sort a szervernek?",
+  "@reportQueueToServer": {
+    "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "reportQueueToServerSubtitle": "Ha engedélyezve van, a Finamp elküldi az aktuális várólistát a szervernek. Ez javíthatja a távoli vezérlést, és lehetővé teszi a várólista szerveroldali helyreállítását. Mindig engedélyezve van, ha a 'Play On' funkció engedélyezve van.",
+  "@reportQueueToServerSubtitle": {
+    "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
+  },
+  "periodicPlaybackSessionUpdateFrequency": "Lejátszási munkamenet frissítési gyakorisága",
+  "@periodicPlaybackSessionUpdateFrequency": {
+    "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "Milyen gyakran küldje el az aktuális lejátszási állapotot a kiszolgálónak, másodpercekben. Ennek kevesebbnek kell lennie, mint 5 perc (300 másodperc), hogy a munkamenet ne járjon le.",
+  "@periodicPlaybackSessionUpdateFrequencySubtitle": {
+    "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Ha a Jellyfin kiszolgáló az elmúlt 5 percben nem kapott frissítést a klienstől, akkor azt feltételezi, hogy a lejátszás befejeződött. Ez azt jelenti, hogy az 5 percnél hosszabb zeneszámok esetében a lejátszást tévesen befejezettnek jelentheti, ami csökkenti a lejátszási adatok hitelességét.",
+  "@periodicPlaybackSessionUpdateFrequencyDetails": {
+    "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+  },
+  "playOnStaleDelay": "'Play On' munkamenet időkorlátja",
+  "@playOnStaleDelay": {
+    "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "playOnStaleDelaySubtitle": "Mennyi ideig tekinthető aktívnak egy távoli 'Play On' munkamenet a parancs fogadása után. Ha aktívnak tekintik, a lejátszás gyakrabban kerül jelentésre, ami megnövekedett adatforgalmat eredményezhet.",
+  "@playOnStaleDelaySubtitle": {
+    "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+  },
+  "enablePlayonTitle": "'Play On' támogatás engedélyezése",
+  "@enablePlayonTitle": {
+    "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "enablePlayonSubtitle": "Engedélyezi a Jellyfin 'Play On' funkcióját (a Finamp távvezérlése egy másik kliensről). Kapcsolja ki, ha a fordított proxy vagy a kiszolgáló nem támogatja a websocketeket.",
+  "@enablePlayonSubtitle": {
+    "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+  },
+  "playOnReconnectionDelay": "'Play On' munkamenet újrakapcsolódás késleltetése",
+  "@playOnReconnectionDelay": {
+    "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "playOnReconnectionDelaySubtitle": "Szabályozza a PlayOn websockethez való újbóli kapcsolódási kísérletek közötti késleltetést, ha a kapcsolat megszakad (másodpercben). Az alacsonyabb késleltetés növeli az adatforgalmat.",
+  "@playOnReconnectionDelaySubtitle": {
+    "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+  },
+  "topTracks": "Top számok",
+  "@topTracks": {},
+  "topAlbums": "Top albumok",
+  "@topAlbums": {},
+  "topArtists": "Top elóadók",
+  "@topArtists": {},
+  "recentlyAddedTracks": "Legutóbb hozzáadott számok",
+  "@recentlyAddedTracks": {
+    "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedAlbums": "Legutóbb hozzáadott albumok",
+  "@recentlyAddedAlbums": {
+    "description": "Label for the genre section that shows albums that were recently added to the library, sorted by the date they were added."
+  },
+  "recentlyAddedArtists": "Legutóbb hozzáadott előadók",
+  "@recentlyAddedArtists": {
+    "description": "Label for the genre section that shows artists that were recently added to the library, sorted by the date they were added."
+  },
+  "activeDownloadsListHeader": "{itemCount} {typeName, select, downloading{folyamatban} failed{sikertelen} syncFailed{ismételten nem szinkronizált} enqueued{sorba állítva} other{}} {itemCount, plural, =1{letöltés} other{letöltés}}",
+  "@activeDownloadsListHeader": {
+    "description": "Header text for lists of active downloads of a particular state.",
+    "placeholders": {
+      "typeName": {
+        "type": "String"
+      },
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadLibraryPrompt": "Biztosan le szeretné tölteni a teljes ''{libraryName}'' könyvtár tartalmát?",
+  "@downloadLibraryPrompt": {
+    "description": "Confirmation prompt before downloading entire library, which may be large.",
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    }
+  },
+  "onlyShowFullyDownloaded": "Csak a teljesen letöltött albumok megjelenítése",
+  "@onlyShowFullyDownloaded": {
+    "description": "Tooltip for button that hides all partially downloaded albums"
+  },
+  "filesystemFull": "A fennmaradó letöltések nem fejezhetők be. A fájlrendszer megtelt.",
+  "@filesystemFull": {
+    "description": "Message shown when a download cannot complete due to the filesystem being full."
+  },
+  "connectionInterrupted": "A kapcsolat megszakadt, a letöltések szünetelnek.",
+  "@connectionInterrupted": {
+    "description": "Message shown when the connection is interrupted during a download."
+  },
+  "connectionInterruptedBackground": "A kapcsolat megszakadt a háttérben történő letöltés közben. Ezt a rendszer beállításai okozhatják.",
+  "@connectionInterruptedBackground": {
+    "description": "Message shown when the connection is interrupted during a download while in the background. It advises checking OS settings, as they may cause background downloads to be blocked."
+  },
+  "connectionInterruptedBackgroundAndroid": "A kapcsolat megszakadt a háttérben történő letöltés közben. Ezt az 'Alacsony prioritású állapotba lépés szüneteltetéskor' opció engedélyezése vagy a rendszer beállításai okozhatják.",
+  "@connectionInterruptedBackgroundAndroid": {
+    "description": "Message shown when the connection is interrupted during a download while in the background on android. It advises checking OS settings, as they may cause background downloads to be blocked, or checking the  'Enter Low-Priority State on Pause' setting."
+  },
+  "activeDownloadSize": "Letöltés…",
+  "@activeDownloadSize": {
+    "description": "Message shown for download size while item is still being downloaded"
+  },
+  "missingDownloadSize": "Törlés…",
+  "@missingDownloadSize": {
+    "description": "Message shown for download size while item is being deleted but is not fully removed"
+  },
+  "syncingDownloadSize": "Szinkronizáslás…",
+  "@syncingDownloadSize": {
+    "description": "Message shown for download size while item is still syncing."
+  },
+  "runRepairWarning": "A szerverrel nem lehetett kapcsolatba lépni a letöltések véglegesítéséhez. Kérjük, amint újra online lesz, futtassa a 'Letöltések javítása' parancsot a letöltések képernyőn.",
+  "@runRepairWarning": {
+    "description": "Message shown when an error occurs during the downloads repair step of the Isar downloads migration, which requires a server connection."
+  },
+  "downloadSettings": "Letöltések",
+  "@downloadSettings": {},
+  "showNullLibraryItemsTitle": "Ismeretlen könyvtárból származó tartalom megjelenítése.",
+  "@showNullLibraryItemsTitle": {
+    "description": "Title of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "showNullLibraryItemsSubtitle": "Egyes tartalmak ismeretlen könyvtárból tölthetők le. Kapcsolja ki ezt a lehetőséget az elrejtéshez az eredeti forráson kívül.",
+  "@showNullLibraryItemsSubtitle": {
+    "description": "Description of setting that shows tracks/albums from an unknown library in all libraries when on, or in no libraries when off."
+  },
+  "maxConcurrentDownloads": "Maximális egyidejű letöltések",
+  "@maxConcurrentDownloads": {
+    "description": "Title of setting controlling max concurrent downloads."
+  },
+  "maxConcurrentDownloadsSubtitle": "Az egyidejű letöltések növelése elősegítheti a háttérben történő letöltés hatékonyságát, de egyes nagy méretű letöltések meghiúsulhatnak, vagy bizonyos esetekben túlzott késleltetést okozhatnak.",
+  "@maxConcurrentDownloadsSubtitle": {
+    "description": "Description of setting controlling max concurrent downloads."
+  },
+  "maxConcurrentDownloadsLabel": "{count} egyidejű letöltés",
+  "@maxConcurrentDownloadsLabel": {
+    "description": "Label of values on max concurrent downloads slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadsWorkersSetting": "Letöltési szálak száma",
+  "@downloadsWorkersSetting": {
+    "description": "Title of setting controlling download worker count."
+  },
+  "downloadsWorkersSettingSubtitle": "A metaadatok szinkronizálásához és a letöltések törléséhez szükséges munkafolyamatok száma. A letöltési szálak számának növelése felgyorsíthatja a letöltések szinkronizálását és törlését, különösen magas szerverkésés esetén, de lagot is okozhat.",
+  "@downloadsWorkersSettingSubtitle": {
+    "description": "Description of setting controlling download worker count."
+  },
+  "downloadsWorkersSettingLabel": "{count} letöltési szál",
+  "@downloadsWorkersSettingLabel": {
+    "description": "Label of values on download worker count slider",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "syncOnStartupSwitch": "Letöltések automatikus szinkronizálása indításkor",
+  "@syncOnStartupSwitch": {
+    "description": "Title of setting for automatically triggering a throttled resync on app startup."
+  },
+  "preferQuickSyncSwitch": "Gyors szinkronizálás előnyben részesítése",
+  "@preferQuickSyncSwitch": {
+    "description": "Title of setting that skips completed albums while syncing."
+  },
+  "preferQuickSyncSwitchSubtitle": "Szinkronizáláskor néhány jellemzően statikus elem (például zeneszámok és albumok) nem frissül. A letöltések javítása mindig teljes szinkronizálást hajt végre.",
+  "@preferQuickSyncSwitchSubtitle": {
+    "description": "Description of setting that skips completed albums while syncing."
+  },
+  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Lejátszási lista} artist{Előadó} genre{Műfaj} track{Szám} library{Könyvtár} unknown{Elem} other{{itemType}}} {itemName}",
+  "@itemTypeSubtitle": {
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    },
+    "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
+  },
+  "downloadButtonDisabledGenreFilterTooltip": "Kérjük, távolítsa el a műfaji szűrőt a letöltési műveletek engedélyezéséhez.",
+  "@downloadButtonDisabledGenreFilterTooltip": {
+    "description": "Tooltip shown when a download button is disabled because of an active genre filter."
+  },
+  "genreFilterNotAvailableForAlbums": "A műfaji szűrők nem állnak rendelkezésre az albumok esetében.",
+  "@genreFilterNotAvailableForAlbums": {
+    "description": "Message shown when the user tries to apply a genre filter to an album."
+  },
+  "genreNotFound": "A műfaj nem található.{additionalInfo, select, offline{ Lehet, hogy nincs letöltve, vagy más könyvtárhoz tartozik.} other{ Lehet, hogy más könyvtárhoz tartozik.}}",
+  "@genreNotFound": {
+    "placeholders": {
+      "additionalInfo": {
+        "type": "String"
+      }
+    },
+    "description": "Message shown when a genre filter or open-genre action fails because the genre item could not be found."
+  },
+  "incidentalDownloadTooltip": "Ezt az elemet a(z) {parentName} miatt kell letölteni.",
+  "@incidentalDownloadTooltip": {
+    "placeholders": {
+      "parentName": {
+        "type": "String"
+      }
+    },
+    "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
+  },
+  "finampCollectionNames": "{itemType, select, favorites{Kedvencek} allPlaylists{Minden lejátszási lista} fiveLatestAlbums{5 legutóbbi album} allPlaylistsMetadata{Lejátszási lista metaadatok} collectionWithLibraryFilter{Gyűjtemény könyvtárszűrővel} other{{itemType}} }",
+  "@finampCollectionNames": {
+    "placeholders": {
+      "itemType": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collections like favorites."
+  },
+  "cacheLibraryImagesName": "'{libraryName}' gyorsítótárazott képek",
+  "@cacheLibraryImagesName": {
+    "placeholders": {
+      "libraryName": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of special downloadable collection representing cached images for a certain library."
+  },
+  "transcodingStreamingFormatTitle": "Átkódolási formátum kiválasztása",
+  "@transcodingStreamingFormatTitle": {
+    "description": "Title for the dropdown that selects the format for transcoded streams"
+  },
+  "transcodingStreamingFormatSubtitle": "Válassza ki az átkódolt hang streameléséhez használni kívánt formátumot. A már sorba állított zeneszámokat ez nem érinti.",
+  "@transcodingStreamingFormatSubtitle": {},
+  "downloadTranscodeEnableTitle": "Átkódolt letöltések engedélyezése",
+  "@downloadTranscodeEnableTitle": {
+    "description": "Title for Enable Transcoded Downloads dropdown"
+  },
+  "downloadTranscodeCodecTitle": "Letöltési formátum kiválasztása",
+  "@downloadTranscodeCodecTitle": {
+    "description": "Title for Select Download Codec dropdown"
+  },
+  "downloadTranscodeEnableOption": "{option, select, always{Mindig} never{Soha} ask{Kérdezze} other{{option}} }",
+  "@downloadTranscodeEnableOption": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    },
+    "description": "Options in Select Download Codec dropdown"
+  },
+  "downloadBitrate": "Letöltési bitráta",
+  "@downloadBitrate": {
+    "description": "Title for Download Bitrate settings slider"
+  },
+  "downloadBitrateSubtitle": "A magasabb bitráta jobb minőségű hangot biztosít, de nagyobb tárhelyigényt eredményez.",
+  "@downloadBitrateSubtitle": {
+    "description": "subtitle for Download Bitrate settings slider"
+  },
+  "transcodeHint": "Átkódolás?",
+  "@transcodeHint": {
+    "description": "Initial text in downloads dropdown when 'Enable Transcoded Downloads' is set to ask."
+  },
+  "doTranscode": "Letöltés {codec} @ {bitrate}{size, select, null{} other{ - ~{size}}} alapján",
+  "@doTranscode": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "123kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "OPUS"
+      },
+      "size": {
+        "type": "String",
+        "example": "167 MB"
+      }
+    },
+    "description": "Dropdown option to download transcoded version of tracks"
+  },
+  "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} átkódolva}}{location, select, null{} other{ ({location})}}",
+  "@downloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      },
+      "location": {
+        "type": "String",
+        "example": "Internal Storage"
+      }
+    },
+    "description": "Track info line in downloads screen lists"
+  },
+  "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ mint {codec} @ {bitrate}}}{location, select, null{} other{ ({location})}}",
+  "@collectionDownloadInfo": {
+    "placeholders": {
+      "bitrate": {
+        "type": "String",
+        "example": "234kbps"
+      },
+      "codec": {
+        "type": "String",
+        "example": "FLAC"
+      },
+      "size": {
+        "type": "String",
+        "example": "456"
+      },
+      "location": {
+        "type": "String",
+        "example": "Internal Storage"
+      }
+    },
+    "description": "Collection info line in downloads screen lists"
+  },
+  "dontTranscode": "Eredeti letöltése{description, select, null{} other{ - {description}}}",
+  "@dontTranscode": {
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "example": "456 MB FLAC"
+      }
+    },
+    "description": "Dropdown option to download original version of tracks"
+  },
+  "redownloadcomplete": "Átkódolás újratöltés sorba állítva.",
+  "@redownloadcomplete": {
+    "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
+  },
+  "redownloadTitle": "Átkódolások automatikus újratöltése",
+  "@redownloadTitle": {
+    "description": "Title for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "redownloadSubtitle": "Automatikusan újratölti azokat a zeneszámokat, amelyek a forrás gyűjtemény változása miatt várhatóan más minőségűek lesznek.",
+  "@redownloadSubtitle": {
+    "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
+  },
+  "defaultDownloadLocationButton": "Beállítás alapértelmezett letöltési helyként.  Letöltésenként történő kiválasztáshoz tiltsa le.",
+  "@defaultDownloadLocationButton": {
+    "description": "Tooltip for button that sets a download location as the default."
+  },
+  "fixedGridSizeSwitchTitle": "Fix méretű rács használata",
+  "@fixedGridSizeSwitchTitle": {},
+  "fixedGridSizeSwitchSubtitle": "A rács méretét nem befolyásolja az ablak/képernyő mérete.",
+  "@fixedGridSizeSwitchSubtitle": {},
+  "fixedGridSizeTitle": "Csempe rácsméret",
+  "@fixedGridSizeTitle": {},
+  "fixedGridTileSizeEnum": "{size, select, small{Kicsi} medium{Közepes} large{Nagy} veryLarge{Nagyon nagy} other{???}}",
+  "@fixedGridTileSizeEnum": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    },
+    "description": "Localized names of fixed size grid tile sizes."
+  },
+  "allowSplitScreenTitle": "Osztott képernyős mód engedélyezése",
+  "@allowSplitScreenTitle": {},
+  "allowSplitScreenSubtitle": "A lejátszó más elemekkel együtt jelenik meg a szélesebb kijelzőkön.",
+  "@allowSplitScreenSubtitle": {},
+  "enableVibration": "Rezgés engedélyezése",
+  "@enableVibration": {},
+  "enableVibrationSubtitle": "A rezgés ki- vagy bekapcsolása.",
+  "@enableVibrationSubtitle": {},
+  "hideQueueButton": "Sorba állítás gomb elrejtése",
+  "@hideQueueButton": {},
+  "hideQueueButtonSubtitle": "Rejtse el a várólista gombot a lejátszási képernyőn. Húzza felfelé az ujját a várólista eléréséhez.",
+  "@hideQueueButtonSubtitle": {},
+  "oneLineMarqueeTextButton": "Hosszú címek automatikus görgetése",
+  "@oneLineMarqueeTextButton": {},
+  "oneLineMarqueeTextButtonSubtitle": "Automatikusan görgeti a két sorban való megjelenítéshez túl hosszú számcímeket",
+  "@oneLineMarqueeTextButtonSubtitle": {},
+  "marqueeOrTruncateButton": "Három pont a hosszú nevekhez",
+  "@marqueeOrTruncateButton": {},
+  "marqueeOrTruncateButtonSubtitle": "'...' megjelenítése a hosszú címek végén a szöveg görgetése helyett",
+  "@marqueeOrTruncateButtonSubtitle": {},
+  "hidePlayerBottomActions": "Alsó műveletek elrejtése",
+  "@hidePlayerBottomActions": {},
+  "hidePlayerBottomActionsSubtitle": "A lejátszó képernyőjén a várólista és a dalszöveg gombok elrejtése. A várólistához való hozzáféréshez húzd felfelé, a dalszöveg (ha rendelkezésre áll) megtekintéséhez húzd balra (az albumborító alatt).",
+  "@hidePlayerBottomActionsSubtitle": {},
+  "prioritizePlayerCover": "Abum borító priorizálása",
+  "@prioritizePlayerCover": {},
+  "prioritizePlayerCoverSubtitle": "Elsőbbséget élvez a nagyobb méretű albumborító a lejátszási képernyőn. A kevésbé fontos opciók kisebb képernyőkön nagyobb valószínűséggel rejtve maradnak.",
+  "@prioritizePlayerCoverSubtitle": {},
+  "releaseDateFormatTitle": "Megjelenési dátum formátum",
+  "@releaseDateFormatTitle": {
+    "description": "Title for the setting that controls the format release dates throughout the app."
+  },
+  "releaseDateFormatSubtitle": "Szabályozza az alkalmazásban megjelenő dátumok formátumát.",
+  "@releaseDateFormatSubtitle": {
+    "description": "Subtitle for the setting that controls the format release dates throughout the app."
+  },
+  "additionalBaseItemInfoTitle": "További információk az elemről",
+  "@additionalBaseItemInfoTitle": {
+    "description": "Title for the setting that controls the displayed additional item info."
+  },
+  "additionalBaseItemInfoSubtitle": "Szabályozza, hogy az egyes elemtípusoknál milyen típusú kiegészítő információk jelenjenek meg az elemlistákban. Az \"Adaptív\" beállítás esetén az információ automatikusan kiválasztásra kerül az aktuális rendezés vagy kontextus alapján.",
+  "@additionalBaseItemInfoSubtitle": {
+    "description": "Subtitle for the setting that controls the displayed additional item info."
+  },
+  "noReleaseDate": "Nincs megjelenési dátum",
+  "@noReleaseDate": {
+    "description": "Placeholder text if an item has no release date set."
+  },
+  "noDateAdded": "Nincs hozzáadott dátum",
+  "@noDateAdded": {
+    "description": "Placeholder text if an item has no dateAdded set."
+  },
+  "noDateLastPlayed": "Még nem játszott",
+  "@noDateLastPlayed": {
+    "description": "Placeholder text if an item has no lastPlayedDate set."
+  },
+  "librarySelectError": "Hiba történt a felhasználó számára elérhető könyvtárak betöltése során",
+  "@librarySelectError": {
+    "description": "Error shown when the library select screen fails to load."
+  },
+  "autoOfflineOptionOff": "Letiltva",
+  "@autoOfflineOptionOff": {
+    "description": "This is shown when the autoOffline feature is turned off and has no effects"
+  },
+  "autoOfflineOptionNetwork": "Helyi hálózat",
+  "@autoOfflineOptionNetwork": {
+    "description": "This is shown when the autoOffline feature is set to \"local Network\", this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
+  },
+  "autoOfflineOptionDisconnected": "Nincs kapcsolat",
+  "@autoOfflineOptionDisconnected": {
+    "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
+  },
+  "autoOfflineOptionUnreachable": "Elérhetetlen",
+  "@autoOfflineOptionUnreachable": {
+    "description": "This is shown when the autoOffline feature is set to Unreachable, this means offline mode will be automatically enabled when - after a network change - the server cant be pinged"
+  },
+  "autoOfflineSettingDescription": "Automatikusan engedélyezi az offline módot.\nLetiltva: Nem kapcsolja be automatikusan az offline módot. Akkumulátor-kímélő lehet.\nHelyi hálózat: Offline mód bekapcsolása, ha nem csatlakozik wifi vagy vezetékes hálózathoz.\nNincs kapcsolat: Offline mód bekapcsolása, ha egyáltalán nincs kapcsolat.\nElérhetetlen: Kapcsolja be az offline módot, ha a kiszolgálót hálózatváltás után nem lehet megpingelni.\nManuálisan bármikor bekapcsolhatja az offline módot, amely szünetelteti az automatizálást, amíg újra ki nem kapcsolja az offline módot.",
+  "@autoOfflineSettingDescription": {
+    "description": "Setting description. Make sure the Mode names match the translations."
+  },
+  "autoOfflineSettingTitle": "Automatikus offline mód",
+  "@autoOfflineSettingTitle": {},
+  "autoOfflineNotification": "Automatikus offline mód {state, select, enabled{engedélyezve} disabled{letiltve} other{kvantumpozícióban}}",
+  "@autoOfflineNotification": {
+    "description": "The text for 'other' should never be seen anyway, so feel free to put in a little harmless easter egg :)"
+  },
+  "audioFadeOutDurationSettingTitle": "A hang elhalkulásának időtartama",
+  "@audioFadeOutDurationSettingTitle": {
+    "description": "Title for the audio fade-out duration setting."
+  },
+  "audioFadeOutDurationSettingSubtitle": "A hang elhalkulásának időtartama ezredmásodpercben.",
+  "@audioFadeOutDurationSettingSubtitle": {
+    "description": "Subtitle for the audio fade-out duration setting. Set to 0 to disable fade-out."
+  },
+  "audioFadeInDurationSettingTitle": "Hangerősítés időtartama",
+  "@audioFadeInDurationSettingTitle": {
+    "description": "Title for the audio fade-in duration setting."
+  },
+  "audioFadeInDurationSettingSubtitle": "A hangerő-növekedés időtartama ezredmásodpercben. A hangerő-növekedés letiltásához állítsa 0-ra.",
+  "@audioFadeInDurationSettingSubtitle": {
+    "description": "Subtitle for the audio fade-in duration setting. Set to 0 to disable fade-in."
+  },
+  "outputMenuButtonTitle": "Kimenet",
+  "@outputMenuButtonTitle": {
+    "description": "Button title for opening the output menu/panel"
+  },
+  "outputMenuTitle": "Kimenet módosítása",
+  "@outputMenuTitle": {
+    "description": "Title for the output menu that allows the user to change the audio output device and volume"
+  },
+  "outputMenuVolumeSectionTitle": "Hangerő",
+  "@outputMenuVolumeSectionTitle": {
+    "description": "Title for the volume section in the output menu"
+  },
+  "outputMenuDevicesSectionTitle": "Elérhető eszközök",
+  "@outputMenuDevicesSectionTitle": {
+    "description": "Title for the available devices section in the output menu"
+  },
+  "outputMenuOpenConnectionSettingsButtonTitle": "Csatlakozás egy eszközhöz",
+  "@outputMenuOpenConnectionSettingsButtonTitle": {
+    "description": "Button title for connecting to a device from the output menu"
   }
 }

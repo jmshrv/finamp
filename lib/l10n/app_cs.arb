@@ -81,7 +81,7 @@
       }
     }
   },
-  "shuffleAllTrackCountSubtitle": "Počet skladeb, které se mají načíst při použití tlačítka náhodného přehrávání všech skladeb.",
+  "shuffleAllTrackCountSubtitle": "Počet skladeb, které se mají načíst při použití tlačítka náhodného přehrání všeho na kartě skladeb nebo žánrů.",
   "@shuffleAllTrackCountSubtitle": {},
   "cancelSleepTimer": "Zrušit časovač spánku?",
   "@cancelSleepTimer": {},
@@ -2566,7 +2566,7 @@
   "@serverSharingMenuDetails": {
     "description": "Description text shown in the server sharing menu, below the description"
   },
-  "quickConnectAuthorizationMenuButtonTitle": "Rychlé připojení",
+  "quickConnectAuthorizationMenuButtonTitle": "Autorizovat Rychlé připojení",
   "@quickConnectAuthorizationMenuButtonTitle": {
     "description": "Title for the button in the drawer that opens the quick connect authorization menu"
   },
@@ -2623,5 +2623,65 @@
     "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
   },
   "logoutButtonSubtitle": "Přihlášením se na jiný server se smažou existující stažené soubory",
-  "@logoutButtonSubtitle": {}
+  "@logoutButtonSubtitle": {},
+  "adaptive": "Adaptivní",
+  "@adaptive": {},
+  "shuffleCountButton": "Náhodně přehrát ({count,plural,=1{{count} skladbu} few{{count} skladby} other{{count} skladeb}})",
+  "@shuffleCountButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "none": "Žádný",
+  "@none": {},
+  "additionalBaseItemInfoTitle": "Dodatečné informace o položce",
+  "@additionalBaseItemInfoTitle": {
+    "description": "Title for the setting that controls the displayed additional item info."
+  },
+  "additionalBaseItemInfoSubtitle": "Ovládá, který typ dodatečnýcb informací bude zobrazen v seznamech položek u každého typu položky. Pokud je nastaveno na „Adaptivní“, budou informace automaticky zvoleny v závislosti na aktuálním řazení nebo kontextu.",
+  "@additionalBaseItemInfoSubtitle": {
+    "description": "Subtitle for the setting that controls the displayed additional item info."
+  },
+  "discordRPCSettingTitle": "Discord RPC",
+  "@discordRPCSettingTitle": {
+    "description": "Title for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCSettingDescription": "Povolit stav na Discordu pro zobrazení skladby, kterou si právě přehráváte. Nebude se připojovat k Discordu, pokud je povolen režim offline.",
+  "@discordRPCSettingDescription": {
+    "description": "Description for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCIconSettingTitle": "Zástupná ikona RPC",
+  "@discordRPCIconSettingTitle": {
+    "description": "Title for the setting that controls which icon gets shown in the Discord RPC (Rich Presence) in case the local address is in use"
+  },
+  "discordRPCIconSettingDescription": "Zástupná ikona, která se zobrazí, pokud není detekována žádná veřejná adresa. (Protože Discord nedokáže načíst obrázky z místní adresy a použil by svou zástupnou ikonu)",
+  "@discordRPCIconSettingDescription": {
+    "description": "Description for the setting that controls which Icon the discord RPC displays as a Fallback in case no public address is detected (it doenst matter what connection is active)."
+  },
+  "discordRPCIconDark": "Finamp - Tmavá",
+  "@discordRPCIconDark": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with the Dark-Theme Background"
+  },
+  "discordRPCIconBlack": "Finamp - Černá",
+  "@discordRPCIconBlack": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Black Background"
+  },
+  "discordRPCIconLight": "Finamp - Bílá",
+  "@discordRPCIconLight": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a White Background"
+  },
+  "discordRPCIconJFTransparent": "Jellyfin - Průhledná",
+  "@discordRPCIconJFTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Jellyfin logo with a Transparent Background"
+  },
+  "discordRPCIconTransparent": "Finamp - Průhledná",
+  "@discordRPCIconTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Transparent Background"
+  },
+  "discordRPCIconWhiteTransparent": "Bílý Finamp - Průhledná",
+  "@discordRPCIconWhiteTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
+  }
 }

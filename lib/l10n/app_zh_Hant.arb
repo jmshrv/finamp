@@ -2622,11 +2622,11 @@
   "@useHighContrastColorsTitle": {
     "description": "Title for the setting that controls if high contrast colors are used throughout the app"
   },
-  "useHighContrastColorsSubtitle": "使用高對比且可自動調整的色彩，以提升可視性。",
+  "useHighContrastColorsSubtitle": "使用高對比與自適應色彩，以提升可視性。",
   "@useHighContrastColorsSubtitle": {
     "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
   },
-  "adaptive": "自適應",
+  "adaptive": "自動調整",
   "@adaptive": {},
   "shuffleCountButton": "隨機播放（{count, plural,=1{{count} 首歌曲} other{{count} 首歌曲}}）",
   "@shuffleCountButton": {
@@ -2642,19 +2642,19 @@
   "@additionalBaseItemInfoTitle": {
     "description": "Title for the setting that controls the displayed additional item info."
   },
-  "additionalBaseItemInfoSubtitle": "控制在各類項目清單中，顯示哪種類型的其它資訊。當設定為「自動調整」時，系統會依據目前的排序方式或使用情境，自動選擇要顯示的資訊內容。",
+  "additionalBaseItemInfoSubtitle": "控制在各類項目清單中，針對每種項目類型所顯示的額外資訊類型。當設定為「自動調整」時，系統會根據目前的排序方式或使用情境，自動選擇要顯示的資訊內容。",
   "@additionalBaseItemInfoSubtitle": {
     "description": "Subtitle for the setting that controls the displayed additional item info."
   },
-  "discordRPCSettingTitle": "Discord 即時狀態顯示",
+  "discordRPCSettingTitle": "Discord 動態顯示",
   "@discordRPCSettingTitle": {
     "description": "Title for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
   },
-  "discordRPCSettingDescription": "啟用 Discord 即時狀態顯示功能，將您正在播放的內容顯示在 Discord 狀態中。若啟用了離線模式，將無法連線至 Discord。",
+  "discordRPCSettingDescription": "啟用 Discord 動態功能，將您正在播放的內容顯示在 Discord 動態中。若啟用了離線模式，將無法連線至 Discord。",
   "@discordRPCSettingDescription": {
     "description": "Description for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
   },
-  "discordRPCIconSettingTitle": "即時狀態顯示備用圖示",
+  "discordRPCIconSettingTitle": "動態備用圖示",
   "@discordRPCIconSettingTitle": {
     "description": "Title for the setting that controls which icon gets shown in the Discord RPC (Rich Presence) in case the local address is in use"
   },
@@ -2662,27 +2662,27 @@
   "@discordRPCIconSettingDescription": {
     "description": "Description for the setting that controls which Icon the discord RPC displays as a Fallback in case no public address is detected (it doenst matter what connection is active)."
   },
-  "discordRPCIconDark": "Finamp - 深色主題",
+  "discordRPCIconDark": "Finamp - 深色樣式",
   "@discordRPCIconDark": {
     "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with the Dark-Theme Background"
   },
-  "discordRPCIconBlack": "Finamp - 黑色主題",
+  "discordRPCIconBlack": "Finamp - 黑色樣式",
   "@discordRPCIconBlack": {
     "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Black Background"
   },
-  "discordRPCIconLight": "Finamp - 白色主題",
+  "discordRPCIconLight": "Finamp - 白色樣式",
   "@discordRPCIconLight": {
     "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a White Background"
   },
-  "discordRPCIconJFTransparent": "Jellyfin – 透明主題",
+  "discordRPCIconJFTransparent": "Jellyfin – 透明樣式",
   "@discordRPCIconJFTransparent": {
     "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Jellyfin logo with a Transparent Background"
   },
-  "discordRPCIconTransparent": "Finamp - 透明主題",
+  "discordRPCIconTransparent": "Finamp - 透明樣式",
   "@discordRPCIconTransparent": {
     "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Transparent Background"
   },
-  "discordRPCIconWhiteTransparent": "白色 Finamp - 透明主題",
+  "discordRPCIconWhiteTransparent": "白色 Finamp - 透明樣式",
   "@discordRPCIconWhiteTransparent": {
     "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
   }
