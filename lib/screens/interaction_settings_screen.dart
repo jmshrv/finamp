@@ -1,4 +1,5 @@
 import 'package:finamp/components/InteractionSettingsScreen/FastScrollSelector.dart';
+import 'package:finamp/components/InteractionSettingsScreen/auto_expand_player_screen.dart';
 import 'package:finamp/components/InteractionSettingsScreen/item_swipe_action_dropdown_list_tile.dart';
 import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_dropdown_list_tile.dart';
 import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_while_charging_selector.dart';
@@ -36,6 +37,7 @@ class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
           ApplyFilterOnGenreChipTapSwitch(),
           AutoSwitchItemCurationTypeToggle(),
           FastScrollSelector(),
+          AutoExpandPlayerScreenSelector(),
           ShowDeleteFromServerOptionToggle(),
           KeepScreenOnDropdownListTile(),
           KeepScreenOnWhilePluggedInSelector(),

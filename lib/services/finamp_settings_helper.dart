@@ -216,6 +216,7 @@ class FinampSettingsHelper {
     finampSettingsTemp.itemSwipeActionRightToLeft = DefaultSettings.itemSwipeActionRightToLeft;
     finampSettingsTemp.startInstantMixForIndividualTracks = DefaultSettings.startInstantMixForIndividualTracks;
     finampSettingsTemp.applyFilterOnGenreChipTap = DefaultSettings.applyFilterOnGenreChipTap;
+    FinampSetters.setAutoExpandPlayerScreen(DefaultSettings.autoExpandPlayerScreen);
     FinampSetters.setShowFastScroller(DefaultSettings.showFastScroller);
     FinampSetters.setKeepScreenOnOption(DefaultSettings.keepScreenOnOption);
     FinampSetters.setKeepScreenOnWhilePluggedIn(DefaultSettings.keepScreenOnWhilePluggedIn);

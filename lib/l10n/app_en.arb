@@ -2481,13 +2481,13 @@
       }
     }
   },
-  "itemCountCalculating": "Calculating item count", 
+  "itemCountCalculating": "Calculating item count",
   "@itemCountCalculating": {
     "description": "Shown to screen readers while the item count is being calculated."
   },
   "preferLocalNetworkActiveAddressInfoText": "Active Address",
   "@preferLocalNetworkActiveAddressInfoText": {
-      "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
   },
   "preferLocalNetworkTargetAddressLocalSettingTitle": "Local Network Address",
   "preferLocalNetworkTargetAddressLocalSettingDescription": "Target address of the Jellyfin server inside your local network",
@@ -2578,11 +2578,11 @@
     "description": "Option for the sleep timer that will finish the last track before stopping playback."
   },
   "sleepTimerAfterCurrentTrack": "After Current Track",
-  "@sleepTimerAfterCurrentTrack" : {
+  "@sleepTimerAfterCurrentTrack": {
     "description": "Option for the sleep timer that will stop playback after the current track finishes."
   },
   "sleepTimerStartTimer": "Start Timer",
-  "@sleepTimerStartTimer" : {
+  "@sleepTimerStartTimer": {
     "description": "Label for the button that starts the sleep timer"
   },
   "syncPlaybackSpeedAndPitchLabel": "Sync Speed & Pitch",
@@ -2680,6 +2680,14 @@
   "useHighContrastColorsSubtitle": "Use high contrast dynamic colors for better visibility.",
   "@useHighContrastColorsSubtitle": {
     "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "autoExpandPlayerScreenTitle": "Open the player screen on playback start",
+  "@autoExpandPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "autoExpandPlayerScreenSubtitle": "This will open the now playing screen when starting playback of a new queue",
+  "@autoExpandPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
   },
   "discordRPCSettingTitle": "Discord RPC",
   "@discordRPCSettingTitle": {

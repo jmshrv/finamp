@@ -124,6 +124,7 @@ class DefaultSettings {
   static const showArtistsTracksSection = true;
   static const disableGesture = false;
   static const showFastScroller = true;
+  static const autoExpandPlayerScreen = false;
   static const bufferDisableSizeConstraints = false;
   static const bufferDurationSeconds = 600;
   static const bufferSizeMegabytes = 50;
@@ -742,6 +743,9 @@ class FinampSettings {
 
   @HiveField(124, defaultValue: DefaultSettings.rpcIcon)
   DiscordRpcIcon rpcIcon;
+
+  @HiveField(125, defaultValue: DefaultSettings.autoExpandPlayerScreen)
+  bool autoExpandPlayerScreen = DefaultSettings.autoExpandPlayerScreen;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

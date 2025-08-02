@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/components/now_playing_bar.dart';
 import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -487,6 +489,7 @@ class QueueService {
       if (initialIndex >= itemList.length) {
         return Future.error("initialIndex is bigger than the itemList! ($initialIndex > ${itemList.length})");
       }
+
       _queueServiceLogger.finest("Replacing whole queue with ${itemList.length} items.");
 
       if (saveQueue) {
@@ -545,6 +548,14 @@ class QueueService {
       _audioHandler.setNextInitialIndex(_queueAudioSourceIndex);
 
       await _audioHandler.initializeAudioSource(_queueAudioSource, preload: true);
+
+      //!!! keep this roughly here so the player screen opens to the correct track, but doesn't seem laggy
+      if (beginPlaying) {
+        // only open the player screen if we actually start playing, otherwise it would open after startup + queue restore
+        if (FinampSettingsHelper.finampSettings.autoExpandPlayerScreen) {
+          unawaited(NowPlayingBar.openPlayerScreen(GlobalSnackbar.materialAppNavigatorKey.currentContext!));
+        }
+      }
 
       newShuffledOrder = List.from(_queueAudioSource.shuffleIndices);
 
