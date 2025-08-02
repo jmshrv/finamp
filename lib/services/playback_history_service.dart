@@ -2,10 +2,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/discord_rpc.dart';
+import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/playon_service.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
@@ -68,6 +71,13 @@ class PlaybackHistoryService {
         _updatePlaybackInfo();
       }
       _wasOfflineBefore = FinampSettingsHelper.finampSettings.isOffline;
+    });
+
+    GetIt.instance<ProviderContainer>().listen(currentTrackMetadataProvider, (metadata, currentTrackMetadataProvider) {
+      final metadata = currentTrackMetadataProvider.value;
+      if (metadata != null) {
+        _updatePlaybackInfo(playbackData: generateGenericPlaybackProgressInfo(metadata: metadata));
+      }
     });
 
     bool throttleRemoteSessionReporting = false;
@@ -513,11 +523,13 @@ class PlaybackHistoryService {
     required bool isMuted,
     required Duration playerPosition,
     required bool includeNowPlayingQueue,
+    MetadataProvider? metadata,
   }) {
     try {
       return jellyfin_models.PlaybackProgressInfo(
         itemId: item.baseItem?.id ?? jellyfin_models.BaseItemId(""),
-        playSessionId: _queueService.getQueue().id,
+        playSessionId: metadata?.playbackInfo.playSessionId,
+        sessionId: _queueService.getQueue().id,
         isPaused: isPaused,
         isMuted: isMuted,
         positionTicks: playerPosition.inMicroseconds * 10,
@@ -542,6 +554,7 @@ class PlaybackHistoryService {
   jellyfin_models.PlaybackProgressInfo? generateGenericPlaybackProgressInfo({
     bool includeNowPlayingQueue = false,
     bool force = false,
+    MetadataProvider? metadata,
   }) {
     final currentTrack = _currentTrack?.item ?? _queueService.getCurrentTrack();
     if (currentTrack == null) {
@@ -552,10 +565,13 @@ class PlaybackHistoryService {
       return null;
     }
 
+    metadata ??= GetIt.instance<ProviderContainer>().read(currentTrackMetadataProvider).value;
+
     try {
       return jellyfin_models.PlaybackProgressInfo(
         itemId: currentTrack.baseItem?.id ?? jellyfin_models.BaseItemId(""),
-        playSessionId: _queueService.getQueue().id,
+        playSessionId: metadata?.playbackInfo.playSessionId,
+        sessionId: _queueService.getQueue().id,
         canSeek: true,
         isPaused: _audioService.paused,
         isMuted: _audioService.volume == 0.0,

@@ -675,42 +675,14 @@ class DeviceProfileAdapter extends TypeAdapter<DeviceProfile> {
     return DeviceProfile(
       name: fields[0] as String?,
       id: fields[1] as String?,
-      identification: fields[2] as DeviceIdentification?,
-      friendlyName: fields[3] as String?,
-      manufacturer: fields[4] as String?,
-      manufacturerUrl: fields[5] as String?,
-      modelName: fields[6] as String?,
-      modelDescription: fields[7] as String?,
-      modelNumber: fields[8] as String?,
-      modelUrl: fields[9] as String?,
-      serialNumber: fields[10] as String?,
-      enableAlbumArtInDidl: fields[11] as bool,
-      enableSingleAlbumArtLimit: fields[12] as bool,
-      enableSingleSubtitleLimit: fields[13] as bool,
-      supportedMediaTypes: fields[14] as String?,
-      userId: fields[15] as String?,
-      albumArtPn: fields[16] as String?,
-      maxAlbumArtWidth: (fields[17] as num).toInt(),
-      maxAlbumArtHeight: (fields[18] as num).toInt(),
-      maxIconWidth: (fields[19] as num?)?.toInt(),
-      maxIconHeight: (fields[20] as num?)?.toInt(),
       maxStreamingBitrate: (fields[21] as num?)?.toInt(),
       maxStaticBitrate: (fields[22] as num?)?.toInt(),
       musicStreamingTranscodingBitrate: (fields[23] as num?)?.toInt(),
       maxStaticMusicBitrate: (fields[24] as num?)?.toInt(),
-      sonyAggregationFlags: fields[25] as String?,
-      protocolInfo: fields[26] as String?,
-      timelineOffsetSeconds: (fields[27] as num).toInt(),
-      requiresPlainVideoItems: fields[28] as bool,
-      requiresPlainFolders: fields[29] as bool,
-      enableMSMediaReceiverRegistrar: fields[30] as bool,
-      ignoreTranscodeByteRangeRequests: fields[31] as bool,
-      xmlRootAttributes: (fields[32] as List?)?.cast<XmlAttribute>(),
       directPlayProfiles: (fields[33] as List?)?.cast<DirectPlayProfile>(),
       transcodingProfiles: (fields[34] as List?)?.cast<TranscodingProfile>(),
       containerProfiles: (fields[35] as List?)?.cast<ContainerProfile>(),
       codecProfiles: (fields[36] as List?)?.cast<CodecProfile>(),
-      responseProfiles: (fields[37] as List?)?.cast<ResponseProfile>(),
       subtitleProfiles: (fields[38] as List?)?.cast<SubtitleProfile>(),
     );
   }
@@ -718,49 +690,11 @@ class DeviceProfileAdapter extends TypeAdapter<DeviceProfile> {
   @override
   void write(BinaryWriter writer, DeviceProfile obj) {
     writer
-      ..writeByte(39)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
       ..write(obj.id)
-      ..writeByte(2)
-      ..write(obj.identification)
-      ..writeByte(3)
-      ..write(obj.friendlyName)
-      ..writeByte(4)
-      ..write(obj.manufacturer)
-      ..writeByte(5)
-      ..write(obj.manufacturerUrl)
-      ..writeByte(6)
-      ..write(obj.modelName)
-      ..writeByte(7)
-      ..write(obj.modelDescription)
-      ..writeByte(8)
-      ..write(obj.modelNumber)
-      ..writeByte(9)
-      ..write(obj.modelUrl)
-      ..writeByte(10)
-      ..write(obj.serialNumber)
-      ..writeByte(11)
-      ..write(obj.enableAlbumArtInDidl)
-      ..writeByte(12)
-      ..write(obj.enableSingleAlbumArtLimit)
-      ..writeByte(13)
-      ..write(obj.enableSingleSubtitleLimit)
-      ..writeByte(14)
-      ..write(obj.supportedMediaTypes)
-      ..writeByte(15)
-      ..write(obj.userId)
-      ..writeByte(16)
-      ..write(obj.albumArtPn)
-      ..writeByte(17)
-      ..write(obj.maxAlbumArtWidth)
-      ..writeByte(18)
-      ..write(obj.maxAlbumArtHeight)
-      ..writeByte(19)
-      ..write(obj.maxIconWidth)
-      ..writeByte(20)
-      ..write(obj.maxIconHeight)
       ..writeByte(21)
       ..write(obj.maxStreamingBitrate)
       ..writeByte(22)
@@ -769,22 +703,6 @@ class DeviceProfileAdapter extends TypeAdapter<DeviceProfile> {
       ..write(obj.musicStreamingTranscodingBitrate)
       ..writeByte(24)
       ..write(obj.maxStaticMusicBitrate)
-      ..writeByte(25)
-      ..write(obj.sonyAggregationFlags)
-      ..writeByte(26)
-      ..write(obj.protocolInfo)
-      ..writeByte(27)
-      ..write(obj.timelineOffsetSeconds)
-      ..writeByte(28)
-      ..write(obj.requiresPlainVideoItems)
-      ..writeByte(29)
-      ..write(obj.requiresPlainFolders)
-      ..writeByte(30)
-      ..write(obj.enableMSMediaReceiverRegistrar)
-      ..writeByte(31)
-      ..write(obj.ignoreTranscodeByteRangeRequests)
-      ..writeByte(32)
-      ..write(obj.xmlRootAttributes)
       ..writeByte(33)
       ..write(obj.directPlayProfiles)
       ..writeByte(34)
@@ -793,8 +711,6 @@ class DeviceProfileAdapter extends TypeAdapter<DeviceProfile> {
       ..write(obj.containerProfiles)
       ..writeByte(36)
       ..write(obj.codecProfiles)
-      ..writeByte(37)
-      ..write(obj.responseProfiles)
       ..writeByte(38)
       ..write(obj.subtitleProfiles);
   }
@@ -2741,6 +2657,35 @@ class LyricLineCueAdapter extends TypeAdapter<LyricLineCue> {
           typeId == other.typeId;
 }
 
+class PlaybackInfoRequestAdapter extends TypeAdapter<PlaybackInfoRequest> {
+  @override
+  final typeId = 102;
+
+  @override
+  PlaybackInfoRequest read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return PlaybackInfoRequest();
+  }
+
+  @override
+  void write(BinaryWriter writer, PlaybackInfoRequest obj) {
+    writer.writeByte(0);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PlaybackInfoRequestAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class SortByAdapter extends TypeAdapter<SortBy> {
   @override
   final typeId = 37;
@@ -3308,46 +3253,11 @@ Map<String, dynamic> _$ClientCapabilitiesToJson(ClientCapabilities instance) =>
 DeviceProfile _$DeviceProfileFromJson(Map json) => DeviceProfile(
   name: json['Name'] as String?,
   id: json['Id'] as String?,
-  identification: json['Identification'] == null
-      ? null
-      : DeviceIdentification.fromJson(
-          Map<String, dynamic>.from(json['Identification'] as Map),
-        ),
-  friendlyName: json['FriendlyName'] as String?,
-  manufacturer: json['Manufacturer'] as String?,
-  manufacturerUrl: json['ManufacturerUrl'] as String?,
-  modelName: json['ModelName'] as String?,
-  modelDescription: json['ModelDescription'] as String?,
-  modelNumber: json['ModelNumber'] as String?,
-  modelUrl: json['ModelUrl'] as String?,
-  serialNumber: json['SerialNumber'] as String?,
-  enableAlbumArtInDidl: json['EnableAlbumArtInDidl'] as bool,
-  enableSingleAlbumArtLimit: json['EnableSingleAlbumArtLimit'] as bool,
-  enableSingleSubtitleLimit: json['EnableSingleSubtitleLimit'] as bool,
-  supportedMediaTypes: json['SupportedMediaTypes'] as String?,
-  userId: json['UserId'] as String?,
-  albumArtPn: json['AlbumArtPn'] as String?,
-  maxAlbumArtWidth: (json['MaxAlbumArtWidth'] as num).toInt(),
-  maxAlbumArtHeight: (json['MaxAlbumArtHeight'] as num).toInt(),
-  maxIconWidth: (json['MaxIconWidth'] as num?)?.toInt(),
-  maxIconHeight: (json['MaxIconHeight'] as num?)?.toInt(),
   maxStreamingBitrate: (json['MaxStreamingBitrate'] as num?)?.toInt(),
   maxStaticBitrate: (json['MaxStaticBitrate'] as num?)?.toInt(),
   musicStreamingTranscodingBitrate:
       (json['MusicStreamingTranscodingBitrate'] as num?)?.toInt(),
   maxStaticMusicBitrate: (json['MaxStaticMusicBitrate'] as num?)?.toInt(),
-  sonyAggregationFlags: json['SonyAggregationFlags'] as String?,
-  protocolInfo: json['ProtocolInfo'] as String?,
-  timelineOffsetSeconds: (json['TimelineOffsetSeconds'] as num).toInt(),
-  requiresPlainVideoItems: json['RequiresPlainVideoItems'] as bool,
-  requiresPlainFolders: json['RequiresPlainFolders'] as bool,
-  enableMSMediaReceiverRegistrar:
-      json['EnableMSMediaReceiverRegistrar'] as bool,
-  ignoreTranscodeByteRangeRequests:
-      json['IgnoreTranscodeByteRangeRequests'] as bool,
-  xmlRootAttributes: (json['XmlRootAttributes'] as List<dynamic>?)
-      ?.map((e) => XmlAttribute.fromJson(Map<String, dynamic>.from(e as Map)))
-      .toList(),
   directPlayProfiles: (json['DirectPlayProfiles'] as List<dynamic>?)
       ?.map(
         (e) => DirectPlayProfile.fromJson(Map<String, dynamic>.from(e as Map)),
@@ -3366,11 +3276,6 @@ DeviceProfile _$DeviceProfileFromJson(Map json) => DeviceProfile(
   codecProfiles: (json['CodecProfiles'] as List<dynamic>?)
       ?.map((e) => CodecProfile.fromJson(Map<String, dynamic>.from(e as Map)))
       .toList(),
-  responseProfiles: (json['ResponseProfiles'] as List<dynamic>?)
-      ?.map(
-        (e) => ResponseProfile.fromJson(Map<String, dynamic>.from(e as Map)),
-      )
-      .toList(),
   subtitleProfiles: (json['SubtitleProfiles'] as List<dynamic>?)
       ?.map(
         (e) => SubtitleProfile.fromJson(Map<String, dynamic>.from(e as Map)),
@@ -3383,39 +3288,10 @@ Map<String, dynamic> _$DeviceProfileToJson(
 ) => <String, dynamic>{
   'Name': instance.name,
   'Id': instance.id,
-  'Identification': instance.identification?.toJson(),
-  'FriendlyName': instance.friendlyName,
-  'Manufacturer': instance.manufacturer,
-  'ManufacturerUrl': instance.manufacturerUrl,
-  'ModelName': instance.modelName,
-  'ModelDescription': instance.modelDescription,
-  'ModelNumber': instance.modelNumber,
-  'ModelUrl': instance.modelUrl,
-  'SerialNumber': instance.serialNumber,
-  'EnableAlbumArtInDidl': instance.enableAlbumArtInDidl,
-  'EnableSingleAlbumArtLimit': instance.enableSingleAlbumArtLimit,
-  'EnableSingleSubtitleLimit': instance.enableSingleSubtitleLimit,
-  'SupportedMediaTypes': instance.supportedMediaTypes,
-  'UserId': instance.userId,
-  'AlbumArtPn': instance.albumArtPn,
-  'MaxAlbumArtWidth': instance.maxAlbumArtWidth,
-  'MaxAlbumArtHeight': instance.maxAlbumArtHeight,
-  'MaxIconWidth': instance.maxIconWidth,
-  'MaxIconHeight': instance.maxIconHeight,
   'MaxStreamingBitrate': instance.maxStreamingBitrate,
   'MaxStaticBitrate': instance.maxStaticBitrate,
   'MusicStreamingTranscodingBitrate': instance.musicStreamingTranscodingBitrate,
   'MaxStaticMusicBitrate': instance.maxStaticMusicBitrate,
-  'SonyAggregationFlags': instance.sonyAggregationFlags,
-  'ProtocolInfo': instance.protocolInfo,
-  'TimelineOffsetSeconds': instance.timelineOffsetSeconds,
-  'RequiresPlainVideoItems': instance.requiresPlainVideoItems,
-  'RequiresPlainFolders': instance.requiresPlainFolders,
-  'EnableMSMediaReceiverRegistrar': instance.enableMSMediaReceiverRegistrar,
-  'IgnoreTranscodeByteRangeRequests': instance.ignoreTranscodeByteRangeRequests,
-  'XmlRootAttributes': instance.xmlRootAttributes
-      ?.map((e) => e.toJson())
-      .toList(),
   'DirectPlayProfiles': instance.directPlayProfiles
       ?.map((e) => e.toJson())
       .toList(),
@@ -3426,9 +3302,6 @@ Map<String, dynamic> _$DeviceProfileToJson(
       ?.map((e) => e.toJson())
       .toList(),
   'CodecProfiles': instance.codecProfiles?.map((e) => e.toJson()).toList(),
-  'ResponseProfiles': instance.responseProfiles
-      ?.map((e) => e.toJson())
-      .toList(),
   'SubtitleProfiles': instance.subtitleProfiles
       ?.map((e) => e.toJson())
       .toList(),
@@ -4780,3 +4653,50 @@ Map<String, dynamic> _$LyricLineCueToJson(LyricLineCue instance) =>
       'EndPosition': instance.endPosition,
       'End': instance.end,
     };
+
+PlaybackInfoRequest _$PlaybackInfoRequestFromJson(Map json) =>
+    PlaybackInfoRequest(
+      userId: json['UserId'] as String?,
+      deviceProfile: json['DeviceProfile'] == null
+          ? null
+          : DeviceProfile.fromJson(
+              Map<String, dynamic>.from(json['DeviceProfile'] as Map),
+            ),
+      startTimeTicks: (json['StartTimeTicks'] as num?)?.toInt(),
+      maxStreamingBitrate: (json['MaxStreamingBitrate'] as num?)?.toInt(),
+      audioStreamIndex: (json['AudioStreamIndex'] as num?)?.toInt(),
+      subtitleStreamIndex: (json['SubtitleStreamIndex'] as num?)?.toInt(),
+      maxAudioChannels: (json['MaxAudioChannels'] as num?)?.toInt(),
+      mediaSourceId: json['MediaSourceId'] as String?,
+      liveStreamId: json['LiveStreamId'] as String?,
+      enableDirectPlay: json['EnableDirectPlay'] as bool?,
+      enableDirectStream: json['EnableDirectStream'] as bool?,
+      enableTranscoding: json['EnableTranscoding'] as bool?,
+      allowVideoStreamCopy: json['AllowVideoStreamCopy'] as bool?,
+      allowAudioStreamCopy: json['AllowAudioStreamCopy'] as bool?,
+      autoOpenLiveStream: json['AutoOpenLiveStream'] as bool?,
+      alwaysBurnInSubtitleWhenTranscoding:
+          json['AlwaysBurnInSubtitleWhenTranscoding'] as bool?,
+    );
+
+Map<String, dynamic> _$PlaybackInfoRequestToJson(
+  PlaybackInfoRequest instance,
+) => <String, dynamic>{
+  'UserId': instance.userId,
+  'DeviceProfile': instance.deviceProfile?.toJson(),
+  'StartTimeTicks': instance.startTimeTicks,
+  'MaxStreamingBitrate': instance.maxStreamingBitrate,
+  'AudioStreamIndex': instance.audioStreamIndex,
+  'SubtitleStreamIndex': instance.subtitleStreamIndex,
+  'MaxAudioChannels': instance.maxAudioChannels,
+  'MediaSourceId': instance.mediaSourceId,
+  'LiveStreamId': instance.liveStreamId,
+  'EnableDirectPlay': instance.enableDirectPlay,
+  'EnableDirectStream': instance.enableDirectStream,
+  'EnableTranscoding': instance.enableTranscoding,
+  'AllowVideoStreamCopy': instance.allowVideoStreamCopy,
+  'AllowAudioStreamCopy': instance.allowAudioStreamCopy,
+  'AutoOpenLiveStream': instance.autoOpenLiveStream,
+  'AlwaysBurnInSubtitleWhenTranscoding':
+      instance.alwaysBurnInSubtitleWhenTranscoding,
+};
