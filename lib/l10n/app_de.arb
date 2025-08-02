@@ -2675,5 +2675,13 @@
   "discordRPCIconWhiteTransparent": "Finamp weiß - Transparent",
   "@discordRPCIconWhiteTransparent": {
     "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
+  },
+  "autoExpandPlayerScreenTitle": "Beim Playback-Start den Player öffnen",
+  "@autoExpandPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "autoExpandPlayerScreenSubtitle": "Beim Starten einer neuen Warteschlange wird der Player geöffnet",
+  "@autoExpandPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
   }
 }
