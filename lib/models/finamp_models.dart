@@ -2107,9 +2107,10 @@ class FinampStorableQueueInfo {
     required this.queue,
     required this.creation,
     required this.source,
+    required this.order,
   });
 
-  FinampStorableQueueInfo.fromQueueInfo(FinampQueueInfo info, int? seek)
+  FinampStorableQueueInfo.fromQueueInfo(FinampQueueInfo info, int? seek, this.order)
     : previousTracks = info.previousTracks.map<BaseItemId>((track) => track.baseItemId).toList(),
       currentTrack = info.currentTrack?.baseItemId,
       currentTrackSeek = seek,
@@ -2140,9 +2141,12 @@ class FinampStorableQueueInfo {
   @HiveField(6)
   QueueItemSource? source;
 
+  @HiveField(7)
+  FinampPlaybackOrder? order;
+
   @override
   String toString() {
-    return "previous:$previousTracks current:$currentTrack seek:$currentTrackSeek next:$nextUp queue:$queue";
+    return "previous:$previousTracks current:$currentTrack seek:$currentTrackSeek next:$nextUp queue:$queue order:$order";
   }
 
   int get trackCount {

@@ -1197,13 +1197,14 @@ class FinampStorableQueueInfoAdapter
       queue: (fields[4] as List).cast<BaseItemId>(),
       creation: (fields[5] as num).toInt(),
       source: fields[6] as QueueItemSource?,
+      order: fields[7] as FinampPlaybackOrder?,
     );
   }
 
   @override
   void write(BinaryWriter writer, FinampStorableQueueInfo obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.previousTracks)
       ..writeByte(1)
@@ -1217,7 +1218,9 @@ class FinampStorableQueueInfoAdapter
       ..writeByte(5)
       ..write(obj.creation)
       ..writeByte(6)
-      ..write(obj.source);
+      ..write(obj.source)
+      ..writeByte(7)
+      ..write(obj.order);
   }
 
   @override

@@ -263,6 +263,7 @@ class QueueService {
     FinampStorableQueueInfo info = FinampStorableQueueInfo.fromQueueInfo(
       getQueue(),
       withPosition ? _audioHandler.playbackPosition.inMilliseconds : null,
+      playbackOrder,
     );
     _queuesBox.put("latest", info);
     return info;
@@ -401,6 +402,7 @@ class QueueService {
                 name: const QueueItemSourceName(type: QueueItemSourceNameType.savedQueue),
                 id: "savedqueue",
               ),
+          order: info.order,
         );
 
         Future<void> seekFuture = Future.value();
