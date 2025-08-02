@@ -531,14 +531,6 @@ class QueueService {
       }
       await _queueAudioSource.clear();
 
-      //!!! keep this roughly here so the player screen opens to the correct track, but doesn't seem laggy
-      if (beginPlaying) {
-        // only open the player screen if we actually start playing, otherwise it would open after startup + queue restore
-        if (FinampSettingsHelper.finampSettings.autoExpandPlayerScreen) {
-          unawaited(NowPlayingBar.openPlayerScreen(GlobalSnackbar.materialAppNavigatorKey.currentContext!));
-        }
-      }
-
       List<AudioSource> audioSources = [];
 
       for (final queueItem in newItems) {
@@ -555,6 +547,14 @@ class QueueService {
       _audioHandler.setNextInitialIndex(_queueAudioSourceIndex);
 
       await _audioHandler.initializeAudioSource(_queueAudioSource, preload: true);
+
+      //!!! keep this roughly here so the player screen opens to the correct track, but doesn't seem laggy
+      if (beginPlaying) {
+        // only open the player screen if we actually start playing, otherwise it would open after startup + queue restore
+        if (FinampSettingsHelper.finampSettings.autoExpandPlayerScreen) {
+          unawaited(NowPlayingBar.openPlayerScreen(GlobalSnackbar.materialAppNavigatorKey.currentContext!));
+        }
+      }
 
       newShuffledOrder = List.from(_queueAudioSource.shuffleIndices);
 
