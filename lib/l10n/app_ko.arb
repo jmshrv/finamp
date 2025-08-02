@@ -1847,5 +1847,51 @@
   "genreListsInheritSortingSubtitle": "활성화하면 \"전체 보기\" 리스트가 장르 화면의 정렬과 필터링 설정을 상속받습니다(따릅니다). 비활성화하면 해당 라이브러리 탭의 설정을 대신 사용합니다. 장르 화면 상단의 카운팅이나 \"플레이리스트 탐색\" 버튼을 탭하면 항상 라이브러리 탭의 정렬 설정을 사용합니다.",
   "@genreListsInheritSortingSubtitle": {
     "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
-  }
+  },
+  "curatedItemsMostPlayedOfflineTooltip": "오프라인 모드에서 사용 불가.",
+  "@curatedItemsMostPlayedOfflineTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Offline Mode."
+  },
+  "curatedItemsNoFavorites": "{itemType, select, artistGenreFilter{ 이 장르의 해당 아티스트의} artist{ 이 아트스트의} genre{ 이 장르의} other{}} 즐겨찾기가 없습니다.",
+  "@curatedItemsNoFavorites": {
+    "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "optional": true,
+        "example": "artistGenreFilter, artist or genre"
+      }
+    }
+  },
+  "playbackReportingSettingsTitle": "재생 보고 및 재생",
+  "@playbackReportingSettingsTitle": {
+    "description": "Title for the playback reporting settings screen"
+  },
+  "downloadButtonDisabledGenreFilterTooltip": "다운로드 기능을 활성화하려면 장르 필터를 해제해주세요.",
+  "@downloadButtonDisabledGenreFilterTooltip": {
+    "description": "Tooltip shown when a download button is disabled because of an active genre filter."
+  },
+  "genreFilterNotAvailableForAlbums": "앨범에는 장르 필터를 사용할 수 없습니다.",
+  "@genreFilterNotAvailableForAlbums": {
+    "description": "Message shown when the user tries to apply a genre filter to an album."
+  },
+  "genreNotFound": "장르를 발견할 수 없습니다.{additionalInfo, select, offline{ 다운로드 되지 않았거나 다른 라이브러리에 포함되어 있을 수 있습니다.} other{ 다른 라이브러리에 포함되어 있을 수 있습니다.}}",
+  "@genreNotFound": {
+    "placeholders": {
+      "additionalInfo": {
+        "type": "String"
+      }
+    },
+    "description": "Message shown when a genre filter or open-genre action fails because the genre item could not be found."
+  },
+  "defaultDownloadLocationButton": "기본 다운로드 위치로 정합니다.  매번 다운로드 위치를 선택하려면 비활성화 하십시오.",
+  "@defaultDownloadLocationButton": {
+    "description": "Tooltip for button that sets a download location as the default."
+  },
+  "fixedGridSizeSwitchTitle": "고정 사이즈의 그리드 타일 사용",
+  "@fixedGridSizeSwitchTitle": {},
+  "fixedGridSizeSwitchSubtitle": "그리드 타일 사이즈가 창 및 화면 크기에 반응하지 않습니다.",
+  "@fixedGridSizeSwitchSubtitle": {},
+  "fixedGridSizeTitle": "그리드 타일 사이즈",
+  "@fixedGridSizeTitle": {}
 }
