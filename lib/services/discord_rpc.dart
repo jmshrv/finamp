@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:core';
+import 'dart:io';
 
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -24,6 +25,11 @@ _RpcStatus _targetStatus = _RpcStatus.stopped;
 
 class DiscordRpc {
   static void initialize() {
+    if (!(Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+      _rpcLogger.warning("Discord RPC is only supported on Desktop platforms, skipping initialization.");
+      return;
+    }
+
     var settingsListener = FinampSettingsHelper.finampSettingsListener;
     // Chaphasilor owns the Discord App in case of any issues with that :)
     FlutterDiscordRPC.initialize("1397542416201945221");
