@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:finamp/components/MusicScreen/item_collection_wrapper.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
@@ -15,25 +16,17 @@ import '../../services/queue_service.dart';
 import '../album_image.dart';
 import '../global_snackbar.dart';
 
-class QueueRestoreTile extends StatelessWidget {
+class QueueRestoreTile extends ConsumerWidget {
   const QueueRestoreTile({super.key, required this.info});
 
   final FinampStorableQueueInfo info;
 
   @override
-  Widget build(BuildContext context) {
-    final isarDownloader = GetIt.instance<DownloadsService>();
-    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+  Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
     int remainingTracks = info.trackCount - info.previousTracks.length;
-    Future<BaseItemDto?> track;
-    if (info.currentTrack == null) {
-      track = Future.value(null);
-    } else if (FinampSettingsHelper.finampSettings.isOffline) {
-      track = isarDownloader.getTrackInfo(id: info.currentTrack!).then((value) => value?.baseItem);
-    } else {
-      track = jellyfinApiHelper.getItemById(info.currentTrack!).then((x) => x, onError: (_) => null);
-    }
+
+    BaseItemDto? track = ref.watch(trackProvider(info.currentTrack)).value;
 
     return ListTileTheme(
       // Do not pad between components.  leading/trailing widgets will handle spacing.
@@ -44,39 +37,32 @@ class QueueRestoreTile extends StatelessWidget {
         title: Text(info.source?.name.getLocalized(context) ?? AppLocalizations.of(context)!.unknown),
         leading: Padding(
           padding: const EdgeInsets.only(right: 16),
-          child: FutureBuilder<BaseItemDto?>(
-            future: track,
-            builder: (context, snapshot) => AlbumImage(item: snapshot.data),
-          ),
+          child: AlbumImage(item: track),
         ),
         isThreeLine: true,
         //dense: true,
-        subtitle: FutureBuilder<BaseItemDto?>(
-          future: track,
-          initialData: null,
-          builder: (context, snapshot) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                AppLocalizations.of(context)!.queueRestoreTitle(DateTime.fromMillisecondsSinceEpoch(info.creation)),
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              ...((snapshot.data?.name == null)
-                  ? <Text>[]
-                  : [
-                      // exclude subtitle line 1 if track name is null
-                      Text(
-                        AppLocalizations.of(context)!.queueRestoreSubtitle1(snapshot.data!.name!),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ]),
-              Text(
-                AppLocalizations.of(context)!.queueRestoreSubtitle2(info.trackCount, remainingTracks),
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
-          ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              AppLocalizations.of(context)!.queueRestoreTitle(DateTime.fromMillisecondsSinceEpoch(info.creation)),
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            ...((track?.name == null)
+                ? <Text>[]
+                : [
+                    // exclude subtitle line 1 if track name is null
+                    Text(
+                      AppLocalizations.of(context)!.queueRestoreSubtitle1(track!.name!),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ]),
+            Text(
+              AppLocalizations.of(context)!.queueRestoreSubtitle2(info.trackCount, remainingTracks),
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
         ),
         onLongPress: () => {
           if (info.source?.item != null) {openItemMenu(context: context, item: info.source!.item!, queueInfo: info)},
@@ -93,3 +79,14 @@ class QueueRestoreTile extends StatelessWidget {
     );
   }
 }
+
+final AutoDisposeFutureProviderFamily<BaseItemDto?, BaseItemId?> trackProvider = FutureProvider.autoDispose
+    .family<BaseItemDto?, BaseItemId?>((ref, itemId) async {
+      if (itemId == null) {
+        return null;
+      } else if (ref.watch(finampSettingsProvider.isOffline)) {
+        return GetIt.instance<DownloadsService>().getTrackInfo(id: itemId).then((value) => value?.baseItem);
+      } else {
+        return GetIt.instance<JellyfinApiHelper>().getItemById(itemId).then((x) => x, onError: (_) => null);
+      }
+    });

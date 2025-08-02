@@ -1,21 +1,17 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
+import 'package:finamp/components/Buttons/cta_medium.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/artist_menu.dart';
 import 'package:finamp/menus/components/overflow_menu_button.dart';
-import 'package:finamp/menus/genre_menu.dart';
-import 'package:finamp/components/Buttons/cta_medium.dart';
-import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/services/feedback_helper.dart';
-import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../services/audio_service_helper.dart';
+import '../../services/queue_service.dart';
 import '../album_image.dart';
 import 'artist_item_info.dart';
 
@@ -83,186 +79,6 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
         ),
         order: FinampPlaybackOrder.shuffled,
       );
-    }
-
-    void shuffleAllFromArtistNext(List<BaseItemDto> items) {
-      final shuffled = items..shuffle();
-      queueService.addNext(
-        items: shuffled,
-        source: QueueItemSource(
-          type: QueueItemSourceType.nextUpArtist,
-          name: QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
-          ),
-          id: parentItem.id,
-          item: parentItem,
-        ),
-      );
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext, isConfirmation: true);
-    }
-
-    void shuffleAllFromArtistToNextUp(List<BaseItemDto> items) {
-      final shuffled = items..shuffle();
-      queueService.addNext(
-        items: shuffled,
-        source: QueueItemSource(
-          type: QueueItemSourceType.nextUpArtist,
-          name: QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
-          ),
-          id: parentItem.id,
-          item: parentItem,
-        ),
-      );
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp, isConfirmation: true);
-    }
-
-    void shuffleAllFromArtistToQueue(List<BaseItemDto> items) {
-      final shuffled = items..shuffle();
-      queueService.addNext(
-        items: shuffled,
-        source: QueueItemSource(
-          type: QueueItemSourceType.artist,
-          name: QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
-          ),
-          id: parentItem.id,
-          item: parentItem,
-        ),
-      );
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue, isConfirmation: true);
-    }
-
-    void addArtistNext(List<BaseItemDto> items) {
-      queueService.addNext(
-        items: items,
-        source: QueueItemSource(
-          type: QueueItemSourceType.nextUpArtist,
-          name: QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
-          ),
-          id: parentItem.id,
-          item: parentItem,
-        ),
-      );
-      GlobalSnackbar.message(
-        (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext("artist"),
-        isConfirmation: true,
-      );
-    }
-
-    void addArtistToNextUp(List<BaseItemDto> items) {
-      queueService.addToNextUp(
-        items: items,
-        source: QueueItemSource(
-          type: QueueItemSourceType.nextUpArtist,
-          name: QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
-          ),
-          id: parentItem.id,
-          item: parentItem,
-        ),
-      );
-      GlobalSnackbar.message(
-        (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp("artist"),
-        isConfirmation: true,
-      );
-    }
-
-    void addArtistToQueue(List<BaseItemDto> items) {
-      queueService.addToQueue(
-        items: items,
-        source: QueueItemSource(
-          type: QueueItemSourceType.artist,
-          name: QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
-          ),
-          id: parentItem.id,
-          item: parentItem,
-        ),
-      );
-      GlobalSnackbar.message(
-        (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue("artist"),
-        isConfirmation: true,
-      );
-    }
-
-    void shuffleAlbumsFromArtist(List<BaseItemDto> items) {
-      var tracks = (items.groupListsBy((element) => element.albumId).values.toList()..shuffle()).flattened.toList();
-
-      queueService.startPlayback(
-        items: tracks,
-        source: QueueItemSource(
-          type: QueueItemSourceType.artist,
-          name: QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
-          ),
-          id: parentItem.id,
-          item: parentItem,
-        ),
-        order: FinampPlaybackOrder.linear,
-      );
-    }
-
-    void shuffleAlbumsFromArtistNext(List<BaseItemDto> items) {
-      var tracks = (items.groupListsBy((element) => element.albumId).values.toList()..shuffle()).flattened.toList();
-
-      queueService.addNext(
-        items: tracks,
-        source: QueueItemSource(
-          type: QueueItemSourceType.nextUpArtist,
-          name: QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
-          ),
-          id: parentItem.id,
-          item: parentItem,
-        ),
-      );
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext, isConfirmation: true);
-    }
-
-    void shuffleAlbumsFromArtistToNextUp(List<BaseItemDto> items) {
-      var tracks = (items.groupListsBy((element) => element.albumId).values.toList()..shuffle()).flattened.toList();
-
-      queueService.addToNextUp(
-        items: tracks,
-        source: QueueItemSource(
-          type: QueueItemSourceType.nextUpArtist,
-          name: QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
-          ),
-          id: parentItem.id,
-          item: parentItem,
-        ),
-      );
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp, isConfirmation: true);
-    }
-
-    void shuffleAlbumsFromArtistToQueue(List<BaseItemDto> items) {
-      var tracks = (items.groupListsBy((element) => element.albumId).values.toList()..shuffle()).flattened.toList();
-
-      queueService.addToQueue(
-        items: tracks,
-        source: QueueItemSource(
-          type: QueueItemSourceType.artist,
-          name: QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
-          ),
-          id: parentItem.id,
-          item: parentItem,
-        ),
-      );
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue, isConfirmation: true);
     }
 
     return FlexibleSpaceBar(

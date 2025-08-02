@@ -71,7 +71,6 @@ Map<String, Widget> getPlaybackActionPages({required BuildContext context, requi
           ],
         ),
       };
-      break;
   }
 }
 
@@ -93,10 +92,6 @@ class PlayPlaybackAction extends ConsumerWidget {
           order: FinampPlaybackOrder.linear,
         );
 
-        GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(BaseItemDtoType.fromItem(baseItem).name),
-          isConfirmation: true,
-        );
         Navigator.pop(context);
       },
       iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -231,8 +226,9 @@ class ShuffleNextPlaybackAction extends ConsumerWidget {
         label: AppLocalizations.of(context)!.shuffleNext,
         onPressed: () async {
           await queueService.addNext(
-            items: (await loadChildTracks(baseItem: baseItem) ?? [])..shuffle(),
+            items: await loadChildTracks(baseItem: baseItem) ?? [],
             source: QueueItemSource.fromBaseItem(baseItem, type: QueueItemSourceType.nextUpAlbum),
+            order: FinampPlaybackOrder.shuffled,
           );
 
           GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext, isConfirmation: true);
@@ -257,8 +253,9 @@ class ShuffleToNextUpPlaybackAction extends ConsumerWidget {
       label: AppLocalizations.of(context)!.shuffleToNextUp,
       onPressed: () async {
         await queueService.addToNextUp(
-          items: (await loadChildTracks(baseItem: baseItem) ?? [])..shuffle(),
+          items: await loadChildTracks(baseItem: baseItem) ?? [],
           source: QueueItemSource.fromBaseItem(baseItem, type: QueueItemSourceType.nextUpAlbum),
+          order: FinampPlaybackOrder.shuffled,
         );
 
         GlobalSnackbar.message(
@@ -285,8 +282,9 @@ class ShuffleToQueuePlaybackAction extends ConsumerWidget {
       label: AppLocalizations.of(context)!.shuffleToQueue,
       onPressed: () async {
         await queueService.addToQueue(
-          items: (await loadChildTracks(baseItem: baseItem) ?? [])..shuffle(),
+          items: await loadChildTracks(baseItem: baseItem) ?? [],
           source: QueueItemSource.fromBaseItem(baseItem),
+          order: FinampPlaybackOrder.shuffled,
         );
 
         GlobalSnackbar.message(

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/components/now_playing_bar.dart';
@@ -396,6 +395,7 @@ class QueueService {
           saveQueue: false,
           itemList: items["previous"]! + items["current"]! + items["queue"]!,
           initialIndex: items["current"]!.isNotEmpty || items["queue"]!.isNotEmpty ? items["previous"]!.length : 0,
+          order: FinampPlaybackOrder.linear,
           beginPlaying: isReload && (_audioHandler.playbackState.valueOrNull?.playing ?? false),
           source:
               info.source ??
@@ -447,27 +447,6 @@ class QueueService {
   }) async {
     // _initialQueue = list; // save original PlaybackList for looping/restarting and meta info
 
-    if (items.isEmpty) {
-      _queueServiceLogger.warning("Cannot start playback of empty queue! Source: $source");
-      return;
-    }
-
-    // Native shuffle is not currently implemented on desktop.  Perform manually.
-    if (!(Platform.isAndroid || Platform.isIOS) && order == FinampPlaybackOrder.shuffled) {
-      List<jellyfin_models.BaseItemDto> clonedItems = List.from(items);
-      clonedItems.shuffle();
-      items = clonedItems;
-      order = FinampPlaybackOrder.linear;
-    }
-
-    if (startingIndex == null) {
-      if (order == FinampPlaybackOrder.shuffled) {
-        startingIndex = Random().nextInt(items.length);
-      } else {
-        startingIndex = 0;
-      }
-    }
-
     await _replaceWholeQueue(itemList: items, source: source, order: order, initialIndex: startingIndex);
     _queueServiceLogger.info(
       "Started playing '${GlobalSnackbar.materialAppScaffoldKey.currentContext != null ? source.name.getLocalized(GlobalSnackbar.materialAppScaffoldKey.currentContext!) : source.name.type}' (${source.type}) in order $order from index $startingIndex",
@@ -480,12 +459,35 @@ class QueueService {
   Future<void> _replaceWholeQueue({
     required List<jellyfin_models.BaseItemDto> itemList,
     required QueueItemSource source,
-    required int initialIndex,
+    int? initialIndex,
     FinampPlaybackOrder? order,
     bool beginPlaying = true,
     bool saveQueue = true,
   }) async {
     try {
+      if (itemList.isEmpty) {
+        _queueServiceLogger.warning("Cannot start playback of empty queue! Source: $source");
+        return;
+      }
+
+      order ??= FinampPlaybackOrder.linear;
+
+      // Native shuffle is not currently implemented on desktop.  Perform manually.
+      if (!(Platform.isAndroid || Platform.isIOS) && order == FinampPlaybackOrder.shuffled) {
+        List<jellyfin_models.BaseItemDto> clonedItems = List.from(itemList);
+        clonedItems.shuffle();
+        itemList = clonedItems;
+        order = FinampPlaybackOrder.linear;
+      }
+
+      if (initialIndex == null) {
+        if (order == FinampPlaybackOrder.shuffled) {
+          initialIndex = Random().nextInt(itemList.length);
+        } else {
+          initialIndex = 0;
+        }
+      }
+
       if (initialIndex >= itemList.length) {
         return Future.error("initialIndex is bigger than the itemList! ($initialIndex > ${itemList.length})");
       }
@@ -569,7 +571,6 @@ class QueueService {
       _queueServiceLogger.fine("Order items length: ${_order.items.length}");
 
       // set playback order to trigger shuffle if necessary (fixes indices being wrong when starting with shuffle enabled)
-      order ??= FinampPlaybackOrder.linear;
       playbackOrder = order;
 
       // _queueStream.add(getQueue());
@@ -637,10 +638,15 @@ class QueueService {
     return;
   }
 
-  Future<void> addToQueue({required List<jellyfin_models.BaseItemDto> items, QueueItemSource? source}) async {
+  Future<void> addToQueue({
+    required List<jellyfin_models.BaseItemDto> items,
+    QueueItemSource? source,
+    FinampPlaybackOrder? order,
+  }) async {
     if (_queueAudioSource.length == 0) {
       return _replaceWholeQueue(
         itemList: items,
+        order: order,
         source:
             source ??
             QueueItemSource.rawId(
@@ -649,7 +655,6 @@ class QueueService {
               id: "queue",
               item: null,
             ),
-        initialIndex: 0,
         beginPlaying: false,
       );
     }
@@ -657,6 +662,11 @@ class QueueService {
     try {
       if (_savedQueueState == SavedQueueState.pendingSave) {
         _savedQueueState = SavedQueueState.saving;
+      }
+      if (order == FinampPlaybackOrder.shuffled) {
+        List<jellyfin_models.BaseItemDto> clonedItems = List.from(items);
+        clonedItems.shuffle();
+        items = clonedItems;
       }
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
@@ -683,7 +693,11 @@ class QueueService {
     }
   }
 
-  Future<void> addNext({required List<jellyfin_models.BaseItemDto> items, QueueItemSource? source}) async {
+  Future<void> addNext({
+    required List<jellyfin_models.BaseItemDto> items,
+    QueueItemSource? source,
+    FinampPlaybackOrder? order,
+  }) async {
     if (_queueAudioSource.length == 0) {
       return _replaceWholeQueue(
         itemList: items,
@@ -695,14 +709,19 @@ class QueueService {
               id: "queue",
               item: null,
             ),
-        initialIndex: 0,
         beginPlaying: false,
+        order: order,
       );
     }
 
     try {
       if (_savedQueueState == SavedQueueState.pendingSave) {
         _savedQueueState = SavedQueueState.saving;
+      }
+      if (order == FinampPlaybackOrder.shuffled) {
+        List<jellyfin_models.BaseItemDto> clonedItems = List.from(items);
+        clonedItems.shuffle();
+        items = clonedItems;
       }
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {
@@ -738,7 +757,11 @@ class QueueService {
     }
   }
 
-  Future<void> addToNextUp({required List<jellyfin_models.BaseItemDto> items, QueueItemSource? source}) async {
+  Future<void> addToNextUp({
+    required List<jellyfin_models.BaseItemDto> items,
+    QueueItemSource? source,
+    FinampPlaybackOrder? order,
+  }) async {
     if (_queueAudioSource.length == 0) {
       return _replaceWholeQueue(
         itemList: items,
@@ -750,14 +773,19 @@ class QueueService {
               id: "queue",
               item: null,
             ),
-        initialIndex: 0,
         beginPlaying: false,
+        order: order,
       );
     }
 
     try {
       if (_savedQueueState == SavedQueueState.pendingSave) {
         _savedQueueState = SavedQueueState.saving;
+      }
+      if (order == FinampPlaybackOrder.shuffled) {
+        List<jellyfin_models.BaseItemDto> clonedItems = List.from(items);
+        clonedItems.shuffle();
+        items = clonedItems;
       }
       List<FinampQueueItem> queueItems = [];
       for (final item in items) {

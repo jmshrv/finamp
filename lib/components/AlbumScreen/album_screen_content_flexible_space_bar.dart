@@ -1,15 +1,14 @@
-import 'package:finamp/menus/album_menu.dart';
-import 'package:finamp/menus/playlist_menu.dart';
 import 'package:finamp/components/Buttons/cta_medium.dart';
-import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/menus/components/overflow_menu_button.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/menus/album_menu.dart';
+import 'package:finamp/menus/components/overflow_menu_button.dart';
+import 'package:finamp/menus/playlist_menu.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/audio_service_helper.dart';
 import '../album_image.dart';
@@ -81,124 +80,6 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
         ),
         order: FinampPlaybackOrder.shuffled,
       );
-    }
-
-    void addAlbumToNextUp() {
-      queueService.addToNextUp(
-        items: items,
-        source: QueueItemSource(
-          type: isPlaylist ? QueueItemSourceType.nextUpPlaylist : QueueItemSourceType.nextUpAlbum,
-          name: QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
-          ),
-          id: parentItem.id,
-          item: parentItem,
-          contextNormalizationGain: isPlaylist ? null : parentItem.normalizationGain,
-        ),
-      );
-      GlobalSnackbar.message(
-        (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp(isPlaylist ? "playlist" : "album"),
-        isConfirmation: true,
-      );
-    }
-
-    void addAlbumNext() {
-      queueService.addNext(
-        items: items,
-        source: QueueItemSource(
-          type: isPlaylist ? QueueItemSourceType.nextUpPlaylist : QueueItemSourceType.nextUpAlbum,
-          name: QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
-          ),
-          id: parentItem.id,
-          item: parentItem,
-          contextNormalizationGain: isPlaylist ? null : parentItem.normalizationGain,
-        ),
-      );
-      GlobalSnackbar.message(
-        (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(isPlaylist ? "playlist" : "album"),
-        isConfirmation: true,
-      );
-    }
-
-    void shuffleAlbumToNextUp() {
-      // linear order is used in this case since we don't want to affect the rest of the queue
-      List<BaseItemDto> clonedItems = List.from(items);
-      clonedItems.shuffle();
-      queueService.addToNextUp(
-        items: clonedItems,
-        source: QueueItemSource(
-          type: isPlaylist ? QueueItemSourceType.nextUpPlaylist : QueueItemSourceType.nextUpAlbum,
-          name: QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
-          ),
-          id: parentItem.id,
-          item: parentItem,
-          contextNormalizationGain: isPlaylist ? null : parentItem.normalizationGain,
-        ),
-      );
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp, isConfirmation: true);
-    }
-
-    void shuffleAlbumNext() {
-      // linear order is used in this case since we don't want to affect the rest of the queue
-      List<BaseItemDto> clonedItems = List.from(items);
-      clonedItems.shuffle();
-      queueService.addNext(
-        items: clonedItems,
-        source: QueueItemSource(
-          type: isPlaylist ? QueueItemSourceType.nextUpPlaylist : QueueItemSourceType.nextUpAlbum,
-          name: QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
-          ),
-          id: parentItem.id,
-          item: parentItem,
-          contextNormalizationGain: isPlaylist ? null : parentItem.normalizationGain,
-        ),
-      );
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext, isConfirmation: true);
-    }
-
-    void addAlbumToQueue() {
-      queueService.addToQueue(
-        items: items,
-        source: QueueItemSource(
-          type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
-          name: QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
-          ),
-          id: parentItem.id,
-          item: parentItem,
-        ),
-      );
-      GlobalSnackbar.message(
-        (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue(isPlaylist ? "playlist" : "album"),
-        isConfirmation: true,
-      );
-    }
-
-    void shuffleAlbumToQueue() {
-      // linear order is used in this case since we don't want to affect the rest of the queue
-      List<BaseItemDto> clonedItems = List.from(items);
-      clonedItems.shuffle();
-      queueService.addToQueue(
-        items: clonedItems,
-        source: QueueItemSource(
-          type: isPlaylist ? QueueItemSourceType.playlist : QueueItemSourceType.album,
-          name: QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
-          ),
-          id: parentItem.id,
-          item: parentItem,
-        ),
-      );
-      GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue, isConfirmation: true);
     }
 
     return FlexibleSpaceBar(
