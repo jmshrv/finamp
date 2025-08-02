@@ -2694,7 +2694,7 @@
   "@discordRPCIconWhiteTransparent": {
     "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
   },
-  "autoExpandPlayerScreenTitle": "Abrir o ecrã de reprodutor no inicio de reprodução",
+  "autoExpandPlayerScreenTitle": "Abrir Ecrã de Reprodutor no Inicio de Reprodução",
   "@autoExpandPlayerScreenTitle": {
     "description": "Title for the setting that controls if the player screen is opened directly after starting a new queue"
   },
