@@ -1897,6 +1897,8 @@ class VolumeNormalizationModeAdapter
         return VolumeNormalizationMode.trackBased;
       case 2:
         return VolumeNormalizationMode.albumOnly;
+      case 3:
+        return VolumeNormalizationMode.albumBased;
       default:
         return VolumeNormalizationMode.hybrid;
     }
@@ -1911,6 +1913,8 @@ class VolumeNormalizationModeAdapter
         writer.writeByte(1);
       case VolumeNormalizationMode.albumOnly:
         writer.writeByte(2);
+      case VolumeNormalizationMode.albumBased:
+        writer.writeByte(3);
     }
   }
 

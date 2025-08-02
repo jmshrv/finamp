@@ -153,7 +153,7 @@ class FeatureState {
 
       if (feature == FinampFeatureChipType.normalizationGain &&
           FinampSettingsHelper.finampSettings.volumeNormalizationActive) {
-        double? effectiveGainChange = getEffectiveGainChange(currentTrack!.item, currentTrack!.baseItem);
+        double? effectiveGainChange = getGainForCurrentPlayback(currentTrack!.item, currentTrack!.baseItem);
         if (effectiveGainChange != null) {
           features.add(
             FeatureProperties(

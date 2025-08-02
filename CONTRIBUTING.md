@@ -116,7 +116,10 @@ lib/                                -- the codebase also known as src in other p
 4. Create a new method for interacting with the endpoint in `jellyfin_api_helper.dart`. Again, just copy-paste what you need.
 5. Call the new method through `JellyfinApiHelper` to make your request
 
+### Adding i18n strings
 
+1. In [app_en.arb](lib/l10n/app_en.arb), add default english string as well as string description following examples in the file
+2. Run `flutter gen-l10n` or VSCode command "Generate Localizations" if you have Flutter plugin installed
 
 ## The Redesign
 

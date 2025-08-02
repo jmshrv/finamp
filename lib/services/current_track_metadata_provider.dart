@@ -1,6 +1,5 @@
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -13,28 +12,13 @@ final currentTrackMetadataProvider = AutoDisposeProvider<AsyncValue<MetadataProv
   for (final itemToPrecache in precacheItems) {
     BaseItemDto? base = itemToPrecache.baseItem;
     if (base != null) {
-      // only fetch lyrics for the current track
-      final request = MetadataRequest(
-        item: base,
-        queueItem: itemToPrecache,
-        includeLyrics: true,
-        checkIfSpeedControlNeeded:
-            ref.watch(finampSettingsProvider.playbackSpeedVisibility) == PlaybackSpeedVisibility.automatic,
-      );
-      ref.listen(metadataProvider(request), (_, __) {});
+      ref.listen(metadataProvider(base), (_, __) {});
     }
   }
 
   final currentTrack = ref.watch(currentTrackProvider).value;
   if (currentTrack?.baseItem != null) {
-    final request = MetadataRequest(
-      item: currentTrack!.baseItem!,
-      queueItem: currentTrack,
-      includeLyrics: true,
-      checkIfSpeedControlNeeded:
-          ref.watch(finampSettingsProvider.playbackSpeedVisibility) == PlaybackSpeedVisibility.automatic,
-    );
-    return ref.watch(metadataProvider(request));
+    return ref.watch(metadataProvider(currentTrack!.baseItem!));
   }
   return const AsyncValue.data(null);
 });

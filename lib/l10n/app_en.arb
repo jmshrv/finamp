@@ -1474,13 +1474,13 @@
   "@volumeNormalizationModeSelectorSubtitle": {
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
-  "volumeNormalizationModeSelectorDescription": "Hybrid (Track + Album):\nTrack gain is used for regular playback, but if an album is playing (either because it''s the main playback queue source, or because it was added to the queue at some point), the album gain is used instead.\n\nTrack-based:\nTrack gain is always used, regardless of whether an album is playing or not.\n\nAlbums Only:\nVolume Normalization is only applied while playing albums (using the album gain), but not for individual tracks.",
+  "volumeNormalizationModeSelectorDescription": "Dynamic:\nWhen playing multiple tracks from the same album in a row, album gain is used (i.e. when playing an album, or tracks from the same album in a playlist). Otherwise, track gain is used.\n\nTrack-based:\nTrack gain is always used, regardless of whether an album is playing or not.\n\nAlbum-based:\nAlbum gain is always used, but if it's not available (i.e. for singles), track gain is used instead.\n\nAlbums Only:\nVolume normalization is only applied while playing albums (using the album gain), but not for individual tracks.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
-  "volumeNormalizationModeHybrid": "Hybrid (Track + Album)",
+  "volumeNormalizationModeHybrid": "Dynamic",
   "@volumeNormalizationModeHybrid": {
-    "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
+    "description": "'Dynamic' option for the replay gain mode dropdown. In dynamic mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), or successive tracks from a same album are in the queue, the album gain is used instead."
   },
   "volumeNormalizationModeTrackBased": "Track-based",
   "@volumeNormalizationModeTrackBased": {

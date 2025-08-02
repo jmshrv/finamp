@@ -2188,6 +2188,9 @@ enum VolumeNormalizationMode {
   /// Only normalize if playing albums
   @HiveField(2)
   albumOnly,
+
+  @HiveField(3)
+  albumBased,
 }
 
 @HiveType(typeId: 64)

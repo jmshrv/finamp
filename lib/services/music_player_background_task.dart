@@ -11,6 +11,7 @@ import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
 import 'package:finamp/services/favorite_provider.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,6 +25,7 @@ import 'package:rxdart/rxdart.dart';
 import 'android_auto_helper.dart';
 import 'finamp_settings_helper.dart';
 import 'locale_helper.dart';
+import 'metadata_provider.dart';
 
 enum FadeDirection { fadeIn, fadeOut, none }
 
@@ -300,13 +302,14 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     // Propagate all events from the audio player to AudioService clients.
     int? replayQueueIndex;
     _player.playbackEventStream.listen((event) async {
-      if (!(_player.sequenceState?.sequence.isEmpty ?? true)) {
+      final playerSequence = _player.sequenceState?.sequence;
+      if (playerSequence != null && playerSequence.isNotEmpty) {
         if (event.currentIndex != replayQueueIndex) {
           replayQueueIndex = event.currentIndex;
           if (replayQueueIndex != null) {
             var queueItem =
                 // event.currentIndex is based on the original sequence, not the effectiveSequence
-                _player.sequenceState?.sequence[replayQueueIndex!].tag as FinampQueueItem?;
+                playerSequence[replayQueueIndex!].tag as FinampQueueItem?;
             if (queueItem != null) {
               _applyVolumeNormalization(queueItem.item);
             }
@@ -340,6 +343,15 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       }
     });
 
+    // This is called each time queue (or at least previous and next items in it)
+    // This unintended behavior is actually used to recalculate the `Dynamic` 4
+    // normalization gain mode.
+    // if user adds a track from the same album next to queue or makes previous
+    // and next track in the queue not from the same album anymore (e.g. by
+    // removing them from queue), volume gain is recalculated instantly so that
+    // it is not changed on track change (where gapless playback will regress to
+    // audible volume change).
+    // This is possible because this callback is called on each queue change
     mediaItem.listen((currentTrack) {
       sleepTimer?.onTrackCompleted();
 
@@ -949,13 +961,12 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     if (FinampSettingsHelper.finampSettings.volumeNormalizationActive && currentTrack != null) {
       final baseItem = jellyfin_models.BaseItemDto.fromJson(currentTrack.extras?["itemJson"] as Map<String, dynamic>);
 
-      double? effectiveGainChange = getEffectiveGainChange(currentTrack, baseItem);
+      double? effectiveGainChange = getGainForCurrentPlayback(currentTrack, baseItem);
 
       _volumeNormalizationLogger.info(
         "normalization gain for '${baseItem.name}': $effectiveGainChange (track gain change: ${baseItem.normalizationGain})",
       );
       if (effectiveGainChange != null) {
-        _volumeNormalizationLogger.info("Gain change: $effectiveGainChange");
         if (Platform.isAndroid) {
           _loudnessEnhancerEffect?.setTargetGain(
             effectiveGainChange / 10.0,
@@ -1091,20 +1102,48 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   double get volume => _player.volume;
   bool get paused => !_player.playing;
   Duration get playbackPosition => _player.position;
+
+  void onQueueServiceAvailable() {
+    // Moved here because currentTrackMetadataProvider depends on queueService
+    // If metadataProvider is sloooooow, this allows it to catch up
+    GetIt.instance<ProviderContainer>().listen(currentTrackMetadataProvider, (previous, next) {
+      if (FinampSettingsHelper.finampSettings.volumeNormalizationMode != VolumeNormalizationMode.albumBased &&
+          FinampSettingsHelper.finampSettings.volumeNormalizationMode != VolumeNormalizationMode.hybrid) {
+        return;
+      }
+      if (previous?.valueOrNull?.parentNormalizationGain != next.valueOrNull?.parentNormalizationGain) {
+        _applyVolumeNormalization(mediaItem.valueOrNull);
+      }
+    });
+  }
 }
 
-double? getEffectiveGainChange(MediaItem currentTrack, jellyfin_models.BaseItemDto? item) {
+double? getGainForCurrentPlayback(MediaItem currentTrack, jellyfin_models.BaseItemDto? item) {
   final baseItem =
       item ?? jellyfin_models.BaseItemDto.fromJson(currentTrack.extras?["itemJson"] as Map<String, dynamic>);
+
   double? effectiveGainChange;
   switch (FinampSettingsHelper.finampSettings.volumeNormalizationMode) {
-    case VolumeNormalizationMode.hybrid:
-      // case VolumeNormalizationMode.albumBased: // we use the context normalization gain for album-based because we don't have the album item here
-      // use context normalization gain if available, otherwise use track normalization gain
-      effectiveGainChange = currentTrack.extras?["contextNormalizationGain"] as double? ?? baseItem.normalizationGain;
+    case VolumeNormalizationMode.hybrid when GetIt.instance<QueueService>().getQueue().isCurrentlyPlayingTracksFromSameAlbum():
+    case VolumeNormalizationMode.albumBased:
+      final providerContainer = GetIt.instance<ProviderContainer>();
+      // final parentNormalizationGain = providerContainer.read(currentTrackMetadataProvider).valueOrNull?.parentNormalizationGain;
+      // includeLyrics is always true - fetch the metadataRequest directly.
+      // Requires that provided arguments are the only fields of request,
+      // along with `includeLyrics` always being true in currentTrackMetadataProvider
+      // Otherwise, use code commented above
+      final parentNormalizationGain = providerContainer
+          .read(metadataProvider(baseItem))
+          .valueOrNull
+          ?.parentNormalizationGain;
+
+      effectiveGainChange =
+          parentNormalizationGain ??
+          (currentTrack.extras?["contextNormalizationGain"] as double?) ??
+          baseItem.normalizationGain;
       break;
+    case VolumeNormalizationMode.hybrid:
     case VolumeNormalizationMode.trackBased:
-      // only ever use track normalization gain
       effectiveGainChange = baseItem.normalizationGain;
       break;
     case VolumeNormalizationMode.albumOnly:
