@@ -45,6 +45,9 @@ class DiscordRpc {
   }
 
   static Future<void> start() async {
+    if (!(Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+      return;
+    }
     _targetStatus = _RpcStatus.running;
     if (_status == _RpcStatus.stopped) {
       _status = _RpcStatus.transition;
@@ -81,6 +84,9 @@ class DiscordRpc {
   }
 
   static Future<void> stop({bool force = false}) async {
+    if (!(Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+      return;
+    }
     _targetStatus = _RpcStatus.stopped;
     if (_status == _RpcStatus.running || force) {
       _rpcLogger.info("Stopping RPC");
@@ -107,6 +113,9 @@ class DiscordRpc {
   }
 
   static Future<void> updateRPC() async {
+    if (!(Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+      return;
+    }
     if (!FlutterDiscordRPC.instance.isConnected) return;
     RPCActivity? currentState;
     try {
