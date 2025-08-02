@@ -395,6 +395,7 @@ class QueueService {
           saveQueue: false,
           itemList: items["previous"]! + items["current"]! + items["queue"]!,
           initialIndex: items["current"]!.isNotEmpty || items["queue"]!.isNotEmpty ? items["previous"]!.length : 0,
+          // Always restore queues as linear to prevent them being reshuffled while restoring
           order: FinampPlaybackOrder.linear,
           beginPlaying: isReload && (_audioHandler.playbackState.valueOrNull?.playing ?? false),
           source:
@@ -472,8 +473,8 @@ class QueueService {
 
       order ??= FinampPlaybackOrder.linear;
 
-      // Native shuffle is not currently implemented on desktop.  Perform manually.
-      if (!(Platform.isAndroid || Platform.isIOS) && order == FinampPlaybackOrder.shuffled) {
+      // Native shuffle is not currently implemented on mediakit backend.  Perform manually.
+      if ((Platform.isLinux || Platform.isWindows) && order == FinampPlaybackOrder.shuffled) {
         List<jellyfin_models.BaseItemDto> clonedItems = List.from(itemList);
         clonedItems.shuffle();
         itemList = clonedItems;
@@ -974,7 +975,8 @@ class QueueService {
   FinampLoopMode get loopMode => _loopMode;
 
   set playbackOrder(FinampPlaybackOrder order) {
-    if (!Platform.isAndroid && !Platform.isIOS && order != FinampPlaybackOrder.linear) {
+    // Native shuffle is not currently implemented on mediakit backend.
+    if ((Platform.isLinux || Platform.isWindows) && order != FinampPlaybackOrder.linear) {
       GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.desktopShuffleWarning);
       order = FinampPlaybackOrder.linear;
     }
