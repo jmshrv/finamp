@@ -489,9 +489,6 @@ class QueueService {
         return Future.error("initialIndex is bigger than the itemList! ($initialIndex > ${itemList.length})");
       }
 
-      if (FinampSettingsHelper.finampSettings.autoExpandPlayerScreen) {
-        unawaited(NowPlayingBar.openPlayerScreen(GlobalSnackbar.materialAppNavigatorKey.currentContext!));
-      }
       _queueServiceLogger.finest("Replacing whole queue with ${itemList.length} items.");
 
       if (saveQueue) {
@@ -533,6 +530,14 @@ class QueueService {
         await _audioHandler.stopPlayback();
       }
       await _queueAudioSource.clear();
+
+      //!!! keep this roughly here so the player screen opens to the correct track, but doesn't seem laggy
+      if (beginPlaying) {
+        // only open the player screen if we actually start playing, otherwise it would open after startup + queue restore
+        if (FinampSettingsHelper.finampSettings.autoExpandPlayerScreen) {
+          unawaited(NowPlayingBar.openPlayerScreen(GlobalSnackbar.materialAppNavigatorKey.currentContext!));
+        }
+      }
 
       List<AudioSource> audioSources = [];
 

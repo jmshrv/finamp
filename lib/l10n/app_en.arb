@@ -2681,7 +2681,14 @@
   "@useHighContrastColorsSubtitle": {
     "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
   },
-  "autoExpandPlayerScreen": "Open the Player directly after clicking on a song.",
+  "autoExpandPlayerScreenTitle": "Open the player screen on playback start",
+  "@autoExpandPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "autoExpandPlayerScreenSubtitle": "This will open the now playing screen when starting playback of a new queue",
+  "@autoExpandPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
   "discordRPCSettingTitle": "Discord RPC",
   "@discordRPCSettingTitle": {
     "description": "Title for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
