@@ -175,7 +175,7 @@
   "@directoryMustBeEmpty": {},
   "shuffleAllTrackCount": "전곡 임의 재생시 곡 수",
   "@shuffleAllTrackCount": {},
-  "shuffleAllTrackCountSubtitle": "'전곡 임의 재생' 버튼을 사용할 때 불러올 곡(들)의 개수입니다.",
+  "shuffleAllTrackCountSubtitle": "곡 또는 장르 탭에서 '전곡 임의 재생' 버튼을 사용할 때 불러올 곡(들)의 개수입니다.",
   "@shuffleAllTrackCountSubtitle": {},
   "viewTypeSubtitle": "음악 화면 보기 유형",
   "@viewTypeSubtitle": {},
@@ -1795,5 +1795,57 @@
   "downloadSizeWarningCutoffSubtitle": "이보다 많은 곡들을 한번에 다운로드 하려고 할 때 경고 메시지가 나타납니다.",
   "@downloadSizeWarningCutoffSubtitle": {
     "description": "Subtitle for the setting controlling when to warn about a large download"
+  },
+  "adaptive": "적응형",
+  "@adaptive": {},
+  "shuffleCountButton": "({count,plural,=1{{count} 곡} other{{count} 곡(들)}}) 임의 재생",
+  "@shuffleCountButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "logoutButtonSubtitle": "이미 다운로드 한 곡들은 다른 서버로 로그인 할 경우 삭제됩니다",
+  "@logoutButtonSubtitle": {},
+  "none": "없음",
+  "@none": {},
+  "createPlaylistFromCurrentQueue": "현재 대기열을 새로운 플레이리스트로 저장합니다",
+  "@createPlaylistFromCurrentQueue": {
+    "description": "Label for a button that creates a new playlist from the current queue."
+  },
+  "itemSectionsOrder": "아이템 섹션의 정렬 설정",
+  "@itemSectionsOrder": {
+    "description": "Label for the setting that controls the order of item sections on the screens."
+  },
+  "unknown": "알 수 없음",
+  "@unknown": {},
+  "itemSectionsOrderSubtitle": "아이템 섹션의 정렬을 설정합니다.",
+  "@itemSectionsOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections on the screens."
+  },
+  "genreItemSectionFilterChipOrderTitle": "아이템 섹션 필터 순서",
+  "@genreItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of item sections filter chips."
+  },
+  "genreItemSectionFilterChipOrderSubtitle": "아이템 섹션에서 이용 가능한 필터들의 순서를 설정합니다.",
+  "@genreItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of item sections filter chips."
+  },
+  "genreFilterArtistScreens": "아티스트 필터",
+  "@genreFilterArtistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreFilterPlaylistScreens": "플레이리스트 필터",
+  "@genreFilterPlaylistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "genreListsInheritSorting": "전체 리스트 정렬 상속",
+  "@genreListsInheritSorting": {
+    "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "genreListsInheritSortingSubtitle": "활성화하면 \"전체 보기\" 리스트가 장르 화면의 정렬과 필터링 설정을 상속받습니다(따릅니다). 비활성화하면 해당 라이브러리 탭의 설정을 대신 사용합니다. 장르 화면 상단의 카운팅이나 \"플레이리스트 탐색\" 버튼을 탭하면 항상 라이브러리 탭의 정렬 설정을 사용합니다.",
+  "@genreListsInheritSortingSubtitle": {
+    "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
   }
 }
