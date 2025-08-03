@@ -43,6 +43,7 @@ class _AudioServiceSettingsScreenState extends State<AudioServiceSettingsScreen>
           const LoadQueueOnStartupSelector(),
           const AutoReloadQueueToggle(),
           const ClearQueueOnStopToggle(),
+          const UseRandomizeToggle(),
         ],
       ),
     );
@@ -225,4 +226,19 @@ class ClearQueueOnStopToggle extends ConsumerWidget {
       onChanged: FinampSetters.setClearQueueOnStopEvent,
     );
   }
+}
+
+class UseRandomizeToggle extends ConsumerWidget {
+  const UseRandomizeToggle({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.useRandomizeTitle),
+      subtitle: Text(AppLocalizations.of(context)!.useRandomizeSubtitle),
+      value: ref.watch(finampSettingsProvider.useRandomize),
+      onChanged: FinampSetters.setUseRandomize
+    );
+  }
+
 }
