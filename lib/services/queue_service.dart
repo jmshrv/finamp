@@ -153,7 +153,7 @@ class QueueService {
     if (_queueNextUp.isEmpty && _playbackOrder == FinampPlaybackOrder.shuffled && FinampSettingsHelper.finampSettings.useRandomize) {
       // Queue likely contains multiple of the same item. Deduplicate using a set for an equal chance of any item.
       Set<jellyfin_models.BaseItemDto> itemsSet = {};
-      for (FinampQueueItem queueItem in peekQueue()) {
+      for (FinampQueueItem queueItem in getQueue().fullQueue) {
         itemsSet.add(queueItem.baseItem!);
       }
       List<jellyfin_models.BaseItemDto> items = [...itemsSet];
@@ -1181,7 +1181,6 @@ class QueueService {
         "android.media.extra.DOWNLOAD_STATUS": isDownloaded ? 2 : 0,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
         "contextNormalizationGain": contextNormalizationGain,
-        "baseItem": item,
       },
       // Jellyfin returns microseconds * 10 for some reason
       duration: item.runTimeTicksDuration(),
