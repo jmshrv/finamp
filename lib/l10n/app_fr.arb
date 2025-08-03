@@ -1354,7 +1354,7 @@
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
-  "volumeNormalizationIOSBaseGainEditorSubtitle": "Actuellement, la normalisation du volume sur iOS nécessite de modifier le volume de lecture pour émuler le changement de gain. Comme nous ne pouvons pas augmenter le volume au-delà de 100 %, nous devons diminuer le volume par défaut afin de pouvoir augmenter le volume des pistes calmes. La valeur est exprimée en décibels (dB), où -10 dB correspond à un volume de ~30%, -4,5 dB à un volume de ~60% et -2 dB à un volume de ~80%.",
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "Actuellement, la correction du volume sur iOS nécessite de modifier le volume de lecture pour émuler le changement de gain. Comme nous ne pouvons pas augmenter le volume au-delà de 100 %, nous devons diminuer le volume par défaut afin de pouvoir augmenter le volume des pistes calmes. La valeur est exprimée en décibels (dB), où -10 dB correspond à un volume de ~30%, -4,5 dB à un volume de ~60% et -2 dB à un volume de ~80%.",
   "@volumeNormalizationIOSBaseGainEditorSubtitle": {
     "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
