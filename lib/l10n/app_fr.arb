@@ -1146,11 +1146,11 @@
   },
   "resetToDefaults": "Restaurer les paramètres par défaut",
   "@resetToDefaults": {},
-  "volumeNormalizationModeHybrid": "Hybride (Musique & Album)",
+  "volumeNormalizationModeHybrid": "Dynamique",
   "@volumeNormalizationModeHybrid": {
     "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
   },
-  "volumeNormalizationModeTrackBased": "En fonction de la musique",
+  "volumeNormalizationModeTrackBased": "En fonction de la piste",
   "@volumeNormalizationModeTrackBased": {
     "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
   },
@@ -1350,7 +1350,7 @@
   "@shuffleAlbumsToQueue": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
   },
-  "volumeNormalizationModeSelectorDescription": "Hybride (musique + album) :\nLe gain de piste est utilisé pour la lecture normale, mais si un album est en cours de lecture (soit parce qu''il s''agit de la source principale de la file d''attente de lecture, soit parce qu''il a été ajouté à la file d''attente à un moment donné), le gain de l''album est utilisé à la place.\n\nBasé sur la piste :\nLe gain de piste est toujours utilisé, qu'un album soit en cours de lecture ou non.\n\nAlbums uniquement :\nLa normalisation du volume n'est appliquée que lors de la lecture d'albums (en utilisant le gain de l'album), mais pas pour les pistes individuelles.",
+  "volumeNormalizationModeSelectorDescription": "Dynamique :\nLe gain de piste est utilisé pour la lecture normale, mais si un album est en cours de lecture (soit parce qu''il s''agit de la source principale de la file d''attente de lecture, soit parce qu''il a été ajouté à la file d''attente à un moment donné), le gain de l''album est utilisé à la place.\n\nBasé sur la piste :\nLe gain de piste est toujours utilisé, qu'un album soit en cours de lecture ou non.\n\nBasé sur l'album:\nLe gain de piste est toujours utilisé, sauf si cela n'est pas disponible (ex. pour les singles), La piste sera utilisée à la place.\n\n\nAlbums uniquement :\nLa normalisation du volume n'est appliquée que lors de la lecture d'albums (en utilisant le gain de l'album), mais pas pour les pistes individuelles.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
