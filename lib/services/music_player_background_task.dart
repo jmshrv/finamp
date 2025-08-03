@@ -353,9 +353,12 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     // audible volume change).
     // This is possible because this callback is called on each queue change
     mediaItem.listen((currentTrack) {
-      sleepTimer?.onTrackCompleted();
-
       _applyVolumeNormalization(currentTrack);
+    });
+
+    // But sleepTimer doesn't want to listen on queue changes
+    mediaItem.distinct().listen((currentTrack) {
+      sleepTimer?.onTrackCompleted();
     });
 
     // trigger sleep timer early if we're almost at the end of the final track
