@@ -1006,6 +1006,14 @@ extension FinampSetters on FinampSettingsHelper {
     ).put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setUseRandomize(bool newUseRandomize) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.useRandomize = newUseRandomize;
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setPlaybackPitch(double newPlaybackPitch) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.playbackPitch = newPlaybackPitch;
@@ -1493,6 +1501,8 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       );
   ProviderListenable<Duration> get bufferDuration => finampSettingsProvider
       .select((value) => value.requireValue.bufferDuration);
+  ProviderListenable<bool> get useRandomize => finampSettingsProvider
+      .select((value) => value.requireValue.useRandomize);
 }
 
 // **************************************************************************

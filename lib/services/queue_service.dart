@@ -135,6 +135,7 @@ class QueueService {
       } else {
         _saveUpdateCycleCount++;
       }
+      maybeAddRandomizedNext();
     });
 
     // register callbacks
@@ -143,6 +144,24 @@ class QueueService {
     //   previousTrackCallback: _applyPreviousTrack,
     //   skipToIndexCallback: _applySkipToTrackByOffset,
     // );
+  }
+
+  Future<void> maybeAddRandomizedNext() async {
+    // TODO: Fix on Desktop (shuffled gets set to linear there)
+    // TODO: Have this work even if songs are less than 10 seconds and finish naturally
+    // TODO: Don't pollute the linear queue.
+    if (_queueNextUp.isEmpty && _playbackOrder == FinampPlaybackOrder.shuffled && FinampSettingsHelper.finampSettings.useRandomize) {
+      // Queue likely contains multiple of the same item. Deduplicate using a set for an equal chance of any item.
+      Set<jellyfin_models.BaseItemDto> itemsSet = {};
+      for (FinampQueueItem queueItem in peekQueue()) {
+        itemsSet.add(queueItem.baseItem!);
+      }
+      List<jellyfin_models.BaseItemDto> items = [...itemsSet];
+      // Pick an item to add
+      int nextIndex = Random().nextInt(items.length);
+      await addToNextUp(items: [items[nextIndex]]);
+      _queueServiceLogger.finer("Added ${items[nextIndex].name} to the next up for randomization.");
+    }
   }
 
   void _queueFromConcatenatingAudioSource({bool logUpdate = true}) {
@@ -1162,6 +1181,7 @@ class QueueService {
         "android.media.extra.DOWNLOAD_STATUS": isDownloaded ? 2 : 0,
         "isOffline": FinampSettingsHelper.finampSettings.isOffline,
         "contextNormalizationGain": contextNormalizationGain,
+        "baseItem": item,
       },
       // Jellyfin returns microseconds * 10 for some reason
       duration: item.runTimeTicksDuration(),
