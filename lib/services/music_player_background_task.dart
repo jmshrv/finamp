@@ -346,8 +346,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       }
     });
 
-    // This is called each time queue (or at least previous and next items in it)
-    // This unintended behavior is actually used to recalculate the `Dynamic` 4
+    // This is called each time queue (or at least previous and next items in it) changes
+    // This unintended behavior is actually used to recalculate the `Dynamic`
     // normalization gain mode.
     // if user adds a track from the same album next to queue or makes previous
     // and next track in the queue not from the same album anymore (e.g. by
