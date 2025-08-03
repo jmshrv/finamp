@@ -355,6 +355,7 @@ class FinampSettings {
     this.tileAdditionalInfoType = DefaultSettings.tileAdditionalInfoType,
     this.rpcEnabled = DefaultSettings.rpcEnabled,
     this.rpcIcon = DefaultSettings.rpcIcon,
+    this.useRandomize = DefaultSettings.useRandomize,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
