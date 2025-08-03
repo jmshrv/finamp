@@ -321,14 +321,17 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     double prevIosGain = FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain;
     bool? prevNormActive = FinampSettingsHelper.finampSettings.volumeNormalizationActive;
+    VolumeNormalizationMode prevNormMode = FinampSettingsHelper.finampSettings.volumeNormalizationMode;
     FinampSettingsHelper.finampSettingsListener.addListener(() {
       var iosGain = FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain;
       var normalizationActive = FinampSettingsHelper.finampSettings.volumeNormalizationActive;
-      if (iosGain == prevIosGain && normalizationActive == prevNormActive) {
+      var normalizationMode = FinampSettingsHelper.finampSettings.volumeNormalizationMode;
+      if (iosGain == prevIosGain && normalizationActive == prevNormActive && normalizationMode == prevNormMode) {
         return;
       }
       prevIosGain = iosGain;
       prevNormActive = normalizationActive;
+      prevNormMode = normalizationMode;
       // update replay gain settings every time settings are changed
       iosBaseVolumeGainFactor =
           pow(10.0, iosGain / 20.0)
