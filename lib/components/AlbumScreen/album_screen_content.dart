@@ -262,6 +262,7 @@ class _TracksSliverListState extends ConsumerState<TracksSliverList> {
         }
 
         return TrackListTile(
+          key: ValueKey(item),
           item: item,
           children: widget.childrenForQueue,
           index: indexOffset,
