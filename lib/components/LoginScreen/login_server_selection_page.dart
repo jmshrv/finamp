@@ -154,6 +154,7 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                       final serverUrl = entry.key;
                       final serverInfo = entry.value;
                       return Padding(
+                        key: ValueKey(serverUrl),
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: JellyfinServerSelectionWidget(
                           baseUrl: null,

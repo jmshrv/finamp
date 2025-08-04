@@ -24,7 +24,7 @@ class QueueRestoreScreen extends StatelessWidget {
         padding: const EdgeInsets.only(left: 0.0, right: 0.0, top: 30.0, bottom: 45.0),
         itemCount: queueList.length,
         itemBuilder: (context, index) {
-          return QueueRestoreTile(info: queueList.elementAt(index));
+          return QueueRestoreTile(key: ValueKey(queueList.elementAt(index)), info: queueList.elementAt(index));
         },
       ),
     );
