@@ -28,8 +28,7 @@ class CollectionsSliverList extends ConsumerStatefulWidget {
 }
 
 class _ItemsSliverListState extends ConsumerState<CollectionsSliverList> {
-  final GlobalKey<SliverAnimatedListState> sliverListKey =
-      GlobalKey<SliverAnimatedListState>();
+  final GlobalKey<SliverAnimatedListState> sliverListKey = GlobalKey<SliverAnimatedListState>();
 
   @override
   void initState() {
@@ -38,9 +37,7 @@ class _ItemsSliverListState extends ConsumerState<CollectionsSliverList> {
 
   @override
   Widget build(BuildContext context) {
-    final filterArtistScreens = ref.watch(
-      finampSettingsProvider.genreFilterArtistScreens,
-    );
+    final filterArtistScreens = ref.watch(finampSettingsProvider.genreFilterArtistScreens);
     return SuperSliverList(
       delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
         final BaseItemDto item = widget.childrenForList[index];
@@ -49,12 +46,8 @@ class _ItemsSliverListState extends ConsumerState<CollectionsSliverList> {
           key: ValueKey(item.id),
           item: item,
           isPlaylist: false,
-          genreFilter:
-              (itemType == BaseItemDtoType.artist && filterArtistScreens)
-              ? widget.genreFilter
-              : null,
-          albumShowsYearAndDurationInstead:
-              widget.albumShowsYearAndDurationInstead,
+          genreFilter: (itemType == BaseItemDtoType.artist && filterArtistScreens) ? widget.genreFilter : null,
+          albumShowsYearAndDurationInstead: widget.albumShowsYearAndDurationInstead,
           showAdditionalInfoForSortBy: widget.showAdditionalInfoForSortBy,
         );
       }, childCount: widget.childrenForList.length),

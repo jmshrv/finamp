@@ -46,10 +46,7 @@ Future<void> showModalGenreMenu({
     final pageViewController = PageController();
 
     List<Widget> menu = [
-      SliverPersistentHeader(
-        delegate: MenuItemInfoSliverHeader(item: baseItem),
-        pinned: true,
-      ),
+      SliverPersistentHeader(delegate: MenuItemInfoSliverHeader(item: baseItem), pinned: true),
       //!!! temporarily disabled due to performance issues with large queues
       // MenuMask(
       //   height: MenuMask.defaultHeight,
@@ -67,9 +64,7 @@ Future<void> showModalGenreMenu({
         height: MenuItemInfoSliverHeader.defaultHeight,
         child: SliverPadding(
           padding: const EdgeInsets.only(left: 8.0),
-          sliver: SuperSliverList(
-            delegate: SliverChildListDelegate(menuEntries),
-          ),
+          sliver: SuperSliverList(delegate: SliverChildListDelegate(menuEntries)),
         ),
       ),
     ];

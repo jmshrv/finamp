@@ -1124,7 +1124,8 @@ double? getGainForCurrentPlayback(MediaItem currentTrack, jellyfin_models.BaseIt
 
   double? effectiveGainChange;
   switch (FinampSettingsHelper.finampSettings.volumeNormalizationMode) {
-    case VolumeNormalizationMode.hybrid when GetIt.instance<QueueService>().getQueue().isCurrentlyPlayingTracksFromSameAlbum():
+    case VolumeNormalizationMode.hybrid
+        when GetIt.instance<QueueService>().getQueue().isCurrentlyPlayingTracksFromSameAlbum():
     case VolumeNormalizationMode.albumBased:
       final providerContainer = GetIt.instance<ProviderContainer>();
       // final parentNormalizationGain = providerContainer.read(currentTrackMetadataProvider).valueOrNull?.parentNormalizationGain;

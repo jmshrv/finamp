@@ -17,21 +17,17 @@ class PlaybackReportingSettingsScreen extends StatefulWidget {
   const PlaybackReportingSettingsScreen({super.key});
   static const routeName = "/settings/playback-reporting";
   @override
-  State<PlaybackReportingSettingsScreen> createState() =>
-      _PlaybackReportingSettingsScreenState();
+  State<PlaybackReportingSettingsScreen> createState() => _PlaybackReportingSettingsScreenState();
 }
 
-class _PlaybackReportingSettingsScreenState
-    extends State<PlaybackReportingSettingsScreen> {
+class _PlaybackReportingSettingsScreenState extends State<PlaybackReportingSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     bool hasRpcSupport = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          AppLocalizations.of(context)!.playbackReportingSettingsTitle,
-        ),
+        title: Text(AppLocalizations.of(context)!.playbackReportingSettingsTitle),
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, () {
             setState(() {

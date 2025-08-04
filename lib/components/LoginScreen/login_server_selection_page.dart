@@ -14,24 +14,16 @@ class LoginServerSelectionPage extends StatefulWidget {
   static const routeName = "login/server-selection";
 
   final ServerState serverState;
-  final void Function(PublicSystemInfoResult server, String baseUrl)?
-  onServerSelected;
+  final void Function(PublicSystemInfoResult server, String baseUrl)? onServerSelected;
 
-  const LoginServerSelectionPage({
-    super.key,
-    required this.serverState,
-    this.onServerSelected,
-  });
+  const LoginServerSelectionPage({super.key, required this.serverState, this.onServerSelected});
 
   @override
-  State<LoginServerSelectionPage> createState() =>
-      _LoginServerSelectionPageState();
+  State<LoginServerSelectionPage> createState() => _LoginServerSelectionPageState();
 }
 
 class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
-  static final _loginServerSelectionPageLogger = Logger(
-    "LoginServerSelectionPage",
-  );
+  static final _loginServerSelectionPageLogger = Logger("LoginServerSelectionPage");
 
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final formKey = GlobalKey<FormState>();
@@ -46,28 +38,18 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
       }
     };
 
-    widget.serverState.clientDiscoveryHandler.discoverServers((
-      ClientDiscoveryResponse response,
-    ) async {
-      _loginServerSelectionPageLogger.finer(
-        "Found server: ${response.name} at ${response.address}",
-      );
+    widget.serverState.clientDiscoveryHandler.discoverServers((ClientDiscoveryResponse response) async {
+      _loginServerSelectionPageLogger.finer("Found server: ${response.name} at ${response.address}");
 
       final serverUrl = Uri.parse(response.address!);
-      PublicSystemInfoResult? serverInfo = await jellyfinApiHelper
-          .loadCustomServerPublicInfo(serverUrl);
-      _loginServerSelectionPageLogger.finer(
-        "Server info: ${serverInfo?.toJson()}",
-      );
+      PublicSystemInfoResult? serverInfo = await jellyfinApiHelper.loadCustomServerPublicInfo(serverUrl);
+      _loginServerSelectionPageLogger.finer("Server info: ${serverInfo?.toJson()}");
       if (serverInfo != null && mounted) {
         if (serverInfo.serverName == null) {
           serverInfo.serverName = response.name;
         } else if (serverInfo.serverName != response.name) {
           serverInfo.serverName = "${serverInfo.serverName} (${response.name})";
-          serverInfo.localAddress =
-              response.address ??
-              response.endpointAddress ??
-              serverInfo.localAddress;
+          serverInfo.localAddress = response.address ?? response.endpointAddress ?? serverInfo.localAddress;
         }
         // no need to filter duplicates, we're using a map
         setState(() {
@@ -95,11 +77,7 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                 padding: const EdgeInsets.only(top: 32.0, bottom: 20.0),
                 child: Hero(
                   tag: "finamp_logo",
-                  child: SvgPicture.asset(
-                    'images/finamp_cropped.svg',
-                    width: 75,
-                    height: 75,
-                  ),
+                  child: SvgPicture.asset('images/finamp_cropped.svg', width: 75, height: 75),
                 ),
               ),
               Text(
@@ -123,18 +101,13 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
               _buildServerUrlInput(context),
               ConstrainedBox(
                 constraints: const BoxConstraints(minHeight: 95.0),
-                child:
-                    widget.serverState.baseUrlToTest != null &&
-                        widget.serverState.manualServer == null
+                child: widget.serverState.baseUrlToTest != null && widget.serverState.manualServer == null
                     ? Padding(
                         padding: const EdgeInsets.only(top: 12.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: CircularProgressIndicator(),
-                            ),
+                            const Padding(padding: EdgeInsets.all(4.0), child: CircularProgressIndicator()),
                             const SizedBox(width: 8.0),
                             Text(
                               AppLocalizations.of(context)!.connectingToServer,
@@ -177,8 +150,7 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                   itemBuilder: (context, index) {
                     if (index < widget.serverState.discoveredServers.length) {
                       // get key and value
-                      final entry = widget.serverState.discoveredServers.entries
-                          .elementAt(index);
+                      final entry = widget.serverState.discoveredServers.entries.elementAt(index);
                       final serverUrl = entry.key;
                       final serverInfo = entry.value;
                       return Padding(
@@ -187,10 +159,7 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                           baseUrl: null,
                           serverInfo: serverInfo,
                           onPressed: () {
-                            widget.onServerSelected?.call(
-                              serverInfo,
-                              serverUrl.toString(),
-                            );
+                            widget.onServerSelected?.call(serverInfo, serverUrl.toString());
                           },
                         ),
                       );
@@ -206,16 +175,12 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
                               child: SizedBox(
                                 height: 20.0,
                                 width: 20.0,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.0,
-                                ),
+                                child: CircularProgressIndicator(strokeWidth: 2.0),
                               ),
                             ),
                             const SizedBox(width: 8.0),
                             Text(
-                              AppLocalizations.of(
-                                context,
-                              )!.loginFlowLocalNetworkServersScanningForServers,
+                              AppLocalizations.of(context)!.loginFlowLocalNetworkServersScanningForServers,
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],
@@ -241,16 +206,10 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
       return InputDecoration(
         filled: true,
         fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16.0,
-          vertical: 4.0,
-        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
         label: Text(placeholder),
         floatingLabelBehavior: FloatingLabelBehavior.never,
-        border: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(16),
-        ),
+        border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(16)),
         suffixIcon: IconButton(
           color: Theme.of(context).iconTheme.color,
           icon: const Icon(Icons.info),
@@ -258,9 +217,7 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
           onPressed: () => showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              content: Text(
-                AppLocalizations.of(context)!.internalExternalIpExplanation,
-              ),
+              content: Text(AppLocalizations.of(context)!.internalExternalIpExplanation),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -281,22 +238,14 @@ class _LoginServerSelectionPageState extends State<LoginServerSelectionPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 4.0,
-                horizontal: 8.0,
-              ),
-              child: Text(
-                AppLocalizations.of(context)!.serverUrl,
-                textAlign: TextAlign.start,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+              child: Text(AppLocalizations.of(context)!.serverUrl, textAlign: TextAlign.start),
             ),
             TextFormField(
               autocorrect: false,
               keyboardType: TextInputType.url,
               autofillHints: const [AutofillHints.url],
-              decoration: inputFieldDecoration(
-                AppLocalizations.of(context)!.serverUrlHint,
-              ),
+              decoration: inputFieldDecoration(AppLocalizations.of(context)!.serverUrlHint),
               textInputAction: TextInputAction.next,
               onEditingComplete: () => node.nextFocus(),
               onChanged: (value) async {
@@ -341,11 +290,7 @@ class JellyfinServerSelectionWidget extends StatelessWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            'images/jellyfin-icon-transparent.png',
-            width: 36,
-            height: 36,
-          ),
+          Image.asset('images/jellyfin-icon-transparent.png', width: 36, height: 36),
           const SizedBox(width: 12.0),
           Expanded(
             child: Column(
@@ -360,20 +305,10 @@ class JellyfinServerSelectionWidget extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                Text(
-                  "v${serverInfo?.version}",
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                if (baseUrl != null)
-                  Text(
-                    baseUrl ?? "",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
+                Text("v${serverInfo?.version}", style: Theme.of(context).textTheme.bodySmall),
+                if (baseUrl != null) Text(baseUrl ?? "", style: Theme.of(context).textTheme.bodySmall),
                 if (serverInfo?.localAddress != baseUrl)
-                  Text(
-                    serverInfo?.localAddress ?? "",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
+                  Text(serverInfo?.localAddress ?? "", style: Theme.of(context).textTheme.bodySmall),
               ],
             ),
           ),
@@ -385,13 +320,8 @@ class JellyfinServerSelectionWidget extends StatelessWidget {
         ? ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.surface,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12.0,
-                vertical: 4.0,
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
             ),
             onPressed: onPressed,
             child: buildContent(),
@@ -401,10 +331,7 @@ class JellyfinServerSelectionWidget extends StatelessWidget {
               color: Theme.of(context).colorScheme.primaryContainer,
               borderRadius: BorderRadius.circular(10),
             ),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 4.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
             child: buildContent(),
           );
   }

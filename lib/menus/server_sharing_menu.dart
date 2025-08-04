@@ -40,9 +40,7 @@ Future<void> showServerSharingPanel({required BuildContext context}) async {
               BalancedText(
                 AppLocalizations.of(context)!.serverSharingMenuDescription,
                 textAlign: TextAlign.center,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 24.0),
               BalancedText(
@@ -57,9 +55,7 @@ Future<void> showServerSharingPanel({required BuildContext context}) async {
           child: Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: SimpleButton(
-              text: AppLocalizations.of(
-                context,
-              )!.quickConnectAuthorizationMenuPrompt,
+              text: AppLocalizations.of(context)!.quickConnectAuthorizationMenuPrompt,
               icon: TablerIcons.lock_bolt,
               onPressed: () async {
                 Navigator.of(context).pop();
@@ -80,12 +76,10 @@ class ServerSharingMenuControls extends ConsumerStatefulWidget {
   const ServerSharingMenuControls({super.key});
 
   @override
-  _ServerSharingMenuControlsState createState() =>
-      _ServerSharingMenuControlsState();
+  _ServerSharingMenuControlsState createState() => _ServerSharingMenuControlsState();
 }
 
-class _ServerSharingMenuControlsState
-    extends ConsumerState<ServerSharingMenuControls> {
+class _ServerSharingMenuControlsState extends ConsumerState<ServerSharingMenuControls> {
   final serverDiscoveryEmulationService = JellyfinServerClientDiscovery();
 
   late bool serverSharingEnabled;
@@ -140,19 +134,11 @@ class _ServerSharingMenuControlsState
         child: const Icon(TablerIcons.access_point, size: 36.0),
       ),
       title: serverSharingEnabled
-          ? AppLocalizations.of(
-              context,
-            )!.serverSharingMenuControlTitleSharingEnabled
-          : AppLocalizations.of(
-              context,
-            )!.serverSharingMenuControlTitleSharingDisabled,
+          ? AppLocalizations.of(context)!.serverSharingMenuControlTitleSharingEnabled
+          : AppLocalizations.of(context)!.serverSharingMenuControlTitleSharingDisabled,
       subtitle: serverSharingEnabled
-          ? AppLocalizations.of(
-              context,
-            )!.serverSharingMenuControlSubtitleSharingEnabled
-          : AppLocalizations.of(
-              context,
-            )!.serverSharingMenuControlSubtitleSharingDisabled,
+          ? AppLocalizations.of(context)!.serverSharingMenuControlSubtitleSharingEnabled
+          : AppLocalizations.of(context)!.serverSharingMenuControlSubtitleSharingDisabled,
       trailing: Switch.adaptive(
         value: serverSharingEnabled,
         onChanged: (value) {
@@ -166,15 +152,11 @@ class _ServerSharingMenuControlsState
           await showDialog<ConfirmationPromptDialog>(
             context: context,
             builder: (context) => ConfirmationPromptDialog(
-              promptText: AppLocalizations.of(
-                context,
-              )!.serverSharingMenuConfirmationDialogText,
+              promptText: AppLocalizations.of(context)!.serverSharingMenuConfirmationDialogText,
               confirmButtonText: AppLocalizations.of(
                 context,
               )!.serverSharingMenuConfirmationDialogConfirmationButtonLabel,
-              abortButtonText: MaterialLocalizations.of(
-                context,
-              ).cancelButtonLabel,
+              abortButtonText: MaterialLocalizations.of(context).cancelButtonLabel,
               onConfirmed: () => setServerSharing(true),
               onAborted: () {},
             ),

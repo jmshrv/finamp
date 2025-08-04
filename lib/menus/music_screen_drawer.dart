@@ -38,20 +38,12 @@ class MusicScreenDrawer extends StatelessWidget {
                         alignment: Alignment.topCenter,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: SvgPicture.asset(
-                            'images/finamp_cropped.svg',
-                            width: 56,
-                            height: 56,
-                          ),
+                          child: SvgPicture.asset('images/finamp_cropped.svg', width: 56, height: 56),
                         ),
                       ),
                       Align(
-                        alignment:
-                            Alignment.bottomCenter - const Alignment(0, 0.2),
-                        child: Text(
-                          AppLocalizations.of(context)!.finamp,
-                          style: const TextStyle(fontSize: 20),
-                        ),
+                        alignment: Alignment.bottomCenter - const Alignment(0, 0.2),
+                        child: Text(AppLocalizations.of(context)!.finamp, style: const TextStyle(fontSize: 20)),
                       ),
                     ],
                   ),
@@ -60,34 +52,19 @@ class MusicScreenDrawer extends StatelessWidget {
                 const OfflineModeStatusLabel(),
                 Divider(),
                 ListTile(
-                  leading: const Padding(
-                    padding: EdgeInsets.only(right: 16),
-                    child: Icon(Icons.file_download),
-                  ),
+                  leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(Icons.file_download)),
                   title: Text(AppLocalizations.of(context)!.downloads),
-                  onTap: () => Navigator.of(
-                    context,
-                  ).pushNamed(DownloadsScreen.routeName),
+                  onTap: () => Navigator.of(context).pushNamed(DownloadsScreen.routeName),
                 ),
                 ListTile(
-                  leading: const Padding(
-                    padding: EdgeInsets.only(right: 16),
-                    child: Icon(TablerIcons.clock),
-                  ),
+                  leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(TablerIcons.clock)),
                   title: Text(AppLocalizations.of(context)!.playbackHistory),
-                  onTap: () => Navigator.of(
-                    context,
-                  ).pushNamed(PlaybackHistoryScreen.routeName),
+                  onTap: () => Navigator.of(context).pushNamed(PlaybackHistoryScreen.routeName),
                 ),
                 ListTile(
-                  leading: const Padding(
-                    padding: EdgeInsets.only(right: 16),
-                    child: Icon(Icons.auto_delete),
-                  ),
+                  leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(Icons.auto_delete)),
                   title: Text(AppLocalizations.of(context)!.queuesScreen),
-                  onTap: () => Navigator.of(
-                    context,
-                  ).pushNamed(QueueRestoreScreen.routeName),
+                  onTap: () => Navigator.of(context).pushNamed(QueueRestoreScreen.routeName),
                 ),
                 const Divider(),
               ]),
@@ -96,11 +73,7 @@ class MusicScreenDrawer extends StatelessWidget {
             if (finampUserHelper.currentUser != null)
               SuperSliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
-                  return ViewListTile(
-                    view: finampUserHelper.currentUser!.views.values.elementAt(
-                      index,
-                    ),
-                  );
+                  return ViewListTile(view: finampUserHelper.currentUser!.views.values.elementAt(index));
                 }, childCount: finampUserHelper.currentUser!.views.length),
               ),
             SliverFillRemaining(
@@ -115,24 +88,14 @@ class MusicScreenDrawer extends StatelessWidget {
                     children: [
                       const Divider(),
                       ListTile(
-                        leading: const Padding(
-                          padding: EdgeInsets.only(right: 16),
-                          child: Icon(Icons.warning),
-                        ),
+                        leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(Icons.warning)),
                         title: Text(AppLocalizations.of(context)!.logs),
-                        onTap: () => Navigator.of(
-                          context,
-                        ).pushNamed(LogsScreen.routeName),
+                        onTap: () => Navigator.of(context).pushNamed(LogsScreen.routeName),
                       ),
                       ListTile(
-                        leading: const Padding(
-                          padding: EdgeInsets.only(right: 16),
-                          child: Icon(Icons.settings),
-                        ),
+                        leading: const Padding(padding: EdgeInsets.only(right: 16), child: Icon(Icons.settings)),
                         title: Text(AppLocalizations.of(context)!.settings),
-                        onTap: () => Navigator.of(
-                          context,
-                        ).pushNamed(SettingsScreen.routeName),
+                        onTap: () => Navigator.of(context).pushNamed(SettingsScreen.routeName),
                       ),
                     ],
                   ),

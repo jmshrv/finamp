@@ -29,10 +29,7 @@ Future<void> showPlaylistActionsMenu({
 
   FeedbackHelper.feedback(FeedbackType.selection);
 
-  var playlistsFuture = jellyfinApiHelper.getItems(
-    includeItemTypes: "Playlist",
-    sortBy: "SortName",
-  );
+  var playlistsFuture = jellyfinApiHelper.getItems(includeItemTypes: "Playlist", sortBy: "SortName");
 
   await showThemedBottomSheet(
     context: context,
@@ -54,13 +51,7 @@ Future<void> showPlaylistActionsMenu({
                 aspectRatio: 1.0,
                 child: DecoratedBox(
                   decoration: BoxDecoration(color: themeColor.withOpacity(0.3)),
-                  child: const Center(
-                    child: Icon(
-                      TablerIcons.heart,
-                      size: 36.0,
-                      color: Colors.white,
-                    ),
-                  ),
+                  child: const Center(child: Icon(TablerIcons.heart, size: 36.0, color: Colors.white)),
                 ),
               ),
               positiveIcon: TablerIcons.heart_filled,
@@ -68,27 +59,18 @@ Future<void> showPlaylistActionsMenu({
               initialState: isFavorite,
               tapFeedback: false,
               onToggle: (bool currentState) async {
-                return ref
-                    .read(isFavoriteProvider(item).notifier)
-                    .updateFavorite(!isFavorite);
+                return ref.read(isFavoriteProvider(item).notifier).updateFavorite(!isFavorite);
               },
               enabled: !ref.watch(finampSettingsProvider.isOffline),
             );
           },
         ),
         FutureBuilder(
-          future: playlistsFuture.then(
-            (value) =>
-                value?.firstWhereOrNull((x) => x.id == parentPlaylist?.id),
-          ),
+          future: playlistsFuture.then((value) => value?.firstWhereOrNull((x) => x.id == parentPlaylist?.id)),
           initialData: parentPlaylist,
           builder: (context, snapshot) {
             if (snapshot.data != null) {
-              return AddToPlaylistTile(
-                playlist: snapshot.data!,
-                track: item,
-                playlistItemId: item.playlistItemId,
-              );
+              return AddToPlaylistTile(playlist: snapshot.data!, track: item, playlistItemId: item.playlistItemId);
             } else {
               return const SizedBox.shrink();
             }
@@ -101,19 +83,12 @@ Future<void> showPlaylistActionsMenu({
           header: const PlaylistActionsMenuHeader(),
           sliver: MenuMask(
             height: PlaylistActionsMenuHeader.defaultHeight,
-            child: SuperSliverList(
-              delegate: SliverChildListDelegate(menuEntries),
-            ),
+            child: SuperSliverList(delegate: SliverChildListDelegate(menuEntries)),
           ),
         ),
         SliverStickyHeader(
           header: Padding(
-            padding: const EdgeInsets.only(
-              top: 10.0,
-              bottom: 8.0,
-              left: 16.0,
-              right: 16.0,
-            ),
+            padding: const EdgeInsets.only(top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
             child: Text(
               AppLocalizations.of(context)!.addPlaylistSubheader,
               style: Theme.of(context).textTheme.titleMedium,
@@ -124,11 +99,7 @@ Future<void> showPlaylistActionsMenu({
             child: AddToPlaylistList(
               itemToAdd: item,
               playlistsFuture: playlistsFuture.then(
-                (value) =>
-                    (value
-                        ?.where((element) => element.id != parentPlaylist?.id)
-                        .toList() ??
-                    []),
+                (value) => (value?.where((element) => element.id != parentPlaylist?.id).toList() ?? []),
               ),
             ),
           ),
@@ -191,12 +162,10 @@ class PlaylistActionsPlaylistListTile extends ConsumerStatefulWidget {
   final bool tapFeedback;
 
   @override
-  ConsumerState<PlaylistActionsPlaylistListTile> createState() =>
-      _PlaylistActionsPlaylistListTileState();
+  ConsumerState<PlaylistActionsPlaylistListTile> createState() => _PlaylistActionsPlaylistListTileState();
 }
 
-class _PlaylistActionsPlaylistListTileState
-    extends ConsumerState<PlaylistActionsPlaylistListTile> {
+class _PlaylistActionsPlaylistListTileState extends ConsumerState<PlaylistActionsPlaylistListTile> {
   bool isLoading = false;
   bool currentState = false;
 

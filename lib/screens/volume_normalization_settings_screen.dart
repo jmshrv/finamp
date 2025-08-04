@@ -13,19 +13,15 @@ class VolumeNormalizationSettingsScreen extends StatefulWidget {
   const VolumeNormalizationSettingsScreen({super.key});
   static const routeName = "/settings/volume-normalization";
   @override
-  State<VolumeNormalizationSettingsScreen> createState() =>
-      _VolumeNormalizationSettingsScreenState();
+  State<VolumeNormalizationSettingsScreen> createState() => _VolumeNormalizationSettingsScreenState();
 }
 
-class _VolumeNormalizationSettingsScreenState
-    extends State<VolumeNormalizationSettingsScreen> {
+class _VolumeNormalizationSettingsScreenState extends State<VolumeNormalizationSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          AppLocalizations.of(context)!.volumeNormalizationSettingsTitle,
-        ),
+        title: Text(AppLocalizations.of(context)!.volumeNormalizationSettingsTitle),
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, () {
             setState(() {

@@ -41,27 +41,18 @@ Future<void> showModalAlbumMenu({
 
   (double, List<Widget>) getMenuProperties(BuildContext context) {
     final menuEntries = getMenuEntries(context);
-    final stackHeight = ThemedBottomSheet.calculateStackHeight(
-      context: context,
-      menuEntries: menuEntries,
-    );
+    final stackHeight = ThemedBottomSheet.calculateStackHeight(context: context, menuEntries: menuEntries);
 
     final pageViewController = PageController();
 
     List<Widget> menu = [
-      SliverPersistentHeader(
-        delegate: MenuItemInfoSliverHeader(item: baseItem),
-        pinned: true,
-      ),
+      SliverPersistentHeader(delegate: MenuItemInfoSliverHeader(item: baseItem), pinned: true),
       MenuMask(
         height: MenuItemInfoSliverHeader.defaultHeight,
         child: SliverToBoxAdapter(
           child: PlaybackActionRow(
             controller: pageViewController,
-            playbackActionPages: getPlaybackActionPages(
-              context: context,
-              baseItem: baseItem,
-            ),
+            playbackActionPages: getPlaybackActionPages(context: context, baseItem: baseItem),
           ),
         ),
       ),
@@ -69,9 +60,7 @@ Future<void> showModalAlbumMenu({
         height: MenuItemInfoSliverHeader.defaultHeight,
         child: SliverPadding(
           padding: const EdgeInsets.only(left: 8.0),
-          sliver: SuperSliverList(
-            delegate: SliverChildListDelegate(menuEntries),
-          ),
+          sliver: SuperSliverList(delegate: SliverChildListDelegate(menuEntries)),
         ),
       ),
     ];

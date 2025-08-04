@@ -27,10 +27,7 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.networkSettingsTitle),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-            context,
-            FinampSettingsHelper.resetNetworkSettings,
-          ),
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetNetworkSettings),
         ],
       ),
       body: SuperListView(
@@ -49,14 +46,10 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
               ]);
 
               GlobalSnackbar.message(
-                (context) => AppLocalizations.of(
-                  context,
-                )!.ping("${public.toString()}_${private.toString()}"),
+                (context) => AppLocalizations.of(context)!.ping("${public.toString()}_${private.toString()}"),
               );
             },
-            child: Text(
-              AppLocalizations.of(context)!.testConnectionButtonLabel,
-            ),
+            child: Text(AppLocalizations.of(context)!.testConnectionButtonLabel),
           ),
         ],
       ),
