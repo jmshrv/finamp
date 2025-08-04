@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import "package:super_sliver_list/super_sliver_list.dart";
 
-import "package:super_sliver_list/super_sliver_list.dart";
-
 class AccessibilitySettingsScreen extends StatefulWidget {
   const AccessibilitySettingsScreen({super.key});
   static const routeName = "/settings/accessibility";

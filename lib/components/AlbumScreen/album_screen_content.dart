@@ -159,7 +159,11 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             SliverStickyHeader(
               header: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+<<<<<<< HEAD
                 color: Theme.of(context).colorScheme.surfaceContainerHighest,
+=======
+                color: Theme.of(context).colorScheme.surface,
+>>>>>>> parent of c69245c1 (Replace all ListViews and SliverLists with)
                 child: Text(
                   AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
                   style: const TextStyle(fontSize: 20.0),
@@ -170,10 +174,14 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                 childrenForQueue: queueChildren,
                 parent: widget.parent,
                 onRemoveFromList: onDelete,
+<<<<<<< HEAD
                 showDateAdded: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.dateCreated),
                 showPlayCount: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.playCount),
                 showDateLastPlayed: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.datePlayed),
                 showReleaseDate: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.premiereDate),
+=======
+                adaptiveAdditionalInfoSortBy: (widget.parent.type == "Playlist") ? playlistSortBy : null,
+>>>>>>> parent of c69245c1 (Replace all ListViews and SliverLists with)
                 forceAlbumArtists: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.albumArtist),
               ),
             )
@@ -183,10 +191,14 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             childrenForQueue: queueChildren,
             parent: widget.parent,
             onRemoveFromList: onDelete,
+<<<<<<< HEAD
             showDateAdded: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.dateCreated),
             showPlayCount: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.playCount),
             showDateLastPlayed: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.datePlayed),
             showReleaseDate: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.premiereDate),
+=======
+            adaptiveAdditionalInfoSortBy: (widget.parent.type == "Playlist") ? playlistSortBy : null,
+>>>>>>> parent of c69245c1 (Replace all ListViews and SliverLists with)
             forceAlbumArtists: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.albumArtist),
           )
         else

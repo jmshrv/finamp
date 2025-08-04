@@ -443,10 +443,14 @@ class _MusicScreenTabViewState extends State<MusicScreenTabView>
                                 isOnGenreScreen: (widget.genreFilter != null) ? true : false,
                                 parentItem: widget.genreFilter,
                                 forceAlbumArtists: (sortBy == SortBy.albumArtist),
+<<<<<<< HEAD
                                 showPlayCount: (!settings.isOffline && sortBy == SortBy.playCount),
                                 showReleaseDate: (sortBy == SortBy.premiereDate),
                                 showDateAdded: (sortBy == SortBy.dateCreated),
                                 showDateLastPlayed: (!settings.isOffline && sortBy == SortBy.datePlayed),
+=======
+                                adaptiveAdditionalInfoSortBy: sortBy,
+>>>>>>> parent of c69245c1 (Replace all ListViews and SliverLists with)
                               )
                             : ItemCollectionWrapper(
                                 key: ValueKey(item.id),

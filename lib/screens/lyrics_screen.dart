@@ -264,8 +264,13 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
         int closestLineIndex = -1;
         for (int i = 0; i < lyricLines.length; i++) {
           closestLineIndex = i;
+<<<<<<< HEAD
           final line = metadata.value!.lyrics!.lyrics![i];
           if ((line.start ?? 0) ~/ 10 > (currentPosition?.inMicroseconds ?? 0)) {
+=======
+          final line = lyricLines[i];
+          if (line.startMicros > currentMicros) {
+>>>>>>> parent of c69245c1 (Replace all ListViews and SliverLists with)
             closestLineIndex = i - 1;
             break;
           }
@@ -292,7 +297,11 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
             } else {
               unawaited(
                 autoScrollController.scrollToIndex(
+<<<<<<< HEAD
                   clampedIndex.clamp(0, metadata.value!.lyrics!.lyrics!.length - 1),
+=======
+                  clampedIndex.clamp(0, lyricLines.length - 1),
+>>>>>>> parent of c69245c1 (Replace all ListViews and SliverLists with)
                   preferPosition: AutoScrollPosition.middle,
                   duration: MediaQuery.of(context).disableAnimations
                       ? const Duration(
@@ -326,6 +335,15 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                       final isCurrentLine =
                           (currentPosition?.inMicroseconds ?? 0) >= (line.start ?? 0) ~/ 10 &&
                           (nextLine == null || (currentPosition?.inMicroseconds ?? 0) < (nextLine.start ?? 0) ~/ 10);
+=======
+                      final currentMicros = currentPosition?.inMicroseconds ?? 0;
+                      final line = lyricLines[index];
+                      final nextLine = index < lyricLines.length - 1 ? lyricLines[index + 1] : null;
+
+                      final isCurrentLine =
+                          currentMicros >= line.startMicros &&
+                          (nextLine == null || currentMicros < nextLine.startMicros);
+>>>>>>> parent of c69245c1 (Replace all ListViews and SliverLists with)
 
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -356,6 +374,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                               isCurrentLine: isCurrentLine,
                               onTap: () async {
                                 // Seek to the start of the line
+<<<<<<< HEAD
                                 await audioHandler.seek(Duration(microseconds: (line.start ?? 0) ~/ 10));
                                 setState(() {
                                   isAutoScrollEnabled = true;
@@ -378,6 +397,27 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                           ),
                           if (index == metadata.value!.lyrics!.lyrics!.length - 1)
                             SizedBox(height: constraints.maxHeight * 0.2),
+=======
+                                await audioHandler.seek(Duration(microseconds: line.startMicros));
+                                setState(() {
+                                  isAutoScrollEnabled = true;
+                                });
+                                unawaited(
+                                  autoScrollController.scrollToIndex(
+                                    index,
+                                    preferPosition: AutoScrollPosition.middle,
+                                    duration: MediaQuery.of(context).disableAnimations
+                                        ? const Duration(
+                                            milliseconds: 1,
+                                          ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
+                                        : const Duration(milliseconds: 500),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          if (index == lyricLines.length - 1) SizedBox(height: constraints.maxHeight * 0.2),
+>>>>>>> parent of c69245c1 (Replace all ListViews and SliverLists with)
                         ],
                       );
                     },
@@ -452,6 +492,7 @@ class _LyricLine extends ConsumerWidget {
       onTap: isSynchronized ? onTap : null,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: isSynchronized ? 10.0 : 6.0),
+<<<<<<< HEAD
         child: Text.rich(
           textAlign: lyricsAlignmentToTextAlign(finampSettings?.lyricsAlignment ?? LyricsAlignment.start),
           softWrap: true,
@@ -490,6 +531,76 @@ class _LyricLine extends ConsumerWidget {
               ),
             ],
           ),
+=======
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            // Calculate available width for lyrics (accounting for timestamp if shown)
+            final availableWidth = constraints.maxWidth - (showTimestamp ? 60 : 0);
+
+            final linePainter = TextPainter(
+              text: textSpan,
+              textAlign: lyricsAlignmentToTextAlign(finampSettings?.lyricsAlignment ?? LyricsAlignment.start),
+              textDirection: TextDirection.ltr,
+            )..setPlaceholderDimensions([]);
+            linePainter.layout(minWidth: 0, maxWidth: availableWidth);
+
+            return StreamBuilder<ProgressState>(
+              stream: progressStateStream,
+              builder: (context, snapshot) {
+                final currentMicros = snapshot.data?.position.inMicroseconds ?? 0;
+
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (showTimestamp)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Text(
+                          "${Duration(microseconds: line.startMicros).inMinutes}:${(Duration(microseconds: line.startMicros).inSeconds % 60).toString().padLeft(2, '0')}",
+                          style: TextStyle(
+                            color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
+                            fontSize: 16,
+                            height:
+                                1.75 *
+                                (lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) / 26),
+                          ),
+                        ),
+                      ),
+                    Expanded(
+                      child: CustomPaint(
+                        size: Size(availableWidth, linePainter.height),
+                        painter: LyricsLinePainter(
+                          textPainter: linePainter,
+                          line: line,
+                          currentMicros: currentMicros,
+                          isCurrentLine: isCurrentLine,
+                          primaryColor: Theme.of(context).textTheme.bodyLarge?.color,
+                          highlightColor: Theme.of(context).colorScheme.primary,
+                          grayedColor: Colors.white,
+                          lowlightLine: lowlightLine,
+                          maxWidth: availableWidth,
+                          textAlign: lyricsAlignmentToTextAlign(
+                            finampSettings?.lyricsAlignment ?? LyricsAlignment.start,
+                          ),
+                          baseStyle: TextStyle(
+                            color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
+                            fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
+                            // Keep text width consistent across the different weights
+                            letterSpacing: lowlightLine || !isSynchronized ? 0.02 : -0.4,
+                            fontSize:
+                                lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) *
+                                (isSynchronized ? 1.0 : 0.75),
+                            height: 1.25,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+>>>>>>> parent of c69245c1 (Replace all ListViews and SliverLists with)
         ),
       ),
     );

@@ -48,7 +48,11 @@ class _ItemsSliverListState extends ConsumerState<CollectionsSliverList> {
           isPlaylist: false,
           genreFilter: (itemType == BaseItemDtoType.artist && filterArtistScreens) ? widget.genreFilter : null,
           albumShowsYearAndDurationInstead: widget.albumShowsYearAndDurationInstead,
+<<<<<<< HEAD
           showAdditionalInfoForSortBy: widget.showAdditionalInfoForSortBy,
+=======
+          adaptiveAdditionalInfoSortBy: widget.adaptiveAdditionalInfoSortBy,
+>>>>>>> parent of c69245c1 (Replace all ListViews and SliverLists with)
         );
       }, childCount: widget.childrenForList.length),
     );
