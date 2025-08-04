@@ -151,13 +151,13 @@
   "@downloadsQueued": {},
   "downloadsDeleted": "Letöltések törölve.",
   "@downloadsDeleted": {},
-  "enableTranscoding": "Transzkódolás engedélyezése",
+  "enableTranscoding": "Átkódolás engedélyezése",
   "@enableTranscoding": {},
   "error": "Hiba",
   "@error": {},
   "failedToGetTrackFromDownloadId": "Nem sikerült lekérni a számot a letöltési azonosítóból",
   "@failedToGetTrackFromDownloadId": {},
-  "enableTranscodingSubtitle": "Transzkódolja a zenestreameket a szerver oldalon.",
+  "enableTranscodingSubtitle": "Átkódolja a zenei streameket a szerver oldalon.",
   "@enableTranscodingSubtitle": {},
   "layoutAndTheme": "Elrendezés & Téma",
   "@layoutAndTheme": {},
@@ -183,7 +183,7 @@
   "@shuffleButtonLabel": {},
   "stackTrace": "Kötegelt visszalépés",
   "@stackTrace": {},
-  "transcoding": "Transzkódolás",
+  "transcoding": "Átkódolás",
   "@transcoding": {},
   "dlRunning": "{count} folyamatban",
   "@dlRunning": {
@@ -207,7 +207,7 @@
       }
     }
   },
-  "shuffleAllTrackCountSubtitle": "A betöltendő zeneszámok száma az \"Összes dal keverése\" gombbal.",
+  "shuffleAllTrackCountSubtitle": "A betöltendő zeneszámok száma, amikor a zeneszámok lapon vagy a műfaj képernyőn az összes keverése gombot használja.",
   "@shuffleAllTrackCountSubtitle": {},
   "appDirectory": "Alkalmazás Könyvtára",
   "@appDirectory": {},
@@ -297,7 +297,7 @@
   "@light": {},
   "newPlaylist": "Új lejátszási lista",
   "@newPlaylist": {},
-  "noButtonLabel": "NEM",
+  "noButtonLabel": "Nem",
   "@noButtonLabel": {},
   "noAlbum": "Album nélkül",
   "@noAlbum": {},
@@ -315,7 +315,7 @@
   "@removeFromMix": {},
   "replaceQueue": "Sor kicserélése",
   "@replaceQueue": {},
-  "setSleepTimer": "Elalvásidőzítő beállítása",
+  "setSleepTimer": "Lejátszás megállítása",
   "@setSleepTimer": {},
   "startingInstantMix": "Instant mix indítása.",
   "@startingInstantMix": {},
@@ -325,7 +325,7 @@
   "@unknownArtist": {},
   "addButtonLabel": "Hozzáadás",
   "@addButtonLabel": {},
-  "createButtonLabel": "LÉTREHOZÁS",
+  "createButtonLabel": "Létrehozás",
   "@createButtonLabel": {},
   "invalidNumber": "Érvénytelen szám",
   "@invalidNumber": {},
@@ -350,7 +350,7 @@
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Megjeleníti-e a dal előadóit az album képernyőjén, ha nem különbözik az album előadóitól.",
   "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "yesButtonLabel": "IGEN",
+  "yesButtonLabel": "Igen",
   "@yesButtonLabel": {},
   "addToMix": "Hozzáadás a Mix-hez",
   "@addToMix": {},
@@ -366,7 +366,7 @@
       }
     }
   },
-  "trackCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}",
+  "trackCount": "{count,plural,=1{{count} szám} other{{count} szám}}",
   "@trackCount": {
     "placeholders": {
       "count": {
@@ -386,7 +386,7 @@
   },
   "bufferDuration": "Puffer időtartama",
   "@bufferDuration": {},
-  "bufferDurationSubtitle": "Mennyit kell pufferelnie a lejátszónak másodpercben. Újraindítást igényel.",
+  "bufferDurationSubtitle": "A pufferelés maximális időtartama másodpercben. Újraindítást igényel.",
   "@bufferDurationSubtitle": {},
   "disableGesture": "Gesztusok letiltása",
   "@disableGesture": {},
@@ -1115,7 +1115,7 @@
   "@addToMorePlaylistsTooltip": {},
   "addToMorePlaylistsTitle": "Hozzáadás további lejátszási listákhoz",
   "@addToMorePlaylistsTitle": {},
-  "removeFromPlaylistTooltip": "Eltávolítás erről a lejátszási listáról",
+  "removeFromPlaylistTooltip": "Eltávolítás a lejátszási listáról",
   "@removeFromPlaylistTooltip": {},
   "removeFromPlaylistTitle": "Eltávolítás erről a lejátszási listáról",
   "@removeFromPlaylistTitle": {},
@@ -1435,11 +1435,11 @@
   "@volumeNormalizationModeSelectorSubtitle": {
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
-  "volumeNormalizationModeSelectorDescription": "Hibrid (szám+ album):\nA szokásos lejátszásnál a szám erősítést használjuk, de ha egy albumot játszunk le (vagy azért, mert ez a fő lejátszási forrás, vagy azért, mert valamikor hozzáadtuk a sorhoz), akkor az album erősítést használjuk helyette.\n\nSzám alapú:\nA szám erősítés mindig használatos, függetlenül attól, hogy egy album lejátszása folyamatban van-e vagy sem.\n\nCsak albumok:\nA hangerő normalizálása csak albumok lejátszása közben kerül alkalmazásra (az albumerősítés használatával), az egyes zeneszámok esetében nem.",
+  "volumeNormalizationModeSelectorDescription": "Dinamikus:\nAmikor több számot játszik le ugyanabból az albumból egymás után, az album erősítése használatos (tehát amikor egy albumot vagy ugyanazon album számait játssza le egy lejátszási listában). Egyéb esetben a szám alapú erősítés használatos.\n\nZeneszám alapú:\nA szám erősítés mindig használatos, függetlenül attól, hogy egy album lejátszása folyamatban van-e vagy sem.\n\nAlbum alapú:\nEz az alapértelmezetten használt erősítési mód. Ha nem áll rendelkezésre (pl. kislemezek esetében), akkor a sáv erősítést használjuk.\n\nCsak albumok:\nA hangerő normalizálása csak albumok lejátszása közben kerül alkalmazásra (az albumerősítés használatával), az egyes zeneszámok esetében nem.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
-  "volumeNormalizationModeHybrid": "Hibrid (szám+ album)",
+  "volumeNormalizationModeHybrid": "Dinamikus",
   "@volumeNormalizationModeHybrid": {
     "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
   },
@@ -1558,7 +1558,7 @@
   "@shuffleNext": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
   },
-  "shuffleToNextUp": "Keverés a sor végére",
+  "shuffleToNextUp": "Keverés a következők végére",
   "@shuffleToNextUp": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
   },
@@ -2220,5 +2220,506 @@
   "outputMenuOpenConnectionSettingsButtonTitle": "Csatlakozás egy eszközhöz",
   "@outputMenuOpenConnectionSettingsButtonTitle": {
     "description": "Button title for connecting to a device from the output menu"
+  },
+  "shuffleToQueue": "Keverés a sorba",
+  "@shuffleToQueue": {
+    "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+  },
+  "confirmPlayNext": "{type, select, track{Zeneszám} album{Album} artist{Elóadó} playlist{Lejátszási lista} genre{Műfaj} other{Item}} lesz a következő",
+  "@confirmPlayNext": {
+    "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmAddToNextUp": "{type, select, track{Zeneszám} album{Album} artist{Előadó} playlist{Lejátszási sor} genre{Műfaj} other{Elem}} hozzáadva a következőkhöz",
+  "@confirmAddToNextUp": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmAddToQueue": "{type, select, track{Zeneszám} album{Album} artist{Előadó} playlist{Lejátszási lista} genre{Műfaj} other{Elem}} hozzáadva a lejátszási sorhoz",
+  "@confirmAddToQueue": {
+    "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmShuffleNext": "Keverés következőként",
+  "@confirmShuffleNext": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
+  },
+  "confirmShuffleToNextUp": "Keverés a következők végére",
+  "@confirmShuffleToNextUp": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+  },
+  "confirmShuffleToQueue": "Keverés a sor végére",
+  "@confirmShuffleToQueue": {
+    "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
+  },
+  "suppressPlayerPadding": "A lejátszásvezérlők térközének figyelmen kívül hagyása",
+  "@suppressPlayerPadding": {},
+  "suppressPlayerPaddingSubtitle": "Teljesen minimalizálja a lejátszóvezérlők közötti kitöltést, amikor az albumborító nem teljes méretű.",
+  "@suppressPlayerPaddingSubtitle": {},
+  "lockDownload": "Mindig tartsa meg az eszközön",
+  "@lockDownload": {
+    "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
+  },
+  "showArtistChipImage": "Előadói képek megjelenítése az előadó nevével",
+  "@showArtistChipImage": {},
+  "showArtistChipImageSubtitle": "Ez a kis előadói képek előnézetét érinti, például a lejátszó képernyőjén.",
+  "@showArtistChipImageSubtitle": {},
+  "scrollToCurrentTrack": "Görgetés az aktuális zeneszámhoz",
+  "@scrollToCurrentTrack": {
+    "description": "Tooltip for button that scrolls the queue list back to the current track"
+  },
+  "enableAutoScroll": "Automatikus görgetés engedélyezése",
+  "@enableAutoScroll": {
+    "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
+  },
+  "numberAsKiloHertz": "{kiloHertz} kHz",
+  "@numberAsKiloHertz": {
+    "description": "Value for the sample rate of a track, in kilohertz",
+    "placeholders": {
+      "kiloHertz": {
+        "type": "double"
+      }
+    }
+  },
+  "numberAsBit": "{bit} bit",
+  "@numberAsBit": {
+    "description": "Value for the bit depth of a track, as amount of bit used",
+    "placeholders": {
+      "bit": {
+        "type": "int"
+      }
+    }
+  },
+  "remainingDuration": "{duration} maradt",
+  "@remainingDuration": {
+    "description": "Displays duration of unplayed tracks. {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "sleepTimerProjectedDuration": "A lejátszás ~{duration} után szünetel",
+  "@sleepTimerProjectedDuration": {
+    "description": "Displays duration until playback is expected to be ended by the sleep timer (unless the queue is modified before). {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "removeFromPlaylistConfirm": "Eltávolítás",
+  "@removeFromPlaylistConfirm": {},
+  "downloadAllPlaylistsSetting": "Minden lejátszási lista letöltése",
+  "@downloadAllPlaylistsSetting": {},
+  "fiveLatestAlbumsSetting": "5 legújabb album letöltése",
+  "@fiveLatestAlbumsSetting": {},
+  "fiveLatestAlbumsSettingSubtitle": "A letöltések eltávolításra kerülnek, amint azok már nem aktuálisak.  Zárolja a letöltést, hogy megakadályozza az album eltávolítását.",
+  "@fiveLatestAlbumsSettingSubtitle": {},
+  "cacheLibraryImagesSettings": "Az aktuális könyvtár képeinek gyorsítótárazása",
+  "@cacheLibraryImagesSettings": {},
+  "cacheLibraryImagesSettingsSubtitle": "Az aktuális könyvtárban lévő összes album, előadó, műfaj és lejátszási lista borítója letöltésre kerül.",
+  "@cacheLibraryImagesSettingsSubtitle": {},
+  "showProgressOnNowPlayingBarTitle": "Folyamatjelző megjelenítése az alkalmazáson belüli minilejátszóban",
+  "@showProgressOnNowPlayingBarTitle": {
+    "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the bottom of the music screen functions as a progress bar"
+  },
+  "showProgressOnNowPlayingBarSubtitle": "Szabályozza, hogy a zene képernyő alján található minilejátszó folyamatjelzőként működik-e.",
+  "@showProgressOnNowPlayingBarSubtitle": {
+    "description": "Subtitle for the setting that controls if the now playing bar / miniplayer at the bottom of the music screen functions as a progress bar"
+  },
+  "lyricsScreenButtonTitle": "Dalszövegek",
+  "@lyricsScreenButtonTitle": {
+    "description": "Label for the button for opening the lyrics screen"
+  },
+  "lyricsScreen": "Dalszöveg",
+  "@lyricsScreen": {
+    "description": "Name for the view/screen that shows lyrics for the currently playing track"
+  },
+  "showLyricsTimestampsTitle": "Szinkronizált dalszövegek időbélyegeinek megjelenítése",
+  "@showLyricsTimestampsTitle": {
+    "description": "Title for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showLyricsTimestampsSubtitle": "Szabályozza, hogy az egyes dalszövegsorok időbélyege megjelenjen-e a dalszöveg nézetben, ha rendelkezésre áll.",
+  "@showLyricsTimestampsSubtitle": {
+    "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
+  },
+  "showStopButtonOnMediaNotificationTitle": "Stop gomb megjelenítése a médiaértesítésen",
+  "@showStopButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a stop button."
+  },
+  "showStopButtonOnMediaNotificationSubtitle": "Szabályozza, hogy a médiaértesítésen megjelenik-e a leállító gomb. Ez lehetővé teszi a lejátszás leállítását az alkalmazás megnyitása nélkül.",
+  "@showStopButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a stop button."
+  },
+  "showShuffleButtonOnMediaNotificationTitle": "Keverés gomb megjelenítése a médiaértesítésen",
+  "@showShuffleButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a shuffle button."
+  },
+  "showShuffleButtonOnMediaNotificationSubtitle": "Szabályozza, hogy a médiaértesítésen megjelenik-e keverés gomb. Ez lehetővé teszi a lejátszás keverését/sorba rebdezését az alkalmazás megnyitása nélkül.",
+  "@showShuffleButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
+  },
+  "showFavoriteButtonOnMediaNotificationTitle": "Kedvenc gomb megjelenítése a médiaértesítésen",
+  "@showFavoriteButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a favorite button."
+  },
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Szabályozza, hogy a médiaértesítésen megjelenik-e kedvenc gomb. Ez lehetővé teszi, hogy az aktuális zeneszámot az alkalmazás megnyitása nélkül jelölje kedvencnek. Offline módban elrejtve.",
+  "@showFavoriteButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a favorite button."
+  },
+  "showSeekControlsOnMediaNotificationTitle": "Görgetésvezérlők megjelenítése a médiaértesítésen",
+  "@showSeekControlsOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "showSeekControlsOnMediaNotificationSubtitle": "Szabályozza, hogy a médiaértesítésnek legyen-e görgethető folyamatjelző sávja. Ez lehetővé teszi a lejátszási pozíció megváltoztatását az alkalmazás megnyitása nélkül.",
+  "@showSeekControlsOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
+  },
+  "alignmentOptionStart": "Balra",
+  "@alignmentOptionStart": {
+    "description": "Alignment option for things like the lyrics view. Start means left-aligned in LTR languages and right-aligned in RTL languages."
+  },
+  "alignmentOptionCenter": "Középre",
+  "@alignmentOptionCenter": {
+    "description": "Alignment option for things like the lyrics view. Center means centered."
+  },
+  "alignmentOptionEnd": "Jobbra",
+  "@alignmentOptionEnd": {
+    "description": "Alignment option for things like the lyrics view. End means right-aligned in LTR languages and left-aligned in RTL languages."
+  },
+  "fontSizeOptionSmall": "Kicsi",
+  "@fontSizeOptionSmall": {
+    "description": "Font size option for things like the lyrics view. Small means a smaller font size."
+  },
+  "fontSizeOptionMedium": "Közepes",
+  "@fontSizeOptionMedium": {
+    "description": "Font size option for things like the lyrics view. Medium means a medium font size."
+  },
+  "fontSizeOptionLarge": "Nagy",
+  "@fontSizeOptionLarge": {
+    "description": "Font size option for things like the lyrics view. Large means a larger font size."
+  },
+  "lyricsAlignmentTitle": "Dalszöveg igazítása",
+  "@lyricsAlignmentTitle": {
+    "description": "Title for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "lyricsAlignmentSubtitle": "Szabályozza a dalszövegek igazítását a dalszöveg nézetben.",
+  "@lyricsAlignmentSubtitle": {
+    "description": "Subtitle for the setting that controls the alignment of lyrics in the lyrics view"
+  },
+  "lyricsFontSizeTitle": "Dalszöveg betűméret",
+  "@lyricsFontSizeTitle": {
+    "description": "Title for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "lyricsFontSizeSubtitle": "A dalszövegek betűméretének beállítása a dalszöveg nézetben.",
+  "@lyricsFontSizeSubtitle": {
+    "description": "Subtitle for the setting that controls the font size of lyrics in the lyrics view"
+  },
+  "showLyricsScreenAlbumPreludeTitle": "Albumborító megjelenítése a dalszöveg előtt",
+  "@showLyricsScreenAlbumPreludeTitle": {
+    "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "showLyricsScreenAlbumPreludeSubtitle": "Szabályozza, hogy az album borítója megjelenjen-e a dalszövegek felett.",
+  "@showLyricsScreenAlbumPreludeSubtitle": {
+    "description": "Subtitle for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
+  },
+  "keepScreenOn": "Tartsa bekapcsolva a képernyőt",
+  "@keepScreenOn": {
+    "description": "Option to keep the screen on while using the app"
+  },
+  "keepScreenOnSubtitle": "Mikor tartsa bekapcsolva a képernyőt",
+  "@keepScreenOnSubtitle": {},
+  "keepScreenOnDisabled": "Letiltva",
+  "@keepScreenOnDisabled": {},
+  "keepScreenOnAlwaysOn": "Mindig bekapcsolva",
+  "@keepScreenOnAlwaysOn": {},
+  "keepScreenOnWhilePlaying": "Zenelejátszás közben",
+  "@keepScreenOnWhilePlaying": {},
+  "keepScreenOnWhileLyrics": "Dalszöveg megjelenítésekor",
+  "@keepScreenOnWhileLyrics": {},
+  "allowDeleteFromServerSubtitle": "Engedélyezheti és letilthatja a zeneszám végleges törlését a kiszolgálóról, ha a törlés lehetséges.",
+  "@allowDeleteFromServerSubtitle": {
+    "description": "Subtitle for the setting that controls if items can be deleted from the server"
+  },
+  "deleteFromTargetDialogText": "Ön {itemType, select, album{az album} playlist{a lejátszási lista} artist{az előadó} genre{a műfaj} track{a zeneszám} library{a könyvtár} other{az elem}} törlésére készül {device, select, device{erről az eszközről} server{a szerverről és a könyvtárból.{deleteType, select, canDelete{ Ezt az elemet is törli az eszközről.} cantDelete{ Ez az elem a következő szinkronizálásig elérhető marad ezen az eszközön.} notDownloaded{} other{}}\nEz a művelet nem vonható vissza} other{}}.",
+  "@deleteFromTargetDialogText": {
+    "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
+  },
+  "deleteFromTargetConfirmButton": "Törlés{target, select, device{ erről az eszközről} server{ a szerverről} other{}}",
+  "@deleteFromTargetConfirmButton": {
+    "description": "(Important: Note the space in front of some cases) The button the user needs to press to execute the delete action. If no target is set, the text should just be a generic 'delete' text. This button is both visible before and after the delete confirm prompt."
+  },
+  "largeDownloadWarning": "Figyelem: {count} zeneszám letöltésére készül.",
+  "@largeDownloadWarning": {
+    "description": "A line of warning text on the download dialog when large numbers of tracks are downloaded at once.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "downloadSizeWarningCutoff": "Letöltési méretkorlát figyelmeztetés",
+  "@downloadSizeWarningCutoff": {
+    "description": "Title for the setting controlling when to warn about a large download"
+  },
+  "downloadSizeWarningCutoffSubtitle": "Egy figyelmeztető üzenet jelenik meg, ha ennél több zeneszámot tölt le egyszerre.",
+  "@downloadSizeWarningCutoffSubtitle": {
+    "description": "Subtitle for the setting controlling when to warn about a large download"
+  },
+  "confirmAddAlbumToPlaylist": "Biztos, hogy {itemType, select, album{az album} playlist{a lejátszási lista} artist{az előadó} genre{a műfaj} other{az elem}} '{itemName}' összes számát hozzá szeretné adni a lejátszási listához?  Csak egyenként lehet eltávolítani őket.",
+  "@confirmAddAlbumToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "publiclyVisiblePlaylist": "Nyilvánosan látható:",
+  "@publiclyVisiblePlaylist": {
+    "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."
+  },
+  "releaseDateFormatYear": "Év",
+  "@releaseDateFormatYear": {
+    "description": "Date format option for the release date of an album, showing only the year"
+  },
+  "releaseDateFormatISO": "ISO 8601",
+  "@releaseDateFormatISO": {
+    "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
+  },
+  "releaseDateFormatMonthYear": "Hónap és év",
+  "@releaseDateFormatMonthYear": {
+    "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
+  },
+  "releaseDateFormatMonthDayYear": "Hónap, nap és év",
+  "@releaseDateFormatMonthDayYear": {
+    "description": "Date format option for the release date of an album, showing the year and month and day/date. Example: March 2, 2022"
+  },
+  "showAlbumReleaseDateOnPlayerScreenTitle": "Album megjelenési dátumának megjelenítése a lejátszó képernyőjén",
+  "@showAlbumReleaseDateOnPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "showAlbumReleaseDateOnPlayerScreenSubtitle": "Az album megjelenési dátumának megjelenítése a lejátszó képernyőjén, az album neve után.",
+  "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
+  },
+  "autoExpandPlayerScreenTitle": "A lejátszó képernyő megnyitása a lejátszás indításakor",
+  "@autoExpandPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "autoExpandPlayerScreenSubtitle": "Ez megnyitja a lejátszási képeryőt, amikor egy új várólista lejátszását indítja",
+  "@autoExpandPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "removeFromPlaylistPrompt": "'{itemName}' eltávoltítása a(z ) '{playlistName}' lejátszási listáról?",
+  "@removeFromPlaylistPrompt": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "playlistName": {
+        "type": "String"
+      }
+    },
+    "description": "Prompt on dialog to confirm a removal from playlist"
+  },
+  "trackMenuButtonTooltip": "Zeneszám menü",
+  "@trackMenuButtonTooltip": {
+    "description": "Tooltip for the button that opens the track menu"
+  },
+  "quickActions": "Gyors műveletek",
+  "@quickActions": {
+    "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
+  },
+  "addRemoveFromPlaylist": "Lejátszási lista elemének hozzáadása / eltávolítása",
+  "@addRemoveFromPlaylist": {
+    "description": "Header for add to/remove from playlist popup menu"
+  },
+  "addPlaylistSubheader": "Zeneszám hozzáadása lejátszási listához",
+  "@addPlaylistSubheader": {
+    "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
+  },
+  "trackOfflineFavorites": "Kedvencek állapotának szinkronizálása",
+  "@trackOfflineFavorites": {},
+  "trackOfflineFavoritesSubtitle": "Ez lehetővé teszi a kedvencek állapotának naprakészebb megjelenítését offline állapotban.  Nem tölt le további fájlokat.",
+  "@trackOfflineFavoritesSubtitle": {},
+  "allPlaylistsInfoSetting": "Lejátszási lista metaadatok letöltése",
+  "@allPlaylistsInfoSetting": {},
+  "allPlaylistsInfoSettingSubtitle": "A lejátszási listák metaadatainak szinkronizálása az élmény javítása érdekében",
+  "@allPlaylistsInfoSettingSubtitle": {},
+  "downloadFavoritesSetting": "Minden kedvenc letöltése",
+  "@downloadFavoritesSetting": {},
+  "keepScreenOnWhilePluggedIn": "A képernyő maradjon bekapcsolva, ha a töltő csatlakoztatva van",
+  "@keepScreenOnWhilePluggedIn": {},
+  "keepScreenOnWhilePluggedInSubtitle": "A képernyő bekapcsolva tartásának beállításait hagyja figyelmen kívül, ha a töltő nincs csatlakoztatva",
+  "@keepScreenOnWhilePluggedInSubtitle": {},
+  "genericToggleButtonTooltip": "Koppintson a váltáshoz.",
+  "@genericToggleButtonTooltip": {
+    "description": "Tooltip for toggle buttons that can be tapped to toggle their state"
+  },
+  "artwork": "Borítókép",
+  "@artwork": {},
+  "artworkTooltip": "{title} borítóképe",
+  "@artworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for album artwork on track and album tiles as well as the album screen"
+  },
+  "playerAlbumArtworkTooltip": "{title} borítóképe. Érintse meg a lejátszás indításához vagy megállításához. Lapozzon balra vagy jobbra a zeneszámok váltásához.",
+  "@playerAlbumArtworkTooltip": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Abbey Road"
+      }
+    },
+    "description": "Tooltip for the album artwork on the player screen"
+  },
+  "nowPlayingBarTooltip": "A lejátszó képernyő megnyitása",
+  "@nowPlayingBarTooltip": {
+    "description": "Tooltip for the now playing bar at the bottom of the screen"
+  },
+  "additionalPeople": "Közreműködők",
+  "@additionalPeople": {
+    "description": "Label for the feature chips showing additional people in the credits of a track or album"
+  },
+  "playbackMode": "Lejátszás mód",
+  "@playbackMode": {
+    "description": "Label for the feature chips showing the playback mode of a track. See [playbackModeLocal], [playbackModeDirectPlaying], and [playbackModeTranscoding]"
+  },
+  "codec": "Kodek",
+  "@codec": {
+    "description": "Label for the feature chips showing the codec of a track"
+  },
+  "bitRate": "Bitráta",
+  "@bitRate": {
+    "description": "Label for the feature chips showing the bit rate of a track"
+  },
+  "bitDepth": "Bitmélység",
+  "@bitDepth": {
+    "description": "Label for the feature chips showing the bit depth of a track"
+  },
+  "size": "Méret",
+  "@size": {
+    "description": "Label for the feature chips showing the size (original file size or transcoded size, if available) of a track"
+  },
+  "normalizationGain": "Erősítés",
+  "@normalizationGain": {
+    "description": "Label for the feature chips showing the normalization gain / LUFS offset of a track"
+  },
+  "sampleRate": "Mintavételezési frekvencia",
+  "@sampleRate": {
+    "description": "Label for the feature chips showing the sample rate of a track"
+  },
+  "showFeatureChipsToggleTitle": "További információk a számról",
+  "@showFeatureChipsToggleTitle": {
+    "description": "Title for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "showFeatureChipsToggleSubtitle": "A lejátszó képernyőjén megjelenítheti a zeneszámok speciális adatait, például a kodeket, a bitrátát és egyebeket.",
+  "@showFeatureChipsToggleSubtitle": {
+    "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
+  },
+  "seeAll": "Minden",
+  "@seeAll": {
+    "description": ""
+  },
+  "albumScreen": "Album képernyő",
+  "@albumScreen": {
+    "description": "Name for the view/screen that shows albums"
+  },
+  "showCoversOnAlbumScreenTitle": "Albumborítók megjelenítése a számokhoz",
+  "@showCoversOnAlbumScreenTitle": {
+    "description": "Title for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "showCoversOnAlbumScreenSubtitle": "Az albumborítók megjelenítése minden egyes számhoz külön-külön az album képernyőjén.",
+  "@showCoversOnAlbumScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if album covers are shown for each track separately on the album screen"
+  },
+  "artistScreen": "Előadó képernyő",
+  "@artistScreen": {
+    "description": "Name for the view/screen that shows artists"
+  },
+  "applyFilterOnGenreChipTapTitle": "Szűrő alkalmazása a műfajra koppintással",
+  "@applyFilterOnGenreChipTapTitle": {
+    "description": "Title for the setting that controls if taps on genre chips should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "applyFilterOnGenreChipTapSubtitle": "Alapértelmezés szerint egy műfajra koppintva megnyílik az adott műfaj, míg a hosszan megnyomva az előadó vagy a lejátszási lista az adott műfaj szerint szűrhető. Ha engedélyezi, ez a működés megfordul.",
+  "@applyFilterOnGenreChipTapSubtitle": {
+    "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "applyFilterOnGenreChipTapPrompt": "Alkalmazott műfaji szűrő",
+  "@applyFilterOnGenreChipTapPrompt": {
+    "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "applyFilterOnGenreChipTapPromptButton": "Nyitott műfaj",
+  "@applyFilterOnGenreChipTapPromptButton": {
+    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "genreScreen": "Műfaj képernyő",
+  "@genreScreen": {
+    "description": "Name for the view/screen that shows genres"
+  },
+  "emptyTopTracksList": "Még nem hallgattál meg egyetlen számot sem ettől az előadótól.",
+  "@emptyTopTracksList": {
+    "description": "Message shown as a placeholder when the top tracks list for an artist is empty"
+  },
+  "emptyFilteredListTitle": "Nincsenek elemek",
+  "@emptyFilteredListTitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "emptyFilteredListSubtitle": "Egyetlen elem sem felel meg a szűrőnek. Próbálja kikapcsolni a szűrőt, vagy változtassa meg a keresési kifejezést.",
+  "@emptyFilteredListSubtitle": {
+    "description": "Message shown when a list of items is filtered and no items match the filter"
+  },
+  "resetFiltersButton": "Szűrők visszaállítása",
+  "@resetFiltersButton": {
+    "description": "Button to reset filters on a list of items"
+  },
+  "resetSettingsPromptGlobal": "Biztos, hogy MINDEN beállítást vissza akar állítani az alapértelmezettre?",
+  "@resetSettingsPromptGlobal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings to their default values"
+  },
+  "resetSettingsPromptGlobalConfirm": "MINDEN beállítás visszaállítása",
+  "@resetSettingsPromptGlobalConfirm": {
+    "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
+  },
+  "resetSettingsPromptLocal": "Szeretné visszaállítani ezeket a beállításokat az alapértelmezettekre?",
+  "@resetSettingsPromptLocal": {
+    "description": "Prompt which gets shown when the user is about to reset all settings in the current settings window to their default values"
+  },
+  "genericCancel": "Mégsem",
+  "@genericCancel": {
+    "description": "Used when the user stops an action from taking place inside a popup dialog window"
+  },
+  "allowDeleteFromServerTitle": "Törlés engedélyezése a szerverről",
+  "@allowDeleteFromServerTitle": {
+    "description": "Title for the setting that controls if items can be deleted from the server"
+  },
+  "itemDeletedSnackbar": "{itemType, select, album{Album} playlist{Lejátszási lista} artist{Előadó} genre{Műfaj} track{Zeneszám} library{Könyvtár} other{Elem}} törölve {deviceType, select, device{az eszközről} server{a szerverről} other{ismeretlen}}",
+  "@itemDeletedSnackbar": {
+    "description": "Used whenever item gets deleted from the device or server, message in snackbar"
   }
 }
