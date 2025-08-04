@@ -20,7 +20,8 @@ class PlaybackHistoryList extends StatelessWidget {
       stream: playbackHistoryService.historyStream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          groupedHistory = playbackHistoryService.getHistoryGroupedDynamically();
+          groupedHistory = playbackHistoryService
+              .getHistoryGroupedDynamically();
 
           return PaddedCustomScrollview(
             // use nested SliverList.builder()s to show history items grouped by date
@@ -34,11 +35,10 @@ class PlaybackHistoryList extends StatelessWidget {
                   final historyItem = TrackListTile(
                     index: actualIndex,
                     item: group.value[actualIndex].item.baseItem!,
-<<<<<<< HEAD
-=======
                     isShownInSearchOrHistory: true,
->>>>>>> parent of c69245c1 (Replace all ListViews and SliverLists with)
-                    highlightCurrentTrack: groupIndex == 0 && index == 0, // only highlight first track
+                    highlightCurrentTrack:
+                        groupIndex == 0 &&
+                        index == 0, // only highlight first track
                   );
 
                   return index == 0
@@ -46,7 +46,11 @@ class PlaybackHistoryList extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 4.0),
+                              padding: const EdgeInsets.only(
+                                left: 16.0,
+                                top: 16.0,
+                                bottom: 4.0,
+                              ),
                               child: RelativeDateTimeText(
                                 dateTime: group.key,
                                 style: const TextStyle(fontSize: 16.0),

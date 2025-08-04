@@ -47,7 +47,8 @@ class _LyricsScreenContent extends ConsumerStatefulWidget {
   const _LyricsScreenContent();
 
   @override
-  ConsumerState<_LyricsScreenContent> createState() => _LyricsScreenContentState();
+  ConsumerState<_LyricsScreenContent> createState() =>
+      _LyricsScreenContentState();
 }
 
 class _LyricsScreenContentState extends ConsumerState<_LyricsScreenContent> {
@@ -95,7 +96,8 @@ class _LyricsScreenContentState extends ConsumerState<_LyricsScreenContent> {
                 child: AirPlayRoutePickerView(
                   tintColor: IconTheme.of(context).color ?? Colors.white,
                   activeTintColor: jellyfinBlueColor,
-                  onShowPickerView: () => FeedbackHelper.feedback(FeedbackType.selection),
+                  onShowPickerView: () =>
+                      FeedbackHelper.feedback(FeedbackType.selection),
                 ),
               ),
           ],
@@ -105,7 +107,8 @@ class _LyricsScreenContentState extends ConsumerState<_LyricsScreenContent> {
         extendBodyBehindAppBar: true,
         body: Stack(
           children: [
-            if (ref.watch(finampSettingsProvider.useCoverAsBackground)) const BlurredPlayerScreenBackground(),
+            if (ref.watch(finampSettingsProvider.useCoverAsBackground))
+              const BlurredPlayerScreenBackground(),
             SafeArea(
               minimum: EdgeInsets.only(top: toolbarHeight),
               child: LayoutBuilder(
@@ -126,7 +129,9 @@ class _LyricsScreenContentState extends ConsumerState<_LyricsScreenContent> {
                           onVerticalSwipe: (direction) {
                             if (direction == SwipeDirection.up) {
                               // This should never actually be called until widget finishes build and controller is initialized
-                              if (!FinampSettingsHelper.finampSettings.disableGesture) {
+                              if (!FinampSettingsHelper
+                                  .finampSettings
+                                  .disableGesture) {
                                 showQueueBottomSheet(context, ref);
                               }
                             }
@@ -159,7 +164,8 @@ class LyricsView extends ConsumerStatefulWidget {
   ConsumerState createState() => _LyricsViewState();
 }
 
-class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObserver {
+class _LyricsViewState extends ConsumerState<LyricsView>
+    with WidgetsBindingObserver {
   late AutoScrollController autoScrollController;
   StreamSubscription<ProgressState>? progressStateStreamSubscription;
   Duration? currentPosition;
@@ -176,13 +182,16 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
     WidgetsBinding.instance.addObserver(this);
     autoScrollController = AutoScrollController(
       suggestedRowHeight: 72,
-      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+      viewportBoundaryGetter: () =>
+          Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
       axis: Axis.vertical,
     );
 
     autoScrollController.addListener(() {
       var position = autoScrollController.position;
-      if (position.userScrollDirection != ScrollDirection.idle && _isSynchronizedLyrics && isAutoScrollEnabled) {
+      if (position.userScrollDirection != ScrollDirection.idle &&
+          _isSynchronizedLyrics &&
+          isAutoScrollEnabled) {
         setState(() {
           isAutoScrollEnabled = false;
         });
@@ -194,7 +203,10 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    _isVisible = [AppLifecycleState.resumed, AppLifecycleState.inactive].contains(state);
+    _isVisible = [
+      AppLifecycleState.resumed,
+      AppLifecycleState.inactive,
+    ].contains(state);
     super.didChangeAppLifecycleState(state);
   }
 
@@ -213,7 +225,8 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
     final finampSettings = ref.watch(finampSettingsProvider).value;
 
     //!!! use unwrapPrevious() to prevent getting previous values. If we don't have the lyrics for the current track yet, we want to show the loading state, and not the lyrics for the previous track
-    _isSynchronizedLyrics = metadata.valueOrNull?.lyrics?.lyrics?.first.start != null;
+    _isSynchronizedLyrics =
+        metadata.valueOrNull?.lyrics?.lyrics?.first.start != null;
 
     Widget getEmptyState({required String message, required IconData icon}) {
       return Center(
@@ -223,15 +236,27 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
               mainAxisSize: MainAxisSize.min,
               children: [
                 ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: constraints.maxHeight - 180),
+                  constraints: BoxConstraints(
+                    maxHeight: constraints.maxHeight - 180,
+                  ),
                   child: (finampSettings?.showLyricsScreenAlbumPrelude ?? true)
                       ? const PlayerScreenAlbumImage()
                       : SizedBox(),
                 ),
                 const SizedBox(height: 24),
-                Icon(icon, size: 32, color: Theme.of(context).textTheme.headlineMedium!.color),
+                Icon(
+                  icon,
+                  size: 32,
+                  color: Theme.of(context).textTheme.headlineMedium!.color,
+                ),
                 const SizedBox(height: 12),
-                Text(message, style: TextStyle(color: Theme.of(context).textTheme.headlineMedium!.color, fontSize: 16)),
+                Text(
+                  message,
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.headlineMedium!.color,
+                    fontSize: 16,
+                  ),
+                ),
               ],
             );
           },
@@ -240,19 +265,32 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
     }
 
     if ((metadata.isLoading && !metadata.hasValue) || metadata.isRefreshing) {
-      return getEmptyState(message: "Loading lyrics...", icon: TablerIcons.microphone_2);
+      return getEmptyState(
+        message: "Loading lyrics...",
+        icon: TablerIcons.microphone_2,
+      );
     } else if (!metadata.hasValue ||
         metadata.value == null ||
-        metadata.value!.hasLyrics && metadata.value!.lyrics == null && !metadata.isLoading) {
-      return getEmptyState(message: "Couldn't load lyrics!", icon: TablerIcons.microphone_2_off);
+        metadata.value!.hasLyrics &&
+            metadata.value!.lyrics == null &&
+            !metadata.isLoading) {
+      return getEmptyState(
+        message: "Couldn't load lyrics!",
+        icon: TablerIcons.microphone_2_off,
+      );
     } else if (!metadata.value!.hasLyrics) {
-      return getEmptyState(message: "No lyrics available.", icon: TablerIcons.microphone_2_off);
+      return getEmptyState(
+        message: "No lyrics available.",
+        icon: TablerIcons.microphone_2_off,
+      );
     } else {
       // We have lyrics that we can display
       final lyricLines = metadata.value!.lyrics!.lyrics ?? [];
 
       progressStateStreamSubscription?.cancel();
-      progressStateStreamSubscription = progressStateStream.listen((state) async {
+      progressStateStreamSubscription = progressStateStream.listen((
+        state,
+      ) async {
         currentPosition = state.position;
         final currentMicros = state.position.inMicroseconds;
 
@@ -264,13 +302,8 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
         int closestLineIndex = -1;
         for (int i = 0; i < lyricLines.length; i++) {
           closestLineIndex = i;
-<<<<<<< HEAD
-          final line = metadata.value!.lyrics!.lyrics![i];
-          if ((line.start ?? 0) ~/ 10 > (currentPosition?.inMicroseconds ?? 0)) {
-=======
           final line = lyricLines[i];
           if (line.startMicros > currentMicros) {
->>>>>>> parent of c69245c1 (Replace all ListViews and SliverLists with)
             closestLineIndex = i - 1;
             break;
           }
@@ -297,11 +330,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
             } else {
               unawaited(
                 autoScrollController.scrollToIndex(
-<<<<<<< HEAD
-                  clampedIndex.clamp(0, metadata.value!.lyrics!.lyrics!.length - 1),
-=======
                   clampedIndex.clamp(0, lyricLines.length - 1),
->>>>>>> parent of c69245c1 (Replace all ListViews and SliverLists with)
                   preferPosition: AutoScrollPosition.middle,
                   duration: MediaQuery.of(context).disableAnimations
                       ? const Duration(
@@ -327,23 +356,17 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                     controller: autoScrollController,
                     itemCount: lyricLines.length,
                     itemBuilder: (context, index) {
-                      final line = metadata.value!.lyrics!.lyrics![index];
-                      final nextLine = index < metadata.value!.lyrics!.lyrics!.length - 1
-                          ? metadata.value!.lyrics!.lyrics![index + 1]
+                      final currentMicros =
+                          currentPosition?.inMicroseconds ?? 0;
+                      final line = lyricLines[index];
+                      final nextLine = index < lyricLines.length - 1
+                          ? lyricLines[index + 1]
                           : null;
 
                       final isCurrentLine =
-                          (currentPosition?.inMicroseconds ?? 0) >= (line.start ?? 0) ~/ 10 &&
-                          (nextLine == null || (currentPosition?.inMicroseconds ?? 0) < (nextLine.start ?? 0) ~/ 10);
-=======
-                      final currentMicros = currentPosition?.inMicroseconds ?? 0;
-                      final line = lyricLines[index];
-                      final nextLine = index < lyricLines.length - 1 ? lyricLines[index + 1] : null;
-
-                      final isCurrentLine =
                           currentMicros >= line.startMicros &&
-                          (nextLine == null || currentMicros < nextLine.startMicros);
->>>>>>> parent of c69245c1 (Replace all ListViews and SliverLists with)
+                          (nextLine == null ||
+                              currentMicros < nextLine.startMicros);
 
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -353,7 +376,10 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                               key: const ValueKey(-1),
                               controller: autoScrollController,
                               index: -1,
-                              child: (finampSettings?.showLyricsScreenAlbumPrelude ?? true)
+                              child:
+                                  (finampSettings
+                                          ?.showLyricsScreenAlbumPrelude ??
+                                      true)
                                   ? SizedBox(
                                       height: constraints.maxHeight * 0.65,
                                       child: Center(
@@ -363,7 +389,9 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                                         ),
                                       ),
                                     )
-                                  : SizedBox(height: constraints.maxHeight * 0.2),
+                                  : SizedBox(
+                                      height: constraints.maxHeight * 0.2,
+                                    ),
                             ),
                           AutoScrollTag(
                             key: ValueKey(index),
@@ -374,31 +402,9 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                               isCurrentLine: isCurrentLine,
                               onTap: () async {
                                 // Seek to the start of the line
-<<<<<<< HEAD
-                                await audioHandler.seek(Duration(microseconds: (line.start ?? 0) ~/ 10));
-                                setState(() {
-                                  isAutoScrollEnabled = true;
-                                });
-                                if (previousLineIndex != null) {
-                                  unawaited(
-                                    autoScrollController.scrollToIndex(
-                                      previousLineIndex!,
-                                      preferPosition: AutoScrollPosition.middle,
-                                      duration: MediaQuery.of(context).disableAnimations
-                                          ? const Duration(
-                                              milliseconds: 1,
-                                            ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
-                                          : const Duration(milliseconds: 500),
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-                          ),
-                          if (index == metadata.value!.lyrics!.lyrics!.length - 1)
-                            SizedBox(height: constraints.maxHeight * 0.2),
-=======
-                                await audioHandler.seek(Duration(microseconds: line.startMicros));
+                                await audioHandler.seek(
+                                  Duration(microseconds: line.startMicros),
+                                );
                                 setState(() {
                                   isAutoScrollEnabled = true;
                                 });
@@ -406,7 +412,8 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                                   autoScrollController.scrollToIndex(
                                     index,
                                     preferPosition: AutoScrollPosition.middle,
-                                    duration: MediaQuery.of(context).disableAnimations
+                                    duration:
+                                        MediaQuery.of(context).disableAnimations
                                         ? const Duration(
                                             milliseconds: 1,
                                           ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
@@ -416,8 +423,8 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                               },
                             ),
                           ),
-                          if (index == lyricLines.length - 1) SizedBox(height: constraints.maxHeight * 0.2),
->>>>>>> parent of c69245c1 (Replace all ListViews and SliverLists with)
+                          if (index == lyricLines.length - 1)
+                            SizedBox(height: constraints.maxHeight * 0.2),
                         ],
                       );
                     },
@@ -464,25 +471,38 @@ class _LyricLine extends ConsumerWidget {
   final bool isCurrentLine;
   final VoidCallback? onTap;
 
-  const _LyricLine({required this.line, required this.isCurrentLine, this.onTap});
+  const _LyricLine({
+    required this.line,
+    required this.isCurrentLine,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final finampSettings = ref.watch(finampSettingsProvider).value;
 
     final isSynchronized = line.start != null;
-    final showTimestamp = isSynchronized && !line.text.isNullOrBlank && (finampSettings?.showLyricsTimestamps ?? true);
+    final showTimestamp =
+        isSynchronized &&
+        !line.text.isNullOrBlank &&
+        (finampSettings?.showLyricsTimestamps ?? true);
     final lowlightLine = isSynchronized && !isCurrentLine;
 
     final textSpan = TextSpan(
       text: line.text ?? "<missing lyric line>",
       style: TextStyle(
-        color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
-        fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
+        color: lowlightLine
+            ? Colors.grey
+            : Theme.of(context).textTheme.bodyLarge!.color,
+        fontWeight: lowlightLine || !isSynchronized
+            ? FontWeight.normal
+            : FontWeight.w500,
         // Keep text width consistent across the different weights
         letterSpacing: lowlightLine || !isSynchronized ? 0.02 : -0.4,
         fontSize:
-            lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) *
+            lyricsFontSizeToSize(
+              finampSettings?.lyricsFontSize ?? LyricsFontSize.medium,
+            ) *
             (isSynchronized ? 1.0 : 0.75),
         height: 1.25,
       ),
@@ -492,54 +512,17 @@ class _LyricLine extends ConsumerWidget {
       onTap: isSynchronized ? onTap : null,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: isSynchronized ? 10.0 : 6.0),
-<<<<<<< HEAD
-        child: Text.rich(
-          textAlign: lyricsAlignmentToTextAlign(finampSettings?.lyricsAlignment ?? LyricsAlignment.start),
-          softWrap: true,
-          TextSpan(
-            children: [
-              if (line.start != null &&
-                  (line.text?.trim().isNotEmpty ?? false) &&
-                  (finampSettings?.showLyricsTimestamps ?? true))
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.bottom,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Text(
-                      "${Duration(microseconds: (line.start ?? 0) ~/ 10).inMinutes}:${(Duration(microseconds: (line.start ?? 0) ~/ 10).inSeconds % 60).toString().padLeft(2, '0')}",
-                      style: TextStyle(
-                        color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
-                        fontSize: 16,
-                        height:
-                            1.75 * (lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) / 26),
-                      ),
-                    ),
-                  ),
-                ),
-              TextSpan(
-                text: line.text ?? "<missing lyric line>",
-                style: TextStyle(
-                  color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
-                  fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
-                  // Keep text width consistent across the different weights
-                  letterSpacing: lowlightLine || !isSynchronized ? 0.05 : -0.045,
-                  fontSize:
-                      lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) *
-                      (isSynchronized ? 1.0 : 0.75),
-                  height: 1.25,
-                ),
-              ),
-            ],
-          ),
-=======
         child: LayoutBuilder(
           builder: (context, constraints) {
             // Calculate available width for lyrics (accounting for timestamp if shown)
-            final availableWidth = constraints.maxWidth - (showTimestamp ? 60 : 0);
+            final availableWidth =
+                constraints.maxWidth - (showTimestamp ? 60 : 0);
 
             final linePainter = TextPainter(
               text: textSpan,
-              textAlign: lyricsAlignmentToTextAlign(finampSettings?.lyricsAlignment ?? LyricsAlignment.start),
+              textAlign: lyricsAlignmentToTextAlign(
+                finampSettings?.lyricsAlignment ?? LyricsAlignment.start,
+              ),
               textDirection: TextDirection.ltr,
             )..setPlaceholderDimensions([]);
             linePainter.layout(minWidth: 0, maxWidth: availableWidth);
@@ -547,7 +530,8 @@ class _LyricLine extends ConsumerWidget {
             return StreamBuilder<ProgressState>(
               stream: progressStateStream,
               builder: (context, snapshot) {
-                final currentMicros = snapshot.data?.position.inMicroseconds ?? 0;
+                final currentMicros =
+                    snapshot.data?.position.inMicroseconds ?? 0;
 
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -558,11 +542,17 @@ class _LyricLine extends ConsumerWidget {
                         child: Text(
                           "${Duration(microseconds: line.startMicros).inMinutes}:${(Duration(microseconds: line.startMicros).inSeconds % 60).toString().padLeft(2, '0')}",
                           style: TextStyle(
-                            color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
+                            color: lowlightLine
+                                ? Colors.grey
+                                : Theme.of(context).textTheme.bodyLarge!.color,
                             fontSize: 16,
                             height:
                                 1.75 *
-                                (lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) / 26),
+                                (lyricsFontSizeToSize(
+                                      finampSettings?.lyricsFontSize ??
+                                          LyricsFontSize.medium,
+                                    ) /
+                                    26),
                           ),
                         ),
                       ),
@@ -574,21 +564,33 @@ class _LyricLine extends ConsumerWidget {
                           line: line,
                           currentMicros: currentMicros,
                           isCurrentLine: isCurrentLine,
-                          primaryColor: Theme.of(context).textTheme.bodyLarge?.color,
+                          primaryColor: Theme.of(
+                            context,
+                          ).textTheme.bodyLarge?.color,
                           highlightColor: Theme.of(context).colorScheme.primary,
                           grayedColor: Colors.white,
                           lowlightLine: lowlightLine,
                           maxWidth: availableWidth,
                           textAlign: lyricsAlignmentToTextAlign(
-                            finampSettings?.lyricsAlignment ?? LyricsAlignment.start,
+                            finampSettings?.lyricsAlignment ??
+                                LyricsAlignment.start,
                           ),
                           baseStyle: TextStyle(
-                            color: lowlightLine ? Colors.grey : Theme.of(context).textTheme.bodyLarge!.color,
-                            fontWeight: lowlightLine || !isSynchronized ? FontWeight.normal : FontWeight.w500,
+                            color: lowlightLine
+                                ? Colors.grey
+                                : Theme.of(context).textTheme.bodyLarge!.color,
+                            fontWeight: lowlightLine || !isSynchronized
+                                ? FontWeight.normal
+                                : FontWeight.w500,
                             // Keep text width consistent across the different weights
-                            letterSpacing: lowlightLine || !isSynchronized ? 0.02 : -0.4,
+                            letterSpacing: lowlightLine || !isSynchronized
+                                ? 0.02
+                                : -0.4,
                             fontSize:
-                                lyricsFontSizeToSize(finampSettings?.lyricsFontSize ?? LyricsFontSize.medium) *
+                                lyricsFontSizeToSize(
+                                  finampSettings?.lyricsFontSize ??
+                                      LyricsFontSize.medium,
+                                ) *
                                 (isSynchronized ? 1.0 : 0.75),
                             height: 1.25,
                           ),
@@ -600,7 +602,6 @@ class _LyricLine extends ConsumerWidget {
               },
             );
           },
->>>>>>> parent of c69245c1 (Replace all ListViews and SliverLists with)
         ),
       ),
     );
@@ -637,17 +638,26 @@ class LyricsLinePainter extends ChangeNotifier implements CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // If we have word-level cues and this is the current line, paint word-by-word
-    if (line.cues != null && line.cues!.isNotEmpty && isCurrentLine && !lowlightLine) {
+    if (line.cues != null &&
+        line.cues!.isNotEmpty &&
+        isCurrentLine &&
+        !lowlightLine) {
       _paintWithWordHighlighting(canvas, size);
     } else {
       // Default painting for non-current lines or lines without cues
-      final offsetX = _calculateTextAlignmentOffset(size.width, textPainter.width);
+      final offsetX = _calculateTextAlignmentOffset(
+        size.width,
+        textPainter.width,
+      );
       textPainter.paint(canvas, Offset(offsetX, 0.0));
     }
   }
 
   /// Calculates the horizontal offset for text alignment
-  double _calculateTextAlignmentOffset(double containerWidth, double textWidth) {
+  double _calculateTextAlignmentOffset(
+    double containerWidth,
+    double textWidth,
+  ) {
     switch (textAlign) {
       case TextAlign.start:
       case TextAlign.left:
@@ -696,7 +706,10 @@ class LyricsLinePainter extends ChangeNotifier implements CustomPainter {
 
       // Determine the end position for this cue using endPosition if available, otherwise fallback to next cue's position
       final endPosition = cue.endPosition ?? nextCue?.position ?? text.length;
-      final cueText = text.substring(cue.position, math.min(endPosition, text.length));
+      final cueText = text.substring(
+        cue.position,
+        math.min(endPosition, text.length),
+      );
 
       if (cueText.isNotEmpty) {
         // Determine color based on timing with fade-in effect
@@ -704,19 +717,22 @@ class LyricsLinePainter extends ChangeNotifier implements CustomPainter {
 
         // Check if this word is currently being sung
         final hasReachedThisCue = currentMicros >= cue.startMicros;
-        final hasReachedNextCue = nextCue != null && currentMicros >= nextCue.startMicros;
+        final hasReachedNextCue =
+            nextCue != null && currentMicros >= nextCue.startMicros;
 
         // Calculate fade-in timing (0.5 seconds = 500,000 microseconds before the cue)
         const fadeInDurationMicros = 500000; // 0.5 seconds
         final fadeInStartTime = cue.startMicros - fadeInDurationMicros;
-        final isInFadeInPeriod = currentMicros >= fadeInStartTime && currentMicros < cue.startMicros;
+        final isInFadeInPeriod =
+            currentMicros >= fadeInStartTime && currentMicros < cue.startMicros;
 
         if (hasReachedThisCue && !hasReachedNextCue) {
           // This word/segment is currently active - highlight it
           segmentColor = highlightColor;
         } else if (isInFadeInPeriod) {
           // This word is about to become active - fade it in letter by letter with color change
-          final fadeProgress = (currentMicros - fadeInStartTime) / fadeInDurationMicros;
+          final fadeProgress =
+              (currentMicros - fadeInStartTime) / fadeInDurationMicros;
           final clampedProgress = fadeProgress.clamp(0.0, 1.0);
 
           // Calculate how many letters should be highlighted based on progress
@@ -729,7 +745,12 @@ class LyricsLinePainter extends ChangeNotifier implements CustomPainter {
             segments.add(
               TextSpan(
                 text: highlightedText,
-                style: baseStyle.copyWith(color: Color.alphaBlend(highlightColor.withOpacity(0.6), grayedColor)),
+                style: baseStyle.copyWith(
+                  color: Color.alphaBlend(
+                    highlightColor.withOpacity(0.6),
+                    grayedColor,
+                  ),
+                ),
               ),
             );
           }
@@ -744,7 +765,10 @@ class LyricsLinePainter extends ChangeNotifier implements CustomPainter {
             );
           }
 
-          lastPosition = math.max(lastPosition, math.min(endPosition, text.length));
+          lastPosition = math.max(
+            lastPosition,
+            math.min(endPosition, text.length),
+          );
           continue;
         } else {
           // All other words (past and future) - use normal grayed color
@@ -802,7 +826,10 @@ class LyricsLinePainter extends ChangeNotifier implements CustomPainter {
     coloredTextPainter.layout(minWidth: 0, maxWidth: maxWidth);
 
     // Calculate the offset based on text alignment
-    final offsetX = _calculateTextAlignmentOffset(size.width, coloredTextPainter.width);
+    final offsetX = _calculateTextAlignmentOffset(
+      size.width,
+      coloredTextPainter.width,
+    );
 
     // Paint the colored text with the calculated offset
     coloredTextPainter.paint(canvas, Offset(offsetX, 0.0));
@@ -862,7 +889,11 @@ class EnableAutoScrollButton extends StatelessWidget {
   final bool autoScrollEnabled;
   final VoidCallback? onEnableAutoScroll;
 
-  const EnableAutoScrollButton({super.key, required this.autoScrollEnabled, this.onEnableAutoScroll});
+  const EnableAutoScrollButton({
+    super.key,
+    required this.autoScrollEnabled,
+    this.onEnableAutoScroll,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -873,11 +904,21 @@ class EnableAutoScrollButton extends StatelessWidget {
               onEnableAutoScroll?.call();
             },
             backgroundColor: IconTheme.of(context).color!.withOpacity(0.70),
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
-            icon: Icon(TablerIcons.arrow_bar_to_up, size: 28.0, color: Colors.white.withOpacity(0.9)),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16.0)),
+            ),
+            icon: Icon(
+              TablerIcons.arrow_bar_to_up,
+              size: 28.0,
+              color: Colors.white.withOpacity(0.9),
+            ),
             label: Text(
               AppLocalizations.of(context)!.enableAutoScroll,
-              style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 14.0, fontWeight: FontWeight.w500),
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.9),
+                fontSize: 14.0,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           )
         : const SizedBox.shrink();
