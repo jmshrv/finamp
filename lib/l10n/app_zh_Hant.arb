@@ -1054,7 +1054,7 @@
   },
   "close": "關閉",
   "@close": {},
-  "volumeNormalizationSwitchSubtitle": "依據音量分析結果，讓每首歌曲播放時音量保持一致 (音量標準化)",
+  "volumeNormalizationSwitchSubtitle": "依據音量分析結果，讓每首歌聽起來一樣大聲 (重播增益)",
   "@volumeNormalizationSwitchSubtitle": {
     "description": "Subtitle for the switch that toggles replay gain"
   },
@@ -1223,7 +1223,7 @@
   "@itemDeletedSnackbar": {
     "description": "Used whenever item gets deleted from the device or server, message in snackbar"
   },
-  "volumeNormalizationModeSelectorDescription": "動態模式\n當連續播放同一張專輯中的多首歌曲時，會使用「專輯增益」，例如播放整張專輯或播放清單中來自同一張專輯的歌曲。否則，將改用「單曲增益」。\n\n依單曲調整\n無論播放的是整張專輯還是單曲，一律使用「單曲增益」。\n\n依專輯調整\n優先使用「專輯增益」，若該歌曲無專輯資訊（如單曲），則改用「單曲增益」。\n\n僅限專輯\n只有在播放整張專輯時才會套用音量標準化（使用專輯增益）。播放單曲時不進行音量調整。",
+  "volumeNormalizationModeSelectorDescription": "動態模式：\n當連續播放同一張專輯中的多首歌曲時，使用「專輯增益」進行音量調整（例如播放整張專輯，或播放清單中來自同一專輯的曲目）。否則，將使用「單曲增益」。\n\n依單曲調整：\n無論是否播放整張專輯，皆一律使用「單曲增益」進行音量標準化。\n\n依專輯調整：\n永遠優先使用「專輯增益」；若該歌曲無專輯資訊（例如單曲），則改用「單曲增益」。\n\n僅限專輯：\n僅在播放整張專輯時才會套用音量標準化（使用專輯增益）；播放單首歌曲時將不進行任何音量調整。",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
@@ -1282,7 +1282,7 @@
     },
     "description": "Tooltip for the album artwork on the player screen"
   },
-  "volumeNormalizationIOSBaseGainEditorSubtitle": "在 iOS 系統上，目前的音量標準化功能是透過調整播放音量來模擬增益變化。由於無法將音量提高超過 100%，因此系統預設會先將整體音量降低，這樣在遇到音量較小的曲目時，才有空間可以將其放大。這項設定的單位是分貝（dB），例如：設為 -10 dB，大約相當於 30% 的實際音量；設為 -4.5 dB，約為 60%；而 -2 dB 則接近 80% 音量。",
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "目前在 iOS 上，音量標準化的實作方式是透過調整播放音量來模擬增益變化。由於系統無法將音量提升超過 100%，因此預設會先將整體音量降低一些，這樣在遇到音量較小的歌曲時，才有空間可以將其放大。這項設定的單位是分貝（dB），例如：設為 -10 dB，大約相當於 30% 的實際音量；設為 -4.5 dB，約為 60%；而 -2 dB 則接近 80% 音量。",
   "@volumeNormalizationIOSBaseGainEditorSubtitle": {
     "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
@@ -2528,7 +2528,7 @@
   "@syncPlaybackSpeedAndPitchLabel": {
     "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
   },
-  "serverSharingMenuTitle": "區域網路伺服器共享",
+  "serverSharingMenuTitle": "區域網路伺服器分享",
   "@serverSharingMenuTitle": {
     "description": "Title for the server sharing menu that allows the user to share their server address with other devices on the local network"
   },
@@ -2638,11 +2638,11 @@
   },
   "none": "無",
   "@none": {},
-  "additionalBaseItemInfoTitle": "其它項目資訊",
+  "additionalBaseItemInfoTitle": "額外項目資訊",
   "@additionalBaseItemInfoTitle": {
     "description": "Title for the setting that controls the displayed additional item info."
   },
-  "additionalBaseItemInfoSubtitle": "控制在各類項目清單中，針對每種項目類型所顯示的額外資訊類型。當設定為「自動調整」時，系統會根據目前的排序方式或使用情境，自動選擇要顯示的資訊內容。",
+  "additionalBaseItemInfoSubtitle": "控制在各類型項目清單中要顯示哪種類型的額外資訊。當設定為「自動調整」時，系統會根據目前的排序方式或使用情境，自動選擇要顯示的資訊內容。",
   "@additionalBaseItemInfoSubtitle": {
     "description": "Subtitle for the setting that controls the displayed additional item info."
   },
@@ -2686,11 +2686,11 @@
   "@discordRPCIconWhiteTransparent": {
     "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
   },
-  "autoExpandPlayerScreenTitle": "播放開始時自動開啟播放器畫面",
+  "autoExpandPlayerScreenTitle": "播放開始時自動開啟播放介面",
   "@autoExpandPlayerScreenTitle": {
     "description": "Title for the setting that controls if the player screen is opened directly after starting a new queue"
   },
-  "autoExpandPlayerScreenSubtitle": "當開始播放新的佇列時，將自動開啟正在播放畫面",
+  "autoExpandPlayerScreenSubtitle": "開始播放新的播放佇列時，將自動開啟「現正播放」畫面",
   "@autoExpandPlayerScreenSubtitle": {
     "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
   }
