@@ -326,7 +326,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                           (nextLine == null || currentMicros < nextLine.startMicros);
 
                       return Column(
-                        key: ValueKey(line),
+                        key: ValueKey(line.startMicros),
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           if (index == 0)
