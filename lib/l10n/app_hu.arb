@@ -101,7 +101,7 @@
   "@sortBy": {},
   "sortOrder": "Rendezési sorrend",
   "@sortOrder": {},
-  "startMix": "Mix elindítása",
+  "startMix": "Mix indítása",
   "@startMix": {},
   "unknownName": "Ismeretlen név",
   "@unknownName": {},
@@ -121,7 +121,7 @@
       }
     }
   },
-  "dlEnqueued": "{count} a sorban",
+  "dlEnqueued": "{count} függőben",
   "@dlEnqueued": {
     "placeholders": {
       "count": {
@@ -129,7 +129,7 @@
       }
     }
   },
-  "dlFailed": "{count} nem sikerült",
+  "dlFailed": "{count} sikertelen",
   "@dlFailed": {
     "placeholders": {
       "count": {
