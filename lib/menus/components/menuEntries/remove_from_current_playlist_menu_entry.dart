@@ -1,6 +1,7 @@
 import 'package:finamp/components/PlayerScreen/queue_source_helper.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/components/menuEntries/menu_entry.dart';
+import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,10 @@ class RemoveFromCurrentPlaylistMenuEntry extends ConsumerWidget implements Hidea
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Visibility(
-      visible: parentItem != null && !ref.watch(finampSettingsProvider.isOffline),
+      visible:
+          parentItem != null &&
+          BaseItemDtoType.fromItem(parentItem!) == BaseItemDtoType.playlist &&
+          !ref.watch(finampSettingsProvider.isOffline),
       child: MenuEntry(
         icon: TablerIcons.playlist_x,
         title: AppLocalizations.of(context)!.removeFromPlaylistTitle,
