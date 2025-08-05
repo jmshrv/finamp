@@ -220,7 +220,7 @@
   "@enableAutoScroll": {
     "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
   },
-  "numberAsKiloHertz": "{kiloHertz} kHz",
+  "numberAsKiloHertz": "{kiloHertz} கிஎட்சு",
   "@numberAsKiloHertz": {
     "description": "Value for the sample rate of a track, in kilohertz",
     "placeholders": {
@@ -599,7 +599,7 @@
   "@enterLowPriorityStateOnPauseSubtitle": {},
   "shuffleAllTrackCount": "அனைத்து தட எண்ணிக்கையையும் மாற்றவும்",
   "@shuffleAllTrackCount": {},
-  "shuffleAllTrackCountSubtitle": "மாற்ற வேண்டிய தடங்களின் அளவு சஃபிள் அனைத்து தடங்களையும் பயன்படுத்தும் போது.",
+  "shuffleAllTrackCountSubtitle": "டிராக்குகள் தாவல் அல்லது வகைத் திரையில் சஃபிள் அனைத்து பொத்தானையும் பயன்படுத்தும் போது ஏற்ற வேண்டிய தடங்களின் அளவு.",
   "@shuffleAllTrackCountSubtitle": {},
   "viewType": "பார்வை வகை",
   "@viewType": {},
@@ -693,7 +693,7 @@
   "@showFastScroller": {},
   "hideTrackArtistsIfSameAsAlbumArtists": "ஆல்பம் கலைஞர்களைப் போலவே டிராக் கலைஞர்களையும் மறைக்கவும்",
   "@hideTrackArtistsIfSameAsAlbumArtists": {},
-  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "ஆல்பம் கலைஞர்களிடமிருந்து வேறுபடாவிட்டால் ஆல்பம் திரையில் டிராக் கலைஞர்களைக் காண்பிக்கலாமா?",
+  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "ஆல்பம் கலைஞர்களிடமிருந்து வேறுபடாவிட்டால் ஆல்பம் திரையில் டிராக் கலைஞர்களைக் காண்பிக்கலாமா.",
   "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
   "theme": "கருப்பொருள்",
   "@theme": {},
@@ -713,7 +713,7 @@
   "@yesButtonLabel": {},
   "noButtonLabel": "இல்லை",
   "@noButtonLabel": {},
-  "setSleepTimer": "பின்னணி பின்னணி",
+  "setSleepTimer": "பின்னர் பின்னணி இடைநிறுத்து",
   "@setSleepTimer": {},
   "hours": "மணி",
   "@hours": {},
@@ -745,7 +745,7 @@
   "@invalidNumber": {},
   "sleepTimerTooltip": "தூக்க நேரங்குறிகருவி",
   "@sleepTimerTooltip": {},
-  "sleepTimerRemainingTime": "{time, plural, =1{<1 நிமிடம்} other{{time} நிமிடங்கள்}}",
+  "sleepTimerRemainingTime": "உறக்கம் {time,plural,=1{<1 நிமையம்} other{{time} நிமையங்கள்}}",
   "@sleepTimerRemainingTime": {
     "description": "Button label for sleep timer. {time} is the amount of minutes left.",
     "placeholders": {
@@ -1191,11 +1191,11 @@
   "@volumeNormalizationModeSelectorSubtitle": {
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
-  "volumeNormalizationModeSelectorDescription": "கலப்பின (டிராக் + ஆல்பம்):\n ட்ராக் ஆதாயம் வழக்கமான பிளேபேக்கிற்குப் பயன்படுத்தப்படுகிறது, ஆனால் ஒரு ஆல்பம் இயங்குகிறது என்றால் (இது முக்கிய பின்னணி வரிசை மூலமாக இருப்பதால், அல்லது ஒரு கட்டத்தில் வரிசையில் சேர்க்கப்பட்டதால்), அதற்கு பதிலாக ஆல்பம் பயன்படுத்தப்படுகிறது.\n\n டிராக் அடிப்படையிலான:\n ஒரு ஆல்பம் விளையாடுகிறதா இல்லையா என்பதைப் பொருட்படுத்தாமல், ட்ராக் ஆதாயம் எப்போதும் பயன்படுத்தப்படுகிறது.\n\n ஆல்பங்கள் மட்டுமே:\n ஆல்பங்களை இயக்கும் போது மட்டுமே தொகுதி இயல்பாக்கம் பயன்படுத்தப்படுகிறது (ஆல்பத்தை ஆதாயத்தைப் பயன்படுத்தி), ஆனால் தனிப்பட்ட தடங்களுக்கு அல்ல.",
+  "volumeNormalizationModeSelectorDescription": "டைனமிக்:\nஒரே ஆல்பத்திலிருந்து பல டிராக்குகளை தொடர்ச்சியாக இயக்கும்போது, ஆல்பம் ஆதாயம் பயன்படுத்தப்படுகிறது (அதாவது ஒரு ஆல்பத்தை இயக்கும்போது அல்லது ஒரு பிளேலிஸ்ட்டில் ஒரே ஆல்பத்திலிருந்து டிராக்குகள்). இல்லையெனில், டிராக் ஆதாயம் பயன்படுத்தப்படுகிறது.\n\nடிராக் அடிப்படையிலானது:\nஒரு ஆல்பம் இயங்குகிறதா இல்லையா என்பதைப் பொருட்படுத்தாமல், டிராக் ஆதாயம் எப்போதும் பயன்படுத்தப்படுகிறது.\n\nஆல்பம் அடிப்படையிலானது:\nஆல்பம் ஆதாயம் எப்போதும் பயன்படுத்தப்படுகிறது, ஆனால் அது கிடைக்கவில்லை என்றால் (அதாவது தனிப்பாடல்களுக்கு), அதற்குப் பதிலாக டிராக் ஆதாயம் பயன்படுத்தப்படுகிறது.\n\nஆல்பங்கள் மட்டும்:\nஆல்பங்களை இயக்கும்போது (ஆல்பம் ஆதாயத்தைப் பயன்படுத்தி) ஒலியளவு இயல்பாக்கம் பயன்படுத்தப்படுகிறது, ஆனால் தனிப்பட்ட டிராக்குகளுக்கு அல்ல.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
-  "volumeNormalizationModeHybrid": "கலப்பின (டிராக் + ஆல்பம்)",
+  "volumeNormalizationModeHybrid": "இயங்கி",
   "@volumeNormalizationModeHybrid": {
     "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
   },
@@ -2445,7 +2445,7 @@
   "@preferLocalNetworkTargetAddressLocalSettingDescription": {},
   "preferLocalNetworkEnableSwitchTitle": "உள்ளக நெட்வொர்க்கை விரும்புங்கள்",
   "@preferLocalNetworkEnableSwitchTitle": {},
-  "preferLocalNetworkEnableSwitchDescription": "உங்கள் செலிஃபின் சேவையகத்தின் உள்ளக நெட்வொர்க்கில் இருக்கும்போது வேறு முகவரியைப் பயன்படுத்தலாமா வேண்டாமா?",
+  "preferLocalNetworkEnableSwitchDescription": "உங்கள் செலிஃபின் சேவையகத்தின் உள்ளக நெட்வொர்க்கில் இருக்கும்போது வேறு முகவரியைப் பயன்படுத்தலாமா வேண்டாமா",
   "@preferLocalNetworkEnableSwitchDescription": {},
   "preferLocalNetworkPublicAddressSettingTitle": "பொது முகவரி",
   "@preferLocalNetworkPublicAddressSettingTitle": {},
@@ -2544,5 +2544,171 @@
   "syncPlaybackSpeedAndPitchLabel": "விரைவு மற்றும் சுருதியை ஒத்திசைக்கவும்",
   "@syncPlaybackSpeedAndPitchLabel": {
     "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
+  },
+  "adaptive": "தகவமைப்பு",
+  "@adaptive": {},
+  "shuffleCountButton": "கலக்கு ({count,plural,=1{{count} டிராக்} other{{count} தடங்கள்}})",
+  "@shuffleCountButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "logoutButtonSubtitle": "வேறு சேவையகத்தில் உள்நுழைவது ஏற்கனவே உள்ள பதிவிறக்கங்களை நீக்கும்",
+  "@logoutButtonSubtitle": {},
+  "none": "எதுவுமில்லை",
+  "@none": {},
+  "createPlaylistFromCurrentQueue": "வரிசையை பிளேலிச்ட்டாக சேமிக்கவும்",
+  "@createPlaylistFromCurrentQueue": {
+    "description": "Label for a button that creates a new playlist from the current queue."
+  },
+  "additionalBaseItemInfoTitle": "கூடுதல் உருப்படி செய்தி",
+  "@additionalBaseItemInfoTitle": {
+    "description": "Title for the setting that controls the displayed additional item info."
+  },
+  "additionalBaseItemInfoSubtitle": "ஒவ்வொரு உருப்படி வகைக்கும் உருப்படி பட்டியல்களில் எந்த வகை கூடுதல் செய்தி காட்டப்பட்டுள்ளது என்பதைக் கட்டுப்படுத்துகிறது. \"தகவமைப்பு\" என அமைக்கப்பட்டால், தற்போதைய வரிசையாக்கம் அல்லது சூழலின் அடிப்படையில் செய்தி தானாகவே தேர்ந்தெடுக்கப்படுகிறது.",
+  "@additionalBaseItemInfoSubtitle": {
+    "description": "Subtitle for the setting that controls the displayed additional item info."
+  },
+  "serverSharingMenuTitle": "உள்ளக பிணைய சேவையக பகிர்வு",
+  "@serverSharingMenuTitle": {
+    "description": "Title for the server sharing menu that allows the user to share their server address with other devices on the local network"
+  },
+  "serverSharingMenuButtonTitle": "சேவையகத்தைப் பகிரவும்",
+  "@serverSharingMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the server sharing menu"
+  },
+  "serverSharingMenuConfirmationDialogText": "நீங்கள் இணைப்பில்லாத பயன்முறையில் இருந்தாலும் சேவையக பகிர்வை இயக்க விரும்புகிறீர்களா? இது உள்ளக நெட்வொர்க்கில் தரவை அனுப்ப ஃபினாம்ப் வழிவகுக்கும்.",
+  "@serverSharingMenuConfirmationDialogText": {
+    "description": "Dialog text shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuConfirmationDialogConfirmationButtonLabel": "உறுதிப்படுத்தவும் இயக்கவும்",
+  "@serverSharingMenuConfirmationDialogConfirmationButtonLabel": {
+    "description": "Positive action label for the dialog shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuControlTitleSharingEnabled": "பகிர்வு சேவையகம்",
+  "@serverSharingMenuControlTitleSharingEnabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuControlSubtitleSharingDisabled": "பகிர்ந்து கொள்ள தட்டவும்",
+  "@serverSharingMenuControlSubtitleSharingDisabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlTitleSharingDisabled": "பகிர்வு இல்லை",
+  "@serverSharingMenuControlTitleSharingDisabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlSubtitleSharingEnabled": "நிறுத்த தட்டவும்",
+  "@serverSharingMenuControlSubtitleSharingEnabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuDescription": "உங்கள் செலிஃபின் சேவையகத்தின் அதே உள்ளக நெட்வொர்க்கில் இல்லாத புதிய வாடிக்கையாளர்களை அமைக்க உங்கள் சேவையக முகவரியைப் பகிர்வது பயனுள்ளதாக இருக்கும், அதாவது ஓட்டல் டிவிகள், உங்கள் கணினியில் உங்கள் பிசி அல்லது நீங்கள் பயணத்தின்போது உங்கள் தொலைபேசியில் ஒரு புதிய வாங்கி.",
+  "@serverSharingMenuDescription": {
+    "description": "Description text shown in the server sharing menu, right below the controls"
+  },
+  "serverSharingMenuDetails": "உள்ளக நெட்வொர்க்கில் உள்ள பிற வாடிக்கையாளர்களின் சேவையக கண்டுபிடிப்பு கோரிக்கைகளைக் கேட்பதன் மூலமும், பின்னர் உங்கள் செலிஃபின் சேவையகத்தின் உள்ளமைக்கப்பட்ட முகவரியுடன் அந்த கோரிக்கைகளுக்கு பதிலளிப்பதன் மூலமும் இது செயல்படுகிறது. \nஉங்களிடம் உள்ளக மற்றும் பொது முகவரி உள்ளமைக்கப்பட்டிருந்தால், ஃபைச்பாம்ப் கோரும் வாடிக்கையாளருக்கு இரண்டையும் வழங்கும்.",
+  "@serverSharingMenuDetails": {
+    "description": "Description text shown in the server sharing menu, below the description"
+  },
+  "quickConnectAuthorizationMenuButtonTitle": "விரைவான இணைப்பை அங்கீகரிக்கவும்",
+  "@quickConnectAuthorizationMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuPrompt": "விரைவான இணைப்பு குறியீட்டை உள்ளிடவும்",
+  "@quickConnectAuthorizationMenuPrompt": {
+    "description": "Title for the button in server sharing menu that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuTitle": "விரைவான இணைப்பு கோரிக்கையை அங்கீகரிக்கவும்",
+  "@quickConnectAuthorizationMenuTitle": {
+    "description": "Title for the quick connect authorization menu that allows the user to authorize a quick connect request from another device"
+  },
+  "quickConnectAuthorizationMenuInputLabel": "விரைவான இணைப்பு குறியீடு",
+  "@quickConnectAuthorizationMenuInputLabel": {
+    "description": "Label for the quick connect code input, shown below the input field"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleIdle": "கீழே உள்ள குறியீட்டை உள்ளிடவும் அல்லது ஒட்டவும்",
+  "@quickConnectAuthorizationMenuStateSubtitleIdle": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) while the code hasn't been submitted yet"
+  },
+  "quickConnectAuthorizationMenuStateTitleProcessing": "கோரிக்கையை அங்கீகரிக்க முயற்சிக்கிறது",
+  "@quickConnectAuthorizationMenuStateTitleProcessing": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) while a request is being processed"
+  },
+  "quickConnectAuthorizationMenuStateTitleSuccess": "அங்கீகரிக்கப்பட்டதை வெற்றிகரமாகக் கோருங்கள்",
+  "@quickConnectAuthorizationMenuStateTitleSuccess": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was successful"
+  },
+  "quickConnectAuthorizationMenuStateTitleFailed": "விரைவான இணைப்பு குறியீடு தவறானது",
+  "@quickConnectAuthorizationMenuStateTitleFailed": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleFailed": "குறியீட்டைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்",
+  "@quickConnectAuthorizationMenuStateSubtitleFailed": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuDescription": "விரைவு இணைப்பு வழியாக மற்றொரு செல்லிஃபின் கிளையண்டில் உள்நுழைய முயற்சிக்கிறீர்கள் என்றால், மேலே உள்ள புலத்தில் 6 இலக்க குறியீட்டை உள்ளிடலாம் அல்லது ஒட்டலாம். இது மற்ற கிளையண்டின் கோரிக்கையில் அடையாளத்தை அங்கீகரிக்கும், மேலும் நீங்கள் ஃபினாம்பிற்குப் பயன்படுத்தும் அதே கணக்கில் உங்களை உள்நுழைக.",
+  "@quickConnectAuthorizationMenuDescription": {
+    "description": "Description for the quick connect authorization menu, shown at the bottom"
+  },
+  "accessibility": "அணுகல்",
+  "@accessibility": {
+    "description": "Title for the accessibility settings screen"
+  },
+  "useHighContrastColorsTitle": "அதிக மாறுபட்ட வண்ணங்களைப் பயன்படுத்துங்கள்",
+  "@useHighContrastColorsTitle": {
+    "description": "Title for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "useHighContrastColorsSubtitle": "சிறந்த தெரிவுநிலைக்கு உயர் மாறுபட்ட மாறும் வண்ணங்களைப் பயன்படுத்தவும்.",
+  "@useHighContrastColorsSubtitle": {
+    "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "discordRPCSettingTitle": "முரண்பாடு RPC",
+  "@discordRPCSettingTitle": {
+    "description": "Title for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCSettingDescription": "உங்கள் முரண்பாடான நிலையில் நீங்கள் என்ன விளையாடுகிறீர்கள் என்பதைக் காட்ட முரண்பாடு நிறைந்த இருப்பை இயக்கவும். இணைப்பில்லாத பயன்முறை இயக்கப்பட்டிருந்தால் முரண்பாட்டுடன் இணைக்க வேண்டாம்.",
+  "@discordRPCSettingDescription": {
+    "description": "Description for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCIconSettingTitle": "RPC குறைவடையும் படவுரு",
+  "@discordRPCIconSettingTitle": {
+    "description": "Title for the setting that controls which icon gets shown in the Discord RPC (Rich Presence) in case the local address is in use"
+  },
+  "discordRPCIconSettingDescription": "பொது முகவரி எதுவும் கண்டறியப்படாதபோது காண்பிக்கப்படும் குறைவடையும் படவுரு. (டிச்கார்ட் உள்ளக முகவரியிலிருந்து படங்களை ஏற்ற முடியாது என்பதால், அவற்றின் குறைவடைப்பைப் பயன்படுத்தும்)",
+  "@discordRPCIconSettingDescription": {
+    "description": "Description for the setting that controls which Icon the discord RPC displays as a Fallback in case no public address is detected (it doenst matter what connection is active)."
+  },
+  "discordRPCIconDark": "பொருள் - இருண்ட",
+  "@discordRPCIconDark": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with the Dark-Theme Background"
+  },
+  "discordRPCIconBlack": "பொருள் - கருப்பு",
+  "@discordRPCIconBlack": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Black Background"
+  },
+  "discordRPCIconLight": "பொருள் - வெள்ளை",
+  "@discordRPCIconLight": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a White Background"
+  },
+  "discordRPCIconJFTransparent": "செல்லிஃபின் - வெளிப்படையானது",
+  "@discordRPCIconJFTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Jellyfin logo with a Transparent Background"
+  },
+  "discordRPCIconTransparent": "பொருள் - வெளிப்படையானது",
+  "@discordRPCIconTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Transparent Background"
+  },
+  "discordRPCIconWhiteTransparent": "வெள்ளை பொருள் - வெளிப்படையானது",
+  "@discordRPCIconWhiteTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
+  },
+  "autoExpandPlayerScreenTitle": "பிளேபேக் தொடக்கத்தில் பிளேயர் திரையைத் திறக்கவும்",
+  "@autoExpandPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "autoExpandPlayerScreenSubtitle": "புதிய வரிசையின் பிளேபேக்கைத் தொடங்கும்போது இது இப்போது இயங்கும் திரையைத் திறக்கும்",
+  "@autoExpandPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
   }
 }

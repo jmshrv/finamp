@@ -946,11 +946,11 @@
   "@downloadBitrateSubtitle": {
     "description": "subtitle for Download Bitrate settings slider"
   },
-  "volumeNormalizationModeSelectorDescription": "Гібридно (Композиція + Альбом):\nПосилення композицій застосовується для звичайного відтворення, але якщо відтворюється альбом (коли це головне джерело відтворення черги, чи його було додано до черги якимось чином), тоді буде застосовано посилення альбому.\n\nНа основі композицій:\nПосилення композицій застосовується завжди, незалежно від того чи відтворюється альбом, чи ні.\n\nНа основі альбому:\nНормалізація гучності застосовується лише при відтворені альбомів (застосування посилення альбомів), не для окремих композицій.",
+  "volumeNormalizationModeSelectorDescription": "Динамічне:\nПід час відтворення кількох треків з одного альбому поспіль використовується посилення альбому (тобто під час відтворення альбому або треків з одного альбому у списку відтворення). В іншому випадку використовується посилення треку.\n\nНа основі треку:\nПосилення треку використовується завжди, незалежно від того, чи відтворюється альбом, чи ні.\n\nНа основі альбому:\nПосилення альбому використовується завжди, але якщо воно недоступне (тобто для синглів), використовується посилення треку.\n\nТільки альбоми:\nНормалізація гучності застосовується лише під час відтворення альбомів (з використанням посилення альбому), але не для окремих треків.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
-  "volumeNormalizationModeHybrid": "Гібридно (Композиція + Альбом)",
+  "volumeNormalizationModeHybrid": "Динамічний",
   "@volumeNormalizationModeHybrid": {
     "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
   },
@@ -2685,5 +2685,13 @@
   "discordRPCIconWhiteTransparent": "Білий Finamp - прозорий",
   "@discordRPCIconWhiteTransparent": {
     "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
+  },
+  "autoExpandPlayerScreenTitle": "Відкрити екран програвача на початку відтворення",
+  "@autoExpandPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "autoExpandPlayerScreenSubtitle": "Це відкриє екран відтворення під час початку відтворення нової черги",
+  "@autoExpandPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
   }
 }

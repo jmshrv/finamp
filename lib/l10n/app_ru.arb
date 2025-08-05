@@ -835,7 +835,7 @@
   "@volumeNormalizationModeTrackBased": {
     "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
   },
-  "volumeNormalizationModeSelectorDescription": "Гибридный (Композиция + Альбом):\nУровень громкости композиции используется при обычном воспроизведении, но если воспроизводится альбом (либо потому, что он является основным источником очереди воспроизведения, либо потому, что был добавлен в очередь в какой-то момент), используется уровень громкости альбома.\n\nНа основе композиции:\nУровень громкости композиции используется всегда, независимо от того, воспроизводится альбом или нет.\n\nТолько для альбомов:\nНормализация громкости применяется только при воспроизведении альбомов (с использованием уровня громкости альбома), но не для отдельных композиций.",
+  "volumeNormalizationModeSelectorDescription": "Динамический:\nПри воспроизведении нескольких треков подряд из одного альбома используется громкость альбома (т. е. при воспроизведении альбома или треков из одного альбома в плейлисте). В противном случае используется громкость трека.\n\nНа основе композиции:\nУровень громкости композиции используется всегда, независимо от того, воспроизводится альбом или нет.\n\nНа основе альбома:\nУровень громкости альбома используется всегда, но если он не доступен (например для синглов), используется громкость трека.\n\nТолько для альбомов:\nНормализация громкости применяется только при воспроизведении альбомов (с использованием уровня громкости альбома), но не для отдельных композиций.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
@@ -1442,7 +1442,7 @@
   "@volumeNormalizationModeSelectorSubtitle": {
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
-  "volumeNormalizationModeHybrid": "Гибридный (Композиция + Альбом)",
+  "volumeNormalizationModeHybrid": "Динамический",
   "@volumeNormalizationModeHybrid": {
     "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
   },
@@ -2689,5 +2689,13 @@
   "discordRPCIconWhiteTransparent": "Белый Finamp - Прозрачный",
   "@discordRPCIconWhiteTransparent": {
     "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
+  },
+  "autoExpandPlayerScreenTitle": "Открывать Экран Плеера по Началу Воспроизведения",
+  "@autoExpandPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "autoExpandPlayerScreenSubtitle": "Будет открывать экран плеера, когда вы начинаете воспрозведение новой очереди",
+  "@autoExpandPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
   }
 }

@@ -883,7 +883,7 @@
   "@volumeNormalizationModeSelectorSubtitle": {
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
-  "volumeNormalizationModeHybrid": "Hybridní (skladba + album)",
+  "volumeNormalizationModeHybrid": "Dynamická",
   "@volumeNormalizationModeHybrid": {
     "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
   },
@@ -1737,7 +1737,7 @@
   "@sampleRate": {
     "description": "Label for the feature chips showing the sample rate of a track"
   },
-  "volumeNormalizationModeSelectorDescription": "Hybridní (skladba + album):\nZesílení skladby bude použito pro klasické přehrávání, pokud ale hraje album (buď protože je hlavním zdrojem fronty přehrávání, nebo protože bylo v určitém bodě přidáno do fronty), bude namísto toho použito zesílení alba.\n\nPodle skladby:\nVždy bude použito zesílení skladby, nezávisle na tom, zda hraje album.\n\nPouze alba:\nNormalizace hlasitosti bude použita pouze při přehrávání alb (použitím zesílení alba), ale ne pro jednotlivé skladby.",
+  "volumeNormalizationModeSelectorDescription": "Dynamická:\nPři přehrávání více skladeb ze stejného alba za sebou bude použito zesílení alba (např. během přehrávání alba nebo skladeb ze stejného alba v seznamu skladeb). V opačném případě bude použito zesílení skladby.\n\nPodle skladby:\nVždy bude použito zesílení skladby, nezávisle na tom, zda hraje album.\n\nPodle alba:\nVždy bude použito zesílení alba, ale pokud není dostupné (např. u singlů), bude použito zesílení skladby.\n\nPouze alba:\nNormalizace hlasitosti bude použita pouze při přehrávání alb (použitím zesílení alba), ale ne pro jednotlivé skladby.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
@@ -2683,5 +2683,13 @@
   "discordRPCIconWhiteTransparent": "Bílý Finamp - Průhledná",
   "@discordRPCIconWhiteTransparent": {
     "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
+  },
+  "autoExpandPlayerScreenTitle": "Otevřít obrazovku přehrávače při spuštění přehrávání",
+  "@autoExpandPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "autoExpandPlayerScreenSubtitle": "Toto otevře obrazovku Právě hraje při spuštění přehrávání nové fronty",
+  "@autoExpandPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
   }
 }

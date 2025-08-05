@@ -777,11 +777,11 @@
   "@playbackOrderLinearButtonLabel": {
     "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
   },
-  "volumeNormalizationModeSelectorDescription": "Híbrido (Faixa + Álbum):\nO ganho da faixa é usado para reprodução normal, mas, se um álbum estiver a ser reproduzido (seja porque é a principal fonte da fila de reprodução ou porque foi adicionado à fila em algum momento), o ganho do álbum será usado em vez disso.\n\nBaseado em Faixas:\nO ganho da faixa é sempre usado, independentemente de um álbum estar a ser reproduzido ou não.\n\nApenas Álbuns:\nA Normalização de Volume é aplicada apenas ao reproduzir álbuns (usando o ganho do álbum), mas não para faixas individuais.",
+  "volumeNormalizationModeSelectorDescription": "Dinâmico:\nAo tocar várias faixas do mesmo álbum alinhadas, é usado o ganho do álbum (isto é, ao tocar um álbum, ou faixas do mesmo álbum numa lista). Caso contrário, é usado o ganho da faixa.\n\nBaseado em Faixas:\nO ganho da faixa é sempre usado, independentemente de um álbum estar a ser reproduzido ou não.\n\nBaseado em Álbum:\nÉ sempre usado o ganho do álbum, mas se não estiver disponível (nos singles), então é usado o ganho da faixa.\n\nApenas Álbuns:\nA normalização de volume é aplicada apenas ao reproduzir álbuns (usando o ganho do álbum), mas não para faixas individuais.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
-  "volumeNormalizationModeHybrid": "Híbrido (Faixa + Álbum)",
+  "volumeNormalizationModeHybrid": "Dinâmico",
   "@volumeNormalizationModeHybrid": {
     "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
   },
@@ -2693,5 +2693,13 @@
   "discordRPCIconWhiteTransparent": "Finamp Branco - Transparente",
   "@discordRPCIconWhiteTransparent": {
     "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
+  },
+  "autoExpandPlayerScreenTitle": "Abrir Ecrã de Reprodutor no Inicio de Reprodução",
+  "@autoExpandPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "autoExpandPlayerScreenSubtitle": "Isto irá abrir o ecrã agora a tocar quando se inicia reprodução duma nova fila",
+  "@autoExpandPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
   }
 }

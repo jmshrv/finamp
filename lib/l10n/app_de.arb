@@ -1066,7 +1066,7 @@
   "@volumeNormalizationModeSelectorSubtitle": {
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
-  "volumeNormalizationModeHybrid": "Hybrid (Track + Album)",
+  "volumeNormalizationModeHybrid": "Dynamisch",
   "@volumeNormalizationModeHybrid": {
     "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
   },
@@ -1637,7 +1637,7 @@
   "@oneLineMarqueeTextButton": {},
   "marqueeOrTruncateButtonSubtitle": "Am Ende zu langer Tracktitel … anzeigen, statt zu scrollen",
   "@marqueeOrTruncateButtonSubtitle": {},
-  "volumeNormalizationModeSelectorDescription": "Hybrid (Track + Album):\nFür normales Playback wird der Track Gain benutzt. Wenn ein Album gespielt wird (entweder direkt oder weil es irgendwann zur Warteschlange hinzugefügt wurde), wird stattdessen der Album-Gain verwendet.\n\nTrack-basiert:\nEs wird immer der Track Gain verwendet, selbst wenn ein ganzes Album gespielt wird.\n\nNur Alben:\nLautstärken-Normalisierung wird nur bei der Wiedergabe von Alben (mit dem Album Gain) angewendet, aber nicht für individuelle Tracks.",
+  "volumeNormalizationModeSelectorDescription": "Dynamisch\nBeim Abspielen mehrerer Tracks eines Albums in Reihenfolge (z.B. beim Spielen eines Albums, oder wenn Titel des gleichen Albums in einer Playlist sind) wird der Album Gain verwendet. Ansonsten wird der Track Gain verwendet.\n\nTrack-basiert:\nEs wird immer der Track Gain verwendet, selbst wenn ein ganzes Album gespielt wird.\n\nAlbum-basiert:\nDer Album Gain wird immer verwendet, es sei denn dieser ist nicht vorhanden (z.B. bei Singles). In diesem Fall wird stattdessen der Track-Gain verwendet.\n\nNur Alben:\nLautstärken-Normalisierung wird nur bei der Wiedergabe von Alben (mit dem Album Gain) angewendet, aber nicht für individuelle Tracks.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
@@ -2675,5 +2675,13 @@
   "discordRPCIconWhiteTransparent": "Finamp weiß - Transparent",
   "@discordRPCIconWhiteTransparent": {
     "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
+  },
+  "autoExpandPlayerScreenTitle": "Beim Playback-Start den Player öffnen",
+  "@autoExpandPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "autoExpandPlayerScreenSubtitle": "Beim Starten einer neuen Warteschlange wird der Player geöffnet",
+  "@autoExpandPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
   }
 }

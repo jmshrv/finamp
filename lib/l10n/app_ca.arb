@@ -1030,5 +1030,55 @@
         "type": "String"
       }
     }
+  },
+  "startupErrorCallToAction": "Sisplau crea un issue a \"github.com/jmshrv/finamp\" amb els logs (utilitza el botó de sota) i una captura de pantalla d'aquesta pàgina, de tal manera que ho puguem resoldre tan ràpid com sigui possible.",
+  "@startupErrorCallToAction": {
+    "description": "The subtitle / call to action for what to do after encountering a startup error"
+  },
+  "startupErrorTitle": "S'ha produït un error en iniciar l'aplicació!",
+  "@startupErrorTitle": {
+    "description": "The title for the error screen that shows when startup fails."
+  },
+  "startupErrorWorkaround": "Com a solució temporal a l'error, pots esborrar les dades de l'aplicació per restablir-la. Tingues en compte que, en aquest cas, se suprimiran tots els ajustos i descàrregues.",
+  "@startupErrorWorkaround": {
+    "description": "The subtitle for how to manually recover from a startup error"
+  },
+  "allLibraries": "Totes les llibreries",
+  "@allLibraries": {
+    "description": "All Libraries"
+  },
+  "appearsOnAlbums": "Apareix a",
+  "@appearsOnAlbums": {},
+  "noGenres": "Sense gèneres",
+  "@noGenres": {
+    "description": "Gets shown when there are no genres available for an album or artist"
+  },
+  "favorite": "Preferit",
+  "@favorite": {},
+  "favorites": "Preferits",
+  "@favorites": {},
+  "onlineMode": "Mode en línia",
+  "@onlineMode": {},
+  "albumArtists": "Artistes de l'àlbum",
+  "@albumArtists": {},
+  "performingArtists": "Artistes intèrprets",
+  "@performingArtists": {},
+  "performingArtist": "Intèrpret",
+  "@performingArtist": {},
+  "duration": "Durada",
+  "@duration": {},
+  "defaultOrder": "Ordre per defecte",
+  "@defaultOrder": {
+    "description": "Default sorting order for playlists (server order)"
+  },
+  "adaptive": "Adaptatiu",
+  "@adaptive": {},
+  "libraryDownloads": "Descàrregues de la biblioteca",
+  "@libraryDownloads": {
+    "description": "Title for the library downloads section on the downloads screen."
+  },
+  "playbackActionPagePlay": "Reproduir",
+  "@playbackActionPagePlay": {
+    "description": "Label for the playback action page that contains all actions related to playing in order"
   }
 }
