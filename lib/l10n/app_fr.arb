@@ -1150,7 +1150,7 @@
   "@volumeNormalizationModeHybrid": {
     "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
   },
-  "volumeNormalizationModeTrackBased": "En fonction de la piste",
+  "volumeNormalizationModeTrackBased": "Basé sur le titre",
   "@volumeNormalizationModeTrackBased": {
     "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
   },
@@ -2695,5 +2695,13 @@
   "ping": "{status, select, true_true{Les deux sont accessibles} true_false{Échec de l'accès à l'adresse locale} false_true{Échec de l'accès à l'adresse publique} false_false{Échec de l'accès aux deux} other{inconnu}}",
   "@ping": {
     "description": "Gets shown in the Snackbar when using the Test Connection Button inside the Network Settings. true means reachable, false means unreachable. the first value is for the public address, the second value is fot the home address."
+  },
+  "autoExpandPlayerScreenTitle": "Ouvrir l'écran du lecteur au démarrage de la lecture",
+  "@autoExpandPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "autoExpandPlayerScreenSubtitle": "Cela ouvrira l'écran de lecture en cours lors du démarrage de la lecture d'une nouvelle file d'attente",
+  "@autoExpandPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
   }
 }
