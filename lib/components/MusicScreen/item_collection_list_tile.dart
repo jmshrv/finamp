@@ -203,7 +203,7 @@ class ItemCollectionListTile extends ConsumerWidget {
       // get updated context after the theme is applied
       builder: (context) {
         return ListTile(
-          // textColor: Theme.of(context).textTheme.bodyLarge?.color,
+          textColor: Theme.of(context).textTheme.bodyLarge?.color,
           tileColor: Theme.of(context).colorScheme.surfaceContainer,
           contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: !showSubtitle ? 8.0 : 0.0),
           onTap: onTap,
