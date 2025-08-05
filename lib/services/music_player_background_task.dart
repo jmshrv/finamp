@@ -321,14 +321,17 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
 
     double prevIosGain = FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain;
     bool? prevNormActive = FinampSettingsHelper.finampSettings.volumeNormalizationActive;
+    VolumeNormalizationMode prevNormMode = FinampSettingsHelper.finampSettings.volumeNormalizationMode;
     FinampSettingsHelper.finampSettingsListener.addListener(() {
       var iosGain = FinampSettingsHelper.finampSettings.volumeNormalizationIOSBaseGain;
       var normalizationActive = FinampSettingsHelper.finampSettings.volumeNormalizationActive;
-      if (iosGain == prevIosGain && normalizationActive == prevNormActive) {
+      var normalizationMode = FinampSettingsHelper.finampSettings.volumeNormalizationMode;
+      if (iosGain == prevIosGain && normalizationActive == prevNormActive && normalizationMode == prevNormMode) {
         return;
       }
       prevIosGain = iosGain;
       prevNormActive = normalizationActive;
+      prevNormMode = normalizationMode;
       // update replay gain settings every time settings are changed
       iosBaseVolumeGainFactor =
           pow(10.0, iosGain / 20.0)
@@ -343,8 +346,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
       }
     });
 
-    // This is called each time queue (or at least previous and next items in it)
-    // This unintended behavior is actually used to recalculate the `Dynamic` 4
+    // This is called each time queue (or at least previous and next items in it) changes
+    // This unintended behavior is actually used to recalculate the `Dynamic`
     // normalization gain mode.
     // if user adds a track from the same album next to queue or makes previous
     // and next track in the queue not from the same album anymore (e.g. by
@@ -353,9 +356,12 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
     // audible volume change).
     // This is possible because this callback is called on each queue change
     mediaItem.listen((currentTrack) {
-      sleepTimer?.onTrackCompleted();
-
       _applyVolumeNormalization(currentTrack);
+    });
+
+    // But sleepTimer doesn't want to listen on queue changes
+    mediaItem.distinct().listen((currentTrack) {
+      sleepTimer?.onTrackCompleted();
     });
 
     // trigger sleep timer early if we're almost at the end of the final track

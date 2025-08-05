@@ -65,6 +65,7 @@
               jdk17
               androidComposition.platform-tools
               cmake
+              rustup
             ];
           };
       }
