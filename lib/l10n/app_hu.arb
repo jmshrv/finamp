@@ -3,13 +3,13 @@
   "@applicationLegalese": {},
   "sleepTimerTooltip": "Elalvás időzítő",
   "@sleepTimerTooltip": {},
-  "shuffleAllTrackCount": "Az összes szám véletlenszerű lejátszása",
+  "shuffleAllTrackCount": "Összes dal keverési listájának száma",
   "@shuffleAllTrackCount": {},
   "updateButtonLabel": "Frissítés",
   "@updateButtonLabel": {},
   "username": "Felhasználónév",
   "@username": {},
-  "gridCrossAxisCount": "{value} rács kereszttengelyek száma",
+  "gridCrossAxisCount": "Oszlopok száma {value} módban",
   "@gridCrossAxisCount": {
     "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -145,7 +145,7 @@
       }
     }
   },
-  "downloadLocations": "Letöltési hely",
+  "downloadLocations": "Letöltési helyek",
   "@downloadLocations": {},
   "downloadsQueued": "Fájlok letöltése",
   "@downloadsQueued": {},
@@ -155,11 +155,11 @@
   "@enableTranscoding": {},
   "error": "Hiba",
   "@error": {},
-  "failedToGetTrackFromDownloadId": "Nem sikerült lekérni a számot a letöltési azonosítóból",
+  "failedToGetTrackFromDownloadId": "Nem sikerült lekérni a dalt a letöltési azonosító alapján",
   "@failedToGetTrackFromDownloadId": {},
   "enableTranscodingSubtitle": "Átkódolja a zenei streameket a szerver oldalon.",
   "@enableTranscodingSubtitle": {},
-  "layoutAndTheme": "Elrendezés & Téma",
+  "layoutAndTheme": "Elrendezés és téma",
   "@layoutAndTheme": {},
   "location": "Elhelyezkedés",
   "@location": {},
@@ -197,7 +197,7 @@
   "@addDownloadLocation": {},
   "bitrateSubtitle": "A nagyobb bitráta jobb hangminőséget biztosít nagyobb sávszélesség mellett. Nem vonatkozik a veszteségmentes codec-ekre, pl. FLAC",
   "@bitrateSubtitle": {},
-  "gridCrossAxisCountSubtitle": "A soronként használandó rácscsempék száma {value} esetén.",
+  "gridCrossAxisCountSubtitle": "Oszlopok száma {value} rácsnézetben.",
   "@gridCrossAxisCountSubtitle": {
     "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
     "placeholders": {
@@ -207,7 +207,7 @@
       }
     }
   },
-  "shuffleAllTrackCountSubtitle": "A betöltendő zeneszámok száma, amikor a zeneszámok lapon vagy a műfaj képernyőn az összes keverése gombot használja.",
+  "shuffleAllTrackCountSubtitle": "A betöltendő dalok száma, amikor a dalok lapján vagy a műfaj képernyőn az összes keverése gombot használja.",
   "@shuffleAllTrackCountSubtitle": {},
   "appDirectory": "Alkalmazás Könyvtára",
   "@appDirectory": {},
@@ -217,17 +217,17 @@
   "@customLocationsBuggy": {},
   "directoryMustBeEmpty": "A könyvtárnak üresnek kell lennie",
   "@directoryMustBeEmpty": {},
-  "enterLowPriorityStateOnPause": "Lépjen az Alacsony-prioritású állapotba a Szünet módban",
+  "enterLowPriorityStateOnPause": "Alacsony prioritású állapotba lépés szüneteltetéskor",
   "@enterLowPriorityStateOnPause": {},
   "grid": "Rács",
   "@grid": {},
-  "landscape": "Fekvő",
+  "landscape": "fekvő",
   "@landscape": {},
   "list": "Lista",
   "@list": {},
   "pathReturnSlashErrorMessage": "A „/” karaktert használó elérési utak nem értelmezhetőek",
   "@pathReturnSlashErrorMessage": {},
-  "portrait": "Álló",
+  "portrait": "álló",
   "@portrait": {},
   "selectDirectory": "Könyvtár kiválasztása",
   "@selectDirectory": {},
@@ -319,7 +319,7 @@
   "@setSleepTimer": {},
   "startingInstantMix": "Instant mix indítása.",
   "@startingInstantMix": {},
-  "tabs": "Tabok",
+  "tabs": "Lapok",
   "@tabs": {},
   "unknownArtist": "Ismeretlen Előadó",
   "@unknownArtist": {},
@@ -354,7 +354,7 @@
   "@yesButtonLabel": {},
   "addToMix": "Hozzáadás a Mix-hez",
   "@addToMix": {},
-  "showTextOnGridViewSubtitle": "Megjelenik-e a szöveg (cím, előadó stb.) a rácszene képernyőn.",
+  "showTextOnGridViewSubtitle": "Megjelenjen-e a szöveg (cím, előadó stb.) a rácsos zenei képernyőn.",
   "@showTextOnGridViewSubtitle": {},
   "useCoverAsBackgroundSubtitle": "Használja-e az elmosódott borítót háttérként a lejátszó képernyőjén.",
   "@useCoverAsBackgroundSubtitle": {},
@@ -366,7 +366,7 @@
       }
     }
   },
-  "trackCount": "{count,plural,=1{{count} szám} other{{count} szám}}",
+  "trackCount": "{count,plural,=1{{count} dal} other{{count} dal}}",
   "@trackCount": {
     "placeholders": {
       "count": {
@@ -997,7 +997,7 @@
   "@playbackSpeedControlSettingSubtitle": {
     "description": "Subtitle for the playback speed visibility setting"
   },
-  "playbackSpeedControlSettingDescription": "Automatikus:\nA Finamp megpróbálja azonosítani, hogy a lejátszott zeneszám podcast vagy hangoskönyv (része). Ez akkor történik így, ha a dal hosszabb, mint {trackDuration} perc, ha a dal albuma hosszabb, mint {albumDuration} óra, vagy ha a zeneszámhoz legalább egy ilyen műfaj van hozzárendelve: {genreList}\nEkkor a lejátszás sebességének vezérlése megjelenik a lejátszó képernyőmenüjében.\n\nMegjelenítve:\nA lejátszási sebességvezérlők mindig megjelennek a lejátszási képernyő menüjében.\n\nElrejtve:\nA lejátszási sebességvezérlők a lejátszási képernyő menüjében mindig el lesznek rejtve.",
+  "playbackSpeedControlSettingDescription": "Automatikus:\nA Finamp megpróbálja azonosítani, hogy a lejátszott dal podcast vagy hangoskönyv (része). Ez akkor történik így, ha a dal hosszabb, mint {trackDuration} perc, ha a dal albuma hosszabb, mint {albumDuration} óra, vagy ha a dalhoz legalább egy ilyen műfaj van hozzárendelve: {genreList}\nEkkor a lejátszás sebességének vezérlése megjelenik a lejátszó képernyőmenüjében.\n\nMegjelenítve:\nA lejátszási sebességvezérlők mindig megjelennek a lejátszási képernyő menüjében.\n\nElrejtve:\nA lejátszási sebességvezérlők a lejátszási képernyő menüjében mindig el lesznek rejtve.",
   "@playbackSpeedControlSettingDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
     "placeholders": {
@@ -1203,11 +1203,11 @@
   "@bufferSizeSubtitle": {},
   "language": "Nyelv",
   "@language": {},
-  "skipToPreviousTrackButtonTooltip": "Ugrás az elejére vagy az előző számra",
+  "skipToPreviousTrackButtonTooltip": "Ugrás az elejére vagy az előző dalra",
   "@skipToPreviousTrackButtonTooltip": {
     "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
   },
-  "skipToNextTrackButtonTooltip": "Ugrás a következő számra",
+  "skipToNextTrackButtonTooltip": "Ugrás a következő dalra",
   "@skipToNextTrackButtonTooltip": {
     "description": "Tooltip for the button that skips to the next track"
   },
@@ -1215,7 +1215,7 @@
   "@togglePlaybackButtonTooltip": {
     "description": "Tooltip for the button that toggles playback"
   },
-  "previousTracks": "Előző számok",
+  "previousTracks": "Előző dalok",
   "@previousTracks": {
     "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
   },
@@ -1231,25 +1231,25 @@
   "@stopAndClearQueue": {
     "description": "Label for a button that stops playback and removes all tracks from the queue."
   },
-  "latestTracks": "Legújabb számok",
+  "latestTracks": "Legújabb dalok",
   "@latestTracks": {},
   "latestAlbums": "Legújabb albumok",
   "@latestAlbums": {},
   "latestArtists": "Legújabb előadók",
   "@latestArtists": {},
-  "recentlyPlayedTracks": "Legutóbb játszott számok",
+  "recentlyPlayedTracks": "Legutóbb játszott dalok",
   "@recentlyPlayedTracks": {},
   "recentlyPlayedAlbums": "Legutóbb játszott albumok",
   "@recentlyPlayedAlbums": {},
   "recentlyPlayedArtists": "Legutóbb játszott előadók",
   "@recentlyPlayedArtists": {},
-  "favoriteTracks": "Kedvenc számok",
+  "favoriteTracks": "Kedvenc dalok",
   "@favoriteTracks": {},
   "favoriteAlbums": "Kedvenc albumok",
   "@favoriteAlbums": {},
   "favoriteArtists": "Kedvenc előadók",
   "@favoriteArtists": {},
-  "randomTracks": "Számok (véletlenszerű)",
+  "randomTracks": "Dalok (véletlenszerű)",
   "@randomTracks": {},
   "randomAlbums": "Albumok (véletlenszerű)",
   "@randomAlbums": {},
@@ -1283,11 +1283,11 @@
   "@genreItemSectionFilterChipOrderSubtitle": {
     "description": "Description of the setting that controls the order of item sections filter chips."
   },
-  "artistItemSectionFilterChipOrderTitle": "Számok szekció szűrő rendezés",
+  "artistItemSectionFilterChipOrderTitle": "Dalok szekció szűrő rendezés",
   "@artistItemSectionFilterChipOrderTitle": {
     "description": "Label for the setting that controls the order of the tracks sections filter chips."
   },
-  "artistItemSectionFilterChipOrderSubtitle": "Szabályozza az számok szekcióban rendelkezésre álló szűrők sorrendjét.",
+  "artistItemSectionFilterChipOrderSubtitle": "Szabályozza a dalok szekcióban rendelkezésre álló szűrők sorrendjét.",
   "@artistItemSectionFilterChipOrderSubtitle": {
     "description": "Description of the setting that controls the order of the tracks sections filter chips."
   },
@@ -1295,7 +1295,7 @@
   "@genreFilterArtistScreens": {
     "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
-  "genreFilterArtistScreensSubtitle": "Ha engedélyezve van, az előadók (műfajon keresztül) csak az éppen böngészett műfajnak megfelelő zeneszámokat és albumokat mutatja meg. (A műfaji szűrő manuálisan bármikor eltávolítható, hogy az összes zeneszám és album megjelenjen)",
+  "genreFilterArtistScreensSubtitle": "Ha engedélyezve van, az előadók (műfajon keresztül) csak az éppen böngészett műfajnak megfelelő dalokat és albumokat mutatja meg. (A műfaji szűrő manuálisan bármikor eltávolítható, hogy az összes dal és album megjelenjen)",
   "@genreFilterArtistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
   },
@@ -1303,7 +1303,7 @@
   "@genreFilterPlaylistScreens": {
     "description": "Label for the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
   },
-  "genreFilterPlaylistScreensSubtitle": "Ha engedélyezve van, a lejátszási listák (műfajon keresztül) csak az éppen böngészett műfajnak megfelelő zeneszámokat mutatják. (A műfaji szűrő manuálisan történő eltávolítása mindig lehetséges, hogy az összes zeneszámot megjelenítse)",
+  "genreFilterPlaylistScreensSubtitle": "Ha engedélyezve van, a lejátszási listák (műfajon keresztül) csak az éppen böngészett műfajnak megfelelő dalokat mutatják. (A műfaji szűrő manuálisan történő eltávolítása mindig lehetséges, hogy az összes dalt megjelenítse)",
   "@genreFilterPlaylistScreensSubtitle": {
     "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
   },
@@ -1319,7 +1319,7 @@
   "@curatedItemsMostPlayedOfflineTooltip": {
     "description": "Tooltip for Most Played on Curated Items in Offline Mode."
   },
-  "curatedItemsNotListenedYet": "Nem hallgatott meg egyetlen számot sem{itemType, select, artistGenreFilter{ ebben a műfajban lévő előadó alapján} artist{ az előadótól} genre{ ebből a műfajból} other{}}.",
+  "curatedItemsNotListenedYet": "Nem hallgatott meg egyetlen dalt sem{itemType, select, artistGenreFilter{ ebben a műfajban lévő előadó alapján} artist{ az előadótól} genre{ ebből a műfajból} other{}}.",
   "@curatedItemsNotListenedYet": {
     "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks.",
     "placeholders": {
@@ -1341,7 +1341,7 @@
       }
     }
   },
-  "genreNoItems": "Nincs {itemType, select, playlists{lejátszási lista} artists{előadó} albums{album} tracks{szám} other{elem}} ebben a műfajban.",
+  "genreNoItems": "Nincs {itemType, select, playlists{lejátszási lista} artists{előadó} albums{album} tracks{dal} other{elem}} ebben a műfajban.",
   "@genreNoItems": {
     "description": "Message for empty See All lists for a genre.",
     "placeholders": {
@@ -1383,7 +1383,7 @@
       }
     }
   },
-  "couldNotLoad": "{source, select, album{Az album} playlist{A lejátszási lista} trackMix{A szám mix} artistMix{Az előadó mix} albumMix{Az album mix} genreMix{A műfaj mix} favorites{A kedvencek} allTracks{Az összes szám} filteredList{A számok} genre{A műfaj} artist{Az előadó} track{A szám} nextUpAlbum{A következő album} nextUpPlaylist{A következő lejátszási lista} nextUpArtist{A következő előadó} nextUpGenre{A következő műfaj} other{}} betöltése sikertelen",
+  "couldNotLoad": "{source, select, album{Az album} playlist{A lejátszási lista} trackMix{A dal mix} artistMix{Az előadó mix} albumMix{Az album mix} genreMix{A műfaj mix} favorites{A kedvencek} allTracks{Az összes dal} filteredList{A dalok} genre{A műfaj} artist{Az előadó} track{A dal} nextUpAlbum{A következő album} nextUpPlaylist{A következő lejátszási lista} nextUpArtist{A következő előadó} nextUpGenre{A következő műfaj} other{}} betöltése sikertelen",
   "@couldNotLoad": {
     "placeholders": {
       "source": {
@@ -1423,7 +1423,7 @@
   "@volumeNormalizationSwitchTitle": {
     "description": "Title for the switch that toggles replay gain"
   },
-  "volumeNormalizationSwitchSubtitle": "Az erősítési információk használata a számok hangerejének normalizálásához",
+  "volumeNormalizationSwitchSubtitle": "Az erősítési információk használata a dalok hangerejének normalizálásához",
   "@volumeNormalizationSwitchSubtitle": {
     "description": "Subtitle for the switch that toggles replay gain"
   },
@@ -1435,7 +1435,7 @@
   "@volumeNormalizationModeSelectorSubtitle": {
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
-  "volumeNormalizationModeSelectorDescription": "Dinamikus:\nAmikor több számot játszik le ugyanabból az albumból egymás után, az album erősítése használatos (tehát amikor egy albumot vagy ugyanazon album számait játssza le egy lejátszási listában). Egyéb esetben a szám alapú erősítés használatos.\n\nZeneszám alapú:\nA szám erősítés mindig használatos, függetlenül attól, hogy egy album lejátszása folyamatban van-e vagy sem.\n\nAlbum alapú:\nEz az alapértelmezetten használt erősítési mód. Ha nem áll rendelkezésre (pl. kislemezek esetében), akkor a sáv erősítést használjuk.\n\nCsak albumok:\nA hangerő normalizálása csak albumok lejátszása közben kerül alkalmazásra (az albumerősítés használatával), az egyes zeneszámok esetében nem.",
+  "volumeNormalizationModeSelectorDescription": "Dinamikus:\nAmikor több dalt játszik le ugyanabból az albumból egymás után, az album erősítése használatos (tehát amikor egy albumot vagy ugyanazon album dalait játssza le egy lejátszási listában). Egyéb esetben a dal alapú erősítés használatos.\n\nDal alapú:\nA dal erősítés mindig használatos, függetlenül attól, hogy egy album lejátszása folyamatban van-e vagy sem.\n\nAlbum alapú:\nEz az alapértelmezetten használt erősítési mód. Ha nem áll rendelkezésre (pl. kislemezek esetében), akkor a dal erősítést használjuk.\n\nCsak albumok:\nA hangerő normalizálása csak albumok lejátszása közben kerül alkalmazásra (az albumerősítés használatával), az egyes dalok esetében nem.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
@@ -1443,7 +1443,7 @@
   "@volumeNormalizationModeHybrid": {
     "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
   },
-  "volumeNormalizationModeTrackBased": "Szám alapú",
+  "volumeNormalizationModeTrackBased": "Dal alapú",
   "@volumeNormalizationModeTrackBased": {
     "description": "'Track-based' option for the replay gain mode dropdown. In track-based mode, the track gain is always used, regardless of whether an album is playing or not."
   },
@@ -1459,7 +1459,7 @@
   "@volumeNormalizationIOSBaseGainEditorTitle": {
     "description": "Title for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
-  "volumeNormalizationIOSBaseGainEditorSubtitle": "Jelenleg a hangerő normalizálás iOS-en a lejátszási hangerő megváltoztatását igényli az erősítés változásának emulálásához. Mivel a hangerőt nem tudjuk 100% fölé emelni, alapértelmezés szerint csökkenteni kell a hangerőt, hogy a csendes zeneszámok hangerejét növelni tudjuk. Az érték decibelben (dB) van megadva, ahol -10 dB ~30%-os hangerő, -4,5 dB ~60%-os hangerő és -2 dB ~80%-os hangerő.",
+  "volumeNormalizationIOSBaseGainEditorSubtitle": "Jelenleg a hangerő normalizálás iOS-en a lejátszási hangerő megváltoztatását igényli az erősítés változásának emulálásához. Mivel a hangerőt nem tudjuk 100% fölé emelni, alapértelmezés szerint csökkenteni kell a hangerőt, hogy a csendes dalok hangerejét növelni tudjuk. Az érték decibelben (dB) van megadva, ahol -10 dB ~30%-os hangerő, -4,5 dB ~60%-os hangerő és -2 dB ~80%-os hangerő.",
   "@volumeNormalizationIOSBaseGainEditorSubtitle": {
     "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
   },
@@ -1473,23 +1473,23 @@
       }
     }
   },
-  "swipeInsertQueueNext": "Az elhúzott szám lejátszása következőként",
+  "swipeInsertQueueNext": "Az elhúzott dal lejátszása következőként",
   "@swipeInsertQueueNext": {},
-  "swipeInsertQueueNextSubtitle": "Lehetővé teszi, hogy egy zeneszámot a következő elemként illesszen be a sorba, amikor a számlistán elhúzza, ahelyett, hogy a végére illesztené.",
+  "swipeInsertQueueNextSubtitle": "Lehetővé teszi, hogy egy dalt a következő elemként illesszen be a sorba, amikor a listán elhúzza, ahelyett, hogy a végére illesztené.",
   "@swipeInsertQueueNextSubtitle": {},
   "swipeLeftToRightAction": "Húzás jobbra művelet",
   "@swipeLeftToRightAction": {},
-  "swipeLeftToRightActionSubtitle": "Művelet egy zeneszám balról jobbra húzásakor.",
+  "swipeLeftToRightActionSubtitle": "Művelet egy dal balról jobbra húzásakor.",
   "@swipeLeftToRightActionSubtitle": {},
   "swipeRightToLeftAction": "Balra húzás művelet",
   "@swipeRightToLeftAction": {},
-  "swipeRightToLeftActionSubtitle": "Művelet egy zeneszám jobbról balra húzásakor.",
+  "swipeRightToLeftActionSubtitle": "Művelet egy dal jobbról balra húzásakor.",
   "@swipeRightToLeftActionSubtitle": {},
-  "startInstantMixForIndividualTracksSwitchTitle": "Azonnali mixek indítása egyes zeneszámokhoz",
+  "startInstantMixForIndividualTracksSwitchTitle": "Azonnali mixek indítása egyes dalokhoz",
   "@startInstantMixForIndividualTracksSwitchTitle": {
     "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
   },
-  "startInstantMixForIndividualTracksSwitchSubtitle": "Ha engedélyezve van, akkor a zeneszámok lapon egy elem megérintésével az adott szám azonnali keverése indul el ahelyett, hogy csak egyet játszana le.",
+  "startInstantMixForIndividualTracksSwitchSubtitle": "Ha engedélyezve van, akkor a dalok lapon egy elem megérintésével az adott dal azonnali keverése indul el ahelyett, hogy csak egyet játszana le.",
   "@startInstantMixForIndividualTracksSwitchSubtitle": {},
   "downloadItem": "Letöltés",
   "@downloadItem": {
@@ -1515,7 +1515,7 @@
   "@requireWifiForDownloads": {
     "description": "Description of setting for only performing downloads while on wifi"
   },
-  "queueRestoreError": "Figyelem: {count,plural, =1{{count} szám} other{{count} szám}} nem állítható vissza a lejátszási sorban.",
+  "queueRestoreError": "Figyelem: {count,plural, =1{{count} dal} other{{count} dal}} nem állítható vissza a lejátszási sorban.",
   "@queueRestoreError": {
     "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
     "placeholders": {
@@ -1588,7 +1588,7 @@
       }
     }
   },
-  "tracksFormerNextUp": "A soron következővel hozzáadott számok",
+  "tracksFormerNextUp": "A soron következővel hozzáadott dalok",
   "@tracksFormerNextUp": {
     "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
   },
@@ -1596,7 +1596,7 @@
   "@savedQueue": {
     "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
   },
-  "playingFromType": "Lejátszás {source, select, album{albumból} playlist{lejátszási listáról} trackMix{szám mixből} artistMix{előadó mixből} albumMix{album mixből} genreMix{műfaj mixből} favorites{kedvencekből} allTracks{minden számból} filteredList{számok közül} genre{műfajból} artist{előadóból} track{számból} nextUpAlbum{soron következő albumból} nextUpPlaylist{soron következő lejátszási listáról} nextUpArtist{soron következő előadóból} nextUpGenre{soron következő műfajból} remoteClient{a távoli kliensről} other{}}",
+  "playingFromType": "Lejátszás {source, select, album{albumból} playlist{lejátszási listáról} trackMix{dalmixből} artistMix{előadó mixből} albumMix{album mixből} genreMix{műfaj mixből} favorites{kedvencekből} allTracks{minden dalból} filteredList{dalok közül} genre{műfajból} artist{előadóból} track{dalból} nextUpAlbum{soron következő albumból} nextUpPlaylist{soron következő lejátszási listáról} nextUpArtist{soron következő előadóból} nextUpGenre{soron következő műfajból} remoteClient{a távoli kliensről} other{}}",
   "@playingFromType": {
     "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
     "placeholders": {
@@ -1617,11 +1617,11 @@
   "@playbackOrderLinearButtonTooltip": {
     "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
   },
-  "playbackOrderShuffledButtonLabel": "Számok keverése",
+  "playbackOrderShuffledButtonLabel": "Dalok keverése",
   "@playbackOrderShuffledButtonLabel": {
     "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
   },
-  "playbackOrderShuffledButtonTooltip": "Számok keverése. Koppintson a sorrendben történő lejátszáshoz.",
+  "playbackOrderShuffledButtonTooltip": "Dalok keverése. Koppintson a sorrendben történő lejátszáshoz.",
   "@playbackOrderShuffledButtonTooltip": {
     "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
   },
@@ -1665,7 +1665,7 @@
   "@loopModeNoneButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
   },
-  "loopModeOneButtonLabel": "A szám ismétlése",
+  "loopModeOneButtonLabel": "A dal ismétlése",
   "@loopModeOneButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
   },
@@ -1701,7 +1701,7 @@
       }
     }
   },
-  "queueRestoreSubtitle2": "{count,plural,=1{1 szám} other{{count} szám}}, {remaining} nem lejátszott",
+  "queueRestoreSubtitle2": "{count,plural,=1{1 dal} other{{count} dal}}, {remaining} nem lejátszott",
   "@queueRestoreSubtitle2": {
     "description": "Description of length of a saved queue",
     "placeholders": {
@@ -1745,7 +1745,7 @@
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
     "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "periodicPlaybackSessionUpdateFrequencyDetails": "Ha a Jellyfin kiszolgáló az elmúlt 5 percben nem kapott frissítést a klienstől, akkor azt feltételezi, hogy a lejátszás befejeződött. Ez azt jelenti, hogy az 5 percnél hosszabb zeneszámok esetében a lejátszást tévesen befejezettnek jelentheti, ami csökkenti a lejátszási adatok hitelességét.",
+  "periodicPlaybackSessionUpdateFrequencyDetails": "Ha a Jellyfin kiszolgáló az elmúlt 5 percben nem kapott frissítést a klienstől, akkor azt feltételezi, hogy a lejátszás befejeződött. Ez azt jelenti, hogy az 5 percnél hosszabb dalok esetében a lejátszást tévesen befejezettnek jelentheti, ami csökkenti a lejátszási adatok hitelességét.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1773,13 +1773,13 @@
   "@playOnReconnectionDelaySubtitle": {
     "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
   },
-  "topTracks": "Top számok",
+  "topTracks": "Top dalok",
   "@topTracks": {},
   "topAlbums": "Top albumok",
   "@topAlbums": {},
   "topArtists": "Top elóadók",
   "@topArtists": {},
-  "recentlyAddedTracks": "Legutóbb hozzáadott számok",
+  "recentlyAddedTracks": "Legutóbb hozzáadott dalok",
   "@recentlyAddedTracks": {
     "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
   },
@@ -1900,11 +1900,11 @@
   "@preferQuickSyncSwitch": {
     "description": "Title of setting that skips completed albums while syncing."
   },
-  "preferQuickSyncSwitchSubtitle": "Szinkronizáláskor néhány jellemzően statikus elem (például zeneszámok és albumok) nem frissül. A letöltések javítása mindig teljes szinkronizálást hajt végre.",
+  "preferQuickSyncSwitchSubtitle": "Szinkronizáláskor néhány jellemzően statikus elem (például dalok és albumok) nem frissül. A letöltések javítása mindig teljes szinkronizálást hajt végre.",
   "@preferQuickSyncSwitchSubtitle": {
     "description": "Description of setting that skips completed albums while syncing."
   },
-  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Lejátszási lista} artist{Előadó} genre{Műfaj} track{Szám} library{Könyvtár} unknown{Elem} other{{itemType}}} {itemName}",
+  "itemTypeSubtitle": "{itemType, select, album{Album} playlist{Lejátszási lista} artist{Előadó} genre{Műfaj} track{Dal} library{Könyvtár} unknown{Elem} other{{itemType}}} {itemName}",
   "@itemTypeSubtitle": {
     "placeholders": {
       "itemType": {
@@ -1965,7 +1965,7 @@
   "@transcodingStreamingFormatTitle": {
     "description": "Title for the dropdown that selects the format for transcoded streams"
   },
-  "transcodingStreamingFormatSubtitle": "Válassza ki az átkódolt hang streameléséhez használni kívánt formátumot. A már sorba állított zeneszámokat ez nem érinti.",
+  "transcodingStreamingFormatSubtitle": "Válassza ki az átkódolt hang streameléséhez használni kívánt formátumot. A már sorba állított dalokat ez nem érinti.",
   "@transcodingStreamingFormatSubtitle": {},
   "downloadTranscodeEnableTitle": "Átkódolt letöltések engedélyezése",
   "@downloadTranscodeEnableTitle": {
@@ -2076,7 +2076,7 @@
   "@redownloadTitle": {
     "description": "Title for download transcode setting which redownloads tracks with higher allowed qualities"
   },
-  "redownloadSubtitle": "Automatikusan újratölti azokat a zeneszámokat, amelyek a forrás gyűjtemény változása miatt várhatóan más minőségűek lesznek.",
+  "redownloadSubtitle": "Automatikusan újratölti azokat a dalokat, amelyek a forrás gyűjtemény változása miatt várhatóan más minőségűek lesznek.",
   "@redownloadSubtitle": {
     "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
   },
@@ -2113,7 +2113,7 @@
   "@hideQueueButtonSubtitle": {},
   "oneLineMarqueeTextButton": "Hosszú címek automatikus görgetése",
   "@oneLineMarqueeTextButton": {},
-  "oneLineMarqueeTextButtonSubtitle": "Automatikusan görgeti a két sorban való megjelenítéshez túl hosszú számcímeket",
+  "oneLineMarqueeTextButtonSubtitle": "Automatikusan görgeti a két sorban való megjelenítéshez túl hosszú dalcímeket",
   "@oneLineMarqueeTextButtonSubtitle": {},
   "marqueeOrTruncateButton": "Három pont a hosszú nevekhez",
   "@marqueeOrTruncateButton": {},
@@ -2225,7 +2225,7 @@
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
-  "confirmPlayNext": "{type, select, track{Zeneszám} album{Album} artist{Elóadó} playlist{Lejátszási lista} genre{Műfaj} other{Item}} lesz a következő",
+  "confirmPlayNext": "{type, select, track{Dal} album{Album} artist{Elóadó} playlist{Lejátszási lista} genre{Műfaj} other{Item}} lesz a következő",
   "@confirmPlayNext": {
     "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
     "placeholders": {
@@ -2234,7 +2234,7 @@
       }
     }
   },
-  "confirmAddToNextUp": "{type, select, track{Zeneszám} album{Album} artist{Előadó} playlist{Lejátszási sor} genre{Műfaj} other{Elem}} hozzáadva a következőkhöz",
+  "confirmAddToNextUp": "{type, select, track{Dal} album{Album} artist{Előadó} playlist{Lejátszási sor} genre{Műfaj} other{Elem}} hozzáadva a következőkhöz",
   "@confirmAddToNextUp": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
     "placeholders": {
@@ -2243,7 +2243,7 @@
       }
     }
   },
-  "confirmAddToQueue": "{type, select, track{Zeneszám} album{Album} artist{Előadó} playlist{Lejátszási lista} genre{Műfaj} other{Elem}} hozzáadva a lejátszási sorhoz",
+  "confirmAddToQueue": "{type, select, track{Dal} album{Album} artist{Előadó} playlist{Lejátszási lista} genre{Műfaj} other{Elem}} hozzáadva a lejátszási sorhoz",
   "@confirmAddToQueue": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
     "placeholders": {
@@ -2276,7 +2276,7 @@
   "@showArtistChipImage": {},
   "showArtistChipImageSubtitle": "Ez a kis előadói képek előnézetét érinti, például a lejátszó képernyőjén.",
   "@showArtistChipImageSubtitle": {},
-  "scrollToCurrentTrack": "Görgetés az aktuális zeneszámhoz",
+  "scrollToCurrentTrack": "Görgetés az aktuális dalhoz",
   "@scrollToCurrentTrack": {
     "description": "Tooltip for button that scrolls the queue list back to the current track"
   },
@@ -2542,7 +2542,7 @@
     },
     "description": "Prompt on dialog to confirm a removal from playlist"
   },
-  "trackMenuButtonTooltip": "Zeneszám menü",
+  "trackMenuButtonTooltip": "Dal menü",
   "@trackMenuButtonTooltip": {
     "description": "Tooltip for the button that opens the track menu"
   },
@@ -2554,7 +2554,7 @@
   "@addRemoveFromPlaylist": {
     "description": "Header for add to/remove from playlist popup menu"
   },
-  "addPlaylistSubheader": "Zeneszám hozzáadása lejátszási listához",
+  "addPlaylistSubheader": "Dal hozzáadása lejátszási listához",
   "@addPlaylistSubheader": {
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
   },
