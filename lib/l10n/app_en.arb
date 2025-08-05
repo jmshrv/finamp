@@ -1224,7 +1224,7 @@
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
     "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
-  "periodicPlaybackSessionUpdateFrequencyDetails": "If the Jellyfin server hasn''t received any updates from a client in the last 5 minutes, it assumes that playback has ended. This means that for tracks longer than 5 minutes, that playback could be incorrectly reported as having ended, which reduces the quality of the playback reporting data.",
+  "periodicPlaybackSessionUpdateFrequencyDetails": "If the Jellyfin server hasn't received any updates from a client in the last 5 minutes, it assumes that playback has ended. This means that for tracks longer than 5 minutes, that playback could be incorrectly reported as having ended, which reduces the quality of the playback reporting data.",
   "@periodicPlaybackSessionUpdateFrequencyDetails": {
     "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
