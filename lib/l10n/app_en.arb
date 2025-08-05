@@ -974,9 +974,9 @@
   "@stopAndClearQueue": {
     "description": "Label for a button that stops playback and removes all tracks from the queue."
   },
-  "createPlaylistFromCurrentQueue": "Save Queue as Playlist",
+  "createPlaylistFromCurrentQueue": "Add Queue as Playlist",
   "@createPlaylistFromCurrentQueue": {
-    "description": "Label for a button that creates a new playlist from the current queue."
+    "description": "Label for a button that opens the playlist selection menu to add items from the current queue to a playlist."
   },
   "playingFrom": "Playing from",
   "@playingFrom": {

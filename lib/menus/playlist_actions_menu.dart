@@ -20,7 +20,7 @@ const playlistActionsMenuRouteName = "/playlist-actions-menu";
 
 Future<void> showPlaylistActionsMenu({
   required BuildContext context,
-  required BaseItemDto item,
+  required List<BaseItemDto> items,
   BaseItemDto? parentPlaylist,
 }) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
@@ -31,18 +31,18 @@ Future<void> showPlaylistActionsMenu({
 
   await showThemedBottomSheet(
     context: context,
-    item: item,
+    item: items.length == 1 ? items.first : null,
     routeName: playlistActionsMenuRouteName,
     minDraggableHeight: 0.2,
     buildSlivers: (context) {
       var themeColor = Theme.of(context).colorScheme.primary;
 
       final menuEntries = [
-        MenuItemInfoHeader.condensed(item: item),
-        const SizedBox(height: 16),
-        Consumer(
+        if (items.length == 1) MenuItemInfoHeader.condensed(item: items.first),
+        if (items.length == 1) const SizedBox(height: 16),
+        if (items.length == 1) Consumer(
           builder: (context, ref, child) {
-            bool isFavorite = ref.watch(isFavoriteProvider(item));
+            bool isFavorite = ref.watch(isFavoriteProvider(items.first));
             return PlaylistActionsPlaylistListTile(
               title: AppLocalizations.of(context)!.favorites,
               leading: AspectRatio(
@@ -57,7 +57,7 @@ Future<void> showPlaylistActionsMenu({
               initialState: isFavorite,
               tapFeedback: false,
               onToggle: (bool currentState) async {
-                return ref.read(isFavoriteProvider(item).notifier).updateFavorite(!isFavorite);
+                return ref.read(isFavoriteProvider(items.first).notifier).updateFavorite(!isFavorite);
               },
               enabled: !ref.watch(finampSettingsProvider.isOffline),
             );
@@ -68,7 +68,7 @@ Future<void> showPlaylistActionsMenu({
           initialData: parentPlaylist,
           builder: (context, snapshot) {
             if (snapshot.data != null) {
-              return AddToPlaylistTile(playlist: snapshot.data!, track: item, playlistItemId: item.playlistItemId);
+              return AddToPlaylistTile(playlist: snapshot.data!, tracks: items, playlistItemId: items.length == 1 ? items.first.playlistItemId : null);
             } else {
               return const SizedBox.shrink();
             }
@@ -95,7 +95,7 @@ Future<void> showPlaylistActionsMenu({
           sliver: MenuMask(
             height: PlaylistActionsMenuHeader.defaultHeight,
             child: AddToPlaylistList(
-              itemToAdd: item,
+              itemsToAdd: items,
               playlistsFuture: playlistsFuture.then(
                 (value) => (value?.where((element) => element.id != parentPlaylist?.id).toList() ?? []),
               ),

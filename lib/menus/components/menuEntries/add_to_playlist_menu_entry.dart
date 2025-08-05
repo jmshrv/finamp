@@ -29,7 +29,7 @@ class AddToPlaylistMenuEntry extends ConsumerWidget implements HideableMenuEntry
           bool inPlaylist = queueItemInPlaylist(queueItem);
           showPlaylistActionsMenu(
             context: context,
-            item: baseItem,
+            items: [baseItem],
             parentPlaylist: inPlaylist ? queueItem!.source.item : null,
           );
         },

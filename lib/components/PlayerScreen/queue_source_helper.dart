@@ -122,9 +122,9 @@ Future<bool> removeFromPlaylist(
   return false;
 }
 
-Future<bool> addItemToPlaylist(BuildContext context, BaseItemDto item, BaseItemDto parent) async {
+Future<bool> addItemsToPlaylist(BuildContext context, List<BaseItemDto> items, BaseItemDto parent) async {
   //TODO request server to return the new playlist item id
-  await GetIt.instance<JellyfinApiHelper>().addItemstoPlaylist(playlistId: parent.id, ids: [item.id]);
+  await GetIt.instance<JellyfinApiHelper>().addItemstoPlaylist(playlistId: parent.id, ids: items.map((item) {return item.id;}).toList() );
 
   // re-sync playlist to download added item if needed
   final downloadsService = GetIt.instance<DownloadsService>();
@@ -139,6 +139,10 @@ Future<bool> addItemToPlaylist(BuildContext context, BaseItemDto item, BaseItemD
   GlobalSnackbar.message((scaffold) => AppLocalizations.of(context)!.confirmAddedToPlaylist, isConfirmation: true);
   return true;
 }
+Future<bool> addItemToPlaylist(BuildContext context, BaseItemDto item, BaseItemDto parent) async {
+  return addItemsToPlaylist(context, [item], parent);
+}
+
 
 // Removed playlist items will persist in queue with playlist source.  Store removed items
 // to hide remove from playlist prompt on those items.

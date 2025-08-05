@@ -68,7 +68,7 @@ class _AddToPlaylistButtonState extends ConsumerState<AddToPlaylistButton> {
             bool inPlaylist = queueItemInPlaylist(widget.queueItem);
             await showPlaylistActionsMenu(
               context: context,
-              item: widget.item!,
+              items: [widget.item!],
               parentPlaylist: inPlaylist ? widget.queueItem!.source.item : null,
             );
           },
