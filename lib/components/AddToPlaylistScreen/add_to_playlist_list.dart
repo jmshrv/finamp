@@ -91,7 +91,11 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
             onPressed: () async {
               var dialogResult = await showDialog<(Future<BaseItemId>, String?)?>(
                 context: context,
-                builder: (context) => NewPlaylistDialog(itemsToAdd: widget.itemsToAdd.map((item) {return item.id;}).toList()),
+                builder: (context) => NewPlaylistDialog(
+                  itemsToAdd: widget.itemsToAdd.map((item) {
+                    return item.id;
+                  }).toList(),
+                ),
               );
               if (dialogResult != null) {
                 var oldFuture = playlistsFuture;

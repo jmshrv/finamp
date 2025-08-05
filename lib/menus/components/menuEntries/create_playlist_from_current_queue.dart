@@ -24,13 +24,10 @@ class CreatePlaylistFromCurrentQueueMenuEntry extends ConsumerWidget implements 
         final currentQueue = queueService.getQueue();
 
         await showPlaylistActionsMenu(
-          context: context, 
-          items: currentQueue.fullQueue
-            .where((item) => item.baseItem != null)
-            .map((item) {
-              return item.baseItem!;
-            })
-            .toList()
+          context: context,
+          items: currentQueue.fullQueue.where((item) => item.baseItem != null).map((item) {
+            return item.baseItem!;
+          }).toList(),
         );
       },
     );

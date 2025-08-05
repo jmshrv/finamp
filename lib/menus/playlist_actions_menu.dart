@@ -40,35 +40,40 @@ Future<void> showPlaylistActionsMenu({
       final menuEntries = [
         if (items.length == 1) MenuItemInfoHeader.condensed(item: items.first),
         if (items.length == 1) const SizedBox(height: 16),
-        if (items.length == 1) Consumer(
-          builder: (context, ref, child) {
-            bool isFavorite = ref.watch(isFavoriteProvider(items.first));
-            return PlaylistActionsPlaylistListTile(
-              title: AppLocalizations.of(context)!.favorites,
-              leading: AspectRatio(
-                aspectRatio: 1.0,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(color: themeColor.withOpacity(0.3)),
-                  child: const Center(child: Icon(TablerIcons.heart, size: 36.0, color: Colors.white)),
+        if (items.length == 1)
+          Consumer(
+            builder: (context, ref, child) {
+              bool isFavorite = ref.watch(isFavoriteProvider(items.first));
+              return PlaylistActionsPlaylistListTile(
+                title: AppLocalizations.of(context)!.favorites,
+                leading: AspectRatio(
+                  aspectRatio: 1.0,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(color: themeColor.withOpacity(0.3)),
+                    child: const Center(child: Icon(TablerIcons.heart, size: 36.0, color: Colors.white)),
+                  ),
                 ),
-              ),
-              positiveIcon: TablerIcons.heart_filled,
-              negativeIcon: TablerIcons.heart,
-              initialState: isFavorite,
-              tapFeedback: false,
-              onToggle: (bool currentState) async {
-                return ref.read(isFavoriteProvider(items.first).notifier).updateFavorite(!isFavorite);
-              },
-              enabled: !ref.watch(finampSettingsProvider.isOffline),
-            );
-          },
-        ),
+                positiveIcon: TablerIcons.heart_filled,
+                negativeIcon: TablerIcons.heart,
+                initialState: isFavorite,
+                tapFeedback: false,
+                onToggle: (bool currentState) async {
+                  return ref.read(isFavoriteProvider(items.first).notifier).updateFavorite(!isFavorite);
+                },
+                enabled: !ref.watch(finampSettingsProvider.isOffline),
+              );
+            },
+          ),
         FutureBuilder(
           future: playlistsFuture.then((value) => value?.firstWhereOrNull((x) => x.id == parentPlaylist?.id)),
           initialData: parentPlaylist,
           builder: (context, snapshot) {
             if (snapshot.data != null) {
-              return AddToPlaylistTile(playlist: snapshot.data!, tracks: items, playlistItemId: items.length == 1 ? items.first.playlistItemId : null);
+              return AddToPlaylistTile(
+                playlist: snapshot.data!,
+                tracks: items,
+                playlistItemId: items.length == 1 ? items.first.playlistItemId : null,
+              );
             } else {
               return const SizedBox.shrink();
             }
