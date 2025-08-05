@@ -193,10 +193,10 @@ class _PlaylistActionsPlaylistListTileState extends ConsumerState<PlaylistAction
           isLoading = true;
         });
         try {
-          await widget.onToggle(newState);
+          final confirmedState = await widget.onToggle(newState);
           setState(() {
             isLoading = false;
-            currentState = newState;
+            currentState = confirmedState;
           });
         } catch (e) {
           setState(() {
