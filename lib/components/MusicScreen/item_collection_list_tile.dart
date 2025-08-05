@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:finamp/components/favorite_button.dart';
 import 'package:finamp/components/print_duration.dart';
+import 'package:finamp/services/current_album_image_provider.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/datetime_helper.dart';
+import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,6 +31,7 @@ class ItemCollectionListTile extends ConsumerWidget {
     this.albumShowsYearAndDurationInstead = false,
     this.adaptiveAdditionalInfoSortBy,
     this.showFavoriteIconOnlyWhenFilterDisabled = false,
+    this.highlightCurrentItem = true,
   });
 
   final BaseItemDto item;
@@ -37,6 +40,7 @@ class ItemCollectionListTile extends ConsumerWidget {
   final bool albumShowsYearAndDurationInstead;
   final SortBy? adaptiveAdditionalInfoSortBy;
   final bool showFavoriteIconOnlyWhenFilterDisabled;
+  final bool highlightCurrentItem;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -64,6 +68,9 @@ class ItemCollectionListTile extends ConsumerWidget {
       size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 1,
     );
     final titleText = Text(item.name ?? AppLocalizations.of(context)!.unknownName, overflow: TextOverflow.ellipsis);
+    final isCurrentlyPlaying = ref.watch(
+      currentTrackProvider.select((queueItem) => queueItem.valueOrNull?.source.id == item.id.raw),
+    );
 
     final sortIconMeta = {
       SortBy.runtime: (icon: TablerIcons.stopwatch, offset: isOnDesktop ? Offset(-1.5, 1.2) : Offset(-1.5, 0.5)),
@@ -192,32 +199,67 @@ class ItemCollectionListTile extends ConsumerWidget {
       overflow: TextOverflow.ellipsis,
     );
 
-    return ListTile(
-      // This widget is used on the add to playlist screen, so we allow a custom
-      // onTap to be passed as an argument.
-      contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: !showSubtitle ? 8.0 : 0.0),
-      onTap: onTap,
-      leading: AlbumImage(item: item),
-      title: titleText,
-      subtitle: (showSubtitle) ? subtitleText : null,
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          if ((itemType == BaseItemDtoType.artist
-                  ? jellyfinApiHelper.selectedMixArtists
-                  : (itemType == BaseItemDtoType.genre)
-                  ? jellyfinApiHelper.selectedMixGenres
-                  : jellyfinApiHelper.selectedMixAlbums)
-              .contains(item))
-            const Icon(Icons.explore),
-          FavoriteButton(
-            item: item,
-            onlyIfFav: true,
-            showFavoriteIconOnlyWhenFilterDisabled: showFavoriteIconOnlyWhenFilterDisabled,
+    final unthemedListTile = Builder(
+      // get updated context after the theme is applied
+      builder: (context) {
+        return ListTile(
+          // textColor: Theme.of(context).textTheme.bodyLarge?.color,
+          tileColor: Theme.of(context).colorScheme.surfaceContainer,
+          contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: !showSubtitle ? 8.0 : 0.0),
+          onTap: onTap,
+          leading: AlbumImage(item: item),
+          title: titleText,
+          subtitle: (showSubtitle) ? subtitleText : null,
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if ((itemType == BaseItemDtoType.artist
+                      ? jellyfinApiHelper.selectedMixArtists
+                      : (itemType == BaseItemDtoType.genre)
+                      ? jellyfinApiHelper.selectedMixGenres
+                      : jellyfinApiHelper.selectedMixAlbums)
+                  .contains(item))
+                const Icon(Icons.explore),
+              FavoriteButton(
+                item: item,
+                onlyIfFav: true,
+                showFavoriteIconOnlyWhenFilterDisabled: showFavoriteIconOnlyWhenFilterDisabled,
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
+
+    return isCurrentlyPlaying && highlightCurrentItem
+        ? ItemTheme(
+            item: item,
+            themeTransitionDuration: MediaQuery.of(context).disableAnimations
+                ? Duration.zero
+                : const Duration(milliseconds: 500),
+            themeOverride: (imageTheme) {
+              return imageTheme.copyWith(
+                colorScheme: imageTheme.colorScheme.copyWith(
+                  surfaceContainer: imageTheme.colorScheme.primary.withOpacity(
+                    imageTheme.brightness == Brightness.dark ? 0.35 : 0.3,
+                  ),
+                ),
+                textTheme: imageTheme.textTheme.copyWith(
+                  bodyLarge: imageTheme.textTheme.bodyLarge?.copyWith(
+                    color: Color.alphaBlend(
+                      (imageTheme.colorScheme.secondary.withOpacity(
+                        imageTheme.brightness == Brightness.light ? 0.5 : 0.1,
+                      )),
+                      imageTheme.textTheme.bodyLarge?.color ??
+                          (imageTheme.brightness == Brightness.light ? Colors.black : Colors.white),
+                    ),
+                  ),
+                ),
+              );
+            },
+            child: unthemedListTile,
+          )
+        : unthemedListTile;
   }
 }
