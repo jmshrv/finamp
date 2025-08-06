@@ -76,7 +76,7 @@ class SettingsSearchDelegate extends SearchDelegate<String> {
     List<SettingsItem> filteredSettings = [];
     Map<String, SettingsItem> categoriesSearchStrings = Map.fromEntries(
       settingsList.categoryItems.map(
-        (e) => MapEntry((e.title ?? "") + (e.subtitle ?? ""), e),
+        (e) => MapEntry(("${e.title}${e.subtitle}"), e),
       ),
     );
     if (query.isEmpty) {

@@ -161,8 +161,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       SettingsItem(
         icon: TablerIcons.access_point,
         title: AppLocalizations.of(context)!.serverSharingMenuButtonTitle,
-        onTap: () =>
-            Navigator.of(context).pushNamed(LanguageSelectionScreen.routeName),
+        onTap: () => showServerSharingPanel(context: context),
       ),
 
       SettingsItem(
@@ -175,6 +174,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
       SettingsItem(settingWidget: LogoutListTile()),
     ];
+    for (SettingsItem categoryItem in categoryItems) {}
     return SettingsList(categoryItems: categoryItems, settingsItems: []);
   }
 
