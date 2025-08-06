@@ -974,9 +974,9 @@
   "@stopAndClearQueue": {
     "description": "Label for a button that stops playback and removes all tracks from the queue."
   },
-  "createPlaylistFromCurrentQueue": "Add Queue as Playlist",
+  "createPlaylistFromCurrentQueue": "Save Queue to Playlist",
   "@createPlaylistFromCurrentQueue": {
-    "description": "Label for a button that opens the playlist selection menu to add items from the current queue to a playlist."
+    "description": "Label for a button that adds the current queue to an existing or new playlist."
   },
   "playingFrom": "Playing from",
   "@playingFrom": {
@@ -1983,7 +1983,7 @@
   "@addRemoveFromPlaylist": {
     "description": "Header for add to/remove from playlist popup menu"
   },
-  "addPlaylistSubheader": "Add track to a playlist",
+  "addPlaylistSubheader": "Add items to a playlist",
   "@addPlaylistSubheader": {
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
   },
@@ -2308,9 +2308,9 @@
   "@downloadSizeWarningCutoffSubtitle": {
     "description": "Subtitle for the setting controlling when to warn about a large download"
   },
-  "confirmAddAlbumToPlaylist": "Are you sure you want add all tracks from {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} other{item}} '{itemName}' to this playlist?  They can only be removed individually.",
+  "confirmAddAlbumToPlaylist": "Are you sure you want add all {itemType, select, tracks{selected tracks} other{tracks from {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} other{item}} '{itemName}'}} to this playlist?  They can only be removed individually.",
   "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
+    "description": "Warning dialog for adding an album, artist, etc. or multiple tracks to a playlist, clarifying that this cannot be undone without removing all tracks individually and manually.",
     "placeholders": {
       "itemType": {
         "type": "String",

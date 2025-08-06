@@ -71,7 +71,7 @@ Future<void> showPlaylistActionsMenu({
             if (snapshot.data != null) {
               return AddToPlaylistTile(
                 playlist: snapshot.data!,
-                tracks: items,
+                itemsToBeAdded: items,
                 playlistItemId: items.length == 1 ? items.first.playlistItemId : null,
               );
             } else {

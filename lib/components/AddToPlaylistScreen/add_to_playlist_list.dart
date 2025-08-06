@@ -54,7 +54,7 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
               final (playlist, isLoading, playListItemId) = snapshot.data![index];
               return AddToPlaylistTile(
                 playlist: playlist,
-                tracks: widget.itemsToAdd,
+                itemsToBeAdded: widget.itemsToAdd,
                 playlistItemId: playListItemId,
                 isLoading: isLoading,
               );
@@ -105,31 +105,32 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                   ];
                   playlistsFuture = oldFuture.then((value) => value + loadingItem);
                 });
-                for (var track in widget.itemsToAdd) {
-                  try {
-                    var newId = await dialogResult.$1;
-                    // Give the server time to calculate an initial playlist image
-                    await Future.delayed(const Duration(seconds: 1));
-                    final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-                    var playlist = await jellyfinApiHelper.getItemById(newId);
+                try {
+                  var newId = await dialogResult.$1;
+                  // Give the server time to calculate an initial playlist image
+                  await Future<void>.delayed(const Duration(seconds: 1));
+                  final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+                  var playlist = await jellyfinApiHelper.getItemById(newId);
 
-                    String? trackId;
-                    if (BaseItemDtoType.fromItem(track) == BaseItemDtoType.track) {
-                      var playlistItems = await jellyfinApiHelper.getItems(parentItem: playlist, fields: "");
-                      trackId = playlistItems?.firstWhere((element) => element.id == track.id).playlistItemId;
-                    } else {
-                      // Provide a fake playlist id for playlists created with a non-track initial item.  It
-                      // will not be used as non-tracks cannot be removed.
-                      trackId = "";
-                    }
-                    if (!context.mounted) return;
-                    setState(() {
-                      var newItem = [(playlist, false, trackId)];
-                      playlistsFuture = oldFuture.then((value) => value + newItem);
-                    });
-                  } catch (e) {
-                    GlobalSnackbar.error(e);
+                  String? trackId;
+                  if (widget.itemsToAdd.length == 1 &&
+                      BaseItemDtoType.fromItem(widget.itemsToAdd.first) == BaseItemDtoType.track) {
+                    var playlistItems = await jellyfinApiHelper.getItems(parentItem: playlist, fields: "");
+                    trackId = playlistItems
+                        ?.firstWhere((element) => element.id == widget.itemsToAdd.first.id)
+                        .playlistItemId;
+                  } else {
+                    // Provide a fake playlist id for playlists created with a non-track initial item.
+                    // It will not be used as non-tracks cannot be removed.
+                    trackId = "";
                   }
+                  if (!context.mounted) return;
+                  setState(() {
+                    var newItem = [(playlist, false, trackId)];
+                    playlistsFuture = oldFuture.then((value) => value + newItem);
+                  });
+                } catch (e) {
+                  GlobalSnackbar.error(e);
                 }
               }
             },
@@ -145,12 +146,12 @@ class AddToPlaylistTile extends ConsumerStatefulWidget {
     super.key,
     required this.playlist,
     this.playlistItemId,
-    required this.tracks,
+    required this.itemsToBeAdded,
     this.isLoading = false,
   });
 
   final BaseItemDto playlist;
-  final List<BaseItemDto> tracks;
+  final List<BaseItemDto> itemsToBeAdded;
   final String? playlistItemId;
   final bool isLoading;
 
@@ -183,8 +184,10 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
         itemIsIncluded = true;
       } else {
         final downloadsService = GetIt.instance<DownloadsService>();
-        for (var track in widget.tracks) {
-          itemIsIncluded = downloadsService.checkIfInCollection(widget.playlist, track);
+        if (widget.itemsToBeAdded.length > 1) {
+          itemIsIncluded = false;
+        } else {
+          itemIsIncluded = downloadsService.checkIfInCollection(widget.playlist, widget.itemsToBeAdded.first);
         }
       }
     }
@@ -206,8 +209,9 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
       initialState: itemIsIncluded ?? false,
       onToggle: (bool alreadyInPlaylist) async {
         if (alreadyInPlaylist) {
-          // Only tracks can be removed from playlists
-          if (BaseItemDtoType.fromItem(widget.tracks.first) != BaseItemDtoType.track) {
+          // Only single tracks can be removed from playlists
+          if (widget.itemsToBeAdded.length > 1 ||
+              BaseItemDtoType.fromItem(widget.itemsToBeAdded.first) != BaseItemDtoType.track) {
             return true;
           }
           // If playlistItemId is null, we need to fetch from the server before we can remove
@@ -215,7 +219,7 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
             final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
             var newItems = await jellyfinApiHelper.getItems(parentItem: widget.playlist, fields: "");
 
-            playlistItemId = newItems?.firstWhereOrNull((x) => x.id == widget.tracks.first.id)?.playlistItemId;
+            playlistItemId = newItems?.firstWhereOrNull((x) => x.id == widget.itemsToBeAdded.first.id)?.playlistItemId;
             if (playlistItemId == null) {
               // We were already not part of the playlist,. so removal is complete
               setState(() {
@@ -231,7 +235,7 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
           // part of playlist, remove
           bool removed = await removeFromPlaylist(
             context,
-            widget.tracks.first,
+            widget.itemsToBeAdded.first,
             widget.playlist,
             playlistItemId!,
             confirm: false,
@@ -244,49 +248,24 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
           }
           return !removed;
         } else {
-          if (widget.tracks.length == 1) {
-            // add to playlist
-            if (BaseItemDtoType.fromItem(widget.tracks.first) != BaseItemDtoType.track) {
-              bool confirmed = false;
-              String itemType = switch (widget.tracks.first.type) {
-                "MusicAlbum" => "album",
-                "MusicArtist" => "artist",
-                "MusicGenre" => "genre",
-                "Playlist" => "playlist",
-                _ => "unknown",
-              };
-              await showDialog(
-                context: context,
-                builder: (context) => ConfirmationPromptDialog(
-                  promptText: AppLocalizations.of(
-                    context,
-                  )!.confirmAddAlbumToPlaylist(itemType, widget.tracks.first.name ?? "Unknown"),
-                  confirmButtonText: AppLocalizations.of(context)!.addButtonLabel,
-                  abortButtonText: MaterialLocalizations.of(context).cancelButtonLabel,
-                  onConfirmed: () => confirmed = true,
-                  onAborted: () {},
-                ),
-              );
-              if (!confirmed || !context.mounted) return false;
-            }
-            bool added = await addItemToPlaylist(context, widget.tracks.first, widget.playlist);
-            if (added) {
-              final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-              var newItems = await jellyfinApiHelper.getItems(parentItem: widget.playlist, fields: "");
-              setState(() {
-                childCount = newItems?.length ?? 0;
-                playlistItemId = newItems?.firstWhereOrNull((x) => x.id == widget.tracks.first.id)?.playlistItemId;
-                itemIsIncluded = true;
-              });
-              return true; // this is called before the state is updated
-            }
-            return false;
-          } else {
+          // add item collection or multiple tracks to playlist
+          if (widget.itemsToBeAdded.length > 1 ||
+              BaseItemDtoType.fromItem(widget.itemsToBeAdded.first) != BaseItemDtoType.track) {
             bool confirmed = false;
+            String itemType = switch (BaseItemDtoType.fromItem(widget.itemsToBeAdded.first)) {
+              BaseItemDtoType.album => "album",
+              BaseItemDtoType.artist => "artist",
+              BaseItemDtoType.genre => "genre",
+              BaseItemDtoType.playlist => "playlist",
+              BaseItemDtoType.track => "tracks",
+              _ => "unknown",
+            };
             await showDialog(
               context: context,
               builder: (context) => ConfirmationPromptDialog(
-                promptText: "Add X items to playlist?",
+                promptText: AppLocalizations.of(
+                  context,
+                )!.confirmAddAlbumToPlaylist(itemType, widget.itemsToBeAdded.first.name ?? "Unknown"),
                 confirmButtonText: AppLocalizations.of(context)!.addButtonLabel,
                 abortButtonText: MaterialLocalizations.of(context).cancelButtonLabel,
                 onConfirmed: () => confirmed = true,
@@ -294,20 +273,21 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
               ),
             );
             if (!confirmed || !context.mounted) return false;
-
-            bool added = await addItemsToPlaylist(context, widget.tracks, widget.playlist);
-            if (added) {
-              final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-              var newItems = await jellyfinApiHelper.getItems(parentItem: widget.playlist, fields: "");
-              setState(() {
-                childCount = newItems?.length ?? 0;
-                playlistItemId = newItems?.firstWhereOrNull((x) => x.id == widget.tracks.first.id)?.playlistItemId;
-                itemIsIncluded = true;
-              });
-              return true; // this is called before the state is updated
-            }
-            return false;
           }
+          bool added = await addItemsToPlaylist(context, widget.itemsToBeAdded, widget.playlist);
+          if (added) {
+            final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
+            var newItems = await jellyfinApiHelper.getItems(parentItem: widget.playlist, fields: "");
+            setState(() {
+              childCount = newItems?.length ?? 0;
+              playlistItemId = newItems
+                  ?.firstWhereOrNull((x) => x.id == widget.itemsToBeAdded.first.id)
+                  ?.playlistItemId;
+              itemIsIncluded = true;
+            });
+            return true; // this is called before the state is updated
+          }
+          return false;
         }
       },
       enabled: !isOffline,
