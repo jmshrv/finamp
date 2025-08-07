@@ -1825,19 +1825,6 @@
   "@downloadSizeWarningCutoffSubtitle": {
     "description": "Subtitle for the setting controlling when to warn about a large download"
   },
-  "confirmAddAlbumToPlaylist": "Bist du sicher, dass du alles Tracks von {itemType, select, album{dem Album} playlist{der Playlist} artist{dem Künstler} genre{dem Genre} other{dem Item}} '{itemName}' zu dieser Playlist hinzufügen möchtest? Du kannst sie nur einzeln wieder entfernen.",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
-  },
   "deleteFromTargetDialogText": "Du bist dabei, {itemType, select, album{das Album} playlist{die Playlist} artist{den Künstler} genre{das Genre} track{den Track} library{die Bibliothek} other{das Item}} {device, select, device{von diesem Gerät zu löschen} server{von der Bibliothek und dem Dateisystem des Servers zu löschen.{deleteType, select, canDelete{ Das Item wird dadurch auch von diesem Gerät gelöscht.} cantDelete{ Das Item wird bis zur nächsten Synchronisierung auf diesem Gerät bleiben.} notDownloaded{} other{}}\nDiese Aktion kann nicht rückgängig gemacht werden} other{}}.",
   "@deleteFromTargetDialogText": {
     "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."

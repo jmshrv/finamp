@@ -1969,19 +1969,6 @@
   "@deleteFromTargetDialogText": {
     "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
   },
-  "confirmAddAlbumToPlaylist": "Voulez-vous vraiment ajouter tous les morceaux de {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} other{item}} '{itemName}' à cette playlist ? Ils ne peuvent être supprimés qu'individuellement.",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
-  },
   "autoOfflineSettingDescription": "Activation automatique du mode hors ligne.\nDésactivé : Le mode hors ligne ne s'active pas automatiquement. Peut économiser la batterie.\nRéseau local : Activez le mode hors ligne lorsque vous n'êtes pas connecté au Wi-Fi ou à l'Ethernet.\nDéconnecté : Activez le mode hors ligne lorsque vous n'êtes connecté à aucun réseau.\nInjoignable : Activez le mode hors ligne lorsque le serveur ne peut pas être contacté après un changement de réseau.\nVous pouvez toujours activer manuellement le mode hors ligne, ce qui suspend l'automatisation jusqu'à sa désactivation.",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."

@@ -1721,19 +1721,6 @@
   "@releaseDateFormatSubtitle": {
     "description": "Title for the setting that controls the format release dates throughout the app."
   },
-  "confirmAddAlbumToPlaylist": "Weet je zeker dat je alle nummers van {itemType, select, album{het album} playlist{de playlist} artist{de artiest} genre{de genre} other{dit element}} '{itemName}' aan deze playlist wilt toevoegen? Ze kunnen alleen één voor één verwijderd worden.",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
-  },
   "releaseDateFormatMonthYear": "Maand & Jaar",
   "@releaseDateFormatMonthYear": {
     "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"

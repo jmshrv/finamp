@@ -2494,19 +2494,6 @@
   "@autoReloadQueueSubtitle": {
     "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
   },
-  "confirmAddAlbumToPlaylist": "Tema certeza que quer adicionar todas as faixas de {itemType, select, album{álbum} playlist{lista de reprodução} artist{artista} genre{estilo} other{item}} '{itemName}' para esta lista de reprodução?  Elas só podem ser removidas individualmente.",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
-  },
   "outputMenuButtonTitle": "Saída de Som",
   "@outputMenuButtonTitle": {
     "description": "Button title for opening the output menu/panel"

@@ -2266,19 +2266,6 @@
   "@downloadSizeWarningCutoffSubtitle": {
     "description": "Subtitle for the setting controlling when to warn about a large download"
   },
-  "confirmAddAlbumToPlaylist": "நீங்கள் {itemType, select, album{ஆல்பம்} playlist{பாடல்பட்டி} artist{கலைஞர்} genre{வகை} other{உருப்படி}} '{itemName}' இல் இருந்து அனைத்து பாடல்களையும் இந்த பாடல்பட்டியில் சேர்க்க விரும்புகிறீர்களா? அவற்றை தனித்தனியாக மட்டுமே நீக்க முடியும்.",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
-  },
   "publiclyVisiblePlaylist": "பகிரங்கமாக தெரியும்:",
   "@publiclyVisiblePlaylist": {
     "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."

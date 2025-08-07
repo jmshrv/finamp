@@ -2053,19 +2053,6 @@
   "@deleteFromTargetDialogText": {
     "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
   },
-  "confirmAddAlbumToPlaylist": "Sei sicuro di voler aggiungere tutte le tracce da {itemType, select, album{album} playlist{playlist} artist{artista} genre{genre} other{item}} '{itemName}' a questa playlist?  Possono essere rimosse solo una per una.",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
-  },
   "audioFadeInDurationSettingTitle": "Durata della dissolvenza in apertura",
   "@audioFadeInDurationSettingTitle": {
     "description": "Title for the audio fade-in duration setting."

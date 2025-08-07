@@ -1834,19 +1834,6 @@
   "@downloadSizeWarningCutoffSubtitle": {
     "description": "Subtitle for the setting controlling when to warn about a large download"
   },
-  "confirmAddAlbumToPlaylist": "Opravdu chcete přidat všechny skladby z {itemType, select, album{alba} playlist{seznamu skladeb} artist{umělce} genre{žánru} other{položky}} '{itemName}' do tohoto seznamu skladeb?  Odstranit je lze pouze jednotlivě.",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
-  },
   "hideQueueButtonSubtitle": "Skrýt tlačítko fronty na obrazovce přehrávače. Přejeďte nahoru pro zobrazení fronty.",
   "@hideQueueButtonSubtitle": {},
   "oneLineMarqueeTextButtonSubtitle": "Automaticky posouvat názvy skladeb, které jsou příliš dlouhé na zobrazení ve dvou řádcích",

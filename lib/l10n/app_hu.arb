@@ -2481,19 +2481,6 @@
   "@downloadSizeWarningCutoffSubtitle": {
     "description": "Subtitle for the setting controlling when to warn about a large download"
   },
-  "confirmAddAlbumToPlaylist": "Biztos, hogy {itemType, select, album{az album} playlist{a lejátszási lista} artist{az előadó} genre{a műfaj} other{az elem}} '{itemName}' összes dalát hozzá szeretné adni a lejátszási listához?  Csak egyenként lehet eltávolítani őket.",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
-  },
   "publiclyVisiblePlaylist": "Nyilvánosan látható:",
   "@publiclyVisiblePlaylist": {
     "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."

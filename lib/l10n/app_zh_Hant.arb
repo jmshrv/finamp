@@ -1531,19 +1531,6 @@
   "@preferQuickSyncSwitch": {
     "description": "Title of setting that skips completed albums while syncing."
   },
-  "confirmAddAlbumToPlaylist": "確定要將{itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{類型} other{項目}} '{itemName}'的所有歌曲加入播放清單嗎？請注意，這些歌曲只能逐首刪除，無法一次移除所有內容。",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
-  },
   "doTranscode": "下載{codec}格式：@{bitrate}{size, select, null{} other{- ~{size}}}",
   "@doTranscode": {
     "placeholders": {

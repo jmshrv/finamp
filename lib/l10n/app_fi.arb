@@ -1148,19 +1148,6 @@
   "@resetSettingsPromptGlobalConfirm": {
     "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
   },
-  "confirmAddAlbumToPlaylist": "Haluatko varmasti lisätä kaikki kappaleet kohteesta {itemType, select, album{albumi} playlist{soittolista} artist{artisti} genre{tyylilaji} other{kohde}} '{itemName}' tähän soittolistaan? Kappaleet voidaan poistaa vain yksitellen.",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
-  },
   "showAlbumReleaseDateOnPlayerScreenSubtitle": "Näyttää albumin julkaisupäivän soitinnäkymässä, albuminimen takana.",
   "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
     "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"

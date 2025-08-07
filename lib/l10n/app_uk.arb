@@ -1839,19 +1839,6 @@
       }
     }
   },
-  "confirmAddAlbumToPlaylist": "Ви впевнені, що хочете додати всі треки з {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} other{item}} '{itemName}' до цього списку відтворення?  Їх можна видалити лише окремо.",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
-  },
   "deleteDownloadsConfirmButtonText": "Видалити",
   "@deleteDownloadsConfirmButtonText": {
     "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
