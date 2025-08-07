@@ -12,8 +12,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class InteractionSettingsScreen extends StatefulWidget {
   const InteractionSettingsScreen({super.key});
   static const routeName = "/settings/interactions";
+  static const searchableSettingsChildren = const [
+    ItemSwipeLeftToRightActionDropdownListTile(),
+    ItemSwipeRightToLeftActionDropdownListTile(),
+    StartInstantMixForIndividualTracksSwitch(),
+    ApplyFilterOnGenreChipTapSwitch(),
+    AutoSwitchItemCurationTypeToggle(),
+    FastScrollSelector(),
+    AutoExpandPlayerScreenSelector(),
+    ShowDeleteFromServerOptionToggle(),
+    KeepScreenOnDropdownListTile(),
+    KeepScreenOnWhilePluggedInSelector(),
+  ];
   @override
-  State<InteractionSettingsScreen> createState() => _InteractionSettingsScreenState();
+  State<InteractionSettingsScreen> createState() =>
+      _InteractionSettingsScreenState();
 }
 
 class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
@@ -30,18 +43,7 @@ class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
         ],
       ),
       body: ListView(
-        children: const [
-          ItemSwipeLeftToRightActionDropdownListTile(),
-          ItemSwipeRightToLeftActionDropdownListTile(),
-          StartInstantMixForIndividualTracksSwitch(),
-          ApplyFilterOnGenreChipTapSwitch(),
-          AutoSwitchItemCurationTypeToggle(),
-          FastScrollSelector(),
-          AutoExpandPlayerScreenSelector(),
-          ShowDeleteFromServerOptionToggle(),
-          KeepScreenOnDropdownListTile(),
-          KeepScreenOnWhilePluggedInSelector(),
-        ],
+        children: InteractionSettingsScreen.searchableSettingsChildren,
       ),
     );
   }
@@ -53,9 +55,19 @@ class StartInstantMixForIndividualTracksSwitch extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
-      title: Text(AppLocalizations.of(context)!.startInstantMixForIndividualTracksSwitchTitle),
-      subtitle: Text(AppLocalizations.of(context)!.startInstantMixForIndividualTracksSwitchSubtitle),
-      value: ref.watch(finampSettingsProvider.startInstantMixForIndividualTracks),
+      title: Text(
+        AppLocalizations.of(
+          context,
+        )!.startInstantMixForIndividualTracksSwitchTitle,
+      ),
+      subtitle: Text(
+        AppLocalizations.of(
+          context,
+        )!.startInstantMixForIndividualTracksSwitchSubtitle,
+      ),
+      value: ref.watch(
+        finampSettingsProvider.startInstantMixForIndividualTracks,
+      ),
       onChanged: FinampSetters.setStartInstantMixForIndividualTracks,
     );
   }
@@ -68,7 +80,9 @@ class ApplyFilterOnGenreChipTapSwitch extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.applyFilterOnGenreChipTapTitle),
-      subtitle: Text(AppLocalizations.of(context)!.applyFilterOnGenreChipTapSubtitle),
+      subtitle: Text(
+        AppLocalizations.of(context)!.applyFilterOnGenreChipTapSubtitle,
+      ),
       value: ref.watch(finampSettingsProvider.applyFilterOnGenreChipTap),
       onChanged: FinampSetters.setApplyFilterOnGenreChipTap,
     );
@@ -82,7 +96,9 @@ class ShowDeleteFromServerOptionToggle extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.allowDeleteFromServerTitle),
-      subtitle: Text(AppLocalizations.of(context)!.allowDeleteFromServerSubtitle),
+      subtitle: Text(
+        AppLocalizations.of(context)!.allowDeleteFromServerSubtitle,
+      ),
       value: ref.watch(finampSettingsProvider.allowDeleteFromServer),
       onChanged: FinampSetters.setAllowDeleteFromServer,
     );

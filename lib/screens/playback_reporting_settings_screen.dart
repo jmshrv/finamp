@@ -15,18 +15,30 @@ import '../components/PlaybackReportingSettingsScreen/report_queue_to_server_tog
 class PlaybackReportingSettingsScreen extends StatefulWidget {
   const PlaybackReportingSettingsScreen({super.key});
   static const routeName = "/settings/playback-reporting";
+  static const searchableSettingsChildren = const [
+    const EnablePlayonToggle(),
+    const PeriodicPlaybackSessionUpdateFrequencyEditor(),
+    const ReportQueueToServerToggle(),
+    const PlayOnStaleDelayEditor(),
+    const PlayOnReconnectionDelayEditor(),
+  ];
   @override
-  State<PlaybackReportingSettingsScreen> createState() => _PlaybackReportingSettingsScreenState();
+  State<PlaybackReportingSettingsScreen> createState() =>
+      _PlaybackReportingSettingsScreenState();
 }
 
-class _PlaybackReportingSettingsScreenState extends State<PlaybackReportingSettingsScreen> {
+class _PlaybackReportingSettingsScreenState
+    extends State<PlaybackReportingSettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    bool hasRpcSupport = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+    bool hasRpcSupport =
+        Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.playbackReportingSettingsTitle),
+        title: Text(
+          AppLocalizations.of(context)!.playbackReportingSettingsTitle,
+        ),
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, () {
             setState(() {
@@ -37,11 +49,7 @@ class _PlaybackReportingSettingsScreenState extends State<PlaybackReportingSetti
       ),
       body: ListView(
         children: [
-          const EnablePlayonToggle(),
-          const PeriodicPlaybackSessionUpdateFrequencyEditor(),
-          const ReportQueueToServerToggle(),
-          const PlayOnStaleDelayEditor(),
-          const PlayOnReconnectionDelayEditor(),
+          ...PlaybackReportingSettingsScreen.searchableSettingsChildren,
           if (hasRpcSupport) const Divider(),
           if (hasRpcSupport) const EnabledDiscordRpc(),
           if (hasRpcSupport) const DiscordRpcIconSelector(),

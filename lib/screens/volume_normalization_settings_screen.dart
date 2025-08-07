@@ -11,16 +11,24 @@ import '../components/VolumeNormalizationSettingsScreen/volume_normalization_swi
 class VolumeNormalizationSettingsScreen extends StatefulWidget {
   const VolumeNormalizationSettingsScreen({super.key});
   static const routeName = "/settings/volume-normalization";
+  static const searchableSettingsChildren = const [
+    const VolumeNormalizationSwitch(),
+    const VolumeNormalizationModeSelector(),
+  ];
   @override
-  State<VolumeNormalizationSettingsScreen> createState() => _VolumeNormalizationSettingsScreenState();
+  State<VolumeNormalizationSettingsScreen> createState() =>
+      _VolumeNormalizationSettingsScreenState();
 }
 
-class _VolumeNormalizationSettingsScreenState extends State<VolumeNormalizationSettingsScreen> {
+class _VolumeNormalizationSettingsScreenState
+    extends State<VolumeNormalizationSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.volumeNormalizationSettingsTitle),
+        title: Text(
+          AppLocalizations.of(context)!.volumeNormalizationSettingsTitle,
+        ),
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, () {
             setState(() {
@@ -31,9 +39,11 @@ class _VolumeNormalizationSettingsScreenState extends State<VolumeNormalizationS
       ),
       body: ListView(
         children: [
-          const VolumeNormalizationSwitch(),
+          ...VolumeNormalizationSettingsScreen.searchableSettingsChildren
+              .sublist(0, 1),
           if (!Platform.isAndroid) const VolumeNormalizationIOSBaseGainEditor(),
-          const VolumeNormalizationModeSelector(),
+          ...VolumeNormalizationSettingsScreen.searchableSettingsChildren
+              .sublist(1),
         ],
       ),
     );

@@ -38,6 +38,7 @@ class SettingsItem {
   final bool enabled;
   Function? onTap;
   Widget? settingWidget;
+  List<Widget>? searchableSettingsItems;
 
   SettingsItem({
     this.icon,
@@ -47,21 +48,26 @@ class SettingsItem {
     this.enabled = true,
     this.onTap,
     this.settingWidget,
+    this.searchableSettingsItems,
   });
 
   Widget getListTileWidget(BuildContext context) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title ?? ""),
-      subtitle: Text(subtitle ?? ""),
-      enabled: enabled,
-      onTap:
-          (onTap ??
-                  ((enabled && route != null)
-                      ? () => Navigator.of(context).pushNamed(route!)
-                      : () {}))
-              as GestureTapCallback,
-    );
+    if (settingWidget == null) {
+      return ListTile(
+        leading: Icon(icon),
+        title: Text(title ?? ""),
+        subtitle: Text(subtitle ?? ""),
+        enabled: enabled,
+        onTap:
+            (onTap ??
+                    ((enabled && route != null)
+                        ? () => Navigator.of(context).pushNamed(route!)
+                        : () {}))
+                as GestureTapCallback,
+      );
+    } else {
+      return settingWidget!;
+    }
   }
 }
 

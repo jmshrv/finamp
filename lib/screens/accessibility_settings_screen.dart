@@ -7,11 +7,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class AccessibilitySettingsScreen extends StatefulWidget {
   const AccessibilitySettingsScreen({super.key});
   static const routeName = "/settings/accessibility";
+
+  static const searchableSettingsChildren = const [
+    UseHighContrastColorsToggle(),
+    DisableGestureSelector(),
+    DisableVibrationSelector(),
+  ];
   @override
-  State<AccessibilitySettingsScreen> createState() => _AccessibilitySettingsScreenState();
+  State<AccessibilitySettingsScreen> createState() =>
+      _AccessibilitySettingsScreenState();
 }
 
-class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScreen> {
+class _AccessibilitySettingsScreenState
+    extends State<AccessibilitySettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +33,7 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
         ],
       ),
       body: ListView(
-        children: const [UseHighContrastColorsToggle(), DisableGestureSelector(), DisableVibrationSelector()],
+        children: AccessibilitySettingsScreen.searchableSettingsChildren,
       ),
     );
   }
@@ -38,7 +46,9 @@ class UseHighContrastColorsToggle extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.useHighContrastColorsTitle),
-      subtitle: Text(AppLocalizations.of(context)!.useHighContrastColorsSubtitle),
+      subtitle: Text(
+        AppLocalizations.of(context)!.useHighContrastColorsSubtitle,
+      ),
       value: ref.watch(finampSettingsProvider.useHighContrastColors),
       onChanged: FinampSetters.setUseHighContrastColors,
     );

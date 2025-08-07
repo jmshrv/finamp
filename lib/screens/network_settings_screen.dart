@@ -14,6 +14,13 @@ class NetworkSettingsScreen extends StatefulWidget {
   const NetworkSettingsScreen({super.key});
   static const routeName = "/settings/network";
 
+  static const searchableSettingsChildren = const [
+    AutoOfflineSelector(),
+    PublicAddressSelector(),
+    LocalNetworkSelector(),
+    LocalNetworkAddressSelector(),
+  ];
+
   @override
   State<NetworkSettingsScreen> createState() => _NetworkSettingsScreenState();
 }
@@ -25,17 +32,18 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.networkSettingsTitle),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetNetworkSettings),
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetNetworkSettings,
+          ),
         ],
       ),
       body: ListView(
         children: [
-          AutoOfflineSelector(),
+          NetworkSettingsScreen.searchableSettingsChildren[0],
           Divider(),
           ActiveNetworkDisplay(),
-          PublicAddressSelector(),
-          LocalNetworkSelector(),
-          LocalNetworkAddressSelector(),
+          ...NetworkSettingsScreen.searchableSettingsChildren.sublist(1),
           TextButton(
             onPressed: () async {
               final [public, private] = await Future.wait([
@@ -44,10 +52,14 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
               ]);
 
               GlobalSnackbar.message(
-                (context) => AppLocalizations.of(context)!.ping("${public.toString()}_${private.toString()}"),
+                (context) => AppLocalizations.of(
+                  context,
+                )!.ping("${public.toString()}_${private.toString()}"),
               );
             },
-            child: Text(AppLocalizations.of(context)!.testConnectionButtonLabel),
+            child: Text(
+              AppLocalizations.of(context)!.testConnectionButtonLabel,
+            ),
           ),
         ],
       ),
