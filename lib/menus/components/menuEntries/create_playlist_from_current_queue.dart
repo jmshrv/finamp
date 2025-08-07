@@ -1,6 +1,7 @@
 import 'package:finamp/components/AddToPlaylistScreen/new_playlist_dialog.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/components/menuEntries/menu_entry.dart';
+import 'package:finamp/menus/playlist_actions_menu.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
@@ -19,15 +20,14 @@ class CreatePlaylistFromCurrentQueueMenuEntry extends ConsumerWidget implements 
       icon: TablerIcons.list_tree,
       title: AppLocalizations.of(context)!.createPlaylistFromCurrentQueue,
       onTap: () async {
+        if (context.mounted) Navigator.pop(context);
         final currentQueue = queueService.getQueue();
 
-        if (context.mounted) Navigator.pop(context);
-        var dialogResult = await showDialog<(Future<BaseItemId>, String?)?>(
+        await showPlaylistActionsMenu(
           context: context,
-          builder: (context) => NewPlaylistDialog(
-            itemsToAdd: currentQueue.fullQueue.map((item) => item.baseItemId).toList(),
-            initialName: currentQueue.source.name.getLocalized(context),
-          ),
+          items: currentQueue.fullQueue.where((item) => item.baseItem != null).map((item) {
+            return item.baseItem!;
+          }).toList(),
         );
       },
     );
