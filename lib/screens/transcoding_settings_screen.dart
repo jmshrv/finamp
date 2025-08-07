@@ -10,15 +10,15 @@ import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
 
 class TranscodingSettingsScreen extends StatefulWidget {
-  const TranscodingSettingsScreen({super.key});
+  TranscodingSettingsScreen({super.key});
   static const routeName = "/settings/transcoding";
-  static const searchableSettingsChildren = const [
-    const TranscodeSwitch(),
-    const StreamingTranscodingFormatDropdownListTile(),
-    const BitrateSelector(),
-    const DownloadTranscodeEnableDropdownListTile(),
-    const DownloadTranscodeCodecDropdownListTile(),
-    const DownloadBitrateSelector(),
+  var searchableSettingsChildren = [
+    TranscodeSwitch(),
+    StreamingTranscodingFormatDropdownListTile(),
+    BitrateSelector(),
+    DownloadTranscodeEnableDropdownListTile(),
+    DownloadTranscodeCodecDropdownListTile(),
+    DownloadBitrateSelector(),
   ];
   @override
   State<TranscodingSettingsScreen> createState() =>
@@ -40,13 +40,9 @@ class _TranscodingSettingsScreenState extends State<TranscodingSettingsScreen> {
       ),
       body: ListView(
         children: [
-          const TranscodeSwitch(),
-          const StreamingTranscodingFormatDropdownListTile(),
-          const BitrateSelector(),
+          ...widget.searchableSettingsChildren.sublist(0, 3),
           Divider(),
-          const DownloadTranscodeEnableDropdownListTile(),
-          const DownloadTranscodeCodecDropdownListTile(),
-          const DownloadBitrateSelector(),
+          ...widget.searchableSettingsChildren.sublist(4),
         ],
       ),
     );

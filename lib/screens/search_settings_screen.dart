@@ -6,6 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fuzzy/fuzzy.dart';
 
+class SearchableSetting {
+  String rs(String text) {
+    searchText += searchText;
+    return searchText;
+  }
+}
+
 class SettingsSearchDelegate extends SearchDelegate<String> {
   SettingsList settingsList;
   SettingsSearchDelegate({required this.settingsList});

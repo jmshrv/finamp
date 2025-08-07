@@ -11,10 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 class NetworkSettingsScreen extends StatefulWidget {
-  const NetworkSettingsScreen({super.key});
+  NetworkSettingsScreen({super.key});
   static const routeName = "/settings/network";
 
-  static const searchableSettingsChildren = const [
+  var searchableSettingsChildren = const [
     AutoOfflineSelector(),
     PublicAddressSelector(),
     LocalNetworkSelector(),
