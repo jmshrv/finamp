@@ -196,6 +196,12 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
   @override
   Widget build(BuildContext context) {
     final isOffline = ref.watch(finampSettingsProvider.isOffline);
+    bool willAddMultipleTracks =
+        widget.itemsToBeAdded.length > 1 ||
+        BaseItemDtoType.fromItem(widget.itemsToBeAdded.first) != BaseItemDtoType.track;
+    bool isMultipleTracks =
+        widget.itemsToBeAdded.length > 1 &&
+        BaseItemDtoType.fromItem(widget.itemsToBeAdded.first) == BaseItemDtoType.track;
     return PlaylistActionsPlaylistListTile(
       forceLoading: widget.isLoading,
       title: widget.playlist.name ?? AppLocalizations.of(context)!.unknownName,
@@ -210,8 +216,7 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
       onToggle: (bool alreadyInPlaylist) async {
         if (alreadyInPlaylist) {
           // Only single tracks can be removed from playlists
-          if (widget.itemsToBeAdded.length > 1 ||
-              BaseItemDtoType.fromItem(widget.itemsToBeAdded.first) != BaseItemDtoType.track) {
+          if (willAddMultipleTracks) {
             return true;
           }
           // If playlistItemId is null, we need to fetch from the server before we can remove
@@ -249,23 +254,29 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
           return !removed;
         } else {
           // add item collection or multiple tracks to playlist
-          if (widget.itemsToBeAdded.length > 1 ||
-              BaseItemDtoType.fromItem(widget.itemsToBeAdded.first) != BaseItemDtoType.track) {
+          if (willAddMultipleTracks) {
             bool confirmed = false;
-            String itemType = switch (BaseItemDtoType.fromItem(widget.itemsToBeAdded.first)) {
-              BaseItemDtoType.album => "album",
-              BaseItemDtoType.artist => "artist",
-              BaseItemDtoType.genre => "genre",
-              BaseItemDtoType.playlist => "playlist",
-              BaseItemDtoType.track => "tracks",
-              _ => "unknown",
-            };
-            await showDialog(
+            String promptText;
+            if (isMultipleTracks) {
+              promptText = AppLocalizations.of(
+                context,
+              )!.confirmAddMultipleTracksToPlaylist(widget.itemsToBeAdded.length);
+            } else {
+              String itemType = switch (BaseItemDtoType.fromItem(widget.itemsToBeAdded.first)) {
+                BaseItemDtoType.album => "album",
+                BaseItemDtoType.artist => "artist",
+                BaseItemDtoType.genre => "genre",
+                BaseItemDtoType.playlist => "playlist",
+                _ => "unknown",
+              };
+              promptText = AppLocalizations.of(
+                context,
+              )!.confirmAddCollectionItemToPlaylist(itemType, widget.itemsToBeAdded.first.name ?? "Unknown");
+            }
+            await showDialog<void>(
               context: context,
               builder: (context) => ConfirmationPromptDialog(
-                promptText: AppLocalizations.of(
-                  context,
-                )!.confirmAddAlbumToPlaylist(itemType, widget.itemsToBeAdded.first.name ?? "Unknown"),
+                promptText: promptText,
                 confirmButtonText: AppLocalizations.of(context)!.addButtonLabel,
                 abortButtonText: MaterialLocalizations.of(context).cancelButtonLabel,
                 onConfirmed: () => confirmed = true,
