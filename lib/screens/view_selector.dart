@@ -93,6 +93,7 @@ class _ViewSelectorState extends State<ViewSelector> {
                 final view = _views.keys.elementAt(index);
 
                 return CheckboxListTile(
+                  key: ValueKey(view.id),
                   value: isSelected,
                   enabled: view.collectionType == "music",
                   title: Text(_views.keys.elementAt(index).name ?? AppLocalizations.of(context)!.unknownName),

@@ -14,7 +14,10 @@ class DownloadLocationList extends ConsumerWidget {
     return ListView.builder(
       itemCount: locations.length,
       itemBuilder: (context, index) {
-        return DownloadLocationListTile(downloadLocation: locations.elementAt(index));
+        return DownloadLocationListTile(
+          key: ValueKey(locations.elementAt(index)),
+          downloadLocation: locations.elementAt(index),
+        );
       },
     );
   }
