@@ -35,6 +35,7 @@ import 'blurred_player_screen_background.dart';
 import 'package:finamp/services/animated_music_service.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:finamp/services/downloads_service.dart';
 
 const double _defaultToolbarHeight = 53.0;
 const int _defaultMaxToolbarLines = 2;
@@ -153,7 +154,10 @@ class _PlayerScreenContent extends ConsumerWidget {
     }
 
     final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
-    final hasVideoBackground = ref.watch(_videoBackgroundProvider);
+    final hasVideoBackground =
+        (metadata.valueOrNull?.verticalBackgroundVideoFile != null) ||
+        (metadata.isLoading && ref.watch(_videoBackgroundProvider)) ||
+        ref.watch(_videoBackgroundProvider);
 
     final isLyricsLoading = metadata.isLoading || metadata.isRefreshing;
     final isLyricsAvailable =
@@ -430,18 +434,10 @@ class _AnimatedVerticalBackground extends ConsumerStatefulWidget {
 }
 
 class _AnimatedVerticalBackgroundState extends ConsumerState<_AnimatedVerticalBackground> {
-  late final AnimatedMusicService _animatedMusicService;
+  String? _currentVideoSource;
+  String? _lastTrackId;
   Player? _videoPlayer;
   VideoController? _videoController;
-  String? _currentVideoUri;
-  String? _lastTrackId;
-  bool _isLoadingVerticalBackground = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _animatedMusicService = GetIt.instance<AnimatedMusicService>();
-  }
 
   @override
   void dispose() {
@@ -453,66 +449,35 @@ class _AnimatedVerticalBackgroundState extends ConsumerState<_AnimatedVerticalBa
     _videoPlayer?.dispose();
     _videoPlayer = null;
     _videoController = null;
-    _currentVideoUri = null;
-  }
-
-  Future<void> _loadVerticalBackground(String trackId) async {
-    if (_isLoadingVerticalBackground || _lastTrackId == trackId) {
-      return;
-    }
-
-    _isLoadingVerticalBackground = true;
-    _lastTrackId = trackId;
-
-    try {
-      final backgroundUri = await _animatedMusicService.getVerticalBackgroundForTrack(BaseItemId(trackId));
-
-      if (mounted && _lastTrackId == trackId) {
-        if (backgroundUri != null && backgroundUri != _currentVideoUri) {
-          _setupVideoPlayer(backgroundUri);
-        } else if (backgroundUri == null) {
-          _disposeVideoPlayer();
-        }
-      }
-    } catch (e) {
-      // Silently fail - no vertical background available
-      if (mounted) {
-        _disposeVideoPlayer();
-        ref.read(_videoBackgroundProvider.notifier).state = false;
-      }
-    } finally {
-      if (mounted) {
-        ref.read(_videoBackgroundProvider.notifier).state = false;
-      }
-      _isLoadingVerticalBackground = false;
+    _currentVideoSource = null;
+    // Only update provider if widget is still mounted and we're not in a build cycle
+    if (mounted) {
+      ref.read(_videoBackgroundProvider.notifier).state = false;
     }
   }
 
-  void _setupVideoPlayer(String videoUri) {
+  void _setupVideoPlayer(String videoSource) {
     _disposeVideoPlayer();
 
     try {
       _videoPlayer = Player();
       _videoController = VideoController(_videoPlayer!);
-      _currentVideoUri = videoUri;
+      _currentVideoSource = videoSource;
 
       // Configure video player
       _videoPlayer!.setPlaylistMode(PlaylistMode.loop);
       _videoPlayer!.setVolume(0.0); // Mute the video
-      _videoPlayer!.open(Media(videoUri));
+      _videoPlayer!.open(Media(videoSource));
       _videoPlayer!.play();
 
-      // Only call setState if the widget is still mounted
+      // Update provider immediately, then trigger rebuild
       if (mounted) {
-        // Update provider to indicate video is playing
         ref.read(_videoBackgroundProvider.notifier).state = true;
         setState(() {});
       }
     } catch (e) {
       if (mounted) {
-        // Update provider to indicate video is playing
-        ref.read(_videoBackgroundProvider.notifier).state = false;
-        setState(() {});
+        _disposeVideoPlayer();
       }
     }
   }
@@ -520,6 +485,8 @@ class _AnimatedVerticalBackgroundState extends ConsumerState<_AnimatedVerticalBa
   @override
   Widget build(BuildContext context) {
     final queueService = GetIt.instance<QueueService>();
+    final animatedMusicService = GetIt.instance<AnimatedMusicService>();
+
     return StreamBuilder<FinampQueueInfo?>(
       stream: queueService.getQueueStream(),
       builder: (context, snapshot) {
@@ -531,25 +498,98 @@ class _AnimatedVerticalBackgroundState extends ConsumerState<_AnimatedVerticalBa
         final currentTrack = queueInfo.currentTrack;
         final currentTrackId = currentTrack?.baseItemId.raw;
 
-        // Load vertical background if we have a track ID
-        if (currentTrackId != null && currentTrackId != _lastTrackId) {
-          if (mounted) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              _loadVerticalBackground(currentTrackId);
+        // Only proceed if we have a current track
+        if (currentTrackId == null) {
+          if (_currentVideoSource != null) {
+            _disposeVideoPlayer();
+          }
+          return const SizedBox.shrink();
+        }
+
+        // Watch the metadata provider for the current track
+        final metadataAsyncValue = ref.watch(currentTrackMetadataProvider);
+
+        // Handle metadata loading/error states
+        final metadata = metadataAsyncValue.unwrapPrevious();
+
+        // Fix 3: Better handling of loading states
+        if (metadata.isLoading && metadata.valueOrNull == null) {
+          // Still loading initial metadata - keep current state
+          return _buildCurrentVideo();
+        }
+
+        final metadataValue = metadata.valueOrNull;
+        if (metadataValue == null) {
+          // No metadata available
+          if (_currentVideoSource != null) {
+            _disposeVideoPlayer();
+          }
+          return const SizedBox.shrink();
+        }
+
+        // Check if track changed
+        if (currentTrackId != _lastTrackId) {
+          _lastTrackId = currentTrackId;
+
+          String? videoSource;
+
+          // First, try to use locally cached file from metadata
+          if (metadataValue.verticalBackgroundVideoFile != null &&
+              metadataValue.verticalBackgroundVideoFile!.existsSync()) {
+            videoSource = metadataValue.verticalBackgroundVideoFile!.path;
+          }
+          // Fallback to online streaming if not in offline mode and no local file
+          else if (!FinampSettingsHelper.finampSettings.isOffline) {
+            // Use the animated music service to check if vertical background video exists
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              try {
+                final hasVerticalBackground = await animatedMusicService.hasVerticalBackgroundVideo(
+                  BaseItemId(currentTrackId),
+                );
+                if (mounted && hasVerticalBackground && _lastTrackId == currentTrackId) {
+                  final onlineUrl = await animatedMusicService.getVerticalBackgroundForTrack(
+                    BaseItemId(currentTrackId),
+                  );
+                  if (mounted && onlineUrl != null && _lastTrackId == currentTrackId) {
+                    _setupVideoPlayer(onlineUrl);
+                  }
+                } else if (mounted && !hasVerticalBackground) {
+                  // No vertical background available, dispose current player
+                  _disposeVideoPlayer();
+                }
+              } catch (e) {
+                // Silently fail - no vertical background available for streaming
+                if (mounted) {
+                  _disposeVideoPlayer();
+                }
+              }
             });
+            return _buildCurrentVideo();
+          }
+
+          // Setup video player if we have a source
+          if (videoSource != null && videoSource != _currentVideoSource) {
+            _setupVideoPlayer(videoSource);
+          } else if (videoSource == null && _currentVideoSource != null) {
+            // No video available, dispose current player
+            _disposeVideoPlayer();
           }
         }
 
-        // Show animated video background if available
-        if (_videoController != null && _currentVideoUri != null) {
-          return Positioned.fill(
-            child: Video(controller: _videoController!, controls: null, fit: BoxFit.cover, fill: Colors.transparent),
-          );
-        }
-
-        return const SizedBox.shrink();
+        return _buildCurrentVideo();
       },
     );
+  }
+
+  Widget _buildCurrentVideo() {
+    // Show animated video background if available
+    if (_videoController != null && _currentVideoSource != null) {
+      return Positioned.fill(
+        child: Video(controller: _videoController!, controls: null, fit: BoxFit.cover, fill: Colors.transparent),
+      );
+    }
+
+    return const SizedBox.shrink();
   }
 }
 
