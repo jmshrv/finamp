@@ -1154,7 +1154,7 @@
   "@addRemoveFromPlaylist": {
     "description": "Header for add to/remove from playlist popup menu"
   },
-  "addPlaylistSubheader": "Přidat skladbu do seznamu skladeb",
+  "addPlaylistSubheader": "Přidat položky do seznamu skladeb",
   "@addPlaylistSubheader": {
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
   },
@@ -2593,7 +2593,7 @@
   "@quickConnectAuthorizationMenuDescription": {
     "description": "Description for the quick connect authorization menu, shown at the bottom"
   },
-  "createPlaylistFromCurrentQueue": "Uložit frontu jako seznam skladeb",
+  "createPlaylistFromCurrentQueue": "Uložit frontu do seznamu skladeb",
   "@createPlaylistFromCurrentQueue": {
     "description": "Label for a button that creates a new playlist from the current queue."
   },
@@ -2678,5 +2678,27 @@
   "autoExpandPlayerScreenSubtitle": "Toto otevře obrazovku Právě hraje při spuštění přehrávání nové fronty",
   "@autoExpandPlayerScreenSubtitle": {
     "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "confirmAddCollectionItemToPlaylist": "Opravdu chcete přidat všechny skladby{itemType, select, album{z alba} playlist{ze seznamu skladeb} artist{od umělce} genre{ze žánru} other{z položky}} „{itemName}“ do tohoto seznamu skladeb? Odebrat je lze pouze jednotlivě.",
+  "@confirmAddCollectionItemToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, etc. or multiple tracks to a playlist, clarifying that this cannot be undone without removing all tracks individually and manually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmAddMultipleTracksToPlaylist": "Opravdu chcete přidat {trackCount} skladeb do tohoto seznamu skladeb? Odebrat je lze pouze jednotlivě.",
+  "@confirmAddMultipleTracksToPlaylist": {
+    "description": "Warning dialog for adding multiple tracks to a playlist, clarifying that this cannot be undone without removing all tracks individually and manually.",
+    "placeholders": {
+      "trackCount": {
+        "type": "int"
+      }
+    }
   }
 }
