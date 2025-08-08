@@ -825,7 +825,7 @@
   "@redownloadSubtitle": {
     "description": "subtitle for download transcode setting which redownloads tracks with higher allowed qualities"
   },
-  "addPlaylistSubheader": "Добавить композицию в плейлист",
+  "addPlaylistSubheader": "Добавить элементы в плейлист",
   "@addPlaylistSubheader": {
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
   },
@@ -2599,7 +2599,7 @@
   "@performingArtists": {},
   "performingArtist": "Участвующий Исполнитель",
   "@performingArtist": {},
-  "createPlaylistFromCurrentQueue": "Сохранить Очередь как Плейлист",
+  "createPlaylistFromCurrentQueue": "Сохранить Очередь в Плейлист",
   "@createPlaylistFromCurrentQueue": {
     "description": "Label for a button that creates a new playlist from the current queue."
   },
@@ -2684,5 +2684,27 @@
   "autoExpandPlayerScreenSubtitle": "Будет открывать экран плеера, когда вы начинаете воспрозведение новой очереди",
   "@autoExpandPlayerScreenSubtitle": {
     "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "confirmAddCollectionItemToPlaylist": "Вы уверены, что хотите добавить все треки {itemType, select, album{из альбома} playlist{из плейлиста} artist{исполнителя} genre{жанра} other{объекта}} '{itemName}' в плейлист? Их можно будет удалить только по одному.",
+  "@confirmAddCollectionItemToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, etc. or multiple tracks to a playlist, clarifying that this cannot be undone without removing all tracks individually and manually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmAddMultipleTracksToPlaylist": "Вы уверены, что хотите добавить {trackCount} треков в этот плейлист? Их можно будет удалить только по одному.",
+  "@confirmAddMultipleTracksToPlaylist": {
+    "description": "Warning dialog for adding multiple tracks to a playlist, clarifying that this cannot be undone without removing all tracks individually and manually.",
+    "placeholders": {
+      "trackCount": {
+        "type": "int"
+      }
+    }
   }
 }
