@@ -102,6 +102,7 @@ class _MusicScreenTabViewState extends ConsumerState<MusicScreenTabView>
       final sortOrder =
           (widget.sortOrderOverride ?? settings.tabSortOrder[widget.tabContentType])?.toString() ??
           SortOrder.ascending.toString();
+      final sortBy = widget.sortByOverride ?? settings.tabSortBy[widget.tabContentType];
       final newItems = await _jellyfinApiHelper.getItems(
         // starting with Jellyfin 10.9, only automatically created playlists will have a specific library as parent. user-created playlists will not be returned anymore
         // this condition fixes this by not providing a parentId when fetching playlists
@@ -112,7 +113,7 @@ class _MusicScreenTabViewState extends ConsumerState<MusicScreenTabView>
         // Jellyfin web client does. If this isn't the case, sort by "SortName".
         // If widget.sortBy is set, it is used instead.
         sortBy:
-            (widget.sortByOverride ?? settings.tabSortBy[widget.tabContentType])?.jellyfinName(widget.tabContentType) ??
+            sortBy?.jellyfinName(widget.tabContentType) ??
             (widget.tabContentType == TabContentType.tracks ? "Album,SortName" : "SortName"),
         sortOrder: sortOrder,
         searchTerm: widget.searchTerm?.trim(),
@@ -129,7 +130,11 @@ class _MusicScreenTabViewState extends ConsumerState<MusicScreenTabView>
                     (widget.isFavoriteOverride == null && settings.onlyShowFavorites)))
             ? true
             : null,
-        startIndex: pageKey,
+        // Prevent arbitrarily stopping at size of library when using random order by always using a 0 offset.  The order
+        // of items in random requests are independent, so some items may be duplicated and others may be shown multiple
+        // times, making the library size limit arbitrary.  If the library size is < _pageSize, all items are fetched in
+        // a single request and each item will be present exactly once, so loading will stop as normal.
+        startIndex: sortBy == SortBy.random ? 0 : pageKey,
         limit: _pageSize,
         artistType: settings.defaultArtistType,
         genreFilter: widget.genreFilter,
