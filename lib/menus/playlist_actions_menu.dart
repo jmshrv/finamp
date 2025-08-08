@@ -20,7 +20,7 @@ const playlistActionsMenuRouteName = "/playlist-actions-menu";
 
 Future<void> showPlaylistActionsMenu({
   required BuildContext context,
-  required BaseItemDto item,
+  required List<BaseItemDto> items,
   BaseItemDto? parentPlaylist,
 }) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
@@ -31,44 +31,49 @@ Future<void> showPlaylistActionsMenu({
 
   await showThemedBottomSheet(
     context: context,
-    item: item,
+    item: items.length == 1 ? items.first : null,
     routeName: playlistActionsMenuRouteName,
     minDraggableHeight: 0.2,
     buildSlivers: (context) {
       var themeColor = Theme.of(context).colorScheme.primary;
 
       final menuEntries = [
-        MenuItemInfoHeader.condensed(item: item),
-        const SizedBox(height: 16),
-        Consumer(
-          builder: (context, ref, child) {
-            bool isFavorite = ref.watch(isFavoriteProvider(item));
-            return PlaylistActionsPlaylistListTile(
-              title: AppLocalizations.of(context)!.favorites,
-              leading: AspectRatio(
-                aspectRatio: 1.0,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(color: themeColor.withOpacity(0.3)),
-                  child: const Center(child: Icon(TablerIcons.heart, size: 36.0, color: Colors.white)),
+        if (items.length == 1) MenuItemInfoHeader.condensed(item: items.first),
+        if (items.length == 1) const SizedBox(height: 16),
+        if (items.length == 1)
+          Consumer(
+            builder: (context, ref, child) {
+              bool isFavorite = ref.watch(isFavoriteProvider(items.first));
+              return PlaylistActionsPlaylistListTile(
+                title: AppLocalizations.of(context)!.favorites,
+                leading: AspectRatio(
+                  aspectRatio: 1.0,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(color: themeColor.withOpacity(0.3)),
+                    child: const Center(child: Icon(TablerIcons.heart, size: 36.0, color: Colors.white)),
+                  ),
                 ),
-              ),
-              positiveIcon: TablerIcons.heart_filled,
-              negativeIcon: TablerIcons.heart,
-              initialState: isFavorite,
-              tapFeedback: false,
-              onToggle: (bool currentState) async {
-                return ref.read(isFavoriteProvider(item).notifier).updateFavorite(!isFavorite);
-              },
-              enabled: !ref.watch(finampSettingsProvider.isOffline),
-            );
-          },
-        ),
+                positiveIcon: TablerIcons.heart_filled,
+                negativeIcon: TablerIcons.heart,
+                initialState: isFavorite,
+                tapFeedback: false,
+                onToggle: (bool currentState) async {
+                  return ref.read(isFavoriteProvider(items.first).notifier).updateFavorite(!isFavorite);
+                },
+                enabled: !ref.watch(finampSettingsProvider.isOffline),
+              );
+            },
+          ),
         FutureBuilder(
           future: playlistsFuture.then((value) => value?.firstWhereOrNull((x) => x.id == parentPlaylist?.id)),
           initialData: parentPlaylist,
           builder: (context, snapshot) {
             if (snapshot.data != null) {
-              return AddToPlaylistTile(playlist: snapshot.data!, track: item, playlistItemId: item.playlistItemId);
+              return AddToPlaylistTile(
+                playlist: snapshot.data!,
+                itemsToBeAdded: items,
+                playlistItemId: items.length == 1 ? items.first.playlistItemId : null,
+              );
             } else {
               return const SizedBox.shrink();
             }
@@ -95,7 +100,7 @@ Future<void> showPlaylistActionsMenu({
           sliver: MenuMask(
             height: PlaylistActionsMenuHeader.defaultHeight,
             child: AddToPlaylistList(
-              itemToAdd: item,
+              itemsToAdd: items,
               playlistsFuture: playlistsFuture.then(
                 (value) => (value?.where((element) => element.id != parentPlaylist?.id).toList() ?? []),
               ),

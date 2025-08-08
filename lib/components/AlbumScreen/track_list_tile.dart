@@ -2,19 +2,16 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
-import 'package:finamp/menus/track_menu.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/components/now_playing_bar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/menus/track_menu.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
-import 'package:finamp/screens/player_screen.dart';
 import 'package:finamp/services/current_album_image_provider.dart';
+import 'package:finamp/services/datetime_helper.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
-import 'package:finamp/services/queue_service.dart';
-import 'package:finamp/services/datetime_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -23,6 +20,7 @@ import 'package:get_it/get_it.dart';
 import '../../services/audio_service_helper.dart';
 import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
+import '../../services/queue_service.dart';
 import '../../services/theme_provider.dart';
 import '../album_image.dart';
 import '../print_duration.dart';
@@ -387,7 +385,7 @@ class QueueListTile extends StatelessWidget {
   }
 }
 
-class TrackListItem extends ConsumerStatefulWidget {
+class TrackListItem extends ConsumerWidget {
   final BaseItemDto baseItem;
   final BaseItemDto? parentItem;
   final int? listIndex;
@@ -431,54 +429,44 @@ class TrackListItem extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<TrackListItem> createState() => TrackListItemState();
-}
-
-class TrackListItemState extends ConsumerState<TrackListItem> with SingleTickerProviderStateMixin {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     bool playable;
     if (ref.watch(finampSettingsProvider.isOffline)) {
       playable = ref.watch(
         GetIt.instance<DownloadsService>()
-            .stateProvider(DownloadStub.fromItem(type: DownloadItemType.track, item: widget.baseItem))
+            .stateProvider(DownloadStub.fromItem(type: DownloadItemType.track, item: baseItem))
             .select((value) => value.value?.isComplete ?? false),
       );
     } else {
       playable = true;
     }
 
-    final bool showAlbum = widget.baseItem.albumId != widget.parentItem?.id;
+    final bool showAlbum = baseItem.albumId != parentItem?.id;
 
     final isCurrentlyPlaying = ref.watch(
-      currentTrackProvider.select((queueItem) => queueItem.valueOrNull?.baseItemId == widget.baseItem.id),
+      currentTrackProvider.select((queueItem) => queueItem.valueOrNull?.baseItemId == baseItem.id),
     );
 
-    var listItem = Opacity(
-      opacity: playable ? 1.0 : 0.5,
-      child: Card(
-        color: Colors.transparent,
-        elevation: 0,
-        margin: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-        child: TrackListItemTile(
-          baseItem: widget.baseItem,
-          listIndex: widget.listIndex,
-          actualIndex: widget.actualIndex,
-          showIndex: widget.showIndex,
-          showCover: widget.showCover,
-          showArtists: widget.showArtists,
-          forceAlbumArtists: widget.forceAlbumArtists,
-          showAlbum: showAlbum,
-          adaptiveAdditionalInfoSortBy: widget.adaptiveAdditionalInfoSortBy,
-          isCurrentTrack: isCurrentlyPlaying,
-          highlightCurrentTrack: widget.highlightCurrentTrack,
-          allowReorder: widget.allowReorder,
-          onTap: () => widget.onTap(playable),
-        ),
+    var listCard = Padding(
+      padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+      child: TrackListItemTile(
+        baseItem: baseItem,
+        listIndex: listIndex,
+        actualIndex: actualIndex,
+        showIndex: showIndex,
+        showCover: showCover,
+        showArtists: showArtists,
+        forceAlbumArtists: forceAlbumArtists,
+        showAlbum: showAlbum,
+        adaptiveAdditionalInfoSortBy: adaptiveAdditionalInfoSortBy,
+        isCurrentTrack: isCurrentlyPlaying,
+        highlightCurrentTrack: highlightCurrentTrack,
+        allowReorder: allowReorder,
+        onTap: () => onTap(playable),
       ),
     );
+
+    var listItem = playable ? listCard : Opacity(opacity: 0.5, child: listCard);
 
     var unthemedItem = Builder(
       builder: (context) {
@@ -488,10 +476,10 @@ class TrackListItemState extends ConsumerState<TrackListItem> with SingleTickerP
             FeedbackHelper.feedback(FeedbackType.selection);
             await showModalTrackMenu(
               context: context,
-              item: widget.baseItem,
-              isInPlaylist: widget.isInPlaylist,
-              parentItem: widget.parentItem,
-              onRemoveFromList: widget.onRemoveFromList,
+              item: baseItem,
+              isInPlaylist: isInPlaylist,
+              parentItem: parentItem,
+              onRemoveFromList: onRemoveFromList,
               confirmPlaylistRemoval: false,
             );
           }
@@ -512,33 +500,31 @@ class TrackListItemState extends ConsumerState<TrackListItem> with SingleTickerP
         return GestureDetector(
           onTapDown: (_) {
             // Begin precalculating theme for song menu
-            ref.listenManual(finampThemeProvider(ThemeInfo(widget.baseItem)), (_, __) {});
+            ref.listenManual(finampThemeProvider(ThemeInfo(baseItem)), (_, __) {});
           },
           onLongPressStart: (details) => menuCallback(),
           onSecondaryTapDown: (details) => menuCallback(),
           child: !playable
               ? listItem
               : Dismissible(
-                  key: Key(widget.listIndex.toString()),
-                  direction: ref.watch(finampSettingsProvider.disableGesture) || !widget.allowDismiss
+                  key: Key(listIndex.toString()),
+                  direction: ref.watch(finampSettingsProvider.disableGesture) || !allowDismiss
                       ? DismissDirection.none
                       : allowedDismissDirection,
                   dismissThresholds: const {DismissDirection.startToEnd: 0.65, DismissDirection.endToStart: 0.65},
                   // no background, dismissing really dismisses here
-                  confirmDismiss: widget.confirmDismiss,
-                  background: widget.leftSwipeBackground,
-                  secondaryBackground: widget.rightSwipeBackground,
+                  confirmDismiss: confirmDismiss,
+                  background: leftSwipeBackground,
+                  secondaryBackground: rightSwipeBackground,
                   child: listItem,
                 ),
         );
       },
     );
 
-    return isCurrentlyPlaying && widget.highlightCurrentTrack
+    return isCurrentlyPlaying && highlightCurrentTrack
         ? PlayerScreenTheme(
-            themeTransitionDuration: MediaQuery.of(context).disableAnimations
-                ? Duration.zero
-                : const Duration(milliseconds: 500),
+            themeTransitionDuration: const Duration(milliseconds: 500),
             themeOverride: (imageTheme) {
               return imageTheme.copyWith(
                 colorScheme: imageTheme.colorScheme.copyWith(
@@ -656,6 +642,7 @@ class TrackListItemTile extends ConsumerWidget {
         minVerticalPadding: 0.0,
         horizontalTitleGap: defaultTitleGap,
         contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         // tileColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
         leading: Row(
           mainAxisSize: MainAxisSize.min,
@@ -681,8 +668,7 @@ class TrackListItemTile extends ConsumerWidget {
                   ),
                 ),
               ),
-            if (showCover)
-              AlbumImage(item: baseItem, borderRadius: highlightTrack ? BorderRadius.zero : BorderRadius.circular(8.0)),
+            if (showCover) AlbumImage(item: baseItem, borderRadius: BorderRadius.circular(8.0)),
           ],
         ),
         title: ConstrainedBox(

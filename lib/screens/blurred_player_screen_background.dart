@@ -38,7 +38,7 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
 
     return Positioned.fill(
       child: AnimatedSwitcher(
-        duration: getThemeTransitionDuration(context),
+        duration: getThemeTransitionDuration(context, null),
         switchOutCurve: const Threshold(0.0),
         child: imageProvider == null
             ? placeholderBuilder(null)
