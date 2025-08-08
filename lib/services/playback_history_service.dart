@@ -256,11 +256,9 @@ class PlaybackHistoryService {
       element.endTime != null &&
           !(
           // played less than 30 seconds
-          element.endTime!.difference(element.startTime) >= const Duration(seconds: 30) ||
+          (element.playDuration ?? Duration.zero) >= const Duration(seconds: 30) ||
               // played less than 20% of the track duration
-              element.endTime!.difference(element.startTime).inMilliseconds /
-                      (element.item.baseItem?.runTimeTicksDuration() ?? element.item.item.duration ?? Duration.zero)
-                          .inMilliseconds >=
+              (element.playPercentage ?? 0.0) >=
                   0.2)) {
         continue;
       }

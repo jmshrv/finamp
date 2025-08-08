@@ -2098,6 +2098,21 @@ class FinampHistoryItem {
 
   @HiveField(2)
   DateTime? endTime;
+
+  /// The duration of the play session (up until the current moment if still playing)
+  Duration? get playDuration {
+    return (endTime == null ? startTime.difference(DateTime.now()) : endTime!.difference(startTime)).abs();
+  }
+
+  /// The percentage of the item that has been played (up until the current moment if still playing)
+  /// This shows the listened duration, not the "played" duration. so skipping ahead does not increase the play percentage
+  double? get playPercentage {
+    final totalDuration = item.baseItem?.runTimeTicksDuration() ?? item.item.duration;
+    if (totalDuration == null) {
+      return null;
+    }
+    return (playDuration!.inMicroseconds / totalDuration.inMicroseconds).clamp(0.0, 1.0);
+  }
 }
 
 @HiveType(typeId: 61)
