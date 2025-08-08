@@ -1356,7 +1356,7 @@
   "@trackOfflineFavoritesSubtitle": {},
   "allPlaylistsInfoSetting": "Fazer Download de Metadados da Lista de Reprodução",
   "@allPlaylistsInfoSetting": {},
-  "addPlaylistSubheader": "Adicionar faixa a uma lista de reprodução",
+  "addPlaylistSubheader": "Adicionar itens a uma lista de reprodução",
   "@addPlaylistSubheader": {
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
   },
@@ -2603,7 +2603,7 @@
   "@quickConnectAuthorizationMenuDescription": {
     "description": "Description for the quick connect authorization menu, shown at the bottom"
   },
-  "createPlaylistFromCurrentQueue": "Salvar Fila como Lista de Reprodução",
+  "createPlaylistFromCurrentQueue": "Salvar Fila para Lista de Reprodução",
   "@createPlaylistFromCurrentQueue": {
     "description": "Label for a button that creates a new playlist from the current queue."
   },
@@ -2688,5 +2688,27 @@
   "autoExpandPlayerScreenSubtitle": "Isto irá abrir o ecrã agora a tocar quando se inicia reprodução duma nova fila",
   "@autoExpandPlayerScreenSubtitle": {
     "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "confirmAddCollectionItemToPlaylist": "Tem certeza que deseja adicionar todas as faixas de {itemType, select, album{álbum} playlist{lista de reprodução} artist{artista} genre{estilo} other{item}} '{itemName}' a esta lista de reprodução? Elas só podem ser removidas individualmente.",
+  "@confirmAddCollectionItemToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, etc. or multiple tracks to a playlist, clarifying that this cannot be undone without removing all tracks individually and manually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmAddMultipleTracksToPlaylist": "Tem certeza que deseja adicionar {trackCount} faixas a esta lista de reprodução? Elas só podem ser removidas individualmente.",
+  "@confirmAddMultipleTracksToPlaylist": {
+    "description": "Warning dialog for adding multiple tracks to a playlist, clarifying that this cannot be undone without removing all tracks individually and manually.",
+    "placeholders": {
+      "trackCount": {
+        "type": "int"
+      }
+    }
   }
 }
