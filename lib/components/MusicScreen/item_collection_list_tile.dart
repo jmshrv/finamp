@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:finamp/components/favorite_button.dart';
 import 'package:finamp/components/print_duration.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/current_album_image_provider.dart';
+import 'package:finamp/services/datetime_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
-import 'package:finamp/services/datetime_helper.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
@@ -202,31 +202,35 @@ class ItemCollectionListTile extends ConsumerWidget {
     final unthemedListTile = Builder(
       // get updated context after the theme is applied
       builder: (context) {
-        return ListTile(
-          textColor: Theme.of(context).textTheme.bodyLarge?.color,
-          tileColor: Theme.of(context).colorScheme.surfaceContainer,
-          contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: !showSubtitle ? 8.0 : 0.0),
-          onTap: onTap,
-          leading: AlbumImage(item: item),
-          title: titleText,
-          subtitle: (showSubtitle) ? subtitleText : null,
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              if ((itemType == BaseItemDtoType.artist
-                      ? jellyfinApiHelper.selectedMixArtists
-                      : (itemType == BaseItemDtoType.genre)
-                      ? jellyfinApiHelper.selectedMixGenres
-                      : jellyfinApiHelper.selectedMixAlbums)
-                  .contains(item))
-                const Icon(Icons.explore),
-              FavoriteButton(
-                item: item,
-                onlyIfFav: true,
-                showFavoriteIconOnlyWhenFilterDisabled: showFavoriteIconOnlyWhenFilterDisabled,
-              ),
-            ],
+        return Padding(
+          padding: const EdgeInsets.only(left: 6.0, right: 6.0),
+          child: ListTile(
+            textColor: Theme.of(context).textTheme.bodyLarge?.color,
+            tileColor: Theme.of(context).colorScheme.surfaceContainer,
+            contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: !showSubtitle ? 8.0 : 0.0),
+            onTap: onTap,
+            leading: AlbumImage(item: item),
+            title: titleText,
+            subtitle: (showSubtitle) ? subtitleText : null,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                if ((itemType == BaseItemDtoType.artist
+                        ? jellyfinApiHelper.selectedMixArtists
+                        : (itemType == BaseItemDtoType.genre)
+                        ? jellyfinApiHelper.selectedMixGenres
+                        : jellyfinApiHelper.selectedMixAlbums)
+                    .contains(item))
+                  const Icon(Icons.explore),
+                FavoriteButton(
+                  item: item,
+                  onlyIfFav: true,
+                  showFavoriteIconOnlyWhenFilterDisabled: showFavoriteIconOnlyWhenFilterDisabled,
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -235,9 +239,7 @@ class ItemCollectionListTile extends ConsumerWidget {
     return isCurrentlyPlaying && highlightCurrentItem
         ? ItemTheme(
             item: item,
-            themeTransitionDuration: MediaQuery.of(context).disableAnimations
-                ? Duration.zero
-                : const Duration(milliseconds: 500),
+            themeTransitionDuration: const Duration(milliseconds: 500),
             themeOverride: (imageTheme) {
               return imageTheme.copyWith(
                 colorScheme: imageTheme.colorScheme.copyWith(

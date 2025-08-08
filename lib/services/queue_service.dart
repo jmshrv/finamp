@@ -31,6 +31,12 @@ class QueueService {
   /// Used to build content:// URIs that are handled by Finamp's built-in content provider.
   static final contentProviderPackageName = "com.unicornsonlsd.finamp";
 
+  static const savedQueueSource = QueueItemSource.rawId(
+    type: QueueItemSourceType.unknown,
+    name: QueueItemSourceName(type: QueueItemSourceNameType.savedQueue),
+    id: "savedqueue",
+  );
+
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final _audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
   final _finampUserHelper = GetIt.instance<FinampUserHelper>();
@@ -392,19 +398,13 @@ class QueueService {
 
       if (loadedTracks > 0) {
         await _replaceWholeQueue(
-          saveQueue: false,
+          isRestoredQueue: true,
           itemList: items["previous"]! + items["current"]! + items["queue"]!,
           initialIndex: items["current"]!.isNotEmpty || items["queue"]!.isNotEmpty ? items["previous"]!.length : 0,
           // Always restore queues as linear to prevent them being reshuffled while restoring
           order: FinampPlaybackOrder.linear,
           beginPlaying: isReload && (_audioHandler.playbackState.valueOrNull?.playing ?? false),
-          source:
-              info.source ??
-              QueueItemSource.rawId(
-                type: QueueItemSourceType.unknown,
-                name: const QueueItemSourceName(type: QueueItemSourceNameType.savedQueue),
-                id: "savedqueue",
-              ),
+          source: info.source ?? savedQueueSource,
         );
 
         Future<void> seekFuture = Future.value();
@@ -463,7 +463,7 @@ class QueueService {
     int? initialIndex,
     FinampPlaybackOrder? order,
     bool beginPlaying = true,
-    bool saveQueue = true,
+    bool isRestoredQueue = false,
   }) async {
     try {
       if (itemList.isEmpty) {
@@ -495,7 +495,7 @@ class QueueService {
 
       _queueServiceLogger.finest("Replacing whole queue with ${itemList.length} items.");
 
-      if (saveQueue) {
+      if (!isRestoredQueue) {
         archiveSavedQueue();
         _savedQueueState = SavedQueueState.saving;
       }
@@ -514,12 +514,12 @@ class QueueService {
         try {
           MediaItem mediaItem = await generateMediaItem(
             item,
-            contextNormalizationGain: source.contextNormalizationGain,
+            contextNormalizationGain: isRestoredQueue ? null : source.contextNormalizationGain,
           );
           newItems.add(
             FinampQueueItem(
               item: mediaItem,
-              source: source,
+              source: isRestoredQueue ? savedQueueSource : source,
               type: i == 0 ? QueueItemQueueType.currentTrack : QueueItemQueueType.queue,
             ),
           );

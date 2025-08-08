@@ -1,5 +1,5 @@
-import 'package:finamp/services/genre_screen_provider.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/genre_screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -33,7 +33,7 @@ class _GenreScreenState extends ConsumerState<GenreScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final BaseItemDto genre = widget.widgetGenre ?? ModalRoute.of(context)!.settings.arguments as BaseItemDto;
+    final BaseItemDto genre = widget.widgetGenre ?? ModalRoute.settingsOf(context)!.arguments as BaseItemDto;
 
     return Scaffold(
       extendBody: true,
