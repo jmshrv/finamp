@@ -642,18 +642,20 @@ class TrackListItemTile extends ConsumerWidget {
     );
     final addSpaceAfterSpecialIcons =
         (downloadedIndicator.isVisible(ref) || (baseItem.hasLyrics ?? false)) && (showDateAdded || showDateLastPlayed);
+      
+    final showPlaybackProgress = !highlightCurrentTrack && playbackProgress != null && playbackProgress! < 0.99;
 
     return ListTileTheme(
       tileColor: highlightTrack ? Theme.of(context).colorScheme.surfaceContainer : Colors.transparent,
       child: Stack(
         children: [
-          if (!highlightTrack && playbackProgress != null)
+          if (showPlaybackProgress)
             Positioned.fill(
               child: Container(
                 margin: const EdgeInsets.only(left: defaultTileHeight),
                 child: FractionallySizedBox(
                   alignment: AlignmentDirectional.centerStart,
-                  widthFactor: (playbackProgress ?? 0),
+                  widthFactor: playbackProgress,
                   child: DecoratedBox(
                     decoration: ShapeDecoration(
                       color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.1),
@@ -671,7 +673,6 @@ class TrackListItemTile extends ConsumerWidget {
             horizontalTitleGap: defaultTitleGap,
             contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(albumCoverCornerRadius)),
-            // tileColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
             leading: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
