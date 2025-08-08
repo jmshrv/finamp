@@ -34,7 +34,7 @@ class FinampLogsHelper {
     if (_logFileWriter != null) {
       // This fails if we log an event before setting up userHelper
       var message = log.censoredMessage;
-      if (log.stackTrace == null) {
+      if (log.getStack == null) {
         // Truncate long messages from chopper, but leave long stack traces
         message = message.substring(0, min(1024 * 5, message.length));
       }

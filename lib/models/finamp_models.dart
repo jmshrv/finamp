@@ -9,7 +9,6 @@ import 'package:background_downloader/background_downloader.dart';
 import 'package:collection/collection.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:finamp/services/discord_rpc.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -1812,7 +1811,7 @@ enum QueueItemQueueType {
 
 @HiveType(typeId: 54)
 class QueueItemSource {
-  QueueItemSource.rawId({
+  const QueueItemSource.rawId({
     required this.type,
     required this.name,
     required this.id,
@@ -1865,19 +1864,19 @@ class QueueItemSource {
   }) : id = id.raw;
 
   @HiveField(0)
-  QueueItemSourceType type;
+  final QueueItemSourceType type;
 
   @HiveField(1)
-  QueueItemSourceName name;
+  final QueueItemSourceName name;
 
   @HiveField(2)
-  String id;
+  final String id;
 
   @HiveField(3)
-  BaseItemDto? item;
+  final BaseItemDto? item;
 
   @HiveField(4)
-  double? contextNormalizationGain;
+  final double? contextNormalizationGain;
 }
 
 @HiveType(typeId: 55)

@@ -1,8 +1,8 @@
 import 'package:clipboard/clipboard.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/censored_log.dart';
 import 'package:finamp/services/contains_login.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:logging/logging.dart';
 
 import '../global_snackbar.dart';
@@ -30,14 +30,14 @@ class _LogTileState extends State<LogTile> {
         try {
           await FlutterClipboard.copy(widget.logRecord.censoredMessage);
         } catch (e) {
-          errorSnackbar(e, context);
+          GlobalSnackbar.error(e);
         }
       },
       onSecondaryTap: () async {
         try {
           await FlutterClipboard.copy(widget.logRecord.censoredMessage);
         } catch (e) {
-          errorSnackbar(e, context);
+          GlobalSnackbar.error(e);
         }
       },
       child: Card(
@@ -72,9 +72,9 @@ class _LogTileState extends State<LogTile> {
             Text(AppLocalizations.of(context)!.message, style: Theme.of(context).textTheme.titleLarge),
             _LogMessageContent(widget.logRecord.message),
             const SizedBox(height: 16.0),
-            if (widget.logRecord.stackTrace != null)
+            if (widget.logRecord.getStack != null)
               Text(AppLocalizations.of(context)!.stackTrace, style: Theme.of(context).textTheme.titleLarge),
-            if (widget.logRecord.stackTrace != null) _LogMessageContent(widget.logRecord.stackTrace.toString()),
+            if (widget.logRecord.getStack != null) _LogMessageContent(widget.logRecord.getStack.toString()),
           ],
           onExpansionChanged: (value) async {
             if (value && !hasConfirmed && widget.logRecord.containsLogin) {

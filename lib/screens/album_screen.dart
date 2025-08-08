@@ -30,7 +30,7 @@ class _AlbumScreenState extends ConsumerState<AlbumScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final BaseItemDto parent = widget.parent ?? ModalRoute.of(context)!.settings.arguments as BaseItemDto;
+    final BaseItemDto parent = widget.parent ?? ModalRoute.settingsOf(context)!.arguments as BaseItemDto;
 
     return Scaffold(
       extendBody: true,

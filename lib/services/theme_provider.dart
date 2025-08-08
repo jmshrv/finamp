@@ -20,17 +20,6 @@ import 'widget_bindings_observer_provider.dart';
 
 part 'theme_provider.g.dart';
 
-class ThemeImage {
-  ThemeImage(this.image, this.blurHash, {this.useIsolate = true});
-  const ThemeImage.empty() : image = null, blurHash = null, useIsolate = true;
-  // The background image to use
-  final ImageProvider? image;
-  // The blurHash associated with the image
-  final String? blurHash;
-  // Whether to use an isolate for slower but less laggy theme calculations
-  final bool useIsolate;
-}
-
 final themeProviderLogger = Logger("ThemeProvider");
 
 class PlayerScreenTheme extends StatelessWidget {
@@ -71,7 +60,7 @@ class PlayerScreenTheme extends StatelessWidget {
             theme = themeOverride!(theme);
           }
           return AnimatedTheme(
-            duration: themeTransitionDuration ?? getThemeTransitionDuration(context),
+            duration: getThemeTransitionDuration(context, themeTransitionDuration),
             data: theme,
             child: child!,
           );
@@ -110,7 +99,7 @@ class ItemTheme extends StatelessWidget {
             theme = themeOverride!(theme);
           }
           return AnimatedTheme(
-            duration: themeTransitionDuration ?? getThemeTransitionDuration(context),
+            duration: getThemeTransitionDuration(context, themeTransitionDuration),
             data: theme,
             child: child!,
           );
@@ -158,6 +147,7 @@ ThemeImage themeImage(Ref ref, ThemeInfo request) {
     if (item.blurHash != null) {
       image = BlurHashImage(item.blurHash!);
     } else if (item.imageId != null) {
+      // ignore: avoid_manual_providers_as_generated_provider_dependency
       image = ref.watch(albumImageProvider(AlbumImageRequest(item: item, maxHeight: 100, maxWidth: 100)));
     }
   }
@@ -348,10 +338,23 @@ class ThemeRequestFromImage {
   int get hashCode => image.hashCode;
 }
 
+class ThemeImage {
+  ThemeImage(this.image, this.blurHash, {this.useIsolate = true, this.usePLayerThemeWhileLoading = false});
+  const ThemeImage.empty() : image = null, blurHash = null, useIsolate = true, usePLayerThemeWhileLoading = false;
+  // The background image to use
+  final ImageProvider? image;
+  // The blurHash associated with the image
+  final String? blurHash;
+  // Whether to use an isolate for slower but less laggy theme calculations
+  final bool useIsolate;
+
+  final bool usePLayerThemeWhileLoading;
+}
+
 _ThemeTransitionCalculator? _calculator;
 
-Duration getThemeTransitionDuration(BuildContext context) =>
-    (_calculator ??= _ThemeTransitionCalculator()).getThemeTransitionDuration(context);
+Duration getThemeTransitionDuration(BuildContext context, Duration? duration) =>
+    (_calculator ??= _ThemeTransitionCalculator()).getThemeTransitionDuration(context, duration);
 
 /// Skip track change transition animations if app or route is in background
 class _ThemeTransitionCalculator {
@@ -372,10 +375,12 @@ class _ThemeTransitionCalculator {
 
   bool _skipAllTransitions = false;
 
-  Duration getThemeTransitionDuration(BuildContext context) {
+  Duration getThemeTransitionDuration(BuildContext context, Duration? duration) {
     if (_skipAllTransitions || MediaQuery.of(context).disableAnimations) {
       return Duration.zero;
     }
-    return context.mounted ? const Duration(milliseconds: 1000) : Duration.zero;
+    return (context.mounted && (ModalRoute.isCurrentOf(context) ?? true))
+        ? duration ?? const Duration(milliseconds: 1000)
+        : Duration.zero;
   }
 }

@@ -2,14 +2,16 @@
 // for logging, analytics, and diagnostics.
 
 import 'dart:io' show Platform;
+
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
-import 'package:logging/logging.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:logging/logging.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'finamp_user_helper.dart';
 
 part 'environment_metadata.g.dart';
@@ -224,7 +226,7 @@ class EnvironmentMetadata {
 
   String get pretty =>
       "=== METADATA ===\n"
-      "Device Info: ${deviceInfo.pretty}\n"
-      "App Info: ${appInfo.pretty}\n"
-      "Server Info: ${serverInfo?.pretty ?? "Not available"}";
+      "${deviceInfo.pretty}\n"
+      "${appInfo.pretty}\n"
+      "${serverInfo?.pretty ?? "Server Info: Not available"}";
 }
