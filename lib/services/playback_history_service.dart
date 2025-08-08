@@ -250,6 +250,21 @@ class PlaybackHistoryService {
     final groupedHistoryMap = <DateTime, List<FinampHistoryItem>>{};
 
     for (var element in _history) {
+      // ignore "skipped" tracks
+      if (
+      // not still playing
+      element.endTime != null &&
+          !(
+          // played less than 30 seconds
+          element.endTime!.difference(element.startTime) >= const Duration(seconds: 30) ||
+              // played less than 20% of the track duration
+              element.endTime!.difference(element.startTime).inMilliseconds /
+                      (element.item.baseItem?.runTimeTicksDuration() ?? element.item.item.duration ?? Duration.zero)
+                          .inMilliseconds >=
+                  0.2)) {
+        continue;
+      }
+
       final date = dateTimeConstructor(element);
 
       if (groupedHistoryMap.containsKey(date)) {
