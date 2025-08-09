@@ -18,7 +18,6 @@ class TranscodingSettingsScreen extends StatefulWidget {
     BitrateSelector(),
     DownloadTranscodeEnableDropdownListTile(),
     DownloadTranscodeCodecDropdownListTile(),
-    DownloadBitrateSelector(),
   ];
   @override
   State<TranscodingSettingsScreen> createState() =>

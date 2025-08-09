@@ -3,9 +3,9 @@ PATH=${PATH:-}
 nix_saved_PATH="$PATH"
 XDG_DATA_DIRS=${XDG_DATA_DIRS:-}
 nix_saved_XDG_DATA_DIRS="$XDG_DATA_DIRS"
-ANDROID_HOME='/nix/store/jl9rc9dlrcy3jpdqqr7fdrnivvhlnxap-androidsdk/libexec/android-sdk'
+ANDROID_HOME='/nix/store/cphfh2pcjbnpaz554lh5rxiqcr92cbw3-androidsdk/libexec/android-sdk'
 export ANDROID_HOME
-ANDROID_SDK_ROOT='/nix/store/jl9rc9dlrcy3jpdqqr7fdrnivvhlnxap-androidsdk/libexec/android-sdk'
+ANDROID_SDK_ROOT='/nix/store/cphfh2pcjbnpaz554lh5rxiqcr92cbw3-androidsdk/libexec/android-sdk'
 export ANDROID_SDK_ROOT
 AR='ar'
 export AR
@@ -24,10 +24,10 @@ CXX='g++'
 export CXX
 FLUTTER_ROOT='/nix/store/cnx9jaibxg5bpc151w7jqzy8b42ja8nh-flutter-wrapped-3.32.6-sdk-links'
 export FLUTTER_ROOT
-GRADLE_OPTS='-Dorg.gradle.project.android.aapt2FromMavenOverride=/nix/store/jl9rc9dlrcy3jpdqqr7fdrnivvhlnxap-androidsdk/libexec/android-sdk/build-tools/35.0.0/aapt2'
+GRADLE_OPTS='-Dorg.gradle.project.android.aapt2FromMavenOverride=/nix/store/cphfh2pcjbnpaz554lh5rxiqcr92cbw3-androidsdk/libexec/android-sdk/build-tools/35.0.0/aapt2'
 export GRADLE_OPTS
 HOSTTYPE='x86_64'
-HOST_PATH='/nix/store/cnx9jaibxg5bpc151w7jqzy8b42ja8nh-flutter-wrapped-3.32.6-sdk-links/bin:/nix/store/jl9rc9dlrcy3jpdqqr7fdrnivvhlnxap-androidsdk/bin:/nix/store/5nzjzkhlzkq4hnzvbnzd8zkibbr3217f-openjdk-17.0.15+6/bin:/nix/store/0mbk2ivb6p9p68nxd78fb0mszlfn2d2q-android-sdk-platform-tools-35.0.2/bin:/nix/store/hvn9cprr3p61gjlahk9pq4bmp3zaxj4a-cmake-3.31.7/bin:/nix/store/rnf8wb305f8508hnkjgi0i3vy2522b5w-rustup-1.28.2/bin:/nix/store/0qrgvvnnvw55xnk7bn8pbz2rqy6m8x15-coreutils-9.7/bin:/nix/store/zmxciylqkkfmdf2h218na01v3pxwsb95-findutils-4.10.0/bin:/nix/store/gfpz48bx9c8wahip9bp690y96gah39lf-diffutils-3.12/bin:/nix/store/140daj0gckxd1v5gws3rlva8vkji6inp-gnused-4.9/bin:/nix/store/949qw4342ffgiblqqj8cd9s9jhmiwj4r-gnugrep-3.12/bin:/nix/store/waj9yn803d245zn9pn59y4r8w0ih63v0-gawk-5.3.2/bin:/nix/store/r8d70l24x06f4fgq246wz2s8zvmj6vxb-gnutar-1.35/bin:/nix/store/31h4wbbp0yvsrciyw46iij6r4c0wc8fp-gzip-1.14/bin:/nix/store/l27d5inaj8rjdpc1y5s7rmaciak2gpb7-bzip2-1.0.8-bin/bin:/nix/store/naq2h5b3rbdmgi14r4sqfikc52j6axsw-gnumake-4.4.1/bin:/nix/store/p79bgyzmmmddi554ckwzbqlavbkw07zh-bash-5.2p37/bin:/nix/store/x4v5sxm2ja6k6srg37hbqp3pxbi7nq8a-patch-2.8/bin:/nix/store/8avg418ydn50ha9wlyrv2f5pj4qccldg-xz-5.8.1-bin/bin:/nix/store/9hngr9k2164g59hcw8f3xs6vwzqlk240-file-5.45/bin'
+HOST_PATH='/nix/store/cnx9jaibxg5bpc151w7jqzy8b42ja8nh-flutter-wrapped-3.32.6-sdk-links/bin:/nix/store/cphfh2pcjbnpaz554lh5rxiqcr92cbw3-androidsdk/bin:/nix/store/5nzjzkhlzkq4hnzvbnzd8zkibbr3217f-openjdk-17.0.15+6/bin:/nix/store/0mbk2ivb6p9p68nxd78fb0mszlfn2d2q-android-sdk-platform-tools-35.0.2/bin:/nix/store/hvn9cprr3p61gjlahk9pq4bmp3zaxj4a-cmake-3.31.7/bin:/nix/store/rnf8wb305f8508hnkjgi0i3vy2522b5w-rustup-1.28.2/bin:/nix/store/0qrgvvnnvw55xnk7bn8pbz2rqy6m8x15-coreutils-9.7/bin:/nix/store/zmxciylqkkfmdf2h218na01v3pxwsb95-findutils-4.10.0/bin:/nix/store/gfpz48bx9c8wahip9bp690y96gah39lf-diffutils-3.12/bin:/nix/store/140daj0gckxd1v5gws3rlva8vkji6inp-gnused-4.9/bin:/nix/store/949qw4342ffgiblqqj8cd9s9jhmiwj4r-gnugrep-3.12/bin:/nix/store/waj9yn803d245zn9pn59y4r8w0ih63v0-gawk-5.3.2/bin:/nix/store/r8d70l24x06f4fgq246wz2s8zvmj6vxb-gnutar-1.35/bin:/nix/store/31h4wbbp0yvsrciyw46iij6r4c0wc8fp-gzip-1.14/bin:/nix/store/l27d5inaj8rjdpc1y5s7rmaciak2gpb7-bzip2-1.0.8-bin/bin:/nix/store/naq2h5b3rbdmgi14r4sqfikc52j6axsw-gnumake-4.4.1/bin:/nix/store/p79bgyzmmmddi554ckwzbqlavbkw07zh-bash-5.2p37/bin:/nix/store/x4v5sxm2ja6k6srg37hbqp3pxbi7nq8a-patch-2.8/bin:/nix/store/8avg418ydn50ha9wlyrv2f5pj4qccldg-xz-5.8.1-bin/bin:/nix/store/9hngr9k2164g59hcw8f3xs6vwzqlk240-file-5.45/bin'
 export HOST_PATH
 IFS=' 	
 '
@@ -41,7 +41,7 @@ LD_LIBRARY_PATH='/nix/store/jhfifn27kip4j9yybqvm4armyvxag1i8-mpv-0.40.0/lib'
 export LD_LIBRARY_PATH
 LINENO='76'
 MACHTYPE='x86_64-pc-linux-gnu'
-NIXPKGS_CMAKE_PREFIX_PATH='/nix/store/3971v240cnz6z2ijm77jprx9nc92baxj-patchelf-0.15.0:/nix/store/776kzljyiiscarkhfqpn0wn293pkrc1p-update-autotools-gnu-config-scripts-hook:/nix/store/7nlf5v84s4p2yhx327j8495yik60qnzh-gcc-wrapper-14.3.0:/nix/store/svk6gmy4wbf0y2v8j3g8fw0jx6zhixqf-binutils-wrapper-2.44:/nix/store/cnx9jaibxg5bpc151w7jqzy8b42ja8nh-flutter-wrapped-3.32.6-sdk-links:/nix/store/jl9rc9dlrcy3jpdqqr7fdrnivvhlnxap-androidsdk:/nix/store/5nzjzkhlzkq4hnzvbnzd8zkibbr3217f-openjdk-17.0.15+6:/nix/store/kqnfxan3cprmqpd5vwn7bcqwlcpcqj53-set-java-classpath-hook:/nix/store/0mbk2ivb6p9p68nxd78fb0mszlfn2d2q-android-sdk-platform-tools-35.0.2:/nix/store/hvn9cprr3p61gjlahk9pq4bmp3zaxj4a-cmake-3.31.7:/nix/store/rnf8wb305f8508hnkjgi0i3vy2522b5w-rustup-1.28.2'
+NIXPKGS_CMAKE_PREFIX_PATH='/nix/store/3971v240cnz6z2ijm77jprx9nc92baxj-patchelf-0.15.0:/nix/store/776kzljyiiscarkhfqpn0wn293pkrc1p-update-autotools-gnu-config-scripts-hook:/nix/store/7nlf5v84s4p2yhx327j8495yik60qnzh-gcc-wrapper-14.3.0:/nix/store/svk6gmy4wbf0y2v8j3g8fw0jx6zhixqf-binutils-wrapper-2.44:/nix/store/cnx9jaibxg5bpc151w7jqzy8b42ja8nh-flutter-wrapped-3.32.6-sdk-links:/nix/store/cphfh2pcjbnpaz554lh5rxiqcr92cbw3-androidsdk:/nix/store/5nzjzkhlzkq4hnzvbnzd8zkibbr3217f-openjdk-17.0.15+6:/nix/store/kqnfxan3cprmqpd5vwn7bcqwlcpcqj53-set-java-classpath-hook:/nix/store/0mbk2ivb6p9p68nxd78fb0mszlfn2d2q-android-sdk-platform-tools-35.0.2:/nix/store/hvn9cprr3p61gjlahk9pq4bmp3zaxj4a-cmake-3.31.7:/nix/store/rnf8wb305f8508hnkjgi0i3vy2522b5w-rustup-1.28.2'
 export NIXPKGS_CMAKE_PREFIX_PATH
 NIX_BINTOOLS='/nix/store/svk6gmy4wbf0y2v8j3g8fw0jx6zhixqf-binutils-wrapper-2.44'
 export NIX_BINTOOLS
@@ -53,7 +53,7 @@ NIX_CC='/nix/store/7nlf5v84s4p2yhx327j8495yik60qnzh-gcc-wrapper-14.3.0'
 export NIX_CC
 NIX_CC_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu='1'
 export NIX_CC_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu
-NIX_CFLAGS_COMPILE=' -frandom-seed=57lnichfam -isystem /nix/store/5nzjzkhlzkq4hnzvbnzd8zkibbr3217f-openjdk-17.0.15+6/include -isystem /nix/store/5nzjzkhlzkq4hnzvbnzd8zkibbr3217f-openjdk-17.0.15+6/include'
+NIX_CFLAGS_COMPILE=' -frandom-seed=grpafslb0a -isystem /nix/store/5nzjzkhlzkq4hnzvbnzd8zkibbr3217f-openjdk-17.0.15+6/include -isystem /nix/store/5nzjzkhlzkq4hnzvbnzd8zkibbr3217f-openjdk-17.0.15+6/include'
 export NIX_CFLAGS_COMPILE
 NIX_ENFORCE_NO_NATIVE='1'
 export NIX_ENFORCE_NO_NATIVE
@@ -74,7 +74,7 @@ OLDPWD=''
 export OLDPWD
 OPTERR='1'
 OSTYPE='linux-gnu'
-PATH='/nix/store/3971v240cnz6z2ijm77jprx9nc92baxj-patchelf-0.15.0/bin:/nix/store/7nlf5v84s4p2yhx327j8495yik60qnzh-gcc-wrapper-14.3.0/bin:/nix/store/xvqbvva4djgyascjsnki6354422n4msk-gcc-14.3.0/bin:/nix/store/hmgdq159x7ds6dfg1qybziwwfcpjb3n6-glibc-2.40-66-bin/bin:/nix/store/0qrgvvnnvw55xnk7bn8pbz2rqy6m8x15-coreutils-9.7/bin:/nix/store/svk6gmy4wbf0y2v8j3g8fw0jx6zhixqf-binutils-wrapper-2.44/bin:/nix/store/x7w0rmkaam7aikclyhwdbn8wmmq29ma6-binutils-2.44/bin:/nix/store/cnx9jaibxg5bpc151w7jqzy8b42ja8nh-flutter-wrapped-3.32.6-sdk-links/bin:/nix/store/jl9rc9dlrcy3jpdqqr7fdrnivvhlnxap-androidsdk/bin:/nix/store/5nzjzkhlzkq4hnzvbnzd8zkibbr3217f-openjdk-17.0.15+6/bin:/nix/store/0mbk2ivb6p9p68nxd78fb0mszlfn2d2q-android-sdk-platform-tools-35.0.2/bin:/nix/store/hvn9cprr3p61gjlahk9pq4bmp3zaxj4a-cmake-3.31.7/bin:/nix/store/rnf8wb305f8508hnkjgi0i3vy2522b5w-rustup-1.28.2/bin:/nix/store/0qrgvvnnvw55xnk7bn8pbz2rqy6m8x15-coreutils-9.7/bin:/nix/store/zmxciylqkkfmdf2h218na01v3pxwsb95-findutils-4.10.0/bin:/nix/store/gfpz48bx9c8wahip9bp690y96gah39lf-diffutils-3.12/bin:/nix/store/140daj0gckxd1v5gws3rlva8vkji6inp-gnused-4.9/bin:/nix/store/949qw4342ffgiblqqj8cd9s9jhmiwj4r-gnugrep-3.12/bin:/nix/store/waj9yn803d245zn9pn59y4r8w0ih63v0-gawk-5.3.2/bin:/nix/store/r8d70l24x06f4fgq246wz2s8zvmj6vxb-gnutar-1.35/bin:/nix/store/31h4wbbp0yvsrciyw46iij6r4c0wc8fp-gzip-1.14/bin:/nix/store/l27d5inaj8rjdpc1y5s7rmaciak2gpb7-bzip2-1.0.8-bin/bin:/nix/store/naq2h5b3rbdmgi14r4sqfikc52j6axsw-gnumake-4.4.1/bin:/nix/store/p79bgyzmmmddi554ckwzbqlavbkw07zh-bash-5.2p37/bin:/nix/store/x4v5sxm2ja6k6srg37hbqp3pxbi7nq8a-patch-2.8/bin:/nix/store/8avg418ydn50ha9wlyrv2f5pj4qccldg-xz-5.8.1-bin/bin:/nix/store/9hngr9k2164g59hcw8f3xs6vwzqlk240-file-5.45/bin'
+PATH='/nix/store/3971v240cnz6z2ijm77jprx9nc92baxj-patchelf-0.15.0/bin:/nix/store/7nlf5v84s4p2yhx327j8495yik60qnzh-gcc-wrapper-14.3.0/bin:/nix/store/xvqbvva4djgyascjsnki6354422n4msk-gcc-14.3.0/bin:/nix/store/hmgdq159x7ds6dfg1qybziwwfcpjb3n6-glibc-2.40-66-bin/bin:/nix/store/0qrgvvnnvw55xnk7bn8pbz2rqy6m8x15-coreutils-9.7/bin:/nix/store/svk6gmy4wbf0y2v8j3g8fw0jx6zhixqf-binutils-wrapper-2.44/bin:/nix/store/x7w0rmkaam7aikclyhwdbn8wmmq29ma6-binutils-2.44/bin:/nix/store/cnx9jaibxg5bpc151w7jqzy8b42ja8nh-flutter-wrapped-3.32.6-sdk-links/bin:/nix/store/cphfh2pcjbnpaz554lh5rxiqcr92cbw3-androidsdk/bin:/nix/store/5nzjzkhlzkq4hnzvbnzd8zkibbr3217f-openjdk-17.0.15+6/bin:/nix/store/0mbk2ivb6p9p68nxd78fb0mszlfn2d2q-android-sdk-platform-tools-35.0.2/bin:/nix/store/hvn9cprr3p61gjlahk9pq4bmp3zaxj4a-cmake-3.31.7/bin:/nix/store/rnf8wb305f8508hnkjgi0i3vy2522b5w-rustup-1.28.2/bin:/nix/store/0qrgvvnnvw55xnk7bn8pbz2rqy6m8x15-coreutils-9.7/bin:/nix/store/zmxciylqkkfmdf2h218na01v3pxwsb95-findutils-4.10.0/bin:/nix/store/gfpz48bx9c8wahip9bp690y96gah39lf-diffutils-3.12/bin:/nix/store/140daj0gckxd1v5gws3rlva8vkji6inp-gnused-4.9/bin:/nix/store/949qw4342ffgiblqqj8cd9s9jhmiwj4r-gnugrep-3.12/bin:/nix/store/waj9yn803d245zn9pn59y4r8w0ih63v0-gawk-5.3.2/bin:/nix/store/r8d70l24x06f4fgq246wz2s8zvmj6vxb-gnutar-1.35/bin:/nix/store/31h4wbbp0yvsrciyw46iij6r4c0wc8fp-gzip-1.14/bin:/nix/store/l27d5inaj8rjdpc1y5s7rmaciak2gpb7-bzip2-1.0.8-bin/bin:/nix/store/naq2h5b3rbdmgi14r4sqfikc52j6axsw-gnumake-4.4.1/bin:/nix/store/p79bgyzmmmddi554ckwzbqlavbkw07zh-bash-5.2p37/bin:/nix/store/x4v5sxm2ja6k6srg37hbqp3pxbi7nq8a-patch-2.8/bin:/nix/store/8avg418ydn50ha9wlyrv2f5pj4qccldg-xz-5.8.1-bin/bin:/nix/store/9hngr9k2164g59hcw8f3xs6vwzqlk240-file-5.45/bin'
 export PATH
 PS4='+ '
 RANLIB='ranlib'
@@ -96,7 +96,7 @@ export XDG_DATA_DIRS
 __structuredAttrs=''
 export __structuredAttrs
 _substituteStream_has_warned_replace_deprecation='false'
-buildInputs='/nix/store/cnx9jaibxg5bpc151w7jqzy8b42ja8nh-flutter-wrapped-3.32.6-sdk-links /nix/store/jl9rc9dlrcy3jpdqqr7fdrnivvhlnxap-androidsdk /nix/store/5nzjzkhlzkq4hnzvbnzd8zkibbr3217f-openjdk-17.0.15+6 /nix/store/0mbk2ivb6p9p68nxd78fb0mszlfn2d2q-android-sdk-platform-tools-35.0.2 /nix/store/hvn9cprr3p61gjlahk9pq4bmp3zaxj4a-cmake-3.31.7 /nix/store/rnf8wb305f8508hnkjgi0i3vy2522b5w-rustup-1.28.2'
+buildInputs='/nix/store/cnx9jaibxg5bpc151w7jqzy8b42ja8nh-flutter-wrapped-3.32.6-sdk-links /nix/store/cphfh2pcjbnpaz554lh5rxiqcr92cbw3-androidsdk /nix/store/5nzjzkhlzkq4hnzvbnzd8zkibbr3217f-openjdk-17.0.15+6 /nix/store/0mbk2ivb6p9p68nxd78fb0mszlfn2d2q-android-sdk-platform-tools-35.0.2 /nix/store/hvn9cprr3p61gjlahk9pq4bmp3zaxj4a-cmake-3.31.7 /nix/store/rnf8wb305f8508hnkjgi0i3vy2522b5w-rustup-1.28.2'
 export buildInputs
 buildPhase='{ echo "------------------------------------------------------------";
   echo " WARNING: the existence of this path is not guaranteed.";
@@ -179,7 +179,7 @@ declare -a pkgsBuildBuild=()
 declare -a pkgsBuildHost=('/nix/store/3971v240cnz6z2ijm77jprx9nc92baxj-patchelf-0.15.0' '/nix/store/776kzljyiiscarkhfqpn0wn293pkrc1p-update-autotools-gnu-config-scripts-hook' '/nix/store/0y5xmdb7qfvimjwbq7ibg1xdgkgjwqng-no-broken-symlinks.sh' '/nix/store/cv1d7p48379km6a85h4zp6kr86brh32q-audit-tmpdir.sh' '/nix/store/4bawv6x85435v6s624sfk5cdpg9gr6yq-compress-man-pages.sh' '/nix/store/wgrbkkaldkrlrni33ccvm3b6vbxzb656-make-symlinks-relative.sh' '/nix/store/5yzw0vhkyszf2d179m0qfkgxmp5wjjx4-move-docs.sh' '/nix/store/fyaryjvghbkpfnsyw97hb3lyb37s1pd6-move-lib64.sh' '/nix/store/kd4xwxjpjxi71jkm6ka0np72if9rm3y0-move-sbin.sh' '/nix/store/pag6l61paj1dc9sv15l7bm5c17xn5kyk-move-systemd-user-units.sh' '/nix/store/cmzya9irvxzlkh7lfy6i82gbp0saxqj3-multiple-outputs.sh' '/nix/store/j1swvs35pkzpw7vag5s4hndll1q31g40-patch-shebangs.sh' '/nix/store/cickvswrvann041nqxb0rxilc46svw1n-prune-libtool-files.sh' '/nix/store/xyff06pkhki3qy1ls77w10s0v79c9il0-reproducible-builds.sh' '/nix/store/z7k98578dfzi6l3hsvbivzm7hfqlk0zc-set-source-date-epoch-to-latest.sh' '/nix/store/pilsssjjdxvdphlg2h19p0bfx5q0jzkn-strip.sh' '/nix/store/7nlf5v84s4p2yhx327j8495yik60qnzh-gcc-wrapper-14.3.0' '/nix/store/svk6gmy4wbf0y2v8j3g8fw0jx6zhixqf-binutils-wrapper-2.44' )
 declare -a pkgsBuildTarget=()
 declare -a pkgsHostHost=()
-declare -a pkgsHostTarget=('/nix/store/cnx9jaibxg5bpc151w7jqzy8b42ja8nh-flutter-wrapped-3.32.6-sdk-links' '/nix/store/jl9rc9dlrcy3jpdqqr7fdrnivvhlnxap-androidsdk' '/nix/store/5nzjzkhlzkq4hnzvbnzd8zkibbr3217f-openjdk-17.0.15+6' '/nix/store/kqnfxan3cprmqpd5vwn7bcqwlcpcqj53-set-java-classpath-hook' '/nix/store/0mbk2ivb6p9p68nxd78fb0mszlfn2d2q-android-sdk-platform-tools-35.0.2' '/nix/store/hvn9cprr3p61gjlahk9pq4bmp3zaxj4a-cmake-3.31.7' '/nix/store/rnf8wb305f8508hnkjgi0i3vy2522b5w-rustup-1.28.2' )
+declare -a pkgsHostTarget=('/nix/store/cnx9jaibxg5bpc151w7jqzy8b42ja8nh-flutter-wrapped-3.32.6-sdk-links' '/nix/store/cphfh2pcjbnpaz554lh5rxiqcr92cbw3-androidsdk' '/nix/store/5nzjzkhlzkq4hnzvbnzd8zkibbr3217f-openjdk-17.0.15+6' '/nix/store/kqnfxan3cprmqpd5vwn7bcqwlcpcqj53-set-java-classpath-hook' '/nix/store/0mbk2ivb6p9p68nxd78fb0mszlfn2d2q-android-sdk-platform-tools-35.0.2' '/nix/store/hvn9cprr3p61gjlahk9pq4bmp3zaxj4a-cmake-3.31.7' '/nix/store/rnf8wb305f8508hnkjgi0i3vy2522b5w-rustup-1.28.2' )
 declare -a pkgsTargetTarget=()
 declare -a postFixupHooks=('noBrokenSymlinksInAllOutputs' '_makeSymlinksRelativeInAllOutputs' '_multioutPropagateDev' 'cmakePcfileCheckPhase' )
 declare -a postHooks=('makeCmakeFindLibs' )
@@ -200,7 +200,21 @@ declare -a propagatedTargetDepFiles=('propagated-target-target-deps' )
 setOutputFlags=''
 shell='/nix/store/p79bgyzmmmddi554ckwzbqlavbkw07zh-bash-5.2p37/bin/bash'
 export shell
-shellHook=''
+shellHook='echo ""
+echo "🎯 Flutter Android Development Environment"
+echo "=========================================="
+echo ""
+echo "📱 Android SDK: $ANDROID_SDK_ROOT"
+echo "🎯 Flutter: $(flutter --version | head -1)"
+echo ""
+echo "🚀 Quick Start:"
+echo "  1. Run: nix run .#setup-android-emulator"
+echo "  2. Then: flutter emulators --launch finamp_dev_emulator"
+echo "  3. Check: flutter devices"
+echo ""
+echo "💡 The setup-android-emulator script handles everything automatically!"
+echo ""
+'
 export shellHook
 stdenv='/nix/store/a13rl87yjhzqrbkc4gb0mrwz2mfkivcf-stdenv-linux'
 export stdenv

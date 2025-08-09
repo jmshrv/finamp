@@ -78,8 +78,9 @@ class SettingsList {
 }
 
 class SettingsScreen extends ConsumerStatefulWidget {
-  const SettingsScreen({super.key});
+  SettingsScreen({super.key});
   static const routeName = "/settings";
+  List<Widget> searchableSettingsChildren;
   @override
   ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
 }
@@ -180,7 +181,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
       SettingsItem(settingWidget: LogoutListTile()),
     ];
-    for (SettingsItem categoryItem in categoryItems) {}
+    List<SettingsItem> searchedSettingsItems = [];
+    for (SettingsItem categoryItem in categoryItems) {
+      if (categoryItem.searchableSettingsItems != null) {
+        for (var item in categoryItem.searchableSettingsItems!) {
+          searchedSettingsItems.add(SettingsItem(settingWidget: item))
+        }
+      }
+    }
     return SettingsList(categoryItems: categoryItems, settingsItems: []);
   }
 
