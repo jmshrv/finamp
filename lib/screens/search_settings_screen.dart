@@ -13,6 +13,27 @@ class SettingsSearchDelegate extends SearchDelegate<String> {
   @override
   String get searchFieldLabel => 'Search settings...';
 
+  List<String> getAllTextsFromContext(BuildContext context) {
+    final List<String> texts = [];
+
+    void visitElement(Element element) {
+      final widget = element.widget;
+
+      if (widget is Text && widget.data != null) {
+        texts.add(widget.data!);
+      }
+
+      if (widget is RichText) {
+        texts.add(widget.text.toPlainText());
+      }
+
+      element.visitChildren(visitElement);
+    }
+
+    context.visitChildElements(visitElement);
+    return texts;
+  }
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -81,6 +102,9 @@ class SettingsSearchDelegate extends SearchDelegate<String> {
   }
 
   List<SettingsItem> _filterSettings(String query) {
+    if (query.isEmpty) {
+      return settingsList.categoryItems + settingsList.settingsItems;
+    }
     final lowercaseQuery = query.toLowerCase();
     List<SettingsItem> filteredSettings = [];
     Map<String, SettingsItem> categoriesSearchStrings = Map.fromEntries(
@@ -89,14 +113,24 @@ class SettingsSearchDelegate extends SearchDelegate<String> {
       ),
     );
 
-    if (query.isEmpty) {
-      return settingsList.categoryItems + settingsList.settingsItems;
-    }
+    // Map<String, SettingsItem> settingsSearchStrings = Map.fromEntries(
+    //   settingsList.settingsItems.map(
+    //     (e) => MapEntry((getAllTextsFromContext(e.settingWidget).join("")), e),
+    //   ),
+    // );
+    // print(settingsSearchStrings.keys);
+
     final fuzzyCategories = Fuzzy(categoriesSearchStrings.keys.toList());
     filteredSettings = fuzzyCategories
         .search(lowercaseQuery)
         .map((e) => categoriesSearchStrings[e.item]!)
         .toList();
+
+    // final fuzzySettings = Fuzzy(settingsSearchStrings.keys.toList());
+    // filteredSettings += fuzzySettings
+    //     .search(lowercaseQuery)
+    //     .map((e) => settingsSearchStrings[e.item]!)
+    //     .toList();
     return filteredSettings;
   }
 

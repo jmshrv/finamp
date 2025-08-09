@@ -87,10 +87,6 @@ abstract class CategorySettingsScreen {
   List<Widget> get searchableSettingsChildren;
 }
 
-mixin SearchableSetting {
-  rst(String text) {}
-}
-
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   static const repoLink = "https://github.com/jmshrv/finamp";
   static const releaseNotesLink = "https://github.com/jmshrv/finamp/releases";

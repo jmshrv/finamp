@@ -9,14 +9,6 @@ import '../../services/finamp_settings_helper.dart';
 class TranscodeSwitch extends ConsumerWidget {
   const TranscodeSwitch({super.key});
 
-  String getSearchableText() {
-    var context = GlobalSnackbar.materialAppScaffoldKey.currentContext;
-    return ([
-      AppLocalizations.of(context!)!.enableTranscoding,
-      AppLocalizations.of(context!)!.enableTranscodingSubtitle,
-    ]).join("");
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
