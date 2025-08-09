@@ -638,6 +638,7 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler {
   @override
   Future<void> skipToNext() async {
     try {
+      await GetIt.instance<QueueService>().maybeAddRandomizedNext();
       if (_player.loopMode == LoopMode.one || !_player.hasNext) {
         // if the user manually skips to the next track, they probably want to actually skip to the next track
         await skipByOffset(1); //!!! don't use _player.nextIndex here, because that adjusts based on loop mode

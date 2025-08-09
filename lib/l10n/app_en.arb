@@ -2550,6 +2550,14 @@
   "@clearQueueOnStopEventSubtitle": {
     "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
   },
+  "useRandomizeTitle": "Use Randomize Shuffling",
+  "@useRandomizeTitle": {
+    "description": "Title for the setting that controls whether to use randomize mode for shuffling."
+  },
+  "useRandomizeSubtitle": "When enabled, shuffling will instead choose randomly from songs in the queue which song should come next, even if that song has already been played.",
+  "@useRandomizeSubtitle": {
+    "description": "Subtitle for the setting that controls whether to use randomize mode for shuffling."
+  },
   "autoReloadPrompt": "Reload queue to apply new {type, select, network{network settings} transcoding{transcoding settings} other{settings}}",
   "@autoReloadPrompt": {
     "description": "Prompt shown when the queue needs to be reloaded after changing network settings",
