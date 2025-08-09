@@ -1719,19 +1719,6 @@
   "@itemDeletedSnackbar": {
     "description": "Used whenever item gets deleted from the device or server, message in snackbar"
   },
-  "confirmAddAlbumToPlaylist": "Tem certeza que deseja adicionar todas as faixas {itemType, select, album{do álbum} playlist{da lista} artist{do artista} genre{do gênero} other{do item}} '{itemName}' para esta lista de reprodução?  Eles só poderão ser removidos um-a-um.",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
-  },
   "showStopButtonOnMediaNotificationSubtitle": "Controla se a notificação do reprodutor terá um botâo \"Parar\" além do botão de pausa. Isso permite que você pare completamente a reprodução sem abrir o app.",
   "@showStopButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."

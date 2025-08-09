@@ -1901,19 +1901,6 @@
   "@allowDeleteFromServerSubtitle": {
     "description": "Subtitle for the setting that controls if items can be deleted from the server"
   },
-  "confirmAddAlbumToPlaylist": "क्या आप वाकई {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} other{item}} '{itemName}' से सभी ट्रैक इस प्लेलिस्ट में जोड़ना चाहते हैं? उन्हें केवल एक-एक करके ही हटाया जा सकता है।",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
-  },
   "marqueeOrTruncateButtonSubtitle": "स्क्रॉलिंग टेक्स्ट के बजाय लंबे शीर्षकों के अंत में ... दिखाएँ",
   "@marqueeOrTruncateButtonSubtitle": {},
   "releaseDateFormatMonthDayYear": "महीना, तिथि और साल",

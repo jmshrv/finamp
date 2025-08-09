@@ -1415,19 +1415,6 @@
   "@downloadSizeWarningCutoff": {
     "description": "Title for the setting controlling when to warn about a large download"
   },
-  "confirmAddAlbumToPlaylist": "Vill du verkligen lägga till alla spår från {itemType, select, album{albumet} playlist{spellistan} artist{artisten} genre{genren} other{artikeln}} '{itemName}' till den här spellistan?  De kan endast tas bort individuellt.",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
-  },
   "fixedGridSizeSwitchSubtitle": "Rutnätsblockens storlek påverkas inte av fönstrets/skärmens storlek.",
   "@fixedGridSizeSwitchSubtitle": {},
   "itemDeletedSnackbar": "{itemType, select, album{Albumet} playlist{Spellistan} artist{Artisten} genre{Genren} track{Spåret} library{Biblioteket} other{Artikeln}} raderades från {deviceType, select, device{enheten} server{servern} other{okänd plats}}",

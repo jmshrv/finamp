@@ -1881,19 +1881,6 @@
   "@deleteFromTargetDialogText": {
     "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
   },
-  "confirmAddAlbumToPlaylist": "Вы уверены что хотите добавить все композиции {itemType, select, album{из альбома} playlist{из плейлиста} artist{исполнителя} genre{жанра} other{из элемента}} '{itemName}' в этот плейлист?  Их можно удалить только по отдельности.",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
-  },
   "releaseDateFormatMonthDayYear": "Месяц, день и год",
   "@releaseDateFormatMonthDayYear": {
     "description": "Date format option for the release date of an album, showing the year and month and day/date. Example: March 2, 2022"

@@ -1200,7 +1200,7 @@
       }
     }
   },
-  "addPlaylistSubheader": "Track zu einer Playlist hinzufügen",
+  "addPlaylistSubheader": "Items zu einer Playlist hinzufügen",
   "@addPlaylistSubheader": {
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
   },
@@ -1824,19 +1824,6 @@
   "downloadSizeWarningCutoffSubtitle": "Eine Warnung wird angezeigt, wenn du mehr als die hier angegebene Anzahl an Tracks herunterladen möchest.",
   "@downloadSizeWarningCutoffSubtitle": {
     "description": "Subtitle for the setting controlling when to warn about a large download"
-  },
-  "confirmAddAlbumToPlaylist": "Bist du sicher, dass du alles Tracks von {itemType, select, album{dem Album} playlist{der Playlist} artist{dem Künstler} genre{dem Genre} other{dem Item}} '{itemName}' zu dieser Playlist hinzufügen möchtest? Du kannst sie nur einzeln wieder entfernen.",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
   },
   "deleteFromTargetDialogText": "Du bist dabei, {itemType, select, album{das Album} playlist{die Playlist} artist{den Künstler} genre{das Genre} track{den Track} library{die Bibliothek} other{das Item}} {device, select, device{von diesem Gerät zu löschen} server{von der Bibliothek und dem Dateisystem des Servers zu löschen.{deleteType, select, canDelete{ Das Item wird dadurch auch von diesem Gerät gelöscht.} cantDelete{ Das Item wird bis zur nächsten Synchronisierung auf diesem Gerät bleiben.} notDownloaded{} other{}}\nDiese Aktion kann nicht rückgängig gemacht werden} other{}}.",
   "@deleteFromTargetDialogText": {
@@ -2532,7 +2519,7 @@
   "@logoutButtonSubtitle": {},
   "none": "Nichts",
   "@none": {},
-  "createPlaylistFromCurrentQueue": "Wiedergabeverlauf als Playlist speichern",
+  "createPlaylistFromCurrentQueue": "Wiedergabeverlauf in Playlist speichern",
   "@createPlaylistFromCurrentQueue": {
     "description": "Label for a button that creates a new playlist from the current queue."
   },
@@ -2683,5 +2670,27 @@
   "autoExpandPlayerScreenSubtitle": "Beim Starten einer neuen Warteschlange wird der Player geöffnet",
   "@autoExpandPlayerScreenSubtitle": {
     "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "confirmAddCollectionItemToPlaylist": "Bist du sicher, dass du alle Titel von {itemType, select, album{dem Album} playlist{der Playlist} artist{dem Künstler} genre{dem Genre} other{dem Item}} '{itemName}' zu dieser Playlist hinzufügen möchtest? Sie können nur einzeln wieder entfernt werden.",
+  "@confirmAddCollectionItemToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, etc. or multiple tracks to a playlist, clarifying that this cannot be undone without removing all tracks individually and manually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmAddMultipleTracksToPlaylist": "Bist du sicher, dass du {trackCount} Titel zu dieser Playlist hinzufügen möchtest? Sie können nur einzeln wieder entfernt werden.",
+  "@confirmAddMultipleTracksToPlaylist": {
+    "description": "Warning dialog for adding multiple tracks to a playlist, clarifying that this cannot be undone without removing all tracks individually and manually.",
+    "placeholders": {
+      "trackCount": {
+        "type": "int"
+      }
+    }
   }
 }

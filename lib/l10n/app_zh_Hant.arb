@@ -81,7 +81,7 @@
   "@criticRating": {},
   "dateAdded": "新增日期",
   "@dateAdded": {},
-  "datePlayed": "最近播放日期",
+  "datePlayed": "最後播放",
   "@datePlayed": {},
   "playCount": "播放次數",
   "@playCount": {},
@@ -1531,19 +1531,6 @@
   "@preferQuickSyncSwitch": {
     "description": "Title of setting that skips completed albums while syncing."
   },
-  "confirmAddAlbumToPlaylist": "確定要將{itemType, select, album{專輯} playlist{播放清單} artist{藝人} genre{類型} other{項目}} '{itemName}'的所有歌曲加入播放清單嗎？請注意，這些歌曲只能逐首刪除，無法一次移除所有內容。",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
-  },
   "doTranscode": "下載{codec}格式：@{bitrate}{size, select, null{} other{- ~{size}}}",
   "@doTranscode": {
     "placeholders": {
@@ -2375,7 +2362,7 @@
   "@downloadPaused": {
     "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
   },
-  "ping": "{status, select,true_true {外部網路與區域網路位址皆可連線}true_false {外部網路可連線，但無法連線至區域網路位址}false_true {區域網路位址可連線，但無法連線至外部網路}false_false {外部網路與區域網路位址皆無法連線}other {未知}}",
+  "ping": "{status, select, true_true{區域與外部網路皆可連線} true_false{無法連線至區域網路} false_true{無法連線至外部網路} false_false{區域與外部網路皆無法連線} other{未知}}",
   "@ping": {
     "description": "Gets shown in the Snackbar when using the Test Connection Button inside the Network Settings. true means reachable, false means unreachable. the first value is for the public address, the second value is fot the home address."
   },
@@ -2520,7 +2507,7 @@
   "@clearQueueOnStopEventTitle": {
     "description": "Title for the setting that controls if OS stop commands clear the queue."
   },
-  "clearQueueOnStopEventSubtitle": "若從作業系統接收到「停止」指令，將清空佇列並關閉播放器。在應用程式內執行停止動作時，也會自動關閉播放器並清空佇列。",
+  "clearQueueOnStopEventSubtitle": "無論是在作業系統中或於應用程式內停止播放，都會清空播放佇列並關閉播放器。",
   "@clearQueueOnStopEventSubtitle": {
     "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
   },
@@ -2622,7 +2609,7 @@
   "@useHighContrastColorsTitle": {
     "description": "Title for the setting that controls if high contrast colors are used throughout the app"
   },
-  "useHighContrastColorsSubtitle": "使用高對比與自適應色彩，以提升可視性。",
+  "useHighContrastColorsSubtitle": "使用高對比動態色彩以提升可視性。",
   "@useHighContrastColorsSubtitle": {
     "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
   },

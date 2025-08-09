@@ -1148,19 +1148,6 @@
   "@resetSettingsPromptGlobalConfirm": {
     "description": "A differently worded Confirm button to prevent the user from instandly clicking confirm because they are about to reset all settings to their default value"
   },
-  "confirmAddAlbumToPlaylist": "Haluatko varmasti lisätä kaikki kappaleet kohteesta {itemType, select, album{albumi} playlist{soittolista} artist{artisti} genre{tyylilaji} other{kohde}} '{itemName}' tähän soittolistaan? Kappaleet voidaan poistaa vain yksitellen.",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
-  },
   "showAlbumReleaseDateOnPlayerScreenSubtitle": "Näyttää albumin julkaisupäivän soitinnäkymässä, albuminimen takana.",
   "@showAlbumReleaseDateOnPlayerScreenSubtitle": {
     "description": "Subtitle for the setting that controls if the release date of an album is shown on the player screen"
@@ -1426,7 +1413,7 @@
   "@volumeNormalizationModeSelectorSubtitle": {
     "description": "Subtitle for the dropdown that selects the replay gain mode"
   },
-  "volumeNormalizationModeSelectorDescription": "Hybridi (Kappale + Albumi):\nKappalevahvistusta käytetään normaalissa toistossa, mutta albumia toistaessa (jos jono on toison päälähde, tai albumi lisättiin jonoon jossain vaiheessa), albumivahvistusta käytetään.\n\nKappale-pohjainen:\nKappalevahvistusta käytetään aina, välittämättä siitä soiko albumi vai ei.\n\nVain albumit:\nÄänenvoimakkuuden normalisointia käytetään vain, kun albumia toistetaan (käyttäen albumivahvistusta), mutta ei yksittäisten kappaleiden toistossa.",
+  "volumeNormalizationModeSelectorDescription": "Dynaaminen:\nKun toistetaan peräkkäin useita kappaleita samalta albumilta, albumiperusteista vahvistusta käytetään (eli kun toistetaan albumia, tai kappaleita samalta albumilta käyttäen soittolistaa). Muutoin kappaleperusteista vahvistusta käytetään. \n\nKappaleperusteinen:\nKappaleperusteista vahvistusta käytetään aina, riippumatta siitä kuunnellaanko albumia vai ei.\n\nAlbumiperusteinen:\n\nAlbumiperusteista vahvistusta käytetään aina, mutta jos sitä ei ole saatavilla (esim. singleillä), kappaleperusteista vahvistusta käytetään sen sijaan.\n\nVain albumit:\nÄänenvoimakkuuden normalisointia käytetään vain, kun albumia toistetaan (käyttäen albumiperusteista vahvistusta), mutta ei yksittäisten kappaleiden toistossa.",
   "@volumeNormalizationModeSelectorDescription": {
     "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
   },
@@ -1804,7 +1791,7 @@
   "@queueRetryMessage": {
     "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
   },
-  "volumeNormalizationModeHybrid": "Hybridi (Kappale + Albumi)",
+  "volumeNormalizationModeHybrid": "Dynaaminen",
   "@volumeNormalizationModeHybrid": {
     "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
   },
@@ -1976,7 +1963,7 @@
   "@autoOfflineOptionDisconnected": {
     "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
   },
-  "autoOfflineSettingDescription": "Kytke Offline-tila automaattisesti.\nPois päältä: Ei kytke offline-tilaa automaattisesti. Voi säästää akkua.\nPaikallisverkko: Kytke offline-tila päälle, kun ei yhteyttä wifin tai ethernetin kautta.\nEi yhteyttä: Kytke offline-tila päälle, kun ei yhteyttä mihinkään.\nEi tavoitettavissa: Kytke offline-tila päälle, kun serveriin ei saada yhteyttä verkon vaihtamisen jälkeen.\nVoit aina kytkeä offline-tilan päälle käsin. Tämä kytkee offline-automaation pois päältä, kunnes taas kytket offline-tilan pois päältä.",
+  "autoOfflineSettingDescription": "Kytke Offline-tila automaattisesti.\nPois päältä: Ei kytke offline-tilaa automaattisesti. Saattaa säästää akkua.\nPaikallisverkko: Kytke offline-tila päälle, kun ei yhteyttä wifin tai ethernetin kautta.\nEi yhteyttä: Kytke offline-tila päälle, kun ei yhteyttä mihinkään.\nEi tavoitettavissa: Kytke offline-tila päälle, kun serveriin ei saada yhteyttä verkon vaihtamisen jälkeen.\nVoit aina kytkeä offline-tilan päälle käsin. Tämä kytkee offline-automaation pois päältä, kunnes taas kytket offline-tilan pois päältä.",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
@@ -2689,5 +2676,13 @@
   "discordRPCIconWhiteTransparent": "Valkoinen Finamp - Läpinäkyvä",
   "@discordRPCIconWhiteTransparent": {
     "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
+  },
+  "autoExpandPlayerScreenTitle": "Avaa soitinnäkymä toiston alkaessa",
+  "@autoExpandPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "autoExpandPlayerScreenSubtitle": "Tämä avaa 'toistetaan nyt'-näkymän, kun uuden jonon toisto aloitetaan",
+  "@autoExpandPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
   }
 }

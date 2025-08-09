@@ -1604,19 +1604,6 @@
   "@publiclyVisiblePlaylist": {
     "description": "Toggle for playlist creation where true means the playlist is publicly visible, false means only the creator can see it."
   },
-  "confirmAddAlbumToPlaylist": "¿Esta seguro que quiere agregar todas las canciones de {itemType, select, album{este álbum} playlist{esta lista de reproducción} artist{este artista} genre{este género} other{este elemento}} '{itemName}' a esta lista de reproducción? Solo se pueden quitar de manera individual.",
-  "@confirmAddAlbumToPlaylist": {
-    "description": "Warning dialog for adding an album, artist, or similar to a playlist, clarifying that this cannot be undone without removing all tracks individually.",
-    "placeholders": {
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      },
-      "itemName": {
-        "type": "String"
-      }
-    }
-  },
   "finampCollectionNames": "{itemType, select, favorites{Favoritos} allPlaylists{Todas las listas de reproducción} fiveLatestAlbums{Últimos 5 álbumes} allPlaylistsMetadata{Metadatos de lista de reproducción} collectionWithLibraryFilter{Colección con filtro de biblioteca} other{{itemType}} }",
   "@finampCollectionNames": {
     "placeholders": {
