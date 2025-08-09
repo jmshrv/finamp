@@ -51,22 +51,31 @@ class SettingsSearchDelegate extends SearchDelegate<String> {
       itemCount: filteredSettings.length,
       itemBuilder: (context, index) {
         final setting = filteredSettings[index];
-        return ListTile(
-          leading: Icon(setting.icon),
-          title: setting.title != null
-              ? _highlightText(setting.title!, query, context)
-              : null,
-          subtitle: setting.subtitle != null
-              ? _highlightText(setting.subtitle!, query, context)
-              : null,
-          onTap: () {
-            if (setting.onTap == null && setting.route != null) {
-              Navigator.of(context).popAndPushNamed(setting.route!);
-            } else {
-              setting.onTap?.call();
-            }
-          },
-        );
+        return setting.icon != null
+            ? ListTile(
+                key: ValueKey(index),
+                leading: Icon(setting.icon),
+                title: setting.title != null
+                    ? _highlightText(setting.title!, query, context)
+                    : null,
+                subtitle: setting.subtitle != null
+                    ? _highlightText(setting.subtitle!, query, context)
+                    : null,
+                onTap: () {
+                  if (setting.onTap == null) {
+                    Navigator.of(context).popAndPushNamed(
+                      (setting.settingWidget as CategorySettingsScreen)
+                          .routeName,
+                    );
+                  } else {
+                    setting.onTap?.call();
+                  }
+                },
+              )
+            : KeyedSubtree(
+                key: ValueKey(index),
+                child: setting.settingWidget ?? Placeholder(),
+              );
       },
     );
   }
@@ -79,6 +88,7 @@ class SettingsSearchDelegate extends SearchDelegate<String> {
         (e) => MapEntry(("${e.title}${e.subtitle}"), e),
       ),
     );
+
     if (query.isEmpty) {
       return settingsList.categoryItems + settingsList.settingsItems;
     }
@@ -112,12 +122,15 @@ class SettingsSearchDelegate extends SearchDelegate<String> {
     return RichText(
       text: TextSpan(
         children: [
-          TextSpan(text: text.substring(0, startIndex)),
+          TextSpan(
+            text: text.substring(0, startIndex),
+            style: textTheme.bodyLarge,
+          ),
           TextSpan(
             text: text.substring(startIndex, endIndex),
             style: textTheme.bodyLarge?.copyWith(color: colorScheme.primary),
           ),
-          TextSpan(text: text.substring(endIndex)),
+          TextSpan(text: text.substring(endIndex), style: textTheme.bodyLarge),
         ],
       ),
     );

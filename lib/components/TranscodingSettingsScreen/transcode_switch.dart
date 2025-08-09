@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../services/finamp_settings_helper.dart';
 
 class TranscodeSwitch extends ConsumerWidget {
-  TranscodeSwitch({super.key});
+  const TranscodeSwitch({super.key});
 
   String getSearchableText() {
     var context = GlobalSnackbar.materialAppScaffoldKey.currentContext;

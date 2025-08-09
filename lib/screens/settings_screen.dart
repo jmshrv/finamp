@@ -33,26 +33,21 @@ import 'volume_normalization_settings_screen.dart';
 class SettingsItem {
   final IconData? icon;
   final String? title;
-  String? route;
   final String? subtitle;
   final bool enabled;
   Function? onTap;
   Widget? settingWidget;
-  List<Widget>? searchableSettingsItems;
-
   SettingsItem({
     this.icon,
     this.title,
-    this.route,
     this.subtitle,
     this.enabled = true,
     this.onTap,
     this.settingWidget,
-    this.searchableSettingsItems,
   });
 
   Widget getListTileWidget(BuildContext context) {
-    if (settingWidget == null) {
+    if (icon != null) {
       return ListTile(
         leading: Icon(icon),
         title: Text(title ?? ""),
@@ -60,8 +55,11 @@ class SettingsItem {
         enabled: enabled,
         onTap:
             (onTap ??
-                    ((enabled && route != null)
-                        ? () => Navigator.of(context).pushNamed(route!)
+                    ((enabled && settingWidget != null)
+                        ? () => Navigator.of(context).pushNamed(
+                            ((settingWidget!) as CategorySettingsScreen)
+                                .routeName,
+                          )
                         : () {}))
                 as GestureTapCallback,
       );
@@ -80,9 +78,17 @@ class SettingsList {
 class SettingsScreen extends ConsumerStatefulWidget {
   SettingsScreen({super.key});
   static const routeName = "/settings";
-  List<Widget> searchableSettingsChildren;
   @override
   ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+abstract class CategorySettingsScreen {
+  String get routeName;
+  List<Widget> get searchableSettingsChildren;
+}
+
+mixin SearchableSetting {
+  rst(String text) {}
 }
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
@@ -95,60 +101,60 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       SettingsItem(
         icon: Icons.compress,
         title: AppLocalizations.of(context)!.transcoding,
-        route: TranscodingSettingsScreen.routeName,
+        settingWidget: TranscodingSettingsScreen(),
       ),
 
       SettingsItem(
         icon: Icons.download,
         title: AppLocalizations.of(context)!.downloadSettings,
-        route: DownloadsSettingsScreen.routeName,
+        settingWidget: DownloadsSettingsScreen(),
       ),
 
       SettingsItem(
         icon: Icons.wifi,
         title: AppLocalizations.of(context)!.networkSettingsTitle,
-        route: NetworkSettingsScreen.routeName,
+        settingWidget: NetworkSettingsScreen(),
       ),
       SettingsItem(
         icon: Icons.music_note,
         title: AppLocalizations.of(context)!.audioService,
-        route: AudioServiceSettingsScreen.routeName,
+        settingWidget: AudioServiceSettingsScreen(),
       ),
 
       SettingsItem(
         icon: TablerIcons.cast,
         title: AppLocalizations.of(context)!.playbackReportingSettingsTitle,
-        route: PlaybackReportingSettingsScreen.routeName,
+        settingWidget: PlaybackReportingSettingsScreen(),
       ),
 
       SettingsItem(
         icon: Icons.equalizer_rounded,
         title: AppLocalizations.of(context)!.volumeNormalizationSettingsTitle,
-        route: VolumeNormalizationSettingsScreen.routeName,
+        settingWidget: VolumeNormalizationSettingsScreen(),
       ),
 
       SettingsItem(
         icon: Icons.gesture,
         title: AppLocalizations.of(context)!.interactions,
-        route: InteractionSettingsScreen.routeName,
+        settingWidget: InteractionSettingsScreen(),
       ),
 
       SettingsItem(
         icon: Icons.widgets,
         title: AppLocalizations.of(context)!.layoutAndTheme,
-        route: LayoutSettingsScreen.routeName,
+        settingWidget: LayoutSettingsScreen(),
       ),
 
       SettingsItem(
         icon: TablerIcons.accessible,
         title: AppLocalizations.of(context)!.accessibility,
-        route: AccessibilitySettingsScreen.routeName,
+        settingWidget: AccessibilitySettingsScreen(),
       ),
 
       SettingsItem(
         icon: Icons.library_music,
         title: AppLocalizations.of(context)!.selectMusicLibraries,
-        route: ViewSelector.routeName,
+        settingWidget: ViewSelector(),
         subtitle: ref.watch(finampSettingsProvider.isOffline)
             ? (AppLocalizations.of(context)!.notAvailableInOfflineMode)
             : null,
@@ -158,7 +164,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       SettingsItem(
         icon: Icons.language,
         title: AppLocalizations.of(context)!.language,
-        route: LanguageSelectionScreen.routeName,
+        settingWidget: LanguageSelectionScreen(),
         subtitle:
             LocaleHelper.locale?.nativeDisplayLanguage ??
             AppLocalizations.of(context)!.system,
@@ -181,15 +187,24 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
       SettingsItem(settingWidget: LogoutListTile()),
     ];
-    List<SettingsItem> searchedSettingsItems = [];
+    List<SettingsItem> searchableSettingsItems = [];
     for (SettingsItem categoryItem in categoryItems) {
-      if (categoryItem.searchableSettingsItems != null) {
-        for (var item in categoryItem.searchableSettingsItems!) {
-          searchedSettingsItems.add(SettingsItem(settingWidget: item))
+      if (categoryItem.settingWidget != null &&
+          categoryItem.settingWidget is! Divider &&
+          categoryItem.settingWidget is! ViewSelector &&
+          categoryItem.settingWidget is! LanguageSelectionScreen &&
+          categoryItem.settingWidget is! LogoutListTile) {
+        CategorySettingsScreen settingsScreen =
+            categoryItem.settingWidget as CategorySettingsScreen;
+        for (var item in settingsScreen.searchableSettingsChildren) {
+          searchableSettingsItems.add(SettingsItem(settingWidget: item));
         }
       }
     }
-    return SettingsList(categoryItems: categoryItems, settingsItems: []);
+    return SettingsList(
+      categoryItems: categoryItems,
+      settingsItems: searchableSettingsItems,
+    );
   }
 
   @override

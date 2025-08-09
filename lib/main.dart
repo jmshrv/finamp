@@ -646,28 +646,28 @@ class _FinampState extends State<Finamp> with WindowListener {
                       LogsScreen.routeName: (context) => const LogsScreen(),
                       QueueRestoreScreen.routeName: (context) =>
                           const QueueRestoreScreen(),
-                      SettingsScreen.routeName: (context) =>
-                          const SettingsScreen(),
-                      TranscodingSettingsScreen.routeName: (context) =>
-                          const TranscodingSettingsScreen(),
+                      SettingsScreen.routeName: (context) => SettingsScreen(),
+                      TranscodingSettingsScreen().routeName: (context) =>
+                          TranscodingSettingsScreen(),
                       DownloadsLocationScreen.routeName: (context) =>
                           const DownloadsLocationScreen(),
-                      DownloadsSettingsScreen.routeName: (context) =>
-                          const DownloadsSettingsScreen(),
+                      DownloadsSettingsScreen().routeName: (context) =>
+                          DownloadsSettingsScreen(),
                       AddDownloadLocationScreen.routeName: (context) =>
                           const AddDownloadLocationScreen(),
-                      PlaybackReportingSettingsScreen.routeName: (context) =>
+                      PlaybackReportingSettingsScreen().routeName: (context) =>
                           const PlaybackReportingSettingsScreen(),
-                      AudioServiceSettingsScreen.routeName: (context) =>
+                      AudioServiceSettingsScreen().routeName: (context) =>
                           const AudioServiceSettingsScreen(),
-                      VolumeNormalizationSettingsScreen.routeName: (context) =>
-                          const VolumeNormalizationSettingsScreen(),
-                      InteractionSettingsScreen.routeName: (context) =>
+                      VolumeNormalizationSettingsScreen().routeName:
+                          (context) =>
+                              const VolumeNormalizationSettingsScreen(),
+                      InteractionSettingsScreen().routeName: (context) =>
                           const InteractionSettingsScreen(),
                       TabsSettingsScreen.routeName: (context) =>
                           const TabsSettingsScreen(),
-                      LayoutSettingsScreen.routeName: (context) =>
-                          const LayoutSettingsScreen(),
+                      LayoutSettingsScreen().routeName: (context) =>
+                          LayoutSettingsScreen(),
                       CustomizationSettingsScreen.routeName: (context) =>
                           const CustomizationSettingsScreen(),
                       PlayerSettingsScreen.routeName: (context) =>
@@ -681,11 +681,11 @@ class _FinampState extends State<Finamp> with WindowListener {
                       ArtistSettingsScreen.routeName: (context) =>
                           const ArtistSettingsScreen(),
                       GenreSettingsScreen.routeName: (context) =>
-                          const GenreSettingsScreen(),
-                      NetworkSettingsScreen.routeName: (context) =>
-                          const NetworkSettingsScreen(),
-                      AccessibilitySettingsScreen.routeName: (context) =>
-                          const AccessibilitySettingsScreen(),
+                          GenreSettingsScreen(),
+                      NetworkSettingsScreen().routeName: (context) =>
+                          NetworkSettingsScreen(),
+                      AccessibilitySettingsScreen().routeName: (context) =>
+                          AccessibilitySettingsScreen(),
                     },
                     initialRoute: SplashScreen.routeName,
                     navigatorObservers: [

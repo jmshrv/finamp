@@ -5,14 +5,16 @@ import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_dropd
 import 'package:finamp/components/InteractionSettingsScreen/keep_screen_on_while_charging_selector.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/screens/layout_settings_screen.dart';
+import 'package:finamp/screens/settings_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class InteractionSettingsScreen extends StatefulWidget {
+class InteractionSettingsScreen extends StatefulWidget
+    implements CategorySettingsScreen {
   const InteractionSettingsScreen({super.key});
-  static const routeName = "/settings/interactions";
-  static const searchableSettingsChildren = const [
+  String get routeName => "/settings/interactions";
+  List<Widget> get searchableSettingsChildren => const [
     ItemSwipeLeftToRightActionDropdownListTile(),
     ItemSwipeRightToLeftActionDropdownListTile(),
     StartInstantMixForIndividualTracksSwitch(),
@@ -42,9 +44,7 @@ class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
           ),
         ],
       ),
-      body: ListView(
-        children: InteractionSettingsScreen.searchableSettingsChildren,
-      ),
+      body: ListView(children: widget.searchableSettingsChildren),
     );
   }
 }

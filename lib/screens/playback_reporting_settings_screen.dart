@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:finamp/components/PlaybackReportingSettingsScreen/discord_rpc_icon_selector.dart';
 import 'package:finamp/components/PlaybackReportingSettingsScreen/enabled_discord_rpc.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/screens/settings_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -12,10 +13,13 @@ import '../components/PlaybackReportingSettingsScreen/play_on_reconnection_delay
 import '../components/PlaybackReportingSettingsScreen/play_on_stale_delay_editor.dart';
 import '../components/PlaybackReportingSettingsScreen/report_queue_to_server_toggle.dart';
 
-class PlaybackReportingSettingsScreen extends StatefulWidget {
+class PlaybackReportingSettingsScreen extends StatefulWidget
+    implements CategorySettingsScreen {
   const PlaybackReportingSettingsScreen({super.key});
-  static const routeName = "/settings/playback-reporting";
-  static const searchableSettingsChildren = const [
+  @override
+  String get routeName => "/settings/playback-reporting";
+  @override
+  List<Widget> get searchableSettingsChildren => const [
     const EnablePlayonToggle(),
     const PeriodicPlaybackSessionUpdateFrequencyEditor(),
     const ReportQueueToServerToggle(),
@@ -49,7 +53,7 @@ class _PlaybackReportingSettingsScreenState
       ),
       body: ListView(
         children: [
-          ...PlaybackReportingSettingsScreen.searchableSettingsChildren,
+          ...widget.searchableSettingsChildren,
           if (hasRpcSupport) const Divider(),
           if (hasRpcSupport) const EnabledDiscordRpc(),
           if (hasRpcSupport) const DiscordRpcIconSelector(),

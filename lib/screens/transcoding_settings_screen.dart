@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:finamp/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,10 +10,13 @@ import '../components/TranscodingSettingsScreen/transcode_switch.dart';
 import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
 
-class TranscodingSettingsScreen extends StatefulWidget {
+class TranscodingSettingsScreen extends StatefulWidget
+    implements CategorySettingsScreen {
   TranscodingSettingsScreen({super.key});
-  static const routeName = "/settings/transcoding";
-  var searchableSettingsChildren = [
+  @override
+  String get routeName => "/settings/transcoding";
+  @override
+  List<Widget> get searchableSettingsChildren => [
     TranscodeSwitch(),
     StreamingTranscodingFormatDropdownListTile(),
     BitrateSelector(),

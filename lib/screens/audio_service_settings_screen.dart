@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/screens/settings_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,11 +11,13 @@ import '../components/AudioServiceSettingsScreen/loadQueueOnStartup_selector.dar
 import '../components/AudioServiceSettingsScreen/stop_foreground_selector.dart';
 import '../components/AudioServiceSettingsScreen/track_shuffle_item_count_editor.dart';
 
-class AudioServiceSettingsScreen extends StatefulWidget {
+class AudioServiceSettingsScreen extends StatefulWidget
+    implements CategorySettingsScreen {
   const AudioServiceSettingsScreen({super.key});
-  static const routeName = "/settings/audioservice";
-
-  static const searchableSettingsChildren = const [
+  @override
+  String get routeName => "/settings/audioservice";
+  @override
+  List<Widget> get searchableSettingsChildren => [
     const TrackShuffleItemCountEditor(),
     const AudioFadeInDurationListTile(),
     const AudioFadeOutDurationListTile(),
@@ -47,12 +50,9 @@ class _AudioServiceSettingsScreenState
       body: ListView(
         children: [
           if (Platform.isAndroid) const StopForegroundSelector(),
-          ...AudioServiceSettingsScreen.searchableSettingsChildren.sublist(
-            0,
-            3,
-          ),
+          ...widget.searchableSettingsChildren.sublist(0, 3),
           if (Platform.isAndroid) const BufferSizeListTile(),
-          ...AudioServiceSettingsScreen.searchableSettingsChildren.sublist(4),
+          ...widget.searchableSettingsChildren.sublist(4),
         ],
       ),
     );

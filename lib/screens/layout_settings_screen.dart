@@ -5,6 +5,7 @@ import 'package:finamp/screens/customization_settings_screen.dart';
 import 'package:finamp/screens/genre_settings_screen.dart';
 import 'package:finamp/screens/lyrics_settings_screen.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
+import 'package:finamp/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -18,10 +19,13 @@ import '../components/LayoutSettingsScreen/use_cover_as_background_toggle.dart';
 import '../services/finamp_settings_helper.dart';
 import 'tabs_settings_screen.dart';
 
-class LayoutSettingsScreen extends ConsumerStatefulWidget {
-  const LayoutSettingsScreen({super.key});
-  static const routeName = "/settings/layout";
-  static const searchableSettingsChildren = const [
+class LayoutSettingsScreen extends ConsumerStatefulWidget
+    implements CategorySettingsScreen {
+  LayoutSettingsScreen({super.key});
+  @override
+  String get routeName => "/settings/layout";
+  @override
+  List<Widget> get searchableSettingsChildren => const [
     const Divider(),
     const ThemeSelector(),
     const ContentViewTypeDropdownListTile(),
@@ -97,13 +101,13 @@ class _LayoutSettingsScreenState extends ConsumerState<LayoutSettingsScreen> {
             onTap: () =>
                 Navigator.of(context).pushNamed(TabsSettingsScreen.routeName),
           ),
-          ...(LayoutSettingsScreen.searchableSettingsChildren).sublist(0, 3),
+          ...(widget.searchableSettingsChildren).sublist(0, 3),
           if (!ref.watch(finampSettingsProvider.useFixedSizeGridTiles))
             for (final type in ContentGridViewCrossAxisCountType.values)
               ContentGridViewCrossAxisCountListTile(type: type),
           if (ref.watch(finampSettingsProvider.useFixedSizeGridTiles))
             const FixedGridTileSizeDropdownListTile(),
-          ...(LayoutSettingsScreen.searchableSettingsChildren).sublist(4),
+          ...(widget.searchableSettingsChildren).sublist(4),
         ],
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:finamp/screens/settings_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
@@ -7,7 +8,7 @@ import '../components/LayoutSettingsScreen/TabsSettingsScreen/hide_tab_toggle.da
 class TabsSettingsScreen extends StatefulWidget {
   const TabsSettingsScreen({super.key});
 
-  static const routeName = "/settings/tabs";
+  static const String routeName = "/settings/tabs";
 
   @override
   State<TabsSettingsScreen> createState() => _TabsSettingsScreenState();
@@ -20,7 +21,10 @@ class _TabsSettingsScreenState extends State<TabsSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.tabs),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetTabsSettings),
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
+            context,
+            FinampSettingsHelper.resetTabsSettings,
+          ),
         ],
       ),
       body: ReorderableListView.builder(
@@ -44,7 +48,9 @@ class _TabsSettingsScreenState extends State<TabsSettingsScreen> {
               newIndex -= 1;
             }
 
-            var currentTabOrder = List.of(FinampSettingsHelper.finampSettings.tabOrder);
+            var currentTabOrder = List.of(
+              FinampSettingsHelper.finampSettings.tabOrder,
+            );
 
             // move all values below newIndex down by one
             final oldTab = currentTabOrder[oldIndex];
