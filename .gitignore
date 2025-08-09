@@ -125,3 +125,4 @@ app.*.map.json
 
 # generated localization files
 **/lib/l10n/*.dart
+.direnv/
