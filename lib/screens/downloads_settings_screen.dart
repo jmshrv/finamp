@@ -15,16 +15,14 @@ import '../services/downloads_service.dart';
 import '../services/finamp_settings_helper.dart';
 import 'downloads_location_screen.dart';
 
-class DownloadsSettingsScreen extends StatefulWidget
-    implements CategorySettingsScreen {
+class DownloadsSettingsScreen extends StatefulWidget implements CategorySettingsScreen {
   DownloadsSettingsScreen({super.key});
   @override
   String get routeName => "/settings/downloads";
   @override
   List<Widget> get searchableSettingsChildren => [];
   @override
-  State<DownloadsSettingsScreen> createState() =>
-      _DownloadsSettingsScreenState();
+  State<DownloadsSettingsScreen> createState() => _DownloadsSettingsScreenState();
 }
 
 class _DownloadsSettingsScreenState extends State<DownloadsSettingsScreen> {
@@ -35,10 +33,7 @@ class _DownloadsSettingsScreenState extends State<DownloadsSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.downloadSettings),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-            context,
-            FinampSettingsHelper.resetDownloadSettings,
-          ),
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetDownloadSettings),
         ],
       ),
       body: ListView(
@@ -46,34 +41,24 @@ class _DownloadsSettingsScreenState extends State<DownloadsSettingsScreen> {
           ListTile(
             leading: const Icon(Icons.folder),
             title: Text(AppLocalizations.of(context)!.downloadLocations),
-            onTap: () => Navigator.of(
-              context,
-            ).pushNamed(DownloadsLocationScreen.routeName),
+            onTap: () => Navigator.of(context).pushNamed(DownloadsLocationScreen.routeName),
           ),
           if (Platform.isIOS || Platform.isAndroid) const RequireWifiSwitch(),
           const SyncFavoritesSwitch(),
           ListTile(
             // TODO real UI for this
             title: Text(AppLocalizations.of(context)!.allPlaylistsInfoSetting),
-            subtitle: Text(
-              AppLocalizations.of(context)!.allPlaylistsInfoSettingSubtitle,
-            ),
+            subtitle: Text(AppLocalizations.of(context)!.allPlaylistsInfoSettingSubtitle),
             trailing: DownloadButton(
               item: DownloadStub.fromFinampCollection(
-                FinampCollection(
-                  type: FinampCollectionType.allPlaylistsMetadata,
-                ),
+                FinampCollection(type: FinampCollectionType.allPlaylistsMetadata),
               ),
             ),
           ),
           ListTile(
             // TODO real UI for this
-            title: Text(
-              AppLocalizations.of(context)!.cacheLibraryImagesSettings,
-            ),
-            subtitle: Text(
-              AppLocalizations.of(context)!.cacheLibraryImagesSettingsSubtitle,
-            ),
+            title: Text(AppLocalizations.of(context)!.cacheLibraryImagesSettings),
+            subtitle: Text(AppLocalizations.of(context)!.cacheLibraryImagesSettingsSubtitle),
             trailing: DownloadButton(
               item: DownloadStub.fromFinampCollection(
                 FinampCollection(
@@ -87,32 +72,22 @@ class _DownloadsSettingsScreenState extends State<DownloadsSettingsScreen> {
             // TODO real UI for this
             title: Text(AppLocalizations.of(context)!.downloadFavoritesSetting),
             trailing: DownloadButton(
-              item: DownloadStub.fromFinampCollection(
-                FinampCollection(type: FinampCollectionType.favorites),
-              ),
+              item: DownloadStub.fromFinampCollection(FinampCollection(type: FinampCollectionType.favorites)),
             ),
           ),
           ListTile(
             // TODO real UI for this
-            title: Text(
-              AppLocalizations.of(context)!.downloadAllPlaylistsSetting,
-            ),
+            title: Text(AppLocalizations.of(context)!.downloadAllPlaylistsSetting),
             trailing: DownloadButton(
-              item: DownloadStub.fromFinampCollection(
-                FinampCollection(type: FinampCollectionType.allPlaylists),
-              ),
+              item: DownloadStub.fromFinampCollection(FinampCollection(type: FinampCollectionType.allPlaylists)),
             ),
           ),
           ListTile(
             // TODO real UI for this
             title: Text(AppLocalizations.of(context)!.fiveLatestAlbumsSetting),
-            subtitle: Text(
-              AppLocalizations.of(context)!.fiveLatestAlbumsSettingSubtitle,
-            ),
+            subtitle: Text(AppLocalizations.of(context)!.fiveLatestAlbumsSettingSubtitle),
             trailing: DownloadButton(
-              item: DownloadStub.fromFinampCollection(
-                FinampCollection(type: FinampCollectionType.latest5Albums),
-              ),
+              item: DownloadStub.fromFinampCollection(FinampCollection(type: FinampCollectionType.latest5Albums)),
             ),
           ),
           const SyncOnStartupSwitch(),
@@ -149,9 +124,7 @@ class SyncFavoritesSwitch extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.trackOfflineFavorites),
-      subtitle: Text(
-        AppLocalizations.of(context)!.trackOfflineFavoritesSubtitle,
-      ),
+      subtitle: Text(AppLocalizations.of(context)!.trackOfflineFavoritesSubtitle),
       value: ref.watch(finampSettingsProvider.trackOfflineFavorites),
       onChanged: (value) {
         FinampSetters.setTrackOfflineFavorites(value);
@@ -171,9 +144,7 @@ class ShowPlaylistTracksSwitch extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.showNullLibraryItemsTitle),
-      subtitle: Text(
-        AppLocalizations.of(context)!.showNullLibraryItemsSubtitle,
-      ),
+      subtitle: Text(AppLocalizations.of(context)!.showNullLibraryItemsSubtitle),
       value: ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
       onChanged: FinampSetters.setShowDownloadsWithUnknownLibrary,
     );
@@ -200,9 +171,7 @@ class PreferQuickSyncsSwitch extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.preferQuickSyncSwitch),
-      subtitle: Text(
-        AppLocalizations.of(context)!.preferQuickSyncSwitchSubtitle,
-      ),
+      subtitle: Text(AppLocalizations.of(context)!.preferQuickSyncSwitchSubtitle),
       value: ref.watch(finampSettingsProvider.preferQuickSyncs),
       onChanged: FinampSetters.setPreferQuickSyncs,
     );
@@ -218,9 +187,7 @@ class ConcurentDownloadsSelector extends ConsumerWidget {
       children: [
         ListTile(
           title: Text(AppLocalizations.of(context)!.maxConcurrentDownloads),
-          subtitle: Text(
-            AppLocalizations.of(context)!.maxConcurrentDownloadsSubtitle,
-          ),
+          subtitle: Text(AppLocalizations.of(context)!.maxConcurrentDownloadsSubtitle),
         ),
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -229,26 +196,18 @@ class ConcurentDownloadsSelector extends ConsumerWidget {
             Slider(
               min: 1,
               max: 100,
-              value: ref
-                  .watch(finampSettingsProvider.maxConcurrentDownloads)
-                  .clamp(1, 100)
-                  .toDouble(),
-              label: AppLocalizations.of(context)!.maxConcurrentDownloadsLabel(
-                ref
-                    .watch(finampSettingsProvider.maxConcurrentDownloads)
-                    .toString(),
-              ),
-              onChanged: (value) =>
-                  FinampSetters.setMaxConcurrentDownloads(value.toInt()),
+              value: ref.watch(finampSettingsProvider.maxConcurrentDownloads).clamp(1, 100).toDouble(),
+              label: AppLocalizations.of(
+                context,
+              )!.maxConcurrentDownloadsLabel(ref.watch(finampSettingsProvider.maxConcurrentDownloads).toString()),
+              onChanged: (value) => FinampSetters.setMaxConcurrentDownloads(value.toInt()),
               autofocus: false,
               focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
             ),
             Text(
-              AppLocalizations.of(context)!.maxConcurrentDownloadsLabel(
-                ref
-                    .watch(finampSettingsProvider.maxConcurrentDownloads)
-                    .toString(),
-              ),
+              AppLocalizations.of(
+                context,
+              )!.maxConcurrentDownloadsLabel(ref.watch(finampSettingsProvider.maxConcurrentDownloads).toString()),
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ],
@@ -268,9 +227,7 @@ class DownloadWorkersSelector extends ConsumerWidget {
       children: [
         ListTile(
           title: Text(AppLocalizations.of(context)!.downloadsWorkersSetting),
-          subtitle: Text(
-            AppLocalizations.of(context)!.downloadsWorkersSettingSubtitle,
-          ),
+          subtitle: Text(AppLocalizations.of(context)!.downloadsWorkersSettingSubtitle),
         ),
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -280,18 +237,13 @@ class DownloadWorkersSelector extends ConsumerWidget {
               min: 1,
               max: 10,
               value: workers.clamp(1, 10).toDouble(),
-              label: AppLocalizations.of(
-                context,
-              )!.downloadsWorkersSettingLabel(workers.toString()),
-              onChanged: (value) =>
-                  FinampSetters.setDownloadWorkers(value.toInt()),
+              label: AppLocalizations.of(context)!.downloadsWorkersSettingLabel(workers.toString()),
+              onChanged: (value) => FinampSetters.setDownloadWorkers(value.toInt()),
               autofocus: false,
               focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
             ),
             Text(
-              AppLocalizations.of(
-                context,
-              )!.downloadsWorkersSettingLabel(workers.toString()),
+              AppLocalizations.of(context)!.downloadsWorkersSettingLabel(workers.toString()),
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ],
@@ -316,9 +268,7 @@ class RedownloadTranscodesSwitch extends ConsumerWidget {
           final isarDownloader = GetIt.instance<DownloadsService>();
           isarDownloader.markOutdatedTranscodes();
           await isarDownloader.resyncAll();
-          GlobalSnackbar.message(
-            (scaffold) => AppLocalizations.of(scaffold)!.redownloadcomplete,
-          );
+          GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.redownloadcomplete);
         }
       },
     );
@@ -329,23 +279,19 @@ class DownloadSizeWarningCutoffTile extends StatefulWidget {
   const DownloadSizeWarningCutoffTile({super.key});
 
   @override
-  State<DownloadSizeWarningCutoffTile> createState() =>
-      _BufferSizeListTileState();
+  State<DownloadSizeWarningCutoffTile> createState() => _BufferSizeListTileState();
 }
 
 class _BufferSizeListTileState extends State<DownloadSizeWarningCutoffTile> {
   final _controller = TextEditingController(
-    text: FinampSettingsHelper.finampSettings.downloadSizeWarningCutoff
-        .toString(),
+    text: FinampSettingsHelper.finampSettings.downloadSizeWarningCutoff.toString(),
   );
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.downloadSizeWarningCutoff),
-      subtitle: Text(
-        AppLocalizations.of(context)!.downloadSizeWarningCutoffSubtitle,
-      ),
+      subtitle: Text(AppLocalizations.of(context)!.downloadSizeWarningCutoffSubtitle),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(

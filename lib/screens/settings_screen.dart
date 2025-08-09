@@ -37,14 +37,7 @@ class SettingsItem {
   final bool enabled;
   Function? onTap;
   Widget? settingWidget;
-  SettingsItem({
-    this.icon,
-    this.title,
-    this.subtitle,
-    this.enabled = true,
-    this.onTap,
-    this.settingWidget,
-  });
+  SettingsItem({this.icon, this.title, this.subtitle, this.enabled = true, this.onTap, this.settingWidget});
 
   Widget getListTileWidget(BuildContext context) {
     if (icon != null) {
@@ -56,10 +49,7 @@ class SettingsItem {
         onTap:
             (onTap ??
                     ((enabled && settingWidget != null)
-                        ? () => Navigator.of(context).pushNamed(
-                            ((settingWidget!) as CategorySettingsScreen)
-                                .routeName,
-                          )
+                        ? () => Navigator.of(context).pushNamed(((settingWidget!) as CategorySettingsScreen).routeName)
                         : () {}))
                 as GestureTapCallback,
       );
@@ -161,9 +151,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         icon: Icons.language,
         title: AppLocalizations.of(context)!.language,
         settingWidget: LanguageSelectionScreen(),
-        subtitle:
-            LocaleHelper.locale?.nativeDisplayLanguage ??
-            AppLocalizations.of(context)!.system,
+        subtitle: LocaleHelper.locale?.nativeDisplayLanguage ?? AppLocalizations.of(context)!.system,
       ),
       SettingsItem(settingWidget: Divider()),
 
@@ -175,9 +163,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
       SettingsItem(
         icon: TablerIcons.lock_bolt,
-        title: AppLocalizations.of(
-          context,
-        )!.quickConnectAuthorizationMenuButtonTitle,
+        title: AppLocalizations.of(context)!.quickConnectAuthorizationMenuButtonTitle,
         onTap: () => showQuickConnectAuthorizationMenu(context: context),
       ),
 
@@ -190,17 +176,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           categoryItem.settingWidget is! ViewSelector &&
           categoryItem.settingWidget is! LanguageSelectionScreen &&
           categoryItem.settingWidget is! LogoutListTile) {
-        CategorySettingsScreen settingsScreen =
-            categoryItem.settingWidget as CategorySettingsScreen;
+        CategorySettingsScreen settingsScreen = categoryItem.settingWidget as CategorySettingsScreen;
         for (var item in settingsScreen.searchableSettingsChildren) {
           searchableSettingsItems.add(SettingsItem(settingWidget: item));
         }
       }
     }
-    return SettingsList(
-      categoryItems: categoryItems,
-      settingsItems: searchableSettingsItems,
-    );
+    return SettingsList(categoryItems: categoryItems, settingsItems: searchableSettingsItems);
   }
 
   @override
@@ -224,26 +206,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             isGlobal: true,
           ),
           Semantics.fromProperties(
-            properties: SemanticsProperties(
-              label: AppLocalizations.of(context)!.about,
-              button: true,
-            ),
+            properties: SemanticsProperties(label: AppLocalizations.of(context)!.about, button: true),
             excludeSemantics: true,
             container: true,
             child: IconButton(
               icon: Icon(Icons.info),
               onPressed: () async {
                 final localizations = AppLocalizations.of(context)!;
-                final applicationLegalese = AppLocalizations.of(
-                  context,
-                )!.applicationLegalese(repoLink);
+                final applicationLegalese = AppLocalizations.of(context)!.applicationLegalese(repoLink);
                 PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
                 ThemeData theme = Theme.of(context);
-                const linkStyle = TextStyle(
-                  color: Colors.blue,
-                  decoration: TextDecoration.underline,
-                );
+                const linkStyle = TextStyle(color: Colors.blue, decoration: TextDecoration.underline);
 
                 showAboutDialog(
                   context: context,
@@ -251,11 +225,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   applicationVersion: packageInfo.version,
                   applicationIcon: Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: SvgPicture.asset(
-                      'images/finamp_cropped.svg',
-                      width: 56,
-                      height: 56,
-                    ),
+                    child: SvgPicture.asset('images/finamp_cropped.svg', width: 56, height: 56),
                   ),
                   applicationLegalese: applicationLegalese,
                   children: [
@@ -263,23 +233,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
-                        style: TextStyle(
-                          color: theme.textTheme.bodyMedium!.color,
-                        ),
+                        style: TextStyle(color: theme.textTheme.bodyMedium!.color),
                         children: [
                           TextSpan(
                             text: localizations.finampTagline,
-                            style: const TextStyle(
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w500),
                           ),
                           const TextSpan(text: '\n\n'),
                           TextSpan(text: localizations.aboutContributionPrompt),
                           const TextSpan(text: '\n\n'),
-                          TextSpan(
-                            text: '${localizations.aboutContributionLink}\n',
-                          ),
+                          TextSpan(text: '${localizations.aboutContributionLink}\n'),
                           TextSpan(
                             text: repoLink,
                             style: linkStyle,
@@ -289,9 +252,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                               },
                           ),
                           const TextSpan(text: '\n\n'),
-                          TextSpan(
-                            text: '${localizations.aboutTranslations}\n',
-                          ),
+                          TextSpan(text: '${localizations.aboutTranslations}\n'),
                           TextSpan(
                             text: translationsLink,
                             style: linkStyle,
@@ -301,9 +262,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                               },
                           ),
                           const TextSpan(text: '\n\n'),
-                          TextSpan(
-                            text: '${localizations.aboutReleaseNotes}\n',
-                          ),
+                          TextSpan(text: '${localizations.aboutReleaseNotes}\n'),
                           TextSpan(
                             text: releaseNotesLink,
                             style: linkStyle,
@@ -327,11 +286,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
         ],
       ),
-      body: ListView(
-        children: List.of(
-          getSettings().categoryItems.map((e) => e.getListTileWidget(context)),
-        ),
-      ),
+      body: ListView(children: List.of(getSettings().categoryItems.map((e) => e.getListTileWidget(context)))),
     );
   }
 }

@@ -11,8 +11,7 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-class NetworkSettingsScreen extends StatefulWidget
-    implements CategorySettingsScreen {
+class NetworkSettingsScreen extends StatefulWidget implements CategorySettingsScreen {
   NetworkSettingsScreen({super.key});
   String get routeName => "/settings/network";
 
@@ -34,10 +33,7 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.networkSettingsTitle),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-            context,
-            FinampSettingsHelper.resetNetworkSettings,
-          ),
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetNetworkSettings),
         ],
       ),
       body: ListView(
@@ -54,14 +50,10 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
               ]);
 
               GlobalSnackbar.message(
-                (context) => AppLocalizations.of(
-                  context,
-                )!.ping("${public.toString()}_${private.toString()}"),
+                (context) => AppLocalizations.of(context)!.ping("${public.toString()}_${private.toString()}"),
               );
             },
-            child: Text(
-              AppLocalizations.of(context)!.testConnectionButtonLabel,
-            ),
+            child: Text(AppLocalizations.of(context)!.testConnectionButtonLabel),
           ),
         ],
       ),

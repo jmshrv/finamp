@@ -7,9 +7,7 @@ import '../services/finamp_settings_helper.dart';
 class AlbumSettingsScreen extends StatefulWidget {
   const AlbumSettingsScreen({super.key});
   static const routeName = "/settings/layout/album";
-  static const searchableSettingsChildren = const [
-    ShowCoversOnAlbumScreenToggle(),
-  ];
+  static const searchableSettingsChildren = const [ShowCoversOnAlbumScreenToggle()];
   @override
   State<AlbumSettingsScreen> createState() => _AlbumSettingsScreenState();
 }
@@ -21,10 +19,7 @@ class _AlbumSettingsScreenState extends State<AlbumSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.albumScreen),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-            context,
-            FinampSettingsHelper.resetAlbumSettings,
-          ),
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetAlbumSettings),
         ],
       ),
       body: ListView(children: AlbumSettingsScreen.searchableSettingsChildren),
@@ -39,9 +34,7 @@ class ShowCoversOnAlbumScreenToggle extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.showCoversOnAlbumScreenTitle),
-      subtitle: Text(
-        AppLocalizations.of(context)!.showCoversOnAlbumScreenSubtitle,
-      ),
+      subtitle: Text(AppLocalizations.of(context)!.showCoversOnAlbumScreenSubtitle),
       value: ref.watch(finampSettingsProvider.showCoversOnAlbumScreen),
       onChanged: FinampSetters.setShowCoversOnAlbumScreen,
     );

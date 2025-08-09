@@ -21,10 +21,7 @@ class _TabsSettingsScreenState extends State<TabsSettingsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.tabs),
         actions: [
-          FinampSettingsHelper.makeSettingsResetButtonWithDialog(
-            context,
-            FinampSettingsHelper.resetTabsSettings,
-          ),
+          FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetTabsSettings),
         ],
       ),
       body: ReorderableListView.builder(
@@ -48,9 +45,7 @@ class _TabsSettingsScreenState extends State<TabsSettingsScreen> {
               newIndex -= 1;
             }
 
-            var currentTabOrder = List.of(
-              FinampSettingsHelper.finampSettings.tabOrder,
-            );
+            var currentTabOrder = List.of(FinampSettingsHelper.finampSettings.tabOrder);
 
             // move all values below newIndex down by one
             final oldTab = currentTabOrder[oldIndex];

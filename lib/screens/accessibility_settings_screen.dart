@@ -5,8 +5,7 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AccessibilitySettingsScreen extends StatefulWidget
-    implements CategorySettingsScreen {
+class AccessibilitySettingsScreen extends StatefulWidget implements CategorySettingsScreen {
   AccessibilitySettingsScreen({super.key});
   @override
   String get routeName => "/settings/accessibility";
@@ -18,12 +17,10 @@ class AccessibilitySettingsScreen extends StatefulWidget
     DisableVibrationSelector(),
   ];
   @override
-  State<AccessibilitySettingsScreen> createState() =>
-      _AccessibilitySettingsScreenState();
+  State<AccessibilitySettingsScreen> createState() => _AccessibilitySettingsScreenState();
 }
 
-class _AccessibilitySettingsScreenState
-    extends State<AccessibilitySettingsScreen> {
+class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,9 +45,7 @@ class UseHighContrastColorsToggle extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.useHighContrastColorsTitle),
-      subtitle: Text(
-        AppLocalizations.of(context)!.useHighContrastColorsSubtitle,
-      ),
+      subtitle: Text(AppLocalizations.of(context)!.useHighContrastColorsSubtitle),
       value: ref.watch(finampSettingsProvider.useHighContrastColors),
       onChanged: FinampSetters.setUseHighContrastColors,
     );

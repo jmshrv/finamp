@@ -13,8 +13,7 @@ import '../components/PlaybackReportingSettingsScreen/play_on_reconnection_delay
 import '../components/PlaybackReportingSettingsScreen/play_on_stale_delay_editor.dart';
 import '../components/PlaybackReportingSettingsScreen/report_queue_to_server_toggle.dart';
 
-class PlaybackReportingSettingsScreen extends StatefulWidget
-    implements CategorySettingsScreen {
+class PlaybackReportingSettingsScreen extends StatefulWidget implements CategorySettingsScreen {
   const PlaybackReportingSettingsScreen({super.key});
   @override
   String get routeName => "/settings/playback-reporting";
@@ -27,22 +26,17 @@ class PlaybackReportingSettingsScreen extends StatefulWidget
     const PlayOnReconnectionDelayEditor(),
   ];
   @override
-  State<PlaybackReportingSettingsScreen> createState() =>
-      _PlaybackReportingSettingsScreenState();
+  State<PlaybackReportingSettingsScreen> createState() => _PlaybackReportingSettingsScreenState();
 }
 
-class _PlaybackReportingSettingsScreenState
-    extends State<PlaybackReportingSettingsScreen> {
+class _PlaybackReportingSettingsScreenState extends State<PlaybackReportingSettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    bool hasRpcSupport =
-        Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+    bool hasRpcSupport = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          AppLocalizations.of(context)!.playbackReportingSettingsTitle,
-        ),
+        title: Text(AppLocalizations.of(context)!.playbackReportingSettingsTitle),
         actions: [
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, () {
             setState(() {
