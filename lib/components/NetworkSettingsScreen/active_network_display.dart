@@ -15,21 +15,14 @@ class ActiveNetworkDisplay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String? address = ref
-        .watch(FinampUserHelper.finampCurrentUserProvider)
-        .valueOrNull
-        ?.baseURL;
+    String? address = ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.baseURL;
 
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, __) {
         return ListTile(
           leading: Icon(Icons.router_outlined),
-          subtitle: Text(
-            AppLocalizations.of(
-              context,
-            )!.preferLocalNetworkActiveAddressInfoText,
-          ),
+          subtitle: Text(AppLocalizations.of(context)!.preferLocalNetworkActiveAddressInfoText),
           trailing: Text(address ?? ""),
         );
       },

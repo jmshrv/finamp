@@ -9,16 +9,9 @@ Builder getSearchableGenerator(BuilderOptions options) =>
 
 class _SearchableGenerator extends GeneratorForAnnotation<Searchable> {
   @override
-  FutureOr<String> generateForAnnotatedElement(
-    Element element,
-    ConstantReader annotation,
-    BuildStep buildStep,
-  ) async {
+  FutureOr<String> generateForAnnotatedElement(Element element, ConstantReader annotation, BuildStep buildStep) async {
     if (element is! ClassElement) {
-      throw InvalidGenerationSourceError(
-        'Searchable annotation can only be applied to classes',
-        element: element,
-      );
+      throw InvalidGenerationSourceError('Searchable annotation can only be applied to classes', element: element);
     }
 
     final className = element.name;
@@ -29,10 +22,7 @@ class _SearchableGenerator extends GeneratorForAnnotation<Searchable> {
     final isRegularStatefulWidget = _isStatefulWidget(element);
     final isRegularStatelessWidget = _isStatelessWidget(element);
 
-    if (!isConsumerStatefulWidget &&
-        !isConsumerWidget &&
-        !isRegularStatefulWidget &&
-        !isRegularStatelessWidget) {
+    if (!isConsumerStatefulWidget && !isConsumerWidget && !isRegularStatefulWidget && !isRegularStatelessWidget) {
       throw InvalidGenerationSourceError(
         'Searchable annotation can only be applied to ConsumerWidget, ConsumerStatefulWidget, StatefulWidget, or StatelessWidget classes',
         element: element,
@@ -105,10 +95,7 @@ class _SearchableGenerator extends GeneratorForAnnotation<Searchable> {
     return false;
   }
 
-  String _generateStatelessWidgetExtension(
-    String className,
-    Set<String> localizationCalls,
-  ) {
+  String _generateStatelessWidgetExtension(String className, Set<String> localizationCalls) {
     return '''
 extension ${className}Searchable on $className {
   @override
@@ -129,10 +116,7 @@ ${localizationCalls.map((call) => '      _safeToString(l.$call),').join('\n')}
 ''';
   }
 
-  String _generateStatefulWidgetExtension(
-    String className,
-    Set<String> localizationCalls,
-  ) {
+  String _generateStatefulWidgetExtension(String className, Set<String> localizationCalls) {
     return '''
 extension ${className}Searchable on $className {
   String getSearchableContent(BuildContext context) {
@@ -160,19 +144,11 @@ ${localizationCalls.map((call) => '      _safeToString(l.$call),').join('\n')}
     // Also catches l.methodName patterns (common shorthand)
     final patterns = [
       // AppLocalizations.of(context).method or AppLocalizations.of(context)!.method
-      RegExp(
-        r'AppLocalizations\s*\.\s*of\s*\([^)]*\)\s*!?\s*\.\s*(\w+)',
-        multiLine: true,
-        dotAll: true,
-      ),
+      RegExp(r'AppLocalizations\s*\.\s*of\s*\([^)]*\)\s*!?\s*\.\s*(\w+)', multiLine: true, dotAll: true),
       // l.method pattern (where l is likely AppLocalizations)
       RegExp(r'\bl\s*\.\s*(\w+)(?!\s*[=()])', multiLine: true, dotAll: true),
       // context.l.method pattern
-      RegExp(
-        r'\bcontext\s*\.\s*l\s*\.\s*(\w+)(?!\s*[=()])',
-        multiLine: true,
-        dotAll: true,
-      ),
+      RegExp(r'\bcontext\s*\.\s*l\s*\.\s*(\w+)(?!\s*[=()])', multiLine: true, dotAll: true),
     ];
 
     final calls = <String>{};
