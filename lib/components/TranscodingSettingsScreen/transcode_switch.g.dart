@@ -12,7 +12,6 @@ part of 'transcode_switch.dart';
 // **************************************************************************
 
 extension TranscodeSwitchSearchable on TranscodeSwitch {
-  @override
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [

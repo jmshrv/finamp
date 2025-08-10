@@ -1,3 +1,4 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/network_manager.dart';
@@ -6,21 +7,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
+part "prefer_local_network_selector.g.dart";
+
+@Searchable()
 class LocalNetworkSelector extends ConsumerWidget {
   const LocalNetworkSelector({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool preferLocalNetwork =
-        ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.preferLocalNetwork ??
+        ref
+            .watch(FinampUserHelper.finampCurrentUserProvider)
+            .valueOrNull
+            ?.preferLocalNetwork ??
         DefaultSettings.preferLocalNetwork;
 
     return SwitchListTile.adaptive(
-      title: Text(AppLocalizations.of(context)!.preferLocalNetworkEnableSwitchTitle),
-      subtitle: Text(AppLocalizations.of(context)!.preferLocalNetworkEnableSwitchDescription),
+      title: Text(
+        AppLocalizations.of(context)!.preferLocalNetworkEnableSwitchTitle,
+      ),
+      subtitle: Text(
+        AppLocalizations.of(context)!.preferLocalNetworkEnableSwitchDescription,
+      ),
       value: preferLocalNetwork,
       onChanged: (value) async {
-        GetIt.instance<FinampUserHelper>().currentUser?.update(newPreferLocalNetwork: value);
+        GetIt.instance<FinampUserHelper>().currentUser?.update(
+          newPreferLocalNetwork: value,
+        );
         await changeTargetUrl();
       },
     );

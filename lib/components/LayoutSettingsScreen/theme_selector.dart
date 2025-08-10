@@ -1,3 +1,4 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:hive_ce/hive.dart';
@@ -5,9 +6,13 @@ import 'package:hive_ce/hive.dart';
 import '../../services/theme_mode_helper.dart';
 
 extension LocalisedName on ThemeMode {
-  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+  String toLocalisedString(BuildContext context) =>
+      _humanReadableLocalisedName(this, context);
 
-  String _humanReadableLocalisedName(ThemeMode themeMode, BuildContext context) {
+  String _humanReadableLocalisedName(
+    ThemeMode themeMode,
+    BuildContext context,
+  ) {
     switch (themeMode) {
       case ThemeMode.system:
         return AppLocalizations.of(context)!.system;
@@ -32,7 +37,12 @@ class ThemeSelector extends StatelessWidget {
           trailing: DropdownButton<ThemeMode>(
             value: box.get("ThemeMode"),
             items: ThemeMode.values
-                .map((e) => DropdownMenuItem<ThemeMode>(value: e, child: Text(e.toLocalisedString(context))))
+                .map(
+                  (e) => DropdownMenuItem<ThemeMode>(
+                    value: e,
+                    child: Text(e.toLocalisedString(context)),
+                  ),
+                )
                 .toList(),
             onChanged: (value) {
               if (value != null) {

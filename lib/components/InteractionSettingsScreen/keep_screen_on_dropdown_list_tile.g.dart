@@ -5,18 +5,19 @@
 // dart format off
 
 
-part of 'bitrate_selector.dart';
+part of 'keep_screen_on_dropdown_list_tile.dart';
 
 // **************************************************************************
 // _SearchableGenerator
 // **************************************************************************
 
-extension BitrateSelectorSearchable on BitrateSelector {
+extension KeepScreenOnDropdownListTileSearchable
+    on KeepScreenOnDropdownListTile {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bitrate,
-      l.bitrateSubtitle,
+      l.keepScreenOn,
+      l.keepScreenOnSubtitle,
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

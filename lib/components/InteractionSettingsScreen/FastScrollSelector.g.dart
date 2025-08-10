@@ -5,18 +5,17 @@
 // dart format off
 
 
-part of 'bitrate_selector.dart';
+part of 'FastScrollSelector.dart';
 
 // **************************************************************************
 // _SearchableGenerator
 // **************************************************************************
 
-extension BitrateSelectorSearchable on BitrateSelector {
+extension FastScrollSelectorSearchable on FastScrollSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bitrate,
-      l.bitrateSubtitle,
+      l.showFastScroller,
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

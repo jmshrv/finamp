@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
+part "enable_playon_toggle";
+
 class EnablePlayonToggle extends ConsumerWidget {
   const EnablePlayonToggle({super.key});
 

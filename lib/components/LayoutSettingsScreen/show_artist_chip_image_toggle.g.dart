@@ -5,18 +5,18 @@
 // dart format off
 
 
-part of 'bitrate_selector.dart';
+part of 'show_artist_chip_image_toggle.dart';
 
 // **************************************************************************
 // _SearchableGenerator
 // **************************************************************************
 
-extension BitrateSelectorSearchable on BitrateSelector {
+extension ShowArtistChipImageToggleSearchable on ShowArtistChipImageToggle {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bitrate,
-      l.bitrateSubtitle,
+      l.showArtistChipImage,
+      l.showArtistChipImageSubtitle,
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

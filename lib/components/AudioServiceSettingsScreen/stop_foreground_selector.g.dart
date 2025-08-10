@@ -5,18 +5,18 @@
 // dart format off
 
 
-part of 'bitrate_selector.dart';
+part of 'stop_foreground_selector.dart';
 
 // **************************************************************************
 // _SearchableGenerator
 // **************************************************************************
 
-extension BitrateSelectorSearchable on BitrateSelector {
+extension StopForegroundSelectorSearchable on StopForegroundSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bitrate,
-      l.bitrateSubtitle,
+      l.enterLowPriorityStateOnPause,
+      l.enterLowPriorityStateOnPauseSubtitle,
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

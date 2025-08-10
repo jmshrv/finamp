@@ -1,8 +1,12 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
+part "play_on_stale_delay_editor.g.dart";
+
+@Searchable()
 class PlayOnStaleDelayEditor extends StatefulWidget {
   const PlayOnStaleDelayEditor({super.key});
 
@@ -11,7 +15,9 @@ class PlayOnStaleDelayEditor extends StatefulWidget {
 }
 
 class _PlayOnStaleDelayEditorState extends State<PlayOnStaleDelayEditor> {
-  final _controller = TextEditingController(text: FinampSettingsHelper.finampSettings.playOnStaleDelay.toString());
+  final _controller = TextEditingController(
+    text: FinampSettingsHelper.finampSettings.playOnStaleDelay.toString(),
+  );
 
   @override
   Widget build(BuildContext context) {

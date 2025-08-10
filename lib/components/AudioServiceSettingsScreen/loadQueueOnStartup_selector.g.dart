@@ -5,18 +5,18 @@
 // dart format off
 
 
-part of 'bitrate_selector.dart';
+part of 'loadQueueOnStartup_selector.dart';
 
 // **************************************************************************
 // _SearchableGenerator
 // **************************************************************************
 
-extension BitrateSelectorSearchable on BitrateSelector {
+extension LoadQueueOnStartupSelectorSearchable on LoadQueueOnStartupSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bitrate,
-      l.bitrateSubtitle,
+      l.autoloadLastQueueOnStartup,
+      l.autoloadLastQueueOnStartupSubtitle,
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

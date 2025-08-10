@@ -5,18 +5,20 @@
 // dart format off
 
 
-part of 'bitrate_selector.dart';
+part of 'periodic_playback_session_update_frequency_editor.dart';
 
 // **************************************************************************
 // _SearchableGenerator
 // **************************************************************************
 
-extension BitrateSelectorSearchable on BitrateSelector {
+extension PeriodicPlaybackSessionUpdateFrequencyEditorSearchable
+    on PeriodicPlaybackSessionUpdateFrequencyEditor {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bitrate,
-      l.bitrateSubtitle,
+      l.periodicPlaybackSessionUpdateFrequency,
+      l.moreInfo,
+      l.close,
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

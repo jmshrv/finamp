@@ -1,9 +1,13 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
+part "stop_foreground_selector.g.dart";
+
+@Searchable()
 class StopForegroundSelector extends ConsumerWidget {
   const StopForegroundSelector({super.key});
 
@@ -11,9 +15,12 @@ class StopForegroundSelector extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.enterLowPriorityStateOnPause),
-      subtitle: Text(AppLocalizations.of(context)!.enterLowPriorityStateOnPauseSubtitle),
+      subtitle: Text(
+        AppLocalizations.of(context)!.enterLowPriorityStateOnPauseSubtitle,
+      ),
       value: ref.watch(finampSettingsProvider.androidStopForegroundOnPause),
-      onChanged: (value) => FinampSetters.setAndroidStopForegroundOnPause(value),
+      onChanged: (value) =>
+          FinampSetters.setAndroidStopForegroundOnPause(value),
     );
   }
 }

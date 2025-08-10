@@ -1,3 +1,4 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/network_manager.dart';
@@ -6,11 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
+part "public_address_selector.g.dart";
+
+@Searchable()
 class PublicAddressSelector extends ConsumerStatefulWidget {
   const PublicAddressSelector({super.key});
 
   @override
-  ConsumerState<PublicAddressSelector> createState() => _PublicAddressSelector();
+  ConsumerState<PublicAddressSelector> createState() =>
+      _PublicAddressSelector();
 }
 
 class _PublicAddressSelector extends ConsumerState<PublicAddressSelector> {
@@ -24,13 +29,24 @@ class _PublicAddressSelector extends ConsumerState<PublicAddressSelector> {
 
   @override
   Widget build(BuildContext context) {
-    String? publicAddress = ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.publicAddress;
+    String? publicAddress = ref
+        .watch(FinampUserHelper.finampCurrentUserProvider)
+        .valueOrNull
+        ?.publicAddress;
 
     _controller ??= TextEditingController(text: publicAddress.toString());
 
     return ListTile(
-      title: Text(AppLocalizations.of(context)!.preferLocalNetworkPublicAddressSettingTitle),
-      subtitle: Text(AppLocalizations.of(context)!.preferLocalNetworkPublicAddressSettingDescription),
+      title: Text(
+        AppLocalizations.of(
+          context,
+        )!.preferLocalNetworkPublicAddressSettingTitle,
+      ),
+      subtitle: Text(
+        AppLocalizations.of(
+          context,
+        )!.preferLocalNetworkPublicAddressSettingDescription,
+      ),
       trailing: SizedBox(
         width: 200 * MediaQuery.of(context).textScaleFactor,
         child: TextField(
@@ -39,9 +55,13 @@ class _PublicAddressSelector extends ConsumerState<PublicAddressSelector> {
           keyboardType: TextInputType.url,
           onSubmitted: (value) async {
             if (!value.startsWith("http")) {
-              return GlobalSnackbar.message((context) => AppLocalizations.of(context)!.missingSchemaError);
+              return GlobalSnackbar.message(
+                (context) => AppLocalizations.of(context)!.missingSchemaError,
+              );
             }
-            GetIt.instance<FinampUserHelper>().currentUser?.update(newPublicAddress: value);
+            GetIt.instance<FinampUserHelper>().currentUser?.update(
+              newPublicAddress: value,
+            );
             await changeTargetUrl();
           },
         ),

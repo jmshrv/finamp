@@ -5,18 +5,19 @@
 // dart format off
 
 
-part of 'bitrate_selector.dart';
+part of 'content_view_type_dropdown_list_tile.dart';
 
 // **************************************************************************
 // _SearchableGenerator
 // **************************************************************************
 
-extension BitrateSelectorSearchable on BitrateSelector {
+extension ContentViewTypeDropdownListTileSearchable
+    on ContentViewTypeDropdownListTile {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bitrate,
-      l.bitrateSubtitle,
+      l.viewType,
+      l.viewTypeSubtitle,
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

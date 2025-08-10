@@ -1,17 +1,23 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
+part "buffer_duration_list_tile.g.dart";
+
+@Searchable()
 class BufferDurationListTile extends ConsumerStatefulWidget {
   const BufferDurationListTile({super.key});
 
   @override
-  ConsumerState<BufferDurationListTile> createState() => _BufferDurationListTileState();
+  ConsumerState<BufferDurationListTile> createState() =>
+      _BufferDurationListTileState();
 }
 
-class _BufferDurationListTileState extends ConsumerState<BufferDurationListTile> {
+class _BufferDurationListTileState
+    extends ConsumerState<BufferDurationListTile> {
   final _controller = TextEditingController();
 
   @override

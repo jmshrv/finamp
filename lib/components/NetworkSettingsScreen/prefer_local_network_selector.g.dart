@@ -5,18 +5,18 @@
 // dart format off
 
 
-part of 'bitrate_selector.dart';
+part of 'prefer_local_network_selector.dart';
 
 // **************************************************************************
 // _SearchableGenerator
 // **************************************************************************
 
-extension BitrateSelectorSearchable on BitrateSelector {
+extension LocalNetworkSelectorSearchable on LocalNetworkSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bitrate,
-      l.bitrateSubtitle,
+      l.preferLocalNetworkEnableSwitchTitle,
+      l.preferLocalNetworkEnableSwitchDescription,
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

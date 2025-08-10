@@ -5,18 +5,18 @@
 // dart format off
 
 
-part of 'bitrate_selector.dart';
+part of 'track_shuffle_item_count_editor.dart';
 
 // **************************************************************************
 // _SearchableGenerator
 // **************************************************************************
 
-extension BitrateSelectorSearchable on BitrateSelector {
+extension TrackShuffleItemCountEditorSearchable on TrackShuffleItemCountEditor {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bitrate,
-      l.bitrateSubtitle,
+      l.shuffleAllTrackCount,
+      l.shuffleAllTrackCountSubtitle,
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

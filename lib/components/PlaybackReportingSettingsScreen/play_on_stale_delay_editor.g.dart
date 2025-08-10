@@ -5,18 +5,18 @@
 // dart format off
 
 
-part of 'bitrate_selector.dart';
+part of 'play_on_stale_delay_editor.dart';
 
 // **************************************************************************
 // _SearchableGenerator
 // **************************************************************************
 
-extension BitrateSelectorSearchable on BitrateSelector {
+extension PlayOnStaleDelayEditorSearchable on PlayOnStaleDelayEditor {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bitrate,
-      l.bitrateSubtitle,
+      l.playOnStaleDelay,
+      l.playOnStaleDelaySubtitle,
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

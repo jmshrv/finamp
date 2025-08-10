@@ -5,18 +5,18 @@
 // dart format off
 
 
-part of 'bitrate_selector.dart';
+part of 'auto_offline_selector.dart';
 
 // **************************************************************************
 // _SearchableGenerator
 // **************************************************************************
 
-extension BitrateSelectorSearchable on BitrateSelector {
+extension AutoOfflineSelectorSearchable on AutoOfflineSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bitrate,
-      l.bitrateSubtitle,
+      l.autoOfflineSettingTitle,
+      l.autoOfflineSettingDescription,
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

@@ -5,18 +5,18 @@
 // dart format off
 
 
-part of 'bitrate_selector.dart';
+part of 'volume_normalization_switch.dart';
 
 // **************************************************************************
 // _SearchableGenerator
 // **************************************************************************
 
-extension BitrateSelectorSearchable on BitrateSelector {
+extension VolumeNormalizationSwitchSearchable on VolumeNormalizationSwitch {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bitrate,
-      l.bitrateSubtitle,
+      l.volumeNormalizationSwitchTitle,
+      l.volumeNormalizationSwitchSubtitle,
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

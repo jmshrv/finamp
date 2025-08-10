@@ -1,17 +1,23 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
+part "track_shuffle_item_count_editor.g.dart";
+
+@Searchable()
 class TrackShuffleItemCountEditor extends ConsumerStatefulWidget {
   const TrackShuffleItemCountEditor({super.key});
 
   @override
-  ConsumerState<TrackShuffleItemCountEditor> createState() => _TrackShuffleItemCountEditorState();
+  ConsumerState<TrackShuffleItemCountEditor> createState() =>
+      _TrackShuffleItemCountEditorState();
 }
 
-class _TrackShuffleItemCountEditorState extends ConsumerState<TrackShuffleItemCountEditor> {
+class _TrackShuffleItemCountEditorState
+    extends ConsumerState<TrackShuffleItemCountEditor> {
   final _controller = TextEditingController();
 
   @override
@@ -27,7 +33,9 @@ class _TrackShuffleItemCountEditorState extends ConsumerState<TrackShuffleItemCo
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.shuffleAllTrackCount),
-      subtitle: Text(AppLocalizations.of(context)!.shuffleAllTrackCountSubtitle),
+      subtitle: Text(
+        AppLocalizations.of(context)!.shuffleAllTrackCountSubtitle,
+      ),
       trailing: SizedBox(
         width: 50 * MediaQuery.of(context).textScaleFactor,
         child: TextField(
