@@ -47,7 +47,7 @@
   "@datePlayed": {},
   "playCount": "Conteggio Riproduzioni",
   "@playCount": {},
-  "premiereDate": "Data di Rilascio",
+  "premiereDate": "Data di uscita",
   "@premiereDate": {},
   "budget": "Budget",
   "@budget": {},
@@ -253,7 +253,7 @@
   "@albums": {},
   "bitrateSubtitle": "Un bitrate più alto permette di avere una qualità audio più alta al costo di un più alto consumo della connessione dati. Non si applica ai codec lossless, es. FLAC",
   "@bitrateSubtitle": {},
-  "shuffleAllTrackCountSubtitle": "Numero di brani da mettere in coda quando si usa il tasto per la riproduzione casuale di tutti i brani.",
+  "shuffleAllTrackCountSubtitle": "Numero di brani da mettere in coda quando si usa il tasto per la riproduzione casuale di tutti i brani. Valido nella sezione brani o genere",
   "@shuffleAllTrackCountSubtitle": {},
   "errorScreenError": "Si è verificato un errore mentre tentavo di ottenere la lista degli errori! A questo punto probabilmente dovresti aprire una issue su GitHub e cancellare i dati dell'app",
   "@errorScreenError": {},
@@ -1048,7 +1048,7 @@
   "@loopModeNoneButtonLabel": {
     "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
   },
-  "volumeNormalizationModeHybrid": "Ibrida (Brano + Album)",
+  "volumeNormalizationModeHybrid": "Dinamica",
   "@volumeNormalizationModeHybrid": {
     "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
   },
@@ -1468,7 +1468,7 @@
   "@trackOfflineFavorites": {},
   "trackOfflineFavoritesSubtitle": "Ciò consente di mostrare gli stati dei preferiti più aggiornati mentre si è offline.  Non scarica alcun file aggiuntivo.",
   "@trackOfflineFavoritesSubtitle": {},
-  "addPlaylistSubheader": "Aggiungi brano alla playlist",
+  "addPlaylistSubheader": "Aggiungi brani alla playlist",
   "@addPlaylistSubheader": {
     "description": "Subheader for adding to a playlist in the add to/remove from playlist popup menu"
   },
@@ -1492,7 +1492,7 @@
   "@showStopButtonOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
-  "showStopButtonOnMediaNotificationSubtitle": "Controlla se la notifica multimediale deve disporre di un pulsante di stop oltre al pulsante di pausa. Ciò ti consente di interrompere la riproduzione senza aprire l'app.",
+  "showStopButtonOnMediaNotificationSubtitle": "Controlla se la notifica multimediale ha un pulsante di stop oltre al pulsante di pausa. Ciò ti consente di interrompere la riproduzione senza aprire l'app.",
   "@showStopButtonOnMediaNotificationSubtitle": {
     "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
   },
@@ -1628,7 +1628,7 @@
   "@resetFiltersButton": {
     "description": "Button to reset filters on a list of items"
   },
-  "queueRestoreButtonLabel": "Ripristina",
+  "queueRestoreButtonLabel": "Ripristina la coda",
   "@queueRestoreButtonLabel": {
     "description": "Button to restore archived now playing queue, overwriting current queue"
   },
@@ -1739,7 +1739,7 @@
   "@showProgressOnNowPlayingBarTitle": {
     "description": "Title for the setting that controls if the in-app miniplayer / now playing bar at the botton of the music screen functions as a progress bar"
   },
-  "showSeekControlsOnMediaNotificationTitle": "Mostra i controlli di scorrimento nella notifica multimediale",
+  "showSeekControlsOnMediaNotificationTitle": "Consenti la ricerca nella notifica multimediale",
   "@showSeekControlsOnMediaNotificationTitle": {
     "description": "Title for the setting that controls if the media notification has a seekable progress bar."
   },
@@ -1905,7 +1905,7 @@
   "@releaseDateFormatISO": {
     "description": "Date format option for the release date of an album, showing the full ISO 8601 date"
   },
-  "autoOfflineOptionNetwork": "Rete",
+  "autoOfflineOptionNetwork": "Rete locale",
   "@autoOfflineOptionNetwork": {
     "description": "This is shown when the autoOffline feature is set to Network, this means offline mode will be automatically enabled when no wifi or ethernet connection is active"
   },
@@ -2065,7 +2065,7 @@
   "@outputMenuTitle": {
     "description": "Title for the output menu that allows the user to change the audio output device and volume"
   },
-  "autoOfflineSettingDescription": "Attiva automaticamente la modalità Offline.\nDisattivo: Non attiverà automaticamente la modalità Offline. Può far risparmiare la batteria.\nRete: Attiva la modalità Offline quando non si è connessi al wifi o ad un cavo ethernet.\nNon connesso: Attiva la modalità Offline quando non si è connessi a niente.\nPuoi sempre attivare manualmente la modalità offline, ciò metterà in pausa le automazioni fino a quando non disattiverai la modalità offline",
+  "autoOfflineSettingDescription": "Attiva automaticamente la modalità Offline.\nDisattivo: Non attiverà automaticamente la modalità Offline. Può far risparmiare la batteria.\nRete locale: Attiva la modalità Offline quando non si è connessi al wifi o ad un cavo ethernet.\nNon connesso: Attiva la modalità Offline quando non si è connessi a niente.\nPuoi sempre attivare manualmente la modalità offline, ciò metterà in pausa le automazioni fino a quando non disattiverai la modalità offline",
   "@autoOfflineSettingDescription": {
     "description": "Setting description. Make sure the Mode names match the translations."
   },
@@ -2155,13 +2155,13 @@
   "@randomArtists": {},
   "mostPlayed": "Più Riprodotti",
   "@mostPlayed": {},
-  "randomFavoritesFirst": "Casuale (Preferiti Prima)",
+  "randomFavoritesFirst": "Casuale (Prima i preferiti)",
   "@randomFavoritesFirst": {},
   "recentlyAdded": "Aggiunti di recente",
   "@recentlyAdded": {},
   "latestReleases": "Ultime Release",
   "@latestReleases": {},
-  "itemSectionsOrder": "Ordine Sezione degli Elementi",
+  "itemSectionsOrder": "Ordine delle sezioni degli elementi",
   "@itemSectionsOrder": {
     "description": "Label for the setting that controls the order of item sections on the screens."
   },
@@ -2216,5 +2216,362 @@
   "itemSectionsOrderSubtitle": "Controlla l'ordine delle Sezioni degli elementi.",
   "@itemSectionsOrderSubtitle": {
     "description": "Description of the setting that controls the order of item sections on the screens."
+  },
+  "adaptive": "Adattivo",
+  "@adaptive": {},
+  "logoutButtonSubtitle": "L'accesso ad un server diverso eliminerà i download esistenti",
+  "@logoutButtonSubtitle": {},
+  "none": "Nessuno",
+  "@none": {},
+  "sleepTimerRemainingTracks": "Etichetta del pulsante per il timer di spegnimento. {time} sono il numero di minuti rimanenti.",
+  "@sleepTimerRemainingTracks": {
+    "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+    "placeholders": {
+      "time": {
+        "type": "int"
+      }
+    }
+  },
+  "createPlaylistFromCurrentQueue": "Etichetta per il pulsante che aggiunge la coda corrente a una playlist esistente o nuova.",
+  "@createPlaylistFromCurrentQueue": {
+    "description": "Label for a button that adds the current queue to an existing or new playlist."
+  },
+  "artistItemSectionFilterChipOrderTitle": "Ordine filtro sezione tracce",
+  "@artistItemSectionFilterChipOrderTitle": {
+    "description": "Label for the setting that controls the order of the tracks sections filter chips."
+  },
+  "artistItemSectionFilterChipOrderSubtitle": "Controlla l'ordine dei filtri disponibili per la sezione tracce",
+  "@artistItemSectionFilterChipOrderSubtitle": {
+    "description": "Description of the setting that controls the order of the tracks sections filter chips."
+  },
+  "genreFilterArtistScreens": "Filtro Artisti",
+  "@genreFilterArtistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreFilterArtistScreensSubtitle": "Se abilitato, Artisti (a cui si accede tramite un genere) mostrerà solo tracce e album che corrispondono al genere che si sta attualmente esplorando. (È sempre possibile rimuovere manualmente il filtro di genere per visualizzare tutte le tracce e gli album.)",
+  "@genreFilterArtistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to ArtistScreens when accessing the ArtistScreens through a Genre."
+  },
+  "genreFilterPlaylistScreens": "Filtro Playlists",
+  "@genreFilterPlaylistScreens": {
+    "description": "Label for the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "genreFilterPlaylistScreensSubtitle": "Se abilitata, le playlist (a cui si accede tramite un genere) mostreranno solo le tracce che corrispondono al genere che si sta attualmente esplorando. (È sempre possibile rimuovere manualmente il filtro di genere per visualizzare tutte le tracce.)",
+  "@genreFilterPlaylistScreensSubtitle": {
+    "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
+  },
+  "genreListsInheritSorting": "Ereditarietà dell'ordinamento degli elenchi completi",
+  "@genreListsInheritSorting": {
+    "description": "Label for the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "genreListsInheritSortingSubtitle": "Se abilitato, gli elenchi \"Vedi tutti\" erediteranno l'ordinamento e il filtro dalla schermata Genere. Se disabilitato, verranno utilizzate le impostazioni della scheda della libreria corrispondente. Selezionando i Conteggi nella parte superiore della schermata Genere o il pulsante \"Sfoglia playlist\" si aprirà sempre un elenco completo con le impostazioni di ordinamento della scheda della libreria.",
+  "@genreListsInheritSortingSubtitle": {
+    "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
+  },
+  "curatedItemsMostPlayedOfflineTooltip": "Non disponibile in modalità offline.",
+  "@curatedItemsMostPlayedOfflineTooltip": {
+    "description": "Tooltip for Most Played on Curated Items in Offline Mode."
+  },
+  "downloadButtonDisabledGenreFilterTooltip": "Rimuovere il filtro di genere per abilitare le azioni di download.",
+  "@downloadButtonDisabledGenreFilterTooltip": {
+    "description": "Tooltip shown when a download button is disabled because of an active genre filter."
+  },
+  "genreFilterNotAvailableForAlbums": "I filtri di genere non sono disponibili per gli album.",
+  "@genreFilterNotAvailableForAlbums": {
+    "description": "Message shown when the user tries to apply a genre filter to an album."
+  },
+  "sleepTimerProjectedDuration": "La riproduzione verrà messa in pausa tra ~ {duration}",
+  "@sleepTimerProjectedDuration": {
+    "description": "Displays duration until playback is expected to be ended by the sleep timer (unless the queue is modified before). {duration} is a pre-formatted string.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "36:23"
+      }
+    }
+  },
+  "showShuffleButtonOnMediaNotificationTitle": "Mostra il pulsante di riproduzione casuale sulla notifica multimediale",
+  "@showShuffleButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a shuffle button."
+  },
+  "showShuffleButtonOnMediaNotificationSubtitle": "Controlla se la notifica multimediale ha un pulsante di riproduzione casuale. Questo consente di riprodurre in ordine casuale/sequenziale senza aprire l'app.",
+  "@showShuffleButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a shuffle button."
+  },
+  "showFavoriteButtonOnMediaNotificationTitle": "Mostra il pulsante preferito sulla notifica multimediale",
+  "@showFavoriteButtonOnMediaNotificationTitle": {
+    "description": "Title for the setting that controls if the media notification has a favorite button."
+  },
+  "showFavoriteButtonOnMediaNotificationSubtitle": "Controlla se la notifica multimediale ha un pulsante Preferiti. Questo consente di aggiungere/rimuovere dai preferiti la traccia corrente senza aprire l'app. Nascosto in modalità offline.",
+  "@showFavoriteButtonOnMediaNotificationSubtitle": {
+    "description": "Subtitle for the setting that controls if the media notification has a favorite button."
+  },
+  "seeAll": "Vedi tutto",
+  "@seeAll": {
+    "description": ""
+  },
+  "artistScreen": "Artista",
+  "@artistScreen": {
+    "description": "Name for the view/screen that shows artists"
+  },
+  "applyFilterOnGenreChipTapTitle": "Applica al tocco il filtro genere",
+  "@applyFilterOnGenreChipTapTitle": {
+    "description": "Title for the setting that controls if taps on genre chips should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "applyFilterOnGenreChipTapSubtitle": "Per impostazione predefinita, toccando un genere lo si apre, mentre tenendolo premuto a lungo si filtra l'artista o la playlist in base a quel genere. Se abilitato, questo comportamento è invertito.",
+  "@applyFilterOnGenreChipTapSubtitle": {
+    "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
+  },
+  "applyFilterOnGenreChipTapPrompt": "Filtro genere applicato",
+  "@applyFilterOnGenreChipTapPrompt": {
+    "description": "A snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "applyFilterOnGenreChipTapPromptButton": "Apri genere",
+  "@applyFilterOnGenreChipTapPromptButton": {
+    "description": "The button for the snackbar that is shown to the user if a genre filter was applied due to their selected settings"
+  },
+  "genreScreen": "Genere",
+  "@genreScreen": {
+    "description": "Name for the view/screen that shows genres"
+  },
+  "additionalBaseItemInfoTitle": "Informazioni aggiuntive sull'articolo",
+  "@additionalBaseItemInfoTitle": {
+    "description": "Title for the setting that controls the displayed additional item info."
+  },
+  "additionalBaseItemInfoSubtitle": "Controlla quale tipo di informazioni aggiuntive viene visualizzato negli elenchi degli articoli per ciascun tipo di articolo. Se impostato su \"Adattivo\", le informazioni vengono scelte automaticamente in base all'ordinamento o al contesto corrente.",
+  "@additionalBaseItemInfoSubtitle": {
+    "description": "Subtitle for the setting that controls the displayed additional item info."
+  },
+  "noReleaseDate": "Nessuna data di rilascio",
+  "@noReleaseDate": {
+    "description": "Placeholder text if an item has no release date set."
+  },
+  "noDateAdded": "Nessuna sata inserita",
+  "@noDateAdded": {
+    "description": "Placeholder text if an item has no dateAdded set."
+  },
+  "noDateLastPlayed": "Non ancora riprodotto",
+  "@noDateLastPlayed": {
+    "description": "Placeholder text if an item has no lastPlayedDate set."
+  },
+  "autoOfflineOptionUnreachable": "Non raggiungibile",
+  "@autoOfflineOptionUnreachable": {
+    "description": "This is shown when the autoOffline feature is set to Unreachable, this means offline mode will be automatically enabled when - after a network change - the server cant be pinged"
+  },
+  "itemCountCalculating": "Conteggio degli elementi",
+  "@itemCountCalculating": {
+    "description": "Shown to screen readers while the item count is being calculated."
+  },
+  "preferLocalNetworkActiveAddressInfoText": "Indirizzo attivo",
+  "@preferLocalNetworkActiveAddressInfoText": {
+    "description": "Shows the active address inside the network settings screen so the user can see if this feature works"
+  },
+  "preferLocalNetworkTargetAddressLocalSettingTitle": "Indirizzo rete locale",
+  "@preferLocalNetworkTargetAddressLocalSettingTitle": {},
+  "preferLocalNetworkTargetAddressLocalSettingDescription": "Indirizzo del server Jellyfin all'interno della tua rete locale",
+  "@preferLocalNetworkTargetAddressLocalSettingDescription": {},
+  "preferLocalNetworkEnableSwitchTitle": "Preferita rete locale",
+  "@preferLocalNetworkEnableSwitchTitle": {},
+  "preferLocalNetworkEnableSwitchDescription": "Se utilizzare o meno un indirizzo diverso quando ci si trova nella rete locale del server Jellyfin",
+  "@preferLocalNetworkEnableSwitchDescription": {},
+  "preferLocalNetworkPublicAddressSettingTitle": "Indirizzo pubblico",
+  "@preferLocalNetworkPublicAddressSettingTitle": {},
+  "preferLocalNetworkPublicAddressSettingDescription": "L'indirizzo principale per connettersi al server Jellyfin",
+  "@preferLocalNetworkPublicAddressSettingDescription": {},
+  "preferLocalNetworkInfoBox": "Questa funzione richiede l'autorizzazione di posizione abilitata per leggere il nome della rete.",
+  "@preferLocalNetworkInfoBox": {
+    "description": "This is only shown on ios and android since desktop doesnt require location permissions"
+  },
+  "networkSettingsTitle": "Rete",
+  "@networkSettingsTitle": {
+    "description": "Title for the network settings screen"
+  },
+  "downloadPaused": "Download in pausa perché il dispositivo non è connesso al Wi-Fi",
+  "@downloadPaused": {
+    "description": "Gets shown in the snackbar if loosing wifi connection while downloads are running and the 'requireWifiForDownloads' is enabled"
+  },
+  "missingSchemaError": "L'URL deve iniziare con http(s)://",
+  "@missingSchemaError": {
+    "description": "Snackbar message when the user changes their home/public address but it doesn't start with http"
+  },
+  "testConnectionButtonLabel": "Testa  le connessioni",
+  "@testConnectionButtonLabel": {
+    "description": "Button to test the public and local url inside the network settings tab"
+  },
+  "autoReloadQueueTitle": "Ricarica automaticamente la coda",
+  "@autoReloadQueueTitle": {
+    "description": "Title for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "autoReloadQueueSubtitle": "Ricarica automaticamente la coda quando cambia la sorgente (ad esempio, modalità offline abilitata o cambio di indirizzo del server). Se disabilitato, Finamp ti chiederà di farlo.",
+  "@autoReloadQueueSubtitle": {
+    "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
+  },
+  "clearQueueOnStopEventTitle": "Cancella coda in caso di arresto esterno",
+  "@clearQueueOnStopEventTitle": {
+    "description": "Title for the setting that controls if OS stop commands clear the queue."
+  },
+  "clearQueueOnStopEventSubtitle": "Cancella la coda e chiudi il player se il sistema operativo riceve un comando \"stop\". Le azioni di stop in-app chiudono sempre il player e cancellano la coda",
+  "@clearQueueOnStopEventSubtitle": {
+    "description": "Subtitle for the setting that controls if OS stop commands clear the queue."
+  },
+  "menuButtonLabel": "Altre azioni",
+  "@menuButtonLabel": {
+    "description": "Generic label for menu buttons shown throughout the app. Used for the album, artist, playlist, etc. menus"
+  },
+  "autoReloadPromptReloadButton": "Ricarica",
+  "@autoReloadPromptReloadButton": {
+    "description": "Button title for reloading the queue after network settings change"
+  },
+  "notImplementedYet": "Non ancora implementato.",
+  "@notImplementedYet": {
+    "description": "Message shown when a feature is not implemented yet"
+  },
+  "automaticOfflineModeOverrideActiveTitle": "Commutazione automatica in pausa",
+  "@automaticOfflineModeOverrideActiveTitle": {
+    "description": "Title for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "automaticOfflineModeOverrideActiveSubtitle": "Tocca qui per riprendere",
+  "@automaticOfflineModeOverrideActiveSubtitle": {
+    "description": "Subtitle for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+  },
+  "sleepTimerFinishLastTrack": "Finire l'ultima traccia?",
+  "@sleepTimerFinishLastTrack": {
+    "description": "Option for the sleep timer that will finish the last track before stopping playback."
+  },
+  "sleepTimerAfterCurrentTrack": "Dopo la traccia corrente",
+  "@sleepTimerAfterCurrentTrack": {
+    "description": "Option for the sleep timer that will stop playback after the current track finishes."
+  },
+  "sleepTimerStartTimer": "Avvia timer",
+  "@sleepTimerStartTimer": {
+    "description": "Label for the button that starts the sleep timer"
+  },
+  "syncPlaybackSpeedAndPitchLabel": "Sincronizza velocità e pitch",
+  "@syncPlaybackSpeedAndPitchLabel": {
+    "description": "Label for the checkbox that toggled is the pitch is adjusted along with the playback speed, or if the pitch is kept constant. Shown in the speed submenu on the track menu"
+  },
+  "serverSharingMenuTitle": "Condivisione del server di rete locale",
+  "@serverSharingMenuTitle": {
+    "description": "Title for the server sharing menu that allows the user to share their server address with other devices on the local network"
+  },
+  "serverSharingMenuButtonTitle": "Condividi il server",
+  "@serverSharingMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the server sharing menu"
+  },
+  "serverSharingMenuConfirmationDialogText": "Sei sicuro di voler abilitare la condivisione del server anche se sei in modalità offline? Finamp invierà dati sulla rete locale.",
+  "@serverSharingMenuConfirmationDialogText": {
+    "description": "Dialog text shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuConfirmationDialogConfirmationButtonLabel": "Conferma e abilita",
+  "@serverSharingMenuConfirmationDialogConfirmationButtonLabel": {
+    "description": "Positive action label for the dialog shown when enabling server sharing while offline mode is enabled"
+  },
+  "serverSharingMenuControlTitleSharingEnabled": "Server di condivisione",
+  "@serverSharingMenuControlTitleSharingEnabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuControlSubtitleSharingDisabled": "Tocca per condividere",
+  "@serverSharingMenuControlSubtitleSharingDisabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlTitleSharingDisabled": "Non condiviso",
+  "@serverSharingMenuControlTitleSharingDisabled": {
+    "description": "Title of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned off"
+  },
+  "serverSharingMenuControlSubtitleSharingEnabled": "Tocca per interrompere",
+  "@serverSharingMenuControlSubtitleSharingEnabled": {
+    "description": "Subtitle of the toggle control in the server sharing menu used to turn server sharing on or off, when it's currently turned on"
+  },
+  "serverSharingMenuDescription": "Condividere l'indirizzo del server può essere utile per configurare nuovi client che non si trovano sulla stessa rete locale del server Jellyfin, ad esempio le TV dell'hotel, il PC al lavoro o un nuovo client sul telefono mentre sei in viaggio.",
+  "@serverSharingMenuDescription": {
+    "description": "Description text shown in the server sharing menu, right below the controls"
+  },
+  "serverSharingMenuDetails": "Funziona ascoltando le richieste di ricerca del server da parte di altri client sulla rete locale e quindi rispondendo a tali richieste con l'indirizzo configurato del server Jellyfin. Se sono configurati sia un indirizzo locale che uno pubblico, Finamp fornirà entrambi al client richiedente.",
+  "@serverSharingMenuDetails": {
+    "description": "Description text shown in the server sharing menu, below the description"
+  },
+  "quickConnectAuthorizationMenuButtonTitle": "Autorizza Quick Connect",
+  "@quickConnectAuthorizationMenuButtonTitle": {
+    "description": "Title for the button in the drawer that opens the quick connect authorization menu"
+  },
+  "quickConnectAuthorizationMenuTitle": "Autorizza la richiesta di Connessione rapida",
+  "@quickConnectAuthorizationMenuTitle": {
+    "description": "Title for the quick connect authorization menu that allows the user to authorize a quick connect request from another device"
+  },
+  "quickConnectAuthorizationMenuInputLabel": "Codice Quick Connect",
+  "@quickConnectAuthorizationMenuInputLabel": {
+    "description": "Label for the quick connect code input, shown below the input field"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleIdle": "Inserisci o incolla il codice qui sotto",
+  "@quickConnectAuthorizationMenuStateSubtitleIdle": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) while the code hasn't been submitted yet"
+  },
+  "quickConnectAuthorizationMenuStateTitleProcessing": "Tentativo di autorizzazione Richiesta",
+  "@quickConnectAuthorizationMenuStateTitleProcessing": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) while a request is being processed"
+  },
+  "quickConnectAuthorizationMenuStateTitleSuccess": "Richiesta autorizzata con successo",
+  "@quickConnectAuthorizationMenuStateTitleSuccess": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was successful"
+  },
+  "quickConnectAuthorizationMenuStateTitleFailed": "Codice Quick Connect non valido",
+  "@quickConnectAuthorizationMenuStateTitleFailed": {
+    "description": "Title for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuStateSubtitleFailed": "Controllare il codice e riprovare",
+  "@quickConnectAuthorizationMenuStateSubtitleFailed": {
+    "description": "Subtitle for the quick connect authorization menu state info (above the input field) when the authorization was unsuccessful"
+  },
+  "quickConnectAuthorizationMenuDescription": "Se stai tentando di accedere a un altro client Jellyfin tramite Quick Connect, puoi inserire o incollare il codice di 6 cifre nel campo sopra. Questo autorizzerà la richiesta di accesso dell'altro client e ti consentirà di accedere allo stesso account che stai utilizzando per Finamp.",
+  "@quickConnectAuthorizationMenuDescription": {
+    "description": "Description for the quick connect authorization menu, shown at the bottom"
+  },
+  "accessibility": "Accessibilità",
+  "@accessibility": {
+    "description": "Title for the accessibility settings screen"
+  },
+  "useHighContrastColorsTitle": "Usa colori ad alto contrasto",
+  "@useHighContrastColorsTitle": {
+    "description": "Title for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "useHighContrastColorsSubtitle": "Utilizza colori dinamici ad alto contrasto per una migliore visibilità",
+  "@useHighContrastColorsSubtitle": {
+    "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
+  },
+  "autoExpandPlayerScreenTitle": "Apri il lettore a schermo interno all'avvio della riproduzione",
+  "@autoExpandPlayerScreenTitle": {
+    "description": "Title for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "autoExpandPlayerScreenSubtitle": "Questo aprirà il player a schermo intero quando si avvia la riproduzione di una nuova coda",
+  "@autoExpandPlayerScreenSubtitle": {
+    "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "discordRPCSettingTitle": "Discord RPC",
+  "@discordRPCSettingTitle": {
+    "description": "Title for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCSettingDescription": "Abilita Discord Rich Presence per mostrare cosa stai riproducendo nel tuo stato Discord. Non si connetterà a Discord se la modalità offline è abilitata.",
+  "@discordRPCSettingDescription": {
+    "description": "Description for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
+  },
+  "discordRPCIconSettingDescription": "Icona di fallback che viene visualizzata quando non viene rilevato alcun indirizzo pubblico. (Poiché Discord non può caricare immagini dall'indirizzo locale e utilizzerebbe il proprio fallback)",
+  "@discordRPCIconSettingDescription": {
+    "description": "Description for the setting that controls which Icon the discord RPC displays as a Fallback in case no public address is detected (it doenst matter what connection is active)."
+  },
+  "discordRPCIconBlack": "Finamp - Nero",
+  "@discordRPCIconBlack": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Black Background"
+  },
+  "discordRPCIconLight": "Finamp - Bianco",
+  "@discordRPCIconLight": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a White Background"
+  },
+  "discordRPCIconJFTransparent": "Jellyfin - Trasparente",
+  "@discordRPCIconJFTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Jellyfin logo with a Transparent Background"
+  },
+  "discordRPCIconTransparent": "Finamp - Trasparente",
+  "@discordRPCIconTransparent": {
+    "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Transparent Background"
   }
 }
