@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
-part "keep_screen_while_charging_selector.g.dart";
+part "keep_screen_on_while_charging_selector.g.dart";
 
 @Searchable()
 class KeepScreenOnWhilePluggedInSelector extends ConsumerWidget {
@@ -15,7 +15,9 @@ class KeepScreenOnWhilePluggedInSelector extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.keepScreenOnWhilePluggedIn),
-      subtitle: Text(AppLocalizations.of(context)!.keepScreenOnWhilePluggedInSubtitle),
+      subtitle: Text(
+        AppLocalizations.of(context)!.keepScreenOnWhilePluggedInSubtitle,
+      ),
       value: ref.watch(finampSettingsProvider.keepScreenOnWhilePluggedIn),
       onChanged: (value) {
         FinampSetters.setKeepScreenOnWhilePluggedIn(value);

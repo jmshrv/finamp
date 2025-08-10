@@ -9,9 +9,16 @@ Builder getSearchableGenerator(BuilderOptions options) =>
 
 class _SearchableGenerator extends GeneratorForAnnotation<Searchable> {
   @override
-  FutureOr<String> generateForAnnotatedElement(Element element, ConstantReader annotation, BuildStep buildStep) async {
+  FutureOr<String> generateForAnnotatedElement(
+    Element element,
+    ConstantReader annotation,
+    BuildStep buildStep,
+  ) async {
     if (element is! ClassElement) {
-      throw InvalidGenerationSourceError('Searchable annotation can only be applied to classes', element: element);
+      throw InvalidGenerationSourceError(
+        'Searchable annotation can only be applied to classes',
+        element: element,
+      );
     }
 
     final className = element.name;
@@ -22,7 +29,10 @@ class _SearchableGenerator extends GeneratorForAnnotation<Searchable> {
     final isRegularStatefulWidget = _isStatefulWidget(element);
     final isRegularStatelessWidget = _isStatelessWidget(element);
 
-    if (!isConsumerStatefulWidget && !isConsumerWidget && !isRegularStatefulWidget && !isRegularStatelessWidget) {
+    if (!isConsumerStatefulWidget &&
+        !isConsumerWidget &&
+        !isRegularStatefulWidget &&
+        !isRegularStatelessWidget) {
       throw InvalidGenerationSourceError(
         'Searchable annotation can only be applied to ConsumerWidget, ConsumerStatefulWidget, StatefulWidget, or StatelessWidget classes',
         element: element,
@@ -95,27 +105,33 @@ class _SearchableGenerator extends GeneratorForAnnotation<Searchable> {
     return false;
   }
 
-  String _generateStatelessWidgetExtension(String className, Set<String> localizationCalls) {
+  String _generateStatelessWidgetExtension(
+    String className,
+    Set<String> localizationCalls,
+  ) {
     return '''
 extension ${className}Searchable on $className {
   @override
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-${localizationCalls.map((call) => '      l.$call,').join('\n')}
+${localizationCalls.map((call) => '      l.$call is String ? l.$call : l.$call.toString(),').join('\n')}
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }
 ''';
   }
 
-  String _generateStatefulWidgetExtension(String className, Set<String> localizationCalls) {
+  String _generateStatefulWidgetExtension(
+    String className,
+    Set<String> localizationCalls,
+  ) {
     return '''
 extension ${className}Searchable on $className {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-${localizationCalls.map((call) => '      l.$call,').join('\n')}
+${localizationCalls.map((call) => '      l.$call is String ? l.$call : l.$call.toString(),').join('\n')}
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }
@@ -123,29 +139,44 @@ ${localizationCalls.map((call) => '      l.$call,').join('\n')}
   }
 
   Set<String> _extractAppLocalizationCalls(String sourceCode) {
-    // Match various patterns of AppLocalizations usage
-    final patterns = [
-      RegExp(r'AppLocalizations\.of\(context\)!\.(\w+)'),
-      RegExp(r'AppLocalizations\.of\(context\)\.(\w+)'),
-    ];
+    // Debug: print a snippet of the source code
+    log.info('Source code length: ${sourceCode.length}');
+
+    // Simple pattern that looks for AppLocalizations.of(...).methodName
+    // This catches any context variable name, not just "context"
+    final pattern = RegExp(
+      r'AppLocalizations\s*\.\s*of\s*\([^)]*\)\s*!?\s*\.\s*(\w+)',
+      multiLine: true,
+      dotAll: true,
+    );
 
     final calls = <String>{};
-    for (final pattern in patterns) {
-      final matches = pattern.allMatches(sourceCode);
-      for (final match in matches) {
-        final methodName = match.group(1)!;
-        // Skip common non-localization methods
-        if (!_isExcludedMethod(methodName)) {
-          calls.add(methodName);
-        }
+    final matches = pattern.allMatches(sourceCode);
+    log.info('Found ${matches.length} potential AppLocalizations matches');
+
+    for (final match in matches) {
+      final fullMatch = match.group(0);
+      final methodName = match.group(1);
+      log.info('Full match: "$fullMatch" -> method: "$methodName"');
+
+      if (methodName != null && !_isExcludedMethod(methodName)) {
+        calls.add(methodName);
+        log.info('Added method: $methodName');
       }
     }
 
+    log.info('Final extracted calls: ${calls.join(", ")}');
     return calls;
   }
 
   bool _isExcludedMethod(String methodName) {
-    const excludedMethods = {'of', 'maybeOf', 'toString', 'hashCode', 'runtimeType'};
+    const excludedMethods = {
+      'of',
+      'maybeOf',
+      'toString',
+      'hashCode',
+      'runtimeType',
+    };
     return excludedMethods.contains(methodName);
   }
 }

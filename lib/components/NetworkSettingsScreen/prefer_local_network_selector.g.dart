@@ -15,8 +15,12 @@ extension LocalNetworkSelectorSearchable on LocalNetworkSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.preferLocalNetworkEnableSwitchTitle,
-      l.preferLocalNetworkEnableSwitchDescription,
+      l.preferLocalNetworkEnableSwitchTitle is String
+          ? l.preferLocalNetworkEnableSwitchTitle
+          : l.preferLocalNetworkEnableSwitchTitle.toString(),
+      l.preferLocalNetworkEnableSwitchDescription is String
+          ? l.preferLocalNetworkEnableSwitchDescription
+          : l.preferLocalNetworkEnableSwitchDescription.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

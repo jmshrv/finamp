@@ -15,8 +15,12 @@ extension StopForegroundSelectorSearchable on StopForegroundSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.enterLowPriorityStateOnPause,
-      l.enterLowPriorityStateOnPauseSubtitle,
+      l.enterLowPriorityStateOnPause is String
+          ? l.enterLowPriorityStateOnPause
+          : l.enterLowPriorityStateOnPause.toString(),
+      l.enterLowPriorityStateOnPauseSubtitle is String
+          ? l.enterLowPriorityStateOnPauseSubtitle
+          : l.enterLowPriorityStateOnPauseSubtitle.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

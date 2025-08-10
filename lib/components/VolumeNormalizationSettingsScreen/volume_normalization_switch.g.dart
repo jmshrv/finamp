@@ -15,8 +15,12 @@ extension VolumeNormalizationSwitchSearchable on VolumeNormalizationSwitch {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.volumeNormalizationSwitchTitle,
-      l.volumeNormalizationSwitchSubtitle,
+      l.volumeNormalizationSwitchTitle is String
+          ? l.volumeNormalizationSwitchTitle
+          : l.volumeNormalizationSwitchTitle.toString(),
+      l.volumeNormalizationSwitchSubtitle is String
+          ? l.volumeNormalizationSwitchSubtitle
+          : l.volumeNormalizationSwitchSubtitle.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

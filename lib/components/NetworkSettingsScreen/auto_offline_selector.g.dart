@@ -15,8 +15,12 @@ extension AutoOfflineSelectorSearchable on AutoOfflineSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.autoOfflineSettingTitle,
-      l.autoOfflineSettingDescription,
+      l.autoOfflineSettingTitle is String
+          ? l.autoOfflineSettingTitle
+          : l.autoOfflineSettingTitle.toString(),
+      l.autoOfflineSettingDescription is String
+          ? l.autoOfflineSettingDescription
+          : l.autoOfflineSettingDescription.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

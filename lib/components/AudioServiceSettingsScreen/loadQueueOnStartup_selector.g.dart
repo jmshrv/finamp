@@ -15,8 +15,12 @@ extension LoadQueueOnStartupSelectorSearchable on LoadQueueOnStartupSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.autoloadLastQueueOnStartup,
-      l.autoloadLastQueueOnStartupSubtitle,
+      l.autoloadLastQueueOnStartup is String
+          ? l.autoloadLastQueueOnStartup
+          : l.autoloadLastQueueOnStartup.toString(),
+      l.autoloadLastQueueOnStartupSubtitle is String
+          ? l.autoloadLastQueueOnStartupSubtitle
+          : l.autoloadLastQueueOnStartupSubtitle.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

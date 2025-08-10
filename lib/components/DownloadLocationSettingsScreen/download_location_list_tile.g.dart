@@ -5,23 +5,19 @@
 // dart format off
 
 
-part of 'bitrate_selector.dart';
+part of 'download_location_list_tile.dart';
 
 // **************************************************************************
 // _SearchableGenerator
 // **************************************************************************
 
-extension BitrateSelectorSearchable on BitrateSelector {
+extension DownloadLocationListTileSearchable on DownloadLocationListTile {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bitrate is String ? l.bitrate : l.bitrate.toString(),
-      l.bitrateSubtitle is String
-          ? l.bitrateSubtitle
-          : l.bitrateSubtitle.toString(),
-      l.kiloBitsPerSecondLabel is String
-          ? l.kiloBitsPerSecondLabel
-          : l.kiloBitsPerSecondLabel.toString(),
+      l.defaultDownloadLocationButton is String
+          ? l.defaultDownloadLocationButton
+          : l.defaultDownloadLocationButton.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

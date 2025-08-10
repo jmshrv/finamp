@@ -16,8 +16,10 @@ extension ContentViewTypeDropdownListTileSearchable
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.viewType,
-      l.viewTypeSubtitle,
+      l.viewType is String ? l.viewType : l.viewType.toString(),
+      l.viewTypeSubtitle is String
+          ? l.viewTypeSubtitle
+          : l.viewTypeSubtitle.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

@@ -15,8 +15,12 @@ extension BufferDurationListTileSearchable on BufferDurationListTile {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bufferDuration,
-      l.bufferDurationSubtitle,
+      l.bufferDuration is String
+          ? l.bufferDuration
+          : l.bufferDuration.toString(),
+      l.bufferDurationSubtitle is String
+          ? l.bufferDurationSubtitle
+          : l.bufferDurationSubtitle.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

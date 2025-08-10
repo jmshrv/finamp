@@ -15,8 +15,12 @@ extension PlayOnStaleDelayEditorSearchable on PlayOnStaleDelayEditor {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.playOnStaleDelay,
-      l.playOnStaleDelaySubtitle,
+      l.playOnStaleDelay is String
+          ? l.playOnStaleDelay
+          : l.playOnStaleDelay.toString(),
+      l.playOnStaleDelaySubtitle is String
+          ? l.playOnStaleDelaySubtitle
+          : l.playOnStaleDelaySubtitle.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

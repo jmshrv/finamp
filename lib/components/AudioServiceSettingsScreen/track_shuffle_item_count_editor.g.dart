@@ -15,8 +15,12 @@ extension TrackShuffleItemCountEditorSearchable on TrackShuffleItemCountEditor {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.shuffleAllTrackCount,
-      l.shuffleAllTrackCountSubtitle,
+      l.shuffleAllTrackCount is String
+          ? l.shuffleAllTrackCount
+          : l.shuffleAllTrackCount.toString(),
+      l.shuffleAllTrackCountSubtitle is String
+          ? l.shuffleAllTrackCountSubtitle
+          : l.shuffleAllTrackCountSubtitle.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

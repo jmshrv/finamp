@@ -16,9 +16,17 @@ extension PeriodicPlaybackSessionUpdateFrequencyEditorSearchable
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.periodicPlaybackSessionUpdateFrequency,
-      l.moreInfo,
-      l.close,
+      l.periodicPlaybackSessionUpdateFrequency is String
+          ? l.periodicPlaybackSessionUpdateFrequency
+          : l.periodicPlaybackSessionUpdateFrequency.toString(),
+      l.periodicPlaybackSessionUpdateFrequencySubtitle is String
+          ? l.periodicPlaybackSessionUpdateFrequencySubtitle
+          : l.periodicPlaybackSessionUpdateFrequencySubtitle.toString(),
+      l.moreInfo is String ? l.moreInfo : l.moreInfo.toString(),
+      l.periodicPlaybackSessionUpdateFrequencyDetails is String
+          ? l.periodicPlaybackSessionUpdateFrequencyDetails
+          : l.periodicPlaybackSessionUpdateFrequencyDetails.toString(),
+      l.close is String ? l.close : l.close.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

@@ -15,7 +15,15 @@ extension PublicAddressSelectorSearchable on PublicAddressSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.missingSchemaError,
+      l.preferLocalNetworkPublicAddressSettingTitle is String
+          ? l.preferLocalNetworkPublicAddressSettingTitle
+          : l.preferLocalNetworkPublicAddressSettingTitle.toString(),
+      l.preferLocalNetworkPublicAddressSettingDescription is String
+          ? l.preferLocalNetworkPublicAddressSettingDescription
+          : l.preferLocalNetworkPublicAddressSettingDescription.toString(),
+      l.missingSchemaError is String
+          ? l.missingSchemaError
+          : l.missingSchemaError.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

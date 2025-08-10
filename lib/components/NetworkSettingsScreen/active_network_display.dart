@@ -7,7 +7,7 @@ import 'package:hive_ce_flutter/hive_flutter.dart';
 import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
-part "active_network_dispay.g.dart";
+part "active_network_display.g.dart";
 
 @Searchable()
 class ActiveNetworkDisplay extends ConsumerWidget {
@@ -15,14 +15,21 @@ class ActiveNetworkDisplay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String? address = ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.baseURL;
+    String? address = ref
+        .watch(FinampUserHelper.finampCurrentUserProvider)
+        .valueOrNull
+        ?.baseURL;
 
     return ValueListenableBuilder<Box<FinampSettings>>(
       valueListenable: FinampSettingsHelper.finampSettingsListener,
       builder: (context, box, __) {
         return ListTile(
           leading: Icon(Icons.router_outlined),
-          subtitle: Text(AppLocalizations.of(context)!.preferLocalNetworkActiveAddressInfoText),
+          subtitle: Text(
+            AppLocalizations.of(
+              context,
+            )!.preferLocalNetworkActiveAddressInfoText,
+          ),
           trailing: Text(address ?? ""),
         );
       },

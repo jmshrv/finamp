@@ -5,23 +5,22 @@
 // dart format off
 
 
-part of 'bitrate_selector.dart';
+part of 'report_queue_to_server_toggle.dart';
 
 // **************************************************************************
 // _SearchableGenerator
 // **************************************************************************
 
-extension BitrateSelectorSearchable on BitrateSelector {
+extension ReportQueueToServerToggleSearchable on ReportQueueToServerToggle {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bitrate is String ? l.bitrate : l.bitrate.toString(),
-      l.bitrateSubtitle is String
-          ? l.bitrateSubtitle
-          : l.bitrateSubtitle.toString(),
-      l.kiloBitsPerSecondLabel is String
-          ? l.kiloBitsPerSecondLabel
-          : l.kiloBitsPerSecondLabel.toString(),
+      l.reportQueueToServer is String
+          ? l.reportQueueToServer
+          : l.reportQueueToServer.toString(),
+      l.reportQueueToServerSubtitle is String
+          ? l.reportQueueToServerSubtitle
+          : l.reportQueueToServerSubtitle.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

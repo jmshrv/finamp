@@ -15,7 +15,15 @@ extension LocalNetworkAddressSelectorSearchable on LocalNetworkAddressSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.missingSchemaError,
+      l.preferLocalNetworkTargetAddressLocalSettingTitle is String
+          ? l.preferLocalNetworkTargetAddressLocalSettingTitle
+          : l.preferLocalNetworkTargetAddressLocalSettingTitle.toString(),
+      l.preferLocalNetworkTargetAddressLocalSettingDescription is String
+          ? l.preferLocalNetworkTargetAddressLocalSettingDescription
+          : l.preferLocalNetworkTargetAddressLocalSettingDescription.toString(),
+      l.missingSchemaError is String
+          ? l.missingSchemaError
+          : l.missingSchemaError.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

@@ -5,23 +5,22 @@
 // dart format off
 
 
-part of 'bitrate_selector.dart';
+part of 'enable_playon_toggle.dart';
 
 // **************************************************************************
 // _SearchableGenerator
 // **************************************************************************
 
-extension BitrateSelectorSearchable on BitrateSelector {
+extension EnablePlayonToggleSearchable on EnablePlayonToggle {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bitrate is String ? l.bitrate : l.bitrate.toString(),
-      l.bitrateSubtitle is String
-          ? l.bitrateSubtitle
-          : l.bitrateSubtitle.toString(),
-      l.kiloBitsPerSecondLabel is String
-          ? l.kiloBitsPerSecondLabel
-          : l.kiloBitsPerSecondLabel.toString(),
+      l.enablePlayonTitle is String
+          ? l.enablePlayonTitle
+          : l.enablePlayonTitle.toString(),
+      l.enablePlayonSubtitle is String
+          ? l.enablePlayonSubtitle
+          : l.enablePlayonSubtitle.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

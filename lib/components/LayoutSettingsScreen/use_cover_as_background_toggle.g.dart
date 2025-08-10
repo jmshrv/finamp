@@ -5,23 +5,22 @@
 // dart format off
 
 
-part of 'bitrate_selector.dart';
+part of 'use_cover_as_background_toggle.dart';
 
 // **************************************************************************
 // _SearchableGenerator
 // **************************************************************************
 
-extension BitrateSelectorSearchable on BitrateSelector {
+extension UseCoverAsBackgroundToggleSearchable on UseCoverAsBackgroundToggle {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bitrate is String ? l.bitrate : l.bitrate.toString(),
-      l.bitrateSubtitle is String
-          ? l.bitrateSubtitle
-          : l.bitrateSubtitle.toString(),
-      l.kiloBitsPerSecondLabel is String
-          ? l.kiloBitsPerSecondLabel
-          : l.kiloBitsPerSecondLabel.toString(),
+      l.useCoverAsBackground is String
+          ? l.useCoverAsBackground
+          : l.useCoverAsBackground.toString(),
+      l.useCoverAsBackgroundSubtitle is String
+          ? l.useCoverAsBackgroundSubtitle
+          : l.useCoverAsBackgroundSubtitle.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

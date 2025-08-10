@@ -15,8 +15,12 @@ extension ShowTextOnGridViewSelectorSearchable on ShowTextOnGridViewSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.showTextOnGridView,
-      l.showTextOnGridViewSubtitle,
+      l.showTextOnGridView is String
+          ? l.showTextOnGridView
+          : l.showTextOnGridView.toString(),
+      l.showTextOnGridViewSubtitle is String
+          ? l.showTextOnGridViewSubtitle
+          : l.showTextOnGridViewSubtitle.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

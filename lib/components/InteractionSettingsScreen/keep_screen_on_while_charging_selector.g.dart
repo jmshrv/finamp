@@ -5,23 +5,23 @@
 // dart format off
 
 
-part of 'bitrate_selector.dart';
+part of 'keep_screen_on_while_charging_selector.dart';
 
 // **************************************************************************
 // _SearchableGenerator
 // **************************************************************************
 
-extension BitrateSelectorSearchable on BitrateSelector {
+extension KeepScreenOnWhilePluggedInSelectorSearchable
+    on KeepScreenOnWhilePluggedInSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bitrate is String ? l.bitrate : l.bitrate.toString(),
-      l.bitrateSubtitle is String
-          ? l.bitrateSubtitle
-          : l.bitrateSubtitle.toString(),
-      l.kiloBitsPerSecondLabel is String
-          ? l.kiloBitsPerSecondLabel
-          : l.kiloBitsPerSecondLabel.toString(),
+      l.keepScreenOnWhilePluggedIn is String
+          ? l.keepScreenOnWhilePluggedIn
+          : l.keepScreenOnWhilePluggedIn.toString(),
+      l.keepScreenOnWhilePluggedInSubtitle is String
+          ? l.keepScreenOnWhilePluggedInSubtitle
+          : l.keepScreenOnWhilePluggedInSubtitle.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

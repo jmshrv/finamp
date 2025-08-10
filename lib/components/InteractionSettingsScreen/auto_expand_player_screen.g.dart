@@ -16,8 +16,12 @@ extension AutoExpandPlayerScreenSelectorSearchable
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.autoExpandPlayerScreenTitle,
-      l.autoExpandPlayerScreenSubtitle,
+      l.autoExpandPlayerScreenTitle is String
+          ? l.autoExpandPlayerScreenTitle
+          : l.autoExpandPlayerScreenTitle.toString(),
+      l.autoExpandPlayerScreenSubtitle is String
+          ? l.autoExpandPlayerScreenSubtitle
+          : l.autoExpandPlayerScreenSubtitle.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

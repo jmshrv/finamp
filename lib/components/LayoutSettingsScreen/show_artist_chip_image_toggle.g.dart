@@ -15,8 +15,12 @@ extension ShowArtistChipImageToggleSearchable on ShowArtistChipImageToggle {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.showArtistChipImage,
-      l.showArtistChipImageSubtitle,
+      l.showArtistChipImage is String
+          ? l.showArtistChipImage
+          : l.showArtistChipImage.toString(),
+      l.showArtistChipImageSubtitle is String
+          ? l.showArtistChipImageSubtitle
+          : l.showArtistChipImageSubtitle.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

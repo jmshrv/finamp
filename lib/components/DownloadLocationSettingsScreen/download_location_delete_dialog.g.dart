@@ -5,23 +5,21 @@
 // dart format off
 
 
-part of 'bitrate_selector.dart';
+part of 'download_location_delete_dialog.dart';
 
 // **************************************************************************
 // _SearchableGenerator
 // **************************************************************************
 
-extension BitrateSelectorSearchable on BitrateSelector {
+extension DownloadLocationDeleteDialogSearchable
+    on DownloadLocationDeleteDialog {
+  @override
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.bitrate is String ? l.bitrate : l.bitrate.toString(),
-      l.bitrateSubtitle is String
-          ? l.bitrateSubtitle
-          : l.bitrateSubtitle.toString(),
-      l.kiloBitsPerSecondLabel is String
-          ? l.kiloBitsPerSecondLabel
-          : l.kiloBitsPerSecondLabel.toString(),
+      l.itemTypeSubtitle is String
+          ? l.itemTypeSubtitle
+          : l.itemTypeSubtitle.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }

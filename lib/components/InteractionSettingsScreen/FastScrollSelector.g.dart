@@ -15,7 +15,9 @@ extension FastScrollSelectorSearchable on FastScrollSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return [
-      l.showFastScroller,
+      l.showFastScroller is String
+          ? l.showFastScroller
+          : l.showFastScroller.toString(),
     ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
   }
 }
