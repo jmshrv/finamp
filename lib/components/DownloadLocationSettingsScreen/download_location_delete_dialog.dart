@@ -17,24 +17,17 @@ class DownloadLocationDeleteDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var downloads = GetIt.instance<DownloadsService>().getDownloadsForLocation(
-      id,
-      false,
-    );
+    var downloads = GetIt.instance<DownloadsService>().getDownloadsForLocation(id, false);
     if (downloads.isEmpty) {
       return AlertDialog(
         title: const Text("Are you sure?"),
         content: Text("No downloads are currently present in this location."),
         actions: [
-          TextButton(
-            child: const Text("CANCEL"),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+          TextButton(child: const Text("CANCEL"), onPressed: () => Navigator.of(context).pop()),
           TextButton(
             child: const Text("DELETE"),
             onPressed: () {
-              var fileDownloads = GetIt.instance<DownloadsService>()
-                  .getDownloadsForLocation(id, true);
+              var fileDownloads = GetIt.instance<DownloadsService>().getDownloadsForLocation(id, true);
               if (fileDownloads.isNotEmpty) {
                 Navigator.of(context).pop();
                 GlobalSnackbar.message(
@@ -59,11 +52,7 @@ class DownloadLocationDeleteDialog extends StatelessWidget {
               "This location currently contains downloads and cannot be deleted.  Remove these downloads first:",
             ),
             ...downloads.map(
-              (stub) => Text(
-                AppLocalizations.of(
-                  context,
-                )!.itemTypeSubtitle(stub.baseItemType.name, stub.name),
-              ),
+              (stub) => Text(AppLocalizations.of(context)!.itemTypeSubtitle(stub.baseItemType.name, stub.name)),
             ),
           ],
         ),

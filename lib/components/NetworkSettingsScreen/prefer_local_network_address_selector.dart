@@ -15,12 +15,10 @@ class LocalNetworkAddressSelector extends ConsumerStatefulWidget {
   const LocalNetworkAddressSelector({super.key});
 
   @override
-  ConsumerState<LocalNetworkAddressSelector> createState() =>
-      _LocalNetworkAddressSelector();
+  ConsumerState<LocalNetworkAddressSelector> createState() => _LocalNetworkAddressSelector();
 }
 
-class _LocalNetworkAddressSelector
-    extends ConsumerState<LocalNetworkAddressSelector> {
+class _LocalNetworkAddressSelector extends ConsumerState<LocalNetworkAddressSelector> {
   TextEditingController? _controller;
   @override
   void dispose() {
@@ -30,27 +28,16 @@ class _LocalNetworkAddressSelector
 
   @override
   Widget build(BuildContext context) {
-    FinampUser? user = ref
-        .watch(FinampUserHelper.finampCurrentUserProvider)
-        .valueOrNull;
+    FinampUser? user = ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull;
     String address = user?.localAddress ?? DefaultSettings.localNetworkAddress;
-    bool featureEnabled =
-        user?.preferLocalNetwork ?? DefaultSettings.preferLocalNetwork;
+    bool featureEnabled = user?.preferLocalNetwork ?? DefaultSettings.preferLocalNetwork;
 
     _controller ??= TextEditingController(text: address);
 
     return ListTile(
       enabled: featureEnabled,
-      title: Text(
-        AppLocalizations.of(
-          context,
-        )!.preferLocalNetworkTargetAddressLocalSettingTitle,
-      ),
-      subtitle: Text(
-        AppLocalizations.of(
-          context,
-        )!.preferLocalNetworkTargetAddressLocalSettingDescription,
-      ),
+      title: Text(AppLocalizations.of(context)!.preferLocalNetworkTargetAddressLocalSettingTitle),
+      subtitle: Text(AppLocalizations.of(context)!.preferLocalNetworkTargetAddressLocalSettingDescription),
       trailing: SizedBox(
         width: 200 * MediaQuery.of(context).textScaleFactor,
         child: TextField(
@@ -60,13 +47,9 @@ class _LocalNetworkAddressSelector
           keyboardType: TextInputType.url,
           onSubmitted: (value) async {
             if (!value.startsWith("http")) {
-              return GlobalSnackbar.message(
-                (context) => AppLocalizations.of(context)!.missingSchemaError,
-              );
+              return GlobalSnackbar.message((context) => AppLocalizations.of(context)!.missingSchemaError);
             }
-            GetIt.instance<FinampUserHelper>().currentUser?.update(
-              newLocalAddress: value,
-            );
+            GetIt.instance<FinampUserHelper>().currentUser?.update(newLocalAddress: value);
             await changeTargetUrl();
           },
         ),

@@ -18,18 +18,11 @@ class AutoOfflineSelector extends ConsumerWidget {
 
     return ListTile(
       title: Text(AppLocalizations.of(context)!.autoOfflineSettingTitle),
-      subtitle: Text(
-        AppLocalizations.of(context)!.autoOfflineSettingDescription,
-      ),
+      subtitle: Text(AppLocalizations.of(context)!.autoOfflineSettingDescription),
       trailing: DropdownButton<AutoOfflineOption>(
         value: option,
         items: AutoOfflineOption.values
-            .map(
-              (e) => DropdownMenuItem<AutoOfflineOption>(
-                value: e,
-                child: Text(e.toLocalisedString(context)),
-              ),
-            )
+            .map((e) => DropdownMenuItem<AutoOfflineOption>(value: e, child: Text(e.toLocalisedString(context))))
             .toList(),
         onChanged: (value) {
           if (value != null) {

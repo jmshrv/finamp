@@ -15,9 +15,7 @@ class AutoExpandPlayerScreenSelector extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.autoExpandPlayerScreenTitle),
-      subtitle: Text(
-        AppLocalizations.of(context)!.autoExpandPlayerScreenSubtitle,
-      ),
+      subtitle: Text(AppLocalizations.of(context)!.autoExpandPlayerScreenSubtitle),
       value: ref.watch(finampSettingsProvider.autoExpandPlayerScreen),
       onChanged: (value) => FinampSetters.setAutoExpandPlayerScreen(value),
     );

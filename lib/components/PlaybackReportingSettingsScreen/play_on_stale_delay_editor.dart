@@ -15,9 +15,7 @@ class PlayOnStaleDelayEditor extends StatefulWidget {
 }
 
 class _PlayOnStaleDelayEditorState extends State<PlayOnStaleDelayEditor> {
-  final _controller = TextEditingController(
-    text: FinampSettingsHelper.finampSettings.playOnStaleDelay.toString(),
-  );
+  final _controller = TextEditingController(text: FinampSettingsHelper.finampSettings.playOnStaleDelay.toString());
 
   @override
   Widget build(BuildContext context) {

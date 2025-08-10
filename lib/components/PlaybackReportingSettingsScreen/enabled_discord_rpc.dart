@@ -11,9 +11,7 @@ class EnabledDiscordRpc extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchListTile.adaptive(
       title: Text(AppLocalizations.of(context)!.discordRPCSettingTitle),
-      subtitle: Text(
-        AppLocalizations.of(context)!.discordRPCSettingDescription,
-      ),
+      subtitle: Text(AppLocalizations.of(context)!.discordRPCSettingDescription),
       value: ref.watch(finampSettingsProvider.rpcEnabled),
       onChanged: FinampSetters.setRpcEnabled,
     );

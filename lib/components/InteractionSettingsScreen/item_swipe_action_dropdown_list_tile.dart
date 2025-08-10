@@ -17,18 +17,11 @@ class ItemSwipeLeftToRightActionDropdownListTile extends ConsumerWidget {
     var action = ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight);
     return ListTile(
       title: Text(AppLocalizations.of(context)!.swipeLeftToRightAction),
-      subtitle: Text(
-        AppLocalizations.of(context)!.swipeLeftToRightActionSubtitle,
-      ),
+      subtitle: Text(AppLocalizations.of(context)!.swipeLeftToRightActionSubtitle),
       trailing: DropdownButton<ItemSwipeActions>(
         value: action,
         items: ItemSwipeActions.values
-            .map(
-              (e) => DropdownMenuItem<ItemSwipeActions>(
-                value: e,
-                child: Text(e.toLocalisedString(context)),
-              ),
-            )
+            .map((e) => DropdownMenuItem<ItemSwipeActions>(value: e, child: Text(e.toLocalisedString(context))))
             .toList(),
         onChanged: (value) {
           if (value != null) {
@@ -48,18 +41,11 @@ class ItemSwipeRightToLeftActionDropdownListTile extends ConsumerWidget {
     var action = ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft);
     return ListTile(
       title: Text(AppLocalizations.of(context)!.swipeRightToLeftAction),
-      subtitle: Text(
-        AppLocalizations.of(context)!.swipeRightToLeftActionSubtitle,
-      ),
+      subtitle: Text(AppLocalizations.of(context)!.swipeRightToLeftActionSubtitle),
       trailing: DropdownButton<ItemSwipeActions>(
         value: action,
         items: ItemSwipeActions.values
-            .map(
-              (e) => DropdownMenuItem<ItemSwipeActions>(
-                value: e,
-                child: Text(e.toLocalisedString(context)),
-              ),
-            )
+            .map((e) => DropdownMenuItem<ItemSwipeActions>(value: e, child: Text(e.toLocalisedString(context))))
             .toList(),
         onChanged: (value) {
           if (value != null) {

@@ -32,10 +32,7 @@ class SettingsSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.arrow_back),
-      onPressed: () => close(context, ''),
-    );
+    return IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => close(context, ''));
   }
 
   @override
@@ -58,27 +55,17 @@ class SettingsSearchDelegate extends SearchDelegate<String> {
             ? ListTile(
                 key: ValueKey(index),
                 leading: Icon(setting.icon),
-                title: setting.title != null
-                    ? _highlightText(setting.title!, query, context)
-                    : null,
-                subtitle: setting.subtitle != null
-                    ? _highlightText(setting.subtitle!, query, context)
-                    : null,
+                title: setting.title != null ? _highlightText(setting.title!, query, context) : null,
+                subtitle: setting.subtitle != null ? _highlightText(setting.subtitle!, query, context) : null,
                 onTap: () {
                   if (setting.onTap == null) {
-                    Navigator.of(context).popAndPushNamed(
-                      (setting.settingWidget as CategorySettingsScreen)
-                          .routeName,
-                    );
+                    Navigator.of(context).popAndPushNamed((setting.settingWidget as CategorySettingsScreen).routeName);
                   } else {
                     setting.onTap?.call();
                   }
                 },
               )
-            : KeyedSubtree(
-                key: ValueKey(index),
-                child: setting.settingWidget ?? Placeholder(),
-              );
+            : KeyedSubtree(key: ValueKey(index), child: setting.settingWidget ?? Placeholder());
       },
     );
   }
@@ -90,17 +77,14 @@ class SettingsSearchDelegate extends SearchDelegate<String> {
     final lowercaseQuery = query.toLowerCase();
     List<SettingsItem> filteredSettings = [];
     Map<String, SettingsItem> categoriesSearchStrings = Map.fromEntries(
-      settingsList.categoryItems.map(
-        (e) => MapEntry(("${e.title}${e.subtitle}"), e),
-      ),
+      settingsList.categoryItems.map((e) => MapEntry(("${e.title}${e.subtitle}"), e)),
     );
 
     Map<String, SettingsItem> settingsSearchStrings = Map.fromEntries(
       settingsList.settingsItems.map((e) {
         String searchText = "";
         try {
-          SettingsItemWidget settingsItemWidget =
-              e.settingWidget as SettingsItemWidget;
+          SettingsItemWidget settingsItemWidget = e.settingWidget as SettingsItemWidget;
           searchText = settingsItemWidget.getSearchableContent(context);
         } catch (CastException) {}
         return MapEntry(searchText, e);
@@ -109,10 +93,7 @@ class SettingsSearchDelegate extends SearchDelegate<String> {
     print(settingsSearchStrings.keys);
 
     final fuzzyCategories = Fuzzy(categoriesSearchStrings.keys.toList());
-    filteredSettings = fuzzyCategories
-        .search(lowercaseQuery)
-        .map((e) => categoriesSearchStrings[e.item]!)
-        .toList();
+    filteredSettings = fuzzyCategories.search(lowercaseQuery).map((e) => categoriesSearchStrings[e.item]!).toList();
 
     // final fuzzySettings = Fuzzy(settingsSearchStrings.keys.toList());
     // filteredSettings += fuzzySettings
@@ -144,10 +125,7 @@ class SettingsSearchDelegate extends SearchDelegate<String> {
     return RichText(
       text: TextSpan(
         children: [
-          TextSpan(
-            text: text.substring(0, startIndex),
-            style: textTheme.bodyLarge,
-          ),
+          TextSpan(text: text.substring(0, startIndex), style: textTheme.bodyLarge),
           TextSpan(
             text: text.substring(startIndex, endIndex),
             style: textTheme.bodyLarge?.copyWith(color: colorScheme.primary),

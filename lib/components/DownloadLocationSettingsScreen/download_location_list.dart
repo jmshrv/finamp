@@ -14,17 +14,11 @@ class DownloadLocationList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // TODO make this not rebuild on every settings change
-    var locations = ref.watch(
-      finampSettingsProvider.select(
-        (x) => x.requireValue.downloadLocationsMap.values,
-      ),
-    );
+    var locations = ref.watch(finampSettingsProvider.select((x) => x.requireValue.downloadLocationsMap.values));
     return ListView.builder(
       itemCount: locations.length,
       itemBuilder: (context, index) {
-        return DownloadLocationListTile(
-          downloadLocation: locations.elementAt(index),
-        );
+        return DownloadLocationListTile(downloadLocation: locations.elementAt(index));
       },
     );
   }

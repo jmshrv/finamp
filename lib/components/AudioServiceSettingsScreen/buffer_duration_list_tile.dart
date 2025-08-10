@@ -12,12 +12,10 @@ class BufferDurationListTile extends ConsumerStatefulWidget {
   const BufferDurationListTile({super.key});
 
   @override
-  ConsumerState<BufferDurationListTile> createState() =>
-      _BufferDurationListTileState();
+  ConsumerState<BufferDurationListTile> createState() => _BufferDurationListTileState();
 }
 
-class _BufferDurationListTileState
-    extends ConsumerState<BufferDurationListTile> {
+class _BufferDurationListTileState extends ConsumerState<BufferDurationListTile> {
   final _controller = TextEditingController();
 
   @override

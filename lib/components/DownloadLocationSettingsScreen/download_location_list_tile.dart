@@ -18,39 +18,28 @@ class DownloadLocationListTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool isDefault = ref.watch(
-      finampSettingsProvider.select(
-        (value) => value.value?.defaultDownloadLocation == downloadLocation.id,
-      ),
+      finampSettingsProvider.select((value) => value.value?.defaultDownloadLocation == downloadLocation.id),
     );
 
     return ListTile(
       title: Text(downloadLocation.name),
-      subtitle: Text(
-        downloadLocation.currentPath,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
+      subtitle: Text(downloadLocation.currentPath, maxLines: 1, overflow: TextOverflow.ellipsis),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
             icon: Icon(isDefault ? Icons.star : Icons.star_outline),
             onPressed: () {
-              FinampSetters.setDefaultDownloadLocation(
-                isDefault ? null : downloadLocation.id,
-              );
+              FinampSetters.setDefaultDownloadLocation(isDefault ? null : downloadLocation.id);
             },
-            tooltip: AppLocalizations.of(
-              context,
-            )!.defaultDownloadLocationButton,
+            tooltip: AppLocalizations.of(context)!.defaultDownloadLocationButton,
           ),
           if (downloadLocation.baseDirectory.needsPath)
             IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () => showDialog(
                 context: context,
-                builder: (context) =>
-                    DownloadLocationDeleteDialog(id: downloadLocation.id),
+                builder: (context) => DownloadLocationDeleteDialog(id: downloadLocation.id),
               ),
             ),
         ],

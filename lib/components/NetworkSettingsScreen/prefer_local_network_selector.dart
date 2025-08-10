@@ -16,24 +16,15 @@ class LocalNetworkSelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool preferLocalNetwork =
-        ref
-            .watch(FinampUserHelper.finampCurrentUserProvider)
-            .valueOrNull
-            ?.preferLocalNetwork ??
+        ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.preferLocalNetwork ??
         DefaultSettings.preferLocalNetwork;
 
     return SwitchListTile.adaptive(
-      title: Text(
-        AppLocalizations.of(context)!.preferLocalNetworkEnableSwitchTitle,
-      ),
-      subtitle: Text(
-        AppLocalizations.of(context)!.preferLocalNetworkEnableSwitchDescription,
-      ),
+      title: Text(AppLocalizations.of(context)!.preferLocalNetworkEnableSwitchTitle),
+      subtitle: Text(AppLocalizations.of(context)!.preferLocalNetworkEnableSwitchDescription),
       value: preferLocalNetwork,
       onChanged: (value) async {
-        GetIt.instance<FinampUserHelper>().currentUser?.update(
-          newPreferLocalNetwork: value,
-        );
+        GetIt.instance<FinampUserHelper>().currentUser?.update(newPreferLocalNetwork: value);
         await changeTargetUrl();
       },
     );
