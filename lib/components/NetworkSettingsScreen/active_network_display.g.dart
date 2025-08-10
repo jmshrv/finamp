@@ -14,10 +14,18 @@ part of 'active_network_display.dart';
 extension ActiveNetworkDisplaySearchable on ActiveNetworkDisplay {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.preferLocalNetworkActiveAddressInfoText is String
-          ? l.preferLocalNetworkActiveAddressInfoText
-          : l.preferLocalNetworkActiveAddressInfoText.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.preferLocalNetworkActiveAddressInfoText),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

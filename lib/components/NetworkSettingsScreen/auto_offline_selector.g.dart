@@ -14,13 +14,19 @@ part of 'auto_offline_selector.dart';
 extension AutoOfflineSelectorSearchable on AutoOfflineSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.autoOfflineSettingTitle is String
-          ? l.autoOfflineSettingTitle
-          : l.autoOfflineSettingTitle.toString(),
-      l.autoOfflineSettingDescription is String
-          ? l.autoOfflineSettingDescription
-          : l.autoOfflineSettingDescription.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.autoOfflineSettingTitle),
+      _safeToString(l.autoOfflineSettingDescription),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

@@ -14,13 +14,19 @@ part of 'transcode_switch.dart';
 extension TranscodeSwitchSearchable on TranscodeSwitch {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.enableTranscoding is String
-          ? l.enableTranscoding
-          : l.enableTranscoding.toString(),
-      l.enableTranscodingSubtitle is String
-          ? l.enableTranscodingSubtitle
-          : l.enableTranscodingSubtitle.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.enableTranscoding),
+      _safeToString(l.enableTranscodingSubtitle),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

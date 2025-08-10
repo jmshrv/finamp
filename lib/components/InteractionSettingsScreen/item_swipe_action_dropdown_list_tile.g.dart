@@ -15,19 +15,21 @@ extension ItemSwipeLeftToRightActionDropdownListTileSearchable
     on ItemSwipeLeftToRightActionDropdownListTile {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.swipeLeftToRightAction is String
-          ? l.swipeLeftToRightAction
-          : l.swipeLeftToRightAction.toString(),
-      l.swipeLeftToRightActionSubtitle is String
-          ? l.swipeLeftToRightActionSubtitle
-          : l.swipeLeftToRightActionSubtitle.toString(),
-      l.swipeRightToLeftAction is String
-          ? l.swipeRightToLeftAction
-          : l.swipeRightToLeftAction.toString(),
-      l.swipeRightToLeftActionSubtitle is String
-          ? l.swipeRightToLeftActionSubtitle
-          : l.swipeRightToLeftActionSubtitle.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.swipeLeftToRightAction),
+      _safeToString(l.swipeLeftToRightActionSubtitle),
+      _safeToString(l.swipeRightToLeftAction),
+      _safeToString(l.swipeRightToLeftActionSubtitle),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

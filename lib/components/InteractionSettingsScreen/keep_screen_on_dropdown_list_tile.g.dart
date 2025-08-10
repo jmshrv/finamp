@@ -15,11 +15,19 @@ extension KeepScreenOnDropdownListTileSearchable
     on KeepScreenOnDropdownListTile {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.keepScreenOn is String ? l.keepScreenOn : l.keepScreenOn.toString(),
-      l.keepScreenOnSubtitle is String
-          ? l.keepScreenOnSubtitle
-          : l.keepScreenOnSubtitle.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.keepScreenOn),
+      _safeToString(l.keepScreenOnSubtitle),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

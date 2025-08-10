@@ -14,10 +14,18 @@ part of 'download_location_list_tile.dart';
 extension DownloadLocationListTileSearchable on DownloadLocationListTile {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.defaultDownloadLocationButton is String
-          ? l.defaultDownloadLocationButton
-          : l.defaultDownloadLocationButton.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.defaultDownloadLocationButton),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

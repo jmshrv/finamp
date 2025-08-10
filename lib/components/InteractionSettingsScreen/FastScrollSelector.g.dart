@@ -14,10 +14,16 @@ part of 'FastScrollSelector.dart';
 extension FastScrollSelectorSearchable on FastScrollSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.showFastScroller is String
-          ? l.showFastScroller
-          : l.showFastScroller.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[_safeToString(l.showFastScroller)];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

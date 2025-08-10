@@ -14,13 +14,19 @@ part of 'enable_playon_toggle.dart';
 extension EnablePlayonToggleSearchable on EnablePlayonToggle {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.enablePlayonTitle is String
-          ? l.enablePlayonTitle
-          : l.enablePlayonTitle.toString(),
-      l.enablePlayonSubtitle is String
-          ? l.enablePlayonSubtitle
-          : l.enablePlayonSubtitle.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.enablePlayonTitle),
+      _safeToString(l.enablePlayonSubtitle),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

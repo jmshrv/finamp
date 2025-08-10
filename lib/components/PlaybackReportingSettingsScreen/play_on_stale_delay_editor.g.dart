@@ -14,13 +14,19 @@ part of 'play_on_stale_delay_editor.dart';
 extension PlayOnStaleDelayEditorSearchable on PlayOnStaleDelayEditor {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.playOnStaleDelay is String
-          ? l.playOnStaleDelay
-          : l.playOnStaleDelay.toString(),
-      l.playOnStaleDelaySubtitle is String
-          ? l.playOnStaleDelaySubtitle
-          : l.playOnStaleDelaySubtitle.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.playOnStaleDelay),
+      _safeToString(l.playOnStaleDelaySubtitle),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

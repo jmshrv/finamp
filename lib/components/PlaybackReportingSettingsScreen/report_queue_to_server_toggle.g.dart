@@ -14,13 +14,19 @@ part of 'report_queue_to_server_toggle.dart';
 extension ReportQueueToServerToggleSearchable on ReportQueueToServerToggle {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.reportQueueToServer is String
-          ? l.reportQueueToServer
-          : l.reportQueueToServer.toString(),
-      l.reportQueueToServerSubtitle is String
-          ? l.reportQueueToServerSubtitle
-          : l.reportQueueToServerSubtitle.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.reportQueueToServer),
+      _safeToString(l.reportQueueToServerSubtitle),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

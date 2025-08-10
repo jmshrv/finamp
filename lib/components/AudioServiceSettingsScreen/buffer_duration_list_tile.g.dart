@@ -14,13 +14,19 @@ part of 'buffer_duration_list_tile.dart';
 extension BufferDurationListTileSearchable on BufferDurationListTile {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.bufferDuration is String
-          ? l.bufferDuration
-          : l.bufferDuration.toString(),
-      l.bufferDurationSubtitle is String
-          ? l.bufferDurationSubtitle
-          : l.bufferDurationSubtitle.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.bufferDuration),
+      _safeToString(l.bufferDurationSubtitle),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

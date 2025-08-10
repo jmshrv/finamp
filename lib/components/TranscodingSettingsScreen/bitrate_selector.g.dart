@@ -14,14 +14,20 @@ part of 'bitrate_selector.dart';
 extension BitrateSelectorSearchable on BitrateSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.bitrate is String ? l.bitrate : l.bitrate.toString(),
-      l.bitrateSubtitle is String
-          ? l.bitrateSubtitle
-          : l.bitrateSubtitle.toString(),
-      l.kiloBitsPerSecondLabel is String
-          ? l.kiloBitsPerSecondLabel
-          : l.kiloBitsPerSecondLabel.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.bitrate),
+      _safeToString(l.bitrateSubtitle),
+      _safeToString(l.kiloBitsPerSecondLabel),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

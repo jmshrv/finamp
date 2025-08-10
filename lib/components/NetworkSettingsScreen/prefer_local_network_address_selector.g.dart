@@ -14,16 +14,20 @@ part of 'prefer_local_network_address_selector.dart';
 extension LocalNetworkAddressSelectorSearchable on LocalNetworkAddressSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.preferLocalNetworkTargetAddressLocalSettingTitle is String
-          ? l.preferLocalNetworkTargetAddressLocalSettingTitle
-          : l.preferLocalNetworkTargetAddressLocalSettingTitle.toString(),
-      l.preferLocalNetworkTargetAddressLocalSettingDescription is String
-          ? l.preferLocalNetworkTargetAddressLocalSettingDescription
-          : l.preferLocalNetworkTargetAddressLocalSettingDescription.toString(),
-      l.missingSchemaError is String
-          ? l.missingSchemaError
-          : l.missingSchemaError.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.preferLocalNetworkTargetAddressLocalSettingTitle),
+      _safeToString(l.preferLocalNetworkTargetAddressLocalSettingDescription),
+      _safeToString(l.missingSchemaError),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

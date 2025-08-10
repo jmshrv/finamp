@@ -14,13 +14,19 @@ part of 'volume_normalization_switch.dart';
 extension VolumeNormalizationSwitchSearchable on VolumeNormalizationSwitch {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.volumeNormalizationSwitchTitle is String
-          ? l.volumeNormalizationSwitchTitle
-          : l.volumeNormalizationSwitchTitle.toString(),
-      l.volumeNormalizationSwitchSubtitle is String
-          ? l.volumeNormalizationSwitchSubtitle
-          : l.volumeNormalizationSwitchSubtitle.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.volumeNormalizationSwitchTitle),
+      _safeToString(l.volumeNormalizationSwitchSubtitle),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

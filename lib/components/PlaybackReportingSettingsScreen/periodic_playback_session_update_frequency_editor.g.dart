@@ -15,18 +15,22 @@ extension PeriodicPlaybackSessionUpdateFrequencyEditorSearchable
     on PeriodicPlaybackSessionUpdateFrequencyEditor {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.periodicPlaybackSessionUpdateFrequency is String
-          ? l.periodicPlaybackSessionUpdateFrequency
-          : l.periodicPlaybackSessionUpdateFrequency.toString(),
-      l.periodicPlaybackSessionUpdateFrequencySubtitle is String
-          ? l.periodicPlaybackSessionUpdateFrequencySubtitle
-          : l.periodicPlaybackSessionUpdateFrequencySubtitle.toString(),
-      l.moreInfo is String ? l.moreInfo : l.moreInfo.toString(),
-      l.periodicPlaybackSessionUpdateFrequencyDetails is String
-          ? l.periodicPlaybackSessionUpdateFrequencyDetails
-          : l.periodicPlaybackSessionUpdateFrequencyDetails.toString(),
-      l.close is String ? l.close : l.close.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.periodicPlaybackSessionUpdateFrequency),
+      _safeToString(l.periodicPlaybackSessionUpdateFrequencySubtitle),
+      _safeToString(l.moreInfo),
+      _safeToString(l.periodicPlaybackSessionUpdateFrequencyDetails),
+      _safeToString(l.close),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

@@ -114,9 +114,16 @@ extension ${className}Searchable on $className {
   @override
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-${localizationCalls.map((call) => '      l.$call is String ? l.$call : l.$call.toString(),').join('\n')}
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+${localizationCalls.map((call) => '      _safeToString(l.$call),').join('\n')}
+    ];
+    return searchableTexts.where((text) => text.isNotEmpty).join(' ').toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }
 ''';
@@ -130,9 +137,16 @@ ${localizationCalls.map((call) => '      l.$call is String ? l.$call : l.$call.t
 extension ${className}Searchable on $className {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-${localizationCalls.map((call) => '      l.$call is String ? l.$call : l.$call.toString(),').join('\n')}
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+${localizationCalls.map((call) => '      _safeToString(l.$call),').join('\n')}
+    ];
+    return searchableTexts.where((text) => text.isNotEmpty).join(' ').toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }
 ''';
@@ -142,26 +156,40 @@ ${localizationCalls.map((call) => '      l.$call is String ? l.$call : l.$call.t
     // Debug: print a snippet of the source code
     log.info('Source code length: ${sourceCode.length}');
 
-    // Simple pattern that looks for AppLocalizations.of(...).methodName
-    // This catches any context variable name, not just "context"
-    final pattern = RegExp(
-      r'AppLocalizations\s*\.\s*of\s*\([^)]*\)\s*!?\s*\.\s*(\w+)',
-      multiLine: true,
-      dotAll: true,
-    );
+    // Enhanced pattern that looks for AppLocalizations.of(...).methodName
+    // Also catches l.methodName patterns (common shorthand)
+    final patterns = [
+      // AppLocalizations.of(context).method or AppLocalizations.of(context)!.method
+      RegExp(
+        r'AppLocalizations\s*\.\s*of\s*\([^)]*\)\s*!?\s*\.\s*(\w+)',
+        multiLine: true,
+        dotAll: true,
+      ),
+      // l.method pattern (where l is likely AppLocalizations)
+      RegExp(r'\bl\s*\.\s*(\w+)(?!\s*[=()])', multiLine: true, dotAll: true),
+      // context.l.method pattern
+      RegExp(
+        r'\bcontext\s*\.\s*l\s*\.\s*(\w+)(?!\s*[=()])',
+        multiLine: true,
+        dotAll: true,
+      ),
+    ];
 
     final calls = <String>{};
-    final matches = pattern.allMatches(sourceCode);
-    log.info('Found ${matches.length} potential AppLocalizations matches');
 
-    for (final match in matches) {
-      final fullMatch = match.group(0);
-      final methodName = match.group(1);
-      log.info('Full match: "$fullMatch" -> method: "$methodName"');
+    for (final pattern in patterns) {
+      final matches = pattern.allMatches(sourceCode);
+      log.info('Pattern found ${matches.length} matches');
 
-      if (methodName != null && !_isExcludedMethod(methodName)) {
-        calls.add(methodName);
-        log.info('Added method: $methodName');
+      for (final match in matches) {
+        final fullMatch = match.group(0);
+        final methodName = match.group(1);
+        log.info('Full match: "$fullMatch" -> method: "$methodName"');
+
+        if (methodName != null && !_isExcludedMethod(methodName)) {
+          calls.add(methodName);
+          log.info('Added method: $methodName');
+        }
       }
     }
 
@@ -176,6 +204,13 @@ ${localizationCalls.map((call) => '      l.$call is String ? l.$call : l.$call.t
       'toString',
       'hashCode',
       'runtimeType',
+      'noSuchMethod',
+      'when',
+      'map',
+      'fold',
+      'copyWith',
+      'props',
+      'stringify',
     };
     return excludedMethods.contains(methodName);
   }

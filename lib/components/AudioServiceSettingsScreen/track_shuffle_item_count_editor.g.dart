@@ -14,13 +14,19 @@ part of 'track_shuffle_item_count_editor.dart';
 extension TrackShuffleItemCountEditorSearchable on TrackShuffleItemCountEditor {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.shuffleAllTrackCount is String
-          ? l.shuffleAllTrackCount
-          : l.shuffleAllTrackCount.toString(),
-      l.shuffleAllTrackCountSubtitle is String
-          ? l.shuffleAllTrackCountSubtitle
-          : l.shuffleAllTrackCountSubtitle.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.shuffleAllTrackCount),
+      _safeToString(l.shuffleAllTrackCountSubtitle),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

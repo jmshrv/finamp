@@ -14,13 +14,19 @@ part of 'loadQueueOnStartup_selector.dart';
 extension LoadQueueOnStartupSelectorSearchable on LoadQueueOnStartupSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.autoloadLastQueueOnStartup is String
-          ? l.autoloadLastQueueOnStartup
-          : l.autoloadLastQueueOnStartup.toString(),
-      l.autoloadLastQueueOnStartupSubtitle is String
-          ? l.autoloadLastQueueOnStartupSubtitle
-          : l.autoloadLastQueueOnStartupSubtitle.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.autoloadLastQueueOnStartup),
+      _safeToString(l.autoloadLastQueueOnStartupSubtitle),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

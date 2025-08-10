@@ -15,13 +15,19 @@ extension AutoExpandPlayerScreenSelectorSearchable
     on AutoExpandPlayerScreenSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.autoExpandPlayerScreenTitle is String
-          ? l.autoExpandPlayerScreenTitle
-          : l.autoExpandPlayerScreenTitle.toString(),
-      l.autoExpandPlayerScreenSubtitle is String
-          ? l.autoExpandPlayerScreenSubtitle
-          : l.autoExpandPlayerScreenSubtitle.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.autoExpandPlayerScreenTitle),
+      _safeToString(l.autoExpandPlayerScreenSubtitle),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

@@ -14,16 +14,20 @@ part of 'public_address_selector.dart';
 extension PublicAddressSelectorSearchable on PublicAddressSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.preferLocalNetworkPublicAddressSettingTitle is String
-          ? l.preferLocalNetworkPublicAddressSettingTitle
-          : l.preferLocalNetworkPublicAddressSettingTitle.toString(),
-      l.preferLocalNetworkPublicAddressSettingDescription is String
-          ? l.preferLocalNetworkPublicAddressSettingDescription
-          : l.preferLocalNetworkPublicAddressSettingDescription.toString(),
-      l.missingSchemaError is String
-          ? l.missingSchemaError
-          : l.missingSchemaError.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.preferLocalNetworkPublicAddressSettingTitle),
+      _safeToString(l.preferLocalNetworkPublicAddressSettingDescription),
+      _safeToString(l.missingSchemaError),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

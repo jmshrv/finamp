@@ -15,13 +15,19 @@ extension KeepScreenOnWhilePluggedInSelectorSearchable
     on KeepScreenOnWhilePluggedInSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.keepScreenOnWhilePluggedIn is String
-          ? l.keepScreenOnWhilePluggedIn
-          : l.keepScreenOnWhilePluggedIn.toString(),
-      l.keepScreenOnWhilePluggedInSubtitle is String
-          ? l.keepScreenOnWhilePluggedInSubtitle
-          : l.keepScreenOnWhilePluggedInSubtitle.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.keepScreenOnWhilePluggedIn),
+      _safeToString(l.keepScreenOnWhilePluggedInSubtitle),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

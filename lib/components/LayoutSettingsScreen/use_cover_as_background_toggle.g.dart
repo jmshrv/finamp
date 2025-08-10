@@ -14,13 +14,19 @@ part of 'use_cover_as_background_toggle.dart';
 extension UseCoverAsBackgroundToggleSearchable on UseCoverAsBackgroundToggle {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.useCoverAsBackground is String
-          ? l.useCoverAsBackground
-          : l.useCoverAsBackground.toString(),
-      l.useCoverAsBackgroundSubtitle is String
-          ? l.useCoverAsBackgroundSubtitle
-          : l.useCoverAsBackgroundSubtitle.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.useCoverAsBackground),
+      _safeToString(l.useCoverAsBackgroundSubtitle),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }

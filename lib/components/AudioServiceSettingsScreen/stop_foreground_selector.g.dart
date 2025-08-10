@@ -14,13 +14,19 @@ part of 'stop_foreground_selector.dart';
 extension StopForegroundSelectorSearchable on StopForegroundSelector {
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    return [
-      l.enterLowPriorityStateOnPause is String
-          ? l.enterLowPriorityStateOnPause
-          : l.enterLowPriorityStateOnPause.toString(),
-      l.enterLowPriorityStateOnPauseSubtitle is String
-          ? l.enterLowPriorityStateOnPauseSubtitle
-          : l.enterLowPriorityStateOnPauseSubtitle.toString(),
-    ].where((text) => text.isNotEmpty).join(' ').toLowerCase();
+    final searchableTexts = <String>[
+      _safeToString(l.enterLowPriorityStateOnPause),
+      _safeToString(l.enterLowPriorityStateOnPauseSubtitle),
+    ];
+    return searchableTexts
+        .where((text) => text.isNotEmpty)
+        .join(' ')
+        .toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
   }
 }
