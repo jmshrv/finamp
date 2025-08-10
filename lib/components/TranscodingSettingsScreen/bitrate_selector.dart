@@ -1,9 +1,13 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
+part 'bitrate_selector.g.dart';
+
+@Searchable()
 class BitrateSelector extends ConsumerStatefulWidget {
   const BitrateSelector({super.key});
 
@@ -34,7 +38,9 @@ class _BitrateSelectorState extends ConsumerState<BitrateSelector> {
               max: 320,
               value: (currentBitrate / 1000).clamp(64, 320),
               divisions: 8,
-              label: AppLocalizations.of(context)!.kiloBitsPerSecondLabel(currentBitrate ~/ 1000),
+              label: AppLocalizations.of(
+                context,
+              )!.kiloBitsPerSecondLabel(currentBitrate ~/ 1000),
               onChanged: (value) {
                 setState(() {
                   currentBitrate = (value * 1000).toInt();
@@ -47,7 +53,9 @@ class _BitrateSelectorState extends ConsumerState<BitrateSelector> {
               focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
             ),
             Text(
-              AppLocalizations.of(context)!.kiloBitsPerSecondLabel(currentBitrate ~/ 1000),
+              AppLocalizations.of(
+                context,
+              )!.kiloBitsPerSecondLabel(currentBitrate ~/ 1000),
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ],

@@ -3,6 +3,8 @@ targets:
     builders:
       finamp:finamp_settings_generator:
         enabled: true
+      finamp:searchable_generator: # ADD THIS
+        enabled: true
       source_gen:combining_builder:
         options:
           ignore_for_file:
@@ -18,5 +20,12 @@ builders:
     import: "package:finamp/builders/finamp_settings_builder.dart"
     builder_factories: ["getFinampSettingsGenerator"]
     build_extensions: { ".dart": ["finamp_settings_generator.g.part"] }
+    build_to: cache
+    applies_builders: ["source_gen|combining_builder"]
+
+  searchable_generator: # ADD THIS BLOCK
+    import: "package:finamp/builders/searchable_builder.dart"
+    builder_factories: ["getSearchableGenerator"]
+    build_extensions: { ".dart": ["searchable_generator.g.part"] }
     build_to: cache
     applies_builders: ["source_gen|combining_builder"]

@@ -7,7 +7,8 @@ class SettingsHelperIgnore {
   final String message;
   const SettingsHelperIgnore(this.message);
   @override
-  String toString() => "Excluded from automatic sub-provider/setter generation: $message";
+  String toString() =>
+      "Excluded from automatic sub-provider/setter generation: $message";
 }
 
 /// Annotation for FinampSettings fields that should not have a setter and/or a
@@ -17,4 +18,8 @@ class SettingsHelperMap {
   final String keyName;
   final String valueName;
   const SettingsHelperMap(this.keyName, this.valueName);
+}
+
+class Searchable {
+  const Searchable();
 }
