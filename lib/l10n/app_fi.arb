@@ -1779,7 +1779,7 @@
       }
     }
   },
-  "periodicPlaybackSessionUpdateFrequencySubtitle": "Kuinka usein palvelimelle lähetetään nykyisen toistoistunnon tila, sekunneissa. Tämän pitäisi olla vähemmän kuin 5 minuuttia (300 sekuntia), jotta sessiota ei aikakatkaista.",
+  "periodicPlaybackSessionUpdateFrequencySubtitle": "Kuinka usein palvelimelle lähetetään nykyisen toistoistunnon tila, sekunneissa. Tämän pitäisi olla vähemmän kuin 5 minuuttia (300 sekuntia), jotta istuntoa ei aikakatkaista.",
   "@periodicPlaybackSessionUpdateFrequencySubtitle": {
     "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
   },
@@ -1991,7 +1991,7 @@
   "@enablePlayonTitle": {
     "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
   },
-  "enablePlayonSubtitle": "Kytkee Jellyfinin 'Toista laitteella'-ominaisuuden päälle. (Finampin etäohjaus toisella laitteella). Poista käytöstä, jos käänteinen välityspalvelin tai palvelin ei tue WebSocketteja.",
+  "enablePlayonSubtitle": "Kytkee Jellyfinin 'Toista laitteella'-ominaisuuden päälle. (Finampin etäohjaus toisella laitteella). Poista käytöstä, jos käänteinen välityspalvelin tai palvelin ei tue WebSocketeja.",
   "@enablePlayonSubtitle": {
     "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
   },
@@ -2559,7 +2559,7 @@
   "@serverSharingMenuDescription": {
     "description": "Description text shown in the server sharing menu, right below the controls"
   },
-  "serverSharingMenuDetails": "Tämä toimii kuuntelemalla muiden asiakkaiden lähettämiä palvelimen löytöpyyntökä paikallisverkossa, ja sitten vastaamalla noihin pyyntöihin Jellyfin palvelimen asetetulla osoittella.\nJos sinulla on sekä paikallinen, että julkinen osoite määritetty, Finamp lähettää molemmat pyytävälle clientille.",
+  "serverSharingMenuDetails": "Tämä toimii kuuntelemalla muiden asiakkaiden lähettämiä palvelimen löytöpyyntöjä paikallisverkossa, ja sitten vastaamalla noihin pyyntöihin Jellyfin palvelimen asetetulla osoittella.\nJos sinulla on sekä paikallinen, että julkinen osoite määritetty, Finamp lähettää molemmat pyytävälle clientille.",
   "@serverSharingMenuDetails": {
     "description": "Description text shown in the server sharing menu, below the description"
   },
@@ -2684,5 +2684,27 @@
   "autoExpandPlayerScreenSubtitle": "Tämä avaa 'toistetaan nyt'-näkymän, kun uuden jonon toisto aloitetaan",
   "@autoExpandPlayerScreenSubtitle": {
     "description": "Subtitle for the setting that controls if the player screen is opened directly after starting a new queue"
+  },
+  "confirmAddMultipleTracksToPlaylist": "Oletko varma, että haluat lisätä {trackCount} kappaletta tälle soittolistalle? Ne voidaan poistaa vain yksitellen.",
+  "@confirmAddMultipleTracksToPlaylist": {
+    "description": "Warning dialog for adding multiple tracks to a playlist, clarifying that this cannot be undone without removing all tracks individually and manually.",
+    "placeholders": {
+      "trackCount": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmAddCollectionItemToPlaylist": "Oletko varma, että haluat lisätä kaikki {itemType, select, albumin{album} soittolistan{playlist} artistin{artist} tyylilajin{genre} other{item}} '{itemName}'kappaleet tälle soittolistalle? Ne voidaan poistaa vain yksitellen.",
+  "@confirmAddCollectionItemToPlaylist": {
+    "description": "Warning dialog for adding an album, artist, etc. or multiple tracks to a playlist, clarifying that this cannot be undone without removing all tracks individually and manually.",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "example": "album"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
   }
 }
