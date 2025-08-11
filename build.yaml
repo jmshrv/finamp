@@ -3,7 +3,7 @@ targets:
     builders:
       finamp:finamp_settings_generator:
         enabled: true
-      finamp:searchable_generator: # ADD THIS
+      finamp:searchable_generator:
         enabled: true
       source_gen:combining_builder:
         options:
