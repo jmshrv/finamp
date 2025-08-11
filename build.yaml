@@ -23,7 +23,7 @@ builders:
     build_to: cache
     applies_builders: ["source_gen|combining_builder"]
 
-  searchable_generator: # ADD THIS BLOCK
+  searchable_generator:
     import: "package:finamp/builders/searchable_builder.dart"
     builder_factories: ["getSearchableGenerator"]
     build_extensions: { ".dart": ["searchable_generator.g.part"] }
