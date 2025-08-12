@@ -61,16 +61,22 @@ class AutoOffline extends _$AutoOffline {
     // false = user overwrote offline mode
     bool autoOfflineActive = ref.watch(finampSettingsProvider.autoOfflineListenerActive);
 
-    bool autoServerSwitch =
+    bool preferLocalNetwork =
         ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.preferLocalNetwork ??
         DefaultSettings.preferLocalNetwork;
 
-    // instead of `(autoOfflineEnabled && autoOfflineActive) || autoServerSwitch` this function
-    // needs to return a not-bool. This is because when autoServerSwitch is true, the function always
-    // returns true, and since the value doesnt change the listener wont trigger. Thus this number workaround
+    // Why this integer magic?
+    // If the function would return a bool aka. `(autoOfflineEnabled && autoOfflineActive) || autoServerSwitch`
+    // The container.listen would only trigger when the value actually changes (doesn't stay the same).
+    // This means when preferLocalNetwork is true, the method will always return `true`. Thus not firing the listener.
+    // Why does the listener need to trigger?
+    // When the user paused automation by manually changing offline mode, and then reengages automation
+    // The listener wouldn't fire (since the value doesn't actually change, it stays `true`), this results in _onConnectivityChange
+    // not being called which means autoOffline wont reevaluate the offline-state immediately, meaning offlineMode stays where the
+    // user last changed it to and wont update until a network change happens
     int state = 0;
     if (autoOfflineEnabled && autoOfflineActive) state += 1;
-    if (autoServerSwitch) state += 2;
+    if (preferLocalNetwork) state += 2;
 
     return state;
   }
