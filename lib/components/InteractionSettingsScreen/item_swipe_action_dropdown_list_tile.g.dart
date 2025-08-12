@@ -18,8 +18,6 @@ extension ItemSwipeLeftToRightActionDropdownListTileSearchable
     final searchableTexts = <String>[
       _safeToString(l.swipeLeftToRightAction),
       _safeToString(l.swipeLeftToRightActionSubtitle),
-      _safeToString(l.swipeRightToLeftAction),
-      _safeToString(l.swipeRightToLeftActionSubtitle),
     ];
     return searchableTexts
         .where((text) => text.isNotEmpty)

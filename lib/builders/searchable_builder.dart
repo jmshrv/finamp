@@ -1,4 +1,7 @@
 import 'dart:async';
+
+import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:finamp/builders/annotations.dart';
@@ -16,26 +19,14 @@ class _SearchableGenerator extends GeneratorForAnnotation<Searchable> {
 
     final className = element.name;
 
-    // Check widget type (Consumer widgets, regular StatefulWidget, or StatelessWidget)
-    final isConsumerStatefulWidget = _isConsumerStatefulWidget(element);
-    final isConsumerWidget = _isConsumerWidget(element);
-    final isRegularStatefulWidget = _isStatefulWidget(element);
-    final isRegularStatelessWidget = _isStatelessWidget(element);
-
-    if (!isConsumerStatefulWidget && !isConsumerWidget && !isRegularStatefulWidget && !isRegularStatelessWidget) {
-      throw InvalidGenerationSourceError(
-        'Searchable annotation can only be applied to ConsumerWidget, ConsumerStatefulWidget, StatefulWidget, or StatelessWidget classes',
-        element: element,
-      );
+    final visitor = LocalizationFinder();
+    final ast = await buildStep.resolver.astNodeFor(element, resolve: true);
+    ast!.visitChildren(visitor);
+    if (visitor.stateElement != null) {
+      final stateAst = await buildStep.resolver.astNodeFor(visitor.stateElement!, resolve: true);
+      stateAst!.visitChildren(visitor);
     }
-
-    // Get the source code to analyze
-    final assetId = await buildStep.resolver.assetIdForElement(element);
-    final library = await buildStep.resolver.libraryFor(assetId);
-    final sourceCode = library.source.contents.data;
-
-    // Extract AppLocalizations calls using regex
-    final localizationCalls = _extractAppLocalizationCalls(sourceCode);
+    final localizationCalls = visitor.localizations;
 
     if (localizationCalls.isEmpty) {
       log.warning('No AppLocalizations calls found in $className');
@@ -46,148 +37,77 @@ class _SearchableGenerator extends GeneratorForAnnotation<Searchable> {
       'Generated searchable content for $className with ${localizationCalls.length} localizations: ${localizationCalls.join(", ")}',
     );
 
-    // Generate different extensions based on widget type
-    if (isConsumerStatefulWidget || isRegularStatefulWidget) {
-      return _generateStatefulWidgetExtension(className, localizationCalls);
-    } else {
-      return _generateStatelessWidgetExtension(className, localizationCalls);
-    }
+    return _generateExtension(className, localizationCalls);
   }
 
-  bool _isConsumerWidget(ClassElement element) {
-    return _hasAncestorType(element, 'ConsumerWidget');
-  }
-
-  bool _isConsumerStatefulWidget(ClassElement element) {
-    return _hasAncestorType(element, 'ConsumerStatefulWidget');
-  }
-
-  bool _isStatefulWidget(ClassElement element) {
-    return _hasAncestorType(element, 'StatefulWidget');
-  }
-
-  bool _isStatelessWidget(ClassElement element) {
-    return _hasAncestorType(element, 'StatelessWidget');
-  }
-
-  bool _hasAncestorType(ClassElement element, String typeName) {
-    // Check direct supertype
-    final supertype = element.supertype;
-    if (supertype?.element.name == typeName) {
-      return true;
-    }
-
-    // Check if it extends the target type through inheritance chain
-    ClassElement? current = element;
-    while (current != null) {
-      if (current.supertype?.element.name == typeName) {
-        return true;
-      }
-      // Cast InterfaceElement to ClassElement
-      final supertypeElement = current.supertype?.element;
-      if (supertypeElement is ClassElement) {
-        current = supertypeElement;
-      } else {
-        current = null;
-      }
-    }
-
-    return false;
-  }
-
-  String _generateStatelessWidgetExtension(String className, Set<String> localizationCalls) {
+  String _generateExtension(String className, Set<String> localizationCalls) {
     return '''
 extension ${className}Searchable on $className {
+  String getSearchableContent(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+    final searchableTexts = <String>[
+${localizationCalls.map((call) => '      _safeToString(l.$call),').join('\n')}
+    ];
+    return searchableTexts.where((text) => text.isNotEmpty).join(' ').toLowerCase();
+  }
+
+  String _safeToString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
+  }
+}
+''';
+  }
+}
+
+class LocalizationFinder extends RecursiveAstVisitor<void> {
+  final Set<String> localizations = {};
+  Element? stateElement;
+
+  LocalizationFinder();
+
+  bool _inCreateState = false;
+
   @override
-  String getSearchableContent(BuildContext context) {
-    final l = AppLocalizations.of(context)!;
-    final searchableTexts = <String>[
-${localizationCalls.map((call) => '      _safeToString(l.$call),').join('\n')}
-    ];
-    return searchableTexts.where((text) => text.isNotEmpty).join(' ').toLowerCase();
-  }
-
-  String _safeToString(dynamic value) {
-    if (value == null) return '';
-    if (value is String) return value;
-    return value.toString();
-  }
-}
-''';
-  }
-
-  String _generateStatefulWidgetExtension(String className, Set<String> localizationCalls) {
-    return '''
-extension ${className}Searchable on $className {
-  String getSearchableContent(BuildContext context) {
-    final l = AppLocalizations.of(context)!;
-    final searchableTexts = <String>[
-${localizationCalls.map((call) => '      _safeToString(l.$call),').join('\n')}
-    ];
-    return searchableTexts.where((text) => text.isNotEmpty).join(' ').toLowerCase();
-  }
-
-  String _safeToString(dynamic value) {
-    if (value == null) return '';
-    if (value is String) return value;
-    return value.toString();
-  }
-}
-''';
-  }
-
-  Set<String> _extractAppLocalizationCalls(String sourceCode) {
-    // Debug: print a snippet of the source code
-    log.info('Source code length: ${sourceCode.length}');
-
-    // Enhanced pattern that looks for AppLocalizations.of(...).methodName
-    // Also catches l.methodName patterns (common shorthand)
-    final patterns = [
-      // AppLocalizations.of(context).method or AppLocalizations.of(context)!.method
-      RegExp(r'AppLocalizations\s*\.\s*of\s*\([^)]*\)\s*!?\s*\.\s*(\w+)', multiLine: true, dotAll: true),
-      // l.method pattern (where l is likely AppLocalizations)
-      RegExp(r'\bl\s*\.\s*(\w+)(?!\s*[=()])', multiLine: true, dotAll: true),
-      // context.l.method pattern
-      RegExp(r'\bcontext\s*\.\s*l\s*\.\s*(\w+)(?!\s*[=()])', multiLine: true, dotAll: true),
-    ];
-
-    final calls = <String>{};
-
-    for (final pattern in patterns) {
-      final matches = pattern.allMatches(sourceCode);
-      log.info('Pattern found ${matches.length} matches');
-
-      for (final match in matches) {
-        final fullMatch = match.group(0);
-        final methodName = match.group(1);
-        log.info('Full match: "$fullMatch" -> method: "$methodName"');
-
-        if (methodName != null && !_isExcludedMethod(methodName)) {
-          calls.add(methodName);
-          log.info('Added method: $methodName');
-        }
-      }
+  void visitPropertyAccess(PropertyAccess node) {
+    if (node.realTarget.staticType?.element?.name == "AppLocalizations") {
+      localizations.add(node.propertyName.name);
     }
-
-    log.info('Final extracted calls: ${calls.join(", ")}');
-    return calls;
+    super.visitPropertyAccess(node);
   }
 
-  bool _isExcludedMethod(String methodName) {
-    const excludedMethods = {
-      'of',
-      'maybeOf',
-      'toString',
-      'hashCode',
-      'runtimeType',
-      'noSuchMethod',
-      'when',
-      'map',
-      'fold',
-      'copyWith',
-      'props',
-      'stringify',
-    };
-    return excludedMethods.contains(methodName);
+  @override
+  void visitMethodInvocation(MethodInvocation node) {
+    if (node.realTarget?.staticType?.element?.name == "AppLocalizations") {
+      localizations.add(node.methodName.name);
+    }
+    super.visitMethodInvocation(node);
+  }
+
+  @override
+  void visitMethodDeclaration(MethodDeclaration node) {
+    assert(!_inCreateState);
+    if (node.name.lexeme == "createState") _inCreateState = true;
+    super.visitMethodDeclaration(node);
+    _inCreateState = false;
+  }
+
+  @override
+  void visitReturnStatement(ReturnStatement node) {
+    if (_inCreateState) {
+      assert(stateElement == null);
+      stateElement = node.expression!.staticType!.element!;
+    }
+    super.visitReturnStatement(node);
+  }
+
+  @override
+  void visitExpressionFunctionBody(ExpressionFunctionBody node) {
+    if (_inCreateState) {
+      assert(stateElement == null);
+      stateElement = node.expression.staticType!.element!;
+    }
+    super.visitExpressionFunctionBody(node);
   }
 }

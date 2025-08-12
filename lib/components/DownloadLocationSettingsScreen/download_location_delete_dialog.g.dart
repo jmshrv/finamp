@@ -13,7 +13,6 @@ part of 'download_location_delete_dialog.dart';
 
 extension DownloadLocationDeleteDialogSearchable
     on DownloadLocationDeleteDialog {
-  @override
   String getSearchableContent(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     final searchableTexts = <String>[_safeToString(l.itemTypeSubtitle)];
