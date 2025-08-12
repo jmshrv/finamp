@@ -40,7 +40,8 @@ class AutoOffline extends _$AutoOffline {
   static void startWatching() {
     ProviderContainer container = GetIt.instance<ProviderContainer>();
 
-    container.listen(autoOfflineProvider, (_, automationEnabled) {
+    container.listen(autoOfflineProvider, (_, automationState) {
+      bool automationEnabled = automationState > 0;
       _networkAutomationLogger.info("${automationEnabled ? "Enabled" : "Paused"} Automation");
 
       if (automationEnabled) {
@@ -54,7 +55,7 @@ class AutoOffline extends _$AutoOffline {
   }
 
   @override
-  bool build() {
+  int build() {
     bool autoOfflineEnabled = ref.watch(finampSettingsProvider.autoOffline) != AutoOfflineOption.disabled;
 
     // false = user overwrote offline mode
@@ -64,7 +65,14 @@ class AutoOffline extends _$AutoOffline {
         ref.watch(FinampUserHelper.finampCurrentUserProvider).valueOrNull?.preferLocalNetwork ??
         DefaultSettings.preferLocalNetwork;
 
-    return (autoOfflineEnabled && autoOfflineActive) || autoServerSwitch;
+    // instead of `(autoOfflineEnabled && autoOfflineActive) || autoServerSwitch` this function
+    // needs to return a not-bool. This is because when autoServerSwitch is true, the function always
+    // returns true, and since the value doesnt change the listener wont trigger. Thus this number workaround
+    int state = 0;
+    if (autoOfflineEnabled && autoOfflineActive) state += 1;
+    if (autoServerSwitch) state += 2;
+
+    return state;
   }
 }
 
@@ -74,10 +82,10 @@ Future<void> _onConnectivityChange(List<ConnectivityResult>? connections) async 
   );
   connections ??= await Connectivity().checkConnectivity();
   final [offlineModeActive, baseUrlChanged] = await Future.wait([_setOfflineMode(connections), changeTargetUrl()]);
-  _notifyOfPausedDownloads(connections);
   if (baseUrlChanged) {
     _reconnectPlayOnService(connections);
   }
+  _notifyOfPausedDownloads(connections);
 }
 
 bool featureEnabled() {
