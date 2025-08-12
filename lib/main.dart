@@ -25,6 +25,7 @@ import 'package:finamp/screens/playback_history_screen.dart';
 import 'package:finamp/screens/playback_reporting_settings_screen.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:finamp/screens/queue_restore_screen.dart';
+import 'package:finamp/screens/search_settings_screen.dart';
 import 'package:finamp/services/android_auto_helper.dart';
 import 'package:finamp/services/audio_service_smtc.dart';
 import 'package:finamp/services/data_source_service.dart';
@@ -570,27 +571,27 @@ class _FinampState extends State<Finamp> with WindowListener {
                       PlaybackHistoryScreen.routeName: (context) => const PlaybackHistoryScreen(),
                       LogsScreen.routeName: (context) => const LogsScreen(),
                       QueueRestoreScreen.routeName: (context) => const QueueRestoreScreen(),
-                      SettingsScreen.routeName: (context) => const SettingsScreen(),
-                      TranscodingSettingsScreen.routeName: (context) => const TranscodingSettingsScreen(),
+                      SettingsScreen.routeName: (context) => SettingsScreen(),
+                      TranscodingSettingsScreen().routeName: (context) => TranscodingSettingsScreen(),
                       DownloadsLocationScreen.routeName: (context) => const DownloadsLocationScreen(),
-                      DownloadsSettingsScreen.routeName: (context) => const DownloadsSettingsScreen(),
+                      DownloadsSettingsScreen().routeName: (context) => DownloadsSettingsScreen(),
                       AddDownloadLocationScreen.routeName: (context) => const AddDownloadLocationScreen(),
-                      PlaybackReportingSettingsScreen.routeName: (context) => const PlaybackReportingSettingsScreen(),
-                      AudioServiceSettingsScreen.routeName: (context) => const AudioServiceSettingsScreen(),
-                      VolumeNormalizationSettingsScreen.routeName: (context) =>
+                      PlaybackReportingSettingsScreen().routeName: (context) => const PlaybackReportingSettingsScreen(),
+                      AudioServiceSettingsScreen().routeName: (context) => const AudioServiceSettingsScreen(),
+                      VolumeNormalizationSettingsScreen().routeName: (context) =>
                           const VolumeNormalizationSettingsScreen(),
-                      InteractionSettingsScreen.routeName: (context) => const InteractionSettingsScreen(),
+                      InteractionSettingsScreen().routeName: (context) => const InteractionSettingsScreen(),
                       TabsSettingsScreen.routeName: (context) => const TabsSettingsScreen(),
-                      LayoutSettingsScreen.routeName: (context) => const LayoutSettingsScreen(),
+                      LayoutSettingsScreen().routeName: (context) => LayoutSettingsScreen(),
                       CustomizationSettingsScreen.routeName: (context) => const CustomizationSettingsScreen(),
                       PlayerSettingsScreen.routeName: (context) => const PlayerSettingsScreen(),
                       LyricsSettingsScreen.routeName: (context) => const LyricsSettingsScreen(),
                       LanguageSelectionScreen.routeName: (context) => const LanguageSelectionScreen(),
                       AlbumSettingsScreen.routeName: (context) => const AlbumSettingsScreen(),
                       ArtistSettingsScreen.routeName: (context) => const ArtistSettingsScreen(),
-                      GenreSettingsScreen.routeName: (context) => const GenreSettingsScreen(),
-                      NetworkSettingsScreen.routeName: (context) => const NetworkSettingsScreen(),
-                      AccessibilitySettingsScreen.routeName: (context) => const AccessibilitySettingsScreen(),
+                      GenreSettingsScreen.routeName: (context) => GenreSettingsScreen(),
+                      NetworkSettingsScreen().routeName: (context) => NetworkSettingsScreen(),
+                      AccessibilitySettingsScreen().routeName: (context) => AccessibilitySettingsScreen(),
                     },
                     initialRoute: SplashScreen.routeName,
                     navigatorObservers: [SplitScreenNavigatorObserver(), KeepScreenOnObserver()],

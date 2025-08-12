@@ -1,3 +1,4 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,9 @@ import 'package:get_it/get_it.dart';
 import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
 
+part "download_location_delete_dialog.g.dart";
+
+@Searchable()
 class DownloadLocationDeleteDialog extends StatelessWidget {
   const DownloadLocationDeleteDialog({super.key, required this.id});
 

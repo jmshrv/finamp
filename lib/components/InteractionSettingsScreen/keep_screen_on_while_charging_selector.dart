@@ -1,9 +1,13 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
+part "keep_screen_on_while_charging_selector.g.dart";
+
+@Searchable()
 class KeepScreenOnWhilePluggedInSelector extends ConsumerWidget {
   const KeepScreenOnWhilePluggedInSelector({super.key});
 

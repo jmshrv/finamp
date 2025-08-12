@@ -1,8 +1,12 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
+part "play_on_stale_delay_editor.g.dart";
+
+@Searchable()
 class PlayOnStaleDelayEditor extends StatefulWidget {
   const PlayOnStaleDelayEditor({super.key});
 

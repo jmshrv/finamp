@@ -1,3 +1,4 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:hive_ce/hive.dart';

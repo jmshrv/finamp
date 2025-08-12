@@ -1,9 +1,13 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
+part "periodic_playback_session_update_frequency_editor.g.dart";
+
+@Searchable()
 class PeriodicPlaybackSessionUpdateFrequencyEditor extends StatefulWidget {
   const PeriodicPlaybackSessionUpdateFrequencyEditor({super.key});
 

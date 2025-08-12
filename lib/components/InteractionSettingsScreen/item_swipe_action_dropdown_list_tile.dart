@@ -1,3 +1,4 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
+part 'item_swipe_action_dropdown_list_tile.g.dart';
+
+@Searchable()
 class ItemSwipeLeftToRightActionDropdownListTile extends ConsumerWidget {
   const ItemSwipeLeftToRightActionDropdownListTile({super.key});
 

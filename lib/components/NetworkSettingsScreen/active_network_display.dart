@@ -1,3 +1,4 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,9 @@ import 'package:hive_ce_flutter/hive_flutter.dart';
 import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
+part "active_network_display.g.dart";
+
+@Searchable()
 class ActiveNetworkDisplay extends ConsumerWidget {
   const ActiveNetworkDisplay({super.key});
 

@@ -4,7 +4,7 @@ import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class GenreSettingsScreen extends ConsumerStatefulWidget {
-  const GenreSettingsScreen({super.key});
+  GenreSettingsScreen({super.key});
   static const routeName = "/settings/genre";
   @override
   ConsumerState<GenreSettingsScreen> createState() => _GenreSettingsScreenState();
