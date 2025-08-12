@@ -1130,7 +1130,9 @@ double? getGainForCurrentPlayback(MediaItem currentTrack, jellyfin_models.BaseIt
 
   double? effectiveGainChange;
   final providerContainer = GetIt.instance<ProviderContainer>();
-  providerContainer.read(currentTrackMetadataProvider); // forces it even in background https://github.com/rrousselGit/riverpod/issues/2671
+  providerContainer.read(
+    currentTrackMetadataProvider,
+  ); // forces it even in background https://github.com/rrousselGit/riverpod/issues/2671
 
   switch (FinampSettingsHelper.finampSettings.volumeNormalizationMode) {
     case VolumeNormalizationMode.hybrid
