@@ -642,7 +642,7 @@ class TrackListItemTile extends ConsumerWidget {
     );
     final addSpaceAfterSpecialIcons =
         (downloadedIndicator.isVisible(ref) || (baseItem.hasLyrics ?? false)) && (showDateAdded || showDateLastPlayed);
-      
+
     final showPlaybackProgress = !highlightCurrentTrack && playbackProgress != null && playbackProgress! < 0.99;
 
     return ListTileTheme(
