@@ -2743,5 +2743,22 @@
   "discordRPCIconWhiteTransparent": "White Finamp - Transparent",
   "@discordRPCIconWhiteTransparent": {
     "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
+  },
+  "discOfAlbum": "[Disc {number}] {albumName}",
+  "@discOfAlbum": {
+    "description": "Used when a single disc of album is opened, then album name is replaced with this string",
+    "placeholders": {
+      "number": {
+        "type": "int",
+        "example": "1"
+      },
+      "albumName": {
+        "type": "String"
+      }
+    }
+  },
+  "moreActionsOnAlbumDisc": "More actions on album disc",
+  "@moreActionsOnAlbumDisc": {
+    "description": "Text for more actions button that appears in the header of an album disc, and opens menu allowing to play specific disc"
   }
 }

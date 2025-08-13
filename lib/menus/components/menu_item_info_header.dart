@@ -38,26 +38,23 @@ Widget _getMenuHeaderForItemType({
 
 enum MenuItemInfoHeaderFeatures { openItem, addToPlaylistAndFavorite }
 
-class MenuItemInfoSliverHeader extends SliverPersistentHeaderDelegate {
+abstract class CommonMenuItemInfoSliverHeader extends SliverPersistentHeaderDelegate {
   final BaseItemDto item;
   final bool condensed;
   final List<MenuItemInfoHeaderFeatures> features;
 
-  MenuItemInfoSliverHeader({
+  CommonMenuItemInfoSliverHeader({
     required this.item,
     this.features = const [MenuItemInfoHeaderFeatures.openItem, MenuItemInfoHeaderFeatures.addToPlaylistAndFavorite],
   }) : condensed = false;
 
-  MenuItemInfoSliverHeader.condensed({required this.item, this.features = const [MenuItemInfoHeaderFeatures.openItem]})
-    : condensed = true;
+  CommonMenuItemInfoSliverHeader.condensed({
+    required this.item,
+    this.features = const [MenuItemInfoHeaderFeatures.openItem],
+  }) : condensed = true;
 
   static const MenuMaskHeight defaultHeight = MenuMaskHeight(151.0);
   static const MenuMaskHeight condensedHeight = MenuMaskHeight(80.0);
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return _getMenuHeaderForItemType(item: item, condensed: condensed, features: features);
-  }
 
   @override
   double get maxExtent => (condensed ? condensedHeight.raw : defaultHeight.raw) + 10.0;
@@ -67,6 +64,42 @@ class MenuItemInfoSliverHeader extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => true;
+}
+
+// TODO split MenuItemInfoSliverHeader to all item types
+class MenuItemInfoSliverHeader extends CommonMenuItemInfoSliverHeader {
+  static const MenuMaskHeight defaultHeight = MenuMaskHeight(151.0);
+  static const MenuMaskHeight condensedHeight = MenuMaskHeight(80.0);
+
+  MenuItemInfoSliverHeader({
+    required super.item,
+    super.features = const [MenuItemInfoHeaderFeatures.openItem, MenuItemInfoHeaderFeatures.addToPlaylistAndFavorite],
+  }) : super();
+
+  MenuItemInfoSliverHeader.condensed({required super.item, super.features}) : super.condensed();
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return _getMenuHeaderForItemType(item: item, condensed: condensed, features: features);
+  }
+}
+
+class MenuAlbumInfoSliverHeader extends CommonMenuItemInfoSliverHeader {
+  final int? disc;
+
+  MenuAlbumInfoSliverHeader({
+    required super.item,
+    super.features = const [MenuItemInfoHeaderFeatures.openItem, MenuItemInfoHeaderFeatures.addToPlaylistAndFavorite],
+    this.disc,
+  }) : super();
+
+  MenuAlbumInfoSliverHeader.condensed({required super.item, super.features, this.disc}) : super.condensed();
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    assert(BaseItemDtoType.fromItem(item) == BaseItemDtoType.album);
+    return AlbumInfo(item: item, condensed: condensed, features: features, disc: disc);
+  }
 }
 
 class MenuItemInfoHeader extends ConsumerWidget {
@@ -147,14 +180,17 @@ class TrackInfo extends ConsumerWidget {
 }
 
 class AlbumInfo extends ConsumerWidget {
-  const AlbumInfo({super.key, required this.item, required this.condensed, required this.features});
+  const AlbumInfo({super.key, required this.item, required this.condensed, required this.features, this.disc});
 
   final BaseItemDto item;
   final bool condensed;
   final List<MenuItemInfoHeaderFeatures> features;
+  final int? disc;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final albumName = item.name ?? AppLocalizations.of(context)!.unknownName;
+
     return ItemInfo(
       item: item,
       condensed: condensed,
@@ -163,7 +199,7 @@ class AlbumInfo extends ConsumerWidget {
       featureImage: AlbumImage(item: item, borderRadius: BorderRadius.zero, tapToZoom: true),
       infoRows: [
         Text(
-          item.name ?? AppLocalizations.of(context)!.unknownName,
+          disc == null ? albumName : AppLocalizations.of(context)!.discOfAlbum(disc!, albumName),
           textAlign: TextAlign.start,
           style: TextStyle(
             fontSize: condensed ? 16 : 18,

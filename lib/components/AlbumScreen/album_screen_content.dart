@@ -8,10 +8,16 @@ import 'package:finamp/services/album_screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:get_it/get_it.dart';
 
+import '../../menus/album_menu.dart';
+import '../../menus/components/overflow_menu_button.dart';
+import '../../menus/playlist_menu.dart';
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
+import '../../services/queue_service.dart';
 import '../Buttons/cta_medium.dart';
 import '../favorite_button.dart';
 import '../padded_custom_scrollview.dart';
@@ -157,14 +163,48 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             childrenPerDisc.length > 1) // show headers only for multi disc albums
           for (var childrenOfThisDisc in childrenPerDisc)
             SliverStickyHeader(
-              header: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                color: Theme.of(context).colorScheme.surface,
-                child: Text(
-                  AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
-                  style: const TextStyle(fontSize: 20.0),
+              header: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                child: Material(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(8),
+                  clipBehavior: Clip.antiAlias,
+                  child: InkWell(
+                    onTap: () async => await GetIt.instance<QueueService>().startPlayback(
+                      items: childrenOfThisDisc,
+                      source: QueueItemSource.fromBaseItem(widget.parent),
+                      order: FinampPlaybackOrder.linear,
+                    ),
+                    onLongPress: () => showModalAlbumMenu(
+                      context: context,
+                      baseItem: widget.parent,
+                      discTrackList: childrenOfThisDisc,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
+                            style: const TextStyle(fontSize: 20.0),
+                          ),
+                          Spacer(),
+                          OverflowMenuButton(
+                            onPressed: () => showModalAlbumMenu(
+                              context: context,
+                              baseItem: widget.parent,
+                              discTrackList: childrenOfThisDisc,
+                            ),
+                            icon: TablerIcons.dots_vertical,
+                            label: AppLocalizations.of(context)!.moreActionsOnAlbumDisc,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
+
               sliver: TracksSliverList(
                 childrenForList: childrenOfThisDisc,
                 childrenForQueue: queueChildren,

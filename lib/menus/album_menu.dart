@@ -25,6 +25,7 @@ Future<void> showModalAlbumMenu({
   required BuildContext context,
   required BaseItemDto baseItem,
   FinampStorableQueueInfo? queueInfo,
+  List<BaseItemDto>? discTrackList,
 }) async {
   // Normal menu entries, excluding headers
   List<HideableMenuEntry> getMenuEntries(BuildContext context) {
@@ -45,13 +46,20 @@ Future<void> showModalAlbumMenu({
     final pageViewController = PageController();
 
     List<Widget> menu = [
-      SliverPersistentHeader(delegate: MenuItemInfoSliverHeader(item: baseItem), pinned: true),
+      SliverPersistentHeader(
+        delegate: MenuAlbumInfoSliverHeader(item: baseItem, disc: discTrackList?[0].parentIndexNumber),
+        pinned: true,
+      ),
       MenuMask(
         height: MenuItemInfoSliverHeader.defaultHeight,
         child: SliverToBoxAdapter(
           child: PlaybackActionRow(
             controller: pageViewController,
-            playbackActionPages: getPlaybackActionPages(context: context, baseItem: baseItem),
+            playbackActionPages: getAlbumPlaybackActionPages(
+              context: context,
+              baseItem: baseItem,
+              trackList: discTrackList,
+            ),
           ),
         ),
       ),
