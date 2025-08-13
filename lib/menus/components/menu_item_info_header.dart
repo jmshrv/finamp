@@ -84,6 +84,24 @@ class MenuItemInfoSliverHeader extends CommonMenuItemInfoSliverHeader {
   }
 }
 
+class MenuAlbumInfoSliverHeader extends CommonMenuItemInfoSliverHeader {
+  final int? disc;
+
+  MenuAlbumInfoSliverHeader({
+    required super.item,
+    super.features = const [MenuItemInfoHeaderFeatures.openItem, MenuItemInfoHeaderFeatures.addToPlaylistAndFavorite],
+    this.disc,
+  }) : super();
+
+  MenuAlbumInfoSliverHeader.condensed({required super.item, super.features, this.disc}) : super.condensed();
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    assert(BaseItemDtoType.fromItem(item) == BaseItemDtoType.album);
+    return AlbumInfo(item: item, condensed: condensed, features: features, disc: disc);
+  }
+}
+
 class MenuItemInfoHeader extends ConsumerWidget {
   final BaseItemDto item;
   final bool condensed;
@@ -162,14 +180,17 @@ class TrackInfo extends ConsumerWidget {
 }
 
 class AlbumInfo extends ConsumerWidget {
-  const AlbumInfo({super.key, required this.item, required this.condensed, required this.features});
+  const AlbumInfo({super.key, required this.item, required this.condensed, required this.features, this.disc});
 
   final BaseItemDto item;
   final bool condensed;
   final List<MenuItemInfoHeaderFeatures> features;
+  final int? disc;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final albumName = item.name ?? AppLocalizations.of(context)!.unknownName;
+
     return ItemInfo(
       item: item,
       condensed: condensed,
@@ -178,7 +199,7 @@ class AlbumInfo extends ConsumerWidget {
       featureImage: AlbumImage(item: item, borderRadius: BorderRadius.zero, tapToZoom: true),
       infoRows: [
         Text(
-          item.name ?? AppLocalizations.of(context)!.unknownName,
+          disc == null ? albumName : AppLocalizations.of(context)!.discOfAlbum(disc!, albumName),
           textAlign: TextAlign.start,
           style: TextStyle(
             fontSize: condensed ? 16 : 18,
