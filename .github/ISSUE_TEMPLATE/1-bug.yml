@@ -81,7 +81,8 @@ body:
         and upload the log file. You may need to put the text file into a
         .zip due to file size.
         To get the logs Open the side menu, click "Logs", and then use the
-        *share* button at the top right to get the log file.
+        *share* button at the top right to get the log file.  
+        You can use the following link to open Finamp's "Logs" screen: [🔗 Logs Screen](https://intradeus.github.io/http-protocol-redirector?r=finamp://internal/logs)
       value: |
         <details>
         
