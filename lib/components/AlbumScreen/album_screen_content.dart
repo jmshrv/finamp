@@ -163,28 +163,48 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             childrenPerDisc.length > 1) // show headers only for multi disc albums
           for (var childrenOfThisDisc in childrenPerDisc)
             SliverStickyHeader(
-              header: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                color: Theme.of(context).colorScheme.surface,
-                child: Row(
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
-                      style: const TextStyle(fontSize: 20.0),
+              header: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                child: Material(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(8),
+                  clipBehavior: Clip.antiAlias,
+                  child: InkWell(
+                    onTap: () async => await GetIt.instance<QueueService>().startPlayback(
+                      items: childrenOfThisDisc,
+                      source: QueueItemSource.fromBaseItem(widget.parent),
+                      order: FinampPlaybackOrder.linear,
                     ),
-                    Spacer(),
-                    OverflowMenuButton(
-                      onPressed: () => showModalAlbumMenu(
-                        context: context,
-                        baseItem: widget.parent,
-                        discTrackList: childrenOfThisDisc,
+                    onLongPress: () => showModalAlbumMenu(
+                      context: context,
+                      baseItem: widget.parent,
+                      discTrackList: childrenOfThisDisc,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
+                            style: const TextStyle(fontSize: 20.0),
+                          ),
+                          Spacer(),
+                          OverflowMenuButton(
+                            onPressed: () => showModalAlbumMenu(
+                              context: context,
+                              baseItem: widget.parent,
+                              discTrackList: childrenOfThisDisc,
+                            ),
+                            icon: TablerIcons.dots_vertical,
+                            label: AppLocalizations.of(context)!.moreActionsOnAlbumDisc,
+                          ),
+                        ],
                       ),
-                      icon: TablerIcons.dots_vertical,
-                      label: AppLocalizations.of(context)!.moreActionsOnAlbumDisc,
                     ),
-                  ],
+                  ),
                 ),
               ),
+
               sliver: TracksSliverList(
                 childrenForList: childrenOfThisDisc,
                 childrenForQueue: queueChildren,
