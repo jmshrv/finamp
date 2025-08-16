@@ -304,8 +304,8 @@ class ShuffleAlbumsAction extends ConsumerWidget {
       label: AppLocalizations.of(context)!.shuffleAlbums,
       onPressed: () async {
         await queueService.startPlayback(
-          items: await loadChildTracks(
-            baseItem: baseItem,
+          items: groupItems(
+            items: await loadChildTracks(baseItem: baseItem),
             groupListBy: (element) => element.albumId?.toString(),
             manuallyShuffle: true,
           ),
@@ -334,8 +334,8 @@ class ShuffleAlbumsNextPlaybackAction extends ConsumerWidget {
         label: AppLocalizations.of(context)!.shuffleAlbumsNext,
         onPressed: () async {
           await queueService.addNext(
-            items: await loadChildTracks(
-              baseItem: baseItem,
+            items: groupItems(
+              items: await loadChildTracks(baseItem: baseItem),
               groupListBy: (element) => element.albumId?.toString(),
               manuallyShuffle: true,
             ),
@@ -364,8 +364,8 @@ class ShuffleAlbumsToNextUpPlaybackAction extends ConsumerWidget {
       label: AppLocalizations.of(context)!.shuffleAlbumsToNextUp,
       onPressed: () async {
         await queueService.addToNextUp(
-          items: await loadChildTracks(
-            baseItem: baseItem,
+          items: groupItems(
+            items: await loadChildTracks(baseItem: baseItem),
             groupListBy: (element) => element.albumId?.toString(),
             manuallyShuffle: true,
           ),
@@ -396,8 +396,8 @@ class ShuffleAlbumsToQueuePlaybackAction extends ConsumerWidget {
       label: AppLocalizations.of(context)!.shuffleAlbumsToQueue,
       onPressed: () async {
         await queueService.addToQueue(
-          items: await loadChildTracks(
-            baseItem: baseItem,
+          items: groupItems(
+            items: await loadChildTracks(baseItem: baseItem),
             groupListBy: (element) => element.albumId?.toString(),
             manuallyShuffle: true,
           ),

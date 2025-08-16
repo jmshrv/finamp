@@ -12,18 +12,13 @@ import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
-Future<List<BaseItemDto>> loadChildTracks({
-  required BaseItemDto baseItem,
-  String? Function(BaseItemDto)? groupListBy,
-  bool manuallyShuffle = false,
-}) async {
+Future<List<BaseItemDto>> loadChildTracks({required BaseItemDto baseItem}) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final finampUserHelper = GetIt.instance<FinampUserHelper>();
   final settings = FinampSettingsHelper.finampSettings;
   final ref = GetIt.instance<ProviderContainer>();
 
   final Future<List<BaseItemDto>?> newItemsFuture;
-  List<BaseItemDto>? newItems;
 
   if (settings.isOffline) {
     newItemsFuture = loadChildTracksOffline(baseItem: baseItem);
@@ -61,7 +56,7 @@ Future<List<BaseItemDto>> loadChildTracks({
     }
   }
 
-  newItems = await newItemsFuture;
+  final List<BaseItemDto>? newItems = await newItemsFuture;
 
   if (newItems == null) {
     GlobalSnackbar.message(
@@ -70,15 +65,19 @@ Future<List<BaseItemDto>> loadChildTracks({
     return [];
   }
 
-  if (groupListBy != null) {
-    var albums = newItems.groupListsBy(groupListBy).values.toList();
-    if (manuallyShuffle) {
-      albums = albums..shuffle();
-    }
-    newItems = albums.flattened.toList();
-  }
-
   return newItems;
+}
+
+List<BaseItemDto> groupItems({
+  required List<BaseItemDto> items,
+  required String? Function(BaseItemDto) groupListBy,
+  bool manuallyShuffle = false,
+}) {
+  var albums = items.groupListsBy(groupListBy).values.toList();
+  if (manuallyShuffle) {
+    albums = albums..shuffle();
+  }
+  return albums.flattened.toList();
 }
 
 Future<List<BaseItemDto>?> loadChildTracksOffline({
