@@ -11,14 +11,10 @@ import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-Future<List<BaseItemDto>?> loadChildTracks({
+Future<List<BaseItemDto>> loadChildTracks({
   required BaseItemDto baseItem,
-  SortBy? sortBy,
-  SortOrder? sortOrder,
   String? Function(BaseItemDto)? groupListBy,
-  BaseItemDto? genreFilter,
   bool manuallyShuffle = false,
 }) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
@@ -44,15 +40,13 @@ Future<List<BaseItemDto>?> loadChildTracks({
         break;
       case BaseItemDtoType.artist:
         newItemsFuture = ref.read(
-          getArtistTracksProvider(baseItem, finampUserHelper.currentUser?.currentView, genreFilter).future,
+          getArtistTracksProvider(baseItem, finampUserHelper.currentUser?.currentView, null).future,
         );
         break;
       case BaseItemDtoType.genre:
         newItemsFuture = jellyfinApiHelper.getItems(
           parentItem: finampUserHelper.currentUser?.currentView,
           includeItemTypes: [BaseItemDtoType.track.idString].join(","),
-          sortBy: sortBy?.jellyfinName(null) ?? SortBy.album.jellyfinName(null),
-          sortOrder: sortOrder?.toString(),
           genreFilter: baseItem,
         );
         break;
@@ -60,8 +54,8 @@ Future<List<BaseItemDto>?> loadChildTracks({
         newItemsFuture = jellyfinApiHelper.getItems(
           parentItem: baseItem,
           includeItemTypes: [BaseItemDtoType.track.idString].join(","),
-          sortBy: sortBy?.jellyfinName(null) ?? "ParentIndexNumber,IndexNumber,SortName",
-          sortOrder: sortOrder?.toString(),
+          sortBy: "ParentIndexNumber,IndexNumber,SortName",
+          sortOrder: null,
           // filters: settings.onlyShowFavorites ? "IsFavorite" : null,
         );
     }
