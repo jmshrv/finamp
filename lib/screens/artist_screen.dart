@@ -36,12 +36,10 @@ class _ArtistScreenState extends ConsumerState<ArtistScreen> {
 
     return Scaffold(
       extendBody: true,
-      body: SafeArea(
-        child: ArtistScreenContent(
-          parent: artist,
-          library: _finampUserHelper.currentUser?.currentView,
-          genreFilter: widget.genreFilter,
-        ),
+      body: ArtistScreenContent(
+        parent: artist,
+        library: _finampUserHelper.currentUser?.currentView,
+        genreFilter: widget.genreFilter,
       ),
       bottomNavigationBar: const NowPlayingBar(),
     );
