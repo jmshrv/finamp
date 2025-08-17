@@ -25,11 +25,7 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
         ],
       ),
       body: ListView(
-        children: const [
-          UseHighContrastColorsToggle(),
-          DisableGestureSelector(),
-          DisableVibrationSelector(),
-        ],
+        children: const [UseHighContrastColorsToggle(), DisableGestureSelector(), DisableVibrationSelector()],
       ),
     );
   }
