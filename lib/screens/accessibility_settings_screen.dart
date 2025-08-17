@@ -1,12 +1,21 @@
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/screens/layout_settings_screen.dart';
+import 'package:finamp/screens/settings_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AccessibilitySettingsScreen extends StatefulWidget {
-  const AccessibilitySettingsScreen({super.key});
-  static const routeName = "/settings/accessibility";
+class AccessibilitySettingsScreen extends StatefulWidget implements CategorySettingsScreen {
+  AccessibilitySettingsScreen({super.key});
+  @override
+  String get routeName => "/settings/accessibility";
+
+  @override
+  List<Widget> get searchableSettingsChildren => const [
+    UseHighContrastColorsToggle(),
+    DisableGestureSelector(),
+    DisableVibrationSelector(),
+  ];
   @override
   State<AccessibilitySettingsScreen> createState() => _AccessibilitySettingsScreenState();
 }
@@ -24,9 +33,7 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
           ),
         ],
       ),
-      body: ListView(
-        children: const [UseHighContrastColorsToggle(), DisableGestureSelector(), DisableVibrationSelector()],
-      ),
+      body: ListView(children: widget.searchableSettingsChildren),
     );
   }
 }

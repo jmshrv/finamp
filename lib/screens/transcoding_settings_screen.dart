@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:finamp/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,9 +10,18 @@ import '../components/TranscodingSettingsScreen/transcode_switch.dart';
 import '../models/finamp_models.dart';
 import '../services/finamp_settings_helper.dart';
 
-class TranscodingSettingsScreen extends StatefulWidget {
-  const TranscodingSettingsScreen({super.key});
-  static const routeName = "/settings/transcoding";
+class TranscodingSettingsScreen extends StatefulWidget implements CategorySettingsScreen {
+  TranscodingSettingsScreen({super.key});
+  @override
+  String get routeName => "/settings/transcoding";
+  @override
+  List<Widget> get searchableSettingsChildren => [
+    TranscodeSwitch(),
+    StreamingTranscodingFormatDropdownListTile(),
+    BitrateSelector(),
+    DownloadTranscodeEnableDropdownListTile(),
+    DownloadTranscodeCodecDropdownListTile(),
+  ];
   @override
   State<TranscodingSettingsScreen> createState() => _TranscodingSettingsScreenState();
 }
@@ -31,13 +41,9 @@ class _TranscodingSettingsScreenState extends State<TranscodingSettingsScreen> {
       ),
       body: ListView(
         children: [
-          const TranscodeSwitch(),
-          const StreamingTranscodingFormatDropdownListTile(),
-          const BitrateSelector(),
+          ...widget.searchableSettingsChildren.sublist(0, 3),
           Divider(),
-          const DownloadTranscodeEnableDropdownListTile(),
-          const DownloadTranscodeCodecDropdownListTile(),
-          const DownloadBitrateSelector(),
+          ...widget.searchableSettingsChildren.sublist(4),
         ],
       ),
     );

@@ -18,3 +18,7 @@ class SettingsHelperMap {
   final String valueName;
   const SettingsHelperMap(this.keyName, this.valueName);
 }
+
+class Searchable {
+  const Searchable();
+}

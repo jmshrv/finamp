@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/screens/settings_screen.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,9 +11,21 @@ import '../components/AudioServiceSettingsScreen/loadQueueOnStartup_selector.dar
 import '../components/AudioServiceSettingsScreen/stop_foreground_selector.dart';
 import '../components/AudioServiceSettingsScreen/track_shuffle_item_count_editor.dart';
 
-class AudioServiceSettingsScreen extends StatefulWidget {
+class AudioServiceSettingsScreen extends StatefulWidget implements CategorySettingsScreen {
   const AudioServiceSettingsScreen({super.key});
-  static const routeName = "/settings/audioservice";
+  @override
+  String get routeName => "/settings/audioservice";
+  @override
+  List<Widget> get searchableSettingsChildren => [
+    const TrackShuffleItemCountEditor(),
+    const AudioFadeInDurationListTile(),
+    const AudioFadeOutDurationListTile(),
+    const BufferDurationListTile(),
+    const BufferDisableSizeConstraintsSelector(),
+    const LoadQueueOnStartupSelector(),
+    const AutoReloadQueueToggle(),
+    const ClearQueueOnStopToggle(),
+  ];
   @override
   State<AudioServiceSettingsScreen> createState() => _AudioServiceSettingsScreenState();
 }
@@ -34,15 +47,9 @@ class _AudioServiceSettingsScreenState extends State<AudioServiceSettingsScreen>
       body: ListView(
         children: [
           if (Platform.isAndroid) const StopForegroundSelector(),
-          const TrackShuffleItemCountEditor(),
-          const AudioFadeInDurationListTile(),
-          const AudioFadeOutDurationListTile(),
+          ...widget.searchableSettingsChildren.sublist(0, 3),
           if (Platform.isAndroid) const BufferSizeListTile(),
-          const BufferDurationListTile(),
-          const BufferDisableSizeConstraintsSelector(),
-          const LoadQueueOnStartupSelector(),
-          const AutoReloadQueueToggle(),
-          const ClearQueueOnStopToggle(),
+          ...widget.searchableSettingsChildren.sublist(4),
         ],
       ),
     );

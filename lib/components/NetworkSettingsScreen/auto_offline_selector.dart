@@ -1,3 +1,4 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/finamp_models.dart';
 import '../../services/finamp_settings_helper.dart';
 
+part "auto_offline_selector.g.dart";
+
+@Searchable()
 class AutoOfflineSelector extends ConsumerWidget {
   const AutoOfflineSelector({super.key});
 

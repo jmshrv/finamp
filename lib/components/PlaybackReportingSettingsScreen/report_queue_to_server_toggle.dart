@@ -1,9 +1,13 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
+part "report_queue_to_server_toggle.g.dart";
+
+@Searchable()
 class ReportQueueToServerToggle extends ConsumerWidget {
   const ReportQueueToServerToggle({super.key});
 

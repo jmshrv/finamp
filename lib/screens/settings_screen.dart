@@ -1,9 +1,13 @@
+import 'dart:core';
+
+import 'package:audio_session/audio_session.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/quick_connect_authorization_menu.dart';
 import 'package:finamp/menus/server_sharing_menu.dart';
 import 'package:finamp/screens/accessibility_settings_screen.dart';
 import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/network_settings_screen.dart';
+import 'package:finamp/screens/search_settings_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
@@ -21,16 +25,56 @@ import 'audio_service_settings_screen.dart';
 import 'downloads_settings_screen.dart';
 import 'language_selection_screen.dart';
 import 'layout_settings_screen.dart';
+import 'playback_reporting_settings_screen.dart';
 import 'transcoding_settings_screen.dart';
 import 'view_selector.dart';
 import 'volume_normalization_settings_screen.dart';
-import 'playback_reporting_settings_screen.dart';
+
+class SettingsItem {
+  final IconData? icon;
+  final String? title;
+  final String? subtitle;
+  final bool enabled;
+  Function? onTap;
+  Widget? settingWidget;
+  SettingsItem({this.icon, this.title, this.subtitle, this.enabled = true, this.onTap, this.settingWidget});
+
+  Widget getListTileWidget(BuildContext context) {
+    if (icon != null) {
+      return ListTile(
+        leading: Icon(icon),
+        title: Text(title ?? ""),
+        subtitle: Text(subtitle ?? ""),
+        enabled: enabled,
+        onTap:
+            (onTap ??
+                    ((enabled && settingWidget != null)
+                        ? () => Navigator.of(context).pushNamed(((settingWidget!) as CategorySettingsScreen).routeName)
+                        : () {}))
+                as GestureTapCallback,
+      );
+    } else {
+      return settingWidget!;
+    }
+  }
+}
+
+class SettingsList {
+  List<SettingsItem> categoryItems;
+  List<SettingsItem> settingsItems;
+  SettingsList({required this.categoryItems, required this.settingsItems});
+}
 
 class SettingsScreen extends ConsumerStatefulWidget {
-  const SettingsScreen({super.key});
+  SettingsScreen({super.key});
   static const routeName = "/settings";
   @override
   ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+abstract class CategorySettingsScreen {
+  String get routeName;
+  List<Widget> get searchableSettingsChildren;
 }
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
@@ -38,12 +82,124 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   static const releaseNotesLink = "https://github.com/jmshrv/finamp/releases";
   static const translationsLink = "https://hosted.weblate.org/projects/finamp";
 
+  SettingsList getSettings() {
+    List<SettingsItem> categoryItems = [
+      SettingsItem(
+        icon: Icons.compress,
+        title: AppLocalizations.of(context)!.transcoding,
+        settingWidget: TranscodingSettingsScreen(),
+      ),
+
+      SettingsItem(
+        icon: Icons.download,
+        title: AppLocalizations.of(context)!.downloadSettings,
+        settingWidget: DownloadsSettingsScreen(),
+      ),
+
+      SettingsItem(
+        icon: Icons.wifi,
+        title: AppLocalizations.of(context)!.networkSettingsTitle,
+        settingWidget: NetworkSettingsScreen(),
+      ),
+      SettingsItem(
+        icon: Icons.music_note,
+        title: AppLocalizations.of(context)!.audioService,
+        settingWidget: AudioServiceSettingsScreen(),
+      ),
+
+      SettingsItem(
+        icon: TablerIcons.cast,
+        title: AppLocalizations.of(context)!.playbackReportingSettingsTitle,
+        settingWidget: PlaybackReportingSettingsScreen(),
+      ),
+
+      SettingsItem(
+        icon: Icons.equalizer_rounded,
+        title: AppLocalizations.of(context)!.volumeNormalizationSettingsTitle,
+        settingWidget: VolumeNormalizationSettingsScreen(),
+      ),
+
+      SettingsItem(
+        icon: Icons.gesture,
+        title: AppLocalizations.of(context)!.interactions,
+        settingWidget: InteractionSettingsScreen(),
+      ),
+
+      SettingsItem(
+        icon: Icons.widgets,
+        title: AppLocalizations.of(context)!.layoutAndTheme,
+        settingWidget: LayoutSettingsScreen(),
+      ),
+
+      SettingsItem(
+        icon: TablerIcons.accessible,
+        title: AppLocalizations.of(context)!.accessibility,
+        settingWidget: AccessibilitySettingsScreen(),
+      ),
+
+      SettingsItem(
+        icon: Icons.library_music,
+        title: AppLocalizations.of(context)!.selectMusicLibraries,
+        settingWidget: ViewSelector(),
+        subtitle: ref.watch(finampSettingsProvider.isOffline)
+            ? (AppLocalizations.of(context)!.notAvailableInOfflineMode)
+            : null,
+        enabled: !ref.watch(finampSettingsProvider.isOffline),
+      ),
+
+      SettingsItem(
+        icon: Icons.language,
+        title: AppLocalizations.of(context)!.language,
+        settingWidget: LanguageSelectionScreen(),
+        subtitle: LocaleHelper.locale?.nativeDisplayLanguage ?? AppLocalizations.of(context)!.system,
+      ),
+      SettingsItem(settingWidget: Divider()),
+
+      SettingsItem(
+        icon: TablerIcons.access_point,
+        title: AppLocalizations.of(context)!.serverSharingMenuButtonTitle,
+        onTap: () => showServerSharingPanel(context: context),
+      ),
+
+      SettingsItem(
+        icon: TablerIcons.lock_bolt,
+        title: AppLocalizations.of(context)!.quickConnectAuthorizationMenuButtonTitle,
+        onTap: () => showQuickConnectAuthorizationMenu(context: context),
+      ),
+
+      SettingsItem(settingWidget: LogoutListTile()),
+    ];
+    List<SettingsItem> searchableSettingsItems = [];
+    for (SettingsItem categoryItem in categoryItems) {
+      if (categoryItem.settingWidget != null &&
+          categoryItem.settingWidget is! Divider &&
+          categoryItem.settingWidget is! ViewSelector &&
+          categoryItem.settingWidget is! LanguageSelectionScreen &&
+          categoryItem.settingWidget is! LogoutListTile) {
+        CategorySettingsScreen settingsScreen = categoryItem.settingWidget as CategorySettingsScreen;
+        for (var item in settingsScreen.searchableSettingsChildren) {
+          searchableSettingsItems.add(SettingsItem(settingWidget: item));
+        }
+      }
+    }
+    return SettingsList(categoryItems: categoryItems, settingsItems: searchableSettingsItems);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.settings),
         actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: SettingsSearchDelegate(settingsList: getSettings()),
+              );
+            },
+          ),
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(
             context,
             FinampSettingsHelper.resetAllSettings,
@@ -54,7 +210,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             excludeSemantics: true,
             container: true,
             child: IconButton(
-              icon: const Icon(Icons.info),
+              icon: Icon(Icons.info),
               onPressed: () async {
                 final localizations = AppLocalizations.of(context)!;
                 final applicationLegalese = AppLocalizations.of(context)!.applicationLegalese(repoLink);
@@ -130,82 +286,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
         ],
       ),
-      body: ListView(
-        children: [
-          ListTile(
-            leading: const Icon(Icons.compress),
-            title: Text(AppLocalizations.of(context)!.transcoding),
-            onTap: () => Navigator.of(context).pushNamed(TranscodingSettingsScreen.routeName),
-          ),
-          ListTile(
-            leading: const Icon(Icons.download),
-            title: Text(AppLocalizations.of(context)!.downloadSettings),
-            onTap: () => Navigator.of(context).pushNamed(DownloadsSettingsScreen.routeName),
-          ),
-          ListTile(
-            leading: const Icon(Icons.wifi),
-            title: Text(AppLocalizations.of(context)!.networkSettingsTitle),
-            onTap: () => Navigator.of(context).pushNamed(NetworkSettingsScreen.routeName),
-          ),
-          ListTile(
-            leading: const Icon(Icons.music_note),
-            title: Text(AppLocalizations.of(context)!.audioService),
-            onTap: () => Navigator.of(context).pushNamed(AudioServiceSettingsScreen.routeName),
-          ),
-          ListTile(
-            leading: const Icon(TablerIcons.cast),
-            title: Text(AppLocalizations.of(context)!.playbackReportingSettingsTitle),
-            onTap: () => Navigator.of(context).pushNamed(PlaybackReportingSettingsScreen.routeName),
-          ),
-          ListTile(
-            leading: const Icon(Icons.equalizer_rounded),
-            title: Text(AppLocalizations.of(context)!.volumeNormalizationSettingsTitle),
-            onTap: () => Navigator.of(context).pushNamed(VolumeNormalizationSettingsScreen.routeName),
-          ),
-          ListTile(
-            leading: const Icon(Icons.gesture),
-            title: Text(AppLocalizations.of(context)!.interactions),
-            onTap: () => Navigator.of(context).pushNamed(InteractionSettingsScreen.routeName),
-          ),
-          ListTile(
-            leading: const Icon(Icons.widgets),
-            title: Text(AppLocalizations.of(context)!.layoutAndTheme),
-            onTap: () => Navigator.of(context).pushNamed(LayoutSettingsScreen.routeName),
-          ),
-          ListTile(
-            leading: const Icon(TablerIcons.accessible),
-            title: Text(AppLocalizations.of(context)!.accessibility),
-            onTap: () => Navigator.of(context).pushNamed(AccessibilitySettingsScreen.routeName),
-          ),
-          ListTile(
-            leading: const Icon(Icons.library_music),
-            title: Text(AppLocalizations.of(context)!.selectMusicLibraries),
-            subtitle: ref.watch(finampSettingsProvider.isOffline)
-                ? Text(AppLocalizations.of(context)!.notAvailableInOfflineMode)
-                : null,
-            enabled: !ref.watch(finampSettingsProvider.isOffline),
-            onTap: () => Navigator.of(context).pushNamed(ViewSelector.routeName),
-          ),
-          ListTile(
-            leading: const Icon(Icons.language),
-            title: Text(AppLocalizations.of(context)!.language),
-            subtitle: Text(LocaleHelper.locale?.nativeDisplayLanguage ?? AppLocalizations.of(context)!.system),
-            onTap: () => Navigator.of(context).pushNamed(LanguageSelectionScreen.routeName),
-          ),
-          Divider(),
-          ListTile(
-            leading: Icon(TablerIcons.access_point),
-            title: Text(AppLocalizations.of(context)!.serverSharingMenuButtonTitle),
-            onTap: () => showServerSharingPanel(context: context),
-          ),
-          ListTile(
-            leading: Icon(TablerIcons.lock_bolt),
-            title: Text(AppLocalizations.of(context)!.quickConnectAuthorizationMenuButtonTitle),
-            onTap: () => showQuickConnectAuthorizationMenu(context: context),
-          ),
-          const LogoutListTile(),
-        ],
-      ),
+      body: ListView(children: List.of(getSettings().categoryItems.map((e) => e.getListTileWidget(context)))),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/screens/album_settings_screen.dart';
 import 'package:finamp/screens/artist_settings_screen.dart';
@@ -5,6 +6,7 @@ import 'package:finamp/screens/customization_settings_screen.dart';
 import 'package:finamp/screens/genre_settings_screen.dart';
 import 'package:finamp/screens/lyrics_settings_screen.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
+import 'package:finamp/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -18,11 +20,130 @@ import '../components/LayoutSettingsScreen/use_cover_as_background_toggle.dart';
 import '../services/finamp_settings_helper.dart';
 import 'tabs_settings_screen.dart';
 
-class LayoutSettingsScreen extends ConsumerStatefulWidget {
-  const LayoutSettingsScreen({super.key});
-  static const routeName = "/settings/layout";
+part "layout_settings_screen.g.dart";
+
+@Searchable()
+class AllowSplitScreenSwitch extends ConsumerWidget {
+  const AllowSplitScreenSwitch({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.allowSplitScreenTitle),
+      subtitle: Text(AppLocalizations.of(context)!.allowSplitScreenSubtitle),
+      value: ref.watch(finampSettingsProvider.allowSplitScreen),
+      onChanged: FinampSetters.setAllowSplitScreen,
+    );
+  }
+}
+
+class AutoSwitchItemCurationTypeToggle extends ConsumerWidget {
+  const AutoSwitchItemCurationTypeToggle({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.autoSwitchItemCurationTypeTitle),
+      subtitle: Text(AppLocalizations.of(context)!.autoSwitchItemCurationTypeSubtitle),
+      value: ref.watch(finampSettingsProvider.autoSwitchItemCurationType),
+      onChanged: FinampSetters.setAutoSwitchItemCurationType,
+    );
+  }
+}
+
+enum FixedGridTileSize {
+  small,
+  medium,
+  large,
+  veryLarge;
+
+  int get toInt => switch (this) {
+    small => 100,
+    medium => 150,
+    large => 230,
+    veryLarge => 360,
+  };
+
+  static FixedGridTileSize fromInt(int size) => switch (size) {
+    100 => small,
+    150 => medium,
+    230 => large,
+    360 => veryLarge,
+    _ => medium,
+  };
+}
+
+class FixedGridTileSizeDropdownListTile extends ConsumerWidget {
+  const FixedGridTileSizeDropdownListTile({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.fixedGridSizeTitle),
+      trailing: DropdownButton<FixedGridTileSize>(
+        value: FixedGridTileSize.fromInt(FinampSettingsHelper.finampSettings.fixedGridTileSize),
+        items: FixedGridTileSize.values
+            .map(
+              (e) => DropdownMenuItem<FixedGridTileSize>(
+                value: e,
+                child: Text(AppLocalizations.of(context)!.fixedGridTileSizeEnum(e.name)),
+              ),
+            )
+            .toList(),
+        onChanged: (value) => FinampSetters.setFixedGridTileSize.ifNonNull(value?.toInt),
+      ),
+    );
+  }
+}
+
+@Searchable()
+class FixedSizeGridSwitch extends ConsumerWidget {
+  const FixedSizeGridSwitch({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.fixedGridSizeSwitchTitle),
+      subtitle: Text(AppLocalizations.of(context)!.fixedGridSizeSwitchSubtitle),
+      value: ref.watch(finampSettingsProvider.useFixedSizeGridTiles),
+      onChanged: FinampSetters.setUseFixedSizeGridTiles,
+    );
+  }
+}
+
+class LayoutSettingsScreen extends ConsumerStatefulWidget implements CategorySettingsScreen {
+  LayoutSettingsScreen({super.key});
+  @override
+  String get routeName => "/settings/layout";
+  @override
+  List<Widget> get searchableSettingsChildren => const [
+    const Divider(),
+    const ThemeSelector(),
+    const ContentViewTypeDropdownListTile(),
+    const FixedSizeGridSwitch(),
+    const ShowTextOnGridViewSelector(),
+    const UseCoverAsBackgroundToggle(),
+    const ShowArtistChipImageToggle(),
+    const AllowSplitScreenSwitch(),
+    const ShowProgressOnNowPlayingBarToggle(),
+  ];
   @override
   ConsumerState<LayoutSettingsScreen> createState() => _LayoutSettingsScreenState();
+}
+
+@Searchable()
+class ShowProgressOnNowPlayingBarToggle extends ConsumerWidget {
+  const ShowProgressOnNowPlayingBarToggle({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.showProgressOnNowPlayingBarTitle),
+      subtitle: Text(AppLocalizations.of(context)!.showProgressOnNowPlayingBarSubtitle),
+      value: ref.watch(finampSettingsProvider.showProgressOnNowPlayingBar),
+      onChanged: FinampSetters.setShowProgressOnNowPlayingBar,
+    );
+  }
 }
 
 class _LayoutSettingsScreenState extends ConsumerState<LayoutSettingsScreen> {
@@ -72,122 +193,14 @@ class _LayoutSettingsScreenState extends ConsumerState<LayoutSettingsScreen> {
             title: Text(AppLocalizations.of(context)!.tabs),
             onTap: () => Navigator.of(context).pushNamed(TabsSettingsScreen.routeName),
           ),
-          const Divider(),
-          const ThemeSelector(),
-          const ContentViewTypeDropdownListTile(),
-          const FixedSizeGridSwitch(),
+          ...(widget.searchableSettingsChildren).sublist(0, 3),
           if (!ref.watch(finampSettingsProvider.useFixedSizeGridTiles))
             for (final type in ContentGridViewCrossAxisCountType.values)
               ContentGridViewCrossAxisCountListTile(type: type),
           if (ref.watch(finampSettingsProvider.useFixedSizeGridTiles)) const FixedGridTileSizeDropdownListTile(),
-          const ShowTextOnGridViewSelector(),
-          const UseCoverAsBackgroundToggle(),
-          const ShowArtistChipImageToggle(),
-          const AllowSplitScreenSwitch(),
-          const ShowProgressOnNowPlayingBarToggle(),
+          ...(widget.searchableSettingsChildren).sublist(4),
         ],
       ),
     );
   }
-}
-
-class FixedSizeGridSwitch extends ConsumerWidget {
-  const FixedSizeGridSwitch({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return SwitchListTile.adaptive(
-      title: Text(AppLocalizations.of(context)!.fixedGridSizeSwitchTitle),
-      subtitle: Text(AppLocalizations.of(context)!.fixedGridSizeSwitchSubtitle),
-      value: ref.watch(finampSettingsProvider.useFixedSizeGridTiles),
-      onChanged: FinampSetters.setUseFixedSizeGridTiles,
-    );
-  }
-}
-
-class AllowSplitScreenSwitch extends ConsumerWidget {
-  const AllowSplitScreenSwitch({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return SwitchListTile.adaptive(
-      title: Text(AppLocalizations.of(context)!.allowSplitScreenTitle),
-      subtitle: Text(AppLocalizations.of(context)!.allowSplitScreenSubtitle),
-      value: ref.watch(finampSettingsProvider.allowSplitScreen),
-      onChanged: FinampSetters.setAllowSplitScreen,
-    );
-  }
-}
-
-class FixedGridTileSizeDropdownListTile extends ConsumerWidget {
-  const FixedGridTileSizeDropdownListTile({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ListTile(
-      title: Text(AppLocalizations.of(context)!.fixedGridSizeTitle),
-      trailing: DropdownButton<FixedGridTileSize>(
-        value: FixedGridTileSize.fromInt(FinampSettingsHelper.finampSettings.fixedGridTileSize),
-        items: FixedGridTileSize.values
-            .map(
-              (e) => DropdownMenuItem<FixedGridTileSize>(
-                value: e,
-                child: Text(AppLocalizations.of(context)!.fixedGridTileSizeEnum(e.name)),
-              ),
-            )
-            .toList(),
-        onChanged: (value) => FinampSetters.setFixedGridTileSize.ifNonNull(value?.toInt),
-      ),
-    );
-  }
-}
-
-class ShowProgressOnNowPlayingBarToggle extends ConsumerWidget {
-  const ShowProgressOnNowPlayingBarToggle({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return SwitchListTile.adaptive(
-      title: Text(AppLocalizations.of(context)!.showProgressOnNowPlayingBarTitle),
-      subtitle: Text(AppLocalizations.of(context)!.showProgressOnNowPlayingBarSubtitle),
-      value: ref.watch(finampSettingsProvider.showProgressOnNowPlayingBar),
-      onChanged: FinampSetters.setShowProgressOnNowPlayingBar,
-    );
-  }
-}
-
-class AutoSwitchItemCurationTypeToggle extends ConsumerWidget {
-  const AutoSwitchItemCurationTypeToggle({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return SwitchListTile.adaptive(
-      title: Text(AppLocalizations.of(context)!.autoSwitchItemCurationTypeTitle),
-      subtitle: Text(AppLocalizations.of(context)!.autoSwitchItemCurationTypeSubtitle),
-      value: ref.watch(finampSettingsProvider.autoSwitchItemCurationType),
-      onChanged: FinampSetters.setAutoSwitchItemCurationType,
-    );
-  }
-}
-
-enum FixedGridTileSize {
-  small,
-  medium,
-  large,
-  veryLarge;
-
-  static FixedGridTileSize fromInt(int size) => switch (size) {
-    100 => small,
-    150 => medium,
-    230 => large,
-    360 => veryLarge,
-    _ => medium,
-  };
-
-  int get toInt => switch (this) {
-    small => 100,
-    medium => 150,
-    large => 230,
-    veryLarge => 360,
-  };
 }

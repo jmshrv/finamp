@@ -1,3 +1,4 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
@@ -6,6 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/finamp_models.dart';
 import 'download_location_delete_dialog.dart';
 
+part "download_location_list_tile.g.dart";
+
+@Searchable()
 class DownloadLocationListTile extends ConsumerWidget {
   const DownloadLocationListTile({super.key, required this.downloadLocation});
 

@@ -5,14 +5,22 @@ import 'package:finamp/components/NetworkSettingsScreen/prefer_local_network_sel
 import 'package:finamp/components/NetworkSettingsScreen/public_address_selector.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/screens/settings_screen.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-class NetworkSettingsScreen extends StatefulWidget {
-  const NetworkSettingsScreen({super.key});
-  static const routeName = "/settings/network";
+class NetworkSettingsScreen extends StatefulWidget implements CategorySettingsScreen {
+  NetworkSettingsScreen({super.key});
+  String get routeName => "/settings/network";
+
+  List<Widget> get searchableSettingsChildren => const [
+    AutoOfflineSelector(),
+    PublicAddressSelector(),
+    LocalNetworkSelector(),
+    LocalNetworkAddressSelector(),
+  ];
 
   @override
   State<NetworkSettingsScreen> createState() => _NetworkSettingsScreenState();
@@ -30,12 +38,10 @@ class _NetworkSettingsScreenState extends State<NetworkSettingsScreen> {
       ),
       body: ListView(
         children: [
-          AutoOfflineSelector(),
+          widget.searchableSettingsChildren[0],
           Divider(),
           ActiveNetworkDisplay(),
-          PublicAddressSelector(),
-          LocalNetworkSelector(),
-          LocalNetworkAddressSelector(),
+          ...widget.searchableSettingsChildren.sublist(1),
           TextButton(
             onPressed: () async {
               final [public, private] = await Future.wait([

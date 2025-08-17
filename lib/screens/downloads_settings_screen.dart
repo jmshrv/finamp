@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:finamp/components/AlbumScreen/download_button.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/screens/settings_screen.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,9 +15,12 @@ import '../services/downloads_service.dart';
 import '../services/finamp_settings_helper.dart';
 import 'downloads_location_screen.dart';
 
-class DownloadsSettingsScreen extends StatefulWidget {
-  const DownloadsSettingsScreen({super.key});
-  static const routeName = "/settings/downloads";
+class DownloadsSettingsScreen extends StatefulWidget implements CategorySettingsScreen {
+  DownloadsSettingsScreen({super.key});
+  @override
+  String get routeName => "/settings/downloads";
+  @override
+  List<Widget> get searchableSettingsChildren => [];
   @override
   State<DownloadsSettingsScreen> createState() => _DownloadsSettingsScreenState();
 }

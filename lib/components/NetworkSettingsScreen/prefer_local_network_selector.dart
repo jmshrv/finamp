@@ -1,3 +1,4 @@
+import 'package:finamp/builders/annotations.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/network_manager.dart';
@@ -6,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
+part "prefer_local_network_selector.g.dart";
+
+@Searchable()
 class LocalNetworkSelector extends ConsumerWidget {
   const LocalNetworkSelector({super.key});
 
