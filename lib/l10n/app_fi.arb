@@ -2706,5 +2706,13 @@
                 "type": "String"
             }
         }
+    },
+    "preferAddingToFavoritesOverPlaylistsTitle": "Lisää suosikkeihin napauttamalla sydän-ikonia",
+    "@preferAddingToFavoritesOverPlaylistsTitle": {
+        "description": "Title for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
+    },
+    "preferAddingToFavoritesOverPlaylistsSubtitle": "Kun kytketty päälle, lyhyt napautus lisää suosikkeihin, ja pitkä painallus avaa ’lisää soittolistalle’-valikon. Oletuksena toiminnot ovat käänteiset.",
+    "@preferAddingToFavoritesOverPlaylistsSubtitle": {
+        "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
     }
 }
