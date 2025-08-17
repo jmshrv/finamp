@@ -124,6 +124,7 @@ class DefaultSettings {
   static const disableGesture = false;
   static const showFastScroller = true;
   static const autoExpandPlayerScreen = false;
+  static const useRandomize = false;
   static const bufferDisableSizeConstraints = false;
   static const bufferDurationSeconds = 600;
   static const bufferSizeMegabytes = 50;
@@ -353,6 +354,7 @@ class FinampSettings {
     this.tileAdditionalInfoType = DefaultSettings.tileAdditionalInfoType,
     this.rpcEnabled = DefaultSettings.rpcEnabled,
     this.rpcIcon = DefaultSettings.rpcIcon,
+    this.useRandomize = DefaultSettings.useRandomize,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -745,6 +747,9 @@ class FinampSettings {
 
   @HiveField(125, defaultValue: DefaultSettings.autoExpandPlayerScreen)
   bool autoExpandPlayerScreen = DefaultSettings.autoExpandPlayerScreen;
+
+  @HiveField(126, defaultValue: DefaultSettings.useRandomize)
+  bool useRandomize = DefaultSettings.useRandomize;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(

@@ -135,6 +135,7 @@ class QueueService {
       } else {
         _saveUpdateCycleCount++;
       }
+      maybeAddRandomizedNext();
     });
 
     // register callbacks
@@ -143,6 +144,24 @@ class QueueService {
     //   previousTrackCallback: _applyPreviousTrack,
     //   skipToIndexCallback: _applySkipToTrackByOffset,
     // );
+  }
+
+  Future<void> maybeAddRandomizedNext() async {
+    // TODO: Fix on Desktop (shuffled gets set to linear there)
+    // TODO: Have this work even if songs are less than 10 seconds and finish naturally
+    // TODO: Don't pollute the linear queue.
+    if (_queueNextUp.length + _queue.length < 5 && _playbackOrder == FinampPlaybackOrder.shuffled && FinampSettingsHelper.finampSettings.useRandomize) {
+      // Queue likely contains multiple of the same item. Deduplicate using a set for an equal chance of any item.
+      Set<jellyfin_models.BaseItemDto> itemsSet = {};
+      for (FinampQueueItem queueItem in getQueue().fullQueue) {
+        itemsSet.add(queueItem.baseItem!);
+      }
+      List<jellyfin_models.BaseItemDto> items = [...itemsSet];
+      // Pick an item to add
+      int nextIndex = Random().nextInt(items.length);
+      await addToQueue(items: [items[nextIndex]]);
+      _queueServiceLogger.finer("Added ${items[nextIndex].name} to the next up for randomization.");
+    }
   }
 
   void _queueFromConcatenatingAudioSource({bool logUpdate = true}) {

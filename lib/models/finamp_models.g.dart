@@ -408,7 +408,8 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..sleepTimer = fields[116] as SleepTimer?
       ..autoExpandPlayerScreen = fields[125] == null
           ? false
-          : fields[125] as bool;
+          : fields[125] as bool
+      ..useRandomize = fields[126] == null ? false : fields[126] as bool;
   }
 
   @override
@@ -652,7 +653,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(124)
       ..write(obj.rpcIcon)
       ..writeByte(125)
-      ..write(obj.autoExpandPlayerScreen);
+      ..write(obj.autoExpandPlayerScreen)
+      ..writeByte(126)
+      ..write(obj.useRandomize);
   }
 
   @override
