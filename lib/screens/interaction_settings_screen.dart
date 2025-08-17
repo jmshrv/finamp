@@ -41,6 +41,7 @@ class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
           ShowDeleteFromServerOptionToggle(),
           KeepScreenOnDropdownListTile(),
           KeepScreenOnWhilePluggedInSelector(),
+          PreferAddingToFavoritesOverPlaylistsToggle(),
         ],
       ),
     );
@@ -85,6 +86,20 @@ class ShowDeleteFromServerOptionToggle extends ConsumerWidget {
       subtitle: Text(AppLocalizations.of(context)!.allowDeleteFromServerSubtitle),
       value: ref.watch(finampSettingsProvider.allowDeleteFromServer),
       onChanged: FinampSetters.setAllowDeleteFromServer,
+    );
+  }
+}
+
+class PreferAddingToFavoritesOverPlaylistsToggle extends ConsumerWidget {
+  const PreferAddingToFavoritesOverPlaylistsToggle({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.preferAddingToFavoritesOverPlaylistsTitle),
+      subtitle: Text(AppLocalizations.of(context)!.preferAddingToFavoritesOverPlaylistsSubtitle),
+      value: ref.watch(finampSettingsProvider.preferAddingToFavoritesOverPlaylists),
+      onChanged: (value) => FinampSetters.setPreferAddingToFavoritesOverPlaylists(value),
     );
   }
 }

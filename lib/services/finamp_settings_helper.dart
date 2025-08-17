@@ -220,6 +220,7 @@ class FinampSettingsHelper {
     FinampSetters.setShowFastScroller(DefaultSettings.showFastScroller);
     FinampSetters.setKeepScreenOnOption(DefaultSettings.keepScreenOnOption);
     FinampSetters.setKeepScreenOnWhilePluggedIn(DefaultSettings.keepScreenOnWhilePluggedIn);
+    FinampSetters.setPreferAddingToFavoritesOverPlaylists(DefaultSettings.preferAddingToFavoritesOverPlaylists);
 
     Hive.box<FinampSettings>("FinampSettings").put("FinampSettings", finampSettingsTemp);
   }
@@ -237,7 +238,6 @@ class FinampSettingsHelper {
     FinampSetters.setUseHighContrastColors(DefaultSettings.useHighContrastColors);
     FinampSetters.setDisableGesture(DefaultSettings.disableGesture);
     FinampSetters.setEnableVibration(DefaultSettings.enableVibration);
-    FinampSetters.setFavouriteButtonTogglesByShortClick(DefaultSettings.favouriteButtonTogglesByShortClick);
   }
 
   static void resetAllSettings() {

@@ -57,14 +57,14 @@ class AddToPlaylistButton extends ConsumerWidget {
       container: true,
       child: GestureDetector(
         onLongPress: () async {
-          if (FinampSettingsHelper.finampSettings.favouriteButtonTogglesByShortClick) {
+          if (FinampSettingsHelper.finampSettings.preferAddingToFavoritesOverPlaylists) {
             await openPlaylistActionsMenu();
           } else {
             toggleFavourite();
           }
         },
         onSecondaryTap: () async {
-          if (FinampSettingsHelper.finampSettings.favouriteButtonTogglesByShortClick) {
+          if (FinampSettingsHelper.finampSettings.preferAddingToFavoritesOverPlaylists) {
             await openPlaylistActionsMenu();
           } else {
             toggleFavourite();
@@ -77,7 +77,7 @@ class AddToPlaylistButton extends ConsumerWidget {
           visualDensity: visualDensity ?? VisualDensity.compact,
           // tooltip: AppLocalizations.of(context)!.addToPlaylistTooltip,
           onPressed: () async {
-            if (FinampSettingsHelper.finampSettings.favouriteButtonTogglesByShortClick) {
+            if (FinampSettingsHelper.finampSettings.preferAddingToFavoritesOverPlaylists) {
               toggleFavourite();
             } else {
               await openPlaylistActionsMenu();

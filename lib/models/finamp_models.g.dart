@@ -400,7 +400,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
         rpcIcon: fields[124] == null
             ? DiscordRpcIcon.transparent
             : fields[124] as DiscordRpcIcon,
-        favouriteButtonTogglesByShortClick: fields[126] == null
+        preferAddingToFavoritesOverPlaylists: fields[126] == null
             ? false
             : fields[126] as bool,
       )
@@ -657,7 +657,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(125)
       ..write(obj.autoExpandPlayerScreen)
       ..writeByte(126)
-      ..write(obj.favouriteButtonTogglesByShortClick);
+      ..write(obj.preferAddingToFavoritesOverPlaylists);
   }
 
   @override

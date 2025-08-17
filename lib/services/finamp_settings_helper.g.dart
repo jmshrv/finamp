@@ -1086,12 +1086,12 @@ extension FinampSetters on FinampSettingsHelper {
     ).put("FinampSettings", finampSettingsTemp);
   }
 
-  static void setFavouriteButtonTogglesByShortClick(
-    bool newFavouriteButtonTogglesByShortClick,
+  static void setPreferAddingToFavoritesOverPlaylists(
+    bool newPreferAddingToFavoritesOverPlaylists,
   ) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
-    finampSettingsTemp.favouriteButtonTogglesByShortClick =
-        newFavouriteButtonTogglesByShortClick;
+    finampSettingsTemp.preferAddingToFavoritesOverPlaylists =
+        newPreferAddingToFavoritesOverPlaylists;
     Hive.box<FinampSettings>(
       "FinampSettings",
     ).put("FinampSettings", finampSettingsTemp);
@@ -1479,9 +1479,9 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       finampSettingsProvider.select((value) => value.requireValue.rpcIcon);
   ProviderListenable<bool> get autoExpandPlayerScreen => finampSettingsProvider
       .select((value) => value.requireValue.autoExpandPlayerScreen);
-  ProviderListenable<bool> get favouriteButtonTogglesByShortClick =>
+  ProviderListenable<bool> get preferAddingToFavoritesOverPlaylists =>
       finampSettingsProvider.select(
-        (value) => value.requireValue.favouriteButtonTogglesByShortClick,
+        (value) => value.requireValue.preferAddingToFavoritesOverPlaylists,
       );
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider.select(
