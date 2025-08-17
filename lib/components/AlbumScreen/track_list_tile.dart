@@ -263,18 +263,6 @@ class TrackListTile extends ConsumerWidget {
       return false;
     }
 
-    IconData getSwipeActionIcon(ItemSwipeActions action) {
-      switch (action) {
-        case ItemSwipeActions.addToQueue:
-          return TablerIcons.playlist;
-        case ItemSwipeActions.playNext:
-          return TablerIcons.corner_right_down;
-        case ItemSwipeActions.addToNextUp:
-        case ItemSwipeActions.nothing:
-          return TablerIcons.corner_right_down_double;
-      }
-    }
-
     Widget buildSwipeActionBackground(BuildContext context, DismissDirection direction) {
       final action = (direction == DismissDirection.startToEnd)
           ? ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight)
@@ -328,6 +316,47 @@ class TrackListTile extends ConsumerWidget {
       playbackProgress: playbackProgress,
     );
   }
+}
+
+IconData getSwipeActionIcon(ItemSwipeActions action) {
+  switch (action) {
+    case ItemSwipeActions.addToQueue:
+      return TablerIcons.playlist;
+    case ItemSwipeActions.playNext:
+      return TablerIcons.corner_right_down;
+    case ItemSwipeActions.addToNextUp:
+    case ItemSwipeActions.nothing:
+      return TablerIcons.corner_right_down_double;
+  }
+}
+
+Widget buildSwipeActionBackground({
+  required BuildContext context,
+  required DismissDirection direction,
+  required ItemSwipeActions action,
+}) {
+  final icon = getSwipeActionIcon(action);
+  final label = action.toLocalisedString(context);
+
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+    alignment: (direction == DismissDirection.startToEnd) ? Alignment.centerLeft : Alignment.centerRight,
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: (direction == DismissDirection.startToEnd) ? MainAxisAlignment.start : MainAxisAlignment.end,
+      children: direction == DismissDirection.startToEnd
+          ? [
+              Icon(icon, color: Theme.of(context).colorScheme.secondary, size: 32),
+              const SizedBox(width: 4.0),
+              Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
+            ]
+          : [
+              Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
+              const SizedBox(width: 4.0),
+              Icon(icon, color: Theme.of(context).colorScheme.secondary, size: 32),
+            ],
+    ),
+  );
 }
 
 class QueueListTile extends StatelessWidget {

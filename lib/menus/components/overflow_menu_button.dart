@@ -7,7 +7,7 @@ class OverflowMenuButton extends ConsumerWidget {
   final IconData icon;
   final String label;
 
-  const OverflowMenuButton({super.key, required this.onPressed, required this.label, this.icon = TablerIcons.menu_2});
+  const OverflowMenuButton({super.key, required this.onPressed, required this.label, this.icon = TablerIcons.dots});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

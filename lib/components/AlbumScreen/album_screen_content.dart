@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/MusicScreen/sort_by_menu_button.dart';
 import 'package:finamp/components/MusicScreen/sort_order_button.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/album_screen_provider.dart';
 import 'package:flutter/material.dart';
@@ -115,6 +116,95 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
       }
     }
 
+    final swipeLeftEnabled = ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight) != ItemSwipeActions.nothing;
+    final swipeRightEnabled = ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft) != ItemSwipeActions.nothing;
+    final allowedDismissDirection = (swipeLeftEnabled && swipeRightEnabled)
+        ? DismissDirection.horizontal
+        : swipeLeftEnabled
+        ? DismissDirection.startToEnd
+        : swipeRightEnabled
+        ? DismissDirection.endToStart
+        : DismissDirection.none;
+
+    Future<bool> discHeaderConfirmDismiss({
+      required DismissDirection direction,
+      required BaseItemDto parentAlbum,
+      required List<BaseItemDto> tracks,
+    }) async {
+      var followUpAction = (direction == DismissDirection.startToEnd)
+          ? FinampSettingsHelper.finampSettings.itemSwipeActionLeftToRight
+          : FinampSettingsHelper.finampSettings.itemSwipeActionRightToLeft;
+
+      final queueService = GetIt.instance<QueueService>();
+
+      switch (followUpAction) {
+        case ItemSwipeActions.addToNextUp:
+          unawaited(
+            queueService.addToNextUp(
+              items: tracks,
+              source: QueueItemSource.rawId(
+                type: QueueItemSourceType.nextUp,
+                name: QueueItemSourceName(
+                  type: QueueItemSourceNameType.preTranslated,
+                  pretranslatedName: AppLocalizations.of(context)!.queue,
+                ),
+                id: parentAlbum.id.raw,
+                item: parentAlbum,
+              ),
+            ),
+          );
+          GlobalSnackbar.message(
+            (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp("disc"),
+            isConfirmation: true,
+          );
+          break;
+        case ItemSwipeActions.playNext:
+          unawaited(
+            queueService.addNext(
+              items: tracks,
+              source: QueueItemSource.rawId(
+                type: QueueItemSourceType.nextUp,
+                name: QueueItemSourceName(
+                  type: QueueItemSourceNameType.preTranslated,
+                  pretranslatedName: AppLocalizations.of(context)!.queue,
+                ),
+                id: parentAlbum.id.raw,
+                item: parentAlbum,
+              ),
+            ),
+          );
+          GlobalSnackbar.message(
+            (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext("disc"),
+            isConfirmation: true,
+          );
+          break;
+        case ItemSwipeActions.addToQueue:
+          unawaited(
+            queueService.addToQueue(
+              items: tracks,
+              source: QueueItemSource.rawId(
+                type: QueueItemSourceType.queue,
+                name: QueueItemSourceName(
+                  type: QueueItemSourceNameType.preTranslated,
+                  pretranslatedName: AppLocalizations.of(context)!.queue,
+                ),
+                id: parentAlbum.id.raw,
+                item: parentAlbum,
+              ),
+            ),
+          );
+          GlobalSnackbar.message(
+            (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue("disc"),
+            isConfirmation: true,
+          );
+          break;
+        case ItemSwipeActions.nothing:
+          break;
+      }
+
+      return false;
+    }
+
     return PaddedCustomScrollview(
       slivers: [
         SliverLayoutBuilder(
@@ -163,46 +253,69 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             childrenPerDisc.length > 1) // show headers only for multi disc albums
           for (var childrenOfThisDisc in childrenPerDisc)
             SliverStickyHeader(
-              header: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                child: Material(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(8),
-                  clipBehavior: Clip.antiAlias,
-                  child: InkWell(
-                    onTap: () async => await GetIt.instance<QueueService>().startPlayback(
-                      items: childrenOfThisDisc,
-                      source: QueueItemSource.fromBaseItem(widget.parent),
-                      order: FinampPlaybackOrder.linear,
-                    ),
-                    onLongPress: () => showModalAlbumMenu(
-                      context: context,
-                      item: AlbumDisc(parent: widget.parent, tracks: childrenOfThisDisc),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
-                            style: const TextStyle(fontSize: 20.0),
-                          ),
-                          Spacer(),
-                          OverflowMenuButton(
-                            onPressed: () => showModalAlbumMenu(
-                              context: context,
-                              item: AlbumDisc(parent: widget.parent, tracks: childrenOfThisDisc),
+              header: Container(
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0, bottom: 0.0),
+                color: Theme.of(context).colorScheme.surface,
+                child: Dismissible(
+                  key: Key("${childrenOfThisDisc[0].id}-${childrenOfThisDisc[0].parentIndexNumber}"),
+                  direction: ref.watch(finampSettingsProvider.disableGesture)
+                      ? DismissDirection.none
+                      : allowedDismissDirection,
+                  dismissThresholds: const {DismissDirection.startToEnd: 0.65, DismissDirection.endToStart: 0.65},
+                  // no background, dismissing really dismisses here
+                  confirmDismiss: (direction) => discHeaderConfirmDismiss(
+                    direction: direction,
+                    parentAlbum: widget.parent,
+                    tracks: childrenOfThisDisc,
+                  ),
+                  background: buildSwipeActionBackground(
+                    context: context,
+                    direction: DismissDirection.startToEnd,
+                    action: ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight),
+                  ),
+                  secondaryBackground: buildSwipeActionBackground(
+                    context: context,
+                    direction: DismissDirection.endToStart,
+                    action: ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft),
+                  ),
+                  child: Material(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Theme.of(context).colorScheme.surface,
+                    clipBehavior: Clip.antiAlias,
+                    child: InkWell(
+                      onTap: () async => await GetIt.instance<QueueService>().startPlayback(
+                        items: childrenOfThisDisc,
+                        source: QueueItemSource.fromBaseItem(widget.parent),
+                        order: FinampPlaybackOrder.linear,
+                      ),
+                      onLongPress: () => showModalAlbumMenu(
+                        context: context,
+                        item: AlbumDisc(parent: widget.parent, tracks: childrenOfThisDisc),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
+                              style: TextTheme.of(context).titleMedium,
                             ),
-                            icon: TablerIcons.dots_vertical,
-                            label: AppLocalizations.of(context)!.moreActionsOnAlbumDisc,
-                          ),
-                        ],
+                            Spacer(),
+                            OverflowMenuButton(
+                              onPressed: () => showModalAlbumMenu(
+                                context: context,
+                                item: AlbumDisc(parent: widget.parent, tracks: childrenOfThisDisc),
+                              ),
+                              label: AppLocalizations.of(context)!.moreActionsOnAlbumDisc,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-
               sliver: TracksSliverList(
                 childrenForList: childrenOfThisDisc,
                 childrenForQueue: queueChildren,

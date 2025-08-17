@@ -1011,7 +1011,7 @@
       }
     }
   },
-  "confirmAddToNextUp": "Added {type, select, track{Track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} to Next Up",
+  "confirmAddToNextUp": "Added {type, select, track{Track} album{album} artist{artist} playlist{playlist} genre{genre} disc{disc} other{item}} to Next Up",
   "@confirmAddToNextUp": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
     "placeholders": {
@@ -1020,7 +1020,7 @@
       }
     }
   },
-  "confirmAddToQueue": "Added {type, select, track{track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} to queue",
+  "confirmAddToQueue": "Added {type, select, track{track} album{album} artist{artist} playlist{playlist} genre{genre} disc{disc} other{item}} to queue",
   "@confirmAddToQueue": {
     "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
     "placeholders": {
