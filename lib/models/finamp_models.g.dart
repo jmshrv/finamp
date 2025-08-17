@@ -400,6 +400,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
         rpcIcon: fields[124] == null
             ? DiscordRpcIcon.transparent
             : fields[124] as DiscordRpcIcon,
+        preferAddingToFavoritesOverPlaylists: fields[126] == null
+            ? false
+            : fields[126] as bool,
       )
       ..disableGesture = fields[19] == null ? false : fields[19] as bool
       ..showFastScroller = fields[25] == null ? true : fields[25] as bool
@@ -414,7 +417,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(119)
+      ..writeByte(120)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -652,7 +655,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(124)
       ..write(obj.rpcIcon)
       ..writeByte(125)
-      ..write(obj.autoExpandPlayerScreen);
+      ..write(obj.autoExpandPlayerScreen)
+      ..writeByte(126)
+      ..write(obj.preferAddingToFavoritesOverPlaylists);
   }
 
   @override

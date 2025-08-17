@@ -2743,5 +2743,13 @@
   "discordRPCIconWhiteTransparent": "White Finamp - Transparent",
   "@discordRPCIconWhiteTransparent": {
     "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
+  },
+  "preferAddingToFavoritesOverPlaylistsTitle": "Add to Favorites When Tapping Heart Icon",
+  "@preferAddingToFavoritesOverPlaylistsTitle": {
+    "description": "Title for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
+  },
+  "preferAddingToFavoritesOverPlaylistsSubtitle": "When enabled, a short tap will add to favorites, and a long press will open the 'Add to Playlist' menu. Default is the inverse.",
+  "@preferAddingToFavoritesOverPlaylistsSubtitle": {
+    "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
   }
 }

@@ -229,6 +229,7 @@ class DefaultSettings {
   };
   static const rpcEnabled = false;
   static const rpcIcon = DiscordRpcIcon.transparent;
+  static const preferAddingToFavoritesOverPlaylists = false;
 }
 
 @HiveType(typeId: 28)
@@ -353,6 +354,7 @@ class FinampSettings {
     this.tileAdditionalInfoType = DefaultSettings.tileAdditionalInfoType,
     this.rpcEnabled = DefaultSettings.rpcEnabled,
     this.rpcIcon = DefaultSettings.rpcIcon,
+    this.preferAddingToFavoritesOverPlaylists = DefaultSettings.preferAddingToFavoritesOverPlaylists,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -745,6 +747,9 @@ class FinampSettings {
 
   @HiveField(125, defaultValue: DefaultSettings.autoExpandPlayerScreen)
   bool autoExpandPlayerScreen = DefaultSettings.autoExpandPlayerScreen;
+
+  @HiveField(126, defaultValue: DefaultSettings.preferAddingToFavoritesOverPlaylists)
+  bool preferAddingToFavoritesOverPlaylists = DefaultSettings.preferAddingToFavoritesOverPlaylists;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
