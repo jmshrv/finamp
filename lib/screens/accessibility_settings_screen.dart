@@ -25,7 +25,12 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
         ],
       ),
       body: ListView(
-        children: const [UseHighContrastColorsToggle(), DisableGestureSelector(), DisableVibrationSelector()],
+        children: const [
+          UseHighContrastColorsToggle(),
+          DisableGestureSelector(),
+          DisableVibrationSelector(),
+          FavouriteButtonTogglesByShortClickSelector(),
+        ],
       ),
     );
   }
@@ -69,6 +74,20 @@ class DisableVibrationSelector extends ConsumerWidget {
       subtitle: Text(AppLocalizations.of(context)!.enableVibrationSubtitle),
       value: ref.watch(finampSettingsProvider.enableVibration),
       onChanged: (value) => FinampSetters.setEnableVibration(value),
+    );
+  }
+}
+
+class FavouriteButtonTogglesByShortClickSelector extends ConsumerWidget {
+  const FavouriteButtonTogglesByShortClickSelector({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.favouriteButtonTogglesByShortClickSetting),
+      subtitle: Text(AppLocalizations.of(context)!.favouriteButtonTogglesByShortClickSettingSubtitle),
+      value: ref.watch(finampSettingsProvider.favouriteButtonTogglesByShortClick),
+      onChanged: (value) => FinampSetters.setFavouriteButtonTogglesByShortClick(value),
     );
   }
 }

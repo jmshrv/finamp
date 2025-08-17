@@ -237,6 +237,7 @@ class FinampSettingsHelper {
     FinampSetters.setUseHighContrastColors(DefaultSettings.useHighContrastColors);
     FinampSetters.setDisableGesture(DefaultSettings.disableGesture);
     FinampSetters.setEnableVibration(DefaultSettings.enableVibration);
+    FinampSetters.setFavouriteButtonTogglesByShortClick(DefaultSettings.favouriteButtonTogglesByShortClick);
   }
 
   static void resetAllSettings() {

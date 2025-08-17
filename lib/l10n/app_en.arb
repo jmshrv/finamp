@@ -2743,5 +2743,9 @@
   "discordRPCIconWhiteTransparent": "White Finamp - Transparent",
   "@discordRPCIconWhiteTransparent": {
     "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
-  }
+  },
+  "favouriteButtonTogglesByShortClickSetting": "Whether to allow favouring tracks via clicking.",
+  "@favouriteButtonTogglesByShortClickSelector": {},
+  "favouriteButtonTogglesByShortClickSettingSubtitle": "Default (disabled) opens \"Add to playlist\" menu by clicking.",
+  "@favouriteButtonTogglesByShortClickSettingSubtitle": {}
 }

@@ -1086,6 +1086,17 @@ extension FinampSetters on FinampSettingsHelper {
     ).put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setFavouriteButtonTogglesByShortClick(
+    bool newFavouriteButtonTogglesByShortClick,
+  ) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.favouriteButtonTogglesByShortClick =
+        newFavouriteButtonTogglesByShortClick;
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -1468,6 +1479,10 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       finampSettingsProvider.select((value) => value.requireValue.rpcIcon);
   ProviderListenable<bool> get autoExpandPlayerScreen => finampSettingsProvider
       .select((value) => value.requireValue.autoExpandPlayerScreen);
+  ProviderListenable<bool> get favouriteButtonTogglesByShortClick =>
+      finampSettingsProvider.select(
+        (value) => value.requireValue.favouriteButtonTogglesByShortClick,
+      );
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider.select(
         (value) => value.requireValue.downloadTranscodingProfile,
