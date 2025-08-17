@@ -12,7 +12,14 @@ import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
-Future<List<BaseItemDto>> loadChildTracks({required BaseItemDto baseItem}) async {
+Future<List<BaseItemDto>> loadChildTracks({required PlayableItem item}) {
+  switch (item) {
+    case BaseItemDto():
+      return loadChildTracksFromBaseItem(baseItem: item);
+  }
+}
+
+Future<List<BaseItemDto>> loadChildTracksFromBaseItem({required BaseItemDto baseItem}) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final finampUserHelper = GetIt.instance<FinampUserHelper>();
   final settings = FinampSettingsHelper.finampSettings;

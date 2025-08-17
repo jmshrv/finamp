@@ -1295,6 +1295,9 @@ class SubtitleProfile {
   Map<String, dynamic> toJson() => _$SubtitleProfileToJson(this);
 }
 
+// Here because sealed class works inside one file only
+sealed class PlayableItem {}
+
 @JsonSerializable(
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
@@ -1303,7 +1306,7 @@ class SubtitleProfile {
   converters: [BaseItemIdConverter()],
 )
 @HiveType(typeId: 0)
-class BaseItemDto with RunTimeTickDuration {
+class BaseItemDto with RunTimeTickDuration implements PlayableItem {
   BaseItemDto({
     this.name,
     this.originalTitle,
