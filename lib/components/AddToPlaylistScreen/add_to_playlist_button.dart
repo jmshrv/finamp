@@ -56,15 +56,33 @@ class AddToPlaylistButton extends ConsumerWidget {
       excludeSemantics: true,
       container: true,
       child: GestureDetector(
-        onLongPress: toggleFavourite,
-        onSecondaryTap: toggleFavourite,
+        onLongPress: () async {
+          if (FinampSettingsHelper.finampSettings.favouriteButtonTogglesByShortClick) {
+            await openPlaylistActionsMenu();
+          } else {
+            toggleFavourite();
+          }
+        },
+        onSecondaryTap: () async {
+          if (FinampSettingsHelper.finampSettings.favouriteButtonTogglesByShortClick) {
+            await openPlaylistActionsMenu();
+          } else {
+            toggleFavourite();
+          }
+        },
         child: IconButton(
           icon: Icon(isFav ? Icons.favorite : Icons.favorite_outline, size: size ?? 24.0),
           color: color ?? IconTheme.of(context).color,
           disabledColor: (color ?? IconTheme.of(context).color)!.withOpacity(0.3),
           visualDensity: visualDensity ?? VisualDensity.compact,
           // tooltip: AppLocalizations.of(context)!.addToPlaylistTooltip,
-          onPressed: openPlaylistActionsMenu,
+          onPressed: () async {
+            if (FinampSettingsHelper.finampSettings.favouriteButtonTogglesByShortClick) {
+              toggleFavourite();
+            } else {
+              await openPlaylistActionsMenu();
+            }
+          },
         ),
       ),
     );
