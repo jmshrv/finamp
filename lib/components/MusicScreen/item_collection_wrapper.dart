@@ -171,7 +171,7 @@ void openItemMenu({
       await showModalTrackMenu(context: context, item: item, queueInfo: queueInfo);
       break;
     case BaseItemDtoType.album:
-      await showModalAlbumMenu(context: context, baseItem: item, queueInfo: queueInfo);
+      await showModalAlbumMenu(context: context, item: item, queueInfo: queueInfo);
       break;
     default:
       // Do nothing for unsupported item types

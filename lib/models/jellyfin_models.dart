@@ -1298,6 +1298,20 @@ class SubtitleProfile {
 // Here because sealed class works inside one file only
 sealed class PlayableItem {}
 
+class AlbumDisc implements PlayableItem {
+  AlbumDisc({required this.parent, required this.tracks}) {
+    assert(
+      // there's no "all" in dart (at least IDE doesn't see it). De Morgan's law is here to save the day!
+      !tracks.any((e) {
+        return e.parentIndexNumber != tracks.first.parentIndexNumber;
+      }),
+    );
+  }
+
+  List<BaseItemDto> tracks;
+  BaseItemDto parent;
+}
+
 @JsonSerializable(
   fieldRename: FieldRename.pascal,
   explicitToJson: true,

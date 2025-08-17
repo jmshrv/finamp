@@ -22,24 +22,27 @@ const double infoHeaderFullInternalHeight = 140.0;
 const double infoHeaderCondensedInternalHeight = 80.0;
 
 Widget _getMenuHeaderForItemType({
-  required BaseItemDto item,
+  required PlayableItem item,
   required bool condensed,
   required List<MenuItemInfoHeaderFeatures> features,
 }) {
-  return switch (BaseItemDtoType.fromItem(item)) {
-    BaseItemDtoType.track => TrackInfo(item: item, condensed: condensed, features: features),
-    BaseItemDtoType.album => AlbumInfo(item: item, condensed: condensed, features: features),
-    BaseItemDtoType.playlist => PlaylistInfo(item: item, condensed: condensed, features: features),
-    BaseItemDtoType.genre => GenreInfo(item: item, condensed: condensed, features: features),
-    BaseItemDtoType.artist => ArtistInfo(item: item, condensed: condensed, features: features),
-    _ => TrackInfo(item: item, condensed: condensed, features: features),
+  return switch (item) {
+    AlbumDisc() => AlbumInfo(item: item, condensed: condensed, features: features),
+    BaseItemDto() => switch (BaseItemDtoType.fromItem(item)) {
+      BaseItemDtoType.track => TrackInfo(item: item, condensed: condensed, features: features),
+      BaseItemDtoType.album => AlbumInfo(item: item, condensed: condensed, features: features),
+      BaseItemDtoType.playlist => PlaylistInfo(item: item, condensed: condensed, features: features),
+      BaseItemDtoType.genre => GenreInfo(item: item, condensed: condensed, features: features),
+      BaseItemDtoType.artist => ArtistInfo(item: item, condensed: condensed, features: features),
+      _ => TrackInfo(item: item, condensed: condensed, features: features),
+    },
   };
 }
 
 enum MenuItemInfoHeaderFeatures { openItem, addToPlaylistAndFavorite }
 
 class MenuItemInfoSliverHeader extends SliverPersistentHeaderDelegate {
-  final BaseItemDto item;
+  final PlayableItem item;
   final bool condensed;
   final List<MenuItemInfoHeaderFeatures> features;
 
@@ -149,21 +152,37 @@ class TrackInfo extends ConsumerWidget {
 class AlbumInfo extends ConsumerWidget {
   const AlbumInfo({super.key, required this.item, required this.condensed, required this.features});
 
-  final BaseItemDto item;
+  final PlayableItem item;
   final bool condensed;
   final List<MenuItemInfoHeaderFeatures> features;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final item = this.item;
+    final String title;
+    final BaseItemDto baseItem;
+
+    switch (item) {
+      case AlbumDisc():
+        baseItem = item.parent;
+        title = AppLocalizations.of(context)!.discOfAlbum(
+          item.tracks.first.parentIndexNumber!,
+          baseItem.name ?? AppLocalizations.of(context)!.unknownName,
+        );
+      case BaseItemDto():
+        baseItem = item;
+        title = baseItem.name ?? AppLocalizations.of(context)!.unknownName;
+    }
+
     return ItemInfo(
-      item: item,
+      item: baseItem,
       condensed: condensed,
       features: features,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      featureImage: AlbumImage(item: item, borderRadius: BorderRadius.zero, tapToZoom: true),
+      featureImage: AlbumImage(item: baseItem, borderRadius: BorderRadius.zero, tapToZoom: true),
       infoRows: [
         Text(
-          item.name ?? AppLocalizations.of(context)!.unknownName,
+          title,
           textAlign: TextAlign.start,
           style: TextStyle(
             fontSize: condensed ? 16 : 18,
@@ -177,7 +196,7 @@ class AlbumInfo extends ConsumerWidget {
         Padding(
           padding: condensed ? const EdgeInsets.only(top: 6.0) : const EdgeInsets.symmetric(vertical: 0.0),
           child: ArtistChips(
-            baseItem: item,
+            baseItem: baseItem,
             backgroundColor:
                 IconTheme.of(context).color?.withOpacity(0.1) ??
                 Theme.of(context).textTheme.bodyMedium?.color ??
@@ -186,10 +205,12 @@ class AlbumInfo extends ConsumerWidget {
           ),
         ),
         if (!condensed) ...[
-          GenreIconAndText(parent: item),
+          GenreIconAndText(parent: baseItem),
           IconAndText(
             iconData: Icons.event,
-            textSpan: TextSpan(text: ReleaseDateHelper.autoFormat(item) ?? AppLocalizations.of(context)!.noReleaseDate),
+            textSpan: TextSpan(
+              text: ReleaseDateHelper.autoFormat(baseItem) ?? AppLocalizations.of(context)!.noReleaseDate,
+            ),
           ),
         ],
       ],

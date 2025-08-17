@@ -62,9 +62,9 @@ Map<String, Widget> getPlaylistPlaybackActionPages({required BuildContext contex
   return getCommonPlaybackActionPages(context: context, item: baseItem);
 }
 
-Map<String, Widget> getAlbumPlaybackActionPages({required BuildContext context, required BaseItemDto baseItem}) {
-  assert(BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.playlist);
-  return getCommonPlaybackActionPages(context: context, item: baseItem);
+Map<String, Widget> getAlbumPlaybackActionPages({required BuildContext context, required PlayableItem item}) {
+  //assert(BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.album);
+  return getCommonPlaybackActionPages(context: context, item: item);
 }
 
 class PlayPlaybackAction extends ConsumerWidget {

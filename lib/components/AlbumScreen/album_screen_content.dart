@@ -8,10 +8,16 @@ import 'package:finamp/services/album_screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:get_it/get_it.dart';
 
+import '../../menus/album_menu.dart';
+import '../../menus/components/overflow_menu_button.dart';
+import '../../menus/playlist_menu.dart';
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
+import '../../services/queue_service.dart';
 import '../Buttons/cta_medium.dart';
 import '../favorite_button.dart';
 import '../padded_custom_scrollview.dart';
@@ -160,9 +166,22 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
               header: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
                 color: Theme.of(context).colorScheme.surface,
-                child: Text(
-                  AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
-                  style: const TextStyle(fontSize: 20.0),
+                child: Row(
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
+                      style: const TextStyle(fontSize: 20.0),
+                    ),
+                    Spacer(),
+                    OverflowMenuButton(
+                      onPressed: () => showModalAlbumMenu(
+                        context: context,
+                        item: AlbumDisc(parent: widget.parent, tracks: childrenOfThisDisc),
+                      ),
+                      icon: TablerIcons.dots_vertical,
+                      label: AppLocalizations.of(context)!.moreActionsOnAlbumDisc,
+                    ),
+                  ],
                 ),
               ),
               sliver: TracksSliverList(

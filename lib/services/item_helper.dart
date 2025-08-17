@@ -14,6 +14,8 @@ import 'package:get_it/get_it.dart';
 
 Future<List<BaseItemDto>> loadChildTracks({required PlayableItem item}) {
   switch (item) {
+    case AlbumDisc():
+      return Future.value(item.tracks);
     case BaseItemDto():
       return loadChildTracksFromBaseItem(baseItem: item);
   }

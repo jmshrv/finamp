@@ -133,7 +133,7 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                       OverflowMenuButton(
                         onPressed: () => isPlaylist
                             ? showModalPlaylistMenu(context: context, baseItem: parentItem)
-                            : showModalAlbumMenu(context: context, baseItem: parentItem),
+                            : showModalAlbumMenu(context: context, item: parentItem),
                         label: AppLocalizations.of(context)!.menuButtonLabel,
                       ),
                     ],

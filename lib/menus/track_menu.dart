@@ -234,7 +234,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
 
     return [
       if (widget.queueInfo != null) RestoreQueueMenuEntry(queueInfo: widget.queueInfo!),
-      AddToPlaylistMenuEntry(baseItem: widget.item, queueItem: queueItem),
+      AddToPlaylistMenuEntry(item: widget.item, queueItem: queueItem),
       RemoveFromCurrentPlaylistMenuEntry(
         baseItem: widget.item,
         parentItem: widget.parentItem,

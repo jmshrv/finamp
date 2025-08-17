@@ -1675,6 +1675,8 @@ enum BaseItemDtoType {
   // TODO stopgap solution until snackbars fate is decided
   static BaseItemDtoType fromPlayableItem(PlayableItem item) {
     switch (item) {
+      case AlbumDisc():
+        return BaseItemDtoType.fromItem(item.parent);
       case BaseItemDto():
         return BaseItemDtoType.fromItem(item);
     }
@@ -1833,6 +1835,8 @@ class QueueItemSource {
     QueueItemSourceNameType? nameType,
   }) {
     switch (playableItem) {
+      case AlbumDisc():
+        return QueueItemSource.fromBaseItem(playableItem.parent, type: type, nameType: nameType);
       case BaseItemDto():
         return QueueItemSource.fromBaseItem(playableItem, type: type, nameType: nameType);
     }
