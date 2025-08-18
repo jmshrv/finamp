@@ -117,95 +117,6 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
       }
     }
 
-    final swipeLeftEnabled = ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight) != ItemSwipeActions.nothing;
-    final swipeRightEnabled = ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft) != ItemSwipeActions.nothing;
-    final allowedDismissDirection = (swipeLeftEnabled && swipeRightEnabled)
-        ? DismissDirection.horizontal
-        : swipeLeftEnabled
-        ? DismissDirection.startToEnd
-        : swipeRightEnabled
-        ? DismissDirection.endToStart
-        : DismissDirection.none;
-
-    Future<bool> discHeaderConfirmDismiss({
-      required DismissDirection direction,
-      required BaseItemDto parentAlbum,
-      required List<BaseItemDto> tracks,
-    }) async {
-      var followUpAction = (direction == DismissDirection.startToEnd)
-          ? FinampSettingsHelper.finampSettings.itemSwipeActionLeftToRight
-          : FinampSettingsHelper.finampSettings.itemSwipeActionRightToLeft;
-
-      final queueService = GetIt.instance<QueueService>();
-
-      switch (followUpAction) {
-        case ItemSwipeActions.addToNextUp:
-          unawaited(
-            queueService.addToNextUp(
-              items: tracks,
-              source: QueueItemSource.rawId(
-                type: QueueItemSourceType.nextUp,
-                name: QueueItemSourceName(
-                  type: QueueItemSourceNameType.preTranslated,
-                  pretranslatedName: AppLocalizations.of(context)!.queue,
-                ),
-                id: parentAlbum.id.raw,
-                item: parentAlbum,
-              ),
-            ),
-          );
-          GlobalSnackbar.message(
-            (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp("disc"),
-            isConfirmation: true,
-          );
-          break;
-        case ItemSwipeActions.playNext:
-          unawaited(
-            queueService.addNext(
-              items: tracks,
-              source: QueueItemSource.rawId(
-                type: QueueItemSourceType.nextUp,
-                name: QueueItemSourceName(
-                  type: QueueItemSourceNameType.preTranslated,
-                  pretranslatedName: AppLocalizations.of(context)!.queue,
-                ),
-                id: parentAlbum.id.raw,
-                item: parentAlbum,
-              ),
-            ),
-          );
-          GlobalSnackbar.message(
-            (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext("disc"),
-            isConfirmation: true,
-          );
-          break;
-        case ItemSwipeActions.addToQueue:
-          unawaited(
-            queueService.addToQueue(
-              items: tracks,
-              source: QueueItemSource.rawId(
-                type: QueueItemSourceType.queue,
-                name: QueueItemSourceName(
-                  type: QueueItemSourceNameType.preTranslated,
-                  pretranslatedName: AppLocalizations.of(context)!.queue,
-                ),
-                id: parentAlbum.id.raw,
-                item: parentAlbum,
-              ),
-            ),
-          );
-          GlobalSnackbar.message(
-            (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue("disc"),
-            isConfirmation: true,
-          );
-          break;
-        case ItemSwipeActions.nothing:
-          break;
-      }
-
-      return false;
-    }
-
     return PaddedCustomScrollview(
       slivers: [
         SliverLayoutBuilder(
@@ -261,12 +172,18 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                   key: Key("${childrenOfThisDisc[0].id}-${childrenOfThisDisc[0].parentIndexNumber}"),
                   direction: ref.watch(finampSettingsProvider.disableGesture)
                       ? DismissDirection.none
-                      : allowedDismissDirection,
+                      : getAllowedDismissDirection(
+                          swipeLeftEnabled:
+                              ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight) != ItemSwipeActions.nothing,
+                          swipeRightEnabled:
+                              ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft) != ItemSwipeActions.nothing,
+                        ),
                   dismissThresholds: const {DismissDirection.startToEnd: 0.65, DismissDirection.endToStart: 0.65},
                   // no background, dismissing really dismisses here
-                  confirmDismiss: (direction) => discHeaderConfirmDismiss(
+                  confirmDismiss: (direction) => onConfirmPlayableDismiss(
+                    context: context,
                     direction: direction,
-                    parentAlbum: widget.parent,
+                    sourceItem: AlbumDisc(parent: widget.parent, tracks: childrenOfThisDisc),
                     tracks: childrenOfThisDisc,
                   ),
                   background: buildSwipeActionBackground(

@@ -2145,6 +2145,15 @@ class BaseItemDto with RunTimeTickDuration implements PlayableItem {
     return name!.toLowerCase();
   }
 
+  static BaseItemDto fromPlayableItem(PlayableItem item) {
+    switch (item) {
+      case AlbumDisc():
+        return item.parent;
+      case BaseItemDto():
+        return item;
+    }
+  }
+
   factory BaseItemDto.fromJson(Map<String, dynamic> json) => _$BaseItemDtoFromJson(json);
   Map<String, dynamic> toJson({bool setOffline = true}) {
     var json = _$BaseItemDtoToJson(this);

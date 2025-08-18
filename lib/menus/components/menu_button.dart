@@ -1,3 +1,4 @@
+import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,7 +17,14 @@ class MenuButton extends ConsumerWidget {
       container: true,
       child: IconTheme(
         data: IconThemeData(color: IconTheme.of(context).color, size: 24),
-        child: IconButton(icon: Icon(icon), visualDensity: VisualDensity.compact, onPressed: onPressed),
+        child: IconButton(
+          icon: Icon(icon),
+          visualDensity: VisualDensity.compact,
+          onPressed: () {
+            onPressed();
+            FeedbackHelper.feedback(FeedbackType.selection);
+          },
+        ),
       ),
     );
   }
