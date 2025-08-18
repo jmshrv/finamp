@@ -38,33 +38,27 @@ Map<String, Widget> getCommonPlaybackActionPages({required BuildContext context,
   };
 }
 
-Map<String, Widget> getArtistPlaybackActionPages({required BuildContext context, required BaseItemDto baseItem}) {
+Map<String, Widget> getPlaybackActionPages({required BuildContext context, required PlayableItem item}) {
   final queueService = GetIt.instance<QueueService>();
-  assert(BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.artist);
-  //TODO add case for custom (artists) options
-  return {
-    ...getCommonPlaybackActionPages(context: context, item: baseItem),
-    AppLocalizations.of(context)!.playbackActionPageShuffleAlbums: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        ShuffleAlbumsAction(baseItem: baseItem),
-        if (queueService.getQueue().nextUp.isNotEmpty) ShuffleAlbumsNextPlaybackAction(baseItem: baseItem),
-        ShuffleAlbumsToNextUpPlaybackAction(baseItem: baseItem),
-        ShuffleAlbumsToQueuePlaybackAction(baseItem: baseItem),
-      ],
-    ),
+  return switch (item) {
+    AlbumDisc() => getCommonPlaybackActionPages(context: context, item: item),
+    BaseItemDto() => switch (BaseItemDtoType.fromItem(item)) {
+      BaseItemDtoType.artist => {
+        ...getCommonPlaybackActionPages(context: context, item: item),
+        AppLocalizations.of(context)!.playbackActionPageShuffleAlbums: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ShuffleAlbumsAction(baseItem: item),
+            if (queueService.getQueue().nextUp.isNotEmpty) ShuffleAlbumsNextPlaybackAction(baseItem: item),
+            ShuffleAlbumsToNextUpPlaybackAction(baseItem: item),
+            ShuffleAlbumsToQueuePlaybackAction(baseItem: item),
+          ],
+        ),
+      },
+      _ => getCommonPlaybackActionPages(context: context, item: item),
+    },
   };
-}
-
-Map<String, Widget> getPlaylistPlaybackActionPages({required BuildContext context, required BaseItemDto baseItem}) {
-  assert(BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.playlist);
-  return getCommonPlaybackActionPages(context: context, item: baseItem);
-}
-
-Map<String, Widget> getAlbumPlaybackActionPages({required BuildContext context, required PlayableItem item}) {
-  //assert(BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.album);
-  return getCommonPlaybackActionPages(context: context, item: item);
 }
 
 class PlayPlaybackAction extends ConsumerWidget {
