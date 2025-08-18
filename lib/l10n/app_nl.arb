@@ -558,7 +558,7 @@
     "@emptyFilteredListSubtitle": {
         "description": "Message shown when a list of items is filtered and no items match the filter"
     },
-    "loginFlowWelcomeHeading": "Welkom bij",
+    "loginFlowWelcomeHeading": "Welkom bij {styledName}",
     "@loginFlowWelcomeHeading": {
         "description": "Greeting shown on the login screen. The full message will be 'Welcome to Finamp'."
     },
