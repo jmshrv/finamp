@@ -3,13 +3,13 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:balanced_text/balanced_text.dart';
-import 'package:finamp/color_schemes.g.dart';
 import 'package:finamp/menus/track_menu.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/menus/output_menu.dart';
 import 'package:finamp/components/PlayerScreen/player_screen_appbar_title.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/models/jellyfin_models.dart';
 import 'package:finamp/screens/lyrics_screen.dart';
 import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -32,9 +32,16 @@ import '../components/PlayerScreen/queue_list.dart';
 import '../components/PlayerScreen/track_name_content.dart';
 import '../components/finamp_app_bar_button.dart';
 import 'blurred_player_screen_background.dart';
+import 'package:finamp/services/animated_music_service.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
+import 'package:finamp/services/downloads_service.dart';
 
 const double _defaultToolbarHeight = 53.0;
 const int _defaultMaxToolbarLines = 2;
+
+// Provider to track if animated video background is playing
+final _videoBackgroundProvider = StateProvider<bool>((ref) => false);
 
 class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({super.key});
@@ -147,6 +154,10 @@ class _PlayerScreenContent extends ConsumerWidget {
     }
 
     final metadata = ref.watch(currentTrackMetadataProvider).unwrapPrevious();
+    final hasVideoBackground =
+        (metadata.valueOrNull?.verticalBackgroundVideoFile != null) ||
+        (metadata.isLoading && ref.watch(_videoBackgroundProvider)) ||
+        ref.watch(_videoBackgroundProvider);
 
     final isLyricsLoading = metadata.isLoading || metadata.isRefreshing;
     final isLyricsAvailable =
@@ -155,7 +166,7 @@ class _PlayerScreenContent extends ConsumerWidget {
         !metadata.hasError;
 
     return SafeArea(
-      bottom: true,
+      bottom: false,
       top: false,
       child: SimpleGestureDetector(
         onVerticalSwipe: (direction) {
@@ -210,6 +221,7 @@ class _PlayerScreenContent extends ConsumerWidget {
           body: Stack(
             children: [
               if (ref.watch(finampSettingsProvider.useCoverAsBackground)) const BlurredPlayerScreenBackground(),
+              const _AnimatedVerticalBackground(),
               SafeArea(
                 minimum: EdgeInsets.only(top: toolbarHeight),
                 child: LayoutBuilder(
@@ -229,7 +241,7 @@ class _PlayerScreenContent extends ConsumerWidget {
                                 bottom: constraints.maxHeight * 0.03,
                                 right: max(0, constraints.maxHeight * 0.03 - 20),
                               ),
-                              child: const PlayerScreenAlbumImage(),
+                              child: _AnimatedAlbumImage(hasVideoBackground: hasVideoBackground),
                             ),
                           ),
                           const Spacer(),
@@ -265,7 +277,7 @@ class _PlayerScreenContent extends ConsumerWidget {
                           SizedBox(
                             height: controller.albumSize.height,
                             width: controller.albumSize.width,
-                            child: const PlayerScreenAlbumImage(),
+                            child: _AnimatedAlbumImage(hasVideoBackground: hasVideoBackground),
                           ),
                           SizedBox(
                             height: controller.controlsSize.height,
@@ -394,6 +406,190 @@ class _PlayerScreenContent extends ConsumerWidget {
         const Spacer(flex: 1),
       ],
     );
+  }
+}
+
+class _AnimatedAlbumImage extends StatelessWidget {
+  const _AnimatedAlbumImage({required this.hasVideoBackground});
+
+  final bool hasVideoBackground;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 300),
+      child: hasVideoBackground
+          ? const SizedBox.shrink(key: ValueKey('no-image'))
+          : const PlayerScreenAlbumImage(key: ValueKey('album-image')),
+    );
+  }
+}
+
+//TODO: more to seprate file
+class _AnimatedVerticalBackground extends ConsumerStatefulWidget {
+  const _AnimatedVerticalBackground();
+
+  @override
+  ConsumerState<_AnimatedVerticalBackground> createState() => _AnimatedVerticalBackgroundState();
+}
+
+class _AnimatedVerticalBackgroundState extends ConsumerState<_AnimatedVerticalBackground> {
+  String? _currentVideoSource;
+  String? _lastTrackId;
+  Player? _videoPlayer;
+  VideoController? _videoController;
+
+  @override
+  void dispose() {
+    _disposeVideoPlayer();
+    super.dispose();
+  }
+
+  void _disposeVideoPlayer() {
+    _videoPlayer?.dispose();
+    _videoPlayer = null;
+    _videoController = null;
+    _currentVideoSource = null;
+    // Only update provider if widget is still mounted and we're not in a build cycle
+    if (mounted) {
+      ref.read(_videoBackgroundProvider.notifier).state = false;
+    }
+  }
+
+  void _setupVideoPlayer(String videoSource) {
+    _disposeVideoPlayer();
+
+    try {
+      _videoPlayer = Player();
+      _videoController = VideoController(_videoPlayer!);
+      _currentVideoSource = videoSource;
+
+      // Configure video player
+      _videoPlayer!.setPlaylistMode(PlaylistMode.loop);
+      _videoPlayer!.setVolume(0.0); // Mute the video
+      _videoPlayer!.open(Media(videoSource));
+      _videoPlayer!.play();
+
+      // Update provider immediately, then trigger rebuild
+      if (mounted) {
+        ref.read(_videoBackgroundProvider.notifier).state = true;
+        setState(() {});
+      }
+    } catch (e) {
+      if (mounted) {
+        _disposeVideoPlayer();
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final queueService = GetIt.instance<QueueService>();
+    final animatedMusicService = GetIt.instance<AnimatedMusicService>();
+
+    return StreamBuilder<FinampQueueInfo?>(
+      stream: queueService.getQueueStream(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const SizedBox.shrink();
+        }
+
+        final queueInfo = snapshot.data!;
+        final currentTrack = queueInfo.currentTrack;
+        final currentTrackId = currentTrack?.baseItemId.raw;
+
+        // Only proceed if we have a current track
+        if (currentTrackId == null) {
+          if (_currentVideoSource != null) {
+            _disposeVideoPlayer();
+          }
+          return const SizedBox.shrink();
+        }
+
+        // Watch the metadata provider for the current track
+        final metadataAsyncValue = ref.watch(currentTrackMetadataProvider);
+
+        // Handle metadata loading/error states
+        final metadata = metadataAsyncValue.unwrapPrevious();
+
+        // Fix 3: Better handling of loading states
+        if (metadata.isLoading && metadata.valueOrNull == null) {
+          // Still loading initial metadata - keep current state
+          return _buildCurrentVideo();
+        }
+
+        final metadataValue = metadata.valueOrNull;
+        if (metadataValue == null) {
+          // No metadata available
+          if (_currentVideoSource != null) {
+            _disposeVideoPlayer();
+          }
+          return const SizedBox.shrink();
+        }
+
+        // Check if track changed
+        if (currentTrackId != _lastTrackId) {
+          _lastTrackId = currentTrackId;
+
+          String? videoSource;
+
+          // First, try to use locally cached file from metadata
+          if (metadataValue.verticalBackgroundVideoFile != null &&
+              metadataValue.verticalBackgroundVideoFile!.existsSync()) {
+            videoSource = metadataValue.verticalBackgroundVideoFile!.path;
+          }
+          // Fallback to online streaming if not in offline mode and no local file
+          else if (!FinampSettingsHelper.finampSettings.isOffline) {
+            // Use the animated music service to check if vertical background video exists
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              try {
+                final hasVerticalBackground = await animatedMusicService.hasVerticalBackgroundVideo(
+                  BaseItemId(currentTrackId),
+                );
+                if (mounted && hasVerticalBackground && _lastTrackId == currentTrackId) {
+                  final onlineUrl = await animatedMusicService.getVerticalBackgroundForTrack(
+                    BaseItemId(currentTrackId),
+                  );
+                  if (mounted && onlineUrl != null && _lastTrackId == currentTrackId) {
+                    _setupVideoPlayer(onlineUrl);
+                  }
+                } else if (mounted && !hasVerticalBackground) {
+                  // No vertical background available, dispose current player
+                  _disposeVideoPlayer();
+                }
+              } catch (e) {
+                // Silently fail - no vertical background available for streaming
+                if (mounted) {
+                  _disposeVideoPlayer();
+                }
+              }
+            });
+            return _buildCurrentVideo();
+          }
+
+          // Setup video player if we have a source
+          if (videoSource != null && videoSource != _currentVideoSource) {
+            _setupVideoPlayer(videoSource);
+          } else if (videoSource == null && _currentVideoSource != null) {
+            // No video available, dispose current player
+            _disposeVideoPlayer();
+          }
+        }
+
+        return _buildCurrentVideo();
+      },
+    );
+  }
+
+  Widget _buildCurrentVideo() {
+    // Show animated video background if available
+    if (_videoController != null && _currentVideoSource != null) {
+      return Positioned.fill(
+        child: Video(controller: _videoController!, controls: null, fit: BoxFit.cover, fill: Colors.transparent),
+      );
+    }
+
+    return const SizedBox.shrink();
   }
 }
 
