@@ -454,7 +454,7 @@
     "@usernameValidationMissingUsername": {
         "description": "Error message that shows when the user submits a login without a username"
     },
-    "loginFlowQuickConnectInstructions": "Avaa Jellyfin sovelluksessa tai sen osoite selaimessa, klikkaa käyttäjäkuvaketta, ja valitse Pikayhdistys.",
+    "loginFlowQuickConnectInstructions": "Avaa Jellyfin-sovellus tai sen osoite selaimessa, klikkaa käyttäjäkuvaketta, ja valitse Pikayhdistys.",
     "@loginFlowQuickConnectInstructions": {
         "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
     },
