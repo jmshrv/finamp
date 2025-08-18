@@ -188,37 +188,6 @@ class TrackListTile extends ConsumerWidget {
       }
     }
 
-    Widget buildSwipeActionBackground(BuildContext context, DismissDirection direction) {
-      final action = (direction == DismissDirection.startToEnd)
-          ? ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight)
-          : ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft);
-
-      final icon = getSwipeActionIcon(action);
-      final label = action.toLocalisedString(context);
-
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-        alignment: (direction == DismissDirection.startToEnd) ? Alignment.centerLeft : Alignment.centerRight,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: (direction == DismissDirection.startToEnd)
-              ? MainAxisAlignment.start
-              : MainAxisAlignment.end,
-          children: direction == DismissDirection.startToEnd
-              ? [
-                  Icon(icon, color: Theme.of(context).colorScheme.secondary, size: 40),
-                  const SizedBox(width: 4.0),
-                  Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
-                ]
-              : [
-                  Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
-                  const SizedBox(width: 4.0),
-                  Icon(icon, color: Theme.of(context).colorScheme.secondary, size: 40),
-                ],
-        ),
-      );
-    }
-
     return TrackListItem(
       baseItem: item,
       parentItem: parentItem,
@@ -241,8 +210,18 @@ class TrackListTile extends ConsumerWidget {
         sourceItem: parentItem ?? item,
         tracks: [item],
       ),
-      leftSwipeBackground: buildSwipeActionBackground(context, DismissDirection.startToEnd),
-      rightSwipeBackground: buildSwipeActionBackground(context, DismissDirection.endToStart),
+      leftSwipeBackground: buildSwipeActionBackground(
+        context: context,
+        direction: DismissDirection.startToEnd,
+        action: ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight),
+        iconSize: 40.0,
+      ),
+      rightSwipeBackground: buildSwipeActionBackground(
+        context: context,
+        direction: DismissDirection.endToStart,
+        action: ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft),
+        iconSize: 40.0,
+      ),
       playbackProgress: playbackProgress,
     );
   }
@@ -349,6 +328,7 @@ Widget buildSwipeActionBackground({
   required BuildContext context,
   required DismissDirection direction,
   required ItemSwipeActions action,
+  double? iconSize,
 }) {
   final icon = getSwipeActionIcon(action);
   final label = action.toLocalisedString(context);
@@ -361,14 +341,16 @@ Widget buildSwipeActionBackground({
       mainAxisAlignment: (direction == DismissDirection.startToEnd) ? MainAxisAlignment.start : MainAxisAlignment.end,
       children: direction == DismissDirection.startToEnd
           ? [
-              Icon(icon, color: Theme.of(context).colorScheme.secondary, size: 32),
+              Expanded(
+                child: Icon(icon, color: Theme.of(context).colorScheme.secondary, size: iconSize ?? 28.0),
+              ),
               const SizedBox(width: 4.0),
               Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
             ]
           : [
               Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
               const SizedBox(width: 4.0),
-              Icon(icon, color: Theme.of(context).colorScheme.secondary, size: 32),
+              Icon(icon, color: Theme.of(context).colorScheme.secondary, size: iconSize ?? 28.0),
             ],
     ),
   );
