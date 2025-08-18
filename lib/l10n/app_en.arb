@@ -2759,6 +2759,6 @@
   },
   "moreActionsOnAlbumDisc": "More actions on album disc",
   "@moreActionsOnAlbumDisc": {
-    "description": "Text for more actions button that appears in the header of an album disc, and opens menu allowing to play specific disc"
+    "description": "Label for the disc header menu button."
   }
 }
