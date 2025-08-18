@@ -5,6 +5,7 @@ import 'package:finamp/components/MusicScreen/sort_by_menu_button.dart';
 import 'package:finamp/components/MusicScreen/sort_order_button.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/menus/components/menu_button.dart';
 import 'package:finamp/services/album_screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -278,40 +279,42 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                     direction: DismissDirection.endToStart,
                     action: ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft),
                   ),
-                  child: Material(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Theme.of(context).colorScheme.surface,
-                    clipBehavior: Clip.antiAlias,
-                    child: InkWell(
-                      onTap: () async => await GetIt.instance<QueueService>().startPlayback(
-                        items: childrenOfThisDisc,
-                        source: QueueItemSource.fromBaseItem(widget.parent),
-                        order: FinampPlaybackOrder.linear,
-                      ),
-                      onLongPress: () => showModalAlbumMenu(
-                        context: context,
-                        item: AlbumDisc(parent: widget.parent, tracks: childrenOfThisDisc),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
-                              style: TextTheme.of(context).titleMedium,
-                            ),
-                            Spacer(),
-                            OverflowMenuButton(
-                              onPressed: () => showModalAlbumMenu(
-                                context: context,
-                                item: AlbumDisc(parent: widget.parent, tracks: childrenOfThisDisc),
-                              ),
-                              label: AppLocalizations.of(context)!.moreActionsOnAlbumDisc,
-                            ),
-                          ],
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
+                          style: TextTheme.of(context).titleMedium,
                         ),
-                      ),
+                        Spacer(),
+                        MenuButton(
+                          onPressed: () async => await GetIt.instance<QueueService>().startPlayback(
+                            items: childrenOfThisDisc,
+                            source: QueueItemSource.fromBaseItem(widget.parent),
+                            order: FinampPlaybackOrder.linear,
+                          ),
+                          label: AppLocalizations.of(context)!.playButtonLabel,
+                          icon: TablerIcons.player_play,
+                        ),
+                        MenuButton(
+                          onPressed: () async => await GetIt.instance<QueueService>().startPlayback(
+                            items: childrenOfThisDisc,
+                            source: QueueItemSource.fromBaseItem(widget.parent),
+                            order: FinampPlaybackOrder.shuffled,
+                          ),
+                          label: AppLocalizations.of(context)!.shuffleButtonLabel,
+                          icon: TablerIcons.arrows_shuffle,
+                        ),
+                        OverflowMenuButton(
+                          onPressed: () => showModalAlbumMenu(
+                            context: context,
+                            item: AlbumDisc(parent: widget.parent, tracks: childrenOfThisDisc),
+                          ),
+                          label: AppLocalizations.of(context)!.moreActionsOnAlbumDisc,
+                        ),
+                      ],
                     ),
                   ),
                 ),
