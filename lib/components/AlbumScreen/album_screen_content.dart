@@ -5,7 +5,7 @@ import 'package:finamp/components/MusicScreen/sort_by_menu_button.dart';
 import 'package:finamp/components/MusicScreen/sort_order_button.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
-import 'package:finamp/menus/components/menu_button.dart';
+import 'package:finamp/menus/components/icon_button_with_semantics.dart';
 import 'package:finamp/services/album_screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -206,7 +206,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                           style: TextTheme.of(context).titleMedium,
                         ),
                         Spacer(),
-                        MenuButton(
+                        IconButtonWithSemantics(
                           onPressed: () async => await GetIt.instance<QueueService>().startPlayback(
                             items: childrenOfThisDisc,
                             source: QueueItemSource.fromBaseItem(widget.parent),
@@ -215,7 +215,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                           label: AppLocalizations.of(context)!.playButtonLabel,
                           icon: TablerIcons.player_play,
                         ),
-                        MenuButton(
+                        IconButtonWithSemantics(
                           onPressed: () async => await GetIt.instance<QueueService>().startPlayback(
                             items: childrenOfThisDisc,
                             source: QueueItemSource.fromBaseItem(widget.parent),

@@ -2,12 +2,12 @@ import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MenuButton extends ConsumerWidget {
+class IconButtonWithSemantics extends ConsumerWidget {
   final VoidCallback onPressed;
   final IconData icon;
   final String label;
 
-  const MenuButton({super.key, required this.onPressed, required this.label, required this.icon});
+  const IconButtonWithSemantics({super.key, required this.onPressed, required this.label, required this.icon});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
