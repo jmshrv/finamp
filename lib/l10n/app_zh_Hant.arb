@@ -2707,7 +2707,7 @@
     "@preferAddingToFavoritesOverPlaylistsTitle": {
         "description": "Title for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
     },
-    "preferAddingToFavoritesOverPlaylistsSubtitle": "啟用後，點擊時加入最愛，長按則會開啟「加入播放清單」選單。預設情況下則相反。",
+    "preferAddingToFavoritesOverPlaylistsSubtitle": "啟用後，點擊時加入收藏，長按則會開啟「加入播放清單」選單。預設情況下則相反。",
     "@preferAddingToFavoritesOverPlaylistsSubtitle": {
         "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
     }
