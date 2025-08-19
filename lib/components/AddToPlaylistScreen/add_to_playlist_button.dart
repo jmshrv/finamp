@@ -28,6 +28,25 @@ class AddToPlaylistButton extends ConsumerWidget {
     }
 
     bool isFav = ref.watch(isFavoriteProvider(item));
+
+    void toggleFavourite() {
+      FeedbackHelper.feedback(FeedbackType.selection);
+      ref.read(isFavoriteProvider(item).notifier).updateFavorite(!isFav);
+    }
+
+    Future<void> openPlaylistActionsMenu() async {
+      if (FinampSettingsHelper.finampSettings.isOffline) {
+        return GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notAvailableInOfflineMode);
+      }
+
+      bool inPlaylist = queueItemInPlaylist(queueItem);
+      await showPlaylistActionsMenu(
+        context: context,
+        items: [item!],
+        parentPlaylist: inPlaylist ? queueItem!.source.item : null,
+      );
+    }
+
     return Semantics.fromProperties(
       properties: SemanticsProperties(
         label: AppLocalizations.of(context)!.addToPlaylistTooltip,
@@ -38,12 +57,18 @@ class AddToPlaylistButton extends ConsumerWidget {
       container: true,
       child: GestureDetector(
         onLongPress: () async {
-          FeedbackHelper.feedback(FeedbackType.selection);
-          ref.read(isFavoriteProvider(item).notifier).updateFavorite(!isFav);
+          if (FinampSettingsHelper.finampSettings.preferAddingToFavoritesOverPlaylists) {
+            await openPlaylistActionsMenu();
+          } else {
+            toggleFavourite();
+          }
         },
         onSecondaryTap: () async {
-          FeedbackHelper.feedback(FeedbackType.selection);
-          ref.read(isFavoriteProvider(item).notifier).updateFavorite(!isFav);
+          if (FinampSettingsHelper.finampSettings.preferAddingToFavoritesOverPlaylists) {
+            await openPlaylistActionsMenu();
+          } else {
+            toggleFavourite();
+          }
         },
         child: IconButton(
           icon: Icon(isFav ? Icons.favorite : Icons.favorite_outline, size: size ?? 24.0),
@@ -52,16 +77,11 @@ class AddToPlaylistButton extends ConsumerWidget {
           visualDensity: visualDensity ?? VisualDensity.compact,
           // tooltip: AppLocalizations.of(context)!.addToPlaylistTooltip,
           onPressed: () async {
-            if (FinampSettingsHelper.finampSettings.isOffline) {
-              return GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notAvailableInOfflineMode);
+            if (FinampSettingsHelper.finampSettings.preferAddingToFavoritesOverPlaylists) {
+              toggleFavourite();
+            } else {
+              await openPlaylistActionsMenu();
             }
-
-            bool inPlaylist = queueItemInPlaylist(queueItem);
-            await showPlaylistActionsMenu(
-              context: context,
-              items: [item!],
-              parentPlaylist: inPlaylist ? queueItem!.source.item : null,
-            );
           },
         ),
       ),

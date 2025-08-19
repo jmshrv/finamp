@@ -34,7 +34,10 @@ class QueueRestoreTile extends ConsumerWidget {
       // Shrink trailing padding from 24 to 16
       contentPadding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
       child: ListTile(
+        // Prevent undersized album images on desktop
+        visualDensity: VisualDensity.standard,
         title: Text(info.source?.name.getLocalized(context) ?? AppLocalizations.of(context)!.unknown),
+        titleAlignment: ListTileTitleAlignment.center,
         leading: Padding(
           padding: const EdgeInsets.only(right: 16),
           child: AlbumImage(item: track),

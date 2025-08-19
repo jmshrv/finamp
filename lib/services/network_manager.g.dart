@@ -11,12 +11,12 @@ part of 'network_manager.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$autoOfflineHash() => r'467c3cf000350e05db33178ddeb17c10468e3b65';
+String _$autoOfflineHash() => r'c50c147f4ee55cc5d19db6ad3ee148adbadcd852';
 
 /// See also [AutoOffline].
 @ProviderFor(AutoOffline)
 final autoOfflineProvider =
-    AutoDisposeNotifierProvider<AutoOffline, bool>.internal(
+    AutoDisposeNotifierProvider<AutoOffline, int>.internal(
       AutoOffline.new,
       name: r'autoOfflineProvider',
       debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -26,6 +26,6 @@ final autoOfflineProvider =
       allTransitiveDependencies: null,
     );
 
-typedef _$AutoOffline = AutoDisposeNotifier<bool>;
+typedef _$AutoOffline = AutoDisposeNotifier<int>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

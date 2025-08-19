@@ -37,15 +37,9 @@ class _GenreScreenState extends ConsumerState<GenreScreen> {
 
     return Scaffold(
       extendBody: true,
-      body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: _refresh,
-          child: GenreScreenContent(
-            key: _contentKey,
-            parent: genre,
-            library: _finampUserHelper.currentUser?.currentView,
-          ),
-        ),
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: GenreScreenContent(key: _contentKey, parent: genre, library: _finampUserHelper.currentUser?.currentView),
       ),
       bottomNavigationBar: const NowPlayingBar(),
     );
