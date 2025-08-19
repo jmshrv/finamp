@@ -2284,7 +2284,7 @@
             }
         }
     },
-    "applyFilterOnGenreChipTapSubtitle": "預設的情況下，點擊類型標籤會開啟該類型介面，長按類型標籤則會依該類型篩選藝人或播放清單。啟用此設定後，這兩種操作將會對調。",
+    "applyFilterOnGenreChipTapSubtitle": "預設情況下，點擊類型標籤會開啟該類型介面，長按則會依該類型篩選藝人或播放清單。啟用後，兩種操作將會相反。",
     "@applyFilterOnGenreChipTapSubtitle": {
         "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
     },
@@ -2707,7 +2707,7 @@
     "@preferAddingToFavoritesOverPlaylistsTitle": {
         "description": "Title for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
     },
-    "preferAddingToFavoritesOverPlaylistsSubtitle": "當啟用時，點擊會將項目加入收藏，長按則會開啟「加入播放清單」選單。預設情況下則相反。",
+    "preferAddingToFavoritesOverPlaylistsSubtitle": "啟用後，點擊時加入最愛，長按則會開啟「加入播放清單」選單。預設情況下則相反。",
     "@preferAddingToFavoritesOverPlaylistsSubtitle": {
         "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
     }
