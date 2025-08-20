@@ -197,6 +197,10 @@ class TrackListTile extends ConsumerWidget {
       var followUpAction = (direction == DismissDirection.startToEnd)
           ? FinampSettingsHelper.finampSettings.itemSwipeActionLeftToRight
           : FinampSettingsHelper.finampSettings.itemSwipeActionRightToLeft;
+      // Next Up is currently disabled on desktop, since it's broken upstream
+      if (Platform.isWindows || Platform.isLinux) {
+        followUpAction = ItemSwipeActions.addToQueue;
+      }
 
       final queueService = GetIt.instance<QueueService>();
 
@@ -281,9 +285,13 @@ class TrackListTile extends ConsumerWidget {
     }
 
     Widget buildSwipeActionBackground(BuildContext context, DismissDirection direction) {
-      final action = (direction == DismissDirection.startToEnd)
+      var action = (direction == DismissDirection.startToEnd)
           ? ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight)
           : ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft);
+      // Next Up is currently disabled on desktop, since it's broken upstream
+      if (Platform.isWindows || Platform.isLinux) {
+        action = ItemSwipeActions.addToQueue;
+      }
 
       final icon = getSwipeActionIcon(action);
       final label = action.toLocalisedString(context);
