@@ -30,7 +30,7 @@ class PlaybackAction extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           spacing: 9,
           children: [
-            Icon(icon, color: iconColor, size: 28, weight: 1.0),
+            Icon(icon, color: enabled ? iconColor : iconColor.withOpacity(0.5), size: 28, weight: 1.0),
             Text(
               label,
               textAlign: TextAlign.center,
