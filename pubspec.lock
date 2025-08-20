@@ -1295,10 +1295,10 @@ packages:
     dependency: transitive
     description:
       name: qs_dart
-      sha256: "3851ac2e36e23d96bfb3aa9229f2694f8ec30dca97d7a3ee43ee12a5ee9e81ee"
+      sha256: "4e293534a5ff88fded92a229c8f5371ec8a6cb3ba81b7be1969692c5ff4afa46"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.3"
+    version: "1.5.0"
   riverpod:
     dependency: transitive
     description:

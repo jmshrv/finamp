@@ -598,7 +598,7 @@ class _FinampState extends State<Finamp> with WindowListener {
                     theme: ThemeData(
                       brightness: Brightness.light,
                       colorScheme: lightColorScheme,
-                      appBarTheme: const AppBarTheme(
+                      appBarTheme: const AppBarThemeData(
                         systemOverlayStyle: SystemUiOverlayStyle(
                           statusBarBrightness: Brightness.light,
                           statusBarIconBrightness: Brightness.dark,
