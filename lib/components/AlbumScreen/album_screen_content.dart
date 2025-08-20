@@ -163,10 +163,9 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
         if (!isLoading &&
             displayChildren.length > 1 &&
             childrenPerDisc.length > 1) // show headers only for multi disc albums
-          for (var childrenOfThisDisc in childrenPerDisc)
+          for (var childrenOfThisDisc in childrenPerDisc) ...[
             SliverStickyHeader(
               header: Container(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0, bottom: 0.0),
                 color: Theme.of(context).colorScheme.surface,
                 child: Dismissible(
                   key: Key("${childrenOfThisDisc[0].id}-${childrenOfThisDisc[0].parentIndexNumber}"),
@@ -197,7 +196,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                     action: ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -244,7 +243,9 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                 adaptiveAdditionalInfoSortBy: (widget.parent.type == "Playlist") ? playlistSortBy : null,
                 forceAlbumArtists: (widget.parent.type == "Playlist" && playlistSortBy == SortBy.albumArtist),
               ),
-            )
+            ),
+            SliverToBoxAdapter(child: SizedBox(height: 16.0)),
+          ]
         else if (!isLoading && displayChildren.isNotEmpty)
           TracksSliverList(
             childrenForList: displayChildren,
