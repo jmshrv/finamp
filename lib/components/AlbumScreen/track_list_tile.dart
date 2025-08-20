@@ -118,12 +118,17 @@ class TrackListTile extends ConsumerWidget {
                 ? QueueItemSourceType.artist
                 : isOnGenreScreen
                 ? QueueItemSourceType.genre
-                : QueueItemSourceType.album,
-            name: QueueItemSourceName(
+                : parentItem != null
+                ? QueueItemSourceType.album
+                : QueueItemSourceType.queue,
+            name: parentItem != null
+                ? QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
               pretranslatedName:
                   ((isInPlaylist || isOnArtistScreen || isOnGenreScreen) ? parentItem?.name : item.album) ??
                   AppLocalizations.of(context)!.placeholderSource,
+                  )
+                : QueueItemSourceName(type: QueueItemSourceNameType.queue,
             ),
             id: parentItem?.id.raw ?? "",
             item: parentItem,
