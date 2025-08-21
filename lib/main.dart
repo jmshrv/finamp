@@ -228,7 +228,7 @@ Future<void> _setupDownloadsHelper() async {
 
   if (!FinampSettingsHelper.finampSettings.hasDownloadedPlaylistInfo) {
     GetIt.instance<FinampUserHelper>().runUserHook(() async {
-      await downloadsService.addDefaultPlaylistInfoDownload().catchError((e) {
+      await downloadsService.addDefaultPlaylistInfoDownload().catchError((Object e) {
         // log error without snackbar, we don't want users to be greeted with errors on first launch
         _mainLog.severe("Failed to download playlist metadata: $e");
       });
@@ -252,14 +252,16 @@ Future<void> _setupKeepScreenOnHelper() async {
 }
 
 Future<void> setupHive() async {
-  await Hive.initFlutter();
-  Hive.registerAdapters();
-  Hive.registerAdapter(ThemeModeAdapter());
-  Hive.registerAdapter(LocaleAdapter());
-
   final dir = (Platform.isAndroid || Platform.isIOS)
       ? await getApplicationDocumentsDirectory()
       : await getApplicationSupportDirectory();
+
+  // Use Hive.init instead of initFlutter to set correct default path.
+  WidgetsFlutterBinding.ensureInitialized();
+  Hive.init(dir.path);
+  Hive.registerAdapters();
+  Hive.registerAdapter(ThemeModeAdapter());
+  Hive.registerAdapter(LocaleAdapter());
 
   await Future.wait([
     Hive.openBox<FinampSettings>("FinampSettings", path: dir.path),
