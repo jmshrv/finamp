@@ -123,13 +123,12 @@ class TrackListTile extends ConsumerWidget {
                 : QueueItemSourceType.queue,
             name: parentItem != null
                 ? QueueItemSourceName(
-              type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName:
-                  ((isInPlaylist || isOnArtistScreen || isOnGenreScreen) ? parentItem?.name : item.album) ??
-                  AppLocalizations.of(context)!.placeholderSource,
+                    type: QueueItemSourceNameType.preTranslated,
+                    pretranslatedName:
+                        ((isInPlaylist || isOnArtistScreen || isOnGenreScreen) ? parentItem?.name : item.album) ??
+                        AppLocalizations.of(context)!.placeholderSource,
                   )
-                : QueueItemSourceName(type: QueueItemSourceNameType.queue,
-            ),
+                : QueueItemSourceName(type: QueueItemSourceNameType.queue),
             id: parentItem?.id.raw ?? "",
             item: parentItem,
             // we're playing from an album, so we should use the album's normalization gain.
