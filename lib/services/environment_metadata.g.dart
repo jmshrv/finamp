@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: deprecated_member_use_from_same_package
+// ignore_for_file: deprecated_member_use_from_same_package, strict_raw_type
 
 // dart format off
 
@@ -29,8 +29,15 @@ Map<String, dynamic> _$DeviceInfoToJson(DeviceInfo instance) =>
 AppInfo _$AppInfoFromJson(Map<String, dynamic> json) => AppInfo(
   appName: json['appName'] as String,
   packageName: json['packageName'] as String,
+  source: json['source'] as String?,
   version: json['version'] as String,
   buildNumber: json['buildNumber'] as String,
+  installTime: json['installTime'] == null
+      ? null
+      : DateTime.parse(json['installTime'] as String),
+  updateTime: json['updateTime'] == null
+      ? null
+      : DateTime.parse(json['updateTime'] as String),
   versionHistory: (json['versionHistory'] as List<dynamic>?)
       ?.map((e) => e as String)
       .toList(),
@@ -39,8 +46,11 @@ AppInfo _$AppInfoFromJson(Map<String, dynamic> json) => AppInfo(
 Map<String, dynamic> _$AppInfoToJson(AppInfo instance) => <String, dynamic>{
   'appName': instance.appName,
   'packageName': instance.packageName,
+  'source': instance.source,
   'version': instance.version,
   'buildNumber': instance.buildNumber,
+  'installTime': instance.installTime?.toIso8601String(),
+  'updateTime': instance.updateTime?.toIso8601String(),
   'versionHistory': instance.versionHistory,
 };
 

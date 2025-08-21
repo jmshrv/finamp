@@ -91,15 +91,21 @@ class DeviceInfo {
 class AppInfo {
   final String appName;
   final String packageName;
+  final String? source;
   final String version;
   final String buildNumber;
+  final DateTime? installTime;
+  final DateTime? updateTime;
   final List<String>? versionHistory;
 
   AppInfo({
     required this.appName,
     required this.packageName,
+    required this.source,
     required this.version,
     required this.buildNumber,
+    required this.installTime,
+    required this.updateTime,
     required this.versionHistory,
   });
 
@@ -129,8 +135,11 @@ class AppInfo {
     return AppInfo(
       appName: packageInfo.appName,
       packageName: packageInfo.packageName,
+      source: packageInfo.installerStore,
       version: packageInfo.version,
       buildNumber: packageInfo.buildNumber,
+      installTime: packageInfo.installTime,
+      updateTime: packageInfo.updateTime,
       versionHistory: history,
     );
   }
@@ -139,8 +148,11 @@ class AppInfo {
       "App Info:\n"
       "  App Name: $appName\n"
       "  Package Name: $packageName\n"
+      "  Source: $source\n"
       "  Version: $version\n"
       "  Build Number: $buildNumber\n"
+      "  Installed At: ${installTime?.toIso8601String() ?? "n/a"}\n"
+      "  Updated At: ${updateTime?.toIso8601String() ?? "n/a"}\n"
       "  Version History: ${versionHistory?.join(", ") ?? "n/a"}";
 }
 

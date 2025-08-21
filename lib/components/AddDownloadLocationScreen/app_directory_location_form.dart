@@ -51,7 +51,7 @@ class _AppDirectoryLocationFormState extends State<AppDirectoryLocationForm> {
                   items: dropdownButtonItems,
                   hint: const Text("Location"),
                   isExpanded: true,
-                  value: selectedDirectory,
+                  initialValue: selectedDirectory,
                   onChanged: (value) {
                     setState(() {
                       selectedDirectory = value;

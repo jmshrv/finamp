@@ -10,6 +10,7 @@ class PlaybackAction extends ConsumerWidget {
     required this.onPressed,
     required this.label,
     required this.iconColor,
+    this.enabled = true,
   });
 
   final IconData icon;
@@ -17,6 +18,7 @@ class PlaybackAction extends ConsumerWidget {
   final void Function() onPressed;
   final String label;
   final Color iconColor;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,7 +30,7 @@ class PlaybackAction extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           spacing: 9,
           children: [
-            Icon(icon, color: iconColor, size: 28, weight: 1.0),
+            Icon(icon, color: enabled ? iconColor : iconColor.withOpacity(0.5), size: 28, weight: 1.0),
             Text(
               label,
               textAlign: TextAlign.center,
@@ -38,10 +40,12 @@ class PlaybackAction extends ConsumerWidget {
             ),
           ],
         ),
-        onPressed: () {
+        onPressed: enabled
+            ? () {
           FeedbackHelper.feedback(FeedbackType.selection);
           onPressed();
-        },
+              }
+            : null,
         visualDensity: VisualDensity.compact,
         padding: const EdgeInsets.only(top: 10.0, left: 8.0, right: 8.0, bottom: 12.0),
       ),

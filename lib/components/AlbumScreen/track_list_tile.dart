@@ -118,12 +118,17 @@ class TrackListTile extends ConsumerWidget {
                 ? QueueItemSourceType.artist
                 : isOnGenreScreen
                 ? QueueItemSourceType.genre
-                : QueueItemSourceType.album,
-            name: QueueItemSourceName(
+                : parentItem != null
+                ? QueueItemSourceType.album
+                : QueueItemSourceType.queue,
+            name: parentItem != null
+                ? QueueItemSourceName(
               type: QueueItemSourceNameType.preTranslated,
               pretranslatedName:
                   ((isInPlaylist || isOnArtistScreen || isOnGenreScreen) ? parentItem?.name : item.album) ??
                   AppLocalizations.of(context)!.placeholderSource,
+                  )
+                : QueueItemSourceName(type: QueueItemSourceNameType.queue,
             ),
             id: parentItem?.id.raw ?? "",
             item: parentItem,
@@ -249,6 +254,10 @@ Future<bool> onConfirmPlayableDismiss({
       ? FinampSettingsHelper.finampSettings.itemSwipeActionLeftToRight
       : FinampSettingsHelper.finampSettings.itemSwipeActionRightToLeft;
 
+  if (Platform.isWindows || Platform.isLinux) {
+    followUpAction = ItemSwipeActions.addToQueue;
+  }
+
   final queueService = GetIt.instance<QueueService>();
 
   final sourceItemType = switch (sourceItem) {
@@ -330,6 +339,10 @@ Widget buildSwipeActionBackground({
   required ItemSwipeActions action,
   double? iconSize,
 }) {
+  if (Platform.isWindows || Platform.isLinux) {
+    action = ItemSwipeActions.addToQueue;
+  }
+
   final icon = getSwipeActionIcon(action);
   final label = action.toLocalisedString(context);
 

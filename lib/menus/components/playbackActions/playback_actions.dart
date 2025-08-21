@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/components/playbackActions/playback_action.dart';
@@ -97,6 +99,7 @@ class PlayNextPlaybackAction extends ConsumerWidget {
     return Visibility(
       visible: queueService.getQueue().nextUp.isNotEmpty,
       child: PlaybackAction(
+        enabled: !(Platform.isWindows || Platform.isLinux),
         icon: TablerIcons.corner_right_down,
         label: AppLocalizations.of(context)!.playNext,
         onPressed: () async {
@@ -126,6 +129,7 @@ class AddToNextUpPlaybackAction extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
     return PlaybackAction(
+      enabled: !(Platform.isWindows || Platform.isLinux),
       icon: TablerIcons.corner_right_down_double,
       label: AppLocalizations.of(context)!.addToNextUp,
       onPressed: () async {
@@ -209,6 +213,7 @@ class ShuffleNextPlaybackAction extends ConsumerWidget {
     return Visibility(
       visible: queueService.getQueue().nextUp.isNotEmpty,
       child: PlaybackAction(
+        enabled: !(Platform.isWindows || Platform.isLinux),
         icon: TablerIcons.corner_right_down,
         label: AppLocalizations.of(context)!.shuffleNext,
         onPressed: () async {
@@ -236,6 +241,7 @@ class ShuffleToNextUpPlaybackAction extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
     return PlaybackAction(
+      enabled: !(Platform.isWindows || Platform.isLinux),
       icon: TablerIcons.corner_right_down_double,
       label: AppLocalizations.of(context)!.shuffleToNextUp,
       onPressed: () async {
@@ -324,6 +330,7 @@ class ShuffleAlbumsNextPlaybackAction extends ConsumerWidget {
     return Visibility(
       visible: queueService.getQueue().nextUp.isNotEmpty,
       child: PlaybackAction(
+        enabled: !(Platform.isWindows || Platform.isLinux),
         icon: TablerIcons.corner_right_down,
         label: AppLocalizations.of(context)!.shuffleAlbumsNext,
         onPressed: () async {
@@ -354,6 +361,7 @@ class ShuffleAlbumsToNextUpPlaybackAction extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
     return PlaybackAction(
+      enabled: !(Platform.isWindows || Platform.isLinux),
       icon: TablerIcons.corner_right_down_double,
       label: AppLocalizations.of(context)!.shuffleAlbumsToNextUp,
       onPressed: () async {
