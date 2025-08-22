@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:finamp/components/AddToPlaylistScreen/add_to_playlist_button.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/extensions/string.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/track_menu.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -345,26 +346,16 @@ Widget buildSwipeActionBackground({
   final icon = getSwipeActionIcon(action);
   final label = action.toLocalisedString(context);
 
-  return Container(
+  final children = [
+    Icon(icon, color: Theme.of(context).colorScheme.secondary, size: iconSize ?? 28.0),
+    const SizedBox(width: 4.0),
+    Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
+    Spacer(),
+  ];
+
+  return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-    alignment: (direction == DismissDirection.startToEnd) ? Alignment.centerLeft : Alignment.centerRight,
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: (direction == DismissDirection.startToEnd) ? MainAxisAlignment.start : MainAxisAlignment.end,
-      children: direction == DismissDirection.startToEnd
-          ? [
-              Expanded(
-                child: Icon(icon, color: Theme.of(context).colorScheme.secondary, size: iconSize ?? 28.0),
-              ),
-              const SizedBox(width: 4.0),
-              Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
-            ]
-          : [
-              Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
-              const SizedBox(width: 4.0),
-              Icon(icon, color: Theme.of(context).colorScheme.secondary, size: iconSize ?? 28.0),
-            ],
-    ),
+    child: Row(children: direction == DismissDirection.startToEnd ? children : children.reversed.toList()),
   );
 }
 
@@ -671,12 +662,13 @@ class TrackListItemTile extends ConsumerWidget {
     final durationLabelString =
         "${durationLabelFullHours > 0 ? "$durationLabelFullHours ${AppLocalizations.of(context)!.hours} " : ""}${durationLabelFullMinutes > 0 ? "$durationLabelFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$durationLabelSeconds ${AppLocalizations.of(context)!.seconds}";
 
-    final artistsString = (forceAlbumArtists)
-        ? (baseItem.albumArtists?.map((e) => e.name).join(", ") ?? AppLocalizations.of(context)!.unknownArtist)
-        : (baseItem.artists?.isNotEmpty ?? false)
-        ? baseItem.artists?.join(", ")
-        : (baseItem.albumArtists?.map((e) => e.name).join(", ") ?? AppLocalizations.of(context)!.unknownArtist);
-
+    final String artistsString;
+    if (forceAlbumArtists || (baseItem.artists?.isEmpty ?? true)) {
+      artistsString =
+          baseItem.albumArtists?.map((e) => e.name).joinNonNull(", ") ?? AppLocalizations.of(context)!.unknownArtist;
+    } else {
+      artistsString = baseItem.artists?.joinNonNull(", ") ?? AppLocalizations.of(context)!.unknownArtist;
+    }
     final downloadedIndicator = DownloadedIndicator(
       item: DownloadStub.fromItem(item: baseItem, type: DownloadItemType.track),
       size: Theme.of(context).textTheme.bodyMedium!.fontSize! + 1,
