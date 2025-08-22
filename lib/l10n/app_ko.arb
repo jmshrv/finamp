@@ -1235,11 +1235,11 @@
     "@volumeNormalizationSwitchSubtitle": {
         "description": "Subtitle for the switch that toggles replay gain"
     },
-    "volumeNormalizationModeSelectorDescription": "다이나믹: \n앨범을 재생 중인 경우 앨범의 게인값을 참조합니다. 평상시에는 곡의 게인값이 적용됩니다.\n\n곡 기반:\n앨범 재생 여부와 관계없이 곡의 게인값은 항상 사용됩니다.\n\n앨범 기반:\n앨범을 재생할 때에만 음량 정규화가 적용됩니다(앨범 게인값 사용), 개별단위 곡(들)에는 적용되지 않습니다.\n\n앨범 전용:",
+    "volumeNormalizationModeSelectorDescription": "다이나믹: \n하나의 앨범에서 여러 곡들을 연속 재생 중인 경우, 앨범 게인값을 사용합니다(앨범 또는 동일 앨범의 곡들로 구성된 재생 목록 재생). 그렇지 않은 경우 트랙 게인값을 사용합니다.\n\n곡 기반:\n앨범 재생 여부와 관계없이 항상 트랙 게인값을 사용합니다.\n\n앨범 기반:\n항상 앨범 게인값을 사용합니다. 단, 앨범 게인값을 사용할 수 없을 때는(싱글 앨범 등) 대신 트랙 게인값을 사용합니다.\n\n앨범 전용:\n볼륨 정규화는 개별 곡들에는 적용하지 않고 앨범을 재생할 때만 (앨범 게인값으로) 적용합니다.",
     "@volumeNormalizationModeSelectorDescription": {
         "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
     },
-    "volumeNormalizationModeHybrid": "하이브리드 (트랙 + 앨범)",
+    "volumeNormalizationModeHybrid": "다이나믹 모드",
     "@volumeNormalizationModeHybrid": {
         "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
     },
@@ -1893,5 +1893,128 @@
     "fixedGridSizeSwitchSubtitle": "그리드 타일 사이즈가 창 및 화면 크기에 반응하지 않습니다.",
     "@fixedGridSizeSwitchSubtitle": {},
     "fixedGridSizeTitle": "그리드 타일 사이즈",
-    "@fixedGridSizeTitle": {}
+    "@fixedGridSizeTitle": {},
+    "useHighContrastColorsSubtitle": "가독성을 높이기 위해 고대비 동적 색상을 사용합니다.",
+    "@useHighContrastColorsSubtitle": {
+        "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
+    },
+    "fixedGridTileSizeEnum": "{size, select, small{소형} medium{중형} large{대형} veryLarge{초대형} other{???}}",
+    "@fixedGridTileSizeEnum": {
+        "placeholders": {
+            "size": {
+                "type": "String"
+            }
+        },
+        "description": "Localized names of fixed size grid tile sizes."
+    },
+    "allowSplitScreenTitle": "분할 화면 모드 허용",
+    "@allowSplitScreenTitle": {},
+    "allowSplitScreenSubtitle": "더 큰 디스플레이어에서 재생화면은 다른 보기화면과 함께 표시됩니다.",
+    "@allowSplitScreenSubtitle": {},
+    "enableVibration": "진동 활성화",
+    "@enableVibration": {},
+    "enableVibrationSubtitle": "진동을 활성화 할지 설정함.",
+    "@enableVibrationSubtitle": {},
+    "hideQueueButton": "대기열 버튼 숨기기",
+    "@hideQueueButton": {},
+    "hideQueueButtonSubtitle": "재생화면에서 대기열 버튼을 숨깁니다. 위로 스와이프하여 대기열에 접근합니다.",
+    "@hideQueueButtonSubtitle": {},
+    "oneLineMarqueeTextButton": "긴 제목 자동 스크롤",
+    "@oneLineMarqueeTextButton": {},
+    "oneLineMarqueeTextButtonSubtitle": "곡 제목이 너무 길어서 두 줄로 표시할 수 없을 경우, 자동으로 스크롤합니다",
+    "@oneLineMarqueeTextButtonSubtitle": {},
+    "marqueeOrTruncateButton": "긴 곡 제목에 줄임표 사용",
+    "@marqueeOrTruncateButton": {},
+    "marqueeOrTruncateButtonSubtitle": "곡 제목이 긴 경우 스크롤 하는 대신 끝부분에 줄임표(...)를 보여줍니다",
+    "@marqueeOrTruncateButtonSubtitle": {},
+    "hidePlayerBottomActionsSubtitle": "재생화면에서 대기열과 가사 버튼을 숨깁니다. 위로 스와이프하여 대기열에 접근하며, 가사가 존재할 경우 (앨범 커버 아래쪽에서) 좌로 스와이프하여 가사를 봅니다.",
+    "@hidePlayerBottomActionsSubtitle": {},
+    "hidePlayerBottomActions": "아래쪽 기능 버튼 숨기기",
+    "@hidePlayerBottomActions": {},
+    "prioritizePlayerCover": "앨범 커버 표시 우선",
+    "@prioritizePlayerCover": {},
+    "prioritizePlayerCoverSubtitle": "재생 화면에서 앨범 커버를 큰 사이즈로 보여주는 것에 우선순위를 줍니다. 이를 위해 작은 디스플레이 화면의 경우 중요하지 않은 기능들을 숨깁니다.",
+    "@prioritizePlayerCoverSubtitle": {},
+    "suppressPlayerPadding": "재생 컨트롤의 여백 억제",
+    "@suppressPlayerPadding": {},
+    "suppressPlayerPaddingSubtitle": "앨범 커버가 본래 사이즈보다 작은 경우 재생화면(각 버튼, 기능들)의 여백을 최소화 합니다.",
+    "@suppressPlayerPaddingSubtitle": {},
+    "allPlaylistsInfoSetting": "플레이리스트 메타데이터 다운로드",
+    "@allPlaylistsInfoSetting": {},
+    "lockDownload": "기기에 다운로드 데이터를 항상 유지함",
+    "@lockDownload": {
+        "description": "Text shown on button to require an item which is already downloaded by a parent collection, preventing it from being deleted if the parent is removed."
+    },
+    "showArtistChipImage": "아티스트 이미지와 이름을 표시함",
+    "@showArtistChipImage": {},
+    "showArtistChipImageSubtitle": "이 설정은 재생 화면과 같이 작은 아티스트 이미지 미리보기에 영향을 줍니다.",
+    "@showArtistChipImageSubtitle": {},
+    "scrollToCurrentTrack": "현재 곡으로 스크롤하기",
+    "@scrollToCurrentTrack": {
+        "description": "Tooltip for button that scrolls the queue list back to the current track"
+    },
+    "enableAutoScroll": "자동 스크롤 활성화",
+    "@enableAutoScroll": {
+        "description": "Tooltip for button that can be used to re-enable auto scroll on the lyrics view after the user manually scrolled"
+    },
+    "numberAsKiloHertz": "{kiloHertz} kHz",
+    "@numberAsKiloHertz": {
+        "description": "Value for the sample rate of a track, in kilohertz",
+        "placeholders": {
+            "kiloHertz": {
+                "type": "double"
+            }
+        }
+    },
+    "numberAsBit": "{bit} bit",
+    "@numberAsBit": {
+        "description": "Value for the bit depth of a track, as amount of bit used",
+        "placeholders": {
+            "bit": {
+                "type": "int"
+            }
+        }
+    },
+    "remainingDuration": "{duration} 남음",
+    "@remainingDuration": {
+        "description": "Displays duration of unplayed tracks. {duration} is a pre-formatted string.",
+        "placeholders": {
+            "duration": {
+                "type": "String",
+                "example": "36:23"
+            }
+        }
+    },
+    "sleepTimerProjectedDuration": "재생이 ~{duration} 후에 일시중지 됩니다",
+    "@sleepTimerProjectedDuration": {
+        "description": "Displays duration until playback is expected to be ended by the sleep timer (unless the queue is modified before). {duration} is a pre-formatted string.",
+        "placeholders": {
+            "duration": {
+                "type": "String",
+                "example": "36:23"
+            }
+        }
+    },
+    "removeFromPlaylistConfirm": "삭제",
+    "@removeFromPlaylistConfirm": {},
+    "removeFromPlaylistPrompt": "'{playlistName}' 플레이리스트의 '{itemName}'을 삭제하시겠습니까?",
+    "@removeFromPlaylistPrompt": {
+        "placeholders": {
+            "itemName": {
+                "type": "String"
+            },
+            "playlistName": {
+                "type": "String"
+            }
+        },
+        "description": "Prompt on dialog to confirm a removal from playlist"
+    },
+    "trackMenuButtonTooltip": "곡 메뉴",
+    "@trackMenuButtonTooltip": {
+        "description": "Tooltip for the button that opens the track menu"
+    },
+    "quickActions": "빠른 작업",
+    "@quickActions": {
+        "description": "Title for the short menu that can be shown when long-pressing on the menu button on the player screen. Currently only used for adding to and removing from playlists."
+    }
 }
