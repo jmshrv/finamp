@@ -385,6 +385,7 @@ class _PreviousTracksListState extends State<PreviousTracksList> with TickerProv
           _previousTracks ??= snapshot.data!.previousTracks;
 
           return SliverReorderableList(
+            proxyDecorator: (widget, _, _) => Material(type: MaterialType.transparency, child: widget),
             autoScrollerVelocityScalar: 20.0,
             onReorder: (oldIndex, newIndex) {
               int draggingOffset = -(_previousTracks!.length - oldIndex);
@@ -472,6 +473,7 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
             return SliverPadding(
               padding: const EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0),
               sliver: SliverReorderableList(
+                proxyDecorator: (widget, _, _) => Material(type: MaterialType.transparency, child: widget),
                 autoScrollerVelocityScalar: 20.0,
                 onReorder: (oldIndex, newIndex) {
                   int draggingOffset = oldIndex + 1;
@@ -560,11 +562,11 @@ class _QueueTracksListState extends State<QueueTracksList> {
             _nextUp ??= snapshot.data!.nextUp;
 
             return SliverReorderableList(
+              proxyDecorator: (widget, _, _) => Material(type: MaterialType.transparency, child: widget),
               autoScrollerVelocityScalar: 20.0,
               onReorder: (oldIndex, newIndex) {
                 int draggingOffset = oldIndex + (_nextUp?.length ?? 0) + 1;
                 int newPositionOffset = newIndex + (_nextUp?.length ?? 0) + 1;
-                print("$draggingOffset -> $newPositionOffset");
                 if (mounted) {
                   // update external queue to commit changes, but don't await it
                   _queueService.reorderByOffset(draggingOffset, newPositionOffset);
