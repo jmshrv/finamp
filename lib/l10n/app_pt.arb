@@ -1071,7 +1071,7 @@
     "@addToNextUp": {
         "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
     },
-    "confirmAddToNextUp": "Adicionar {type, select, track{Faixa} album{álbum} artist{artista} playlist{lista de reprodução} genre{estilo} other{item}} para lista A Seguir",
+    "confirmAddToNextUp": "Adicionar {type, select, track{Faixa} album{álbum} artist{artista} playlist{lista de reprodução} genre{estilo} disc{disco} other{item}} para lista A Seguir",
     "@confirmAddToNextUp": {
         "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
         "placeholders": {
@@ -1080,7 +1080,7 @@
             }
         }
     },
-    "confirmAddToQueue": "Adicionado {type, select, track{faixa} album{álbum} artist{artista} playlist{lista de reprodução} genre{estilo} other{item}} à fila",
+    "confirmAddToQueue": "Adicionado {type, select, track{faixa} album{álbum} artist{artista} playlist{lista de reprodução} genre{estilo} disc{disco} other{item}} à fila",
     "@confirmAddToQueue": {
         "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
         "placeholders": {
@@ -2718,5 +2718,22 @@
     "preferAddingToFavoritesOverPlaylistsSubtitle": "Quando ativo, um toque curto irá adicionar aos favoritos, um pressionar longo irá abrir o menu 'Adicionar à Lista de Reprodução'. A predefinição é o inverso.",
     "@preferAddingToFavoritesOverPlaylistsSubtitle": {
         "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
+    },
+    "discOfAlbum": "[Disco {number}] {albumName}",
+    "@discOfAlbum": {
+        "description": "Used when a single disc of album is opened, then album name is replaced with this string",
+        "placeholders": {
+            "number": {
+                "type": "int",
+                "example": "1"
+            },
+            "albumName": {
+                "type": "String"
+            }
+        }
+    },
+    "moreActionsOnAlbumDisc": "Mais ações em disco álbum",
+    "@moreActionsOnAlbumDisc": {
+        "description": "Label for the disc header menu button."
     }
 }
