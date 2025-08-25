@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/MusicScreen/sort_by_menu_button.dart';
 import 'package:finamp/components/MusicScreen/sort_order_button.dart';
-import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/components/icon_button_with_semantics.dart';
 import 'package:finamp/services/album_screen_provider.dart';
@@ -15,7 +14,6 @@ import 'package:get_it/get_it.dart';
 
 import '../../menus/album_menu.dart';
 import '../../menus/components/overflow_menu_button.dart';
-import '../../menus/playlist_menu.dart';
 import '../../models/finamp_models.dart';
 import '../../models/jellyfin_models.dart';
 import '../../services/finamp_settings_helper.dart';
@@ -168,8 +166,15 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
               header: Material(
                 color: Theme.of(context).colorScheme.surface,
                 child: InkWell(
-                  borderRadius: BorderRadius.circular(12),
                   onLongPress: () => showModalAlbumMenu(
+                    context: context,
+                    item: AlbumDisc(parent: widget.parent, tracks: childrenOfThisDisc),
+                  ),
+                  onSecondaryTap: () => showModalAlbumMenu(
+                    context: context,
+                    item: AlbumDisc(parent: widget.parent, tracks: childrenOfThisDisc),
+                  ),
+                  onTap: () => showModalAlbumMenu(
                     context: context,
                     item: AlbumDisc(parent: widget.parent, tracks: childrenOfThisDisc),
                   ),
