@@ -933,11 +933,11 @@
             }
         }
     },
-    "confirmShuffleNext": "已隨機加入下一首",
+    "confirmShuffleNext": "已隨機排序並加入下一首",
     "@confirmShuffleNext": {
         "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
     },
-    "confirmShuffleToNextUp": "已隨機加入即將播放",
+    "confirmShuffleToNextUp": "已隨機排序並加入即將播放",
     "@confirmShuffleToNextUp": {
         "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
     },
