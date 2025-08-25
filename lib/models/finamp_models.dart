@@ -1676,6 +1676,16 @@ enum BaseItemDtoType {
         return unknown;
     }
   }
+
+  // TODO stopgap solution until snackbars fate is decided
+  static BaseItemDtoType fromPlayableItem(PlayableItem item) {
+    switch (item) {
+      case AlbumDisc():
+        return BaseItemDtoType.fromItem(item.parent);
+      case BaseItemDto():
+        return BaseItemDtoType.fromItem(item);
+    }
+  }
 }
 
 /// The category of a section on the download screen.
@@ -1823,6 +1833,19 @@ class QueueItemSource {
     this.item,
     this.contextNormalizationGain,
   });
+
+  factory QueueItemSource.fromPlayableItem(
+    PlayableItem playableItem, {
+    QueueItemSourceType? type,
+    QueueItemSourceNameType? nameType,
+  }) {
+    switch (playableItem) {
+      case AlbumDisc():
+        return QueueItemSource.fromBaseItem(playableItem.parent, type: type, nameType: nameType);
+      case BaseItemDto():
+        return QueueItemSource.fromBaseItem(playableItem, type: type, nameType: nameType);
+    }
+  }
 
   factory QueueItemSource.fromBaseItem(
     BaseItemDto baseItem, {

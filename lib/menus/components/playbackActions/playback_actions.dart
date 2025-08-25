@@ -12,74 +12,61 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
-Map<String, Widget> getPlaybackActionPages({required BuildContext context, required BaseItemDto baseItem}) {
+Map<String, Widget> getCommonPlaybackActionPages({required BuildContext context, required PlayableItem item}) {
   final queueService = GetIt.instance<QueueService>();
-  switch (BaseItemDtoType.fromItem(baseItem)) {
-    //TODO add case for custom (artists) options
-    case BaseItemDtoType.artist:
-      return {
-        AppLocalizations.of(context)!.playbackActionPagePlay: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            PlayPlaybackAction(baseItem: baseItem),
-            if (queueService.getQueue().nextUp.isNotEmpty) PlayNextPlaybackAction(baseItem: baseItem),
-            AddToNextUpPlaybackAction(baseItem: baseItem),
-            AddToQueuePlaybackAction(baseItem: baseItem),
-          ],
-        ),
-        AppLocalizations.of(context)!.playbackActionPageShuffle: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ShufflePlaybackAction(baseItem: baseItem),
-            if (queueService.getQueue().nextUp.isNotEmpty) ShuffleNextPlaybackAction(baseItem: baseItem),
-            ShuffleToNextUpPlaybackAction(baseItem: baseItem),
-            ShuffleToQueuePlaybackAction(baseItem: baseItem),
-          ],
-        ),
+
+  return {
+    AppLocalizations.of(context)!.playbackActionPagePlay: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        PlayPlaybackAction(item: item),
+        if (queueService.getQueue().nextUp.isNotEmpty) PlayNextPlaybackAction(item: item),
+        AddToNextUpPlaybackAction(item: item),
+        AddToQueuePlaybackAction(item: item),
+      ],
+    ),
+    // Shuffle
+    AppLocalizations.of(context)!.playbackActionPageShuffle: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        ShufflePlaybackAction(item: item),
+        if (queueService.getQueue().nextUp.isNotEmpty) ShuffleNextPlaybackAction(item: item),
+        ShuffleToNextUpPlaybackAction(item: item),
+        ShuffleToQueuePlaybackAction(item: item),
+      ],
+    ),
+  };
+}
+
+Map<String, Widget> getPlaybackActionPages({required BuildContext context, required PlayableItem item}) {
+  final queueService = GetIt.instance<QueueService>();
+  return switch (item) {
+    AlbumDisc() => getCommonPlaybackActionPages(context: context, item: item),
+    BaseItemDto() => switch (BaseItemDtoType.fromItem(item)) {
+      BaseItemDtoType.artist => {
+        ...getCommonPlaybackActionPages(context: context, item: item),
         AppLocalizations.of(context)!.playbackActionPageShuffleAlbums: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ShuffleAlbumsAction(baseItem: baseItem),
-            if (queueService.getQueue().nextUp.isNotEmpty) ShuffleAlbumsNextPlaybackAction(baseItem: baseItem),
-            ShuffleAlbumsToNextUpPlaybackAction(baseItem: baseItem),
-            ShuffleAlbumsToQueuePlaybackAction(baseItem: baseItem),
+            ShuffleAlbumsAction(baseItem: item),
+            if (queueService.getQueue().nextUp.isNotEmpty) ShuffleAlbumsNextPlaybackAction(baseItem: item),
+            ShuffleAlbumsToNextUpPlaybackAction(baseItem: item),
+            ShuffleAlbumsToQueuePlaybackAction(baseItem: item),
           ],
         ),
-      };
-    default:
-      return {
-        AppLocalizations.of(context)!.playbackActionPagePlay: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            PlayPlaybackAction(baseItem: baseItem),
-            if (queueService.getQueue().nextUp.isNotEmpty) PlayNextPlaybackAction(baseItem: baseItem),
-            AddToNextUpPlaybackAction(baseItem: baseItem),
-            AddToQueuePlaybackAction(baseItem: baseItem),
-          ],
-        ),
-        // Shuffle
-        AppLocalizations.of(context)!.playbackActionPageShuffle: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ShufflePlaybackAction(baseItem: baseItem),
-            if (queueService.getQueue().nextUp.isNotEmpty) ShuffleNextPlaybackAction(baseItem: baseItem),
-            ShuffleToNextUpPlaybackAction(baseItem: baseItem),
-            ShuffleToQueuePlaybackAction(baseItem: baseItem),
-          ],
-        ),
-      };
-  }
+      },
+      _ => getCommonPlaybackActionPages(context: context, item: item),
+    },
+  };
 }
 
 class PlayPlaybackAction extends ConsumerWidget {
-  const PlayPlaybackAction({super.key, required this.baseItem});
+  const PlayPlaybackAction({super.key, required this.item});
 
-  final BaseItemDto baseItem;
+  final PlayableItem item;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -89,8 +76,8 @@ class PlayPlaybackAction extends ConsumerWidget {
       label: AppLocalizations.of(context)!.playButtonLabel,
       onPressed: () async {
         await queueService.startPlayback(
-          items: await loadChildTracks(baseItem: baseItem) ?? [],
-          source: QueueItemSource.fromBaseItem(baseItem),
+          items: await loadChildTracks(item: item),
+          source: QueueItemSource.fromPlayableItem(item),
           order: FinampPlaybackOrder.linear,
         );
 
@@ -102,9 +89,9 @@ class PlayPlaybackAction extends ConsumerWidget {
 }
 
 class PlayNextPlaybackAction extends ConsumerWidget {
-  const PlayNextPlaybackAction({super.key, required this.baseItem});
+  const PlayNextPlaybackAction({super.key, required this.item});
 
-  final BaseItemDto baseItem;
+  final PlayableItem item;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -117,12 +104,12 @@ class PlayNextPlaybackAction extends ConsumerWidget {
         label: AppLocalizations.of(context)!.playNext,
         onPressed: () async {
           await queueService.addNext(
-            items: await loadChildTracks(baseItem: baseItem) ?? [],
-            source: QueueItemSource.fromBaseItem(baseItem, type: QueueItemSourceType.nextUpAlbum),
+            items: await loadChildTracks(item: item),
+            source: QueueItemSource.fromPlayableItem(item, type: QueueItemSourceType.nextUpAlbum),
           );
 
           GlobalSnackbar.message(
-            (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(BaseItemDtoType.fromItem(baseItem).name),
+            (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(BaseItemDtoType.fromPlayableItem(item).name),
             isConfirmation: true,
           );
           Navigator.pop(context);
@@ -134,9 +121,9 @@ class PlayNextPlaybackAction extends ConsumerWidget {
 }
 
 class AddToNextUpPlaybackAction extends ConsumerWidget {
-  const AddToNextUpPlaybackAction({super.key, required this.baseItem});
+  const AddToNextUpPlaybackAction({super.key, required this.item});
 
-  final BaseItemDto baseItem;
+  final PlayableItem item;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -147,12 +134,12 @@ class AddToNextUpPlaybackAction extends ConsumerWidget {
       label: AppLocalizations.of(context)!.addToNextUp,
       onPressed: () async {
         await queueService.addToNextUp(
-          items: await loadChildTracks(baseItem: baseItem) ?? [],
-          source: QueueItemSource.fromBaseItem(baseItem, type: QueueItemSourceType.nextUpAlbum),
+          items: await loadChildTracks(item: item),
+          source: QueueItemSource.fromPlayableItem(item, type: QueueItemSourceType.nextUpAlbum),
         );
 
         GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp(BaseItemDtoType.fromItem(baseItem).name),
+          (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToNextUp(BaseItemDtoType.fromPlayableItem(item).name),
           isConfirmation: true,
         );
         Navigator.pop(context);
@@ -163,9 +150,9 @@ class AddToNextUpPlaybackAction extends ConsumerWidget {
 }
 
 class AddToQueuePlaybackAction extends ConsumerWidget {
-  const AddToQueuePlaybackAction({super.key, required this.baseItem});
+  const AddToQueuePlaybackAction({super.key, required this.item});
 
-  final BaseItemDto baseItem;
+  final PlayableItem item;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -175,12 +162,12 @@ class AddToQueuePlaybackAction extends ConsumerWidget {
       label: AppLocalizations.of(context)!.addToQueue,
       onPressed: () async {
         await queueService.addToQueue(
-          items: await loadChildTracks(baseItem: baseItem) ?? [],
-          source: QueueItemSource.fromBaseItem(baseItem),
+          items: await loadChildTracks(item: item),
+          source: QueueItemSource.fromPlayableItem(item),
         );
 
         GlobalSnackbar.message(
-          (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue(BaseItemDtoType.fromItem(baseItem).name),
+          (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue(BaseItemDtoType.fromPlayableItem(item).name),
           isConfirmation: true,
         );
         Navigator.pop(context);
@@ -191,9 +178,9 @@ class AddToQueuePlaybackAction extends ConsumerWidget {
 }
 
 class ShufflePlaybackAction extends ConsumerWidget {
-  const ShufflePlaybackAction({super.key, required this.baseItem});
+  const ShufflePlaybackAction({super.key, required this.item});
 
-  final BaseItemDto baseItem;
+  final PlayableItem item;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -203,8 +190,8 @@ class ShufflePlaybackAction extends ConsumerWidget {
       label: AppLocalizations.of(context)!.shuffleButtonLabel,
       onPressed: () async {
         await queueService.startPlayback(
-          items: await loadChildTracks(baseItem: baseItem) ?? [],
-          source: QueueItemSource.fromBaseItem(baseItem),
+          items: await loadChildTracks(item: item),
+          source: QueueItemSource.fromPlayableItem(item),
           order: FinampPlaybackOrder.shuffled,
         );
 
@@ -216,9 +203,9 @@ class ShufflePlaybackAction extends ConsumerWidget {
 }
 
 class ShuffleNextPlaybackAction extends ConsumerWidget {
-  const ShuffleNextPlaybackAction({super.key, required this.baseItem});
+  const ShuffleNextPlaybackAction({super.key, required this.item});
 
-  final BaseItemDto baseItem;
+  final PlayableItem item;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -231,8 +218,8 @@ class ShuffleNextPlaybackAction extends ConsumerWidget {
         label: AppLocalizations.of(context)!.shuffleNext,
         onPressed: () async {
           await queueService.addNext(
-            items: await loadChildTracks(baseItem: baseItem) ?? [],
-            source: QueueItemSource.fromBaseItem(baseItem, type: QueueItemSourceType.nextUpAlbum),
+            items: await loadChildTracks(item: item),
+            source: QueueItemSource.fromPlayableItem(item, type: QueueItemSourceType.nextUpAlbum),
             order: FinampPlaybackOrder.shuffled,
           );
 
@@ -246,9 +233,9 @@ class ShuffleNextPlaybackAction extends ConsumerWidget {
 }
 
 class ShuffleToNextUpPlaybackAction extends ConsumerWidget {
-  const ShuffleToNextUpPlaybackAction({super.key, required this.baseItem});
+  const ShuffleToNextUpPlaybackAction({super.key, required this.item});
 
-  final BaseItemDto baseItem;
+  final PlayableItem item;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -259,8 +246,8 @@ class ShuffleToNextUpPlaybackAction extends ConsumerWidget {
       label: AppLocalizations.of(context)!.shuffleToNextUp,
       onPressed: () async {
         await queueService.addToNextUp(
-          items: await loadChildTracks(baseItem: baseItem) ?? [],
-          source: QueueItemSource.fromBaseItem(baseItem, type: QueueItemSourceType.nextUpAlbum),
+          items: await loadChildTracks(item: item),
+          source: QueueItemSource.fromPlayableItem(item, type: QueueItemSourceType.nextUpAlbum),
           order: FinampPlaybackOrder.shuffled,
         );
 
@@ -276,9 +263,9 @@ class ShuffleToNextUpPlaybackAction extends ConsumerWidget {
 }
 
 class ShuffleToQueuePlaybackAction extends ConsumerWidget {
-  const ShuffleToQueuePlaybackAction({super.key, required this.baseItem});
+  const ShuffleToQueuePlaybackAction({super.key, required this.item});
 
-  final BaseItemDto baseItem;
+  final PlayableItem item;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -288,8 +275,8 @@ class ShuffleToQueuePlaybackAction extends ConsumerWidget {
       label: AppLocalizations.of(context)!.shuffleToQueue,
       onPressed: () async {
         await queueService.addToQueue(
-          items: await loadChildTracks(baseItem: baseItem) ?? [],
-          source: QueueItemSource.fromBaseItem(baseItem),
+          items: await loadChildTracks(item: item),
+          source: QueueItemSource.fromPlayableItem(item),
           order: FinampPlaybackOrder.shuffled,
         );
 
@@ -317,13 +304,11 @@ class ShuffleAlbumsAction extends ConsumerWidget {
       label: AppLocalizations.of(context)!.shuffleAlbums,
       onPressed: () async {
         await queueService.startPlayback(
-          items:
-              (await loadChildTracks(
-                baseItem: baseItem,
-                groupListBy: (element) => element.albumId?.toString(),
-                manuallyShuffle: true,
-              ) ??
-              []),
+          items: groupItems(
+            items: await loadChildTracks(item: baseItem),
+            groupListBy: (element) => element.albumId?.toString(),
+            manuallyShuffle: true,
+          ),
           source: QueueItemSource.fromBaseItem(baseItem, type: QueueItemSourceType.nextUpAlbum),
         );
 
@@ -350,13 +335,11 @@ class ShuffleAlbumsNextPlaybackAction extends ConsumerWidget {
         label: AppLocalizations.of(context)!.shuffleAlbumsNext,
         onPressed: () async {
           await queueService.addNext(
-            items:
-                (await loadChildTracks(
-                  baseItem: baseItem,
-                  groupListBy: (element) => element.albumId?.toString(),
-                  manuallyShuffle: true,
-                ) ??
-                []),
+            items: groupItems(
+              items: await loadChildTracks(item: baseItem),
+              groupListBy: (element) => element.albumId?.toString(),
+              manuallyShuffle: true,
+            ),
             source: QueueItemSource.fromBaseItem(baseItem, type: QueueItemSourceType.nextUpAlbum),
           );
 
@@ -383,13 +366,11 @@ class ShuffleAlbumsToNextUpPlaybackAction extends ConsumerWidget {
       label: AppLocalizations.of(context)!.shuffleAlbumsToNextUp,
       onPressed: () async {
         await queueService.addToNextUp(
-          items:
-              (await loadChildTracks(
-                baseItem: baseItem,
-                groupListBy: (element) => element.albumId?.toString(),
-                manuallyShuffle: true,
-              ) ??
-              []),
+          items: groupItems(
+            items: await loadChildTracks(item: baseItem),
+            groupListBy: (element) => element.albumId?.toString(),
+            manuallyShuffle: true,
+          ),
           source: QueueItemSource.fromBaseItem(baseItem, type: QueueItemSourceType.nextUpAlbum),
         );
 
@@ -417,13 +398,11 @@ class ShuffleAlbumsToQueuePlaybackAction extends ConsumerWidget {
       label: AppLocalizations.of(context)!.shuffleAlbumsToQueue,
       onPressed: () async {
         await queueService.addToQueue(
-          items:
-              (await loadChildTracks(
-                baseItem: baseItem,
-                groupListBy: (element) => element.albumId?.toString(),
-                manuallyShuffle: true,
-              ) ??
-              []),
+          items: groupItems(
+            items: await loadChildTracks(item: baseItem),
+            groupListBy: (element) => element.albumId?.toString(),
+            manuallyShuffle: true,
+          ),
           source: QueueItemSource.fromBaseItem(baseItem),
         );
 

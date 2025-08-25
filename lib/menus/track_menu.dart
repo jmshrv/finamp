@@ -234,7 +234,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
 
     return [
       if (widget.queueInfo != null) RestoreQueueMenuEntry(queueInfo: widget.queueInfo!),
-      AddToPlaylistMenuEntry(baseItem: widget.item, queueItem: queueItem),
+      AddToPlaylistMenuEntry(item: widget.item, queueItem: queueItem),
       RemoveFromCurrentPlaylistMenuEntry(
         baseItem: widget.item,
         parentItem: widget.parentItem,
@@ -476,10 +476,10 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              PlayPlaybackAction(baseItem: widget.item),
-              if (_queueService.getQueue().nextUp.isNotEmpty) PlayNextPlaybackAction(baseItem: widget.item),
-              AddToNextUpPlaybackAction(baseItem: widget.item),
-              AddToQueuePlaybackAction(baseItem: widget.item),
+              PlayPlaybackAction(item: widget.item),
+              if (_queueService.getQueue().nextUp.isNotEmpty) PlayNextPlaybackAction(item: widget.item),
+              AddToNextUpPlaybackAction(item: widget.item),
+              AddToQueuePlaybackAction(item: widget.item),
             ],
           ),
         ),

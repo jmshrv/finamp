@@ -1295,6 +1295,23 @@ class SubtitleProfile {
   Map<String, dynamic> toJson() => _$SubtitleProfileToJson(this);
 }
 
+// Here because sealed class works inside one file only
+sealed class PlayableItem {}
+
+class AlbumDisc implements PlayableItem {
+  AlbumDisc({required this.parent, required this.tracks}) {
+    assert(
+      // there's no "all" in dart (at least IDE doesn't see it). De Morgan's law is here to save the day!
+      !tracks.any((e) {
+        return e.parentIndexNumber != tracks.first.parentIndexNumber;
+      }),
+    );
+  }
+
+  List<BaseItemDto> tracks;
+  BaseItemDto parent;
+}
+
 @JsonSerializable(
   fieldRename: FieldRename.pascal,
   explicitToJson: true,
@@ -1303,7 +1320,7 @@ class SubtitleProfile {
   converters: [BaseItemIdConverter()],
 )
 @HiveType(typeId: 0)
-class BaseItemDto with RunTimeTickDuration {
+class BaseItemDto with RunTimeTickDuration implements PlayableItem {
   BaseItemDto({
     this.name,
     this.originalTitle,
@@ -2126,6 +2143,15 @@ class BaseItemDto with RunTimeTickDuration {
     }
 
     return name!.toLowerCase();
+  }
+
+  static BaseItemDto fromPlayableItem(PlayableItem item) {
+    switch (item) {
+      case AlbumDisc():
+        return item.parent;
+      case BaseItemDto():
+        return item;
+    }
   }
 
   factory BaseItemDto.fromJson(Map<String, dynamic> json) => _$BaseItemDtoFromJson(json);

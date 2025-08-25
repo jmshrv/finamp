@@ -10,13 +10,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 class AddToPlaylistMenuEntry extends ConsumerWidget implements HideableMenuEntry {
-  final BaseItemDto baseItem;
+  final PlayableItem item;
   final FinampQueueItem? queueItem;
 
-  const AddToPlaylistMenuEntry({super.key, required this.baseItem, this.queueItem});
+  const AddToPlaylistMenuEntry({super.key, required this.item, this.queueItem});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final item = this.item;
     return Visibility(
       visible: !ref.watch(finampSettingsProvider.isOffline),
       child: MenuEntry(
@@ -29,7 +30,10 @@ class AddToPlaylistMenuEntry extends ConsumerWidget implements HideableMenuEntry
           bool inPlaylist = queueItemInPlaylist(queueItem);
           showPlaylistActionsMenu(
             context: context,
-            items: [baseItem],
+            items: switch (item) {
+              AlbumDisc() => item.tracks,
+              BaseItemDto() => [item],
+            },
             parentPlaylist: inPlaylist ? queueItem!.source.item : null,
           );
         },

@@ -11,3 +11,8 @@ extension NullableEmptyString on String? {
 extension NullableBlankString on String? {
   bool get isNullOrBlank => this == null || this!.isBlank;
 }
+
+extension NullableJoin on Iterable<String?> {
+  /// Joins all non-null elements as String.  If none exist, returns null.
+  String? joinNonNull([String separator = ""]) => nonNulls.isEmpty ? null : nonNulls.join(separator);
+}

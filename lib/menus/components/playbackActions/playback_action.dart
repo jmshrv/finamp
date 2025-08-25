@@ -42,8 +42,8 @@ class PlaybackAction extends ConsumerWidget {
         ),
         onPressed: enabled
             ? () {
-          FeedbackHelper.feedback(FeedbackType.selection);
-          onPressed();
+                FeedbackHelper.feedback(FeedbackType.selection);
+                onPressed();
               }
             : null,
         visualDensity: VisualDensity.compact,

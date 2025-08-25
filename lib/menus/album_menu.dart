@@ -23,18 +23,26 @@ const albumMenuRouteName = "/album-menu";
 
 Future<void> showModalAlbumMenu({
   required BuildContext context,
-  required BaseItemDto baseItem,
+  required PlayableItem item,
   FinampStorableQueueInfo? queueInfo,
 }) async {
+  final BaseItemDto baseItem = switch (item) {
+    AlbumDisc() => item.parent,
+    BaseItemDto() => item,
+  };
+
   // Normal menu entries, excluding headers
   List<HideableMenuEntry> getMenuEntries(BuildContext context) {
     return [
       if (queueInfo != null) RestoreQueueMenuEntry(queueInfo: queueInfo),
-      AddToPlaylistMenuEntry(baseItem: baseItem),
-      InstantMixMenuEntry(baseItem: baseItem),
-      AdaptiveDownloadLockDeleteMenuEntry(baseItem: baseItem),
-      ToggleFavoriteMenuEntry(baseItem: baseItem),
-      DeleteFromServerMenuEntry(baseItem: baseItem),
+      AddToPlaylistMenuEntry(item: item),
+      // instant mix from arbitrary collection of tracks is not supported
+      if (item is BaseItemDto) InstantMixMenuEntry(baseItem: item),
+      // download system is not that flexible
+      if (item is BaseItemDto) AdaptiveDownloadLockDeleteMenuEntry(baseItem: item),
+      // backend is not flexible too
+      if (item is BaseItemDto) ToggleFavoriteMenuEntry(baseItem: item),
+      if (item is BaseItemDto) DeleteFromServerMenuEntry(baseItem: item),
     ];
   }
 
@@ -45,13 +53,13 @@ Future<void> showModalAlbumMenu({
     final pageViewController = PageController();
 
     List<Widget> menu = [
-      SliverPersistentHeader(delegate: MenuItemInfoSliverHeader(item: baseItem), pinned: true),
+      SliverPersistentHeader(delegate: MenuItemInfoSliverHeader(item: item), pinned: true),
       MenuMask(
         height: MenuItemInfoSliverHeader.defaultHeight,
         child: SliverToBoxAdapter(
           child: PlaybackActionRow(
             controller: pageViewController,
-            playbackActionPages: getPlaybackActionPages(context: context, baseItem: baseItem),
+            playbackActionPages: getPlaybackActionPages(context: context, item: item),
           ),
         ),
       ),

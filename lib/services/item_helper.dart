@@ -11,23 +11,23 @@ import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-Future<List<BaseItemDto>?> loadChildTracks({
-  required BaseItemDto baseItem,
-  SortBy? sortBy,
-  SortOrder? sortOrder,
-  String? Function(BaseItemDto)? groupListBy,
-  BaseItemDto? genreFilter,
-  bool manuallyShuffle = false,
-}) async {
+Future<List<BaseItemDto>> loadChildTracks({required PlayableItem item}) {
+  switch (item) {
+    case AlbumDisc():
+      return Future.value(item.tracks);
+    case BaseItemDto():
+      return loadChildTracksFromBaseItem(baseItem: item);
+  }
+}
+
+Future<List<BaseItemDto>> loadChildTracksFromBaseItem({required BaseItemDto baseItem}) async {
   final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
   final finampUserHelper = GetIt.instance<FinampUserHelper>();
   final settings = FinampSettingsHelper.finampSettings;
   final ref = GetIt.instance<ProviderContainer>();
 
   final Future<List<BaseItemDto>?> newItemsFuture;
-  List<BaseItemDto>? newItems;
 
   if (settings.isOffline) {
     newItemsFuture = loadChildTracksOffline(baseItem: baseItem);
@@ -44,15 +44,13 @@ Future<List<BaseItemDto>?> loadChildTracks({
         break;
       case BaseItemDtoType.artist:
         newItemsFuture = ref.read(
-          getArtistTracksProvider(baseItem, finampUserHelper.currentUser?.currentView, genreFilter).future,
+          getArtistTracksProvider(baseItem, finampUserHelper.currentUser?.currentView, null).future,
         );
         break;
       case BaseItemDtoType.genre:
         newItemsFuture = jellyfinApiHelper.getItems(
           parentItem: finampUserHelper.currentUser?.currentView,
           includeItemTypes: [BaseItemDtoType.track.idString].join(","),
-          sortBy: sortBy?.jellyfinName(null) ?? SortBy.album.jellyfinName(null),
-          sortOrder: sortOrder?.toString(),
           genreFilter: baseItem,
         );
         break;
@@ -60,14 +58,14 @@ Future<List<BaseItemDto>?> loadChildTracks({
         newItemsFuture = jellyfinApiHelper.getItems(
           parentItem: baseItem,
           includeItemTypes: [BaseItemDtoType.track.idString].join(","),
-          sortBy: sortBy?.jellyfinName(null) ?? "ParentIndexNumber,IndexNumber,SortName",
-          sortOrder: sortOrder?.toString(),
+          sortBy: "ParentIndexNumber,IndexNumber,SortName",
+          sortOrder: null,
           // filters: settings.onlyShowFavorites ? "IsFavorite" : null,
         );
     }
   }
 
-  newItems = await newItemsFuture;
+  final List<BaseItemDto>? newItems = await newItemsFuture;
 
   if (newItems == null) {
     GlobalSnackbar.message(
@@ -76,15 +74,19 @@ Future<List<BaseItemDto>?> loadChildTracks({
     return [];
   }
 
-  if (groupListBy != null) {
-    var albums = newItems.groupListsBy(groupListBy).values.toList();
-    if (manuallyShuffle) {
-      albums = albums..shuffle();
-    }
-    newItems = albums.flattened.toList();
-  }
-
   return newItems;
+}
+
+List<BaseItemDto> groupItems({
+  required List<BaseItemDto> items,
+  required String? Function(BaseItemDto) groupListBy,
+  bool manuallyShuffle = false,
+}) {
+  var albums = items.groupListsBy(groupListBy).values.toList();
+  if (manuallyShuffle) {
+    albums = albums..shuffle();
+  }
+  return albums.flattened.toList();
 }
 
 Future<List<BaseItemDto>?> loadChildTracksOffline({

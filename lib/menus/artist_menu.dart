@@ -29,7 +29,7 @@ Future<void> showModalArtistMenu({
   List<HideableMenuEntry> getMenuEntries(BuildContext context) {
     return [
       if (queueInfo != null) RestoreQueueMenuEntry(queueInfo: queueInfo),
-      AddToPlaylistMenuEntry(baseItem: baseItem),
+      AddToPlaylistMenuEntry(item: baseItem),
       InstantMixMenuEntry(baseItem: baseItem),
       AdaptiveDownloadLockDeleteMenuEntry(baseItem: baseItem),
       ToggleFavoriteMenuEntry(baseItem: baseItem),
@@ -49,7 +49,7 @@ Future<void> showModalArtistMenu({
         child: SliverToBoxAdapter(
           child: PlaybackActionRow(
             controller: pageViewController,
-            playbackActionPages: getPlaybackActionPages(context: context, baseItem: baseItem),
+            playbackActionPages: getPlaybackActionPages(context: context, item: baseItem),
           ),
         ),
       ),
