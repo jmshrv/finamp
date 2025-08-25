@@ -152,7 +152,7 @@
     "@failedToGetTrackFromDownloadId": {},
     "error": "錯誤",
     "@error": {},
-    "discNumber": "唱片 {number}",
+    "discNumber": "光碟 {number}",
     "@discNumber": {
         "placeholders": {
             "number": {
@@ -310,9 +310,9 @@
     "@invalidNumber": {},
     "sleepTimerTooltip": "睡眠定時器",
     "@sleepTimerTooltip": {},
-    "addToPlaylistTooltip": "加入至播放清單",
+    "addToPlaylistTooltip": "加入播放清單",
     "@addToPlaylistTooltip": {},
-    "addToPlaylistTitle": "加入至播放清單",
+    "addToPlaylistTitle": "加入播放清單",
     "@addToPlaylistTitle": {},
     "newPlaylist": "建立播放清單",
     "@newPlaylist": {},
@@ -330,7 +330,7 @@
     "@unknownArtist": {},
     "queue": "播放佇列",
     "@queue": {},
-    "addToQueue": "加入至播放佇列",
+    "addToQueue": "加入播放佇列",
     "@addToQueue": {},
     "replaceQueue": "更換播放佇列",
     "@replaceQueue": {},
@@ -338,7 +338,7 @@
     "@instantMix": {},
     "goToAlbum": "檢視專輯",
     "@goToAlbum": {},
-    "addedToQueue": "已加入至播放佇列。",
+    "addedToQueue": "已加入播放佇列。",
     "@addedToQueue": {},
     "queueReplaced": "播放佇列已被取代。",
     "@queueReplaced": {},
@@ -374,7 +374,7 @@
     },
     "removeFromMix": "從組合中刪除",
     "@removeFromMix": {},
-    "addToMix": "加入至組合",
+    "addToMix": "加入組合",
     "@addToMix": {},
     "disableGesture": "禁用手勢",
     "@disableGesture": {},
@@ -402,7 +402,7 @@
     "@language": {},
     "showUncensoredLogMessage": "此記錄包含你的登入資訊。是否顯示？",
     "@showUncensoredLogMessage": {},
-    "insertedIntoQueue": "已加入至播放佇列。",
+    "insertedIntoQueue": "已加入播放佇列。",
     "@insertedIntoQueue": {
         "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
     },
@@ -598,7 +598,7 @@
     },
     "seconds": "秒",
     "@seconds": {},
-    "playlistActionsMenuButtonTooltip": "點擊以加入至播放清單，長按以切換收藏狀態。",
+    "playlistActionsMenuButtonTooltip": "點擊以加入播放清單，長按以切換收藏狀態。",
     "@playlistActionsMenuButtonTooltip": {
         "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
     },
@@ -703,9 +703,9 @@
             }
         }
     },
-    "addToMorePlaylistsTooltip": "加入至更多播放清單",
+    "addToMorePlaylistsTooltip": "加入更多播放清單",
     "@addToMorePlaylistsTooltip": {},
-    "addToMorePlaylistsTitle": "加入至更多播放清單",
+    "addToMorePlaylistsTitle": "加入更多播放清單",
     "@addToMorePlaylistsTitle": {},
     "removeFromPlaylistNamedTooltip": "從播放清單「 '{playlistName}'」移除",
     "@removeFromPlaylistNamedTooltip": {
@@ -885,11 +885,11 @@
     "@playerScreenMinimumCoverPaddingEditorSubtitle": {
         "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
     },
-    "addToNextUp": "加入至即將播放",
+    "addToNextUp": "加入即將播放",
     "@addToNextUp": {
         "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
     },
-    "confirmAddedToPlaylist": "已加入至播放清單。",
+    "confirmAddedToPlaylist": "已加入播放清單。",
     "@confirmAddedToPlaylist": {
         "description": "Snackbar message that shows when the user successfully adds items to a playlist."
     },
@@ -915,7 +915,7 @@
     "@shuffleToQueue": {
         "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
     },
-    "confirmAddToNextUp": "{type,select,track{歌曲}album{專輯}artist{藝人}playlist{播放清單}genre{類型}other{項目}}已加入即將播放",
+    "confirmAddToNextUp": "{type, select, track{歌曲} album{專輯} artist{藝人} playlist{播放清單} genre{類型} disc{光碟} other{項目}}已加入即將播放",
     "@confirmAddToNextUp": {
         "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
         "placeholders": {
@@ -924,7 +924,7 @@
             }
         }
     },
-    "confirmAddToQueue": "{type, select, track{歌曲} album{專輯} artist{藝人} playlist{播放清單} genre{類型} other{項目}}加入至播放佇列",
+    "confirmAddToQueue": "{type, select, track{歌曲} album{專輯} artist{藝人} playlist{播放清單} genre{類型} disc{光碟} other{項目}}已加入播放佇列",
     "@confirmAddToQueue": {
         "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
         "placeholders": {
@@ -1134,15 +1134,15 @@
     "@shuffleAlbums": {
         "description": "Label for action that shuffles all albums of an artist or genre"
     },
-    "shuffleAlbumsNext": "隨機將專輯加入下一首",
+    "shuffleAlbumsNext": "專輯隨機加入下一首",
     "@shuffleAlbumsNext": {
         "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
     },
-    "shuffleAlbumsToNextUp": "隨機將專輯加入即將播放",
+    "shuffleAlbumsToNextUp": "專輯隨機加入即將播放",
     "@shuffleAlbumsToNextUp": {
         "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
     },
-    "shuffleAlbumsToQueue": "隨機將專輯加入播放佇列",
+    "shuffleAlbumsToQueue": "專輯隨機加入播放佇列",
     "@shuffleAlbumsToQueue": {
         "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
     },
@@ -2112,7 +2112,7 @@
     },
     "removeFavorite": "取消收藏",
     "@removeFavorite": {},
-    "addFavorite": "加入至收藏",
+    "addFavorite": "加入收藏",
     "@addFavorite": {},
     "stopAndClearQueue": "停止播放並清空播放佇列",
     "@stopAndClearQueue": {
@@ -2710,5 +2710,22 @@
     "preferAddingToFavoritesOverPlaylistsSubtitle": "啟用後，點擊時加入收藏，長按則會開啟「加入播放清單」選單。預設情況下則相反。",
     "@preferAddingToFavoritesOverPlaylistsSubtitle": {
         "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
+    },
+    "discOfAlbum": "[光碟 {number}] {albumName}",
+    "@discOfAlbum": {
+        "description": "Used when a single disc of album is opened, then album name is replaced with this string",
+        "placeholders": {
+            "number": {
+                "type": "int",
+                "example": "1"
+            },
+            "albumName": {
+                "type": "String"
+            }
+        }
+    },
+    "moreActionsOnAlbumDisc": "專輯光碟上的更多操作",
+    "@moreActionsOnAlbumDisc": {
+        "description": "Label for the disc header menu button."
     }
 }
