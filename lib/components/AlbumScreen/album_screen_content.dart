@@ -165,72 +165,80 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
             childrenPerDisc.length > 1) // show headers only for multi disc albums
           for (var childrenOfThisDisc in childrenPerDisc) ...[
             SliverStickyHeader(
-              header: Container(
+              header: Material(
                 color: Theme.of(context).colorScheme.surface,
-                child: Dismissible(
-                  key: Key("${childrenOfThisDisc[0].id}-${childrenOfThisDisc[0].parentIndexNumber}"),
-                  direction: ref.watch(finampSettingsProvider.disableGesture)
-                      ? DismissDirection.none
-                      : getAllowedDismissDirection(
-                          swipeLeftEnabled:
-                              ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight) != ItemSwipeActions.nothing,
-                          swipeRightEnabled:
-                              ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft) != ItemSwipeActions.nothing,
-                        ),
-                  dismissThresholds: const {DismissDirection.startToEnd: 0.65, DismissDirection.endToStart: 0.65},
-                  // no background, dismissing really dismisses here
-                  confirmDismiss: (direction) => onConfirmPlayableDismiss(
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onLongPress: () => showModalAlbumMenu(
                     context: context,
-                    direction: direction,
-                    sourceItem: AlbumDisc(parent: widget.parent, tracks: childrenOfThisDisc),
-                    tracks: childrenOfThisDisc,
+                    item: AlbumDisc(parent: widget.parent, tracks: childrenOfThisDisc),
                   ),
-                  background: buildSwipeActionBackground(
-                    context: context,
-                    direction: DismissDirection.startToEnd,
-                    action: ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight),
-                  ),
-                  secondaryBackground: buildSwipeActionBackground(
-                    context: context,
-                    direction: DismissDirection.endToStart,
-                    action: ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
-                          style: TextTheme.of(context).titleMedium,
-                        ),
-                        Spacer(),
-                        IconButtonWithSemantics(
-                          onPressed: () async => await GetIt.instance<QueueService>().startPlayback(
-                            items: childrenOfThisDisc,
-                            source: QueueItemSource.fromBaseItem(widget.parent),
-                            order: FinampPlaybackOrder.linear,
+                  child: Dismissible(
+                    key: Key("${childrenOfThisDisc[0].id}-${childrenOfThisDisc[0].parentIndexNumber}"),
+                    direction: ref.watch(finampSettingsProvider.disableGesture)
+                        ? DismissDirection.none
+                        : getAllowedDismissDirection(
+                            swipeLeftEnabled:
+                                ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight) !=
+                                ItemSwipeActions.nothing,
+                            swipeRightEnabled:
+                                ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft) !=
+                                ItemSwipeActions.nothing,
                           ),
-                          label: AppLocalizations.of(context)!.playButtonLabel,
-                          icon: TablerIcons.player_play,
-                        ),
-                        IconButtonWithSemantics(
-                          onPressed: () async => await GetIt.instance<QueueService>().startPlayback(
-                            items: childrenOfThisDisc,
-                            source: QueueItemSource.fromBaseItem(widget.parent),
-                            order: FinampPlaybackOrder.shuffled,
+                    dismissThresholds: const {DismissDirection.startToEnd: 0.65, DismissDirection.endToStart: 0.65},
+                    confirmDismiss: (direction) => onConfirmPlayableDismiss(
+                      context: context,
+                      direction: direction,
+                      sourceItem: AlbumDisc(parent: widget.parent, tracks: childrenOfThisDisc),
+                      tracks: childrenOfThisDisc,
+                    ),
+                    background: buildSwipeActionBackground(
+                      context: context,
+                      direction: DismissDirection.startToEnd,
+                      action: ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight),
+                    ),
+                    secondaryBackground: buildSwipeActionBackground(
+                      context: context,
+                      direction: DismissDirection.endToStart,
+                      action: ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
+                            style: TextTheme.of(context).titleMedium,
                           ),
-                          label: AppLocalizations.of(context)!.shuffleButtonLabel,
-                          icon: TablerIcons.arrows_shuffle,
-                        ),
-                        OverflowMenuButton(
-                          onPressed: () => showModalAlbumMenu(
-                            context: context,
-                            item: AlbumDisc(parent: widget.parent, tracks: childrenOfThisDisc),
+                          Spacer(),
+                          IconButtonWithSemantics(
+                            onPressed: () async => await GetIt.instance<QueueService>().startPlayback(
+                              items: childrenOfThisDisc,
+                              source: QueueItemSource.fromBaseItem(widget.parent),
+                              order: FinampPlaybackOrder.linear,
+                            ),
+                            label: AppLocalizations.of(context)!.playButtonLabel,
+                            icon: TablerIcons.player_play,
                           ),
-                          label: AppLocalizations.of(context)!.moreActionsOnAlbumDisc,
-                        ),
-                      ],
+                          IconButtonWithSemantics(
+                            onPressed: () async => await GetIt.instance<QueueService>().startPlayback(
+                              items: childrenOfThisDisc,
+                              source: QueueItemSource.fromBaseItem(widget.parent),
+                              order: FinampPlaybackOrder.shuffled,
+                            ),
+                            label: AppLocalizations.of(context)!.shuffleButtonLabel,
+                            icon: TablerIcons.arrows_shuffle,
+                          ),
+                          OverflowMenuButton(
+                            onPressed: () => showModalAlbumMenu(
+                              context: context,
+                              item: AlbumDisc(parent: widget.parent, tracks: childrenOfThisDisc),
+                            ),
+                            label: AppLocalizations.of(context)!.moreActionsOnAlbumDisc,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
