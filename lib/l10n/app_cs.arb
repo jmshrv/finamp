@@ -733,7 +733,7 @@
     "@confirmShuffleNext": {
         "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
     },
-    "confirmAddToNextUp": "{type, select, track{Skladba přidána} album{Album přidáno} artist{Umělec přidán} playlist{Seznam skladeb přidán} genre{Žánr přidán} other{Položka přidána}} do dalších na řadě",
+    "confirmAddToNextUp": "{type, select, track{Skladba přidána} album{Album přidáno} artist{Umělec přidán} playlist{Seznam skladeb přidán} genre{Žánr přidán} disc{Disk přidán} other{Položka přidána}} do dalších na řadě",
     "@confirmAddToNextUp": {
         "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
         "placeholders": {
@@ -1378,7 +1378,7 @@
     "@addToNextUp": {
         "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
     },
-    "confirmAddToQueue": "{type, select, track{Skladba přidána} album{Album přidáno} artist{Umělec přidán} playlist{Seznam skladeb přidán} genre{Žánr přidán} other{Položka přidána}} do fronty",
+    "confirmAddToQueue": "{type, select, track{Skladba přidána} album{Album přidáno} artist{Umělec přidán} playlist{Seznam skladeb přidán} genre{Žánr přidán} disc{Disk přidán} other{Položka přidána}} do fronty",
     "@confirmAddToQueue": {
         "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
         "placeholders": {
@@ -2708,5 +2708,22 @@
     "preferAddingToFavoritesOverPlaylistsSubtitle": "Pokud je povoleno, krátké klepnutí přidá položku do oblíbených a dlouhé podržení otevře nabídku „Přidat do seznamu skladeb“. Výchozí je obráceně.",
     "@preferAddingToFavoritesOverPlaylistsSubtitle": {
         "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
+    },
+    "discOfAlbum": "[Disk {number}] {albumName}",
+    "@discOfAlbum": {
+        "description": "Used when a single disc of album is opened, then album name is replaced with this string",
+        "placeholders": {
+            "number": {
+                "type": "int",
+                "example": "1"
+            },
+            "albumName": {
+                "type": "String"
+            }
+        }
+    },
+    "moreActionsOnAlbumDisc": "Další akce disku alba",
+    "@moreActionsOnAlbumDisc": {
+        "description": "Label for the disc header menu button."
     }
 }
