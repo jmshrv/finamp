@@ -828,7 +828,7 @@
     "@queueRestoreButtonLabel": {
         "description": "Button to restore archived now playing queue, overwriting current queue"
     },
-    "confirmAddToNextUp": "{type, select, track{Track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} ajouté à Suivants",
+    "confirmAddToNextUp": "Ajout de {type, select, track{Track} album{album} artiste{artiste} playlist{playlist} genre{genre} disque{disque} autre{élément}} à Suivant",
     "@confirmAddToNextUp": {
         "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
         "placeholders": {
@@ -846,7 +846,7 @@
             }
         }
     },
-    "confirmAddToQueue": "{type, select, track{track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} ajouté à la file de lecture",
+    "confirmAddToQueue": "Ajout de {type, select, track{track} album{album} artist{artist} playlist{playlist} genre{genre} disc{disc} other{item}} à la file d'attente",
     "@confirmAddToQueue": {
         "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
         "placeholders": {
@@ -2720,5 +2720,22 @@
     "preferAddingToFavoritesOverPlaylistsTitle": "Ajouter aux favoris en appuyant sur l'icône en forme de cœur",
     "@preferAddingToFavoritesOverPlaylistsTitle": {
         "description": "Title for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
+    },
+    "discOfAlbum": "[Disc {number}] {albumName}",
+    "@discOfAlbum": {
+        "description": "Used when a single disc of album is opened, then album name is replaced with this string",
+        "placeholders": {
+            "number": {
+                "type": "int",
+                "example": "1"
+            },
+            "albumName": {
+                "type": "String"
+            }
+        }
+    },
+    "moreActionsOnAlbumDisc": "Plus d'actions sur le disque de l'album",
+    "@moreActionsOnAlbumDisc": {
+        "description": "Label for the disc header menu button."
     }
 }
