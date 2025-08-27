@@ -1131,11 +1131,15 @@ double? getGainForCurrentPlayback(MediaItem currentTrack, jellyfin_models.BaseIt
       item ?? jellyfin_models.BaseItemDto.fromJson(currentTrack.extras?["itemJson"] as Map<String, dynamic>);
 
   double? effectiveGainChange;
+  final providerContainer = GetIt.instance<ProviderContainer>();
+  providerContainer.read(
+    currentTrackMetadataProvider,
+  ); // forces it even in background https://github.com/rrousselGit/riverpod/issues/2671
+
   switch (FinampSettingsHelper.finampSettings.volumeNormalizationMode) {
     case VolumeNormalizationMode.hybrid
         when GetIt.instance<QueueService>().getQueue().isCurrentlyPlayingTracksFromSameAlbum():
     case VolumeNormalizationMode.albumBased:
-      final providerContainer = GetIt.instance<ProviderContainer>();
       // final parentNormalizationGain = providerContainer.read(currentTrackMetadataProvider).valueOrNull?.parentNormalizationGain;
       // includeLyrics is always true - fetch the metadataRequest directly.
       // Requires that provided arguments are the only fields of request,
