@@ -1350,7 +1350,7 @@
     "@skipToPreviousTrackButtonTooltip": {
         "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
     },
-    "confirmAddToNextUp": "Lisätty {type, select, track{Track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} Seuraavaksi-jonoon",
+    "confirmAddToNextUp": "Lisättiin {type, select, track{kappale} album{albumi} artist{artisti} playlist{soittolista} genre{tyylilaji} disc{levy} other{kohde}} seuraavaksi- jonoon",
     "@confirmAddToNextUp": {
         "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
         "placeholders": {
@@ -1532,7 +1532,7 @@
             }
         }
     },
-    "confirmAddToQueue": "Lisätty {type, select, track{track} album{album} artist{artist} playlist{playlist} genre{genre} other{item}} jonoon",
+    "confirmAddToQueue": "Lisättiin {type, select, track{kappale} album{albumi} artist{artisti} playlist{soittolista} genre{tyylilaji} disc{levy} other{kohde}} jonoon",
     "@confirmAddToQueue": {
         "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
         "placeholders": {
@@ -2714,5 +2714,22 @@
     "preferAddingToFavoritesOverPlaylistsSubtitle": "Kun kytketty päälle, lyhyt napautus lisää suosikkeihin, ja pitkä painallus avaa ’lisää soittolistalle’-valikon. Oletuksena toiminnot ovat käänteiset.",
     "@preferAddingToFavoritesOverPlaylistsSubtitle": {
         "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
+    },
+    "discOfAlbum": "[Levy {number}] {albumName}",
+    "@discOfAlbum": {
+        "description": "Used when a single disc of album is opened, then album name is replaced with this string",
+        "placeholders": {
+            "number": {
+                "type": "int",
+                "example": "1"
+            },
+            "albumName": {
+                "type": "String"
+            }
+        }
+    },
+    "moreActionsOnAlbumDisc": "Lisää levytoimintoja",
+    "@moreActionsOnAlbumDisc": {
+        "description": "Label for the disc header menu button."
     }
 }
