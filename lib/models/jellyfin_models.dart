@@ -777,11 +777,11 @@ class DeviceProfile {
     this.maxStaticBitrate,
     this.musicStreamingTranscodingBitrate,
     this.maxStaticMusicBitrate,
-    this.directPlayProfiles,
-    this.transcodingProfiles,
-    this.containerProfiles,
-    this.codecProfiles,
-    this.subtitleProfiles,
+    this.directPlayProfiles = const [],
+    this.transcodingProfiles = const [],
+    this.containerProfiles = const [],
+    this.codecProfiles = const [],
+    this.subtitleProfiles = const [],
   });
 
   /// Gets or sets the Name.
@@ -946,19 +946,19 @@ class DeviceProfile {
 
   /// Gets or sets the direct play profiles.
   @HiveField(33)
-  List<DirectPlayProfile>? directPlayProfiles;
+  List<DirectPlayProfile> directPlayProfiles;
 
   /// Gets or sets the transcoding profiles.
   @HiveField(34)
-  List<TranscodingProfile>? transcodingProfiles;
+  List<TranscodingProfile> transcodingProfiles;
 
   /// Gets or sets the ContainerProfiles.
   @HiveField(35)
-  List<ContainerProfile>? containerProfiles;
+  List<ContainerProfile> containerProfiles;
 
   /// Gets or sets the CodecProfiles.
   @HiveField(36)
-  List<CodecProfile>? codecProfiles;
+  List<CodecProfile> codecProfiles;
 
   /// Gets or sets the ResponseProfiles.
   // @Deprecated("removed from API")
@@ -967,7 +967,7 @@ class DeviceProfile {
 
   /// Gets or sets the SubtitleProfiles.
   @HiveField(38)
-  List<SubtitleProfile>? subtitleProfiles;
+  List<SubtitleProfile> subtitleProfiles;
 
   factory DeviceProfile.fromJson(Map<String, dynamic> json) => _$DeviceProfileFromJson(json);
   Map<String, dynamic> toJson() => _$DeviceProfileToJson(this);
@@ -1078,31 +1078,50 @@ class DirectPlayProfile {
 
   /// Enum: "Audio" "Video" "Photo"
   @HiveField(3)
-  String type;
+  DlnaProfileType type;
 
   factory DirectPlayProfile.fromJson(Map<String, dynamic> json) => _$DirectPlayProfileFromJson(json);
   Map<String, dynamic> toJson() => _$DirectPlayProfileToJson(this);
+}
+
+@HiveType(typeId: 103)
+enum DlnaProfileType {
+  @HiveField(0)
+  audio("Audio"),
+  @HiveField(1)
+  lyric("Lyric"),
+  @HiveField(2)
+  video("Video"),
+  @HiveField(3)
+  subtitle("Subtitle"),
+  @HiveField(4)
+  photo("Photo");
+
+  const DlnaProfileType(this.jellyfinName);
+
+  final String jellyfinName;
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 22)
 class TranscodingProfile {
   TranscodingProfile({
-    this.container,
     required this.type,
-    this.videoCodec,
-    this.audioCodec,
-    this.protocol,
-    required this.estimateContentLength,
-    required this.enableMpegtsM2TsMode,
-    required this.transcodeSeekInfo,
-    required this.copyTimestamps,
     required this.context,
-    required this.maxAudioChannels,
-    required this.minSegments,
-    required this.segmentLength,
-    required this.breakOnNonKeyFrames,
-    required this.enableSubtitlesInManifest,
+    required this.container,
+    this.minSegments = 1,
+    this.audioCodec = "aac",
+    this.videoCodec = "mp4",
+    this.protocol,
+    this.estimateContentLength = false,
+    this.enableMpegtsM2TsMode = false,
+    this.transcodeSeekInfo = "Auto",
+    this.copyTimestamps = true,
+    this.segmentLength = 0,
+    this.breakOnNonKeyFrames = false,
+    this.enableSubtitlesInManifest = true,
+    this.maxAudioChannels,
+    this.conditions = const [],
   });
 
   @HiveField(0)
@@ -1110,29 +1129,29 @@ class TranscodingProfile {
 
   /// Enum: "Audio" "Video" "Photo"
   @HiveField(1)
-  String type;
+  DlnaProfileType type;
 
   @HiveField(2)
-  String? videoCodec;
+  String videoCodec;
 
   @HiveField(3)
-  String? audioCodec;
+  String audioCodec;
 
   @HiveField(4)
   String? protocol;
 
   @HiveField(5)
-  bool estimateContentLength;
+  bool? estimateContentLength;
 
   @HiveField(6)
-  bool enableMpegtsM2TsMode;
+  bool? enableMpegtsM2TsMode;
 
   /// Enum: "Auto" "Bytes"
   @HiveField(7)
-  String transcodeSeekInfo;
+  String? transcodeSeekInfo;
 
   @HiveField(8)
-  bool copyTimestamps;
+  bool? copyTimestamps;
 
   /// Enum: "Streaming" "Static"
   @HiveField(9)
@@ -1142,18 +1161,19 @@ class TranscodingProfile {
   String? maxAudioChannels;
 
   @HiveField(11)
-  int minSegments;
+  int? minSegments;
 
   @HiveField(12)
-  int segmentLength;
+  int? segmentLength;
 
   @HiveField(13)
-  bool breakOnNonKeyFrames;
-
-  // Below fields were added during null safety migration (0.5.0)
+  bool? breakOnNonKeyFrames;
 
   @HiveField(14)
-  bool enableSubtitlesInManifest;
+  bool? enableSubtitlesInManifest;
+
+  @HiveField(15)
+  List<ProfileCondition> conditions;
 
   factory TranscodingProfile.fromJson(Map<String, dynamic> json) => _$TranscodingProfileFromJson(json);
   Map<String, dynamic> toJson() => _$TranscodingProfileToJson(this);

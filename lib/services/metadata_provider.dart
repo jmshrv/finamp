@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -105,6 +108,138 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, BaseItemDto> metadataPr
         }
       }
 
+      final DeviceProfile applePlatformProfile = DeviceProfile(
+        directPlayProfiles: [
+          DirectPlayProfile(container: 'mp3', type: DlnaProfileType.audio),
+          DirectPlayProfile(container: 'aac', type: DlnaProfileType.audio),
+          DirectPlayProfile(audioCodec: 'aac', container: 'm4a', type: DlnaProfileType.audio),
+          DirectPlayProfile(audioCodec: 'aac', container: 'm4b', type: DlnaProfileType.audio),
+          DirectPlayProfile(container: 'flac', type: DlnaProfileType.audio),
+          DirectPlayProfile(container: 'alac', type: DlnaProfileType.audio),
+          DirectPlayProfile(audioCodec: 'alac', container: 'm4a', type: DlnaProfileType.audio),
+          DirectPlayProfile(audioCodec: 'alac', container: 'm4b', type: DlnaProfileType.audio),
+          DirectPlayProfile(container: 'wav', type: DlnaProfileType.audio),
+        ],
+        transcodingProfiles: [
+          TranscodingProfile(
+            audioCodec: 'aac',
+            breakOnNonKeyFrames: true,
+            container: 'aac',
+            context: "Streaming",
+            maxAudioChannels: '6',
+            minSegments: 2,
+            protocol: "hls",
+            type: DlnaProfileType.audio,
+          ),
+          TranscodingProfile(
+            audioCodec: 'aac',
+            container: 'aac',
+            context: "Streaming",
+            maxAudioChannels: '6',
+            protocol: "http",
+            type: DlnaProfileType.audio,
+          ),
+          TranscodingProfile(
+            audioCodec: 'mp3',
+            container: 'mp3',
+            context: "Streaming",
+            maxAudioChannels: '6',
+            protocol: "http",
+            type: DlnaProfileType.audio,
+          ),
+          TranscodingProfile(
+            audioCodec: 'wav',
+            container: 'wav',
+            context: "Streaming",
+            maxAudioChannels: '6',
+            protocol: "http",
+            type: DlnaProfileType.audio,
+          ),
+          TranscodingProfile(
+            audioCodec: 'mp3',
+            container: 'mp3',
+            context: "Static",
+            maxAudioChannels: '6',
+            protocol: "http",
+            type: DlnaProfileType.audio,
+          ),
+          TranscodingProfile(
+            audioCodec: 'aac',
+            container: 'aac',
+            context: "Static",
+            maxAudioChannels: '6',
+            protocol: "http",
+            type: DlnaProfileType.audio,
+          ),
+          TranscodingProfile(
+            audioCodec: 'wav',
+            container: 'wav',
+            context: "Static",
+            maxAudioChannels: '6',
+            protocol: "http",
+            type: DlnaProfileType.audio,
+          ),
+        ],
+      );
+
+      final DeviceProfile defaultPlatformProfile = DeviceProfile(
+        directPlayProfiles: [
+          // DirectPlayProfile(container: 'mp3', type: DlnaProfileType.audio),
+          // DirectPlayProfile(container: 'flac', type: DlnaProfileType.audio),
+          // DirectPlayProfile(container: 'wav', type: DlnaProfileType.audio),
+        ],
+        transcodingProfiles: [
+          // TranscodingProfile(
+          //   audioCodec: 'aac',
+          //   container: 'mp4',
+          //   context: "Streaming",
+          //   maxAudioChannels: '6',
+          //   protocol: "http",
+          //   type: DlnaProfileType.audio,
+          // ),
+          // TranscodingProfile(
+          //   audioCodec: 'mp3',
+          //   container: 'mp3',
+          //   context: "Streaming",
+          //   maxAudioChannels: '6',
+          //   protocol: "http",
+          //   type: DlnaProfileType.audio,
+          // ),
+          TranscodingProfile(
+            audioCodec: 'opus',
+            container: 'ogg',
+            context: "Streaming",
+            maxAudioChannels: '6',
+            protocol: "http",
+            type: DlnaProfileType.audio,
+          ),
+          TranscodingProfile(
+            audioCodec: 'wav',
+            container: 'wav',
+            context: "Streaming",
+            maxAudioChannels: '6',
+            protocol: "http",
+            type: DlnaProfileType.audio,
+          ),
+          // TranscodingProfile(
+          //   audioCodec: 'mp3',
+          //   container: 'mp3',
+          //   context: "Static",
+          //   maxAudioChannels: '6',
+          //   protocol: "http",
+          //   type: DlnaProfileType.audio,
+          // ),
+          TranscodingProfile(
+            audioCodec: 'wav',
+            container: 'wav',
+            context: "Static",
+            maxAudioChannels: '6',
+            protocol: "http",
+            type: DlnaProfileType.audio,
+          ),
+        ],
+      );
+
       //!!! only use offline metadata if the app is in offline mode
       // Finamp should always use the server metadata when online, if possible
       if (ref.watch(finampSettingsProvider.isOffline)) {
@@ -125,6 +260,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, BaseItemDto> metadataPr
               enableDirectPlay: false,
               enableDirectStream: false,
               enableTranscoding: true,
+              deviceProfile: (Platform.isIOS || Platform.isMacOS) ? applePlatformProfile : defaultPlatformProfile,
             ),
           );
         } catch (e) {

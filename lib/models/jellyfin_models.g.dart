@@ -679,11 +679,21 @@ class DeviceProfileAdapter extends TypeAdapter<DeviceProfile> {
       maxStaticBitrate: (fields[22] as num?)?.toInt(),
       musicStreamingTranscodingBitrate: (fields[23] as num?)?.toInt(),
       maxStaticMusicBitrate: (fields[24] as num?)?.toInt(),
-      directPlayProfiles: (fields[33] as List?)?.cast<DirectPlayProfile>(),
-      transcodingProfiles: (fields[34] as List?)?.cast<TranscodingProfile>(),
-      containerProfiles: (fields[35] as List?)?.cast<ContainerProfile>(),
-      codecProfiles: (fields[36] as List?)?.cast<CodecProfile>(),
-      subtitleProfiles: (fields[38] as List?)?.cast<SubtitleProfile>(),
+      directPlayProfiles: fields[33] == null
+          ? const []
+          : (fields[33] as List).cast<DirectPlayProfile>(),
+      transcodingProfiles: fields[34] == null
+          ? const []
+          : (fields[34] as List).cast<TranscodingProfile>(),
+      containerProfiles: fields[35] == null
+          ? const []
+          : (fields[35] as List).cast<ContainerProfile>(),
+      codecProfiles: fields[36] == null
+          ? const []
+          : (fields[36] as List).cast<CodecProfile>(),
+      subtitleProfiles: fields[38] == null
+          ? const []
+          : (fields[38] as List).cast<SubtitleProfile>(),
     );
   }
 
@@ -875,7 +885,7 @@ class DirectPlayProfileAdapter extends TypeAdapter<DirectPlayProfile> {
       container: fields[0] as String?,
       audioCodec: fields[1] as String?,
       videoCodec: fields[2] as String?,
-      type: fields[3] as String,
+      type: fields[3] as DlnaProfileType,
     );
   }
 
@@ -915,28 +925,33 @@ class TranscodingProfileAdapter extends TypeAdapter<TranscodingProfile> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return TranscodingProfile(
-      container: fields[0] as String?,
-      type: fields[1] as String,
-      videoCodec: fields[2] as String?,
-      audioCodec: fields[3] as String?,
-      protocol: fields[4] as String?,
-      estimateContentLength: fields[5] as bool,
-      enableMpegtsM2TsMode: fields[6] as bool,
-      transcodeSeekInfo: fields[7] as String,
-      copyTimestamps: fields[8] as bool,
+      type: fields[1] as DlnaProfileType,
       context: fields[9] as String,
+      container: fields[0] as String?,
+      minSegments: fields[11] == null ? 1 : (fields[11] as num?)?.toInt(),
+      audioCodec: fields[3] == null ? "aac" : fields[3] as String,
+      videoCodec: fields[2] == null ? "mp4" : fields[2] as String,
+      protocol: fields[4] as String?,
+      estimateContentLength: fields[5] == null ? false : fields[5] as bool?,
+      enableMpegtsM2TsMode: fields[6] == null ? false : fields[6] as bool?,
+      transcodeSeekInfo: fields[7] == null ? "Auto" : fields[7] as String?,
+      copyTimestamps: fields[8] == null ? true : fields[8] as bool?,
+      segmentLength: fields[12] == null ? 0 : (fields[12] as num?)?.toInt(),
+      breakOnNonKeyFrames: fields[13] == null ? false : fields[13] as bool?,
+      enableSubtitlesInManifest: fields[14] == null
+          ? true
+          : fields[14] as bool?,
       maxAudioChannels: fields[10] as String?,
-      minSegments: (fields[11] as num).toInt(),
-      segmentLength: (fields[12] as num).toInt(),
-      breakOnNonKeyFrames: fields[13] as bool,
-      enableSubtitlesInManifest: fields[14] as bool,
+      conditions: fields[15] == null
+          ? const []
+          : (fields[15] as List).cast<ProfileCondition>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, TranscodingProfile obj) {
     writer
-      ..writeByte(15)
+      ..writeByte(16)
       ..writeByte(0)
       ..write(obj.container)
       ..writeByte(1)
@@ -966,7 +981,9 @@ class TranscodingProfileAdapter extends TypeAdapter<TranscodingProfile> {
       ..writeByte(13)
       ..write(obj.breakOnNonKeyFrames)
       ..writeByte(14)
-      ..write(obj.enableSubtitlesInManifest);
+      ..write(obj.enableSubtitlesInManifest)
+      ..writeByte(15)
+      ..write(obj.conditions);
   }
 
   @override
@@ -2686,6 +2703,55 @@ class PlaybackInfoRequestAdapter extends TypeAdapter<PlaybackInfoRequest> {
           typeId == other.typeId;
 }
 
+class DlnaProfileTypeAdapter extends TypeAdapter<DlnaProfileType> {
+  @override
+  final typeId = 103;
+
+  @override
+  DlnaProfileType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return DlnaProfileType.audio;
+      case 1:
+        return DlnaProfileType.lyric;
+      case 2:
+        return DlnaProfileType.video;
+      case 3:
+        return DlnaProfileType.subtitle;
+      case 4:
+        return DlnaProfileType.photo;
+      default:
+        return DlnaProfileType.audio;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, DlnaProfileType obj) {
+    switch (obj) {
+      case DlnaProfileType.audio:
+        writer.writeByte(0);
+      case DlnaProfileType.lyric:
+        writer.writeByte(1);
+      case DlnaProfileType.video:
+        writer.writeByte(2);
+      case DlnaProfileType.subtitle:
+        writer.writeByte(3);
+      case DlnaProfileType.photo:
+        writer.writeByte(4);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DlnaProfileTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class SortByAdapter extends TypeAdapter<SortBy> {
   @override
   final typeId = 37;
@@ -3258,29 +3324,46 @@ DeviceProfile _$DeviceProfileFromJson(Map json) => DeviceProfile(
   musicStreamingTranscodingBitrate:
       (json['MusicStreamingTranscodingBitrate'] as num?)?.toInt(),
   maxStaticMusicBitrate: (json['MaxStaticMusicBitrate'] as num?)?.toInt(),
-  directPlayProfiles: (json['DirectPlayProfiles'] as List<dynamic>?)
-      ?.map(
-        (e) => DirectPlayProfile.fromJson(Map<String, dynamic>.from(e as Map)),
-      )
-      .toList(),
-  transcodingProfiles: (json['TranscodingProfiles'] as List<dynamic>?)
-      ?.map(
-        (e) => TranscodingProfile.fromJson(Map<String, dynamic>.from(e as Map)),
-      )
-      .toList(),
-  containerProfiles: (json['ContainerProfiles'] as List<dynamic>?)
-      ?.map(
-        (e) => ContainerProfile.fromJson(Map<String, dynamic>.from(e as Map)),
-      )
-      .toList(),
-  codecProfiles: (json['CodecProfiles'] as List<dynamic>?)
-      ?.map((e) => CodecProfile.fromJson(Map<String, dynamic>.from(e as Map)))
-      .toList(),
-  subtitleProfiles: (json['SubtitleProfiles'] as List<dynamic>?)
-      ?.map(
-        (e) => SubtitleProfile.fromJson(Map<String, dynamic>.from(e as Map)),
-      )
-      .toList(),
+  directPlayProfiles:
+      (json['DirectPlayProfiles'] as List<dynamic>?)
+          ?.map(
+            (e) =>
+                DirectPlayProfile.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList() ??
+      const [],
+  transcodingProfiles:
+      (json['TranscodingProfiles'] as List<dynamic>?)
+          ?.map(
+            (e) => TranscodingProfile.fromJson(
+              Map<String, dynamic>.from(e as Map),
+            ),
+          )
+          .toList() ??
+      const [],
+  containerProfiles:
+      (json['ContainerProfiles'] as List<dynamic>?)
+          ?.map(
+            (e) =>
+                ContainerProfile.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList() ??
+      const [],
+  codecProfiles:
+      (json['CodecProfiles'] as List<dynamic>?)
+          ?.map(
+            (e) => CodecProfile.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList() ??
+      const [],
+  subtitleProfiles:
+      (json['SubtitleProfiles'] as List<dynamic>?)
+          ?.map(
+            (e) =>
+                SubtitleProfile.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList() ??
+      const [],
 );
 
 Map<String, dynamic> _$DeviceProfileToJson(
@@ -3293,18 +3376,16 @@ Map<String, dynamic> _$DeviceProfileToJson(
   'MusicStreamingTranscodingBitrate': instance.musicStreamingTranscodingBitrate,
   'MaxStaticMusicBitrate': instance.maxStaticMusicBitrate,
   'DirectPlayProfiles': instance.directPlayProfiles
-      ?.map((e) => e.toJson())
+      .map((e) => e.toJson())
       .toList(),
   'TranscodingProfiles': instance.transcodingProfiles
-      ?.map((e) => e.toJson())
+      .map((e) => e.toJson())
       .toList(),
   'ContainerProfiles': instance.containerProfiles
-      ?.map((e) => e.toJson())
+      .map((e) => e.toJson())
       .toList(),
-  'CodecProfiles': instance.codecProfiles?.map((e) => e.toJson()).toList(),
-  'SubtitleProfiles': instance.subtitleProfiles
-      ?.map((e) => e.toJson())
-      .toList(),
+  'CodecProfiles': instance.codecProfiles.map((e) => e.toJson()).toList(),
+  'SubtitleProfiles': instance.subtitleProfiles.map((e) => e.toJson()).toList(),
 };
 
 DeviceIdentification _$DeviceIdentificationFromJson(Map json) =>
@@ -3363,7 +3444,7 @@ DirectPlayProfile _$DirectPlayProfileFromJson(Map json) => DirectPlayProfile(
   container: json['Container'] as String?,
   audioCodec: json['AudioCodec'] as String?,
   videoCodec: json['VideoCodec'] as String?,
-  type: json['Type'] as String,
+  type: $enumDecode(_$DlnaProfileTypeEnumMap, json['Type']),
 );
 
 Map<String, dynamic> _$DirectPlayProfileToJson(DirectPlayProfile instance) =>
@@ -3371,31 +3452,47 @@ Map<String, dynamic> _$DirectPlayProfileToJson(DirectPlayProfile instance) =>
       'Container': instance.container,
       'AudioCodec': instance.audioCodec,
       'VideoCodec': instance.videoCodec,
-      'Type': instance.type,
+      'Type': _$DlnaProfileTypeEnumMap[instance.type]!,
     };
 
+const _$DlnaProfileTypeEnumMap = {
+  DlnaProfileType.audio: 'audio',
+  DlnaProfileType.lyric: 'lyric',
+  DlnaProfileType.video: 'video',
+  DlnaProfileType.subtitle: 'subtitle',
+  DlnaProfileType.photo: 'photo',
+};
+
 TranscodingProfile _$TranscodingProfileFromJson(Map json) => TranscodingProfile(
-  container: json['Container'] as String?,
-  type: json['Type'] as String,
-  videoCodec: json['VideoCodec'] as String?,
-  audioCodec: json['AudioCodec'] as String?,
-  protocol: json['Protocol'] as String?,
-  estimateContentLength: json['EstimateContentLength'] as bool,
-  enableMpegtsM2TsMode: json['EnableMpegtsM2TsMode'] as bool,
-  transcodeSeekInfo: json['TranscodeSeekInfo'] as String,
-  copyTimestamps: json['CopyTimestamps'] as bool,
+  type: $enumDecode(_$DlnaProfileTypeEnumMap, json['Type']),
   context: json['Context'] as String,
+  container: json['Container'] as String?,
+  minSegments: (json['MinSegments'] as num?)?.toInt() ?? 1,
+  audioCodec: json['AudioCodec'] as String? ?? "aac",
+  videoCodec: json['VideoCodec'] as String? ?? "mp4",
+  protocol: json['Protocol'] as String?,
+  estimateContentLength: json['EstimateContentLength'] as bool? ?? false,
+  enableMpegtsM2TsMode: json['EnableMpegtsM2TsMode'] as bool? ?? false,
+  transcodeSeekInfo: json['TranscodeSeekInfo'] as String? ?? "Auto",
+  copyTimestamps: json['CopyTimestamps'] as bool? ?? true,
+  segmentLength: (json['SegmentLength'] as num?)?.toInt() ?? 0,
+  breakOnNonKeyFrames: json['BreakOnNonKeyFrames'] as bool? ?? false,
+  enableSubtitlesInManifest: json['EnableSubtitlesInManifest'] as bool? ?? true,
   maxAudioChannels: json['MaxAudioChannels'] as String?,
-  minSegments: (json['MinSegments'] as num).toInt(),
-  segmentLength: (json['SegmentLength'] as num).toInt(),
-  breakOnNonKeyFrames: json['BreakOnNonKeyFrames'] as bool,
-  enableSubtitlesInManifest: json['EnableSubtitlesInManifest'] as bool,
+  conditions:
+      (json['Conditions'] as List<dynamic>?)
+          ?.map(
+            (e) =>
+                ProfileCondition.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList() ??
+      const [],
 );
 
 Map<String, dynamic> _$TranscodingProfileToJson(TranscodingProfile instance) =>
     <String, dynamic>{
       'Container': instance.container,
-      'Type': instance.type,
+      'Type': _$DlnaProfileTypeEnumMap[instance.type]!,
       'VideoCodec': instance.videoCodec,
       'AudioCodec': instance.audioCodec,
       'Protocol': instance.protocol,
@@ -3409,6 +3506,7 @@ Map<String, dynamic> _$TranscodingProfileToJson(TranscodingProfile instance) =>
       'SegmentLength': instance.segmentLength,
       'BreakOnNonKeyFrames': instance.breakOnNonKeyFrames,
       'EnableSubtitlesInManifest': instance.enableSubtitlesInManifest,
+      'Conditions': instance.conditions.map((e) => e.toJson()).toList(),
     };
 
 ContainerProfile _$ContainerProfileFromJson(Map json) => ContainerProfile(

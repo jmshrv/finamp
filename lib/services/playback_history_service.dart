@@ -526,9 +526,16 @@ class PlaybackHistoryService {
     MetadataProvider? metadata,
   }) {
     try {
+
+      // metadata ??= GetIt.instance<ProviderContainer>().read(currentTrackMetadataProvider).value;
+
+      print("IN PLAYBACK REPORT: playSessionId=${item.item.extras?["playSessionId"] as String? ?? ""}");
+
+
       return jellyfin_models.PlaybackProgressInfo(
         itemId: item.baseItem?.id ?? jellyfin_models.BaseItemId(""),
-        playSessionId: metadata?.playbackInfo.playSessionId,
+        // playSessionId: metadata?.playbackInfo.playSessionId,
+        playSessionId: item.item.extras?["playSessionId"] as String? ?? "",
         sessionId: _queueService.getQueue().id,
         isPaused: isPaused,
         isMuted: isMuted,
@@ -565,12 +572,14 @@ class PlaybackHistoryService {
       return null;
     }
 
-    metadata ??= GetIt.instance<ProviderContainer>().read(currentTrackMetadataProvider).value;
+    // metadata ??= GetIt.instance<ProviderContainer>().read(currentTrackMetadataProvider).value;
+    print("IN GENERIC PLAYBACK REPORT: playSessionId=${currentTrack.item.extras?["playSessionId"] as String? ?? ""}");
 
     try {
       return jellyfin_models.PlaybackProgressInfo(
         itemId: currentTrack.baseItem?.id ?? jellyfin_models.BaseItemId(""),
-        playSessionId: metadata?.playbackInfo.playSessionId,
+        // playSessionId: metadata?.playbackInfo.playSessionId,
+        playSessionId: currentTrack.item.extras?["playSessionId"] as String? ?? "",
         sessionId: _queueService.getQueue().id,
         canSeek: true,
         isPaused: _audioService.paused,
