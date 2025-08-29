@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:finamp/services/current_track_metadata_provider.dart';
 import 'package:finamp/services/discord_rpc.dart';
-import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/playon_service.dart';
 import 'package:finamp/services/queue_service.dart';
@@ -71,13 +69,6 @@ class PlaybackHistoryService {
         _updatePlaybackInfo();
       }
       _wasOfflineBefore = FinampSettingsHelper.finampSettings.isOffline;
-    });
-
-    GetIt.instance<ProviderContainer>().listen(currentTrackMetadataProvider, (metadata, currentTrackMetadataProvider) {
-      final metadata = currentTrackMetadataProvider.value;
-      if (metadata != null) {
-        _updatePlaybackInfo(playbackData: generateGenericPlaybackProgressInfo(metadata: metadata));
-      }
     });
 
     bool throttleRemoteSessionReporting = false;
@@ -523,18 +514,11 @@ class PlaybackHistoryService {
     required bool isMuted,
     required Duration playerPosition,
     required bool includeNowPlayingQueue,
-    MetadataProvider? metadata,
   }) {
     try {
 
-      // metadata ??= GetIt.instance<ProviderContainer>().read(currentTrackMetadataProvider).value;
-
-      print("IN PLAYBACK REPORT: playSessionId=${item.item.extras?["playSessionId"] as String? ?? ""}");
-
-
       return jellyfin_models.PlaybackProgressInfo(
         itemId: item.baseItem?.id ?? jellyfin_models.BaseItemId(""),
-        // playSessionId: metadata?.playbackInfo.playSessionId,
         playSessionId: item.item.extras?["playSessionId"] as String? ?? "",
         sessionId: _queueService.getQueue().id,
         isPaused: isPaused,
@@ -561,7 +545,6 @@ class PlaybackHistoryService {
   jellyfin_models.PlaybackProgressInfo? generateGenericPlaybackProgressInfo({
     bool includeNowPlayingQueue = false,
     bool force = false,
-    MetadataProvider? metadata,
   }) {
     final currentTrack = _currentTrack?.item ?? _queueService.getCurrentTrack();
     if (currentTrack == null) {
@@ -572,13 +555,9 @@ class PlaybackHistoryService {
       return null;
     }
 
-    // metadata ??= GetIt.instance<ProviderContainer>().read(currentTrackMetadataProvider).value;
-    print("IN GENERIC PLAYBACK REPORT: playSessionId=${currentTrack.item.extras?["playSessionId"] as String? ?? ""}");
-
     try {
       return jellyfin_models.PlaybackProgressInfo(
         itemId: currentTrack.baseItem?.id ?? jellyfin_models.BaseItemId(""),
-        // playSessionId: metadata?.playbackInfo.playSessionId,
         playSessionId: currentTrack.item.extras?["playSessionId"] as String? ?? "",
         sessionId: _queueService.getQueue().id,
         canSeek: true,

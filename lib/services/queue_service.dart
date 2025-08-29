@@ -1150,8 +1150,8 @@ class QueueService {
       }
     }
 
-    final metadata = await GetIt.instance<ProviderContainer>().read(metadataProvider(item).future);
-    print("BEFORE MEDIAITEM: playSessionId=${metadata?.playbackInfo.playSessionId}");
+    // final metadata = await GetIt.instance<ProviderContainer>().read(metadataProvider(item).future);
+    // print("BEFORE MEDIAITEM: playSessionId=${metadata?.playbackInfo.playSessionId}");
 
     return MediaItem(
       id: itemId?.toString() ?? uuid.v4(),
@@ -1162,8 +1162,8 @@ class QueueService {
       artUri: artUri,
       title: item.name ?? "unknown",
       extras: {
-        "playSessionId": metadata?.playbackInfo.playSessionId,
-        "transcodingUrl": metadata?.mediaSourceInfo.transcodingUrl,
+        "playSessionId": uuid
+            .v4(), //!!! this ID has to be consistent across the transcoding URL and the playback reporting status, otherwise the server won't show that we're transcoding
         "itemJson": item.toJson(setOffline: false),
         "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
         "downloadedTrackPath": downloadedTrack?.file?.path,
@@ -1230,31 +1230,21 @@ class QueueService {
     // queryParameters["PlaySessionId"] = _order.id; //!!! this currently breaks transcoding for some reason
 
     if (mediaItem.extras!["shouldTranscode"] as bool) {
-      print("IN URL: playSessionId=${mediaItem.extras!["playSessionId"] as String? ?? ""}");
+      builtPath.addAll(["Audio", mediaItem.extras!["itemJson"]["Id"] as String, "main.m3u8"]);
 
-      if (mediaItem.extras!["transcodingUrl"] != null) {
-        final transcodingUrl = Uri.tryParse(mediaItem.extras!["transcodingUrl"] as String);
-        final pathSegments = transcodingUrl!.path.split("/").where((element) => element.isNotEmpty);
-        builtPath.addAll(pathSegments);
-        queryParameters.addAll(transcodingUrl.queryParameters);
-      } else {
-        builtPath.addAll(["Audio", mediaItem.extras!["itemJson"]["Id"] as String, "main.m3u8"]);
-
-        queryParameters.addAll({
-          "audioCodec": FinampSettingsHelper.finampSettings.transcodingStreamingFormat.codec,
-          // Ideally we'd switch between 44.1/48kHz depending on the source is,
-          // realistically it doesn't matter too much
-          // default to 44100, only use 48000 for opus because opus doesn't support 44100
-          "audioSampleRate": FinampSettingsHelper.finampSettings.transcodingStreamingFormat.codec == 'opus'
-              ? '48000'
-              : '44100',
-          "maxAudioBitDepth": "16",
-          "audioBitRate": FinampSettingsHelper.finampSettings.transcodeBitrate.toString(),
-          "segmentContainer": FinampSettingsHelper.finampSettings.transcodingStreamingFormat.container,
-          "transcodeReasons": "ContainerBitrateExceedsLimit",
-        });
-      }
-
+      queryParameters.addAll({
+        "audioCodec": FinampSettingsHelper.finampSettings.transcodingStreamingFormat.codec,
+        // Ideally we'd switch between 44.1/48kHz depending on the source is,
+        // realistically it doesn't matter too much
+        // default to 44100, only use 48000 for opus because opus doesn't support 44100
+        "playSessionId": mediaItem.extras!["playSessionId"] as String? ?? "",
+        "audioSampleRate": FinampSettingsHelper.finampSettings.transcodingStreamingFormat.codec == 'opus'
+            ? '48000'
+            : '44100',
+        "maxAudioBitDepth": "16",
+        "audioBitRate": FinampSettingsHelper.finampSettings.transcodeBitrate.toString(),
+        "segmentContainer": FinampSettingsHelper.finampSettings.transcodingStreamingFormat.container,
+      });
     } else {
       builtPath.addAll(["Items", mediaItem.extras!["itemJson"]["Id"] as String, "File"]);
     }
