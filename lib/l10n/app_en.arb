@@ -432,17 +432,21 @@
       }
     }
   },
-  "playbackActionPagePlay": "Play",
-  "@playbackActionPagePlay": {
-    "description": "Label for the playback action page that contains all actions related to playing in order"
+  "playbackActionPageNewQueue": "New Queue",
+  "@playbackActionPageNewQueue": {
+    "description": "Label for the playback action page that contains all actions related to starting a new queue"
   },
-  "playbackActionPageShuffle": "Shuffle",
-  "@playbackActionPageShuffle": {
-    "description": "Label for the playback action page that contains all actions related to playing shuffled"
+  "playbackActionPageNext": "Next",
+  "@playbackActionPageNext": {
+    "description": "Label for the playback action page that contains all actions related to playing tracks directly after the current one"
   },
-  "playbackActionPageShuffleAlbums": "Shuffle Albums",
-  "@playbackActionPageShuffleAlbums": {
-    "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+  "playbackActionPageNextUp": "Next Up",
+  "@playbackActionPageNextUp": {
+    "description": "Label for the playback action page that contains all actions related to appending tracks to Next Up"
+  },
+  "playbackActionPageAppendToQueue": "Append",
+  "@playbackActionPageAppendToQueue": {
+    "description": "Label for the playback action page that contains all actions related to appending tracks at the end of the queue"
   },
   "trackCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}",
   "@trackCount": {

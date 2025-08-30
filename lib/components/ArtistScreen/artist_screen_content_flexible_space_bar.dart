@@ -47,7 +47,7 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
     
     final queueService = GetIt.instance<QueueService>();
     final initialPageViewIndex = (queueService.playbackOrder == FinampPlaybackOrder.shuffled) ? 1 : 0;
-    final pageViewController = PageController(initialPage: initialPageViewIndex);
+    final pageViewController = PageController();
 
     return FlexibleSpaceBar(
       background: SafeArea(

@@ -1,6 +1,7 @@
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 class PlaybackAction extends ConsumerWidget {
   const PlaybackAction({
@@ -11,6 +12,7 @@ class PlaybackAction extends ConsumerWidget {
     required this.label,
     required this.iconColor,
     this.enabled = true,
+    this.addShuffleIcon = false,
   });
 
   final IconData icon;
@@ -19,9 +21,36 @@ class PlaybackAction extends ConsumerWidget {
   final String label;
   final Color iconColor;
   final bool enabled;
+  final bool addShuffleIcon;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final double mainSize = 28;
+    final double badgeSize = mainSize * 0.5;
+
+    final iconWidget = SizedBox(
+      width: mainSize,
+      height: mainSize,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Center(
+            child: Icon(icon, color: enabled ? iconColor : iconColor.withOpacity(0.5), size: mainSize, weight: 1.0),
+          ),
+          if (addShuffleIcon)
+            Positioned(
+              left: -8,
+              right: 30,
+              child: Icon(
+                TablerIcons.arrows_shuffle,
+                size: badgeSize,
+                color: enabled ? iconColor : iconColor.withOpacity(0.5),
+              ),
+            ),
+        ],
+      ),
+    );
+
     return Flexible(
       flex: 1,
       child: IconButton(
@@ -30,7 +59,10 @@ class PlaybackAction extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           spacing: 9,
           children: [
-            Icon(icon, color: enabled ? iconColor : iconColor.withOpacity(0.5), size: 28, weight: 1.0),
+            Padding(
+              padding: EdgeInsets.only(left: addShuffleIcon ? 10.0 : 0.0),
+              child: iconWidget,
+            ),
             Text(
               label,
               textAlign: TextAlign.center,
