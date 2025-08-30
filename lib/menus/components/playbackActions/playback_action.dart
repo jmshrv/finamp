@@ -13,6 +13,7 @@ class PlaybackAction extends ConsumerWidget {
     required this.iconColor,
     this.enabled = true,
     this.addShuffleIcon = false,
+    this.compactLayout = false,
   });
 
   final IconData icon;
@@ -22,6 +23,7 @@ class PlaybackAction extends ConsumerWidget {
   final Color iconColor;
   final bool enabled;
   final bool addShuffleIcon;
+  final bool compactLayout;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -57,7 +59,7 @@ class PlaybackAction extends ConsumerWidget {
         icon: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: 9,
+          spacing: compactLayout ? 0 : 9,
           children: [
             Padding(
               padding: EdgeInsets.only(left: addShuffleIcon ? 10.0 : 0.0),
@@ -79,7 +81,9 @@ class PlaybackAction extends ConsumerWidget {
               }
             : null,
         visualDensity: VisualDensity.compact,
-        padding: const EdgeInsets.only(top: 10.0, left: 8.0, right: 8.0, bottom: 12.0),
+        padding: compactLayout
+            ? EdgeInsets.only(top: 5.0, left: 4.0, right: 4.0, bottom: 7.0)
+            : EdgeInsets.only(top: 10.0, left: 8.0, right: 8.0, bottom: 12.0),
       ),
     );
   }

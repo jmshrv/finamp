@@ -3,17 +3,25 @@ import 'package:finamp/menus/components/playbackActions/playback_action_page_ind
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final double playActionRowHeight = 96.0;
-final double playActionPageIndicatorHeight = 31.0;
+final double playActionRowHeightDefault = 96.0;
+final double playActionPageIndicatorHeightDefault = 31.0;
 
 class PlaybackActionRow extends ConsumerWidget {
-  const PlaybackActionRow({super.key, required this.controller, required this.playbackActionPages});
+  const PlaybackActionRow({
+    super.key,
+    required this.controller,
+    required this.playbackActionPages,
+    this.compactLayout = false,
+  });
 
   final PageController controller;
   final Map<String, Widget> playbackActionPages;
+  final bool compactLayout;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final double playActionRowHeight = compactLayout ? 76.0 : playActionRowHeightDefault;
+
     return Column(
       verticalDirection: VerticalDirection.up,
       children: [

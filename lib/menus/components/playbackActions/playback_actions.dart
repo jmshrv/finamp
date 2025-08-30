@@ -16,6 +16,7 @@ Map<String, Widget> getPlaybackActionPages({
   required BuildContext context,
   required PlayableItem item,
   bool popContext = true,
+  bool compactLayout = false,
   BaseItemDto? genreFilter,
 }) {
   final queueService = GetIt.instance<QueueService>();
@@ -27,10 +28,20 @@ Map<String, Widget> getPlaybackActionPages({
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        PlayPlaybackAction(item: item, popContext: popContext, genreFilter: genreFilter),
-        ShufflePlaybackAction(item: item, popContext: popContext, genreFilter: genreFilter),
+        PlayPlaybackAction(item: item, popContext: popContext, compactLayout: compactLayout, genreFilter: genreFilter),
+        ShufflePlaybackAction(
+          item: item,
+          popContext: popContext,
+          compactLayout: compactLayout,
+          genreFilter: genreFilter,
+        ),
         if (itemType == BaseItemDtoType.artist)
-          ShuffleAlbumsPlaybackAction(item: item, popContext: popContext, genreFilter: genreFilter),
+          ShuffleAlbumsPlaybackAction(
+            item: item,
+            popContext: popContext,
+            compactLayout: compactLayout,
+            genreFilter: genreFilter,
+          ),
       ],
     ),
     // Next
@@ -38,10 +49,25 @@ Map<String, Widget> getPlaybackActionPages({
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        PlayNextPlaybackAction(item: item, popContext: popContext, genreFilter: genreFilter),
-        ShuffleNextPlaybackAction(item: item, popContext: popContext, genreFilter: genreFilter),
+        PlayNextPlaybackAction(
+          item: item,
+          popContext: popContext,
+          compactLayout: compactLayout,
+          genreFilter: genreFilter,
+        ),
+        ShuffleNextPlaybackAction(
+          item: item,
+          popContext: popContext,
+          compactLayout: compactLayout,
+          genreFilter: genreFilter,
+        ),
         if (itemType == BaseItemDtoType.artist)
-          ShuffleAlbumsNextPlaybackAction(item: item, popContext: popContext, genreFilter: genreFilter),
+          ShuffleAlbumsNextPlaybackAction(
+            item: item,
+            popContext: popContext,
+            compactLayout: compactLayout,
+            genreFilter: genreFilter,
+          ),
       ],
     ),
     // Append to Next Up
@@ -50,10 +76,25 @@ Map<String, Widget> getPlaybackActionPages({
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          AddToNextUpPlaybackAction(item: item, popContext: popContext, genreFilter: genreFilter),
-          ShuffleToNextUpPlaybackAction(item: item, popContext: popContext, genreFilter: genreFilter),
+          AddToNextUpPlaybackAction(
+            item: item,
+            popContext: popContext,
+            compactLayout: compactLayout,
+            genreFilter: genreFilter,
+          ),
+          ShuffleToNextUpPlaybackAction(
+            item: item,
+            popContext: popContext,
+            compactLayout: compactLayout,
+            genreFilter: genreFilter,
+          ),
           if (itemType == BaseItemDtoType.artist)
-            ShuffleAlbumsToNextUpPlaybackAction(item: item, popContext: popContext, genreFilter: genreFilter),
+            ShuffleAlbumsToNextUpPlaybackAction(
+              item: item,
+              popContext: popContext,
+              compactLayout: compactLayout,
+              genreFilter: genreFilter,
+            ),
         ],
       ),
     // Append to Queue
@@ -61,20 +102,42 @@ Map<String, Widget> getPlaybackActionPages({
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        AddToQueuePlaybackAction(item: item, popContext: popContext, genreFilter: genreFilter),
-        ShuffleToQueuePlaybackAction(item: item, popContext: popContext, genreFilter: genreFilter),
+        AddToQueuePlaybackAction(
+          item: item,
+          popContext: popContext,
+          compactLayout: compactLayout,
+          genreFilter: genreFilter,
+        ),
+        ShuffleToQueuePlaybackAction(
+          item: item,
+          popContext: popContext,
+          compactLayout: compactLayout,
+          genreFilter: genreFilter,
+        ),
         if (itemType == BaseItemDtoType.artist)
-          ShuffleAlbumsToQueuePlaybackAction(item: item, popContext: popContext, genreFilter: genreFilter),
+          ShuffleAlbumsToQueuePlaybackAction(
+            item: item,
+            popContext: popContext,
+            compactLayout: compactLayout,
+            genreFilter: genreFilter,
+          ),
       ],
     ),
   };
 }
 
 class PlayPlaybackAction extends ConsumerWidget {
-  const PlayPlaybackAction({super.key, required this.item, this.popContext = true, this.genreFilter});
+  const PlayPlaybackAction({
+    super.key,
+    required this.item,
+    this.popContext = true,
+    this.compactLayout = false,
+    this.genreFilter,
+  });
 
   final PlayableItem item;
   final bool popContext;
+  final bool compactLayout;
   final BaseItemDto? genreFilter;
 
   @override
@@ -83,6 +146,7 @@ class PlayPlaybackAction extends ConsumerWidget {
     return PlaybackAction(
       icon: TablerIcons.player_play,
       label: AppLocalizations.of(context)!.playButtonLabel,
+      compactLayout: compactLayout,
       onPressed: () async {
         await queueService.startPlayback(
           items: await loadChildTracks(item: item, genreFilter: genreFilter),
@@ -100,10 +164,17 @@ class PlayPlaybackAction extends ConsumerWidget {
 }
 
 class PlayNextPlaybackAction extends ConsumerWidget {
-  const PlayNextPlaybackAction({super.key, required this.item, this.popContext = true, this.genreFilter});
+  const PlayNextPlaybackAction({
+    super.key,
+    required this.item,
+    this.popContext = true,
+    this.compactLayout = false,
+    this.genreFilter,
+  });
 
   final PlayableItem item;
   final bool popContext;
+  final bool compactLayout;
   final BaseItemDto? genreFilter;
 
   @override
@@ -113,6 +184,7 @@ class PlayNextPlaybackAction extends ConsumerWidget {
       enabled: !(Platform.isWindows || Platform.isLinux),
       icon: TablerIcons.corner_right_down,
       label: AppLocalizations.of(context)!.playNext,
+      compactLayout: compactLayout,
       onPressed: () async {
         await queueService.addNext(
           items: await loadChildTracks(item: item, genreFilter: genreFilter),
@@ -133,10 +205,17 @@ class PlayNextPlaybackAction extends ConsumerWidget {
 }
 
 class AddToNextUpPlaybackAction extends ConsumerWidget {
-  const AddToNextUpPlaybackAction({super.key, required this.item, this.popContext = true, this.genreFilter});
+  const AddToNextUpPlaybackAction({
+    super.key,
+    required this.item,
+    this.popContext = true,
+    this.compactLayout = false,
+    this.genreFilter,
+  });
 
   final PlayableItem item;
   final bool popContext;
+  final bool compactLayout;
   final BaseItemDto? genreFilter;
 
   @override
@@ -148,6 +227,7 @@ class AddToNextUpPlaybackAction extends ConsumerWidget {
         enabled: !(Platform.isWindows || Platform.isLinux),
         icon: TablerIcons.corner_right_down_double,
         label: AppLocalizations.of(context)!.addToNextUp,
+        compactLayout: compactLayout,
         onPressed: () async {
           await queueService.addToNextUp(
             items: await loadChildTracks(item: item, genreFilter: genreFilter),
@@ -170,10 +250,17 @@ class AddToNextUpPlaybackAction extends ConsumerWidget {
 }
 
 class AddToQueuePlaybackAction extends ConsumerWidget {
-  const AddToQueuePlaybackAction({super.key, required this.item, this.popContext = true, this.genreFilter});
+  const AddToQueuePlaybackAction({
+    super.key,
+    required this.item,
+    this.popContext = true,
+    this.compactLayout = false,
+    this.genreFilter,
+  });
 
   final PlayableItem item;
   final bool popContext;
+  final bool compactLayout;
   final BaseItemDto? genreFilter;
 
   @override
@@ -182,6 +269,7 @@ class AddToQueuePlaybackAction extends ConsumerWidget {
     return PlaybackAction(
       icon: TablerIcons.playlist,
       label: AppLocalizations.of(context)!.addToQueue,
+      compactLayout: compactLayout,
       onPressed: () async {
         await queueService.addToQueue(
           items: await loadChildTracks(item: item, genreFilter: genreFilter),
@@ -202,10 +290,17 @@ class AddToQueuePlaybackAction extends ConsumerWidget {
 }
 
 class ShufflePlaybackAction extends ConsumerWidget {
-  const ShufflePlaybackAction({super.key, required this.item, this.popContext = true, this.genreFilter});
+  const ShufflePlaybackAction({
+    super.key,
+    required this.item,
+    this.popContext = true,
+    this.compactLayout = false,
+    this.genreFilter,
+  });
 
   final PlayableItem item;
   final bool popContext;
+  final bool compactLayout;
   final BaseItemDto? genreFilter;
 
   @override
@@ -214,6 +309,7 @@ class ShufflePlaybackAction extends ConsumerWidget {
     return PlaybackAction(
       icon: TablerIcons.arrows_shuffle,
       label: AppLocalizations.of(context)!.shuffleButtonLabel,
+      compactLayout: compactLayout,
       onPressed: () async {
         await queueService.startPlayback(
           items: await loadChildTracks(item: item, genreFilter: genreFilter),
@@ -231,10 +327,17 @@ class ShufflePlaybackAction extends ConsumerWidget {
 }
 
 class ShuffleNextPlaybackAction extends ConsumerWidget {
-  const ShuffleNextPlaybackAction({super.key, required this.item, this.popContext = true, this.genreFilter});
+  const ShuffleNextPlaybackAction({
+    super.key,
+    required this.item,
+    this.popContext = true,
+    this.compactLayout = false,
+    this.genreFilter,
+  });
 
   final PlayableItem item;
   final bool popContext;
+  final bool compactLayout;
   final BaseItemDto? genreFilter;
 
   @override
@@ -245,6 +348,7 @@ class ShuffleNextPlaybackAction extends ConsumerWidget {
       icon: TablerIcons.corner_right_down,
       addShuffleIcon: true,
       label: AppLocalizations.of(context)!.shuffleNext,
+      compactLayout: compactLayout,
       onPressed: () async {
         await queueService.addNext(
           items: await loadChildTracks(item: item, genreFilter: genreFilter),
@@ -263,10 +367,17 @@ class ShuffleNextPlaybackAction extends ConsumerWidget {
 }
 
 class ShuffleToNextUpPlaybackAction extends ConsumerWidget {
-  const ShuffleToNextUpPlaybackAction({super.key, required this.item, this.popContext = true, this.genreFilter});
+  const ShuffleToNextUpPlaybackAction({
+    super.key,
+    required this.item,
+    this.popContext = true,
+    this.compactLayout = false,
+    this.genreFilter,
+  });
 
   final PlayableItem item;
   final bool popContext;
+  final bool compactLayout;
   final BaseItemDto? genreFilter;
 
   @override
@@ -279,6 +390,7 @@ class ShuffleToNextUpPlaybackAction extends ConsumerWidget {
         icon: TablerIcons.corner_right_down_double,
         addShuffleIcon: true,
         label: AppLocalizations.of(context)!.shuffleToNextUp,
+        compactLayout: compactLayout,
         onPressed: () async {
           await queueService.addToNextUp(
             items: await loadChildTracks(item: item, genreFilter: genreFilter),
@@ -301,10 +413,17 @@ class ShuffleToNextUpPlaybackAction extends ConsumerWidget {
 }
 
 class ShuffleToQueuePlaybackAction extends ConsumerWidget {
-  const ShuffleToQueuePlaybackAction({super.key, required this.item, this.popContext = true, this.genreFilter});
+  const ShuffleToQueuePlaybackAction({
+    super.key,
+    required this.item,
+    this.popContext = true,
+    this.compactLayout = false,
+    this.genreFilter,
+  });
 
   final PlayableItem item;
   final bool popContext;
+  final bool compactLayout;
   final BaseItemDto? genreFilter;
 
   @override
@@ -314,6 +433,7 @@ class ShuffleToQueuePlaybackAction extends ConsumerWidget {
       icon: TablerIcons.playlist,
       addShuffleIcon: true,
       label: AppLocalizations.of(context)!.shuffleToQueue,
+      compactLayout: compactLayout,
       onPressed: () async {
         await queueService.addToQueue(
           items: await loadChildTracks(item: item, genreFilter: genreFilter),
@@ -335,10 +455,17 @@ class ShuffleToQueuePlaybackAction extends ConsumerWidget {
 }
 
 class ShuffleAlbumsPlaybackAction extends ConsumerWidget {
-  const ShuffleAlbumsPlaybackAction({super.key, required this.item, this.popContext = true, this.genreFilter});
+  const ShuffleAlbumsPlaybackAction({
+    super.key,
+    required this.item,
+    this.popContext = true,
+    this.compactLayout = false,
+    this.genreFilter,
+  });
 
   final PlayableItem item;
   final bool popContext;
+  final bool compactLayout;
   final BaseItemDto? genreFilter;
 
   @override
@@ -347,6 +474,7 @@ class ShuffleAlbumsPlaybackAction extends ConsumerWidget {
     return PlaybackAction(
       icon: TablerIcons.arrows_shuffle,
       label: AppLocalizations.of(context)!.shuffleAlbums,
+      compactLayout: compactLayout,
       onPressed: () async {
         await queueService.startPlayback(
           items: groupItems(
@@ -367,10 +495,17 @@ class ShuffleAlbumsPlaybackAction extends ConsumerWidget {
 }
 
 class ShuffleAlbumsNextPlaybackAction extends ConsumerWidget {
-  const ShuffleAlbumsNextPlaybackAction({super.key, required this.item, this.popContext = true, this.genreFilter});
+  const ShuffleAlbumsNextPlaybackAction({
+    super.key,
+    required this.item,
+    this.popContext = true,
+    this.compactLayout = false,
+    this.genreFilter,
+  });
 
   final PlayableItem item;
   final bool popContext;
+  final bool compactLayout;
   final BaseItemDto? genreFilter;
 
   @override
@@ -381,6 +516,7 @@ class ShuffleAlbumsNextPlaybackAction extends ConsumerWidget {
       icon: TablerIcons.corner_right_down,
       addShuffleIcon: true,
       label: AppLocalizations.of(context)!.shuffleAlbumsNext,
+      compactLayout: compactLayout,
       onPressed: () async {
         await queueService.addNext(
           items: groupItems(
@@ -402,10 +538,17 @@ class ShuffleAlbumsNextPlaybackAction extends ConsumerWidget {
 }
 
 class ShuffleAlbumsToNextUpPlaybackAction extends ConsumerWidget {
-  const ShuffleAlbumsToNextUpPlaybackAction({super.key, required this.item, this.popContext = true, this.genreFilter});
+  const ShuffleAlbumsToNextUpPlaybackAction({
+    super.key,
+    required this.item,
+    this.popContext = true,
+    this.compactLayout = false,
+    this.genreFilter,
+  });
 
   final PlayableItem item;
   final bool popContext;
+  final bool compactLayout;
   final BaseItemDto? genreFilter;
 
   @override
@@ -418,6 +561,7 @@ class ShuffleAlbumsToNextUpPlaybackAction extends ConsumerWidget {
         icon: TablerIcons.corner_right_down_double,
         addShuffleIcon: true,
         label: AppLocalizations.of(context)!.shuffleAlbumsToNextUp,
+        compactLayout: compactLayout,
         onPressed: () async {
           await queueService.addToNextUp(
             items: groupItems(
@@ -443,10 +587,17 @@ class ShuffleAlbumsToNextUpPlaybackAction extends ConsumerWidget {
 }
 
 class ShuffleAlbumsToQueuePlaybackAction extends ConsumerWidget {
-  const ShuffleAlbumsToQueuePlaybackAction({super.key, required this.item, this.popContext = true, this.genreFilter});
+  const ShuffleAlbumsToQueuePlaybackAction({
+    super.key,
+    required this.item,
+    this.popContext = true,
+    this.compactLayout = false,
+    this.genreFilter,
+  });
 
   final PlayableItem item;
   final bool popContext;
+  final bool compactLayout;
   final BaseItemDto? genreFilter;
 
   @override
@@ -456,6 +607,7 @@ class ShuffleAlbumsToQueuePlaybackAction extends ConsumerWidget {
       icon: TablerIcons.playlist,
       addShuffleIcon: true,
       label: AppLocalizations.of(context)!.shuffleAlbumsToQueue,
+      compactLayout: compactLayout,
       onPressed: () async {
         await queueService.addToQueue(
           items: groupItems(

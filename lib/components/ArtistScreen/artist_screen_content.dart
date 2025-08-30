@@ -150,7 +150,7 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
             // 125 + 116 is the total height of the widget we use as a
             // FlexibleSpaceBar. We add the toolbar height since the widget
             // should appear below the appbar.
-            expandedHeight: kToolbarHeight + 125 + 24 + 130,
+            expandedHeight: kToolbarHeight + 125 + 24 + 100,
             centerTitle: false,
             pinned: true,
             flexibleSpace: ArtistScreenContentFlexibleSpaceBar(

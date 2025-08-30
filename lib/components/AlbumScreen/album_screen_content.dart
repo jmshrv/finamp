@@ -141,7 +141,7 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
               title: (widget.parent.type != "Playlist")
                   ? Text(widget.parent.name ?? AppLocalizations.of(context)!.unknownName)
                   : null,
-              expandedHeight: kToolbarHeight + 125 + 18 + 130,
+              expandedHeight: kToolbarHeight + 125 + 18 + 100,
               // collapsedHeight: kToolbarHeight + 125 + 80,
               pinned: true,
               centerTitle: false,

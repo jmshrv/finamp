@@ -436,15 +436,15 @@
   "@playbackActionPageNewQueue": {
     "description": "Label for the playback action page that contains all actions related to starting a new queue"
   },
-  "playbackActionPageNext": "Next",
+  "playbackActionPageNext": "Play Next",
   "@playbackActionPageNext": {
     "description": "Label for the playback action page that contains all actions related to playing tracks directly after the current one"
   },
-  "playbackActionPageNextUp": "Next Up",
+  "playbackActionPageNextUp": "Append Next",
   "@playbackActionPageNextUp": {
     "description": "Label for the playback action page that contains all actions related to appending tracks to Next Up"
   },
-  "playbackActionPageAppendToQueue": "Append",
+  "playbackActionPageAppendToQueue": "Play Last",
   "@playbackActionPageAppendToQueue": {
     "description": "Label for the playback action page that contains all actions related to appending tracks at the end of the queue"
   },

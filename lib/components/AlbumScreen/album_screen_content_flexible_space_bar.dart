@@ -76,13 +76,15 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
                   PlaybackActionRow(
                     controller: pageViewController,
+                    compactLayout: true,
                     playbackActionPages: getPlaybackActionPages(
                       context: context,
                       item: parentItem,
                       popContext: false,
+                      compactLayout: true,
                       genreFilter: genreFilter,
                     ),
                   ),
