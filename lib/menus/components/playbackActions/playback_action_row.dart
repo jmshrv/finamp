@@ -36,7 +36,7 @@ class PlaybackActionRow extends ConsumerWidget {
             children: playbackActionPages.values.toList(),
           ),
         ),
-        PlaybackActionPageIndicator(pages: playbackActionPages, pageController: controller),
+        PlaybackActionPageIndicator(pages: playbackActionPages, pageController: controller, compactLayout: compactLayout),
       ],
     );
   }

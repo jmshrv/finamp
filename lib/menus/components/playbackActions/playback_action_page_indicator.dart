@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 class PlaybackActionPageIndicator extends StatelessWidget {
-  const PlaybackActionPageIndicator({super.key, required this.pages, required this.pageController});
+  const PlaybackActionPageIndicator({super.key, required this.pages, required this.pageController, this.compactLayout = false});
 
   final Map<String, Widget> pages;
   final PageController pageController;
+  final bool compactLayout;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4.0),
+      padding: compactLayout ? EdgeInsets.only(top: 4.0) : EdgeInsets.only(bottom: 4.0),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(

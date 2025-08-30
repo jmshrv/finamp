@@ -221,6 +221,7 @@ class FinampSettingsHelper {
     FinampSetters.setKeepScreenOnOption(DefaultSettings.keepScreenOnOption);
     FinampSetters.setKeepScreenOnWhilePluggedIn(DefaultSettings.keepScreenOnWhilePluggedIn);
     FinampSetters.setPreferAddingToFavoritesOverPlaylists(DefaultSettings.preferAddingToFavoritesOverPlaylists);
+    FinampSetters.setPreferNextUpPrepending(DefaultSettings.preferNextUpPrepending);
 
     Hive.box<FinampSettings>("FinampSettings").put("FinampSettings", finampSettingsTemp);
   }

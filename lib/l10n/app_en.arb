@@ -2756,6 +2756,14 @@
   "@preferAddingToFavoritesOverPlaylistsSubtitle": {
     "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
   },
+  "preferNextUpPrependingTitle": "Prefer Prepending to Next Up",
+  "@preferNextUpPrependingTitle": {
+    "description": "Title for the setting to prefer prepending to Next Up over appending"
+  },
+  "preferNextUpPrependingSubtitle": "When enabled, the \"Play Next\" buttons will be shown when Next Up is empty. Otherwise, \"Add to Next Up\" will be the default.",
+  "@preferNextUpPrependingSubtitle": {
+    "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
+  },
   "discOfAlbum": "[Disc {number}] {albumName}",
   "@discOfAlbum": {
     "description": "Used when a single disc of album is opened, then album name is replaced with this string",
