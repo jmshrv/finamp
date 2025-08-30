@@ -161,6 +161,10 @@ class PlayPlaybackAction extends ConsumerWidget {
         if (popContext) {
           Navigator.pop(context);
         }
+
+        if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
+          FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.newQueue);
+        }
       },
       iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
     );
@@ -204,8 +208,13 @@ class PlayNextPlaybackAction extends ConsumerWidget {
             (scaffold) => AppLocalizations.of(scaffold)!.confirmPlayNext(BaseItemDtoType.fromPlayableItem(item).name),
             isConfirmation: true,
           );
+
           if (popContext) {
             Navigator.pop(context);
+          }
+
+          if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
+            FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.playNext);
           }
         },
         iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -252,8 +261,13 @@ class AddToNextUpPlaybackAction extends ConsumerWidget {
                 AppLocalizations.of(scaffold)!.confirmAddToNextUp(BaseItemDtoType.fromPlayableItem(item).name),
             isConfirmation: true,
           );
+
           if (popContext) {
             Navigator.pop(context);
+          }
+
+          if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
+            FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.appendNext);
           }
         },
         iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -293,8 +307,13 @@ class AddToQueuePlaybackAction extends ConsumerWidget {
           (scaffold) => AppLocalizations.of(scaffold)!.confirmAddToQueue(BaseItemDtoType.fromPlayableItem(item).name),
           isConfirmation: true,
         );
+
         if (popContext) {
           Navigator.pop(context);
+        }
+
+        if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
+          FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.playLast);
         }
       },
       iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -332,6 +351,10 @@ class ShufflePlaybackAction extends ConsumerWidget {
 
         if (popContext) {
           Navigator.pop(context);
+        }
+
+        if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
+          FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.newQueue);
         }
       },
       iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -375,8 +398,13 @@ class ShuffleNextPlaybackAction extends ConsumerWidget {
           );
 
           GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext, isConfirmation: true);
+
           if (popContext) {
             Navigator.pop(context);
+          }
+
+          if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
+            FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.playNext);
           }
         },
         iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -424,8 +452,13 @@ class ShuffleToNextUpPlaybackAction extends ConsumerWidget {
             (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
             isConfirmation: true,
           );
+
           if (popContext) {
             Navigator.pop(context);
+          }
+
+          if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
+            FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.appendNext);
           }
         },
         iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -467,8 +500,13 @@ class ShuffleToQueuePlaybackAction extends ConsumerWidget {
           (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue,
           isConfirmation: true,
         );
+
         if (popContext) {
           Navigator.pop(context);
+        }
+
+        if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
+          FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.playLast);
         }
       },
       iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -509,6 +547,10 @@ class ShuffleAlbumsPlaybackAction extends ConsumerWidget {
 
         if (popContext) {
           Navigator.pop(context);
+        }
+
+        if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
+          FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.newQueue);
         }
       },
       iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -555,8 +597,13 @@ class ShuffleAlbumsNextPlaybackAction extends ConsumerWidget {
           );
 
           GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleNext, isConfirmation: true);
+
           if (popContext) {
             Navigator.pop(context);
+          }
+
+          if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
+            FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.playNext);
           }
         },
         iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -607,8 +654,13 @@ class ShuffleAlbumsToNextUpPlaybackAction extends ConsumerWidget {
             (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToNextUp,
             isConfirmation: true,
           );
+
           if (popContext) {
             Navigator.pop(context);
+          }
+
+          if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
+            FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.appendNext);
           }
         },
         iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -653,8 +705,13 @@ class ShuffleAlbumsToQueuePlaybackAction extends ConsumerWidget {
           (scaffold) => AppLocalizations.of(scaffold)!.confirmShuffleToQueue,
           isConfirmation: true,
         );
+
         if (popContext) {
           Navigator.pop(context);
+        }
+
+        if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
+          FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.playLast);
         }
       },
       iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,

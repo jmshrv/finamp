@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class PlaybackActionPageIndicator extends StatelessWidget {
-  const PlaybackActionPageIndicator({super.key, required this.pages, required this.pageController, this.compactLayout = false});
+  const PlaybackActionPageIndicator({
+    super.key,
+    required this.pages,
+    required this.pageController,
+    this.compactLayout = false,
+  });
 
   final Map<String, Widget> pages;
   final PageController pageController;

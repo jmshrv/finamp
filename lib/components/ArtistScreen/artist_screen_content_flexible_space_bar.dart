@@ -2,9 +2,10 @@ import 'dart:async';
 
 import 'package:finamp/menus/components/playbackActions/playback_action_row.dart';
 import 'package:finamp/menus/components/playbackActions/playback_actions.dart';
-import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
@@ -25,7 +26,7 @@ enum ArtistMenuItems {
   shuffleAlbumsToQueue,
 }
 
-class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
+class ArtistScreenContentFlexibleSpaceBar extends ConsumerWidget {
   const ArtistScreenContentFlexibleSpaceBar({
     super.key,
     required this.parentItem,
@@ -42,12 +43,18 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
   final void Function(BaseItemDto?)? updateGenreFilter;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     GetIt.instance<AudioServiceHelper>();
-    
     final queueService = GetIt.instance<QueueService>();
-    final initialPageViewIndex = (queueService.playbackOrder == FinampPlaybackOrder.shuffled) ? 1 : 0;
-    final pageViewController = PageController();
+
+    final lastUsedPlaybackActionRowPage = ref.read(finampSettingsProvider.lastUsedPlaybackActionRowPage);
+    final lastUsedPlaybackActionRowPageIndex = lastUsedPlaybackActionRowPage.pageIndexFor(
+      nextUpIsEmpty: queueService.getQueue().nextUp.isEmpty,
+    );
+    final initialPageViewIndex = ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)
+        ? lastUsedPlaybackActionRowPageIndex
+        : 0;
+    final pageViewController = PageController(initialPage: initialPageViewIndex);
 
     return FlexibleSpaceBar(
       background: SafeArea(

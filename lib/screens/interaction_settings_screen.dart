@@ -43,6 +43,7 @@ class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
           KeepScreenOnWhilePluggedInSelector(),
           PreferAddingToFavoritesOverPlaylistsToggle(),
           PreferNextUpPrependingToggle(),
+          RememberLastUsedPlaybackActionRowPageToggle(),
         ],
       ),
     );
@@ -115,6 +116,20 @@ class PreferNextUpPrependingToggle extends ConsumerWidget {
       subtitle: Text(AppLocalizations.of(context)!.preferNextUpPrependingSubtitle),
       value: ref.watch(finampSettingsProvider.preferNextUpPrepending),
       onChanged: (value) => FinampSetters.setPreferNextUpPrepending(value),
+    );
+  }
+}
+
+class RememberLastUsedPlaybackActionRowPageToggle extends ConsumerWidget {
+  const RememberLastUsedPlaybackActionRowPageToggle({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.rememberLastUsedPlaybackActionRowPageTitle),
+      subtitle: Text(AppLocalizations.of(context)!.rememberLastUsedPlaybackActionRowPageSubtitle),
+      value: ref.watch(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage),
+      onChanged: (value) => FinampSetters.setRememberLastUsedPlaybackActionRowPage(value),
     );
   }
 }

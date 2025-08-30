@@ -1002,7 +1002,7 @@
   "@shuffleToNextUp": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
   },
-  "shuffleToQueue": "Shuffle to queue",
+  "shuffleToQueue": "Shuffle to Queue",
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
@@ -1409,11 +1409,11 @@
   "@shuffleAlbumsNext": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
   },
-  "shuffleAlbumsToNextUp": "Shuffle Albums To Next Up",
+  "shuffleAlbumsToNextUp": "Shuffle Albums to Next Up",
   "@shuffleAlbumsToNextUp": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
   },
-  "shuffleAlbumsToQueue": "Shuffle Albums To Queue",
+  "shuffleAlbumsToQueue": "Shuffle Albums to Queue",
   "@shuffleAlbumsToQueue": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
   },
@@ -2762,6 +2762,14 @@
   },
   "preferNextUpPrependingSubtitle": "When enabled, the \"Play Next\" buttons will be shown when Next Up is empty. Otherwise, \"Add to Next Up\" will be the default.",
   "@preferNextUpPrependingSubtitle": {
+    "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
+  },
+  "rememberLastUsedPlaybackActionRowPageTitle": "Remember Playback Action Row Page",
+  "@rememberLastUsedPlaybackActionRowPageTitle": {
+    "description": "Title for the setting to remember the last used Playback Action Row Page."
+  },
+  "rememberLastUsedPlaybackActionRowPageSubtitle": "When enabled, your last used Playback Action Row Page will be remembered.",
+  "@rememberLastUsedPlaybackActionRowPageSubtitle": {
     "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
   },
   "discOfAlbum": "[Disc {number}] {albumName}",

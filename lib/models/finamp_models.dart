@@ -231,6 +231,8 @@ class DefaultSettings {
   static const rpcIcon = DiscordRpcIcon.transparent;
   static const preferAddingToFavoritesOverPlaylists = false;
   static const preferNextUpPrepending = true;
+  static const rememberLastUsedPlaybackActionRowPage = true;
+  static const lastUsedPlaybackActionRowPage = PlaybackActionRowPage.newQueue;
 }
 
 @HiveType(typeId: 28)
@@ -357,6 +359,8 @@ class FinampSettings {
     this.rpcIcon = DefaultSettings.rpcIcon,
     this.preferAddingToFavoritesOverPlaylists = DefaultSettings.preferAddingToFavoritesOverPlaylists,
     this.preferNextUpPrepending = DefaultSettings.preferNextUpPrepending,
+    this.rememberLastUsedPlaybackActionRowPage = DefaultSettings.rememberLastUsedPlaybackActionRowPage,
+    this.lastUsedPlaybackActionRowPage = DefaultSettings.lastUsedPlaybackActionRowPage,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -755,6 +759,12 @@ class FinampSettings {
 
   @HiveField(127, defaultValue: DefaultSettings.preferNextUpPrepending)
   bool preferNextUpPrepending = DefaultSettings.preferNextUpPrepending;
+
+  @HiveField(128, defaultValue: DefaultSettings.rememberLastUsedPlaybackActionRowPage)
+  bool rememberLastUsedPlaybackActionRowPage = DefaultSettings.rememberLastUsedPlaybackActionRowPage;
+
+  @HiveField(129, defaultValue: DefaultSettings.lastUsedPlaybackActionRowPage)
+  PlaybackActionRowPage lastUsedPlaybackActionRowPage = DefaultSettings.lastUsedPlaybackActionRowPage;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -3483,6 +3493,67 @@ enum DiscordRpcIcon {
         return AppLocalizations.of(context)!.discordRPCIconTransparent;
       case transparentWhite:
         return AppLocalizations.of(context)!.discordRPCIconWhiteTransparent;
+    }
+  }
+}
+
+@HiveType(typeId: 102)
+enum PlaybackActionRowPage {
+  @HiveField(0)
+  newQueue,
+  @HiveField(1)
+  playNext,
+  @HiveField(2)
+  appendNext,
+  @HiveField(3)
+  playLast;
+
+  /// Human-readable version of this enum.
+  @override
+  @Deprecated("Use toLocalisedString when possible")
+  String toString() => _humanReadableName(this);
+
+  String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
+
+  String _humanReadableName(PlaybackActionRowPage playbackActionRowPage) {
+    switch (playbackActionRowPage) {
+      case PlaybackActionRowPage.newQueue:
+        return "New Queue";
+      case PlaybackActionRowPage.playNext:
+        return "Play Next";
+      case PlaybackActionRowPage.appendNext:
+        return "Append Next";
+      case PlaybackActionRowPage.playLast:
+        return "Play Last";
+    }
+  }
+
+  String _humanReadableLocalisedName(PlaybackActionRowPage playbackActionRowPage, BuildContext context) {
+    switch (playbackActionRowPage) {
+      case PlaybackActionRowPage.newQueue:
+        return AppLocalizations.of(context)!.playbackActionPageNewQueue;
+      case PlaybackActionRowPage.playNext:
+        return AppLocalizations.of(context)!.playbackActionPageNext;
+      case PlaybackActionRowPage.appendNext:
+        return AppLocalizations.of(context)!.playbackActionPageNextUp;
+      case PlaybackActionRowPage.playLast:
+        return AppLocalizations.of(context)!.playbackActionPageAppendToQueue;
+    }
+  }
+
+  int pageIndexFor({required bool nextUpIsEmpty}) {
+    if (!nextUpIsEmpty) {
+      return index;
+    }
+
+    switch (this) {
+      case PlaybackActionRowPage.newQueue:
+        return 0;
+      case PlaybackActionRowPage.playNext:
+      case PlaybackActionRowPage.appendNext:
+        return 1;
+      case PlaybackActionRowPage.playLast:
+        return 2;
     }
   }
 }

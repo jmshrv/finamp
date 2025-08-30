@@ -82,7 +82,7 @@ class PlaybackAction extends ConsumerWidget {
             : null,
         visualDensity: VisualDensity.compact,
         padding: compactLayout
-            ? EdgeInsets.only(top: 5.0, left: 4.0, right: 4.0, bottom: 7.0)
+            ? EdgeInsets.only(top: 5.0, left: 4.0, right: 4.0, bottom: 5.0)
             : EdgeInsets.only(top: 10.0, left: 8.0, right: 8.0, bottom: 12.0),
       ),
     );
