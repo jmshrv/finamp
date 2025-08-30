@@ -13,7 +13,9 @@ import 'package:finamp/menus/components/playbackActions/playback_action_row.dart
 import 'package:finamp/menus/components/playbackActions/playback_actions.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import 'components/menuEntries/menu_entry.dart';
 
@@ -44,7 +46,9 @@ Future<void> showModalPlaylistMenu({
     final menuEntries = getMenuEntries(context);
     final stackHeight = ThemedBottomSheet.calculateStackHeight(context: context, menuEntries: menuEntries);
 
-    final pageViewController = PageController();
+    final queueService = GetIt.instance<QueueService>();
+    final initialPageViewIndex = (queueService.playbackOrder == FinampPlaybackOrder.shuffled) ? 1 : 0;
+    final pageViewController = PageController(initialPage: initialPageViewIndex);
 
     List<Widget> menu = [
       SliverPersistentHeader(delegate: MenuItemInfoSliverHeader(item: baseItem), pinned: true),
