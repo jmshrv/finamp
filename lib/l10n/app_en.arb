@@ -432,17 +432,21 @@
       }
     }
   },
-  "playbackActionPagePlay": "Play",
-  "@playbackActionPagePlay": {
-    "description": "Label for the playback action page that contains all actions related to playing in order"
+  "playbackActionPageNewQueue": "New Queue",
+  "@playbackActionPageNewQueue": {
+    "description": "Label for the playback action page that contains all actions related to starting a new queue"
   },
-  "playbackActionPageShuffle": "Shuffle",
-  "@playbackActionPageShuffle": {
-    "description": "Label for the playback action page that contains all actions related to playing shuffled"
+  "playbackActionPageNext": "Play Next",
+  "@playbackActionPageNext": {
+    "description": "Label for the playback action page that contains all actions related to playing tracks directly after the current one"
   },
-  "playbackActionPageShuffleAlbums": "Shuffle Albums",
-  "@playbackActionPageShuffleAlbums": {
-    "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+  "playbackActionPageNextUp": "Append Next",
+  "@playbackActionPageNextUp": {
+    "description": "Label for the playback action page that contains all actions related to appending tracks to Next Up"
+  },
+  "playbackActionPageAppendToQueue": "Play Last",
+  "@playbackActionPageAppendToQueue": {
+    "description": "Label for the playback action page that contains all actions related to appending tracks at the end of the queue"
   },
   "trackCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}",
   "@trackCount": {
@@ -998,7 +1002,7 @@
   "@shuffleToNextUp": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
   },
-  "shuffleToQueue": "Shuffle to queue",
+  "shuffleToQueue": "Shuffle to Queue",
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
@@ -1405,11 +1409,11 @@
   "@shuffleAlbumsNext": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
   },
-  "shuffleAlbumsToNextUp": "Shuffle Albums To Next Up",
+  "shuffleAlbumsToNextUp": "Shuffle Albums to Next Up",
   "@shuffleAlbumsToNextUp": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
   },
-  "shuffleAlbumsToQueue": "Shuffle Albums To Queue",
+  "shuffleAlbumsToQueue": "Shuffle Albums to Queue",
   "@shuffleAlbumsToQueue": {
     "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
   },
@@ -2750,6 +2754,22 @@
   },
   "preferAddingToFavoritesOverPlaylistsSubtitle": "When enabled, a short tap will add to favorites, and a long press will open the 'Add to Playlist' menu. Default is the inverse.",
   "@preferAddingToFavoritesOverPlaylistsSubtitle": {
+    "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
+  },
+  "preferNextUpPrependingTitle": "Prefer Prepending to Next Up",
+  "@preferNextUpPrependingTitle": {
+    "description": "Title for the setting to prefer prepending to Next Up over appending"
+  },
+  "preferNextUpPrependingSubtitle": "When enabled, the \"Play Next\" buttons will be shown when Next Up is empty. Otherwise, \"Add to Next Up\" will be the default.",
+  "@preferNextUpPrependingSubtitle": {
+    "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
+  },
+  "rememberLastUsedPlaybackActionRowPageTitle": "Remember Playback Action Row Page",
+  "@rememberLastUsedPlaybackActionRowPageTitle": {
+    "description": "Title for the setting to remember the last used Playback Action Row Page."
+  },
+  "rememberLastUsedPlaybackActionRowPageSubtitle": "When enabled, your last used Playback Action Row Page will be remembered.",
+  "@rememberLastUsedPlaybackActionRowPageSubtitle": {
     "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
   },
   "discOfAlbum": "[Disc {number}] {albumName}",

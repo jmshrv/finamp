@@ -42,6 +42,8 @@ class _InteractionSettingsScreenState extends State<InteractionSettingsScreen> {
           KeepScreenOnDropdownListTile(),
           KeepScreenOnWhilePluggedInSelector(),
           PreferAddingToFavoritesOverPlaylistsToggle(),
+          PreferNextUpPrependingToggle(),
+          RememberLastUsedPlaybackActionRowPageToggle(),
         ],
       ),
     );
@@ -100,6 +102,34 @@ class PreferAddingToFavoritesOverPlaylistsToggle extends ConsumerWidget {
       subtitle: Text(AppLocalizations.of(context)!.preferAddingToFavoritesOverPlaylistsSubtitle),
       value: ref.watch(finampSettingsProvider.preferAddingToFavoritesOverPlaylists),
       onChanged: (value) => FinampSetters.setPreferAddingToFavoritesOverPlaylists(value),
+    );
+  }
+}
+
+class PreferNextUpPrependingToggle extends ConsumerWidget {
+  const PreferNextUpPrependingToggle({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.preferNextUpPrependingTitle),
+      subtitle: Text(AppLocalizations.of(context)!.preferNextUpPrependingSubtitle),
+      value: ref.watch(finampSettingsProvider.preferNextUpPrepending),
+      onChanged: (value) => FinampSetters.setPreferNextUpPrepending(value),
+    );
+  }
+}
+
+class RememberLastUsedPlaybackActionRowPageToggle extends ConsumerWidget {
+  const RememberLastUsedPlaybackActionRowPageToggle({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SwitchListTile.adaptive(
+      title: Text(AppLocalizations.of(context)!.rememberLastUsedPlaybackActionRowPageTitle),
+      subtitle: Text(AppLocalizations.of(context)!.rememberLastUsedPlaybackActionRowPageSubtitle),
+      value: ref.watch(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage),
+      onChanged: (value) => FinampSetters.setRememberLastUsedPlaybackActionRowPage(value),
     );
   }
 }
