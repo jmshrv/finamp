@@ -55,7 +55,7 @@ Future<void> showModalAlbumMenu({
     final stackHeight = ThemedBottomSheet.calculateStackHeight(context: context, menuEntries: menuEntries);
     final ref = GetIt.instance<ProviderContainer>();
     final queueService = GetIt.instance<QueueService>();
-    
+
     final lastUsedPlaybackActionRowPage = ref.read(finampSettingsProvider.lastUsedPlaybackActionRowPage);
     final lastUsedPlaybackActionRowPageIndex = lastUsedPlaybackActionRowPage.pageIndexFor(
       nextUpIsEmpty: queueService.getQueue().nextUp.isEmpty,

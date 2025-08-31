@@ -155,7 +155,7 @@ Future<List<BaseItemDto>> loadChildTracksFromShuffledGenreAlbums({required BaseI
 
   List<BaseItemDto> newItems = [];
 
-  // We assume that there are roughly 15 tracks per album and 
+  // We assume that there are roughly 15 tracks per album and
   // calculate an albumLimit to avoid loading too much data
   final albumLimit = (settings.trackShuffleItemCount / 15).toInt();
   int totalTrackLimit = settings.trackShuffleItemCount;

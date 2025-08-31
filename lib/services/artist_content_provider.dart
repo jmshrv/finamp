@@ -323,7 +323,7 @@ Future<List<BaseItemDto>> getArtistTracks(
       libraryFilter: library,
       parentItem: parent,
       genreFilter: genreFilter,
-      sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+      sortBy: "PremiereDate,Album,ParentIndexNumber,IndexNumber,SortName",
       includeItemTypes: "Audio",
       artistType: ArtistType.albumArtist,
     );

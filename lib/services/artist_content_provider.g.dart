@@ -746,7 +746,7 @@ class _GetPerformingArtistTracksProviderElement
       (origin as GetPerformingArtistTracksProvider).onlyFavorites;
 }
 
-String _$getArtistTracksHash() => r'7615ffa7216bd68666ef600e95ccef9faf352464';
+String _$getArtistTracksHash() => r'51141cc18df197a629da0a0ea79edd8dc40da91c';
 
 /// See also [getArtistTracks].
 @ProviderFor(getArtistTracks)

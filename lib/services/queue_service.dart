@@ -748,7 +748,9 @@ class QueueService {
       List<AudioSource> audioSourceList = [];
       for (final queueItem in queueItems) {
         audioSourceList.add(await _queueItemToAudioSource(queueItem));
-        _queueServiceLogger.fine("Prepended '${queueItem.item.title}' to Next Up (index ${adjustedQueueIndex + offsetLog})");
+        _queueServiceLogger.fine(
+          "Prepended '${queueItem.item.title}' to Next Up (index ${adjustedQueueIndex + offsetLog})",
+        );
         offsetLog++;
       }
       await _queueAudioSource.insertAll(adjustedQueueIndex + offset, audioSourceList);
@@ -816,7 +818,9 @@ class QueueService {
       List<AudioSource> audioSourceList = [];
       for (final queueItem in queueItems) {
         audioSourceList.add(await _queueItemToAudioSource(queueItem));
-        _queueServiceLogger.fine("Appended '${queueItem.item.title}' to Next Up (index ${adjustedQueueIndex + offsetLog})");
+        _queueServiceLogger.fine(
+          "Appended '${queueItem.item.title}' to Next Up (index ${adjustedQueueIndex + offsetLog})",
+        );
         offsetLog++;
       }
       await _queueAudioSource.insertAll(adjustedQueueIndex + offset, audioSourceList);
