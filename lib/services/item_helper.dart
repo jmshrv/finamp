@@ -155,11 +155,13 @@ Future<List<BaseItemDto>> loadChildTracksFromShuffledGenreAlbums({required BaseI
 
   List<BaseItemDto> newItems = [];
 
-  // We assume that there are roughly 10 tracks per album
-  final albumLimit = (settings.trackShuffleItemCount / 10).toInt();
+  // We assume that there are roughly 15 tracks per album and 
+  // calculate an albumLimit to avoid loading too much data
+  final albumLimit = (settings.trackShuffleItemCount / 15).toInt();
   int totalTrackLimit = settings.trackShuffleItemCount;
 
   if (settings.isOffline) {
+    // Offline Mode
     List<DownloadStub> fetchedGenreAlbums = await downloadsService.getAllCollections(
       baseTypeFilter: BaseItemDtoType.album,
       fullyDownloaded: ref.read(finampSettingsProvider.onlyShowFullyDownloaded),
@@ -188,37 +190,42 @@ Future<List<BaseItemDto>> loadChildTracksFromShuffledGenreAlbums({required BaseI
       totalTrackLimit -= playableAlbumTracks.length;
     }
   } else {
-    List<BaseItemDto>? genreAlbums = await jellyfinApiHelper.getItems(
-      parentItem: finampUserHelper.currentUser?.currentView,
-      includeItemTypes: [BaseItemDtoType.album.idString].join(","),
-      limit: albumLimit,
-      genreFilter: baseItem,
-      sortBy: "Random", // important, as we load limited albums and otherwise would always get the same
-    );
+    // Online Mode
+    List<BaseItemDto>? genreAlbums =
+        await jellyfinApiHelper.getItems(
+          parentItem: finampUserHelper.currentUser?.currentView,
+          includeItemTypes: [BaseItemDtoType.album.idString].join(","),
+          limit: albumLimit,
+          genreFilter: baseItem,
+          sortBy: "Random", // important, as we load limited albums and otherwise would always get the same
+        ) ??
+        [];
+
+    List<BaseItemId> albumIds = genreAlbums.map((album) => album.id).toList();
 
     // Load Tracks of Albums
-    if (genreAlbums != null) {
-      for (final album in genreAlbums) {
-        // We stop if the totalTrackLimit is reached
-        if (totalTrackLimit <= 0) break;
+    List<BaseItemDto>? newAlbumTracks =
+        await jellyfinApiHelper.getItems(
+          albumIds: albumIds,
+          includeItemTypes: [BaseItemDtoType.track.idString].join(","),
+          sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+        ) ??
+        [];
 
-        List<BaseItemDto>? newAlbumTracks =
-            await jellyfinApiHelper.getItems(
-              parentItem: album,
-              includeItemTypes: [BaseItemDtoType.track.idString].join(","),
-              sortBy: "ParentIndexNumber,IndexNumber,SortName",
-            ) ??
-            [];
-        if (newAlbumTracks.isEmpty) continue;
+    // Check if we exceeded the totalTrackLimit
+    if (newAlbumTracks.length > totalTrackLimit) {
+      final trimmedAlbumIds = List<BaseItemId>.from(albumIds);
 
-        // We don't add the album if it would exceed the totalTrackLimit
-        if (totalTrackLimit - newAlbumTracks.length < 0) break;
-
-        // Add the tracks and decrease the total limit
-        newItems.addAll(newAlbumTracks);
-        totalTrackLimit -= newAlbumTracks.length;
+      while (newAlbumTracks.length > totalTrackLimit && trimmedAlbumIds.isNotEmpty) {
+        // Get the last albumId
+        final lastAlbumId = trimmedAlbumIds.removeLast();
+        // Remove all tracks that belong to this album
+        newAlbumTracks.removeWhere((track) => track.albumId == lastAlbumId);
       }
     }
+
+    // Add the tracks and decrease the total limit
+    newItems.addAll(newAlbumTracks);
   }
 
   if (newItems.isEmpty) {
