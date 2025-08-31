@@ -742,14 +742,16 @@ class QueueService {
       }
 
       int adjustedQueueIndex = getActualIndexByLinearIndex(_queueAudioSourceIndex);
+      int offset = min(_queueAudioSource.length, 1);
+      int offsetLog = offset;
 
-      for (final queueItem in queueItems.reversed) {
-        int offset = min(_queueAudioSource.length, 1);
-        await _queueAudioSource.insert(adjustedQueueIndex + offset, await _queueItemToAudioSource(queueItem));
-        _queueServiceLogger.fine(
-          "Appended '${queueItem.item.title}' to Next Up (index ${adjustedQueueIndex + offset})",
-        );
+      List<AudioSource> audioSourceList = [];
+      for (final queueItem in queueItems) {
+        audioSourceList.add(await _queueItemToAudioSource(queueItem));
+        _queueServiceLogger.fine("Prepended '${queueItem.item.title}' to Next Up (index ${adjustedQueueIndex + offsetLog})");
+        offsetLog++;
       }
+      await _queueAudioSource.insertAll(adjustedQueueIndex + offset, audioSourceList);
 
       _queueFromConcatenatingAudioSource(); // update internal queues
     } catch (e) {
@@ -807,16 +809,17 @@ class QueueService {
 
       _queueFromConcatenatingAudioSource(logUpdate: false); // update internal queues
       int offset = _queueNextUp.length + min(_queueAudioSource.length, 1);
+      int offsetLog = offset;
 
       int adjustedQueueIndex = getActualIndexByLinearIndex(_queueAudioSourceIndex);
 
+      List<AudioSource> audioSourceList = [];
       for (final queueItem in queueItems) {
-        await _queueAudioSource.insert(adjustedQueueIndex + offset, await _queueItemToAudioSource(queueItem));
-        _queueServiceLogger.fine(
-          "Appended '${queueItem.item.title}' to Next Up (index ${adjustedQueueIndex + offset})",
-        );
-        offset++;
+        audioSourceList.add(await _queueItemToAudioSource(queueItem));
+        _queueServiceLogger.fine("Appended '${queueItem.item.title}' to Next Up (index ${adjustedQueueIndex + offsetLog})");
+        offsetLog++;
       }
+      await _queueAudioSource.insertAll(adjustedQueueIndex + offset, audioSourceList);
 
       _queueFromConcatenatingAudioSource(); // update internal queues
     } catch (e) {
