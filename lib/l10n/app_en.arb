@@ -227,6 +227,8 @@
   "@favorite": {},
   "favorites": "Favorites",
   "@favorites": {},
+  "shuffleSome": "Shuffle some",
+  "@shuffleSome": {},
   "shuffleAll": "Shuffle all",
   "@shuffleAll": {},
   "downloads": "Downloads",
@@ -998,13 +1000,25 @@
   "@shuffleNext": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
   },
+  "shuffleSomeNext": "Shuffle some next",
+  "@shuffleSomeNext": {
+    "description": "Used for shuffling some tracks to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
   "shuffleToNextUp": "Shuffle to Next Up",
   "@shuffleToNextUp": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
   },
+  "shuffleSomeToNextUp": "Shuffle some to Next Up",
+  "@shuffleSomeToNextUp": {
+    "description": "Used for shuffling some tracks to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+  },
   "shuffleToQueue": "Shuffle to Queue",
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+  },
+  "shuffleSomeToQueue": "Shuffle some to Queue",
+  "@shuffleSomeToQueue": {
+    "description": "Used for shuffling some tracks to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
   "confirmPlayNext": "{type, select, track{Track} album{Album} artist{Artist} playlist{Playlist} genre{Genre} other{Item}} will play next",
   "@confirmPlayNext": {
@@ -1403,19 +1417,35 @@
   },
   "shuffleAlbums": "Shuffle Albums",
   "@shuffleAlbums": {
-    "description": "Label for action that shuffles all albums of an artist or genre"
+    "description": "Label for action that shuffles all albums of an artist"
+  },
+  "shuffleSomeAlbums": "Shuffle some Albums",
+  "@shuffleSomeAlbums": {
+    "description": "Label for action that shuffles some albums of a genre"
   },
   "shuffleAlbumsNext": "Shuffle Albums Next",
   "@shuffleAlbumsNext": {
-    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+    "description": "Label for action that shuffles all albums of an artist and adds them at the start of Next Up"
+  },
+  "shuffleSomeAlbumsNext": "Shuffle some Albums Next",
+  "@shuffleSomeAlbumsNext": {
+    "description": "Label for action that shuffles some albums of a genre and adds them at the start of Next Up"
   },
   "shuffleAlbumsToNextUp": "Shuffle Albums to Next Up",
   "@shuffleAlbumsToNextUp": {
-    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
+    "description": "Label for action that shuffles all albums of an artist and adds them at the end of Next Up"
+  },
+  "shuffleSomeAlbumsToNextUp": "Shuffle some Albums to Next Up",
+  "@shuffleSomeAlbumsToNextUp": {
+    "description": "Label for action that shuffles all albums of a genre and adds them at the end of Next Up"
   },
   "shuffleAlbumsToQueue": "Shuffle Albums to Queue",
   "@shuffleAlbumsToQueue": {
-    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
+    "description": "Label for action that shuffles all albums of an artist and adds them at the end of the regular queue"
+  },
+  "shuffleSomeAlbumsToQueue": "Shuffle some Albums to Queue",
+  "@shuffleSomeAlbumsToQueue": {
+    "description": "Label for action that shuffles all albums of a genre and adds them at the end of the regular queue"
   },
   "playCountValue": "{playCount,plural,=1{{playCount} play} other{{playCount} plays}}",
   "@playCountValue": {

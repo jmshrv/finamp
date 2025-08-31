@@ -31,16 +31,24 @@ Map<String, Widget> getPlaybackActionPages({
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        PlayPlaybackAction(item: item, popContext: popContext, compactLayout: compactLayout, genreFilter: genreFilter),
+        if (itemType != BaseItemDtoType.genre)
+          PlayPlaybackAction(
+            item: item,
+            popContext: popContext,
+            compactLayout: compactLayout,
+            genreFilter: genreFilter,
+          ),
         ShufflePlaybackAction(
           item: item,
+          itemType: itemType,
           popContext: popContext,
           compactLayout: compactLayout,
           genreFilter: genreFilter,
         ),
-        if (itemType == BaseItemDtoType.artist)
+        if (itemType == BaseItemDtoType.artist || itemType == BaseItemDtoType.genre)
           ShuffleAlbumsPlaybackAction(
             item: item,
+            itemType: itemType,
             popContext: popContext,
             compactLayout: compactLayout,
             genreFilter: genreFilter,
@@ -53,21 +61,24 @@ Map<String, Widget> getPlaybackActionPages({
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          PlayNextPlaybackAction(
-            item: item,
-            popContext: popContext,
-            compactLayout: compactLayout,
-            genreFilter: genreFilter,
-          ),
+          if (itemType != BaseItemDtoType.genre)
+            PlayNextPlaybackAction(
+              item: item,
+              popContext: popContext,
+              compactLayout: compactLayout,
+              genreFilter: genreFilter,
+            ),
           ShuffleNextPlaybackAction(
             item: item,
+            itemType: itemType,
             popContext: popContext,
             compactLayout: compactLayout,
             genreFilter: genreFilter,
           ),
-          if (itemType == BaseItemDtoType.artist)
+          if (itemType == BaseItemDtoType.artist || itemType == BaseItemDtoType.genre)
             ShuffleAlbumsNextPlaybackAction(
               item: item,
+              itemType: itemType,
               popContext: popContext,
               compactLayout: compactLayout,
               genreFilter: genreFilter,
@@ -80,21 +91,24 @@ Map<String, Widget> getPlaybackActionPages({
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          AddToNextUpPlaybackAction(
-            item: item,
-            popContext: popContext,
-            compactLayout: compactLayout,
-            genreFilter: genreFilter,
-          ),
+          if (itemType != BaseItemDtoType.genre)
+            AddToNextUpPlaybackAction(
+              item: item,
+              popContext: popContext,
+              compactLayout: compactLayout,
+              genreFilter: genreFilter,
+            ),
           ShuffleToNextUpPlaybackAction(
             item: item,
+            itemType: itemType,
             popContext: popContext,
             compactLayout: compactLayout,
             genreFilter: genreFilter,
           ),
-          if (itemType == BaseItemDtoType.artist)
+          if (itemType == BaseItemDtoType.artist || itemType == BaseItemDtoType.genre)
             ShuffleAlbumsToNextUpPlaybackAction(
               item: item,
+              itemType: itemType,
               popContext: popContext,
               compactLayout: compactLayout,
               genreFilter: genreFilter,
@@ -106,21 +120,24 @@ Map<String, Widget> getPlaybackActionPages({
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        AddToQueuePlaybackAction(
-          item: item,
-          popContext: popContext,
-          compactLayout: compactLayout,
-          genreFilter: genreFilter,
-        ),
+        if (itemType != BaseItemDtoType.genre)
+          AddToQueuePlaybackAction(
+            item: item,
+            popContext: popContext,
+            compactLayout: compactLayout,
+            genreFilter: genreFilter,
+          ),
         ShuffleToQueuePlaybackAction(
           item: item,
+          itemType: itemType,
           popContext: popContext,
           compactLayout: compactLayout,
           genreFilter: genreFilter,
         ),
-        if (itemType == BaseItemDtoType.artist)
+        if (itemType == BaseItemDtoType.artist || itemType == BaseItemDtoType.genre)
           ShuffleAlbumsToQueuePlaybackAction(
             item: item,
+            itemType: itemType,
             popContext: popContext,
             compactLayout: compactLayout,
             genreFilter: genreFilter,
@@ -308,12 +325,14 @@ class ShufflePlaybackAction extends ConsumerWidget {
   const ShufflePlaybackAction({
     super.key,
     required this.item,
+    this.itemType,
     this.popContext = true,
     this.compactLayout = false,
     this.genreFilter,
   });
 
   final PlayableItem item;
+  final BaseItemDtoType? itemType;
   final bool popContext;
   final bool compactLayout;
   final BaseItemDto? genreFilter;
@@ -324,7 +343,9 @@ class ShufflePlaybackAction extends ConsumerWidget {
 
     return PlaybackAction(
       icon: TablerIcons.arrows_shuffle,
-      label: AppLocalizations.of(context)!.shuffleButtonLabel,
+      label: (itemType == BaseItemDtoType.genre)
+          ? AppLocalizations.of(context)!.shuffleSome
+          : AppLocalizations.of(context)!.shuffleButtonLabel,
       compactLayout: compactLayout,
       onPressed: () async {
         await queueService.startPlayback(
@@ -346,12 +367,14 @@ class ShuffleNextPlaybackAction extends ConsumerWidget {
   const ShuffleNextPlaybackAction({
     super.key,
     required this.item,
+    this.itemType,
     this.popContext = true,
     this.compactLayout = false,
     this.genreFilter,
   });
 
   final PlayableItem item;
+  final BaseItemDtoType? itemType;
   final bool popContext;
   final bool compactLayout;
   final BaseItemDto? genreFilter;
@@ -367,7 +390,9 @@ class ShuffleNextPlaybackAction extends ConsumerWidget {
         enabled: !(Platform.isWindows || Platform.isLinux),
         icon: TablerIcons.corner_right_down,
         addShuffleIcon: true,
-        label: AppLocalizations.of(context)!.shuffleNext,
+        label: (itemType == BaseItemDtoType.genre)
+            ? AppLocalizations.of(context)!.shuffleSomeNext
+            : AppLocalizations.of(context)!.shuffleNext,
         compactLayout: compactLayout,
         onPressed: () async {
           await queueService.addNext(
@@ -392,12 +417,14 @@ class ShuffleToNextUpPlaybackAction extends ConsumerWidget {
   const ShuffleToNextUpPlaybackAction({
     super.key,
     required this.item,
+    this.itemType,
     this.popContext = true,
     this.compactLayout = false,
     this.genreFilter,
   });
 
   final PlayableItem item;
+  final BaseItemDtoType? itemType;
   final bool popContext;
   final bool compactLayout;
   final BaseItemDto? genreFilter;
@@ -413,7 +440,9 @@ class ShuffleToNextUpPlaybackAction extends ConsumerWidget {
         enabled: !(Platform.isWindows || Platform.isLinux),
         icon: TablerIcons.corner_right_down_double,
         addShuffleIcon: true,
-        label: AppLocalizations.of(context)!.shuffleToNextUp,
+        label: (itemType == BaseItemDtoType.genre)
+            ? AppLocalizations.of(context)!.shuffleSomeToNextUp
+            : AppLocalizations.of(context)!.shuffleToNextUp,
         compactLayout: compactLayout,
         onPressed: () async {
           await queueService.addToNextUp(
@@ -441,12 +470,14 @@ class ShuffleToQueuePlaybackAction extends ConsumerWidget {
   const ShuffleToQueuePlaybackAction({
     super.key,
     required this.item,
+    this.itemType,
     this.popContext = true,
     this.compactLayout = false,
     this.genreFilter,
   });
 
   final PlayableItem item;
+  final BaseItemDtoType? itemType;
   final bool popContext;
   final bool compactLayout;
   final BaseItemDto? genreFilter;
@@ -458,7 +489,9 @@ class ShuffleToQueuePlaybackAction extends ConsumerWidget {
     return PlaybackAction(
       icon: TablerIcons.playlist,
       addShuffleIcon: true,
-      label: AppLocalizations.of(context)!.shuffleToQueue,
+      label: (itemType == BaseItemDtoType.genre)
+          ? AppLocalizations.of(context)!.shuffleSomeToQueue
+          : AppLocalizations.of(context)!.shuffleToQueue,
       compactLayout: compactLayout,
       onPressed: () async {
         await queueService.addToQueue(
@@ -485,12 +518,14 @@ class ShuffleAlbumsPlaybackAction extends ConsumerWidget {
   const ShuffleAlbumsPlaybackAction({
     super.key,
     required this.item,
+    this.itemType,
     this.popContext = true,
     this.compactLayout = false,
     this.genreFilter,
   });
 
   final PlayableItem item;
+  final BaseItemDtoType? itemType;
   final bool popContext;
   final bool compactLayout;
   final BaseItemDto? genreFilter;
@@ -501,12 +536,18 @@ class ShuffleAlbumsPlaybackAction extends ConsumerWidget {
 
     return PlaybackAction(
       icon: TablerIcons.arrows_shuffle,
-      label: AppLocalizations.of(context)!.shuffleAlbums,
+      label: (itemType == BaseItemDtoType.genre)
+          ? AppLocalizations.of(context)!.shuffleSomeAlbums
+          : AppLocalizations.of(context)!.shuffleAlbums,
       compactLayout: compactLayout,
       onPressed: () async {
         await queueService.startPlayback(
           items: groupItems(
-            items: await loadChildTracks(item: item, genreFilter: genreFilter),
+            items: await loadChildTracks(
+              item: item,
+              genreFilter: genreFilter,
+              shuffleGenreAlbums: itemType == BaseItemDtoType.genre,
+            ),
             groupListBy: (element) => element.albumId?.toString(),
             manuallyShuffle: true,
           ),
@@ -526,12 +567,14 @@ class ShuffleAlbumsNextPlaybackAction extends ConsumerWidget {
   const ShuffleAlbumsNextPlaybackAction({
     super.key,
     required this.item,
+    this.itemType,
     this.popContext = true,
     this.compactLayout = false,
     this.genreFilter,
   });
 
   final PlayableItem item;
+  final BaseItemDtoType? itemType;
   final bool popContext;
   final bool compactLayout;
   final BaseItemDto? genreFilter;
@@ -547,12 +590,18 @@ class ShuffleAlbumsNextPlaybackAction extends ConsumerWidget {
         enabled: !(Platform.isWindows || Platform.isLinux),
         icon: TablerIcons.corner_right_down,
         addShuffleIcon: true,
-        label: AppLocalizations.of(context)!.shuffleAlbumsNext,
+        label: (itemType == BaseItemDtoType.genre)
+            ? AppLocalizations.of(context)!.shuffleSomeAlbumsNext
+            : AppLocalizations.of(context)!.shuffleAlbumsNext,
         compactLayout: compactLayout,
         onPressed: () async {
           await queueService.addNext(
             items: groupItems(
-              items: await loadChildTracks(item: item, genreFilter: genreFilter),
+              items: await loadChildTracks(
+                item: item,
+                genreFilter: genreFilter,
+                shuffleGenreAlbums: itemType == BaseItemDtoType.genre,
+              ),
               groupListBy: (element) => element.albumId?.toString(),
               manuallyShuffle: true,
             ),
@@ -575,12 +624,14 @@ class ShuffleAlbumsToNextUpPlaybackAction extends ConsumerWidget {
   const ShuffleAlbumsToNextUpPlaybackAction({
     super.key,
     required this.item,
+    this.itemType,
     this.popContext = true,
     this.compactLayout = false,
     this.genreFilter,
   });
 
   final PlayableItem item;
+  final BaseItemDtoType? itemType;
   final bool popContext;
   final bool compactLayout;
   final BaseItemDto? genreFilter;
@@ -596,12 +647,18 @@ class ShuffleAlbumsToNextUpPlaybackAction extends ConsumerWidget {
         enabled: !(Platform.isWindows || Platform.isLinux),
         icon: TablerIcons.corner_right_down_double,
         addShuffleIcon: true,
-        label: AppLocalizations.of(context)!.shuffleAlbumsToNextUp,
+        label: (itemType == BaseItemDtoType.genre)
+            ? AppLocalizations.of(context)!.shuffleSomeAlbumsToNextUp
+            : AppLocalizations.of(context)!.shuffleAlbumsToNextUp,
         compactLayout: compactLayout,
         onPressed: () async {
           await queueService.addToNextUp(
             items: groupItems(
-              items: await loadChildTracks(item: item, genreFilter: genreFilter),
+              items: await loadChildTracks(
+                item: item,
+                genreFilter: genreFilter,
+                shuffleGenreAlbums: itemType == BaseItemDtoType.genre,
+              ),
               groupListBy: (element) => element.albumId?.toString(),
               manuallyShuffle: true,
             ),
@@ -627,12 +684,14 @@ class ShuffleAlbumsToQueuePlaybackAction extends ConsumerWidget {
   const ShuffleAlbumsToQueuePlaybackAction({
     super.key,
     required this.item,
+    this.itemType,
     this.popContext = true,
     this.compactLayout = false,
     this.genreFilter,
   });
 
   final PlayableItem item;
+  final BaseItemDtoType? itemType;
   final bool popContext;
   final bool compactLayout;
   final BaseItemDto? genreFilter;
@@ -640,16 +699,22 @@ class ShuffleAlbumsToQueuePlaybackAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
-    
+
     return PlaybackAction(
       icon: TablerIcons.playlist,
       addShuffleIcon: true,
-      label: AppLocalizations.of(context)!.shuffleAlbumsToQueue,
+      label: (itemType == BaseItemDtoType.genre)
+          ? AppLocalizations.of(context)!.shuffleSomeAlbumsToQueue
+          : AppLocalizations.of(context)!.shuffleAlbumsToQueue,
       compactLayout: compactLayout,
       onPressed: () async {
         await queueService.addToQueue(
           items: groupItems(
-            items: await loadChildTracks(item: item, genreFilter: genreFilter),
+            items: await loadChildTracks(
+              item: item,
+              genreFilter: genreFilter,
+              shuffleGenreAlbums: itemType == BaseItemDtoType.genre,
+            ),
             groupListBy: (element) => element.albumId?.toString(),
             manuallyShuffle: true,
           ),
