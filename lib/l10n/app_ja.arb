@@ -813,7 +813,7 @@
             }
         }
     },
-    "interactions": "ンタラクション",
+    "interactions": "インタラクション",
     "@interactions": {},
     "logoutButtonSubtitle": "別サーバーにログインするとダウンロードが削除されます",
     "@logoutButtonSubtitle": {},
