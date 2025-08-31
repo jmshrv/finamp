@@ -161,10 +161,6 @@ class PlayPlaybackAction extends ConsumerWidget {
         if (popContext) {
           Navigator.pop(context);
         }
-
-        if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
-          FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.newQueue);
-        }
       },
       iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
     );
@@ -188,7 +184,6 @@ class PlayNextPlaybackAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
-    final ref = GetIt.instance<ProviderContainer>();
     final preferNextUpPrepending = ref.read(finampSettingsProvider.preferNextUpPrepending);
 
     return Visibility(
@@ -211,10 +206,6 @@ class PlayNextPlaybackAction extends ConsumerWidget {
 
           if (popContext) {
             Navigator.pop(context);
-          }
-
-          if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
-            FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.playNext);
           }
         },
         iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -240,7 +231,6 @@ class AddToNextUpPlaybackAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
-    final ref = GetIt.instance<ProviderContainer>();
     final preferNextUpPrepending = ref.read(finampSettingsProvider.preferNextUpPrepending);
 
     return Visibility(
@@ -264,10 +254,6 @@ class AddToNextUpPlaybackAction extends ConsumerWidget {
 
           if (popContext) {
             Navigator.pop(context);
-          }
-
-          if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
-            FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.appendNext);
           }
         },
         iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -293,6 +279,7 @@ class AddToQueuePlaybackAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
+
     return PlaybackAction(
       icon: TablerIcons.playlist,
       label: AppLocalizations.of(context)!.addToQueue,
@@ -310,10 +297,6 @@ class AddToQueuePlaybackAction extends ConsumerWidget {
 
         if (popContext) {
           Navigator.pop(context);
-        }
-
-        if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
-          FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.playLast);
         }
       },
       iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -338,6 +321,7 @@ class ShufflePlaybackAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
+
     return PlaybackAction(
       icon: TablerIcons.arrows_shuffle,
       label: AppLocalizations.of(context)!.shuffleButtonLabel,
@@ -351,10 +335,6 @@ class ShufflePlaybackAction extends ConsumerWidget {
 
         if (popContext) {
           Navigator.pop(context);
-        }
-
-        if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
-          FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.newQueue);
         }
       },
       iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -379,7 +359,6 @@ class ShuffleNextPlaybackAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
-    final ref = GetIt.instance<ProviderContainer>();
     final preferNextUpPrepending = ref.read(finampSettingsProvider.preferNextUpPrepending);
 
     return Visibility(
@@ -401,10 +380,6 @@ class ShuffleNextPlaybackAction extends ConsumerWidget {
 
           if (popContext) {
             Navigator.pop(context);
-          }
-
-          if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
-            FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.playNext);
           }
         },
         iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -430,7 +405,6 @@ class ShuffleToNextUpPlaybackAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
-    final ref = GetIt.instance<ProviderContainer>();
     final preferNextUpPrepending = ref.read(finampSettingsProvider.preferNextUpPrepending);
 
     return Visibility(
@@ -456,10 +430,6 @@ class ShuffleToNextUpPlaybackAction extends ConsumerWidget {
           if (popContext) {
             Navigator.pop(context);
           }
-
-          if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
-            FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.appendNext);
-          }
         },
         iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
       ),
@@ -484,6 +454,7 @@ class ShuffleToQueuePlaybackAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
+
     return PlaybackAction(
       icon: TablerIcons.playlist,
       addShuffleIcon: true,
@@ -503,10 +474,6 @@ class ShuffleToQueuePlaybackAction extends ConsumerWidget {
 
         if (popContext) {
           Navigator.pop(context);
-        }
-
-        if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
-          FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.playLast);
         }
       },
       iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -531,6 +498,7 @@ class ShuffleAlbumsPlaybackAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
+
     return PlaybackAction(
       icon: TablerIcons.arrows_shuffle,
       label: AppLocalizations.of(context)!.shuffleAlbums,
@@ -547,10 +515,6 @@ class ShuffleAlbumsPlaybackAction extends ConsumerWidget {
 
         if (popContext) {
           Navigator.pop(context);
-        }
-
-        if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
-          FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.newQueue);
         }
       },
       iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
@@ -575,7 +539,6 @@ class ShuffleAlbumsNextPlaybackAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
-    final ref = GetIt.instance<ProviderContainer>();
     final preferNextUpPrepending = ref.read(finampSettingsProvider.preferNextUpPrepending);
 
     return Visibility(
@@ -601,10 +564,6 @@ class ShuffleAlbumsNextPlaybackAction extends ConsumerWidget {
           if (popContext) {
             Navigator.pop(context);
           }
-
-          if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
-            FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.playNext);
-          }
         },
         iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
       ),
@@ -629,7 +588,6 @@ class ShuffleAlbumsToNextUpPlaybackAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
-    final ref = GetIt.instance<ProviderContainer>();
     final preferNextUpPrepending = ref.read(finampSettingsProvider.preferNextUpPrepending);
 
     return Visibility(
@@ -658,10 +616,6 @@ class ShuffleAlbumsToNextUpPlaybackAction extends ConsumerWidget {
           if (popContext) {
             Navigator.pop(context);
           }
-
-          if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
-            FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.appendNext);
-          }
         },
         iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
       ),
@@ -686,6 +640,7 @@ class ShuffleAlbumsToQueuePlaybackAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
+    
     return PlaybackAction(
       icon: TablerIcons.playlist,
       addShuffleIcon: true,
@@ -708,10 +663,6 @@ class ShuffleAlbumsToQueuePlaybackAction extends ConsumerWidget {
 
         if (popContext) {
           Navigator.pop(context);
-        }
-
-        if (ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)) {
-          FinampSetters.setLastUsedPlaybackActionRowPage(PlaybackActionRowPage.playLast);
         }
       },
       iconColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
