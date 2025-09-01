@@ -516,7 +516,6 @@ class PlaybackHistoryService {
     required bool includeNowPlayingQueue,
   }) {
     try {
-
       return jellyfin_models.PlaybackProgressInfo(
         itemId: item.baseItem?.id ?? jellyfin_models.BaseItemId(""),
         playSessionId: item.item.extras?["playSessionId"] as String? ?? "",

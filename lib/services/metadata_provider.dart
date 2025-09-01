@@ -108,7 +108,6 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, BaseItemDto> metadataPr
         }
       }
 
-
       //!!! only use offline metadata if the app is in offline mode
       // Finamp should always use the server metadata when online, if possible
       if (ref.watch(finampSettingsProvider.isOffline)) {

@@ -1150,9 +1150,6 @@ class QueueService {
       }
     }
 
-    // final metadata = await GetIt.instance<ProviderContainer>().read(metadataProvider(item).future);
-    // print("BEFORE MEDIAITEM: playSessionId=${metadata?.playbackInfo.playSessionId}");
-
     return MediaItem(
       id: itemId?.toString() ?? uuid.v4(),
       playable:
