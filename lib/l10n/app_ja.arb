@@ -349,7 +349,7 @@
     "@bufferDuration": {},
     "language": "言語",
     "@language": {},
-    "finamp": "Finamp",
+    "finamp": "フィンアンプ",
     "@finamp": {},
     "areYouSure": "よろしいですか？",
     "@areYouSure": {},
@@ -464,7 +464,7 @@
     "@confirmDownloadStarted": {
         "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
     },
-    "about": "Finamp について",
+    "about": "「フィンアンプ」について",
     "@about": {
         "description": "Label for the about/info button on the settings screen"
     },
@@ -472,7 +472,7 @@
     "@finampTagline": {
         "description": "Tagline / short description for the app"
     },
-    "aboutContributionLink": "GitHub で Finamp に貢献する:",
+    "aboutContributionLink": "GitHub で「フィンアンプ」に貢献する:",
     "@aboutContributionLink": {
         "description": "Link to the Finamp GitHub repository, shown in the about screen."
     },
@@ -484,11 +484,11 @@
     "@aboutContributionPrompt": {
         "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
     },
-    "aboutTranslations": "Finamp をあなたの言語に翻訳する手伝いをしてください:",
+    "aboutTranslations": "「フィンアンプ」をあなたの言語に翻訳する手伝いをしてください：",
     "@aboutTranslations": {
         "description": "Link to the translation project, shown in the about screen."
     },
-    "aboutThanks": "Finamp をご利用いただきありがとうございます！",
+    "aboutThanks": "「フィンアンプ」をご利用いただきありがとうございます！",
     "@aboutThanks": {
         "description": "Thank you message shown in the about screen."
     },
@@ -765,7 +765,7 @@
     "@startupErrorWorkaround": {
         "description": "The subtitle for how to manually recover from a startup error"
     },
-    "playbackSpeedControlSettingDescription": "自動:\nFinamp は、再生中のトラックがポッドキャストかオーディオブック（の一部）かを識別しようとします。トラックの長さが {trackDuration} 分を超える場合、トラックのアルバムの長さが {albumDuration} 時間を超える場合、またはトラックに以下のジャンル（{genreList}）の少なくとも 1 つが割り当てられている場合、ポッドキャストまたはオーディオブックとみなされます。\n再生速度コントロールは、プレーヤー画面のメニューに表示されます。\n\n表示:\n再生速度コントロールは、プレーヤー画面のメニューに常に表示されます。\n\n非表示:\nプレーヤー画面のメニューの再生速度コントロールは常に非表示です。",
+    "playbackSpeedControlSettingDescription": "自動:\n「フィンアンプ」は、再生中のトラックがポッドキャストかオーディオブック（の一部）かを識別しようとします。トラックの長さが {trackDuration} 分を超える場合、トラックのアルバムの長さが {albumDuration} 時間を超える場合、またはトラックに以下のジャンル（{genreList}）の少なくとも 1 つが割り当てられている場合、ポッドキャストまたはオーディオブックとみなされます。\n再生速度コントロールは、プレーヤー画面のメニューに表示されます。\n\n表示:\n再生速度コントロールは、プレーヤー画面のメニューに常に表示されます。\n\n非表示:\nプレーヤー画面のメニューの再生速度コントロールは常に非表示です。",
     "@playbackSpeedControlSettingDescription": {
         "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
         "placeholders": {
@@ -908,5 +908,451 @@
                 "type": "int"
             }
         }
+    },
+    "autoSwitchItemCurationTypeTitle": "アイテムキュレーションタイプを自動切替",
+    "@autoSwitchItemCurationTypeTitle": {},
+    "autoSwitchItemCurationTypeSubtitle": "有効にすると、アーティスト画面やジャンル画面のアイテムセクションは、利用可能なアイテムがない場合（例：特定のアーティストのお気に入りがない場合）に、自動で別のキュレーションタイプに切り替わります。",
+    "@autoSwitchItemCurationTypeSubtitle": {},
+    "showArtistsTracksSection": "トラックセクションを表示",
+    "@showArtistsTracksSection": {},
+    "showArtistsTracksSectionSubtitle": "最大5曲のトラックセクションを表示するかどうか。有効にすると、再生回数が多い、 お気に入り、ランダム、最新リリース、最近追加、最近再生済みの中から選択できます。",
+    "@showArtistsTracksSectionSubtitle": {},
+    "addToMorePlaylistsTooltip": "他のプレイリストに追加",
+    "@addToMorePlaylistsTooltip": {},
+    "addToMorePlaylistsTitle": "他のプレイリストに追加",
+    "@addToMorePlaylistsTitle": {},
+    "removeFromPlaylistNamedTooltip": "プレイリスト「{playlistName}」から削除",
+    "@removeFromPlaylistNamedTooltip": {
+        "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+        "placeholders": {
+            "playlistName": {
+                "type": "String",
+                "example": "My Favorite Tracks"
+            }
+        }
+    },
+    "removeFromPlaylistNamedTitle": "プレイリスト「{playlistName}」から削除",
+    "@removeFromPlaylistNamedTitle": {
+        "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+        "placeholders": {
+            "playlistName": {
+                "type": "String",
+                "example": "My Favorite Tracks"
+            }
+        }
+    },
+    "playlistActionsMenuButtonTooltip": "タップでプレイリストに追加。長押しでお気に入り切替。",
+    "@playlistActionsMenuButtonTooltip": {
+        "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+    },
+    "browsePlaylists": "プレイリストを閲覧",
+    "@browsePlaylists": {
+        "description": "Label for a button on the genre screen that brings you to a list of genre-filtered playlists."
+    },
+    "unknownAlbum": "不明なアルバム",
+    "@unknownAlbum": {},
+    "playbackModeDirectPlaying": "直接再生",
+    "@playbackModeDirectPlaying": {
+        "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+    },
+    "playbackModeTranscoding": "トランスコード中",
+    "@playbackModeTranscoding": {
+        "description": "Feature chip that is shown when tracks are being transcoded by the server"
+    },
+    "kiloBitsPerSecondLabel": "{bitrate} kbps",
+    "@kiloBitsPerSecondLabel": {
+        "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+        "placeholders": {
+            "bitrate": {
+                "type": "int",
+                "example": "320"
+            }
+        }
+    },
+    "playbackModeLocal": "ローカル再生",
+    "@playbackModeLocal": {
+        "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+    },
+    "goToArtist": "アーティストへ移動",
+    "@goToArtist": {},
+    "goToGenre": "ジャンルへ移動",
+    "@goToGenre": {},
+    "removeFavorite": "お気に入りから削除",
+    "@removeFavorite": {},
+    "addFavorite": "お気に入りに追加",
+    "@addFavorite": {},
+    "confirmFavoriteAdded": "お気に入りに追加済み",
+    "@confirmFavoriteAdded": {},
+    "confirmFavoriteRemoved": "お気に入りから削除済み",
+    "@confirmFavoriteRemoved": {},
+    "confirmAddedToPlaylist": "プレイリストに追加しました。",
+    "@confirmAddedToPlaylist": {
+        "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+    },
+    "bufferDisableSizeConstraintsTitle": "バッファサイズを制限しない",
+    "@bufferDisableSizeConstraintsTitle": {},
+    "bufferDisableSizeConstraintsSubtitle": "バッファサイズの制限（「バッファサイズ」）を無効化します。大きなファイルでも、バッファは設定された時間（「バッファ時間」）まで常に読み込まれます。クラッシュの原因になる場合があります。再起動が必要です。",
+    "@bufferDisableSizeConstraintsSubtitle": {},
+    "bufferSizeTitle": "バッファサイズ",
+    "@bufferSizeTitle": {},
+    "bufferSizeSubtitle": "バッファの最大サイズ（MB）。再起動が必要です",
+    "@bufferSizeSubtitle": {},
+    "skipToPreviousTrackButtonTooltip": "先頭または前の曲へスキップ",
+    "@skipToPreviousTrackButtonTooltip": {
+        "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+    },
+    "skipToNextTrackButtonTooltip": "次の曲へスキップ",
+    "@skipToNextTrackButtonTooltip": {
+        "description": "Tooltip for the button that skips to the next track"
+    },
+    "togglePlaybackButtonTooltip": "再生／一時停止切替",
+    "@togglePlaybackButtonTooltip": {
+        "description": "Tooltip for the button that toggles playback"
+    },
+    "previousTracks": "前の曲",
+    "@previousTracks": {
+        "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+    },
+    "clearNextUp": "「次に再生」をクリア",
+    "@clearNextUp": {
+        "description": "Label for the action that deletes all tracks added to Next Up"
+    },
+    "stopAndClearQueue": "再生停止とキューをクリア",
+    "@stopAndClearQueue": {
+        "description": "Label for a button that stops playback and removes all tracks from the queue."
+    },
+    "createPlaylistFromCurrentQueue": "キューをプレイリストに保存",
+    "@createPlaylistFromCurrentQueue": {
+        "description": "Label for a button that adds the current queue to an existing or new playlist."
+    },
+    "playingFrom": "再生元：",
+    "@playingFrom": {
+        "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+    },
+    "addToNextUp": "次に再生に追加",
+    "@addToNextUp": {
+        "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+    },
+    "shuffleNext": "次に再生をシャッフル",
+    "@shuffleNext": {
+        "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+    },
+    "shuffleToNextUp": "次に再生の最後にシャッフル",
+    "@shuffleToNextUp": {
+        "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+    },
+    "shuffleToQueue": "キューの最後にシャッフル",
+    "@shuffleToQueue": {
+        "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+    },
+    "confirmPlayNext": "{type, select, track{曲} album{アルバム} artist{アーティスト} playlist{プレイリスト} genre{ジャンル} other{アイテム}} が次に再生されます",
+    "@confirmPlayNext": {
+        "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+        "placeholders": {
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "confirmAddToNextUp": "{type, select, track{曲} album{アルバム} artist{アーティスト} playlist{プレイリスト} genre{ジャンル} disc{ディスク} other{アイテム}} を次に再生に追加しました",
+    "@confirmAddToNextUp": {
+        "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+        "placeholders": {
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "confirmAddToQueue": "{type, select, track{曲} album{アルバム} artist{アーティスト} playlist{プレイリスト} genre{ジャンル} disc{ディスク} other{アイテム}} をキューに追加しました",
+    "@confirmAddToQueue": {
+        "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+        "placeholders": {
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "confirmShuffleNext": "次にシャッフル再生されます",
+    "@confirmShuffleNext": {
+        "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
+    },
+    "confirmShuffleToNextUp": "次に再生の最後にシャッフルされました",
+    "@confirmShuffleToNextUp": {
+        "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+    },
+    "confirmShuffleToQueue": "キューの最後にシャッフルされました",
+    "@confirmShuffleToQueue": {
+        "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
+    },
+    "placeholderSource": "不明なソース",
+    "@placeholderSource": {
+        "description": "Placeholder text used when the source of the current track/queue is unknown"
+    },
+    "shareOfflineListens": "オフライン再生データを共有",
+    "@shareOfflineListens": {
+        "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+    },
+    "yourLikes": "あなたのお気に入り",
+    "@yourLikes": {
+        "description": "Title for the queue source when the user is playing their liked tracks"
+    },
+    "mix": "{mixSource} - ミックス",
+    "@mix": {
+        "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+        "placeholders": {
+            "mixSource": {
+                "type": "String",
+                "example": "Never Gonna Give You Up"
+            }
+        }
+    },
+    "tracksFormerNextUp": "次に再生で追加された曲",
+    "@tracksFormerNextUp": {
+        "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+    },
+    "savedQueue": "保存されたキュー",
+    "@savedQueue": {
+        "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+    },
+    "playingFromType": "{source, select, album{アルバムから再生} playlist{プレイリストから再生} trackMix{トラックミックスから再生} artistMix{アーティストミックスから再生} albumMix{アルバムミックスから再生} genreMix{ジャンルミックスから再生} favorites{お気に入りから再生} allTracks{全曲から再生} filteredList{トラックから再生} genre{ジャンルから再生} artist{アーティストから再生} track{曲から再生} nextUpAlbum{次に再生のアルバムから再生} nextUpPlaylist{次に再生のプレイリストから再生} nextUpArtist{次に再生のアーティストから再生} nextUpGenre{次に再生のジャンルから再生} remoteClient{リモートクライアントから再生} other{から再生}}",
+    "@playingFromType": {
+        "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
+        "placeholders": {
+            "source": {
+                "type": "String"
+            }
+        }
+    },
+    "shuffleAllQueueSource": "全曲シャッフル",
+    "@shuffleAllQueueSource": {
+        "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+    },
+    "playbackOrderLinearButtonLabel": "順番に再生",
+    "@playbackOrderLinearButtonLabel": {
+        "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+    },
+    "playbackOrderLinearButtonTooltip": "順番に再生中。タップでシャッフル。",
+    "@playbackOrderLinearButtonTooltip": {
+        "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+    },
+    "playbackOrderShuffledButtonLabel": "曲をシャッフル再生中",
+    "@playbackOrderShuffledButtonLabel": {
+        "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+    },
+    "playbackOrderShuffledButtonTooltip": "曲をシャッフル再生中。タップで順番に再生。",
+    "@playbackOrderShuffledButtonTooltip": {
+        "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+    },
+    "playbackSpeedButtonLabel": "{speed}倍速で再生",
+    "@playbackSpeedButtonLabel": {
+        "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+        "placeholders": {
+            "speed": {
+                "type": "double"
+            }
+        }
+    },
+    "playbackSpeedFeatureText": "{speed}倍速",
+    "@playbackSpeedFeatureText": {
+        "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+        "placeholders": {
+            "speed": {
+                "type": "double"
+            }
+        }
+    },
+    "currentVolumeFeatureText": "{volume}% 音量",
+    "@currentVolumeFeatureText": {
+        "description": "Label for the feature chip that is shown if the volume is not 100%",
+        "placeholders": {
+            "volume": {
+                "type": "int",
+                "description": "The current volume level, in percent"
+            }
+        }
+    },
+    "playbackSpeedDecreaseLabel": "再生速度を下げる",
+    "@playbackSpeedDecreaseLabel": {
+        "description": "Label for the button in the speed menu that decreases the playback speed."
+    },
+    "playbackSpeedIncreaseLabel": "再生速度を上げる",
+    "@playbackSpeedIncreaseLabel": {
+        "description": "Label for the button in the speed menu that increases the playback speed."
+    },
+    "loopModeNoneButtonLabel": "ループなし",
+    "@loopModeNoneButtonLabel": {
+        "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+    },
+    "loopModeOneButtonLabel": "この曲をループ",
+    "@loopModeOneButtonLabel": {
+        "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+    },
+    "loopModeAllButtonLabel": "全曲をループ",
+    "@loopModeAllButtonLabel": {
+        "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+    },
+    "queueRestoreButtonLabel": "このキューを復元",
+    "@queueRestoreButtonLabel": {
+        "description": "Button to restore archived now playing queue, overwriting current queue"
+    },
+    "queueRestoreTitle": "{date} に保存",
+    "@queueRestoreTitle": {
+        "description": "Description of when a saved queue was saved",
+        "placeholders": {
+            "date": {
+                "type": "DateTime",
+                "format": "yyy-MM-dd hh:mm",
+                "isCustomDateFormat": "true"
+            }
+        }
+    },
+    "queueRestoreSubtitle1": "再生中：{track}",
+    "@queueRestoreSubtitle1": {
+        "description": "Description of playing track in a saved queue",
+        "placeholders": {
+            "track": {
+                "type": "String"
+            }
+        }
+    },
+    "queueRestoreSubtitle2": "{count,plural,=1{1 曲} other{{count} 曲}}、{remaining} 曲未再生",
+    "@queueRestoreSubtitle2": {
+        "description": "Description of length of a saved queue",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "remaining": {
+                "type": "int"
+            }
+        }
+    },
+    "queueLoadingMessage": "キューを復元中…",
+    "@queueLoadingMessage": {
+        "description": "Message displayed on now-playing bar when a saved queue is loading."
+    },
+    "queueRetryMessage": "キューの復元に失敗しました。再試行しますか？",
+    "@queueRetryMessage": {
+        "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+    },
+    "autoloadLastQueueOnStartup": "前回のキューを自動復元",
+    "@autoloadLastQueueOnStartup": {
+        "description": "Setting to restore last queue on startup"
+    },
+    "autoloadLastQueueOnStartupSubtitle": "アプリ起動時に、前回再生していたキューを復元します。",
+    "@autoloadLastQueueOnStartupSubtitle": {
+        "description": "Description of the setting to restore last queue on startup"
+    },
+    "reportQueueToServer": "現在のキューをサーバーに送信しますか？",
+    "@reportQueueToServer": {
+        "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
+    },
+    "reportQueueToServerSubtitle": "有効にすると、「フィンアンプ」は現在のキューをサーバーに送信します。これにより、リモート操作が向上し、サーバー側でキューを復元できるようになります。「再生先」機能が有効な場合は常に有効になります。",
+    "@reportQueueToServerSubtitle": {
+        "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
+    },
+    "periodicPlaybackSessionUpdateFrequency": "再生セッション更新頻度",
+    "@periodicPlaybackSessionUpdateFrequency": {
+        "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+    },
+    "periodicPlaybackSessionUpdateFrequencySubtitle": "現在の再生状況をサーバーに送信する間隔（秒）。セッションタイムアウトを防ぐため、5分（300秒）未満に設定してください。",
+    "@periodicPlaybackSessionUpdateFrequencySubtitle": {
+        "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+    },
+    "periodicPlaybackSessionUpdateFrequencyDetails": "Jellyfin サーバーは、クライアントからの更新が過去5分間なかった場合、再生が終了したと判断します。そのため、5分を超える曲では、実際には再生中でも再生が終了したと誤って報告される可能性があり、再生状況のデータ品質が低下します。",
+    "@periodicPlaybackSessionUpdateFrequencyDetails": {
+        "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+    },
+    "playOnStaleDelay": "遠端再生セッションのタイムアウト",
+    "@playOnStaleDelay": {
+        "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+    },
+    "playOnStaleDelaySubtitle": "リモート「遠端再生」セッションは、コマンドを受信してからどのくらいの間アクティブと見なすかを設定します。アクティブと見なされている間は再生状況がより頻繁に報告されるため、帯域幅の使用量が増える可能性があります。",
+    "@playOnStaleDelaySubtitle": {
+        "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+    },
+    "enablePlayonTitle": "「遠端再生」サポートを有効化",
+    "@enablePlayonTitle": {
+        "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
+    },
+    "enablePlayonSubtitle": "Jellyfin の「遠端再生」機能（他のクライアントから「フィンアンプ」をリモート操作）を有効にします。リバースプロキシやサーバーが WebSocket に対応していない場合は無効にしてください。",
+    "@enablePlayonSubtitle": {
+        "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+    },
+    "playOnReconnectionDelay": "「遠端再生」セッション再接続の遅延",
+    "@playOnReconnectionDelay": {
+        "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+    },
+    "playOnReconnectionDelaySubtitle": "切断された遠端再生 WebSocket の再接続試行間隔（秒）を設定します。間隔を短くすると帯域幅の使用量が増えます。",
+    "@playOnReconnectionDelaySubtitle": {
+        "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+    },
+    "topTracks": "人気曲",
+    "@topTracks": {},
+    "topAlbums": "人気アルバム",
+    "@topAlbums": {},
+    "topArtists": "人気アーティスト",
+    "@topArtists": {},
+    "recentlyAddedTracks": "最近追加した曲",
+    "@recentlyAddedTracks": {
+        "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
+    },
+    "recentlyAddedAlbums": "最近追加したアルバム",
+    "@recentlyAddedAlbums": {
+        "description": "Label for the genre section that shows albums that were recently added to the library, sorted by the date they were added."
+    },
+    "recentlyAddedArtists": "最近追加したアーティスト",
+    "@recentlyAddedArtists": {
+        "description": "Label for the genre section that shows artists that were recently added to the library, sorted by the date they were added."
+    },
+    "latestTracks": "最新の曲",
+    "@latestTracks": {},
+    "latestAlbums": "最新のアルバム",
+    "@latestAlbums": {},
+    "latestArtists": "最新のアーティスト",
+    "@latestArtists": {},
+    "recentlyPlayedTracks": "最近再生した曲",
+    "@recentlyPlayedTracks": {},
+    "recentlyPlayedAlbums": "最近再生したアルバム",
+    "@recentlyPlayedAlbums": {},
+    "recentlyPlayedArtists": "最近再生したアーティスト",
+    "@recentlyPlayedArtists": {},
+    "favoriteTracks": "お気に入りの曲",
+    "@favoriteTracks": {},
+    "favoriteAlbums": "お気に入りのアルバム",
+    "@favoriteAlbums": {},
+    "favoriteArtists": "お気に入りのアーティスト",
+    "@favoriteArtists": {},
+    "discordRPCIconLight": "フィンアンプ - ホワイト",
+    "@discordRPCIconLight": {
+        "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a White Background"
+    },
+    "discordRPCIconTransparent": "フィンアンプ - 透明",
+    "@discordRPCIconTransparent": {
+        "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Transparent Background"
+    },
+    "discordRPCIconWhiteTransparent": "ホワイトフィンアンプ - 透明",
+    "@discordRPCIconWhiteTransparent": {
+        "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
+    },
+    "discordRPCIconBlack": "フィンアンプ - ブラック",
+    "@discordRPCIconBlack": {
+        "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Black Background"
+    },
+    "discordRPCIconDark": "フィンアンプ - ダーク",
+    "@discordRPCIconDark": {
+        "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with the Dark-Theme Background"
+    },
+    "autoReloadQueueSubtitle": "ソースが変更されたとき（例：オフラインモードを有効化／サーバーアドレスを切り替えたとき）に、キューを自動で再読み込みします。無効にすると、代わりにフィンアンプが確認を求めます。",
+    "@autoReloadQueueSubtitle": {
+        "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
+    },
+    "serverSharingMenuConfirmationDialogText": "オフラインモード中にもかかわらず、サーバー共有を有効にしてもよろしいですか？ 有効にすると、フィンアンプがローカルネットワーク経由でデータを送信します。",
+    "@serverSharingMenuConfirmationDialogText": {
+        "description": "Dialog text shown when enabling server sharing while offline mode is enabled"
+    },
+    "serverSharingMenuDetails": "これは、ローカルネットワーク上の他のクライアントからのサーバー探索リクエストを受信し、それに対して設定済みの Jellyfin サーバーのアドレスで応答することで動作します。\nローカルアドレスとパブリックアドレスの両方が設定されている場合、フィンアンプはリクエスト元のクライアントに両方を提供します。",
+    "@serverSharingMenuDetails": {
+        "description": "Description text shown in the server sharing menu, below the description"
     }
 }
