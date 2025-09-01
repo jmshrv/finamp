@@ -1,403 +1,668 @@
 {
-  "serverUrl": "Server URL",
-  "@serverUrl": {},
-  "emptyServerUrl": "Server URL kan ikke være tom",
-  "@emptyServerUrl": {
-    "description": "Error message that shows when the user submits a login without a server URL"
-  },
-  "username": "Brugernavn",
-  "@username": {},
-  "password": "Adgangskode",
-  "@password": {},
-  "logs": "Log",
-  "@logs": {},
-  "next": "Næste",
-  "@next": {},
-  "selectMusicLibraries": "Vælg musik biblioteker",
-  "@selectMusicLibraries": {
-    "description": "App bar title for library select screen"
-  },
-  "couldNotFindLibraries": "Kunne ikke finde nogle biblioteker.",
-  "@couldNotFindLibraries": {
-    "description": "Error message when the user does not have any libraries"
-  },
-  "tracks": "Sange",
-  "@tracks": {},
-  "artists": "Kunstnere",
-  "@artists": {},
-  "genres": "Genre",
-  "@genres": {},
-  "startMix": "Start blanding",
-  "@startMix": {},
-  "music": "Musik",
-  "@music": {},
-  "clear": "Ryd",
-  "@clear": {},
-  "shuffleAll": "Bland alle",
-  "@shuffleAll": {},
-  "finamp": "Finamp",
-  "@finamp": {},
-  "downloads": "Overførelser",
-  "@downloads": {},
-  "settings": "Indstillinger",
-  "@settings": {},
-  "offlineMode": "Offline tilstand",
-  "@offlineMode": {},
-  "sortOrder": "Sorter efter",
-  "@sortOrder": {},
-  "sortBy": "Sortér efter",
-  "@sortBy": {},
-  "album": "Album",
-  "@album": {},
-  "albumArtist": "Album kunstner",
-  "@albumArtist": {},
-  "artist": "Kunstner",
-  "@artist": {},
-  "criticRating": "Kritiker bedømmelse",
-  "@criticRating": {},
-  "communityRating": "Fællesskab bedømmelse",
-  "@communityRating": {},
-  "dateAdded": "Dato tilføjet",
-  "@dateAdded": {},
-  "datePlayed": "Afspillet den",
-  "@datePlayed": {},
-  "playCount": "Antal afspilninger",
-  "@playCount": {},
-  "premiereDate": "Udgivelsesdato",
-  "@premiereDate": {},
-  "productionYear": "Produktionsår",
-  "@productionYear": {},
-  "name": "Navn",
-  "@name": {},
-  "random": "Tilfældig",
-  "@random": {},
-  "revenue": "Omsætning",
-  "@revenue": {},
-  "budget": "Budget",
-  "@budget": {},
-  "downloadMissingImages": "Overførelse mangler billeder",
-  "@downloadMissingImages": {},
-  "dlComplete": "{count} færdige",
-  "@dlComplete": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dlFailed": "{count} fejlede",
-  "@dlFailed": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dlEnqueued": "{count} i kø",
-  "@dlEnqueued": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "failedToGetTrackFromDownloadId": "Fejlede under hentning af sang fra overførelse ID",
-  "@failedToGetTrackFromDownloadId": {},
-  "error": "Fejl",
-  "@error": {},
-  "discNumber": "Disk {number}",
-  "@discNumber": {
-    "placeholders": {
-      "number": {
-        "type": "int"
-      }
-    }
-  },
-  "playButtonLabel": "AFSPIL",
-  "@playButtonLabel": {},
-  "required": "Påkrævet",
-  "@required": {},
-  "updateButtonLabel": "OPDATÉR",
-  "@updateButtonLabel": {},
-  "playlistUpdated": "Afspilningslistens navn er opdateret.",
-  "@playlistUpdated": {},
-  "addDownloads": "Tilføj overførelser",
-  "@addDownloads": {},
-  "location": "Placering",
-  "@location": {},
-  "downloadsQueued": "Overførelse tilføjet.",
-  "@downloadsQueued": {},
-  "shareLogs": "Del log",
-  "@shareLogs": {},
-  "stackTrace": "Bunke spor",
-  "@stackTrace": {},
-  "transcoding": "Omkoder",
-  "@transcoding": {},
-  "downloadLocations": "Overførelse placering",
-  "@downloadLocations": {},
-  "audioService": "Lyd tjeneste",
-  "@audioService": {},
-  "layoutAndTheme": "Udseende & tema",
-  "@layoutAndTheme": {},
-  "notAvailableInOfflineMode": "Ikke tilgængelig i offline tilstand",
-  "@notAvailableInOfflineMode": {},
-  "logOut": "Log af",
-  "@logOut": {},
-  "areYouSure": "Er du sikker?",
-  "@areYouSure": {},
-  "enableTranscoding": "Aktivér omkodning",
-  "@enableTranscoding": {},
-  "enableTranscodingSubtitle": "Omkoder musik under afspilning på serveren.",
-  "@enableTranscodingSubtitle": {},
-  "bitrateSubtitle": "En højere bithastighed giver højere lydkvalitet men bruger mere båndbredde.",
-  "@bitrateSubtitle": {},
-  "customLocation": "Vælg placering",
-  "@customLocation": {},
-  "appDirectory": "App katalog",
-  "@appDirectory": {},
-  "addDownloadLocation": "Tilføj overførelse placering",
-  "@addDownloadLocation": {},
-  "selectDirectory": "Vælg katalog",
-  "@selectDirectory": {},
-  "unknownError": "Ukendt fejl",
-  "@unknownError": {},
-  "directoryMustBeEmpty": "Katalog skal være tomt",
-  "@directoryMustBeEmpty": {},
-  "enterLowPriorityStateOnPause": "Gå i lav prioritet tilstand når musik afspilning er på pause",
-  "@enterLowPriorityStateOnPause": {},
-  "enterLowPriorityStateOnPauseSubtitle": "Tillader notifikationer bliver strøget væk, når afspilning er sat på pause. Dette tillader også Android, at afbryde servicen når den er på pause.",
-  "@enterLowPriorityStateOnPauseSubtitle": {},
-  "shuffleAllTrackCount": "Bland alle sange antal",
-  "@shuffleAllTrackCount": {},
-  "viewType": "Visning tilstand",
-  "@viewType": {},
-  "viewTypeSubtitle": "Visningstype for musik skærmen",
-  "@viewTypeSubtitle": {},
-  "list": "Liste",
-  "@list": {},
-  "grid": "Gitter",
-  "@grid": {},
-  "portrait": "Portræt",
-  "@portrait": {},
-  "landscape": "Landskab",
-  "@landscape": {},
-  "gridCrossAxisCountSubtitle": "Antal gitrebrikker som bruges per række {value}.",
-  "@gridCrossAxisCountSubtitle": {
-    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
-    "placeholders": {
-      "value": {
-        "type": "String",
-        "example": "landscape"
-      }
-    }
-  },
-  "showTextOnGridView": "Vis tekst i gitter visning",
-  "@showTextOnGridView": {},
-  "showTextOnGridViewSubtitle": "Vælg om tekst skal vises (titel, kunstner osv.) på gitteret musik skærm.",
-  "@showTextOnGridViewSubtitle": {},
-  "useCoverAsBackground": "Vis sløret cover som afspiller baggrund",
-  "@useCoverAsBackground": {},
-  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Vælg om sangens kunstner skal vises på albummet, hvis den ikke er forskellig fra albummets kunstner.",
-  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "disableGesture": "Deaktivér bevægelser",
-  "@disableGesture": {},
-  "disableGestureSubtitle": "Vælg om bevægelser skal deaktiveres.",
-  "@disableGestureSubtitle": {},
-  "theme": "Tema",
-  "@theme": {},
-  "light": "Lys",
-  "@light": {},
-  "dark": "Mørk",
-  "@dark": {},
-  "tabs": "Faner",
-  "@tabs": {},
-  "cancelSleepTimer": "Vil du annullere sove timeren?",
-  "@cancelSleepTimer": {},
-  "yesButtonLabel": "JA",
-  "@yesButtonLabel": {},
-  "minutes": "Minutter",
-  "@minutes": {},
-  "sleepTimerTooltip": "Sove timer",
-  "@sleepTimerTooltip": {},
-  "addToPlaylistTooltip": "Tilføj til afspilningsliste",
-  "@addToPlaylistTooltip": {},
-  "addToPlaylistTitle": "Tilføj til afspilningsliste",
-  "@addToPlaylistTitle": {},
-  "removeFromPlaylistTooltip": "Fjern fra afspilningsliste",
-  "@removeFromPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "Fjern fra afspilningsliste",
-  "@removeFromPlaylistTitle": {},
-  "newPlaylist": "Ny afspilningsliste",
-  "@newPlaylist": {},
-  "createButtonLabel": "OPRET",
-  "@createButtonLabel": {},
-  "playlistCreated": "Afspilningsliste er oprettet.",
-  "@playlistCreated": {},
-  "noAlbum": "Intet album",
-  "@noAlbum": {},
-  "noItem": "Intet objekt",
-  "@noItem": {},
-  "invalidNumber": "Ugyldig nummer",
-  "@invalidNumber": {},
-  "queue": "Kø",
-  "@queue": {},
-  "addToQueue": "Tilføj til kø",
-  "@addToQueue": {},
-  "replaceQueue": "Udskift køen",
-  "@replaceQueue": {},
-  "instantMix": "Hurtig blanding",
-  "@instantMix": {},
-  "addedToQueue": "Tilføjet til kø.",
-  "@addedToQueue": {},
-  "queueReplaced": "Køen er udskiftet.",
-  "@queueReplaced": {},
-  "removedFromPlaylist": "Fjernet fra afspilningslisten.",
-  "@removedFromPlaylist": {},
-  "startingInstantMix": "Starter hurtig blanding.",
-  "@startingInstantMix": {},
-  "downloadCount": "{count,plural, =1{{count} overført} other{{count} overførelser}}",
-  "@downloadCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "removeFromMix": "Fjern fra blanding",
-  "@removeFromMix": {},
-  "addToMix": "Tilføj til blanding",
-  "@addToMix": {},
-  "redownloadedItems": "{count,plural, =0{Ingen genoverførsel er nødvendig.} =1{Genoverførte {count} objekt} other{Genoverfører {count} objekter}}",
-  "@redownloadedItems": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "bufferDuration": "Buffer varighed",
-  "@bufferDuration": {},
-  "bufferDurationSubtitle": "Hvor meget afspilleren skal forudindlæse i sekunder. En genstart er nødvendig.",
-  "@bufferDurationSubtitle": {},
-  "internalExternalIpExplanation": "Hvis du vil være i stand til at tilgå din Jellyfin server udefra, skal du bruge din eksterne IP.\n\nHvis din server er på HTTP porten (80/443), behøver du ikke angive en port. Dette er som regel tilfældet, hvis din server er bag en reverse proxy.",
-  "@internalExternalIpExplanation": {
-    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
-  },
-  "unknownName": "Ukendt navn",
-  "@unknownName": {},
-  "albums": "Albummer",
-  "@albums": {},
-  "playlists": "Afspilningslister",
-  "@playlists": {},
-  "startMixNoTracksArtist": "Tryk (lang tid) på en kunstner for at tilføje eller fjerne den fra blandingen før du starter en blanding",
-  "@startMixNoTracksArtist": {
-    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
-  },
-  "startMixNoTracksAlbum": "Tryk (lang tid) på et album for at tilføje eller fjerne det fra blandingen for du starter en blanding",
-  "@startMixNoTracksAlbum": {
-    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
-  },
-  "downloadedMissingImages": "{count,plural, =0{Ingen manglende billeder blev fundet} =1{Overførte {count} manglende billeder} other{Overførte {count} manglende billeder}}",
-  "@downloadedMissingImages": {
-    "description": "Message that shows when the user downloads missing images",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dlRunning": "{count} er igang",
-  "@dlRunning": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "shuffleButtonLabel": "BLAND",
-  "@shuffleButtonLabel": {},
-  "errorScreenError": "Der opstod en fejl under hentningen af listen med fejl! På dette tidspunkt, bedes du oprette en fejl på Github og slette appens data",
-  "@errorScreenError": {},
-  "trackCount": "{count,plural,=1{{count} Sang} other{{count} Sange}}",
-  "@trackCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "downloadsDeleted": "Overførelser slettet.",
-  "@downloadsDeleted": {},
-  "addButtonLabel": "TILFØJ",
-  "@addButtonLabel": {},
-  "bitrate": "Bithastighed",
-  "@bitrate": {},
-  "logsCopied": "Log kopieret.",
-  "@logsCopied": {},
-  "message": "Besked",
-  "@message": {},
-  "applicationLegalese": "Licenseret med Mozilla Public License 2.0. Kildeteksten er tilgængelig på:\n\ngithub.com/jmshrv/finamp",
-  "@applicationLegalese": {},
-  "pathReturnSlashErrorMessage": "Stier, der returnerer \"/\", kan ikke anvendes",
-  "@pathReturnSlashErrorMessage": {},
-  "customLocationsBuggy": "Valgfrie placeringer er ekstremt fejlramte grundet manglende rettigheder. Jeg prøver at finde måder at løse dette, men for nu anbefaler jeg ikke, at de anvendes.",
-  "@customLocationsBuggy": {},
-  "noArtist": "Ingen kunstner",
-  "@noArtist": {},
-  "unknownArtist": "Ukendt kunstner",
-  "@unknownArtist": {},
-  "shuffleAllTrackCountSubtitle": "Mængde af sange der skal indlæses, når bland alle sange knappen bruges.",
-  "@shuffleAllTrackCountSubtitle": {},
-  "hideTrackArtistsIfSameAsAlbumArtists": "Skjul sang kunstner, hvis det er den samme som albummets kunstner",
-  "@hideTrackArtistsIfSameAsAlbumArtists": {},
-  "gridCrossAxisCount": "{value} Gitter tværakse antal",
-  "@gridCrossAxisCount": {
-    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
-    "placeholders": {
-      "value": {
-        "type": "String",
-        "example": "Portrait"
-      }
-    }
-  },
-  "setSleepTimer": "Indtil sove timer",
-  "@setSleepTimer": {},
-  "useCoverAsBackgroundSubtitle": "Vælg om der skal bruges sløret omslagskunst som vises som baggrund på afspiller skærmen.",
-  "@useCoverAsBackgroundSubtitle": {},
-  "system": "System",
-  "@system": {},
-  "noButtonLabel": "NEJ",
-  "@noButtonLabel": {},
-  "goToAlbum": "Gå til album",
-  "@goToAlbum": {},
-  "anErrorHasOccured": "Der opstod en fejl.",
-  "@anErrorHasOccured": {},
-  "responseError401": "{error} Status kode {statusCode}. Dette betyder, at du har anvendt et forkert brugernavn/adgangskode eller at din klient ikke længere er logget på.",
-  "@responseError401": {
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Unauthorized"
-      },
-      "statusCode": {
-        "type": "int",
-        "example": "401"
-      }
-    }
-  },
-  "responseError": "{error} Status kode {statusCode}.",
-  "@responseError": {
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Forbidden"
-      },
-      "statusCode": {
-        "type": "int",
-        "example": "403"
-      }
-    }
-  },
-  "language": "Sprog",
-  "@language": {}
+    "serverUrl": "Server URL",
+    "@serverUrl": {},
+    "emptyServerUrl": "Server URL kan ikke være tom",
+    "@emptyServerUrl": {
+        "description": "Error message that shows when the user submits a login without a server URL"
+    },
+    "username": "Brugernavn",
+    "@username": {},
+    "password": "Adgangskode",
+    "@password": {},
+    "logs": "Log",
+    "@logs": {},
+    "next": "Næste",
+    "@next": {},
+    "selectMusicLibraries": "Vælg musik biblioteker",
+    "@selectMusicLibraries": {
+        "description": "App bar title for library select screen"
+    },
+    "couldNotFindLibraries": "Kunne ikke finde nogle biblioteker.",
+    "@couldNotFindLibraries": {
+        "description": "Error message when the user does not have any libraries"
+    },
+    "tracks": "Sange",
+    "@tracks": {},
+    "artists": "Kunstnere",
+    "@artists": {},
+    "genres": "Genre",
+    "@genres": {},
+    "startMix": "Start blanding",
+    "@startMix": {},
+    "music": "Musik",
+    "@music": {},
+    "clear": "Ryd",
+    "@clear": {},
+    "shuffleAll": "Bland alle",
+    "@shuffleAll": {},
+    "finamp": "Finamp",
+    "@finamp": {},
+    "downloads": "Overførelser",
+    "@downloads": {},
+    "settings": "Indstillinger",
+    "@settings": {},
+    "offlineMode": "Offline tilstand",
+    "@offlineMode": {},
+    "sortOrder": "Sorter efter",
+    "@sortOrder": {},
+    "sortBy": "Sortér efter",
+    "@sortBy": {},
+    "album": "Album",
+    "@album": {},
+    "albumArtist": "Album kunstner",
+    "@albumArtist": {},
+    "artist": "Kunstner",
+    "@artist": {},
+    "criticRating": "Kritiker bedømmelse",
+    "@criticRating": {},
+    "communityRating": "Fællesskab bedømmelse",
+    "@communityRating": {},
+    "dateAdded": "Dato tilføjet",
+    "@dateAdded": {},
+    "datePlayed": "Afspillet den",
+    "@datePlayed": {},
+    "playCount": "Antal afspilninger",
+    "@playCount": {},
+    "premiereDate": "Udgivelsesdato",
+    "@premiereDate": {},
+    "productionYear": "Produktionsår",
+    "@productionYear": {},
+    "name": "Navn",
+    "@name": {},
+    "random": "Tilfældig",
+    "@random": {},
+    "revenue": "Omsætning",
+    "@revenue": {},
+    "budget": "Budget",
+    "@budget": {},
+    "downloadMissingImages": "Overførelse mangler billeder",
+    "@downloadMissingImages": {},
+    "dlComplete": "{count} færdige",
+    "@dlComplete": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "dlFailed": "{count} fejlede",
+    "@dlFailed": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "dlEnqueued": "{count} i kø",
+    "@dlEnqueued": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "failedToGetTrackFromDownloadId": "Fejlede under hentning af sang fra overførelse ID",
+    "@failedToGetTrackFromDownloadId": {},
+    "error": "Fejl",
+    "@error": {},
+    "discNumber": "Disk {number}",
+    "@discNumber": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "playButtonLabel": "Afspil",
+    "@playButtonLabel": {},
+    "required": "Påkrævet",
+    "@required": {},
+    "updateButtonLabel": "Opdater",
+    "@updateButtonLabel": {},
+    "playlistUpdated": "Afspilningslistens navn er opdateret.",
+    "@playlistUpdated": {},
+    "addDownloads": "Tilføj overførelser",
+    "@addDownloads": {},
+    "location": "Placering",
+    "@location": {},
+    "downloadsQueued": "Downloader filer",
+    "@downloadsQueued": {},
+    "shareLogs": "Del log",
+    "@shareLogs": {},
+    "stackTrace": "Bunke spor",
+    "@stackTrace": {},
+    "transcoding": "Omkoder",
+    "@transcoding": {},
+    "downloadLocations": "Overførelse placering",
+    "@downloadLocations": {},
+    "audioService": "Lyd tjeneste",
+    "@audioService": {},
+    "layoutAndTheme": "Udseende & tema",
+    "@layoutAndTheme": {},
+    "notAvailableInOfflineMode": "Ikke tilgængelig i offline tilstand",
+    "@notAvailableInOfflineMode": {},
+    "logOut": "Log af",
+    "@logOut": {},
+    "areYouSure": "Er du sikker?",
+    "@areYouSure": {},
+    "enableTranscoding": "Aktivér omkodning",
+    "@enableTranscoding": {},
+    "enableTranscodingSubtitle": "Omkoder musik under afspilning på serveren.",
+    "@enableTranscodingSubtitle": {},
+    "bitrateSubtitle": "En højere bithastighed giver højere lydkvalitet men bruger mere båndbredde.",
+    "@bitrateSubtitle": {},
+    "customLocation": "Vælg placering",
+    "@customLocation": {},
+    "appDirectory": "App katalog",
+    "@appDirectory": {},
+    "addDownloadLocation": "Tilføj overførelse placering",
+    "@addDownloadLocation": {},
+    "selectDirectory": "Vælg katalog",
+    "@selectDirectory": {},
+    "unknownError": "Ukendt fejl",
+    "@unknownError": {},
+    "directoryMustBeEmpty": "Katalog skal være tomt",
+    "@directoryMustBeEmpty": {},
+    "enterLowPriorityStateOnPause": "Gå i lav prioritet tilstand når musik afspilning er på pause",
+    "@enterLowPriorityStateOnPause": {},
+    "enterLowPriorityStateOnPauseSubtitle": "Tillader notifikationer bliver strøget væk, når afspilning er sat på pause. Dette tillader også Android, at afbryde servicen når den er på pause.",
+    "@enterLowPriorityStateOnPauseSubtitle": {},
+    "shuffleAllTrackCount": "Bland alle sange antal",
+    "@shuffleAllTrackCount": {},
+    "viewType": "Visning tilstand",
+    "@viewType": {},
+    "viewTypeSubtitle": "Visningstype for musik skærmen",
+    "@viewTypeSubtitle": {},
+    "list": "Liste",
+    "@list": {},
+    "grid": "Gitter",
+    "@grid": {},
+    "portrait": "Portræt",
+    "@portrait": {},
+    "landscape": "Landskab",
+    "@landscape": {},
+    "gridCrossAxisCountSubtitle": "Antal gitrebrikker som bruges per række {value}.",
+    "@gridCrossAxisCountSubtitle": {
+        "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+        "placeholders": {
+            "value": {
+                "type": "String",
+                "example": "landscape"
+            }
+        }
+    },
+    "showTextOnGridView": "Vis tekst i gitter visning",
+    "@showTextOnGridView": {},
+    "showTextOnGridViewSubtitle": "Vælg om tekst skal vises (titel, kunstner osv.) på gitteret musik skærm.",
+    "@showTextOnGridViewSubtitle": {},
+    "useCoverAsBackground": "Vis sløret cover som afspiller baggrund",
+    "@useCoverAsBackground": {},
+    "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "Vælg om sangens kunstner skal vises på albummet, hvis den ikke er forskellig fra albummets kunstner.",
+    "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
+    "disableGesture": "Deaktivér bevægelser",
+    "@disableGesture": {},
+    "disableGestureSubtitle": "Vælg om bevægelser skal deaktiveres.",
+    "@disableGestureSubtitle": {},
+    "theme": "Tema",
+    "@theme": {},
+    "light": "Lys",
+    "@light": {},
+    "dark": "Mørk",
+    "@dark": {},
+    "tabs": "Faner",
+    "@tabs": {},
+    "cancelSleepTimer": "Vil du annullere sove timeren?",
+    "@cancelSleepTimer": {},
+    "yesButtonLabel": "JA",
+    "@yesButtonLabel": {},
+    "minutes": "Minutter",
+    "@minutes": {},
+    "sleepTimerTooltip": "Sove timer",
+    "@sleepTimerTooltip": {},
+    "addToPlaylistTooltip": "Tilføj til afspilningsliste",
+    "@addToPlaylistTooltip": {},
+    "addToPlaylistTitle": "Tilføj til afspilningsliste",
+    "@addToPlaylistTitle": {},
+    "removeFromPlaylistTooltip": "Fjern fra afspilningsliste",
+    "@removeFromPlaylistTooltip": {},
+    "removeFromPlaylistTitle": "Fjern fra afspilningsliste",
+    "@removeFromPlaylistTitle": {},
+    "newPlaylist": "Ny afspilningsliste",
+    "@newPlaylist": {},
+    "createButtonLabel": "OPRET",
+    "@createButtonLabel": {},
+    "playlistCreated": "Afspilningsliste er oprettet.",
+    "@playlistCreated": {},
+    "noAlbum": "Intet album",
+    "@noAlbum": {},
+    "noItem": "Intet objekt",
+    "@noItem": {},
+    "invalidNumber": "Ugyldig nummer",
+    "@invalidNumber": {},
+    "queue": "Kø",
+    "@queue": {},
+    "addToQueue": "Tilføj til kø",
+    "@addToQueue": {},
+    "replaceQueue": "Udskift køen",
+    "@replaceQueue": {},
+    "instantMix": "Hurtig blanding",
+    "@instantMix": {},
+    "addedToQueue": "Tilføjet til kø.",
+    "@addedToQueue": {},
+    "queueReplaced": "Køen er udskiftet.",
+    "@queueReplaced": {},
+    "removedFromPlaylist": "Fjernet fra afspilningslisten.",
+    "@removedFromPlaylist": {},
+    "startingInstantMix": "Starter hurtig blanding.",
+    "@startingInstantMix": {},
+    "downloadCount": "{count,plural, =1{{count} overført} other{{count} overførelser}}",
+    "@downloadCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "removeFromMix": "Fjern fra blanding",
+    "@removeFromMix": {},
+    "addToMix": "Tilføj til blanding",
+    "@addToMix": {},
+    "redownloadedItems": "{count,plural, =0{Ingen genoverførsel er nødvendig.} =1{Genoverførte {count} objekt} other{Genoverfører {count} objekter}}",
+    "@redownloadedItems": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "bufferDuration": "Buffer varighed",
+    "@bufferDuration": {},
+    "bufferDurationSubtitle": "Hvor meget afspilleren skal forudindlæse i sekunder. En genstart er nødvendig.",
+    "@bufferDurationSubtitle": {},
+    "internalExternalIpExplanation": "Hvis du vil være i stand til at tilgå din Jellyfin server udefra, skal du bruge din eksterne IP.\n\nHvis din server er på HTTP porten (80/443), behøver du ikke angive en port. Dette er som regel tilfældet, hvis din server er bag en reverse proxy.",
+    "@internalExternalIpExplanation": {
+        "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+    },
+    "unknownName": "Ukendt navn",
+    "@unknownName": {},
+    "albums": "Albummer",
+    "@albums": {},
+    "playlists": "Afspilningslister",
+    "@playlists": {},
+    "startMixNoTracksArtist": "Tryk (lang tid) på en kunstner for at tilføje eller fjerne den fra blandingen før du starter en blanding",
+    "@startMixNoTracksArtist": {
+        "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+    },
+    "startMixNoTracksAlbum": "Tryk (lang tid) på et album for at tilføje eller fjerne det fra blandingen for du starter en blanding",
+    "@startMixNoTracksAlbum": {
+        "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+    },
+    "downloadedMissingImages": "{count,plural, =0{Ingen manglende billeder blev fundet} =1{Overførte {count} manglende billeder} other{Overførte {count} manglende billeder}}",
+    "@downloadedMissingImages": {
+        "description": "Message that shows when the user downloads missing images",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "dlRunning": "{count} er igang",
+    "@dlRunning": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "shuffleButtonLabel": "Bland",
+    "@shuffleButtonLabel": {},
+    "errorScreenError": "Der opstod en fejl under hentningen af listen med fejl! På dette tidspunkt, bedes du oprette en fejl på Github og slette appens data",
+    "@errorScreenError": {},
+    "trackCount": "{count,plural,=1{{count} Sang} other{{count} Sange}}",
+    "@trackCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "downloadsDeleted": "Overførelser slettet.",
+    "@downloadsDeleted": {},
+    "addButtonLabel": "Tilføj",
+    "@addButtonLabel": {},
+    "bitrate": "Bithastighed",
+    "@bitrate": {},
+    "logsCopied": "Log kopieret.",
+    "@logsCopied": {},
+    "message": "Besked",
+    "@message": {},
+    "applicationLegalese": "Licenseret med Mozilla Public License 2.0.\nKildeteksten er tilgængelig på {sourceCodeLink}.",
+    "@applicationLegalese": {},
+    "pathReturnSlashErrorMessage": "Stier, der returnerer \"/\", kan ikke anvendes",
+    "@pathReturnSlashErrorMessage": {},
+    "customLocationsBuggy": "Valgfrie placeringer er ekstremt fejlramte grundet manglende rettigheder. Jeg prøver at finde måder at løse dette, men for nu anbefaler jeg ikke, at de anvendes.",
+    "@customLocationsBuggy": {},
+    "noArtist": "Ingen kunstner",
+    "@noArtist": {},
+    "unknownArtist": "Ukendt kunstner",
+    "@unknownArtist": {},
+    "shuffleAllTrackCountSubtitle": "Mængde af sange der skal indlæses, når bland alle sange knappen bruges.",
+    "@shuffleAllTrackCountSubtitle": {},
+    "hideTrackArtistsIfSameAsAlbumArtists": "Skjul sang kunstner, hvis det er den samme som albummets kunstner",
+    "@hideTrackArtistsIfSameAsAlbumArtists": {},
+    "gridCrossAxisCount": "{value} Gitter tværakse antal",
+    "@gridCrossAxisCount": {
+        "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+        "placeholders": {
+            "value": {
+                "type": "String",
+                "example": "Portrait"
+            }
+        }
+    },
+    "setSleepTimer": "Indtil sove timer",
+    "@setSleepTimer": {},
+    "useCoverAsBackgroundSubtitle": "Vælg om der skal bruges sløret omslagskunst som vises som baggrund på afspiller skærmen.",
+    "@useCoverAsBackgroundSubtitle": {},
+    "system": "System",
+    "@system": {},
+    "noButtonLabel": "NEJ",
+    "@noButtonLabel": {},
+    "goToAlbum": "Gå til album",
+    "@goToAlbum": {},
+    "anErrorHasOccured": "Der opstod en fejl.",
+    "@anErrorHasOccured": {},
+    "responseError401": "{error} Status kode {statusCode}. Dette betyder, at du har anvendt et forkert brugernavn/adgangskode eller at din klient ikke længere er logget på.",
+    "@responseError401": {
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Unauthorized"
+            },
+            "statusCode": {
+                "type": "int",
+                "example": "401"
+            }
+        }
+    },
+    "responseError": "{error} Status kode {statusCode}.",
+    "@responseError": {
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Forbidden"
+            },
+            "statusCode": {
+                "type": "int",
+                "example": "403"
+            }
+        }
+    },
+    "language": "Sprog",
+    "@language": {},
+    "finampTagline": "En open source Jellyfin musikafspiller",
+    "@finampTagline": {
+        "description": "Tagline / short description for the app"
+    },
+    "startupErrorTitle": "Noget gik galt under åbning af appen!",
+    "@startupErrorTitle": {
+        "description": "The title for the error screen that shows when startup fails."
+    },
+    "startupErrorCallToAction": "Venligst opret et problem på \"github.com/jmshrv/finamp\" med log (brug knappen nedenunder) og et skærmbillede af denne side så vi kan fikse det hurtigst muligt.",
+    "@startupErrorCallToAction": {
+        "description": "The subtitle / call to action for what to do after encountering a startup error"
+    },
+    "startupErrorWorkaround": "Som en alternativ løsning på fejlen kan du slette din apps data for at nulstille appen. Vær opmærksom på at dette også vil slette alle dine indstillinger og downloads.",
+    "@startupErrorWorkaround": {
+        "description": "The subtitle for how to manually recover from a startup error"
+    },
+    "about": "Omkring Finamp",
+    "@about": {
+        "description": "Label for the about/info button on the settings screen"
+    },
+    "aboutContributionPrompt": "Lavet af seje folk i deres egen fritid\nDu ku' være en af dem!",
+    "@aboutContributionPrompt": {
+        "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+    },
+    "aboutContributionLink": "Bidrag til Finamp på Github:",
+    "@aboutContributionLink": {
+        "description": "Link to the Finamp GitHub repository, shown in the about screen."
+    },
+    "aboutReleaseNotes": "Læs de nyeste udgivelsesnoter:",
+    "@aboutReleaseNotes": {
+        "description": "Link to the release notes, shown in the about screen."
+    },
+    "aboutTranslations": "Hjælp med at oversætte finamp til dit sprog:",
+    "@aboutTranslations": {
+        "description": "Link to the translation project, shown in the about screen."
+    },
+    "aboutThanks": "Tak for at bruge Finamp!",
+    "@aboutThanks": {
+        "description": "Thank you message shown in the about screen."
+    },
+    "loginFlowWelcomeHeading": "Velkommen til {styledName}",
+    "@loginFlowWelcomeHeading": {
+        "description": "Greeting shown on the login screen.",
+        "placeholders": {
+            "styledName": {
+                "type": "String",
+                "example": "Finamp"
+            }
+        }
+    },
+    "loginFlowSlogan": "Din musik, på den måde du vil ha' det.",
+    "@loginFlowSlogan": {
+        "description": "Slogan shown on the login screen."
+    },
+    "loginFlowGetStarted": "Kom I Gang!",
+    "@loginFlowGetStarted": {
+        "description": "Button label for the login/splash screen."
+    },
+    "loginFlowCustomUser": "Tilpasset Bruger",
+    "@loginFlowCustomUser": {
+        "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+    },
+    "loginFlowAuthenticationHeading": "Log ind på din konto",
+    "@loginFlowAuthenticationHeading": {
+        "description": "Heading for the authentication step during the login flow."
+    },
+    "backToAccountSelection": "Tilbage til Valg af Konto",
+    "@backToAccountSelection": {
+        "description": "Label for the button that takes the user back to the account selection step during the login flow."
+    },
+    "loginFlowQuickConnectPrompt": "Brug Quick Connect kode",
+    "@loginFlowQuickConnectPrompt": {
+        "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+    },
+    "loginFlowQuickConnectInstructions": "Åben jellyfin appen eller hjemmesiden, tryk på dit brugerikon og vælg Quick Connect.",
+    "@loginFlowQuickConnectInstructions": {
+        "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+    },
+    "loginFlowQuickConnectDisabled": "Quick Connect er deaktiveret på denne server.",
+    "@loginFlowQuickConnectDisabled": {
+        "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+    },
+    "orDivider": "eller",
+    "@orDivider": {
+        "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+    },
+    "loginFlowSelectAUser": "Vælg en bruger",
+    "@loginFlowSelectAUser": {
+        "description": "Heading for the list of users that the user can select from during the login flow."
+    },
+    "usernameHint": "Indtast til brugernavn",
+    "@usernameHint": {
+        "description": "Hint text for the username input field."
+    },
+    "usernameValidationMissingUsername": "Venligst indtast et brugernavn",
+    "@usernameValidationMissingUsername": {
+        "description": "Error message that shows when the user submits a login without a username"
+    },
+    "passwordHint": "Indtast din adgangskode",
+    "@passwordHint": {
+        "description": "Hint text for the password input field."
+    },
+    "login": "Log ind",
+    "@login": {
+        "description": "Label for the login button."
+    },
+    "allLibraries": "Alle biblioteker",
+    "@allLibraries": {
+        "description": "All Libraries"
+    },
+    "appearsOnAlbums": "Findes på",
+    "@appearsOnAlbums": {},
+    "noGenres": "Ingen Genrer",
+    "@noGenres": {
+        "description": "Gets shown when there are no genres available for an album or artist"
+    },
+    "startMixNoTracksGenre": "Hold-inde på en genre for at tilføje eller fjerne den fra dit mix før du starter det",
+    "@startMixNoTracksGenre": {
+        "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+    },
+    "favorite": "Favorit",
+    "@favorite": {},
+    "favorites": "Favoritter",
+    "@favorites": {},
+    "onlineMode": "Online Tilstand",
+    "@onlineMode": {},
+    "title": "Titel",
+    "@title": {},
+    "albumArtists": "Album Kunstnere",
+    "@albumArtists": {},
+    "performingArtists": "Optrædende Kunstnere",
+    "@performingArtists": {},
+    "performingArtist": "Optrædende Kunstner",
+    "@performingArtist": {},
+    "duration": "Længde",
+    "@duration": {},
+    "defaultOrder": "Oprindelig Rækkefølge",
+    "@defaultOrder": {
+        "description": "Default sorting order for playlists (server order)"
+    },
+    "adaptive": "Tilpassende",
+    "@adaptive": {},
+    "formattedRelativeTime": "{type, select, just_now{lige nu} minutes{{value} min siden} hours{{value} t siden} yesterday{i går} days{{value, plural, =1{1 dag siden} other{{value} dage siden}}} other{value}}",
+    "@formattedRelativeTime": {
+        "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
+        "placeholders": {
+            "type": {
+                "type": "String",
+                "description": "The category of time passed: one of 'just_now', 'minutes', 'hours', 'yesterday', or 'days'."
+            },
+            "value": {
+                "type": "int",
+                "example": "5"
+            }
+        }
+    },
+    "syncDownloadedPlaylists": "Synkroniser downloadede playlister",
+    "@syncDownloadedPlaylists": {},
+    "activeDownloads": "Aktive Downloads",
+    "@activeDownloads": {},
+    "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} nummer} other{{trackCount} numrer}}, {imageCount,plural,=1{{imageCount} billede} other{{imageCount} billeder}}\n{syncCount,plural,=1{{syncCount} node synkroniserer} other{{syncCount} noder synkroniserer}}{repairing, plural, =0{} other{\nReparares i øjeblikket}}",
+    "@downloadedCountUnified": {
+        "description": "Display of downloaded track and image count on downloads screen.",
+        "placeholders": {
+            "trackCount": {
+                "type": "int"
+            },
+            "imageCount": {
+                "type": "int"
+            },
+            "syncCount": {
+                "type": "int"
+            },
+            "repairing": {
+                "type": "int"
+            }
+        }
+    },
+    "activeDownloadsTitle": "Aktive Downloads",
+    "@activeDownloadsTitle": {},
+    "noActiveDownloads": "Ingen aktive downloads.",
+    "@noActiveDownloads": {},
+    "deleteDownloadsPrompt": "Er du sikker på du vil slette {itemType, select, album{album} playlist{playlist} artist{artist} genre{genre} track{track} library{library} other{item}} '{itemName}' fra denne enhed?",
+    "@deleteDownloadsPrompt": {
+        "placeholders": {
+            "itemName": {
+                "type": "String",
+                "example": "Abandon Ship"
+            },
+            "itemType": {
+                "type": "String",
+                "example": "album"
+            }
+        },
+        "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+    },
+    "deleteDownloadsConfirmButtonText": "Slet",
+    "@deleteDownloadsConfirmButtonText": {
+        "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+    },
+    "specialDownloads": "Specielle downloads",
+    "@specialDownloads": {
+        "description": "Title for the special downloads section on the downloads screen."
+    },
+    "libraryDownloads": "Biblioteks downloads",
+    "@libraryDownloads": {
+        "description": "Title for the library downloads section on the downloads screen."
+    },
+    "noItemsDownloaded": "Intet downloadet.",
+    "@noItemsDownloaded": {
+        "description": "Shown on the downloads screen for sections without any downloaded items."
+    },
+    "shuffleCountButton": "Bland ({count,plural,=1{{count} Nummer} other{{count} Numrer}})",
+    "@shuffleCountButton": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "playbackActionPagePlay": "Afspil",
+    "@playbackActionPagePlay": {
+        "description": "Label for the playback action page that contains all actions related to playing in order"
+    },
+    "playbackActionPageShuffle": "Bland",
+    "@playbackActionPageShuffle": {
+        "description": "Label for the playback action page that contains all actions related to playing shuffled"
+    },
+    "playbackActionPageShuffleAlbums": "Bland Albummer",
+    "@playbackActionPageShuffleAlbums": {
+        "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+    },
+    "offlineTrackCount": "{count,plural,=1{{count} Nummer} other{{count} Numrer}}, {downloads} Downloadet",
+    "@offlineTrackCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "downloads": {
+                "type": "int"
+            }
+        }
+    },
+    "offlineTrackCountArtist": "{count,plural,=1{{count} Nummer} other{{count} Numrer}} Downloadet",
+    "@offlineTrackCountArtist": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "editItemTitle": "Rediger {itemType, select, playlist{Playlist} other{}}",
+    "@editItemTitle": {
+        "placeholders": {
+            "itemType": {
+                "type": "String"
+            }
+        }
+    },
+    "confirmDownloadStarted": "Download startet",
+    "@confirmDownloadStarted": {
+        "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+    },
+    "exportLogs": "Gem logs",
+    "@exportLogs": {}
 }
