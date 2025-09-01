@@ -88,6 +88,10 @@ Future<List<BaseItemDto>> loadChildTracksFromBaseItem({required BaseItemDto base
     return [];
   }
 
+  if (BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.artist) {
+    return sortArtistTracks(newItems);
+  }
+
   return newItems;
 }
 
@@ -137,6 +141,7 @@ Future<List<BaseItemDto>?> loadChildTracksOffline({
       items = await GetIt.instance<ProviderContainer>().read(
         getArtistTracksProvider(baseItem, finampUserHelper.currentUser?.currentView, genreFilter).future,
       );
+      items = sortArtistTracks(items);
       break;
     default:
       items = await downloadsService.getCollectionTracks(baseItem, playable: true, genreFilter: genreFilter);
