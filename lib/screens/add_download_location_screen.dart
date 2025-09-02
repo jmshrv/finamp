@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:finamp/components/HomeScreen/finamp_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -54,6 +55,7 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen> w
             title: Text(AppLocalizations.of(context)!.addDownloadLocation),
             bottom: TabBar(controller: _tabController, tabs: tabs),
           ),
+          bottomNavigationBar: const FinampNavigationBar(),
           floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.check),
             onPressed: () async {

@@ -267,7 +267,7 @@ Future<BaseItemDto?> getPlaylistGenreBaseItemDto(String genreName, bool isOfflin
     final isarDownloader = GetIt.instance<DownloadsService>();
     final genreItemDownloadStubs = await isarDownloader.getAllCollections(
       nameFilter: genreName,
-      baseTypeFilter: BaseItemDtoType.genre,
+      includeItemTypes: [BaseItemDtoType.genre],
     );
     genreItems = genreItemDownloadStubs.map((e) => e.baseItem).nonNulls.toList();
   } else {

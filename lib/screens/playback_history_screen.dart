@@ -1,3 +1,4 @@
+import 'package:finamp/components/HomeScreen/finamp_navigation_bar.dart';
 import 'package:finamp/components/PlaybackHistoryScreen/playback_history_list.dart';
 import 'package:finamp/components/PlaybackHistoryScreen/share_offline_listens_button.dart';
 import 'package:finamp/l10n/app_localizations.dart';
@@ -19,7 +20,8 @@ class PlaybackHistoryScreen extends StatelessWidget {
         actions: const [ShareOfflineListensButton()],
       ),
       body: PlaybackHistoryList(),
-      bottomNavigationBar: const NowPlayingBar(),
+      bottomSheet: NowPlayingBar(),
+      bottomNavigationBar: const FinampNavigationBar(),
     );
   }
 }

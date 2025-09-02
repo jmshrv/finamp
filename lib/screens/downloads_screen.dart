@@ -1,4 +1,5 @@
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/components/HomeScreen/finamp_navigation_bar.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +23,7 @@ class DownloadsScreen extends StatelessWidget {
         title: Text(localizations.downloads),
         actions: const [SyncDownloadsButton(), RepairDownloadsButton(), DownloadErrorScreenButton()],
       ),
+      bottomNavigationBar: const FinampNavigationBar(),
       body: PaddedCustomScrollview(
         slivers: [
           SliverList(

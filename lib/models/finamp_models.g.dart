@@ -1439,6 +1439,43 @@ class SleepTimerAdapter extends TypeAdapter<SleepTimer> {
           typeId == other.typeId;
 }
 
+class HomeScreenSectionInfoAdapter extends TypeAdapter<HomeScreenSectionInfo> {
+  @override
+  final typeId = 102;
+
+  @override
+  HomeScreenSectionInfo read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return HomeScreenSectionInfo(
+      type: fields[0] as HomeScreenSectionType,
+      itemId: fields[1] as BaseItemId?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, HomeScreenSectionInfo obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.type)
+      ..writeByte(1)
+      ..write(obj.itemId);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is HomeScreenSectionInfoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class TabContentTypeAdapter extends TypeAdapter<TabContentType> {
   @override
   final typeId = 36;
@@ -8710,3 +8747,30 @@ Map<String, dynamic> _$FinampOutputRouteToJson(FinampOutputRoute instance) =>
       'extras': instance.extras,
       'iconUri': instance.iconUri,
     };
+
+HomeScreenSectionInfo _$HomeScreenSectionInfoFromJson(
+  Map<String, dynamic> json,
+) => HomeScreenSectionInfo(
+  type: $enumDecode(_$HomeScreenSectionTypeEnumMap, json['type']),
+  itemId: _$JsonConverterFromJson<String, BaseItemId>(
+    json['itemId'],
+    const BaseItemIdConverter().fromJson,
+  ),
+);
+
+Map<String, dynamic> _$HomeScreenSectionInfoToJson(
+  HomeScreenSectionInfo instance,
+) => <String, dynamic>{
+  'type': _$HomeScreenSectionTypeEnumMap[instance.type]!,
+  'itemId': _$JsonConverterToJson<String, BaseItemId>(
+    instance.itemId,
+    const BaseItemIdConverter().toJson,
+  ),
+};
+
+const _$HomeScreenSectionTypeEnumMap = {
+  HomeScreenSectionType.listenAgain: 'listenAgain',
+  HomeScreenSectionType.newlyAdded: 'newlyAdded',
+  HomeScreenSectionType.favoriteArtists: 'favoriteArtists',
+  HomeScreenSectionType.collection: 'collection',
+};

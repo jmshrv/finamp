@@ -175,7 +175,7 @@ Future<(List<BaseItemDto>, int)> getCuratedItemsOffline({
           genreFilter: parent,
         )
       : await downloadsService.getAllCollections(
-          baseTypeFilter: baseItemType,
+          includeItemTypes: [baseItemType],
           fullyDownloaded: ref.watch(finampSettingsProvider.onlyShowFullyDownloaded),
           viewFilter: (baseItemType == BaseItemDtoType.album) ? library?.id : null,
           childViewFilter: (baseItemType != BaseItemDtoType.album && baseItemType != BaseItemDtoType.playlist)
@@ -203,7 +203,7 @@ Future<(List<BaseItemDto>, int)> getCuratedItemsOffline({
             genreFilter: parent,
           )
         : await downloadsService.getAllCollections(
-            baseTypeFilter: baseItemType,
+            includeItemTypes: [baseItemType],
             fullyDownloaded: ref.read(finampSettingsProvider.onlyShowFullyDownloaded),
             infoForType: (baseItemType == BaseItemDtoType.artist) ? artistInfoForType : null,
             genreFilter: parent,

@@ -19,7 +19,7 @@ class CTAMedium extends StatelessWidget {
     final paddingVertical = screenSize.height * 0.015;
     final accentColor = Theme.of(context).colorScheme.primary;
 
-    return ElevatedButton(
+    return FilledButton(
       onPressed: () {
         FeedbackHelper.feedback(FeedbackType.selection);
         onPressed();
@@ -32,7 +32,9 @@ class CTAMedium extends StatelessWidget {
           EdgeInsets.only(left: 8 + paddingHorizontal, right: 8, top: paddingVertical, bottom: paddingVertical),
         ),
         backgroundColor: WidgetStateProperty.all<Color>(
-          Theme.of(context).brightness == Brightness.dark ? accentColor.withOpacity(0.3) : accentColor,
+          Theme.of(context).brightness == Brightness.dark
+              ? accentColor.withOpacity(0.15)
+              : Color.alphaBlend(accentColor.withOpacity(0.2), Colors.white),
         ),
       ),
       child: Container(
@@ -42,16 +44,17 @@ class CTAMedium extends StatelessWidget {
         child: Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 24,
-              color: Theme.of(context).brightness == Brightness.dark ? accentColor : Colors.white,
-              weight: 1.5,
-            ),
+            Icon(icon, size: 24, color: accentColor, weight: 1.0),
             const SizedBox(width: 8),
             Text(
               text,
-              style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Color.alphaBlend(accentColor.withOpacity(0.33), Colors.black)
+                    : Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ],
         ),

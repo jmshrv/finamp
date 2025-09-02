@@ -1,3 +1,4 @@
+import 'package:finamp/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -20,7 +21,7 @@ class SplashScreen extends StatelessWidget {
     } else if (finampUserHelper.currentUser!.currentView == null) {
       return const ViewSelector();
     } else {
-      return const MusicScreen();
+      return const HomeScreen();
     }
   }
 }
