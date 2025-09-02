@@ -2727,5 +2727,9 @@
     "moreActionsOnAlbumDisc": "Більше дій на альбомному диску",
     "@moreActionsOnAlbumDisc": {
         "description": "Label for the disc header menu button."
+    },
+    "dragToReorder": "Перетягніть, щоб змінити порядок",
+    "@dragToReorder": {
+        "description": "Label shown on drag handles of track list  tiles in the queue list"
     }
 }
