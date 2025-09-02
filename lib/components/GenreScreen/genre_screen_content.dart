@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/curated_item_filter_row.dart';
-import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/services/audio_service_helper.dart';
+import 'package:finamp/menus/components/playbackActions/playback_action_row.dart';
+import 'package:finamp/menus/components/playbackActions/playback_actions.dart';
 import 'package:finamp/services/genre_screen_provider.dart';
 import 'package:finamp/components/curated_item_sections.dart';
 import 'package:finamp/components/GenreScreen/genre_count_column.dart';
@@ -12,9 +11,9 @@ import 'package:finamp/components/favorite_button.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/screens/music_screen.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
@@ -36,7 +35,6 @@ class GenreScreenContent extends ConsumerStatefulWidget {
 
 class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
   JellyfinApiHelper jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-  final _audioServiceHelper = GetIt.instance<AudioServiceHelper>();
   StreamSubscription<void>? _refreshStream;
   final Set<CuratedItemSelectionType> _disabledTrackFilters = {};
   final Set<CuratedItemSelectionType> _disabledAlbumFilters = {};
@@ -114,6 +112,16 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
     final genreCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
     final genreItemSectionsOrder = ref.watch(finampSettingsProvider.genreItemSectionsOrder);
     final bool autoSwitchItemCurationTypeEnabled = ref.watch(finampSettingsProvider.autoSwitchItemCurationType);
+    final queueService = GetIt.instance<QueueService>();
+
+    final lastUsedPlaybackActionRowPage = ref.read(finampSettingsProvider.lastUsedPlaybackActionRowPage);
+    final lastUsedPlaybackActionRowPageIndex = lastUsedPlaybackActionRowPage.pageIndexFor(
+      nextUpIsEmpty: queueService.getQueue().nextUp.isEmpty,
+    );
+    final initialPageViewIndex = ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)
+        ? lastUsedPlaybackActionRowPageIndex
+        : 0;
+    final pageViewController = PageController(initialPage: initialPageViewIndex);
 
     /// There are inidivual fetch methods for each section on the genre screen. They all are handled
     /// by a single entry point provider "genreCuratedItemsProvider". This provider returns multiple values:
@@ -196,8 +204,6 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
     final countsBorderColor = Theme.of(context).colorScheme.onSurface.withOpacity(0.2);
     final countsBackgroundColor = Theme.of(context).colorScheme.surface;
 
-    final tracksShuffleMaxCount = ref.read(finampSettingsProvider.trackShuffleItemCount);
-
     return PaddedCustomScrollview(
       slivers: <Widget>[
         SliverAppBar(
@@ -279,35 +285,19 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
             ),
           ),
         ),
-
-        /// TODO:
-        /// Once we have better handling of large queues (maybe with lazy-loading/adding?)
-        /// and once we redesigned the play/shuffle buttons, they should get added here
-        /// for now as a temporary solution, I've added a single Shuffle Button, as users kept asking about it
-        /// it basically is the same as the Shuffle All button on the tracks tab + genrefilter
-        /// so the limit defined in the settings applies here as well to prevent crashing
-        if (!isLoading)
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8, top: 16),
-              child: Center(
-                child: CTAMedium(
-                  text: (trackCount == null || trackCount <= tracksShuffleMaxCount)
-                      ? AppLocalizations.of(context)!.shuffleAll
-                      : AppLocalizations.of(context)!.shuffleCountButton(tracksShuffleMaxCount),
-                  icon: TablerIcons.arrows_shuffle,
-                  onPressed: () async {
-                    try {
-                      await _audioServiceHelper.shuffleAll(onlyShowFavorites: false, genreFilter: widget.parent);
-                    } catch (e) {
-                      GlobalSnackbar.error(e);
-                    }
-                  },
-                  minWidth: MediaQuery.of(context).size.width * 0.5,
-                ),
-              ),
+        const SliverToBoxAdapter(child: SizedBox(height: 10)),
+        SliverToBoxAdapter(
+          child: PlaybackActionRow(
+            controller: pageViewController,
+            compactLayout: true,
+            playbackActionPages: getPlaybackActionPages(
+              context: context,
+              item: widget.parent,
+              popContext: false,
+              compactLayout: true,
             ),
           ),
+        ),
         if (!isLoading)
           ...genreItemSectionsOrder.map((type) {
             switch (type) {

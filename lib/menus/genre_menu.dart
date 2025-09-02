@@ -7,9 +7,15 @@ import 'package:finamp/menus/components/menuEntries/instant_mix_menu_entry.dart'
 import 'package:finamp/menus/components/menuEntries/restore_queue_menu_entry.dart';
 import 'package:finamp/menus/components/menuEntries/toggle_favorite_menu_entry.dart';
 import 'package:finamp/menus/components/menu_item_info_header.dart';
+import 'package:finamp/menus/components/playbackActions/playback_action_row.dart';
+import 'package:finamp/menus/components/playbackActions/playback_actions.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 
 import 'components/menuEntries/menu_entry.dart';
 
@@ -36,29 +42,31 @@ Future<void> showModalGenreMenu({
 
   (double, List<Widget>) getMenuProperties(BuildContext context) {
     final menuEntries = getMenuEntries(context);
-    final stackHeight = ThemedBottomSheet.calculateStackHeight(
-      context: context,
-      menuEntries: menuEntries,
-      includePlaybackrow: false,
-    );
+    final stackHeight = ThemedBottomSheet.calculateStackHeight(context: context, menuEntries: menuEntries);
 
-    final pageViewController = PageController();
+    final ref = GetIt.instance<ProviderContainer>();
+    final queueService = GetIt.instance<QueueService>();
+
+    final lastUsedPlaybackActionRowPage = ref.read(finampSettingsProvider.lastUsedPlaybackActionRowPage);
+    final lastUsedPlaybackActionRowPageIndex = lastUsedPlaybackActionRowPage.pageIndexFor(
+      nextUpIsEmpty: queueService.getQueue().nextUp.isEmpty,
+    );
+    final initialPageViewIndex = ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)
+        ? lastUsedPlaybackActionRowPageIndex
+        : 0;
+    final pageViewController = PageController(initialPage: initialPageViewIndex);
 
     List<Widget> menu = [
       SliverPersistentHeader(delegate: MenuItemInfoSliverHeader(item: baseItem), pinned: true),
-      //!!! temporarily disabled due to performance issues with large queues
-      // MenuMask(
-      //   height: MenuMask.defaultHeight,
-      //   child: SliverToBoxAdapter(
-      //     child: PlaybackActionRow(
-      //       controller: pageViewController,
-      //       playbackActionPages: getPlaybackActionPages(
-      //         context: context,
-      //         baseItem: baseItem,
-      //       ),
-      //     ),
-      //   ),
-      // ),
+      MenuMask(
+        height: MenuItemInfoSliverHeader.defaultHeight,
+        child: SliverToBoxAdapter(
+          child: PlaybackActionRow(
+            controller: pageViewController,
+            playbackActionPages: getPlaybackActionPages(context: context, item: baseItem),
+          ),
+        ),
+      ),
       MenuMask(
         height: MenuItemInfoSliverHeader.defaultHeight,
         child: SliverPadding(

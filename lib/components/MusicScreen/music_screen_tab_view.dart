@@ -676,6 +676,60 @@ List<BaseItemDto> sortItems(List<BaseItemDto> itemsToSort, SortBy? sortBy, SortO
   return sortOrder == SortOrder.descending ? itemsToSort.reversed.toList() : itemsToSort;
 }
 
+// This function helps to sort artist tracks in order they appear in the album list
+// There are scenarios where cached provider-data might return a shuffled resultset, I guess,
+// so this function should definitely sort all artist tracks always the same
+List<BaseItemDto> sortArtistTracks(List<BaseItemDto> items) {
+  int _compareNullable<T extends Comparable>(T? a, T? b, {bool nullsFirst = false}) {
+    if (a == null && b == null) return 0;
+    if (a == null) return nullsFirst ? -1 : 1;
+    if (b == null) return nullsFirst ? 1 : -1;
+    return a.compareTo(b);
+  }
+
+  int _compareAlbum(String? a, String? b) {
+    if (a == null && b == null) return 0;
+    if (a == null) return 1;
+    if (b == null) return -1;
+
+    final numRegex = RegExp(r'^(\d+)');
+    final matchA = numRegex.firstMatch(a);
+    final matchB = numRegex.firstMatch(b);
+
+    if (matchA != null && matchB != null) {
+      final numA = int.tryParse(matchA.group(1)!);
+      final numB = int.tryParse(matchB.group(1)!);
+      if (numA != null && numB != null) {
+        final cmp = numA.compareTo(numB);
+        if (cmp != 0) return cmp;
+      }
+    }
+    // fallback to normal string comparison
+    return a.compareTo(b);
+  }
+
+  items.sort((a, b) {
+    // 1. PremiereDate
+    final dateA = a.premiereDate == null ? null : DateTime.tryParse(a.premiereDate!.trim());
+    final dateB = b.premiereDate == null ? null : DateTime.tryParse(b.premiereDate!.trim());
+    final dateCompare = _compareNullable<DateTime>(dateA, dateB, nullsFirst: true);
+    if (dateCompare != 0) return dateCompare;
+    // 2. Album (numbers first)
+    final albumCompare = _compareAlbum(a.album, b.album);
+    if (albumCompare != 0) return albumCompare;
+    // 3. ParentIndexNumber
+    final parentIndexCompare = _compareNullable<int>(a.parentIndexNumber, b.parentIndexNumber);
+    if (parentIndexCompare != 0) return parentIndexCompare;
+    // 4. IndexNumber
+    final indexCompare = _compareNullable<int>(a.indexNumber, b.indexNumber);
+    if (indexCompare != 0) return indexCompare;
+    // 5. SortName
+    return _compareNullable<String>(a.sortName, b.sortName);
+  });
+
+  return items;
+}
+
 List<BaseItemDto> filterItemsByGenreName(List<BaseItemDto> items, BaseItemDto genreFilter) {
   if (genreFilter.name == null) return [];
 

@@ -12,7 +12,11 @@ import 'package:finamp/menus/components/playbackActions/playback_action_row.dart
 import 'package:finamp/menus/components/playbackActions/playback_actions.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 
 import 'components/menuEntries/menu_entry.dart';
 
@@ -49,8 +53,17 @@ Future<void> showModalAlbumMenu({
   (double, List<Widget>) getMenuProperties(BuildContext context) {
     final menuEntries = getMenuEntries(context);
     final stackHeight = ThemedBottomSheet.calculateStackHeight(context: context, menuEntries: menuEntries);
+    final ref = GetIt.instance<ProviderContainer>();
+    final queueService = GetIt.instance<QueueService>();
 
-    final pageViewController = PageController();
+    final lastUsedPlaybackActionRowPage = ref.read(finampSettingsProvider.lastUsedPlaybackActionRowPage);
+    final lastUsedPlaybackActionRowPageIndex = lastUsedPlaybackActionRowPage.pageIndexFor(
+      nextUpIsEmpty: queueService.getQueue().nextUp.isEmpty,
+    );
+    final initialPageViewIndex = ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)
+        ? lastUsedPlaybackActionRowPageIndex
+        : 0;
+    final pageViewController = PageController(initialPage: initialPageViewIndex);
 
     List<Widget> menu = [
       SliverPersistentHeader(delegate: MenuItemInfoSliverHeader(item: item), pinned: true),

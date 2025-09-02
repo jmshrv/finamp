@@ -238,7 +238,7 @@ class _GetArtistTracksSectionProviderElement
       (origin as GetArtistTracksSectionProvider).genreFilter;
 }
 
-String _$getArtistAlbumsHash() => r'5e17f095e550296b3f959456747c7df840307764';
+String _$getArtistAlbumsHash() => r'c18950151efa1659a83910429a6ac13bab56d323';
 
 /// See also [getArtistAlbums].
 @ProviderFor(getArtistAlbums)
@@ -396,7 +396,7 @@ class _GetArtistAlbumsProviderElement
 }
 
 String _$getPerformingArtistAlbumsHash() =>
-    r'19399216cef3e2758f4497ef079953990b935ff7';
+    r'f33da5392fcf479c81ee8d8070124d5c524641d0';
 
 /// See also [getPerformingArtistAlbums].
 @ProviderFor(getPerformingArtistAlbums)
@@ -559,7 +559,7 @@ class _GetPerformingArtistAlbumsProviderElement
 }
 
 String _$getPerformingArtistTracksHash() =>
-    r'72b6d951306d5ea2540837ba23f032f93f49b5fe';
+    r'6a187d42f5b9a2b485b458aa558ea1329113d24a';
 
 /// See also [getPerformingArtistTracks].
 @ProviderFor(getPerformingArtistTracks)
@@ -746,7 +746,7 @@ class _GetPerformingArtistTracksProviderElement
       (origin as GetPerformingArtistTracksProvider).onlyFavorites;
 }
 
-String _$getArtistTracksHash() => r'7615ffa7216bd68666ef600e95ccef9faf352464';
+String _$getArtistTracksHash() => r'51141cc18df197a629da0a0ea79edd8dc40da91c';
 
 /// See also [getArtistTracks].
 @ProviderFor(getArtistTracks)

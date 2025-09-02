@@ -1097,6 +1097,36 @@ extension FinampSetters on FinampSettingsHelper {
     ).put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setPreferNextUpPrepending(bool newPreferNextUpPrepending) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.preferNextUpPrepending = newPreferNextUpPrepending;
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setRememberLastUsedPlaybackActionRowPage(
+    bool newRememberLastUsedPlaybackActionRowPage,
+  ) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.rememberLastUsedPlaybackActionRowPage =
+        newRememberLastUsedPlaybackActionRowPage;
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setLastUsedPlaybackActionRowPage(
+    PlaybackActionRowPage newLastUsedPlaybackActionRowPage,
+  ) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.lastUsedPlaybackActionRowPage =
+        newLastUsedPlaybackActionRowPage;
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -1482,6 +1512,16 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool> get preferAddingToFavoritesOverPlaylists =>
       finampSettingsProvider.select(
         (value) => value.requireValue.preferAddingToFavoritesOverPlaylists,
+      );
+  ProviderListenable<bool> get preferNextUpPrepending => finampSettingsProvider
+      .select((value) => value.requireValue.preferNextUpPrepending);
+  ProviderListenable<bool> get rememberLastUsedPlaybackActionRowPage =>
+      finampSettingsProvider.select(
+        (value) => value.requireValue.rememberLastUsedPlaybackActionRowPage,
+      );
+  ProviderListenable<PlaybackActionRowPage> get lastUsedPlaybackActionRowPage =>
+      finampSettingsProvider.select(
+        (value) => value.requireValue.lastUsedPlaybackActionRowPage,
       );
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider.select(

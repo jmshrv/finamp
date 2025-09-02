@@ -1,17 +1,15 @@
 import 'dart:async';
 
-import 'package:finamp/components/Buttons/cta_medium.dart';
-import 'package:finamp/l10n/app_localizations.dart';
-import 'package:finamp/menus/artist_menu.dart';
-import 'package:finamp/menus/components/overflow_menu_button.dart';
-import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/menus/components/playbackActions/playback_action_row.dart';
+import 'package:finamp/menus/components/playbackActions/playback_actions.dart';
+import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/jellyfin_models.dart';
 import '../../services/audio_service_helper.dart';
-import '../../services/queue_service.dart';
 import '../album_image.dart';
 import 'artist_item_info.dart';
 
@@ -28,7 +26,7 @@ enum ArtistMenuItems {
   shuffleAlbumsToQueue,
 }
 
-class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
+class ArtistScreenContentFlexibleSpaceBar extends ConsumerWidget {
   const ArtistScreenContentFlexibleSpaceBar({
     super.key,
     required this.parentItem,
@@ -45,101 +43,70 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
   final void Function(BaseItemDto?)? updateGenreFilter;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     GetIt.instance<AudioServiceHelper>();
-    QueueService queueService = GetIt.instance<QueueService>();
+    final queueService = GetIt.instance<QueueService>();
 
-    void playAllFromArtist(List<BaseItemDto> items) {
-      queueService.startPlayback(
-        items: items,
-        source: QueueItemSource(
-          type: QueueItemSourceType.artist,
-          name: QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
-          ),
-          id: parentItem.id,
-          item: parentItem,
-        ),
-        order: FinampPlaybackOrder.linear,
-      );
-    }
-
-    void shuffleAllFromArtist(List<BaseItemDto> items) {
-      queueService.startPlayback(
-        items: items,
-        source: QueueItemSource(
-          type: QueueItemSourceType.artist,
-          name: QueueItemSourceName(
-            type: QueueItemSourceNameType.preTranslated,
-            pretranslatedName: parentItem.name ?? AppLocalizations.of(context)!.placeholderSource,
-          ),
-          id: parentItem.id,
-          item: parentItem,
-        ),
-        order: FinampPlaybackOrder.shuffled,
-      );
-    }
+    final lastUsedPlaybackActionRowPage = ref.read(finampSettingsProvider.lastUsedPlaybackActionRowPage);
+    final lastUsedPlaybackActionRowPageIndex = lastUsedPlaybackActionRowPage.pageIndexFor(
+      nextUpIsEmpty: queueService.getQueue().nextUp.isEmpty,
+    );
+    final initialPageViewIndex = ref.read(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)
+        ? lastUsedPlaybackActionRowPageIndex
+        : 0;
+    final pageViewController = PageController(initialPage: initialPageViewIndex);
 
     return FlexibleSpaceBar(
       background: SafeArea(
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    SizedBox(height: 125, child: AlbumImage(item: parentItem, tapToZoom: true)),
-                    const Padding(padding: EdgeInsets.symmetric(horizontal: 4)),
-                    FutureBuilder(
-                      future: allTracks,
-                      builder: (context, snapshot) => Expanded(
-                        flex: 2,
-                        child: ArtistItemInfo(
-                          item: parentItem,
-                          itemTracks: snapshot.data?.length ?? 0,
-                          itemAlbums: albumCount,
-                          genreFilter: genreFilter,
-                          updateGenreFilter: updateGenreFilter,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.only(left: 8, right: 8, top: 16),
-                  child: Wrap(
-                    spacing: 8.0,
-                    alignment: WrapAlignment.spaceEvenly,
+        bottom: false,
+        child: Stack(
+          fit: StackFit.expand,
+          clipBehavior: Clip.hardEdge,
+          children: [
+            Positioned(
+              left: 8,
+              right: 8,
+              bottom: MediaQuery.of(context).padding.bottom,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
                     children: [
-                      CTAMedium(
-                        text: AppLocalizations.of(context)!.playButtonLabel,
-                        icon: TablerIcons.player_play,
-                        onPressed: () => allTracks.then((items) => playAllFromArtist(items ?? [])),
-                        // set the minimum width as 25% of the screen width,
-                        minWidth: MediaQuery.of(context).size.width * 0.25,
-                      ),
-                      CTAMedium(
-                        text: AppLocalizations.of(context)!.shuffleButtonLabel,
-                        icon: TablerIcons.arrows_shuffle,
-                        onPressed: () => allTracks.then((items) => shuffleAllFromArtist(items ?? [])),
-                        // set the minimum width as 25% of the screen width,
-                        minWidth: MediaQuery.of(context).size.width * 0.25,
-                      ),
-                      OverflowMenuButton(
-                        onPressed: () => showModalArtistMenu(context: context, baseItem: parentItem),
-                        label: AppLocalizations.of(context)!.menuButtonLabel,
+                      SizedBox(height: 125, child: AlbumImage(item: parentItem, tapToZoom: true)),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        flex: 2,
+                        child: FutureBuilder(
+                          future: allTracks,
+                          builder: (context, snapshot) {
+                            return ArtistItemInfo(
+                              item: parentItem,
+                              itemTracks: snapshot.data?.length ?? 0,
+                              itemAlbums: albumCount,
+                              genreFilter: genreFilter,
+                              updateGenreFilter: updateGenreFilter,
+                            );
+                          },
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ],
+                  const SizedBox(height: 10),
+                  PlaybackActionRow(
+                    controller: pageViewController,
+                    compactLayout: true,
+                    playbackActionPages: getPlaybackActionPages(
+                      context: context,
+                      item: parentItem,
+                      popContext: false,
+                      compactLayout: true,
+                      genreFilter: genreFilter,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

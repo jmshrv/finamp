@@ -105,7 +105,7 @@ class ThemedBottomSheet extends ConsumerStatefulWidget {
         menuEntries.where((element) => element.isVisible).length *
         (Theme.of(context).visualDensity == VisualDensity.compact ? 48 : 56);
     stackHeight += extraHeight ?? 0.0;
-    stackHeight += includePlaybackrow ? (playActionPageIndicatorHeight + playActionRowHeight) : 0;
+    stackHeight += includePlaybackrow ? (playActionPageIndicatorHeightDefault + playActionRowHeightDefault) : 0;
     return stackHeight;
   }
 

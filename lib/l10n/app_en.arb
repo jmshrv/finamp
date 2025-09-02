@@ -227,6 +227,8 @@
   "@favorite": {},
   "favorites": "Favorites",
   "@favorites": {},
+  "shuffleSome": "Shuffle some",
+  "@shuffleSome": {},
   "shuffleAll": "Shuffle all",
   "@shuffleAll": {},
   "downloads": "Downloads",
@@ -432,17 +434,21 @@
       }
     }
   },
-  "playbackActionPagePlay": "Play",
-  "@playbackActionPagePlay": {
-    "description": "Label for the playback action page that contains all actions related to playing in order"
+  "playbackActionPageNewQueue": "New Queue",
+  "@playbackActionPageNewQueue": {
+    "description": "Label for the playback action page that contains all actions related to starting a new queue"
   },
-  "playbackActionPageShuffle": "Shuffle",
-  "@playbackActionPageShuffle": {
-    "description": "Label for the playback action page that contains all actions related to playing shuffled"
+  "playbackActionPageNext": "Play Next",
+  "@playbackActionPageNext": {
+    "description": "Label for the playback action page that contains all actions related to playing tracks directly after the current one"
   },
-  "playbackActionPageShuffleAlbums": "Shuffle Albums",
-  "@playbackActionPageShuffleAlbums": {
-    "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+  "playbackActionPageNextUp": "Append Next",
+  "@playbackActionPageNextUp": {
+    "description": "Label for the playback action page that contains all actions related to appending tracks to Next Up"
+  },
+  "playbackActionPageAppendToQueue": "Play Last",
+  "@playbackActionPageAppendToQueue": {
+    "description": "Label for the playback action page that contains all actions related to appending tracks at the end of the queue"
   },
   "trackCount": "{count,plural,=1{{count} Track} other{{count} Tracks}}",
   "@trackCount": {
@@ -994,13 +1000,25 @@
   "@shuffleNext": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
   },
+  "shuffleSomeNext": "Shuffle some next",
+  "@shuffleSomeNext": {
+    "description": "Used for shuffling some tracks to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+  },
   "shuffleToNextUp": "Shuffle to Next Up",
   "@shuffleToNextUp": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
   },
-  "shuffleToQueue": "Shuffle to queue",
+  "shuffleSomeToNextUp": "Shuffle some to Next Up",
+  "@shuffleSomeToNextUp": {
+    "description": "Used for shuffling some tracks to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+  },
+  "shuffleToQueue": "Shuffle to Queue",
   "@shuffleToQueue": {
     "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+  },
+  "shuffleSomeToQueue": "Shuffle some to Queue",
+  "@shuffleSomeToQueue": {
+    "description": "Used for shuffling some tracks to the end of the regular queue, to play after all prior tracks from the queue have played"
   },
   "confirmPlayNext": "{type, select, track{Track} album{Album} artist{Artist} playlist{Playlist} genre{Genre} other{Item}} will play next",
   "@confirmPlayNext": {
@@ -1399,19 +1417,35 @@
   },
   "shuffleAlbums": "Shuffle Albums",
   "@shuffleAlbums": {
-    "description": "Label for action that shuffles all albums of an artist or genre"
+    "description": "Label for action that shuffles all albums of an artist"
+  },
+  "shuffleSomeAlbums": "Shuffle some Albums",
+  "@shuffleSomeAlbums": {
+    "description": "Label for action that shuffles some albums of a genre"
   },
   "shuffleAlbumsNext": "Shuffle Albums Next",
   "@shuffleAlbumsNext": {
-    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
+    "description": "Label for action that shuffles all albums of an artist and adds them at the start of Next Up"
   },
-  "shuffleAlbumsToNextUp": "Shuffle Albums To Next Up",
+  "shuffleSomeAlbumsNext": "Shuffle some Albums Next",
+  "@shuffleSomeAlbumsNext": {
+    "description": "Label for action that shuffles some albums of a genre and adds them at the start of Next Up"
+  },
+  "shuffleAlbumsToNextUp": "Shuffle Albums to Next Up",
   "@shuffleAlbumsToNextUp": {
-    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
+    "description": "Label for action that shuffles all albums of an artist and adds them at the end of Next Up"
   },
-  "shuffleAlbumsToQueue": "Shuffle Albums To Queue",
+  "shuffleSomeAlbumsToNextUp": "Shuffle some Albums to Next Up",
+  "@shuffleSomeAlbumsToNextUp": {
+    "description": "Label for action that shuffles all albums of a genre and adds them at the end of Next Up"
+  },
+  "shuffleAlbumsToQueue": "Shuffle Albums to Queue",
   "@shuffleAlbumsToQueue": {
-    "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
+    "description": "Label for action that shuffles all albums of an artist and adds them at the end of the regular queue"
+  },
+  "shuffleSomeAlbumsToQueue": "Shuffle some Albums to Queue",
+  "@shuffleSomeAlbumsToQueue": {
+    "description": "Label for action that shuffles all albums of a genre and adds them at the end of the regular queue"
   },
   "playCountValue": "{playCount,plural,=1{{playCount} play} other{{playCount} plays}}",
   "@playCountValue": {
@@ -2750,6 +2784,22 @@
   },
   "preferAddingToFavoritesOverPlaylistsSubtitle": "When enabled, a short tap will add to favorites, and a long press will open the 'Add to Playlist' menu. Default is the inverse.",
   "@preferAddingToFavoritesOverPlaylistsSubtitle": {
+    "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
+  },
+  "preferNextUpPrependingTitle": "Prefer Prepending to Next Up",
+  "@preferNextUpPrependingTitle": {
+    "description": "Title for the setting to prefer prepending to Next Up over appending"
+  },
+  "preferNextUpPrependingSubtitle": "When enabled, the \"Play Next\" buttons will be shown when Next Up is empty. Otherwise, \"Add to Next Up\" will be the default.",
+  "@preferNextUpPrependingSubtitle": {
+    "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
+  },
+  "rememberLastUsedPlaybackActionRowPageTitle": "Remember Playback Action Row Page",
+  "@rememberLastUsedPlaybackActionRowPageTitle": {
+    "description": "Title for the setting to remember the last used Playback Action Row Page."
+  },
+  "rememberLastUsedPlaybackActionRowPageSubtitle": "When enabled, your last used Playback Action Row Page will be remembered.",
+  "@rememberLastUsedPlaybackActionRowPageSubtitle": {
     "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
   },
   "discOfAlbum": "[Disc {number}] {albumName}",

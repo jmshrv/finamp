@@ -159,7 +159,7 @@ Future<List<BaseItemDto>> getArtistAlbums(
     );
     fetchArtistAlbums.sort((a, b) => (a.baseItem?.premiereDate ?? "").compareTo(b.baseItem!.premiereDate ?? ""));
     final List<BaseItemDto> artistAlbums = fetchArtistAlbums.map((e) => e.baseItem).nonNulls.toList();
-    return artistAlbums;
+    return sortArtistTracks(artistAlbums);
   } else {
     // In Online Mode:
     // Get Albums where artist is Album Artist sorted by Premiere Date
@@ -208,7 +208,7 @@ Future<List<BaseItemDto>> getPerformingArtistAlbums(
         .map((e) => e.baseItem)
         .nonNulls
         .toList();
-    return performingArtistAlbums;
+    return sortArtistTracks(performingArtistAlbums);
   } else {
     // In Online Mode:
     // Get Albums where artist is Performing Artist sorted by Premiere Date
@@ -268,7 +268,7 @@ Future<List<BaseItemDto>> getPerformingArtistTracks(
       libraryFilter: library,
       parentItem: parent,
       genreFilter: genreFilter,
-      sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+      sortBy: "PremiereDate,Album,ParentIndexNumber,IndexNumber,SortName",
       includeItemTypes: "Audio",
       artistType: ArtistType.artist,
       isFavorite: (onlyFavorites == true) ? true : null,
@@ -323,7 +323,7 @@ Future<List<BaseItemDto>> getArtistTracks(
       libraryFilter: library,
       parentItem: parent,
       genreFilter: genreFilter,
-      sortBy: "Album,ParentIndexNumber,IndexNumber,SortName",
+      sortBy: "PremiereDate,Album,ParentIndexNumber,IndexNumber,SortName",
       includeItemTypes: "Audio",
       artistType: ArtistType.albumArtist,
     );
