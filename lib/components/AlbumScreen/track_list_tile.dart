@@ -6,6 +6,8 @@ import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/extensions/string.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:finamp/menus/components/icon_button_with_semantics.dart';
+import 'package:finamp/menus/components/overflow_menu_button.dart';
 import 'package:finamp/menus/track_menu.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart';
@@ -909,6 +911,12 @@ class TrackListItemTile extends ConsumerWidget {
               excludeSemantics: true,
               child: AddToPlaylistButton(item: baseItem, size: 24, visualDensity: const VisualDensity(horizontal: -4)),
             ),
+            if (Platform.isWindows || Platform.isLinux || Platform.isMacOS)
+              OverflowMenuButton(
+                onPressed: () => showModalTrackMenu(context: context, item: baseItem),
+                color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+                label: AppLocalizations.of(context)!.menuButtonLabel,
+              ),
             if (allowReorder)
               ReorderableDragStartListener(
                 index:
@@ -916,11 +924,11 @@ class TrackListItemTile extends ConsumerWidget {
                     0, // will briefly use 0 as index, but should resolve quickly enough for user not to notice
                 child: Padding(
                   padding: const EdgeInsets.only(left: 6.0),
-                  child: Icon(
-                    TablerIcons.grip_horizontal,
+                  child: IconButtonWithSemantics(
+                    icon: TablerIcons.menu_order,
+                    onPressed: null,
+                    label: AppLocalizations.of(context)!.dragToReorder,
                     color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
-                    size: 28.0,
-                    weight: 1.5,
                   ),
                 ),
               ),

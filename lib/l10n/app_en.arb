@@ -2768,5 +2768,9 @@
   "moreActionsOnAlbumDisc": "More actions on album disc",
   "@moreActionsOnAlbumDisc": {
     "description": "Label for the disc header menu button."
+  },
+  "dragToReorder": "Drag to Reorder",
+  "@dragToReorder": {
+    "description": "Label shown on drag handles of track list  tiles in the queue list"
   }
 }
