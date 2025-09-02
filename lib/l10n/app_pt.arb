@@ -2735,5 +2735,9 @@
     "moreActionsOnAlbumDisc": "Mais ações em disco álbum",
     "@moreActionsOnAlbumDisc": {
         "description": "Label for the disc header menu button."
+    },
+    "dragToReorder": "Arrastar para Reordenar",
+    "@dragToReorder": {
+        "description": "Label shown on drag handles of track list  tiles in the queue list"
     }
 }
