@@ -9,7 +9,10 @@ import 'package:finamp/gen/assets.gen.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/jellyfin_models.dart' as jellyfin_models;
+import 'package:finamp/services/current_track_metadata_provider.dart';
+import 'package:finamp/services/metadata_provider.dart';
 import 'package:finamp/services/playback_history_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:just_audio/just_audio.dart';
@@ -1156,6 +1159,8 @@ class QueueService {
       artUri: artUri,
       title: item.name ?? "unknown",
       extras: {
+        "playSessionId": uuid
+            .v4(), //!!! this ID has to be consistent across the transcoding URL and the playback reporting status, otherwise the server won't show that we're transcoding
         "itemJson": item.toJson(setOffline: false),
         "shouldTranscode": FinampSettingsHelper.finampSettings.shouldTranscode,
         "downloadedTrackPath": downloadedTrack?.file?.path,
@@ -1181,11 +1186,14 @@ class QueueService {
       if (queueItem.item.extras!["isOffline"] as bool) {
         return Future.error("Offline mode enabled but downloaded track not found.");
       } else {
-        if (queueItem.item.extras!["shouldTranscode"] == true) {
-          return HlsAudioSource(await _trackUri(queueItem.item), tag: queueItem);
-        } else {
-          return AudioSource.uri(await _trackUri(queueItem.item), tag: queueItem);
-        }
+        final trackUri = await _trackUri(queueItem.item);
+        print("trackUri: $trackUri");
+        return AudioSource.uri(trackUri, tag: queueItem);
+        // if (queueItem.item.extras!["shouldTranscode"] == true) {
+        //   return HlsAudioSource(trackUri, tag: queueItem);
+        // } else {
+        //   return AudioSource.uri(trackUri, tag: queueItem);
+        // }
       }
     } else {
       // We have to deserialise this because Dart is stupid and can't handle
@@ -1226,13 +1234,13 @@ class QueueService {
         // Ideally we'd switch between 44.1/48kHz depending on the source is,
         // realistically it doesn't matter too much
         // default to 44100, only use 48000 for opus because opus doesn't support 44100
+        "playSessionId": mediaItem.extras!["playSessionId"] as String? ?? "",
         "audioSampleRate": FinampSettingsHelper.finampSettings.transcodingStreamingFormat.codec == 'opus'
             ? '48000'
             : '44100',
         "maxAudioBitDepth": "16",
         "audioBitRate": FinampSettingsHelper.finampSettings.transcodeBitrate.toString(),
         "segmentContainer": FinampSettingsHelper.finampSettings.transcodingStreamingFormat.container,
-        "transcodeReasons": "ContainerBitrateExceedsLimit",
       });
     } else {
       builtPath.addAll(["Items", mediaItem.extras!["itemJson"]["Id"] as String, "File"]);

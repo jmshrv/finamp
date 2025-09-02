@@ -612,14 +612,21 @@ class JellyfinApiHelper {
 
   /// Gets the playback info for an item, such as format and bitrate. Usually, I'd require a BaseItemDto as an argument
   /// but since this will be run inside of [MusicPlayerBackgroundTask], I've just set the raw id as an argument.
-  Future<List<MediaSourceInfo>?> getPlaybackInfo(BaseItemId itemId) async {
+  Future<PlaybackInfoResponse> getPlaybackInfo(BaseItemId itemId) async {
     assert(_verifyCallable());
     var response = await jellyfinApi.getPlaybackInfo(id: itemId, userId: _finampUserHelper.currentUser!.id);
 
-    // getPlaybackInfo returns a PlaybackInfoResponse. We only need the List<MediaSourceInfo> in it so we convert it here and
-    // return that List<MediaSourceInfo>.
-    final PlaybackInfoResponse decodedResponse = PlaybackInfoResponse.fromJson(response as Map<String, dynamic>);
-    return decodedResponse.mediaSources;
+    return PlaybackInfoResponse.fromJson(response as Map<String, dynamic>);
+  }
+
+  /// Sends a request for playback info to the server, letting it know which codecs the client will support (to enable automatic transcoding).
+  Future<PlaybackInfoResponse> submitPlaybackInfo({
+    required BaseItemId itemId,
+    required PlaybackInfoRequest playbackInfoRequest,
+  }) async {
+    assert(_verifyCallable());
+    var response = await jellyfinApi.submitPlaybackInfo(id: itemId, playbackInfoRequest: playbackInfoRequest);
+    return PlaybackInfoResponse.fromJson(response as Map<String, dynamic>);
   }
 
   /// Starts an instant mix using the data from the item provided.

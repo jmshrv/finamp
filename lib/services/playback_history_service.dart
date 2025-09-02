@@ -6,6 +6,7 @@ import 'package:finamp/services/discord_rpc.dart';
 import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/playon_service.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
@@ -517,7 +518,8 @@ class PlaybackHistoryService {
     try {
       return jellyfin_models.PlaybackProgressInfo(
         itemId: item.baseItem?.id ?? jellyfin_models.BaseItemId(""),
-        playSessionId: _queueService.getQueue().id,
+        playSessionId: item.item.extras?["playSessionId"] as String? ?? "",
+        sessionId: _queueService.getQueue().id,
         isPaused: isPaused,
         isMuted: isMuted,
         positionTicks: playerPosition.inMicroseconds * 10,
@@ -555,7 +557,8 @@ class PlaybackHistoryService {
     try {
       return jellyfin_models.PlaybackProgressInfo(
         itemId: currentTrack.baseItem?.id ?? jellyfin_models.BaseItemId(""),
-        playSessionId: _queueService.getQueue().id,
+        playSessionId: currentTrack.item.extras?["playSessionId"] as String? ?? "",
+        sessionId: _queueService.getQueue().id,
         canSeek: true,
         isPaused: _audioService.paused,
         isMuted: _audioService.volume == 0.0,

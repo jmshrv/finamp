@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/queue_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -18,19 +22,21 @@ class MetadataProvider {
   static const speedControlLongTrackDuration = Duration(minutes: 15);
   static const speedControlLongAlbumDuration = Duration(hours: 3);
 
-  final MediaSourceInfo mediaSourceInfo;
+  final PlaybackInfoResponse playbackInfo;
   LyricDto? lyrics;
   bool isDownloaded;
   bool qualifiesForPlaybackSpeedControl;
   double? parentNormalizationGain;
 
   MetadataProvider({
-    required this.mediaSourceInfo,
+    required this.playbackInfo,
     this.lyrics,
     this.isDownloaded = false,
     this.qualifiesForPlaybackSpeedControl = false,
     this.parentNormalizationGain,
   });
+
+  MediaSourceInfo get mediaSourceInfo => playbackInfo.mediaSources!.first;
 
   bool get hasLyrics => mediaSourceInfo.mediaStreams.any((e) => e.type == "Lyric");
 }
@@ -47,8 +53,8 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, BaseItemDto> metadataPr
 
       metadataProviderLogger.fine("Fetching metadata for '${item.name}' (${item.id})");
 
-      MediaSourceInfo? playbackInfo;
-      MediaSourceInfo? localPlaybackInfo;
+      PlaybackInfoResponse? playbackInfo;
+      PlaybackInfoResponse? localPlaybackInfo;
 
       final downloadStub = await downloadsService.getTrackInfo(id: item.id);
       if (downloadStub != null) {
@@ -72,28 +78,32 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, BaseItemDto> metadataPr
               ? downloadItem.baseItem!.mediaStreams?.where((x) => x.type == "Lyric").toList() ?? []
               : downloadItem.baseItem!.mediaStreams ?? [];
 
-          localPlaybackInfo = MediaSourceInfo(
-            id: downloadItem.baseItem!.id,
-            protocol: "File",
-            type: "Default",
-            isRemote: false,
-            supportsTranscoding: false,
-            supportsDirectStream: false,
-            supportsDirectPlay: true,
-            isInfiniteStream: false,
-            requiresOpening: false,
-            requiresClosing: false,
-            requiresLooping: false,
-            supportsProbing: false,
-            mediaStreams: mediaStream,
-            readAtNativeFramerate: false,
-            ignoreDts: false,
-            ignoreIndex: false,
-            genPtsInput: false,
-            bitrate: bitrate,
-            container: codec,
-            name: downloadItem.baseItem!.mediaSources?.first.name,
-            size: await downloadsService.getFileSize(downloadStub),
+          localPlaybackInfo = PlaybackInfoResponse(
+            mediaSources: [
+              MediaSourceInfo(
+                id: downloadItem.baseItem!.id,
+                protocol: "File",
+                type: "Default",
+                isRemote: false,
+                supportsTranscoding: false,
+                supportsDirectStream: false,
+                supportsDirectPlay: true,
+                isInfiniteStream: false,
+                requiresOpening: false,
+                requiresClosing: false,
+                requiresLooping: false,
+                supportsProbing: false,
+                mediaStreams: mediaStream,
+                readAtNativeFramerate: false,
+                ignoreDts: false,
+                ignoreIndex: false,
+                genPtsInput: false,
+                bitrate: bitrate,
+                container: codec,
+                name: downloadItem.baseItem!.mediaSources?.first.name,
+                size: await downloadsService.getFileSize(downloadStub),
+              ),
+            ],
           );
         }
       }
@@ -108,22 +118,26 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, BaseItemDto> metadataPr
           "Fetching metadata for '${item.name}' (${item.id}) from server due to missing attributes",
         );
         try {
-          playbackInfo = (await jellyfinApiHelper.getPlaybackInfo(item.id))?.first;
+          playbackInfo = await jellyfinApiHelper.getPlaybackInfo(item.id);
         } catch (e) {
           metadataProviderLogger.severe("Failed to fetch metadata for '${item.name}' (${item.id})", e);
           return null;
         }
 
         // update **PARTS** of playbackInfo with localPlaybackInfo if available
-        if (localPlaybackInfo != null && playbackInfo != null) {
-          playbackInfo.protocol = localPlaybackInfo.protocol;
-          playbackInfo.bitrate = localPlaybackInfo.bitrate;
+        if (localPlaybackInfo != null && (playbackInfo.mediaSources?.isNotEmpty ?? false)) {
+          playbackInfo.mediaSources!.first.protocol = localPlaybackInfo.mediaSources!.first.protocol;
+          playbackInfo.mediaSources!.first.bitrate = localPlaybackInfo.mediaSources!.first.bitrate;
           // Use lyrics mediastream from online item, but take all other streams
           // from downloaded item
-          playbackInfo.mediaStreams = playbackInfo.mediaStreams.where((x) => x.type == "Lyric").toList();
-          playbackInfo.mediaStreams.addAll(localPlaybackInfo.mediaStreams.where((x) => x.type != "Lyric"));
-          playbackInfo.container = localPlaybackInfo.container;
-          playbackInfo.size = localPlaybackInfo.size;
+          playbackInfo.mediaSources!.first.mediaStreams = playbackInfo.mediaSources!.first.mediaStreams
+              .where((x) => x.type == "Lyric")
+              .toList();
+          playbackInfo.mediaSources!.first.mediaStreams.addAll(
+            localPlaybackInfo.mediaSources!.first.mediaStreams.where((x) => x.type != "Lyric"),
+          );
+          playbackInfo.mediaSources!.first.container = localPlaybackInfo.mediaSources!.first.container;
+          playbackInfo.mediaSources!.first.size = localPlaybackInfo.mediaSources!.first.size;
         }
       }
 
@@ -138,7 +152,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, BaseItemDto> metadataPr
       }
 
       final metadata = MetadataProvider(
-        mediaSourceInfo: playbackInfo,
+        playbackInfo: playbackInfo,
         isDownloaded: localPlaybackInfo != null,
         parentNormalizationGain: parent?.normalizationGain,
       );

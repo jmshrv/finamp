@@ -773,43 +773,15 @@ class DeviceProfile {
   DeviceProfile({
     this.name,
     this.id,
-    this.identification,
-    this.friendlyName,
-    this.manufacturer,
-    this.manufacturerUrl,
-    this.modelName,
-    this.modelDescription,
-    this.modelNumber,
-    this.modelUrl,
-    this.serialNumber,
-    required this.enableAlbumArtInDidl,
-    required this.enableSingleAlbumArtLimit,
-    required this.enableSingleSubtitleLimit,
-    this.supportedMediaTypes,
-    this.userId,
-    this.albumArtPn,
-    required this.maxAlbumArtWidth,
-    required this.maxAlbumArtHeight,
-    this.maxIconWidth,
-    this.maxIconHeight,
     this.maxStreamingBitrate,
     this.maxStaticBitrate,
     this.musicStreamingTranscodingBitrate,
     this.maxStaticMusicBitrate,
-    this.sonyAggregationFlags,
-    this.protocolInfo,
-    required this.timelineOffsetSeconds,
-    required this.requiresPlainVideoItems,
-    required this.requiresPlainFolders,
-    required this.enableMSMediaReceiverRegistrar,
-    required this.ignoreTranscodeByteRangeRequests,
-    this.xmlRootAttributes,
-    this.directPlayProfiles,
-    this.transcodingProfiles,
-    this.containerProfiles,
-    this.codecProfiles,
-    this.responseProfiles,
-    this.subtitleProfiles,
+    this.directPlayProfiles = const [],
+    this.transcodingProfiles = const [],
+    this.containerProfiles = const [],
+    this.codecProfiles = const [],
+    this.subtitleProfiles = const [],
   });
 
   /// Gets or sets the Name.
@@ -821,80 +793,99 @@ class DeviceProfile {
   String? id;
 
   /// Gets or sets the Identification.
-  @HiveField(2)
-  DeviceIdentification? identification;
+  // @Deprecated("removed from API")
+  // @HiveField(2)
+  // DeviceIdentification? identification;
 
   /// Gets or sets the FriendlyName.
-  @HiveField(3)
-  String? friendlyName;
+  // @Deprecated("removed from API")
+  // @HiveField(3)
+  // String? friendlyName;
 
   /// Gets or sets the Manufacturer.
-  @HiveField(4)
-  String? manufacturer;
+  // @Deprecated("removed from API")
+  // @HiveField(4)
+  // String? manufacturer;
 
   /// Gets or sets the ManufacturerUrl.
-  @HiveField(5)
-  String? manufacturerUrl;
+  // @Deprecated("removed from API")
+  // @HiveField(5)
+  // String? manufacturerUrl;
 
   /// Gets or sets the ModelName.
-  @HiveField(6)
-  String? modelName;
+  // @Deprecated("removed from API")
+  // @HiveField(6)
+  // String? modelName;
 
   /// Gets or sets the ModelDescription.
-  @HiveField(7)
-  String? modelDescription;
+  // @Deprecated("removed from API")
+  // @HiveField(7)
+  // String? modelDescription;
 
   /// Gets or sets the ModelNumber.
-  @HiveField(8)
-  String? modelNumber;
+  // @Deprecated("removed from API")
+  // @HiveField(8)
+  // String? modelNumber;
 
   /// Gets or sets the ModelUrl.
-  @HiveField(9)
-  String? modelUrl;
+  // @Deprecated("removed from API")
+  // @HiveField(9)
+  // String? modelUrl;
 
   /// Gets or sets the SerialNumber.
-  @HiveField(10)
-  String? serialNumber;
+  // @Deprecated("removed from API")
+  // @HiveField(10)
+  // String? serialNumber;
 
   /// Gets or sets a value indicating whether EnableAlbumArtInDidl.
-  @HiveField(11)
-  bool enableAlbumArtInDidl;
+  // @Deprecated("removed from API")
+  // @HiveField(11)
+  // bool enableAlbumArtInDidl;
 
   /// Gets or sets a value indicating whether EnableSingleAlbumArtLimit.
-  @HiveField(12)
-  bool enableSingleAlbumArtLimit;
+  // @Deprecated("removed from API")
+  // @HiveField(12)
+  // bool enableSingleAlbumArtLimit;
 
   /// Gets or sets a value indicating whether EnableSingleSubtitleLimit.
-  @HiveField(13)
-  bool enableSingleSubtitleLimit;
+  // @Deprecated("removed from API")
+  // @HiveField(13)
+  // bool enableSingleSubtitleLimit;
 
   /// Gets or sets the SupportedMediaTypes.
-  @HiveField(14)
-  String? supportedMediaTypes;
+  // @Deprecated("removed from API")
+  // @HiveField(14)
+  // String? supportedMediaTypes;
 
   /// Gets or sets the UserId.
-  @HiveField(15)
-  String? userId;
+  // @Deprecated("removed from API")
+  // @HiveField(15)
+  // String? userId;
 
   /// Gets or sets the AlbumArtPn.
-  @HiveField(16)
-  String? albumArtPn;
+  // @Deprecated("removed from API")
+  // @HiveField(16)
+  // String? albumArtPn;
 
   /// Gets or sets the MaxAlbumArtWidth.
-  @HiveField(17)
-  int maxAlbumArtWidth;
+  // @Deprecated("removed from API")
+  // @HiveField(17)
+  // int maxAlbumArtWidth;
 
   /// Gets or sets the MaxAlbumArtHeight.
-  @HiveField(18)
-  int maxAlbumArtHeight;
+  // @Deprecated("removed from API")
+  // @HiveField(18)
+  // int maxAlbumArtHeight;
 
   /// Gets or sets the MaxIconWidth.
-  @HiveField(19)
-  int? maxIconWidth;
+  // @Deprecated("removed from API")
+  // @HiveField(19)
+  // int? maxIconWidth;
 
   /// Gets or sets the MaxIconHeight.
-  @HiveField(20)
-  int? maxIconHeight;
+  // @Deprecated("removed from API")
+  // @HiveField(20)
+  // int? maxIconHeight;
 
   /// Gets or sets the MaxStreamingBitrate.
   @HiveField(21)
@@ -914,60 +905,69 @@ class DeviceProfile {
 
   /// Gets or sets the content of the aggregationFlags element in the
   /// urn:schemas-sonycom:av namespace.
-  @HiveField(25)
-  String? sonyAggregationFlags;
+  // @Deprecated("removed from API")
+  // @HiveField(25)
+  // String? sonyAggregationFlags;
 
   /// Gets or sets the ProtocolInfo.
-  @HiveField(26)
-  String? protocolInfo;
+  // @Deprecated("removed from API")
+  // @HiveField(26)
+  // String? protocolInfo;
 
   /// Gets or sets the TimelineOffsetSeconds.
-  @HiveField(27)
-  int timelineOffsetSeconds;
+  // @Deprecated("removed from API")
+  // @HiveField(27)
+  // int timelineOffsetSeconds;
 
   /// Gets or sets a value indicating whether RequiresPlainVideoItems.
-  @HiveField(28)
-  bool requiresPlainVideoItems;
+  // @Deprecated("removed from API")
+  // @HiveField(28)
+  // bool requiresPlainVideoItems;
 
   /// Gets or sets a value indicating whether RequiresPlainFolders.
-  @HiveField(29)
-  bool requiresPlainFolders;
+  // @Deprecated("removed from API")
+  // @HiveField(29)
+  // bool requiresPlainFolders;
 
   /// Gets or sets a value indicating whether EnableMSMediaReceiverRegistrar.
-  @HiveField(30)
-  bool enableMSMediaReceiverRegistrar;
+  // @Deprecated("removed from API")
+  // @HiveField(30)
+  // bool enableMSMediaReceiverRegistrar;
 
   /// Gets or sets a value indicating whether IgnoreTranscodeByteRangeRequests.
-  @HiveField(31)
-  bool ignoreTranscodeByteRangeRequests;
+  // @Deprecated("removed from API")
+  // @HiveField(31)
+  // bool ignoreTranscodeByteRangeRequests;
 
   /// Gets or sets the XmlRootAttributes.
-  @HiveField(32)
-  List<XmlAttribute>? xmlRootAttributes;
+  // @Deprecated("removed from API")
+  // @HiveField(32)
+  // List<XmlAttribute>? xmlRootAttributes;
 
   /// Gets or sets the direct play profiles.
   @HiveField(33)
-  List<DirectPlayProfile>? directPlayProfiles;
+  List<DirectPlayProfile> directPlayProfiles;
 
   /// Gets or sets the transcoding profiles.
   @HiveField(34)
-  List<TranscodingProfile>? transcodingProfiles;
+  List<TranscodingProfile> transcodingProfiles;
 
   /// Gets or sets the ContainerProfiles.
   @HiveField(35)
-  List<ContainerProfile>? containerProfiles;
+  List<ContainerProfile> containerProfiles;
 
   /// Gets or sets the CodecProfiles.
   @HiveField(36)
-  List<CodecProfile>? codecProfiles;
+  List<CodecProfile> codecProfiles;
 
   /// Gets or sets the ResponseProfiles.
-  @HiveField(37)
-  List<ResponseProfile>? responseProfiles;
+  // @Deprecated("removed from API")
+  // @HiveField(37)
+  // List<ResponseProfile>? responseProfiles;
 
   /// Gets or sets the SubtitleProfiles.
   @HiveField(38)
-  List<SubtitleProfile>? subtitleProfiles;
+  List<SubtitleProfile> subtitleProfiles;
 
   factory DeviceProfile.fromJson(Map<String, dynamic> json) => _$DeviceProfileFromJson(json);
   Map<String, dynamic> toJson() => _$DeviceProfileToJson(this);
@@ -1078,31 +1078,50 @@ class DirectPlayProfile {
 
   /// Enum: "Audio" "Video" "Photo"
   @HiveField(3)
-  String type;
+  DlnaProfileType type;
 
   factory DirectPlayProfile.fromJson(Map<String, dynamic> json) => _$DirectPlayProfileFromJson(json);
   Map<String, dynamic> toJson() => _$DirectPlayProfileToJson(this);
+}
+
+@HiveType(typeId: 103)
+enum DlnaProfileType {
+  @HiveField(0)
+  audio("Audio"),
+  @HiveField(1)
+  lyric("Lyric"),
+  @HiveField(2)
+  video("Video"),
+  @HiveField(3)
+  subtitle("Subtitle"),
+  @HiveField(4)
+  photo("Photo");
+
+  const DlnaProfileType(this.jellyfinName);
+
+  final String jellyfinName;
 }
 
 @JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
 @HiveType(typeId: 22)
 class TranscodingProfile {
   TranscodingProfile({
-    this.container,
     required this.type,
-    this.videoCodec,
-    this.audioCodec,
-    this.protocol,
-    required this.estimateContentLength,
-    required this.enableMpegtsM2TsMode,
-    required this.transcodeSeekInfo,
-    required this.copyTimestamps,
     required this.context,
-    required this.maxAudioChannels,
-    required this.minSegments,
-    required this.segmentLength,
-    required this.breakOnNonKeyFrames,
-    required this.enableSubtitlesInManifest,
+    required this.container,
+    this.minSegments = 1,
+    this.audioCodec = "aac",
+    this.videoCodec = "mp4",
+    this.protocol,
+    this.estimateContentLength = false,
+    this.enableMpegtsM2TsMode = false,
+    this.transcodeSeekInfo = "Auto",
+    this.copyTimestamps = true,
+    this.segmentLength = 0,
+    this.breakOnNonKeyFrames = false,
+    this.enableSubtitlesInManifest = true,
+    this.maxAudioChannels,
+    this.conditions = const [],
   });
 
   @HiveField(0)
@@ -1110,29 +1129,29 @@ class TranscodingProfile {
 
   /// Enum: "Audio" "Video" "Photo"
   @HiveField(1)
-  String type;
+  DlnaProfileType type;
 
   @HiveField(2)
-  String? videoCodec;
+  String videoCodec;
 
   @HiveField(3)
-  String? audioCodec;
+  String audioCodec;
 
   @HiveField(4)
   String? protocol;
 
   @HiveField(5)
-  bool estimateContentLength;
+  bool? estimateContentLength;
 
   @HiveField(6)
-  bool enableMpegtsM2TsMode;
+  bool? enableMpegtsM2TsMode;
 
   /// Enum: "Auto" "Bytes"
   @HiveField(7)
-  String transcodeSeekInfo;
+  String? transcodeSeekInfo;
 
   @HiveField(8)
-  bool copyTimestamps;
+  bool? copyTimestamps;
 
   /// Enum: "Streaming" "Static"
   @HiveField(9)
@@ -1142,18 +1161,19 @@ class TranscodingProfile {
   String? maxAudioChannels;
 
   @HiveField(11)
-  int minSegments;
+  int? minSegments;
 
   @HiveField(12)
-  int segmentLength;
+  int? segmentLength;
 
   @HiveField(13)
-  bool breakOnNonKeyFrames;
-
-  // Below fields were added during null safety migration (0.5.0)
+  bool? breakOnNonKeyFrames;
 
   @HiveField(14)
-  bool enableSubtitlesInManifest;
+  bool? enableSubtitlesInManifest;
+
+  @HiveField(15)
+  List<ProfileCondition> conditions;
 
   factory TranscodingProfile.fromJson(Map<String, dynamic> json) => _$TranscodingProfileFromJson(json);
   Map<String, dynamic> toJson() => _$TranscodingProfileToJson(this);
@@ -3779,4 +3799,48 @@ class LyricLineCue {
   factory LyricLineCue.fromJson(Map<String, dynamic> json) => _$LyricLineCueFromJson(json);
 
   Map<String, dynamic> toJson() => _$LyricLineCueToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.pascal, explicitToJson: true, anyMap: true)
+@HiveType(typeId: 102)
+class PlaybackInfoRequest {
+  PlaybackInfoRequest({
+    this.userId,
+    this.deviceProfile,
+    this.startTimeTicks,
+    this.maxStreamingBitrate,
+    this.audioStreamIndex,
+    this.subtitleStreamIndex,
+    this.maxAudioChannels,
+    this.mediaSourceId,
+    this.liveStreamId,
+    this.enableDirectPlay,
+    this.enableDirectStream,
+    this.enableTranscoding,
+    this.allowVideoStreamCopy,
+    this.allowAudioStreamCopy,
+    this.autoOpenLiveStream,
+    this.alwaysBurnInSubtitleWhenTranscoding,
+  });
+
+  final String? userId;
+  final DeviceProfile? deviceProfile;
+  final int? startTimeTicks;
+  final int? maxStreamingBitrate;
+  final int? audioStreamIndex;
+  final int? subtitleStreamIndex;
+  final int? maxAudioChannels;
+  final String? mediaSourceId;
+  final String? liveStreamId;
+  final bool? enableDirectPlay;
+  final bool? enableDirectStream;
+  final bool? enableTranscoding;
+  final bool? allowVideoStreamCopy;
+  final bool? allowAudioStreamCopy;
+  final bool? autoOpenLiveStream;
+  final bool? alwaysBurnInSubtitleWhenTranscoding;
+
+  factory PlaybackInfoRequest.fromJson(Map<String, dynamic> json) => _$PlaybackInfoRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PlaybackInfoRequestToJson(this);
 }

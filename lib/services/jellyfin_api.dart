@@ -222,6 +222,13 @@ abstract class JellyfinApi extends ChopperService {
   @Get(path: "/Items/{id}/PlaybackInfo")
   Future<dynamic> getPlaybackInfo({@Path() required BaseItemId id, @Query() required String userId});
 
+  @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
+  @POST(path: "/Items/{id}/PlaybackInfo")
+  Future<dynamic> submitPlaybackInfo({
+    @Path() required BaseItemId id,
+    @Body() required PlaybackInfoRequest playbackInfoRequest,
+  });
+
   @FactoryConverter(request: JsonConverter.requestFactory)
   @Post(path: "/Items/{itemId}")
   Future<dynamic> updateItem({

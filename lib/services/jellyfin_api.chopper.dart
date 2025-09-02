@@ -334,6 +334,22 @@ final class _$JellyfinApi extends JellyfinApi {
   }
 
   @override
+  Future<dynamic> submitPlaybackInfo({
+    required BaseItemId id,
+    required PlaybackInfoRequest playbackInfoRequest,
+  }) async {
+    final Uri $url = Uri.parse('/Items/${id}/PlaybackInfo');
+    final $body = playbackInfoRequest;
+    final Request $request = Request('POST', $url, client.baseUrl, body: $body);
+    final Response $response = await client.send<dynamic, dynamic>(
+      $request,
+      requestConverter: JsonConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
+    return $response.bodyOrThrow;
+  }
+
+  @override
   Future<dynamic> updateItem({
     required BaseItemId itemId,
     required BaseItemDto newItem,
