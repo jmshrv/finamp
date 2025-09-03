@@ -65,7 +65,7 @@
     },
     "addDownloads": "添加下载",
     "@addDownloads": {},
-    "downloadsQueued": "下载准备就绪，正在下载文件",
+    "downloadsQueued": "正在下载文件",
     "@downloadsQueued": {},
     "downloadsDeleted": "已删除下载。",
     "@downloadsDeleted": {},
@@ -137,7 +137,7 @@
     "@noAlbum": {},
     "playlistCreated": "播放列表已创建。",
     "@playlistCreated": {},
-    "setSleepTimer": "设置睡眠定时器",
+    "setSleepTimer": "播放完成后暂停",
     "@setSleepTimer": {},
     "sleepTimerTooltip": "睡眠定时器",
     "@sleepTimerTooltip": {},
@@ -207,7 +207,7 @@
             }
         }
     },
-    "shuffleAllTrackCountSubtitle": "使用随机播放按钮时要加载的歌曲数量。",
+    "shuffleAllTrackCountSubtitle": "在歌曲选项卡或流派页面上使用随机播放按钮时要加载的曲目数量。",
     "@shuffleAllTrackCountSubtitle": {},
     "errorScreenError": "获取错误列表时出错！ 现在您可能应该在 GitHub 上创建一个问题并清除应用数据",
     "@errorScreenError": {},
@@ -839,7 +839,7 @@
     "@hours": {},
     "seconds": "秒",
     "@seconds": {},
-    "sleepTimerRemainingTime": "{time} 分钟后睡眠",
+    "sleepTimerRemainingTime": "{time,plural,=1{<1 分钟} other{{time} 分钟}}后休眠",
     "@sleepTimerRemainingTime": {
         "description": "Button label for sleep timer. {time} is the amount of minutes left.",
         "placeholders": {
@@ -1068,7 +1068,7 @@
     "@queuesScreen": {
         "description": "Title for the screen where older now playing queues can be restored"
     },
-    "queueRestoreButtonLabel": "恢复",
+    "queueRestoreButtonLabel": "恢复这个队列",
     "@queueRestoreButtonLabel": {
         "description": "Button to restore archived now playing queue, overwriting current queue"
     },
@@ -1168,7 +1168,7 @@
     "@volumeNormalizationModeAlbumBased": {
         "description": "'Album-based' option for the replay gain mode dropdown. In album-based mode, the album gain is always used, regardless of whether an album is playing or not."
     },
-    "volumeNormalizationModeHybrid": "混合（音轨 + 专辑）",
+    "volumeNormalizationModeHybrid": "动态",
     "@volumeNormalizationModeHybrid": {
         "description": "'Hybrid' option for the replay gain mode dropdown. In hybrid mode, the track gain is used for regular playback, but if an album is playing (either because it's the main playback queue source, or because it was added to the queue at some point), the album gain is used instead."
     },
@@ -1638,7 +1638,7 @@
     "@showFeatureChipsToggleSubtitle": {
         "description": "Subtitle for the setting that controls if the feature chips showing advanced track info are shown on the player screen"
     },
-    "confirmAddToQueue": "{type, select, track{歌曲} album{专辑} artist{艺术家} playlist{播放列表} genre{流派} other{项目}}已添加到队列队尾",
+    "confirmAddToQueue": "{type, select, track{歌曲} album{专辑} artist{艺术家} playlist{播放列表} genre{流派} disc{唱片}other{项目}}已添加到队列队尾",
     "@confirmAddToQueue": {
         "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
         "placeholders": {
@@ -1676,7 +1676,7 @@
             }
         }
     },
-    "confirmAddToNextUp": "{type, select, track{歌曲} album{专辑} artist{艺术家} playlist{播放列表} genre{流派} other{项目}}已添加到接下来队列队尾",
+    "confirmAddToNextUp": "{type, select, track{歌曲} album{专辑} artist{艺术家} playlist{播放列表} genre{流派}  disc{唱片} other{项目}}已添加到接下来队列队尾",
     "@confirmAddToNextUp": {
         "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
         "placeholders": {
@@ -1685,7 +1685,7 @@
             }
         }
     },
-    "volumeNormalizationModeSelectorDescription": "混合（音轨 + 专辑）：\n音轨增益用于常规播放，但如果正在播放专辑（因为它是主要播放队列源，或者因为它在某个时刻被添加到队列中），则将使用专辑增益。\n\n基于音轨：\n无论专辑是否正在播放，始终使用音轨增益。\n\n仅限专辑：\n音量标准化仅在播放专辑时应用（使用专辑增益），但不适用于单个歌曲。",
+    "volumeNormalizationModeSelectorDescription": "动态：\n当播在同一专辑播放音轨时使用音轨增益（即当播放一个专辑，或在播放列表中的音轨是同一专辑）。否则将使用专辑增益。\n\n基于音轨：\n无论专辑是否正在播放，始终使用音轨增益。\n\n基于专辑：\n始终使用专辑增益，但若不可用（例如单曲的情况下），则会改用音轨增益。\n\n仅限专辑：\n音量标准化仅在播放专辑时应用（使用专辑增益），但不适用于单个歌曲。",
     "@volumeNormalizationModeSelectorDescription": {
         "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown"
     },
@@ -1693,7 +1693,7 @@
     "@volumeNormalizationIOSBaseGainEditorSubtitle": {
         "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
     },
-    "couldNotLoad": "无法加载{source, select, album{专辑} playlist{播放列表} trackMix{歌曲合辑} artistMix{ 艺术家合辑} albumMix{专辑合辑} genreMix{流派合辑} favorites{最爱} allTracks{全部歌曲} filteredList{筛选列表} genre{流派} artist{艺术家} track{歌曲} nextUpAlbum{接下来专辑} nextUpPlaylist{接下来播放列表} nextUpArtist{接下来艺术家} other{}}",
+    "couldNotLoad": "无法加载{source, select, album{专辑} playlist{播放列表} trackMix{歌曲合辑} artistMix{ 艺术家合辑} albumMix{专辑合辑} genreMix{流派合辑} favorites{最爱} allTracks{全部歌曲} filteredList{筛选列表} genre{流派} artist{艺术家} track{歌曲} nextUpAlbum{接下来的专辑} nextUpPlaylist{接下来的播放列表} nextUpArtist{接下来的艺术家} nextUpGenre{接下来的流派} other{}}",
     "@couldNotLoad": {
         "placeholders": {
             "source": {
@@ -1701,7 +1701,7 @@
             }
         }
     },
-    "finampCollectionNames": "{itemType, select, favorites{收藏夹} allPlaylists{所有播放列表} fiveLatestAlbums{五张最新专辑} allPlaylistsMetadata{所有播放列表元数据} other{{itemType}} }",
+    "finampCollectionNames": "{itemType, select, favorites{收藏夹} allPlaylists{所有播放列表} fiveLatestAlbums{五张最新专辑} allPlaylistsMetadata{所有播放列表元数据} collectionWithLibraryFilter{支持媒体库筛选的收藏夹} other{{itemType}} }",
     "@finampCollectionNames": {
         "placeholders": {
             "itemType": {
@@ -1757,7 +1757,7 @@
         },
         "description": "Subtitle for the type of a downloaded item, shown when syncing fails and in DownloadButton tooltip."
     },
-    "playingFromType": "播放自{source, select, album{专辑} playlist{播放列表} trackMix{歌曲合辑} artistMix{ 艺术家合辑} albumMix{专辑合辑} genreMix{流派合辑} favorites{收藏夹} allTracks{全部歌曲} filteredList{歌曲} genre{流派} artist{艺术家} track{歌曲} nextUpAlbum{接下来专辑} nextUpPlaylist{接下来播放列表} nextUpArtist{接下来艺术家} other{}}",
+    "playingFromType": "播放自{source, select, album{专辑} playlist{播放列表} trackMix{歌曲合辑} artistMix{ 艺术家合辑} albumMix{专辑合辑} genreMix{流派合辑} favorites{收藏夹} allTracks{全部歌曲} filteredList{歌曲} genre{流派} artist{艺术家} track{歌曲} nextUpAlbum{接下来的专辑} nextUpPlaylist{接下来的播放列表} nextUpArtist{接下来的艺术家} nextUpGenre{接下来的流派} remoteClient{远程客户端} other{}}",
     "@playingFromType": {
         "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
         "placeholders": {
@@ -2054,7 +2054,7 @@
     "@showFavoriteButtonOnMediaNotificationTitle": {
         "description": "Title for the setting that controls if the media notification has a favorite button."
     },
-    "startupErrorCallToAction": "请在 github.com/jmshrv/finamp 上创建一个问题，并附上日志（！）（使用下面的按钮）和此页面的屏幕截图，以便我们尽快修复它。",
+    "startupErrorCallToAction": "请在 \"github.com/jmshrv/finamp\" 上创建一个问题，并附上日志（使用下面的按钮）和此页面的屏幕截图，以便我们尽快修复它。",
     "@startupErrorCallToAction": {
         "description": "The subtitle / call to action for what to do after encountering a startup error"
     },
@@ -2067,7 +2067,7 @@
         },
         "description": "Label for the type of device in the output menu"
     },
-    "startupErrorTitle": "应用启动时出错了！\n很抱歉……",
+    "startupErrorTitle": "应用启动时出错了！",
     "@startupErrorTitle": {
         "description": "The title for the error screen that shows when startup fails."
     },
@@ -2075,7 +2075,7 @@
     "@showFavoriteButtonOnMediaNotificationSubtitle": {
         "description": "Subtitle for the setting that controls if the media notification has a favorite button."
     },
-    "startupErrorWorkaround": "解决方法是，您可以清除应用数据来重置应用。请注意，此操作会导致您的所有设置和下载内容被删除。",
+    "startupErrorWorkaround": "作为这个错误的解决方法是，您可以清除应用数据来重置应用。请注意，此操作会导致您的所有设置和下载内容被删除。",
     "@startupErrorWorkaround": {
         "description": "The subtitle for how to manually recover from a startup error"
     },
@@ -2269,5 +2269,110 @@
     "curatedItemsMostPlayedOfflineTooltip": "在离线模式下不可用。",
     "@curatedItemsMostPlayedOfflineTooltip": {
         "description": "Tooltip for Most Played on Curated Items in Offline Mode."
+    },
+    "defaultOrder": "默认排序",
+    "@defaultOrder": {
+        "description": "Default sorting order for playlists (server order)"
+    },
+    "adaptive": "自适应",
+    "@adaptive": {},
+    "formattedRelativeTime": "{type, select, just_now{刚刚} minutes{{value} 分钟前} hours{{value} 小时前} yesterday{昨天} days{{value, plural, =1{1 天前} other{{value} 天前}}} other{value}}",
+    "@formattedRelativeTime": {
+        "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
+        "placeholders": {
+            "type": {
+                "type": "String",
+                "description": "The category of time passed: one of 'just_now', 'minutes', 'hours', 'yesterday', or 'days'."
+            },
+            "value": {
+                "type": "int",
+                "example": "5"
+            }
+        }
+    },
+    "shuffleCountButton": "随机播放 ({count,plural,=1{{count} 首歌曲} other{{count} 首歌曲}})",
+    "@shuffleCountButton": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "playbackActionPagePlay": "播放",
+    "@playbackActionPagePlay": {
+        "description": "Label for the playback action page that contains all actions related to playing in order"
+    },
+    "playbackActionPageShuffle": "随机播放",
+    "@playbackActionPageShuffle": {
+        "description": "Label for the playback action page that contains all actions related to playing shuffled"
+    },
+    "playbackActionPageShuffleAlbums": "随机播放专辑",
+    "@playbackActionPageShuffleAlbums": {
+        "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+    },
+    "editItemTitle": "编辑 {itemType, select, playlist{播放列表} other{}}",
+    "@editItemTitle": {
+        "placeholders": {
+            "itemType": {
+                "type": "String"
+            }
+        }
+    },
+    "logoutButtonSubtitle": "登录到不同的服务器将删除现有的下载",
+    "@logoutButtonSubtitle": {},
+    "none": "无",
+    "@none": {},
+    "sleepTimerRemainingTracks": "{time,plural,=1{当前歌曲} other{in {time} 首歌曲}}后休眠",
+    "@sleepTimerRemainingTracks": {
+        "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+        "placeholders": {
+            "time": {
+                "type": "int"
+            }
+        }
+    },
+    "createPlaylistFromCurrentQueue": "将队列保存到播放列表",
+    "@createPlaylistFromCurrentQueue": {
+        "description": "Label for a button that adds the current queue to an existing or new playlist."
+    },
+    "curatedItemsNotListenedYet": "你还没有 {itemType, select, artistGenreFilter{在这个艺术家的流派} artist{在这个艺术家} genre{在这个流派} other{}} 中听过任何歌曲。",
+    "@curatedItemsNotListenedYet": {
+        "description": "Tooltip for Most Played and Recently Played on Curated Items in Online Mode when not yet listened to any tracks.",
+        "placeholders": {
+            "itemType": {
+                "type": "String",
+                "optional": true,
+                "example": "artistGenreFilter, artist or genre"
+            }
+        }
+    },
+    "curatedItemsNoFavorites": "你还没有 {itemType, select, artistGenreFilter{在这个艺术家的流派} artist{在这个艺术家} genre{在这个流派} other{}} 中有收藏。",
+    "@curatedItemsNoFavorites": {
+        "description": "Tooltip for Favorites on Curated Items in Online Mode when no favorites yet.",
+        "placeholders": {
+            "itemType": {
+                "type": "String",
+                "optional": true,
+                "example": "artistGenreFilter, artist or genre"
+            }
+        }
+    },
+    "genreNoItems": "你没有任何 {itemType, select, playlists{播放列表} artists{艺术家} albums{专辑} tracks{歌曲} other{项目}} 在这个流派中。",
+    "@genreNoItems": {
+        "description": "Message for empty See All lists for a genre.",
+        "placeholders": {
+            "itemType": {
+                "type": "String"
+            }
+        }
+    },
+    "genreNotFound": "未能找到该流派类型。{additionalInfo, select, offline {可能尚未下载或属于其他资料库。} other {可能属于其他资料库。}}",
+    "@genreNotFound": {
+        "placeholders": {
+            "additionalInfo": {
+                "type": "String"
+            }
+        },
+        "description": "Message shown when a genre filter or open-genre action fails because the genre item could not be found."
     }
 }
