@@ -2727,5 +2727,9 @@
     "moreActionsOnAlbumDisc": "專輯光碟上的更多操作",
     "@moreActionsOnAlbumDisc": {
         "description": "Label for the disc header menu button."
+    },
+    "dragToReorder": "拖曳以重新排序",
+    "@dragToReorder": {
+        "description": "Label shown on drag handles of track list  tiles in the queue list"
     }
 }
