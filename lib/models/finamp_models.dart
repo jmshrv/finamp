@@ -116,7 +116,7 @@ class DefaultSettings {
   static const playbackSpeedVisibility = PlaybackSpeedVisibility.automatic;
   static const contentGridViewCrossAxisCountPortrait = 2;
   static const contentGridViewCrossAxisCountLandscape = 3;
-  static const showTextOnGridView = true;
+  static const showTextOnGridView = false;
   static const sleepTimerDurationSeconds = 60 * 30;
   static const useCoverAsBackground = true;
   static const playerScreenCoverMinimumPadding = 1.5;
