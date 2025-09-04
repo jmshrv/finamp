@@ -42,6 +42,13 @@ Future<void> showThemedBottomSheet({
   } else if (item == null) {
     useDefaultTheme = true;
   }
+  final menu = ThemedBottomSheet(
+    key: ValueKey((item?.id?.raw ?? "") + routeName),
+    buildSlivers: buildSlivers,
+    buildWrapper: buildWrapper,
+    minDraggableHeight: minDraggableHeight,
+    showDragHandle: showDragHandle,
+  );
   await showModalBottomSheet<void>(
     context: context,
     backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
@@ -62,19 +69,13 @@ Future<void> showThemedBottomSheet({
     builder: (BuildContext context) {
       return ProviderScope(
         overrides: [
-          if (useDefaultTheme) localThemeProvider.overrideWithValue(getDefaultTheme(Theme.of(context).brightness)),
+          if (useDefaultTheme) localThemeProvider.overrideWithValue(getDefaultTheme(Theme.brightnessOf(context))),
           if (!useDefaultTheme && themeImage != null) localImageProvider.overrideWithValue(themeImage),
           if (!useDefaultTheme && themeImage != null) localThemeInfoProvider.overrideWithValue(themeInfo),
           if (!useDefaultTheme && themeImage == null && item != null)
             localThemeInfoProvider.overrideWithValue(ThemeInfo(item, useIsolate: false)),
         ],
-        child: ThemedBottomSheet(
-          key: ValueKey((item?.id?.raw ?? "") + routeName),
-          buildSlivers: buildSlivers,
-          buildWrapper: buildWrapper,
-          minDraggableHeight: minDraggableHeight,
-          showDragHandle: showDragHandle,
-        ),
+        child: menu,
       );
     },
   );

@@ -370,7 +370,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen> with TickerProviderSt
           builder: (context) {
             final child = TabBarView(
               controller: _tabController,
-              physics: ref.watch(finampSettingsProvider.disableGesture) || MediaQuery.of(context).disableAnimations
+              physics: ref.watch(finampSettingsProvider.disableGesture) || MediaQuery.disableAnimationsOf(context)
                   ? const NeverScrollableScrollPhysics()
                   : widget.tabTypeFilter != null
                   ? NeverScrollableScrollPhysics()
@@ -379,11 +379,10 @@ class _MusicScreenState extends ConsumerState<MusicScreen> with TickerProviderSt
               children: sortedTabs.map((tabType) {
                 return Column(
                   children: [
-                    buildArtistTypeSelectionRow(
-                      context,
-                      tabType,
-                      ref.watch(finampSettingsProvider.defaultArtistType),
-                      refreshTab,
+                    ArtistTypeSelectionRow(
+                      tabType: tabType,
+                      defaultArtistType: ref.watch(finampSettingsProvider.defaultArtistType),
+                      refreshTab: refreshTab,
                     ),
                     Expanded(
                       child: MusicScreenTabView(
