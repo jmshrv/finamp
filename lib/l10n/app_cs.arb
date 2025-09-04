@@ -2725,5 +2725,9 @@
     "moreActionsOnAlbumDisc": "Další akce disku alba",
     "@moreActionsOnAlbumDisc": {
         "description": "Label for the disc header menu button."
+    },
+    "dragToReorder": "Přesuňte pro změnu pořadí",
+    "@dragToReorder": {
+        "description": "Label shown on drag handles of track list  tiles in the queue list"
     }
 }
