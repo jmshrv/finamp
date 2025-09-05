@@ -1,786 +1,1358 @@
 {
-  "error": "エラー",
-  "@error": {},
-  "serverUrl": "サーバー URL",
-  "@serverUrl": {},
-  "internalExternalIpExplanation": "リモートからJellyfinサーバーにアクセスするには外部IPを指定する必要があります。\n\nサーバーがHTTPポート(80/443)やJellyfinのデフォルトポート(8096)で動作している場合、ポートを指定する必要はありません。\n\nURLが正しい場合、入力フィールドの下にサーバーに関する情報が表示されるはずです。",
-  "@internalExternalIpExplanation": {
-    "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
-  },
-  "emptyServerUrl": "サーバーURLを入力してください",
-  "@emptyServerUrl": {
-    "description": "Error message that shows when the user submits a login without a server URL"
-  },
-  "password": "パスワード",
-  "@password": {},
-  "logs": "ログ",
-  "@logs": {},
-  "username": "ユーザー名",
-  "@username": {},
-  "next": "次",
-  "@next": {},
-  "unknownName": "タイトル不明",
-  "@unknownName": {},
-  "couldNotFindLibraries": "ライブラリが見つかりません。",
-  "@couldNotFindLibraries": {
-    "description": "Error message when the user does not have any libraries"
-  },
-  "tracks": "曲",
-  "@tracks": {},
-  "albums": "アルバム",
-  "@albums": {},
-  "artists": "アーティスト",
-  "@artists": {},
-  "genres": "ジャンル",
-  "@genres": {},
-  "selectMusicLibraries": "ミュージック・ライブラリを選択",
-  "@selectMusicLibraries": {
-    "description": "App bar title for library select screen"
-  },
-  "playlists": "プレイリスト",
-  "@playlists": {},
-  "music": "ミュージック",
-  "@music": {},
-  "clear": "クリア",
-  "@clear": {},
-  "shuffleAll": "全てシャッフル",
-  "@shuffleAll": {},
-  "downloads": "ダウンロード",
-  "@downloads": {},
-  "startMix": "ミックス開始",
-  "@startMix": {},
-  "startMixNoTracksArtist": "アーティスト名を長押しすることでミックス対象に追加または削除できます",
-  "@startMixNoTracksArtist": {
-    "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
-  },
-  "startMixNoTracksAlbum": "アルバムを長押しすることでミックス対象に追加または削除できます",
-  "@startMixNoTracksAlbum": {
-    "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
-  },
-  "settings": "設定",
-  "@settings": {},
-  "offlineMode": "オフライン・モード",
-  "@offlineMode": {},
-  "sortOrder": "並び順",
-  "@sortOrder": {},
-  "album": "アルバム",
-  "@album": {},
-  "sortBy": "並び基準",
-  "@sortBy": {},
-  "albumArtist": "アルバム・アーティスト",
-  "@albumArtist": {},
-  "artist": "アーティスト",
-  "@artist": {},
-  "budget": "予算",
-  "@budget": {},
-  "productionYear": "作成年",
-  "@productionYear": {},
-  "dateAdded": "追加日",
-  "@dateAdded": {},
-  "playCount": "再生回数",
-  "@playCount": {},
-  "datePlayed": "最後に再生した日",
-  "@datePlayed": {},
-  "premiereDate": "リリース日",
-  "@premiereDate": {},
-  "criticRating": "評論家評価",
-  "@criticRating": {},
-  "communityRating": "コミュニティ評価",
-  "@communityRating": {},
-  "random": "ランダム",
-  "@random": {},
-  "downloadMissingImages": "欠けている画像をダウンロード",
-  "@downloadMissingImages": {},
-  "revenue": "収入",
-  "@revenue": {},
-  "downloadCount": "{count,plural, =1{{count} 個ダウンロード} other{{count}個ダウンロード}}",
-  "@downloadCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dlComplete": "{count} 個完了",
-  "@dlComplete": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dlEnqueued": "{count} 個キューに追加",
-  "@dlEnqueued": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dlRunning": "{count} 個再生中",
-  "@dlRunning": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dlFailed": "{count}個失敗",
-  "@dlFailed": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "playButtonLabel": "再生",
-  "@playButtonLabel": {},
-  "trackCount": "{count,plural,=1{{count}曲} other{{count}曲}}",
-  "@trackCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "updateButtonLabel": "更新",
-  "@updateButtonLabel": {},
-  "downloadsDeleted": "ダウンロードを削除しました。",
-  "@downloadsDeleted": {},
-  "addButtonLabel": "追加",
-  "@addButtonLabel": {},
-  "shareLogs": "ログ共有",
-  "@shareLogs": {},
-  "location": "場所",
-  "@location": {},
-  "downloadsQueued": "ダウンロードを追加しました。",
-  "@downloadsQueued": {},
-  "stackTrace": "スタックトレース",
-  "@stackTrace": {},
-  "transcoding": "トランスコード",
-  "@transcoding": {},
-  "layoutAndTheme": "レイアウト&テーマ",
-  "@layoutAndTheme": {},
-  "notAvailableInOfflineMode": "オフライン・モードでは無効",
-  "@notAvailableInOfflineMode": {},
-  "downloadLocations": "ダウンロード場所",
-  "@downloadLocations": {},
-  "audioService": "オーディオ・サービス",
-  "@audioService": {},
-  "logOut": "ログアウト",
-  "@logOut": {},
-  "enableTranscoding": "トランスコード有効",
-  "@enableTranscoding": {},
-  "bitrate": "ビットレート",
-  "@bitrate": {},
-  "addDownloadLocation": "ダウンロード場所を追加",
-  "@addDownloadLocation": {},
-  "bitrateSubtitle": "高いビットレートではオーディオの質が高くなりますが、転送容量も高くなります。",
-  "@bitrateSubtitle": {},
-  "selectDirectory": "ディレクトリを選択",
-  "@selectDirectory": {},
-  "unknownError": "不明なエラー",
-  "@unknownError": {},
-  "pathReturnSlashErrorMessage": "\"/\" を返すパスは利用できません",
-  "@pathReturnSlashErrorMessage": {},
-  "directoryMustBeEmpty": "ディレクトリは空でなければなりません",
-  "@directoryMustBeEmpty": {},
-  "list": "リスト",
-  "@list": {},
-  "grid": "グリッド",
-  "@grid": {},
-  "portrait": "縦表示",
-  "@portrait": {},
-  "landscape": "横表示",
-  "@landscape": {},
-  "enterLowPriorityStateOnPause": "一時停止時は低優先度状態",
-  "@enterLowPriorityStateOnPause": {},
-  "showTextOnGridView": "グリッド・ビューでテキストを表示する",
-  "@showTextOnGridView": {},
-  "useCoverAsBackground": "プレイヤー背景にジャケット画像をぼかして表示する",
-  "@useCoverAsBackground": {},
-  "showTextOnGridViewSubtitle": "グリッド音楽画面でテキスト（タイトル、アーティスト等）を表示させるか。",
-  "@showTextOnGridViewSubtitle": {},
-  "useCoverAsBackgroundSubtitle": "プレイヤー画面で背景にジャケット画像をぼかして表示させるか。",
-  "@useCoverAsBackgroundSubtitle": {},
-  "theme": "テーマ",
-  "@theme": {},
-  "system": "システム",
-  "@system": {},
-  "disableGesture": "ジェスチャーを無効",
-  "@disableGesture": {},
-  "light": "明るい",
-  "@light": {},
-  "disableGestureSubtitle": "ジェスチャーを無効にするか。",
-  "@disableGestureSubtitle": {},
-  "tabs": "タブ",
-  "@tabs": {},
-  "invalidNumber": "無効な数値",
-  "@invalidNumber": {},
-  "sleepTimerTooltip": "スリープ・タイマー",
-  "@sleepTimerTooltip": {},
-  "addToPlaylistTooltip": "プレイリストに追加",
-  "@addToPlaylistTooltip": {},
-  "dark": "暗い",
-  "@dark": {},
-  "cancelSleepTimer": "スリープ・タイマーをキャンセルしますか?",
-  "@cancelSleepTimer": {},
-  "yesButtonLabel": "はい",
-  "@yesButtonLabel": {},
-  "noButtonLabel": "いいえ",
-  "@noButtonLabel": {},
-  "setSleepTimer": "スリープ・タイマーを設定",
-  "@setSleepTimer": {},
-  "minutes": "分",
-  "@minutes": {},
-  "addToPlaylistTitle": "プレイリストに追加",
-  "@addToPlaylistTitle": {},
-  "addedToQueue": "キューに追加。",
-  "@addedToQueue": {},
-  "queueReplaced": "キューを置き換えました。",
-  "@queueReplaced": {},
-  "addToMix": "ミックスに追加",
-  "@addToMix": {},
-  "removeFromMix": "ミックスから外す",
-  "@removeFromMix": {},
-  "enableTranscodingSubtitle": "サーバー側の音楽ストリームをトランスコードします。",
-  "@enableTranscodingSubtitle": {},
-  "hideTrackArtistsIfSameAsAlbumArtists": "曲のアーティストがアルバム・アーティストと同じの場合、表示しない",
-  "@hideTrackArtistsIfSameAsAlbumArtists": {},
-  "newPlaylist": "新規プレイリスト",
-  "@newPlaylist": {},
-  "removeFromPlaylistTooltip": "このプレイリストから外す",
-  "@removeFromPlaylistTooltip": {},
-  "removeFromPlaylistTitle": "このプレイリストから外す",
-  "@removeFromPlaylistTitle": {},
-  "createButtonLabel": "作成",
-  "@createButtonLabel": {},
-  "playlistCreated": "プレイリストを作成しました。",
-  "@playlistCreated": {},
-  "noAlbum": "アルバム無し",
-  "@noAlbum": {},
-  "noItem": "アイテム無し",
-  "@noItem": {},
-  "noArtist": "アーティスト無し",
-  "@noArtist": {},
-  "unknownArtist": "アーティスト不明",
-  "@unknownArtist": {},
-  "removedFromPlaylist": "プレイリストから外しました。",
-  "@removedFromPlaylist": {},
-  "startingInstantMix": "インスタント・ミックス開始。",
-  "@startingInstantMix": {},
-  "anErrorHasOccured": "エラーが発生しました。",
-  "@anErrorHasOccured": {},
-  "instantMix": "インスタント・ミックス",
-  "@instantMix": {},
-  "queue": "キュー",
-  "@queue": {},
-  "addToQueue": "キューに追加",
-  "@addToQueue": {},
-  "replaceQueue": "キューを置き換え",
-  "@replaceQueue": {},
-  "responseError": "{error} ステータスコード {statusCode}.",
-  "@responseError": {
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Forbidden"
-      },
-      "statusCode": {
-        "type": "int",
-        "example": "403"
-      }
-    }
-  },
-  "required": "必須",
-  "@required": {},
-  "discNumber": "ディスク {number}",
-  "@discNumber": {
-    "placeholders": {
-      "number": {
-        "type": "int"
-      }
-    }
-  },
-  "shuffleButtonLabel": "シャッフル",
-  "@shuffleButtonLabel": {},
-  "playlistUpdated": "プレイリスト名を更新しました。",
-  "@playlistUpdated": {},
-  "addDownloads": "ダウンロードを追加",
-  "@addDownloads": {},
-  "logsCopied": "ログをコピーしました。",
-  "@logsCopied": {},
-  "message": "メッセージ",
-  "@message": {},
-  "failedToGetTrackFromDownloadId": "ダウンロードIDから曲を取得できませんでした",
-  "@failedToGetTrackFromDownloadId": {},
-  "downloadedMissingImages": "{count,plural, =0{欠けている画像が見つかりません} =1{欠けている画像を {count} 枚ダウンロード} other{欠けている画像を {count} 枚ダウンロード}}",
-  "@downloadedMissingImages": {
-    "description": "Message that shows when the user downloads missing images",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "goToAlbum": "アルバムに行く",
-  "@goToAlbum": {},
-  "errorScreenError": "エラーリスト取得時にエラーが発生しました！この時点では、GitHub で issue を作成し、アプリデータを削除することをお勧めします",
-  "@errorScreenError": {},
-  "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "曲のアーティストがアルバムのアーティストと一致した場合、アルバム画面に表示させるか。",
-  "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
-  "enterLowPriorityStateOnPauseSubtitle": "一時停止時に通知をスワイプで除去できます。また Android では一時停止時にサービスを停止できます。",
-  "@enterLowPriorityStateOnPauseSubtitle": {},
-  "gridCrossAxisCountSubtitle": "{value}の場合一行当たりのグリッドタイル数。",
-  "@gridCrossAxisCountSubtitle": {
-    "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
-    "placeholders": {
-      "value": {
-        "type": "String",
-        "example": "landscape"
-      }
-    }
-  },
-  "bufferDurationSubtitle": "プレイヤーがバッファする容量（秒単位）。リスタートが必要です。",
-  "@bufferDurationSubtitle": {},
-  "name": "曲名",
-  "@name": {},
-  "bufferDuration": "バッファ容量",
-  "@bufferDuration": {},
-  "language": "言語",
-  "@language": {},
-  "finamp": "Finamp",
-  "@finamp": {},
-  "areYouSure": "よろしいですか？",
-  "@areYouSure": {},
-  "appDirectory": "Appのディレクトリ",
-  "@appDirectory": {},
-  "shuffleAllTrackCount": "曲がシャッフル化される回数",
-  "@shuffleAllTrackCount": {},
-  "shuffleAllTrackCountSubtitle": "すべての曲をシャッフルする時、ここで指定した曲数をロードします。",
-  "@shuffleAllTrackCountSubtitle": {},
-  "viewType": "ビューの形式",
-  "@viewType": {},
-  "gridCrossAxisCount": "{value} のアイテム数",
-  "@gridCrossAxisCount": {
-    "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
-    "placeholders": {
-      "value": {
-        "type": "String",
-        "example": "Portrait"
-      }
-    }
-  },
-  "customLocation": "指定の場所",
-  "@customLocation": {},
-  "refresh": "リフレッシュ",
-  "@refresh": {},
-  "confirm": "確認",
-  "@confirm": {},
-  "playNext": "再生次",
-  "@playNext": {
-    "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
-  },
-  "resetTabs": "タブをリセット",
-  "@resetTabs": {},
-  "viewTypeSubtitle": "ミュージック画面の表示形式",
-  "@viewTypeSubtitle": {},
-  "insertedIntoQueue": "キューに挿入されました。",
-  "@insertedIntoQueue": {
-    "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
-  },
-  "responseError401": "{error} Status code {statusCode}. ユーザー名/パスワードが間違っているか、クライアントがログインしていません。",
-  "@responseError401": {
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Unauthorized"
-      },
-      "statusCode": {
-        "type": "int",
-        "example": "401"
-      }
-    }
-  },
-  "noMusicLibrariesBody": "Finamp は音楽ライブラリを見つけることができませんでした。Jellyfin サーバーに、コンテンツ タイプが「音楽」に設定されているライブラリが少なくとも 1 つ含まれていることを確認してください。",
-  "@noMusicLibrariesBody": {},
-  "swipeInsertQueueNextSubtitle": "曲リストでスワイプしたときに、曲を最後に追加するのではなく、キューの次の項目として挿入できるようにします。",
-  "@swipeInsertQueueNextSubtitle": {},
-  "showUncensoredLogMessage": "このログはあなたのログイン情報を含みます。表示しますか？",
-  "@showUncensoredLogMessage": {},
-  "syncDownloadedPlaylists": "ダウンロードしたプレイリストの同期",
-  "@syncDownloadedPlaylists": {},
-  "applicationLegalese": "Mozilla Public License 2.0 のもとでライセンスされています。\nソースコードは {sourceCodeLink} で入手できます。",
-  "@applicationLegalese": {},
-  "customLocationsBuggy": "カスタムの場所は、非常にバグが多くなるかも知れないので 、ほとんどの場合お勧めません。ＯＳ制限 ので 、「Music」ディレクトリの仲に場所は、ジャケット画像をセーブのが止めされる。",
-  "@customLocationsBuggy": {},
-  "showFastScroller": "高速スクロールを表示",
-  "@showFastScroller": {},
-  "swipeInsertQueueNext": "スワイプした曲を再生する",
-  "@swipeInsertQueueNext": {},
-  "noMusicLibrariesTitle": "音楽ライブラリなし",
-  "@noMusicLibrariesTitle": {
-    "description": "Title for message that shows on the views screen when no music libraries could be found."
-  },
-  "changeLanguage": "言語を変更",
-  "@changeLanguage": {
-    "description": "Label for button shown during the login process that allows the user to change the app language"
-  },
-  "serverUrlHint": "例: demo.jellyfin.org/stable",
-  "@serverUrlHint": {
-    "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
-  },
-  "startMixNoTracksGenre": "ミックスを開始する前に、ジャンルを長押ししてミックスビルダーに追加または削除してください",
-  "@startMixNoTracksGenre": {
-    "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
-  },
-  "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} 曲} other{{trackCount} 曲}}, {imageCount,plural,=1{{imageCount} 画像} other{{imageCount} 画像}}\n{syncCount,plural,=1{{syncCount} ノードを同期中} other{{syncCount} ノードを同期中}}{repairing, plural, =0{} other{\n現在修復中}}",
-  "@downloadedCountUnified": {
-    "description": "Display of downloaded track and image count on downloads screen.",
-    "placeholders": {
-      "trackCount": {
-        "type": "int"
-      },
-      "imageCount": {
-        "type": "int"
-      },
-      "syncCount": {
-        "type": "int"
-      },
-      "repairing": {
-        "type": "int"
-      }
-    }
-  },
-  "usernameValidationMissingUsername": "ユーザー名を入力してください",
-  "@usernameValidationMissingUsername": {
-    "description": "Error message that shows when the user submits a login without a username"
-  },
-  "passwordHint": "パスワードを入力してください",
-  "@passwordHint": {
-    "description": "Hint text for the password input field."
-  },
-  "confirmDownloadStarted": "ダウンロードを開始しました",
-  "@confirmDownloadStarted": {
-    "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
-  },
-  "about": "Finamp について",
-  "@about": {
-    "description": "Label for the about/info button on the settings screen"
-  },
-  "finampTagline": "オープンソースのJellyfin音楽プレーヤー",
-  "@finampTagline": {
-    "description": "Tagline / short description for the app"
-  },
-  "aboutContributionLink": "GitHub で Finamp に貢献する:",
-  "@aboutContributionLink": {
-    "description": "Link to the Finamp GitHub repository, shown in the about screen."
-  },
-  "aboutReleaseNotes": "最新のリリースノートを読む:",
-  "@aboutReleaseNotes": {
-    "description": "Link to the release notes, shown in the about screen."
-  },
-  "aboutContributionPrompt": "素晴らしい人々が空き時間に作りました。\nあなたもその一員になれるかもしれません！",
-  "@aboutContributionPrompt": {
-    "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
-  },
-  "aboutTranslations": "Finamp をあなたの言語に翻訳する手伝いをしてください:",
-  "@aboutTranslations": {
-    "description": "Link to the translation project, shown in the about screen."
-  },
-  "aboutThanks": "Finamp をご利用いただきありがとうございます！",
-  "@aboutThanks": {
-    "description": "Thank you message shown in the about screen."
-  },
-  "loginFlowSlogan": "あなたの音楽を、あなたの思い通りに。",
-  "@loginFlowSlogan": {
-    "description": "Slogan shown on the login screen."
-  },
-  "loginFlowGetStarted": "始めましょう！",
-  "@loginFlowGetStarted": {
-    "description": "Button label for the login/splash screen."
-  },
-  "viewLogs": "ログを表示",
-  "@viewLogs": {
-    "description": "Label for button shown during the login process that allows the user to view the app logs"
-  },
-  "loginFlowServerSelectionHeading": "Jellyfin に接続",
-  "@loginFlowServerSelectionHeading": {
-    "description": "Heading for the server selection step during the login flow."
-  },
-  "back": "戻る",
-  "@back": {
-    "description": "Label for the back button."
-  },
-  "serverUrlInfoButtonTooltip": "サーバーURLのヘルプ",
-  "@serverUrlInfoButtonTooltip": {
-    "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
-  },
-  "connectingToServer": "サーバーに接続中…",
-  "@connectingToServer": {
-    "description": "Text shown while the connection to the specified server is attempted"
-  },
-  "loginFlowLocalNetworkServers": "ローカルネットワーク上のサーバー:",
-  "@loginFlowLocalNetworkServers": {
-    "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
-  },
-  "loginFlowLocalNetworkServersScanningForServers": "サーバーをスキャン中…",
-  "@loginFlowLocalNetworkServersScanningForServers": {
-    "description": "Text shown while servers are being discovered via UDP broadcasts"
-  },
-  "loginFlowAccountSelectionHeading": "アカウントを選択してください",
-  "@loginFlowAccountSelectionHeading": {
-    "description": "Heading for the account selection step during the login flow."
-  },
-  "backToServerSelection": "サーバー選択に戻る",
-  "@backToServerSelection": {
-    "description": "Label for the button that takes the user back to the server selection step during the login flow."
-  },
-  "loginFlowNamelessUser": "名前なしユーザー",
-  "@loginFlowNamelessUser": {
-    "description": "Name for a user that doesn't have a name set on the server."
-  },
-  "loginFlowCustomUser": "カスタムユーザー",
-  "@loginFlowCustomUser": {
-    "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
-  },
-  "loginFlowAuthenticationHeading": "アカウントにログインしてください",
-  "@loginFlowAuthenticationHeading": {
-    "description": "Heading for the authentication step during the login flow."
-  },
-  "backToAccountSelection": "アカウント選択に戻る",
-  "@backToAccountSelection": {
-    "description": "Label for the button that takes the user back to the account selection step during the login flow."
-  },
-  "loginFlowQuickConnectPrompt": "Quick Connect コードを使用する",
-  "@loginFlowQuickConnectPrompt": {
-    "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
-  },
-  "loginFlowQuickConnectInstructions": "Jellyfinアプリまたはウェブサイトを開き、ユーザーアイコンをクリックして「Quick Connect」を選択してください。",
-  "@loginFlowQuickConnectInstructions": {
-    "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
-  },
-  "loginFlowQuickConnectDisabled": "このサーバーでは、Quick Connect が無効になっています。",
-  "@loginFlowQuickConnectDisabled": {
-    "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
-  },
-  "orDivider": "または",
-  "@orDivider": {
-    "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
-  },
-  "loginFlowSelectAUser": "ユーザーを選択",
-  "@loginFlowSelectAUser": {
-    "description": "Heading for the list of users that the user can select from during the login flow."
-  },
-  "usernameHint": "ユーザー名を入力してください",
-  "@usernameHint": {
-    "description": "Hint text for the username input field."
-  },
-  "login": "ログイン",
-  "@login": {
-    "description": "Label for the login button."
-  },
-  "title": "タイトル",
-  "@title": {},
-  "activeDownloads": "アクティブなダウンロード",
-  "@activeDownloads": {},
-  "activeDownloadsTitle": "アクティブなダウンロード",
-  "@activeDownloadsTitle": {},
-  "noActiveDownloads": "アクティブなダウンロードはありません。",
-  "@noActiveDownloads": {},
-  "offlineTrackCount": "{count,plural,=1{{count} 曲} other{{count} 曲}}, {downloads} ダウンロード済み",
-  "@offlineTrackCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      },
-      "downloads": {
-        "type": "int"
-      }
-    }
-  },
-  "offlineTrackCountArtist": "{count,plural,=1{{count} 曲} other{{count} 曲}} ダウンロード済み",
-  "@offlineTrackCountArtist": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "customizationSettingsTitle": "カスタマイズ",
-  "@customizationSettingsTitle": {
-    "description": "Title for the customization settings screen"
-  },
-  "playbackSpeedControlSetting": "再生速度の表示",
-  "@playbackSpeedControlSetting": {
-    "description": "Title of the visibility setting of the playback speed controls"
-  },
-  "releaseDateFormatYear": "年",
-  "@releaseDateFormatYear": {
-    "description": "Date format option for the release date of an album, showing only the year"
-  },
-  "seconds": "秒",
-  "@seconds": {},
-  "hours": "時間",
-  "@hours": {},
-  "releaseDateFormatMonthYear": "月と年",
-  "@releaseDateFormatMonthYear": {
-    "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
-  },
-  "nextUp": "次の曲",
-  "@nextUp": {
-    "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
-  },
-  "downloadItem": "ダウンロードする",
-  "@downloadItem": {
-    "description": "Option to download item in long-press menu."
-  },
-  "downloadSettings": "ダウンロード",
-  "@downloadSettings": {},
-  "deleteDownloadsPrompt": "この装置から、{itemType, select, album{アルバム} playlist{playlist} artist{アーティスト} genre{ジャンル} track{曲} library{ライブラリ} other{アイテム}} 「{itemName}」を削除してもよろしいですか?",
-  "@deleteDownloadsPrompt": {
-    "placeholders": {
-      "itemName": {
-        "type": "String",
-        "example": "Abandon Ship"
-      },
-      "itemType": {
-        "type": "String",
-        "example": "album"
-      }
+    "error": "エラー",
+    "@error": {},
+    "serverUrl": "サーバー URL",
+    "@serverUrl": {},
+    "internalExternalIpExplanation": "リモートからJellyfinサーバーにアクセスするには外部IPを指定する必要があります。\n\nサーバーがHTTPポート(80/443)やJellyfinのデフォルトポート(8096)で動作している場合、ポートを指定する必要はありません。\n\nURLが正しい場合、入力フィールドの下にサーバーに関する情報が表示されるはずです。",
+    "@internalExternalIpExplanation": {
+        "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
     },
-    "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
-  },
-  "albumArtists": "アルバムアーティスト",
-  "@albumArtists": {},
-  "loginFlowWelcomeHeading": "{styledName}へようこそ",
-  "@loginFlowWelcomeHeading": {
-    "description": "Greeting shown on the login screen.",
-    "placeholders": {
-      "styledName": {
-        "type": "String",
-        "example": "Finamp"
-      }
+    "emptyServerUrl": "サーバーURLを入力してください",
+    "@emptyServerUrl": {
+        "description": "Error message that shows when the user submits a login without a server URL"
+    },
+    "password": "パスワード",
+    "@password": {},
+    "logs": "ログ",
+    "@logs": {},
+    "username": "ユーザー名",
+    "@username": {},
+    "next": "次",
+    "@next": {},
+    "unknownName": "タイトル不明",
+    "@unknownName": {},
+    "couldNotFindLibraries": "ライブラリが見つかりません。",
+    "@couldNotFindLibraries": {
+        "description": "Error message when the user does not have any libraries"
+    },
+    "tracks": "曲",
+    "@tracks": {},
+    "albums": "アルバム",
+    "@albums": {},
+    "artists": "アーティスト",
+    "@artists": {},
+    "genres": "ジャンル",
+    "@genres": {},
+    "selectMusicLibraries": "ミュージック・ライブラリを選択",
+    "@selectMusicLibraries": {
+        "description": "App bar title for library select screen"
+    },
+    "playlists": "プレイリスト",
+    "@playlists": {},
+    "music": "ミュージック",
+    "@music": {},
+    "clear": "クリア",
+    "@clear": {},
+    "shuffleAll": "全てシャッフル",
+    "@shuffleAll": {},
+    "downloads": "ダウンロード",
+    "@downloads": {},
+    "startMix": "ミックス開始",
+    "@startMix": {},
+    "startMixNoTracksArtist": "アーティスト名を長押しすることでミックス対象に追加または削除できます",
+    "@startMixNoTracksArtist": {
+        "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+    },
+    "startMixNoTracksAlbum": "アルバムを長押しすることでミックス対象に追加または削除できます",
+    "@startMixNoTracksAlbum": {
+        "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+    },
+    "settings": "設定",
+    "@settings": {},
+    "offlineMode": "オフライン・モード",
+    "@offlineMode": {},
+    "sortOrder": "並び順",
+    "@sortOrder": {},
+    "album": "アルバム",
+    "@album": {},
+    "sortBy": "並び基準",
+    "@sortBy": {},
+    "albumArtist": "アルバム・アーティスト",
+    "@albumArtist": {},
+    "artist": "アーティスト",
+    "@artist": {},
+    "budget": "予算",
+    "@budget": {},
+    "productionYear": "作成年",
+    "@productionYear": {},
+    "dateAdded": "追加日",
+    "@dateAdded": {},
+    "playCount": "再生回数",
+    "@playCount": {},
+    "datePlayed": "最後に再生した日",
+    "@datePlayed": {},
+    "premiereDate": "リリース日",
+    "@premiereDate": {},
+    "criticRating": "評論家評価",
+    "@criticRating": {},
+    "communityRating": "コミュニティ評価",
+    "@communityRating": {},
+    "random": "ランダム",
+    "@random": {},
+    "downloadMissingImages": "欠けている画像をダウンロード",
+    "@downloadMissingImages": {},
+    "revenue": "収入",
+    "@revenue": {},
+    "downloadCount": "{count,plural, =1{{count} 個ダウンロード} other{{count}個ダウンロード}}",
+    "@downloadCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "dlComplete": "{count} 個完了",
+    "@dlComplete": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "dlEnqueued": "{count} 個キューに追加",
+    "@dlEnqueued": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "dlRunning": "{count} 個再生中",
+    "@dlRunning": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "dlFailed": "{count}個失敗",
+    "@dlFailed": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "playButtonLabel": "再生",
+    "@playButtonLabel": {},
+    "trackCount": "{count,plural,=1{{count}曲} other{{count}曲}}",
+    "@trackCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "updateButtonLabel": "更新",
+    "@updateButtonLabel": {},
+    "downloadsDeleted": "ダウンロードを削除しました。",
+    "@downloadsDeleted": {},
+    "addButtonLabel": "追加",
+    "@addButtonLabel": {},
+    "shareLogs": "ログ共有",
+    "@shareLogs": {},
+    "location": "場所",
+    "@location": {},
+    "downloadsQueued": "ファイルをダウンロード中",
+    "@downloadsQueued": {},
+    "stackTrace": "スタックトレース",
+    "@stackTrace": {},
+    "transcoding": "トランスコード",
+    "@transcoding": {},
+    "layoutAndTheme": "レイアウト&テーマ",
+    "@layoutAndTheme": {},
+    "notAvailableInOfflineMode": "オフライン・モードでは無効",
+    "@notAvailableInOfflineMode": {},
+    "downloadLocations": "ダウンロード場所",
+    "@downloadLocations": {},
+    "audioService": "オーディオ・サービス",
+    "@audioService": {},
+    "logOut": "ログアウト",
+    "@logOut": {},
+    "enableTranscoding": "トランスコード有効",
+    "@enableTranscoding": {},
+    "bitrate": "ビットレート",
+    "@bitrate": {},
+    "addDownloadLocation": "ダウンロード場所を追加",
+    "@addDownloadLocation": {},
+    "bitrateSubtitle": "ビットレートが高いほど音質は向上しますが、帯域幅も大きくなります（FLACなどロスレスには非適用）",
+    "@bitrateSubtitle": {},
+    "selectDirectory": "ディレクトリを選択",
+    "@selectDirectory": {},
+    "unknownError": "不明なエラー",
+    "@unknownError": {},
+    "pathReturnSlashErrorMessage": "\"/\" を返すパスは利用できません",
+    "@pathReturnSlashErrorMessage": {},
+    "directoryMustBeEmpty": "ディレクトリは空でなければなりません",
+    "@directoryMustBeEmpty": {},
+    "list": "リスト",
+    "@list": {},
+    "grid": "グリッド",
+    "@grid": {},
+    "portrait": "縦表示",
+    "@portrait": {},
+    "landscape": "横表示",
+    "@landscape": {},
+    "enterLowPriorityStateOnPause": "一時停止時は低優先度状態",
+    "@enterLowPriorityStateOnPause": {},
+    "showTextOnGridView": "グリッド・ビューでテキストを表示する",
+    "@showTextOnGridView": {},
+    "useCoverAsBackground": "プレイヤー背景にジャケット画像をぼかして表示する",
+    "@useCoverAsBackground": {},
+    "showTextOnGridViewSubtitle": "グリッド音楽画面でテキスト（タイトル、アーティスト等）を表示させるか。",
+    "@showTextOnGridViewSubtitle": {},
+    "useCoverAsBackgroundSubtitle": "プレイヤー画面で背景にジャケット画像をぼかして表示させるか。",
+    "@useCoverAsBackgroundSubtitle": {},
+    "theme": "テーマ",
+    "@theme": {},
+    "system": "システム",
+    "@system": {},
+    "disableGesture": "ジェスチャーを無効",
+    "@disableGesture": {},
+    "light": "明るい",
+    "@light": {},
+    "disableGestureSubtitle": "ジェスチャーを無効にするか。",
+    "@disableGestureSubtitle": {},
+    "tabs": "タブ",
+    "@tabs": {},
+    "invalidNumber": "無効な数値",
+    "@invalidNumber": {},
+    "sleepTimerTooltip": "スリープ・タイマー",
+    "@sleepTimerTooltip": {},
+    "addToPlaylistTooltip": "プレイリストに追加",
+    "@addToPlaylistTooltip": {},
+    "dark": "暗い",
+    "@dark": {},
+    "cancelSleepTimer": "スリープ・タイマーをキャンセルしますか?",
+    "@cancelSleepTimer": {},
+    "yesButtonLabel": "はい",
+    "@yesButtonLabel": {},
+    "noButtonLabel": "いいえ",
+    "@noButtonLabel": {},
+    "setSleepTimer": "再生を一時停止",
+    "@setSleepTimer": {},
+    "minutes": "分",
+    "@minutes": {},
+    "addToPlaylistTitle": "プレイリストに追加",
+    "@addToPlaylistTitle": {},
+    "addedToQueue": "キューに追加。",
+    "@addedToQueue": {},
+    "queueReplaced": "キューを置き換えました。",
+    "@queueReplaced": {},
+    "addToMix": "ミックスに追加",
+    "@addToMix": {},
+    "removeFromMix": "ミックスから外す",
+    "@removeFromMix": {},
+    "enableTranscodingSubtitle": "サーバー側の音楽ストリームをトランスコードします。",
+    "@enableTranscodingSubtitle": {},
+    "hideTrackArtistsIfSameAsAlbumArtists": "曲のアーティストがアルバム・アーティストと同じの場合、表示しない",
+    "@hideTrackArtistsIfSameAsAlbumArtists": {},
+    "newPlaylist": "新規プレイリスト",
+    "@newPlaylist": {},
+    "removeFromPlaylistTooltip": "このプレイリストから外す",
+    "@removeFromPlaylistTooltip": {},
+    "removeFromPlaylistTitle": "このプレイリストから外す",
+    "@removeFromPlaylistTitle": {},
+    "createButtonLabel": "作成",
+    "@createButtonLabel": {},
+    "playlistCreated": "プレイリストを作成しました。",
+    "@playlistCreated": {},
+    "noAlbum": "アルバム無し",
+    "@noAlbum": {},
+    "noItem": "アイテム無し",
+    "@noItem": {},
+    "noArtist": "アーティスト無し",
+    "@noArtist": {},
+    "unknownArtist": "アーティスト不明",
+    "@unknownArtist": {},
+    "removedFromPlaylist": "プレイリストから外しました。",
+    "@removedFromPlaylist": {},
+    "startingInstantMix": "インスタント・ミックス開始。",
+    "@startingInstantMix": {},
+    "anErrorHasOccured": "エラーが発生しました。",
+    "@anErrorHasOccured": {},
+    "instantMix": "インスタント・ミックス",
+    "@instantMix": {},
+    "queue": "キュー",
+    "@queue": {},
+    "addToQueue": "キューに追加",
+    "@addToQueue": {},
+    "replaceQueue": "キューを置き換え",
+    "@replaceQueue": {},
+    "responseError": "{error} ステータスコード {statusCode}.",
+    "@responseError": {
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Forbidden"
+            },
+            "statusCode": {
+                "type": "int",
+                "example": "403"
+            }
+        }
+    },
+    "required": "必須",
+    "@required": {},
+    "discNumber": "ディスク {number}",
+    "@discNumber": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "shuffleButtonLabel": "シャッフル",
+    "@shuffleButtonLabel": {},
+    "playlistUpdated": "プレイリスト名を更新しました。",
+    "@playlistUpdated": {},
+    "addDownloads": "ダウンロードを追加",
+    "@addDownloads": {},
+    "logsCopied": "ログをコピーしました。",
+    "@logsCopied": {},
+    "message": "メッセージ",
+    "@message": {},
+    "failedToGetTrackFromDownloadId": "ダウンロードIDから曲を取得できませんでした",
+    "@failedToGetTrackFromDownloadId": {},
+    "downloadedMissingImages": "{count,plural, =0{欠けている画像が見つかりません} =1{欠けている画像を {count} 枚ダウンロード} other{欠けている画像を {count} 枚ダウンロード}}",
+    "@downloadedMissingImages": {
+        "description": "Message that shows when the user downloads missing images",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "goToAlbum": "アルバムに行く",
+    "@goToAlbum": {},
+    "errorScreenError": "エラーリスト取得時にエラーが発生しました！この時点では、GitHub で issue を作成し、アプリデータを削除することをお勧めします",
+    "@errorScreenError": {},
+    "hideTrackArtistsIfSameAsAlbumArtistsSubtitle": "曲のアーティストがアルバムのアーティストと一致した場合、アルバム画面に表示させるか。",
+    "@hideTrackArtistsIfSameAsAlbumArtistsSubtitle": {},
+    "enterLowPriorityStateOnPauseSubtitle": "一時停止時に通知をスワイプで除去できます。また Android では一時停止時にサービスを停止できます。",
+    "@enterLowPriorityStateOnPauseSubtitle": {},
+    "gridCrossAxisCountSubtitle": "{value}の場合一行当たりのグリッドタイル数。",
+    "@gridCrossAxisCountSubtitle": {
+        "description": "List tile subtitle for grid cross axis count. Value will either be the portrait or landscape key.",
+        "placeholders": {
+            "value": {
+                "type": "String",
+                "example": "landscape"
+            }
+        }
+    },
+    "bufferDurationSubtitle": "バッファリングする最大時間（秒）。再起動が必要です。",
+    "@bufferDurationSubtitle": {},
+    "name": "曲名",
+    "@name": {},
+    "bufferDuration": "バッファ容量",
+    "@bufferDuration": {},
+    "language": "言語",
+    "@language": {},
+    "finamp": "フィンアンプ",
+    "@finamp": {},
+    "areYouSure": "よろしいですか？",
+    "@areYouSure": {},
+    "appDirectory": "Appのディレクトリ",
+    "@appDirectory": {},
+    "shuffleAllTrackCount": "曲がシャッフル化される回数",
+    "@shuffleAllTrackCount": {},
+    "shuffleAllTrackCountSubtitle": "「すべてシャッフル」ボタンで読み込むトラック数。",
+    "@shuffleAllTrackCountSubtitle": {},
+    "viewType": "ビューの形式",
+    "@viewType": {},
+    "gridCrossAxisCount": "{value} のアイテム数",
+    "@gridCrossAxisCount": {
+        "description": "List tile title for grid cross axis count. Value will either be the portrait or landscape key.",
+        "placeholders": {
+            "value": {
+                "type": "String",
+                "example": "Portrait"
+            }
+        }
+    },
+    "customLocation": "指定の場所",
+    "@customLocation": {},
+    "refresh": "リフレッシュ",
+    "@refresh": {},
+    "confirm": "確認",
+    "@confirm": {},
+    "playNext": "次に再生",
+    "@playNext": {
+        "description": "Popup menu item title for inserting an item into the play queue after the currently-playing item."
+    },
+    "resetTabs": "タブをリセット",
+    "@resetTabs": {},
+    "viewTypeSubtitle": "ミュージック画面の表示形式",
+    "@viewTypeSubtitle": {},
+    "insertedIntoQueue": "キューに挿入されました。",
+    "@insertedIntoQueue": {
+        "description": "Snackbar message that shows when the user successfully inserts items into the play queue at a location that is not necessarily the end."
+    },
+    "responseError401": "{error} Status code {statusCode}. ユーザー名/パスワードが間違っているか、クライアントがログインしていません。",
+    "@responseError401": {
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Unauthorized"
+            },
+            "statusCode": {
+                "type": "int",
+                "example": "401"
+            }
+        }
+    },
+    "noMusicLibrariesBody": "Finamp は音楽ライブラリを見つけることができませんでした。Jellyfin サーバーに、コンテンツ タイプが「音楽」に設定されているライブラリが少なくとも 1 つ含まれていることを確認してください。",
+    "@noMusicLibrariesBody": {},
+    "swipeInsertQueueNextSubtitle": "曲リストでスワイプしたときに、曲を最後に追加するのではなく、キューの次の項目として挿入できるようにします。",
+    "@swipeInsertQueueNextSubtitle": {},
+    "showUncensoredLogMessage": "このログはあなたのログイン情報を含みます。表示しますか？",
+    "@showUncensoredLogMessage": {},
+    "syncDownloadedPlaylists": "ダウンロードしたプレイリストの同期",
+    "@syncDownloadedPlaylists": {},
+    "applicationLegalese": "Mozilla Public License 2.0 のもとでライセンスされています。\nソースコードは {sourceCodeLink} で入手できます。",
+    "@applicationLegalese": {},
+    "customLocationsBuggy": "カスタムの場所は、非常にバグが多くなるかも知れないので 、ほとんどの場合お勧めません。ＯＳ制限 ので 、「Music」ディレクトリの仲に場所は、ジャケット画像をセーブのが止めされる。",
+    "@customLocationsBuggy": {},
+    "showFastScroller": "高速スクロールを表示",
+    "@showFastScroller": {},
+    "swipeInsertQueueNext": "スワイプした曲を再生する",
+    "@swipeInsertQueueNext": {},
+    "noMusicLibrariesTitle": "音楽ライブラリなし",
+    "@noMusicLibrariesTitle": {
+        "description": "Title for message that shows on the views screen when no music libraries could be found."
+    },
+    "changeLanguage": "言語を変更",
+    "@changeLanguage": {
+        "description": "Label for button shown during the login process that allows the user to change the app language"
+    },
+    "serverUrlHint": "例: demo.jellyfin.org/stable",
+    "@serverUrlHint": {
+        "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+    },
+    "startMixNoTracksGenre": "ミックスを開始する前に、ジャンルを長押ししてミックスビルダーに追加または削除してください",
+    "@startMixNoTracksGenre": {
+        "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+    },
+    "downloadedCountUnified": "{trackCount,plural,=1{{trackCount} 曲} other{{trackCount} 曲}}, {imageCount,plural,=1{{imageCount} 画像} other{{imageCount} 画像}}\n{syncCount,plural,=1{{syncCount} ノードを同期中} other{{syncCount} ノードを同期中}}{repairing, plural, =0{} other{\n現在修復中}}",
+    "@downloadedCountUnified": {
+        "description": "Display of downloaded track and image count on downloads screen.",
+        "placeholders": {
+            "trackCount": {
+                "type": "int"
+            },
+            "imageCount": {
+                "type": "int"
+            },
+            "syncCount": {
+                "type": "int"
+            },
+            "repairing": {
+                "type": "int"
+            }
+        }
+    },
+    "usernameValidationMissingUsername": "ユーザー名を入力してください",
+    "@usernameValidationMissingUsername": {
+        "description": "Error message that shows when the user submits a login without a username"
+    },
+    "passwordHint": "パスワードを入力してください",
+    "@passwordHint": {
+        "description": "Hint text for the password input field."
+    },
+    "confirmDownloadStarted": "ダウンロードを開始しました",
+    "@confirmDownloadStarted": {
+        "description": "A confirmation message that is shown after successfully adding an item to the download queue, before it starts being processed and enqueued for download"
+    },
+    "about": "「フィンアンプ」について",
+    "@about": {
+        "description": "Label for the about/info button on the settings screen"
+    },
+    "finampTagline": "オープンソースのJellyfin音楽プレーヤー",
+    "@finampTagline": {
+        "description": "Tagline / short description for the app"
+    },
+    "aboutContributionLink": "GitHub で「フィンアンプ」に貢献する:",
+    "@aboutContributionLink": {
+        "description": "Link to the Finamp GitHub repository, shown in the about screen."
+    },
+    "aboutReleaseNotes": "最新のリリースノートを読む:",
+    "@aboutReleaseNotes": {
+        "description": "Link to the release notes, shown in the about screen."
+    },
+    "aboutContributionPrompt": "素晴らしい人々が空き時間に作りました。\nあなたもその一員になれるかもしれません！",
+    "@aboutContributionPrompt": {
+        "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+    },
+    "aboutTranslations": "「フィンアンプ」をあなたの言語に翻訳する手伝いをしてください：",
+    "@aboutTranslations": {
+        "description": "Link to the translation project, shown in the about screen."
+    },
+    "aboutThanks": "「フィンアンプ」をご利用いただきありがとうございます！",
+    "@aboutThanks": {
+        "description": "Thank you message shown in the about screen."
+    },
+    "loginFlowSlogan": "あなたの音楽を、あなたの思い通りに。",
+    "@loginFlowSlogan": {
+        "description": "Slogan shown on the login screen."
+    },
+    "loginFlowGetStarted": "始めましょう！",
+    "@loginFlowGetStarted": {
+        "description": "Button label for the login/splash screen."
+    },
+    "viewLogs": "ログを表示",
+    "@viewLogs": {
+        "description": "Label for button shown during the login process that allows the user to view the app logs"
+    },
+    "loginFlowServerSelectionHeading": "Jellyfin に接続",
+    "@loginFlowServerSelectionHeading": {
+        "description": "Heading for the server selection step during the login flow."
+    },
+    "back": "戻る",
+    "@back": {
+        "description": "Label for the back button."
+    },
+    "serverUrlInfoButtonTooltip": "サーバーURLのヘルプ",
+    "@serverUrlInfoButtonTooltip": {
+        "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+    },
+    "connectingToServer": "サーバーに接続中…",
+    "@connectingToServer": {
+        "description": "Text shown while the connection to the specified server is attempted"
+    },
+    "loginFlowLocalNetworkServers": "ローカルネットワーク上のサーバー:",
+    "@loginFlowLocalNetworkServers": {
+        "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+    },
+    "loginFlowLocalNetworkServersScanningForServers": "サーバーをスキャン中…",
+    "@loginFlowLocalNetworkServersScanningForServers": {
+        "description": "Text shown while servers are being discovered via UDP broadcasts"
+    },
+    "loginFlowAccountSelectionHeading": "アカウントを選択してください",
+    "@loginFlowAccountSelectionHeading": {
+        "description": "Heading for the account selection step during the login flow."
+    },
+    "backToServerSelection": "サーバー選択に戻る",
+    "@backToServerSelection": {
+        "description": "Label for the button that takes the user back to the server selection step during the login flow."
+    },
+    "loginFlowNamelessUser": "名前なしユーザー",
+    "@loginFlowNamelessUser": {
+        "description": "Name for a user that doesn't have a name set on the server."
+    },
+    "loginFlowCustomUser": "カスタムユーザー",
+    "@loginFlowCustomUser": {
+        "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+    },
+    "loginFlowAuthenticationHeading": "アカウントにログインしてください",
+    "@loginFlowAuthenticationHeading": {
+        "description": "Heading for the authentication step during the login flow."
+    },
+    "backToAccountSelection": "アカウント選択に戻る",
+    "@backToAccountSelection": {
+        "description": "Label for the button that takes the user back to the account selection step during the login flow."
+    },
+    "loginFlowQuickConnectPrompt": "Quick Connect コードを使用する",
+    "@loginFlowQuickConnectPrompt": {
+        "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+    },
+    "loginFlowQuickConnectInstructions": "Jellyfinアプリまたはウェブサイトを開き、ユーザーアイコンをクリックして「Quick Connect」を選択してください。",
+    "@loginFlowQuickConnectInstructions": {
+        "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+    },
+    "loginFlowQuickConnectDisabled": "このサーバーでは、Quick Connect が無効になっています。",
+    "@loginFlowQuickConnectDisabled": {
+        "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+    },
+    "orDivider": "または",
+    "@orDivider": {
+        "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+    },
+    "loginFlowSelectAUser": "ユーザーを選択",
+    "@loginFlowSelectAUser": {
+        "description": "Heading for the list of users that the user can select from during the login flow."
+    },
+    "usernameHint": "ユーザー名を入力してください",
+    "@usernameHint": {
+        "description": "Hint text for the username input field."
+    },
+    "login": "ログイン",
+    "@login": {
+        "description": "Label for the login button."
+    },
+    "title": "タイトル",
+    "@title": {},
+    "activeDownloads": "アクティブなダウンロード",
+    "@activeDownloads": {},
+    "activeDownloadsTitle": "アクティブなダウンロード",
+    "@activeDownloadsTitle": {},
+    "noActiveDownloads": "アクティブなダウンロードはありません。",
+    "@noActiveDownloads": {},
+    "offlineTrackCount": "{count,plural,=1{{count} 曲} other{{count} 曲}}, {downloads} ダウンロード済み",
+    "@offlineTrackCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "downloads": {
+                "type": "int"
+            }
+        }
+    },
+    "offlineTrackCountArtist": "{count,plural,=1{{count} 曲} other{{count} 曲}} ダウンロード済み",
+    "@offlineTrackCountArtist": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "customizationSettingsTitle": "カスタマイズ",
+    "@customizationSettingsTitle": {
+        "description": "Title for the customization settings screen"
+    },
+    "playbackSpeedControlSetting": "再生速度の表示",
+    "@playbackSpeedControlSetting": {
+        "description": "Title of the visibility setting of the playback speed controls"
+    },
+    "releaseDateFormatYear": "年",
+    "@releaseDateFormatYear": {
+        "description": "Date format option for the release date of an album, showing only the year"
+    },
+    "seconds": "秒",
+    "@seconds": {},
+    "hours": "時間",
+    "@hours": {},
+    "releaseDateFormatMonthYear": "月と年",
+    "@releaseDateFormatMonthYear": {
+        "description": "Date format option for the release date of an album, showing the year and month. Example: March 2022"
+    },
+    "nextUp": "次の曲",
+    "@nextUp": {
+        "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
+    },
+    "downloadItem": "ダウンロードする",
+    "@downloadItem": {
+        "description": "Option to download item in long-press menu."
+    },
+    "downloadSettings": "ダウンロード",
+    "@downloadSettings": {},
+    "deleteDownloadsPrompt": "この装置から、{itemType, select, album{アルバム} playlist{playlist} artist{アーティスト} genre{ジャンル} track{曲} library{ライブラリ} other{アイテム}} 「{itemName}」を削除してもよろしいですか?",
+    "@deleteDownloadsPrompt": {
+        "placeholders": {
+            "itemName": {
+                "type": "String",
+                "example": "Abandon Ship"
+            },
+            "itemType": {
+                "type": "String",
+                "example": "album"
+            }
+        },
+        "description": "Confirmation prompt shown before deleting downloaded media from the local device, destructive action, doesn't affect the media on the server."
+    },
+    "albumArtists": "アルバムアーティスト",
+    "@albumArtists": {},
+    "loginFlowWelcomeHeading": "{styledName}へようこそ",
+    "@loginFlowWelcomeHeading": {
+        "description": "Greeting shown on the login screen.",
+        "placeholders": {
+            "styledName": {
+                "type": "String",
+                "example": "Finamp"
+            }
+        }
+    },
+    "apply": "適用",
+    "@apply": {
+        "description": "Used for a button in the playback speed menu"
+    },
+    "startupErrorCallToAction": "できるだけ早く修正できるよう、ログ（下のボタンを使用）とこのページのスクリーンショットを添えて、「github.com/jmshrv/finamp」に問題を作成してください。",
+    "@startupErrorCallToAction": {
+        "description": "The subtitle / call to action for what to do after encountering a startup error"
+    },
+    "defaultOrder": "デフォルトの順序",
+    "@defaultOrder": {
+        "description": "Default sorting order for playlists (server order)"
+    },
+    "automatic": "自動",
+    "@automatic": {
+        "description": "Used as an option in the playback speed visibility settings"
+    },
+    "libraryDownloads": "ダウンロードのライブラリ",
+    "@libraryDownloads": {
+        "description": "Title for the library downloads section on the downloads screen."
+    },
+    "favorite": "お気に入り",
+    "@favorite": {},
+    "onlineMode": "オンラインモード",
+    "@onlineMode": {},
+    "performingArtist": "出演アーティスト",
+    "@performingArtist": {},
+    "duration": "間隔",
+    "@duration": {},
+    "formattedRelativeTime": "{type, select, just_now{たった今} minutes{{value} 分前} hours{{value} 時間前} yesterday{昨日} days{{value, plural, =1{1 日前} other{{value} 日前}}} other{value}}",
+    "@formattedRelativeTime": {
+        "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
+        "placeholders": {
+            "type": {
+                "type": "String",
+                "description": "The category of time passed: one of 'just_now', 'minutes', 'hours', 'yesterday', or 'days'."
+            },
+            "value": {
+                "type": "int",
+                "example": "5"
+            }
+        }
+    },
+    "deleteDownloadsConfirmButtonText": "削除",
+    "@deleteDownloadsConfirmButtonText": {
+        "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
+    },
+    "notAvailable": "利用できません",
+    "@notAvailable": {},
+    "playbackSpeedControlSettingSubtitle": "プレーヤー画面のメニューに再生速度コントロールを表示しますか",
+    "@playbackSpeedControlSettingSubtitle": {
+        "description": "Subtitle for the playback speed visibility setting"
+    },
+    "hidden": "非表示",
+    "@hidden": {
+        "description": "Used as an option in the playback speed visibility settings"
+    },
+    "speed": "速さ",
+    "@speed": {
+        "description": "Used as a placeholder in the input of the playback speed menu"
+    },
+    "reset": "リセット",
+    "@reset": {
+        "description": "Used for buttons in the playback speed menu and the settings"
+    },
+    "appearsOnAlbums": "登場作品",
+    "@appearsOnAlbums": {},
+    "performingArtists": "出演アーティスト",
+    "@performingArtists": {},
+    "shown": "表示",
+    "@shown": {
+        "description": "Used as an option in the playback speed visibility settings"
+    },
+    "playbackReporting": "再生レポート",
+    "@playbackReporting": {},
+    "noItemsDownloaded": "ダウンロードされたアイテムはありません。",
+    "@noItemsDownloaded": {
+        "description": "Shown on the downloads screen for sections without any downloaded items."
+    },
+    "specialDownloads": "特別ダウンロード",
+    "@specialDownloads": {
+        "description": "Title for the special downloads section on the downloads screen."
+    },
+    "allLibraries": "すべてのライブラリ",
+    "@allLibraries": {
+        "description": "All Libraries"
+    },
+    "noGenres": "ジャンルなし",
+    "@noGenres": {
+        "description": "Gets shown when there are no genres available for an album or artist"
+    },
+    "favorites": "お気に入り",
+    "@favorites": {},
+    "exportLogs": "ログを保存",
+    "@exportLogs": {},
+    "startupErrorTitle": "アプリの起動中に問題が発生しました！",
+    "@startupErrorTitle": {
+        "description": "The title for the error screen that shows when startup fails."
+    },
+    "startupErrorWorkaround": "このエラーを回避するためにアプリデータを消去してアプリをリセットすることができます。この場合すべての設定とダウンロードが削除されることにご注意ください。",
+    "@startupErrorWorkaround": {
+        "description": "The subtitle for how to manually recover from a startup error"
+    },
+    "playbackSpeedControlSettingDescription": "自動:\n「フィンアンプ」は、再生中のトラックがポッドキャストかオーディオブック（の一部）かを識別しようとします。トラックの長さが {trackDuration} 分を超える場合、トラックのアルバムの長さが {albumDuration} 時間を超える場合、またはトラックに以下のジャンル（{genreList}）の少なくとも 1 つが割り当てられている場合、ポッドキャストまたはオーディオブックとみなされます。\n再生速度コントロールは、プレーヤー画面のメニューに表示されます。\n\n表示:\n再生速度コントロールは、プレーヤー画面のメニューに常に表示されます。\n\n非表示:\nプレーヤー画面のメニューの再生速度コントロールは常に非表示です。",
+    "@playbackSpeedControlSettingDescription": {
+        "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
+        "placeholders": {
+            "trackDuration": {
+                "type": "int",
+                "example": "30"
+            },
+            "albumDuration": {
+                "type": "int",
+                "example": "3"
+            },
+            "genreList": {
+                "type": "String",
+                "example": "Podcast, Audiobook"
+            }
+        }
+    },
+    "adaptive": "アダプティブ",
+    "@adaptive": {},
+    "shuffleCountButton": "シャッフル({count,plural,=1{{count} 曲} other{{count} 曲}})",
+    "@shuffleCountButton": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "playbackActionPagePlay": "再生",
+    "@playbackActionPagePlay": {
+        "description": "Label for the playback action page that contains all actions related to playing in order"
+    },
+    "playbackActionPageShuffle": "シャッフル",
+    "@playbackActionPageShuffle": {
+        "description": "Label for the playback action page that contains all actions related to playing shuffled"
+    },
+    "playbackActionPageShuffleAlbums": "シャッフルアルバム",
+    "@playbackActionPageShuffleAlbums": {
+        "description": "Label for the playback action page that contains all actions related to playing shuffled albums"
+    },
+    "editItemTitle": "編集{itemType, select, playlist{プレイリスト} other{}}",
+    "@editItemTitle": {
+        "placeholders": {
+            "itemType": {
+                "type": "String"
+            }
+        }
+    },
+    "interactions": "インタラクション",
+    "@interactions": {},
+    "logoutButtonSubtitle": "別サーバーにログインするとダウンロードが削除されます",
+    "@logoutButtonSubtitle": {},
+    "none": "なし",
+    "@none": {},
+    "playerScreenMinimumCoverPaddingEditorTitle": "アルバムカバーの最小余白",
+    "@playerScreenMinimumCoverPaddingEditorTitle": {
+        "description": "Title for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+    },
+    "playerScreen": "プレイヤー画面",
+    "@playerScreen": {
+        "description": "Name for the expanded player"
+    },
+    "automaticOfflineModeOverrideActiveTitle": "自動切り替え停止中",
+    "@automaticOfflineModeOverrideActiveTitle": {
+        "description": "Title for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+    },
+    "playbackHistory": "再生履歴",
+    "@playbackHistory": {
+        "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
+    },
+    "automaticOfflineModeOverrideActiveSubtitle": "ここをタップして再開",
+    "@automaticOfflineModeOverrideActiveSubtitle": {
+        "description": "Subtitle for the label shown below the offline mode toggle when automatic offline mode switching is paused"
+    },
+    "queuesScreen": "再生中を復元",
+    "@queuesScreen": {
+        "description": "Title for the screen where older now playing queues can be restored"
+    },
+    "lyricsScreenButtonTitle": "歌詞",
+    "@lyricsScreenButtonTitle": {
+        "description": "Label for the button for opening the lyrics screen"
+    },
+    "lyricsScreen": "歌詞表示",
+    "@lyricsScreen": {
+        "description": "Name for the view/screen that shows lyrics for the currently playing track"
+    },
+    "redownloadedItems": "{count,plural, =0{再ダウンロードは不要です} =1{{count} 曲を再ダウンロードしました} other{{count} 曲を再ダウンロードしました}}",
+    "@redownloadedItems": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "playerScreenMinimumCoverPaddingEditorSubtitle": "プレーヤー画面のアルバムカバー周囲の最小余白（画面幅に対する割合％）。",
+    "@playerScreenMinimumCoverPaddingEditorSubtitle": {
+        "description": "Subtitle for the editor that allows the user to set the minimum padding around the album cover on the player screen."
+    },
+    "timeFractionTooltip": "{currentTime} / {totalTime}",
+    "@timeFractionTooltip": {
+        "placeholders": {
+            "currentTime": {
+                "type": "String",
+                "example": "2 minutes 40 seconds"
+            },
+            "totalTime": {
+                "type": "String",
+                "example": "3 minutes 20 seconds"
+            }
+        },
+        "description": "Tooltip and accessibility label for the track progress. {currentTime} is the current position within the track, as a translated string like '2 minutes 40 seconds', and {totalTime} is the total duration of the track, also a translated string."
+    },
+    "trackCountTooltip": "キュー内の曲 {currentTrackIndex} / {totalTrackCount}",
+    "@trackCountTooltip": {
+        "description": "Tooltip and accessibility label for the queue progress. {currentTrackIndex} and {totalTrackCount} are both numbers",
+        "placeholders": {
+            "currentTrackIndex": {
+                "type": "int",
+                "example": "10"
+            },
+            "totalTrackCount": {
+                "type": "int",
+                "example": "13"
+            }
+        }
+    },
+    "sleepTimerRemainingTime": "あと {time,plural,=1{1 分未満} other{{time} 分}} でスリープ",
+    "@sleepTimerRemainingTime": {
+        "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+        "placeholders": {
+            "time": {
+                "type": "int"
+            }
+        }
+    },
+    "sleepTimerRemainingTracks": "{time,plural,=1{この曲の後にスリープ} other{{time} 曲後にスリープ}}",
+    "@sleepTimerRemainingTracks": {
+        "description": "Button label for sleep timer. {time} is the amount of minutes left.",
+        "placeholders": {
+            "time": {
+                "type": "int"
+            }
+        }
+    },
+    "autoSwitchItemCurationTypeTitle": "アイテムキュレーションタイプを自動切替",
+    "@autoSwitchItemCurationTypeTitle": {},
+    "autoSwitchItemCurationTypeSubtitle": "有効にすると、アーティスト画面やジャンル画面のアイテムセクションは、利用可能なアイテムがない場合（例：特定のアーティストのお気に入りがない場合）に、自動で別のキュレーションタイプに切り替わります。",
+    "@autoSwitchItemCurationTypeSubtitle": {},
+    "showArtistsTracksSection": "トラックセクションを表示",
+    "@showArtistsTracksSection": {},
+    "showArtistsTracksSectionSubtitle": "最大5曲のトラックセクションを表示するかどうか。有効にすると、再生回数が多い、 お気に入り、ランダム、最新リリース、最近追加、最近再生済みの中から選択できます。",
+    "@showArtistsTracksSectionSubtitle": {},
+    "addToMorePlaylistsTooltip": "他のプレイリストに追加",
+    "@addToMorePlaylistsTooltip": {},
+    "addToMorePlaylistsTitle": "他のプレイリストに追加",
+    "@addToMorePlaylistsTitle": {},
+    "removeFromPlaylistNamedTooltip": "プレイリスト「{playlistName}」から削除",
+    "@removeFromPlaylistNamedTooltip": {
+        "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+        "placeholders": {
+            "playlistName": {
+                "type": "String",
+                "example": "My Favorite Tracks"
+            }
+        }
+    },
+    "removeFromPlaylistNamedTitle": "プレイリスト「{playlistName}」から削除",
+    "@removeFromPlaylistNamedTitle": {
+        "description": "Tooltip for the action that removes a track from a specific playlist. The playlist name is a placeholder.",
+        "placeholders": {
+            "playlistName": {
+                "type": "String",
+                "example": "My Favorite Tracks"
+            }
+        }
+    },
+    "playlistActionsMenuButtonTooltip": "タップでプレイリストに追加。長押しでお気に入り切替。",
+    "@playlistActionsMenuButtonTooltip": {
+        "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
+    },
+    "browsePlaylists": "プレイリストを閲覧",
+    "@browsePlaylists": {
+        "description": "Label for a button on the genre screen that brings you to a list of genre-filtered playlists."
+    },
+    "unknownAlbum": "不明なアルバム",
+    "@unknownAlbum": {},
+    "playbackModeDirectPlaying": "直接再生",
+    "@playbackModeDirectPlaying": {
+        "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
+    },
+    "playbackModeTranscoding": "トランスコード中",
+    "@playbackModeTranscoding": {
+        "description": "Feature chip that is shown when tracks are being transcoded by the server"
+    },
+    "kiloBitsPerSecondLabel": "{bitrate} kbps",
+    "@kiloBitsPerSecondLabel": {
+        "description": "Label for the bitrate of a track or for transcoding. The value will be the bitrate in kilobits per second.",
+        "placeholders": {
+            "bitrate": {
+                "type": "int",
+                "example": "320"
+            }
+        }
+    },
+    "playbackModeLocal": "ローカル再生",
+    "@playbackModeLocal": {
+        "description": "Feature chip that is shown when tracks are being played from local downloads, without using the server"
+    },
+    "goToArtist": "アーティストへ移動",
+    "@goToArtist": {},
+    "goToGenre": "ジャンルへ移動",
+    "@goToGenre": {},
+    "removeFavorite": "お気に入りから削除",
+    "@removeFavorite": {},
+    "addFavorite": "お気に入りに追加",
+    "@addFavorite": {},
+    "confirmFavoriteAdded": "お気に入りに追加済み",
+    "@confirmFavoriteAdded": {},
+    "confirmFavoriteRemoved": "お気に入りから削除済み",
+    "@confirmFavoriteRemoved": {},
+    "confirmAddedToPlaylist": "プレイリストに追加しました。",
+    "@confirmAddedToPlaylist": {
+        "description": "Snackbar message that shows when the user successfully adds items to a playlist."
+    },
+    "bufferDisableSizeConstraintsTitle": "バッファサイズを制限しない",
+    "@bufferDisableSizeConstraintsTitle": {},
+    "bufferDisableSizeConstraintsSubtitle": "バッファサイズの制限（「バッファサイズ」）を無効化します。大きなファイルでも、バッファは設定された時間（「バッファ時間」）まで常に読み込まれます。クラッシュの原因になる場合があります。再起動が必要です。",
+    "@bufferDisableSizeConstraintsSubtitle": {},
+    "bufferSizeTitle": "バッファサイズ",
+    "@bufferSizeTitle": {},
+    "bufferSizeSubtitle": "バッファの最大サイズ（MB）。再起動が必要です",
+    "@bufferSizeSubtitle": {},
+    "skipToPreviousTrackButtonTooltip": "先頭または前の曲へスキップ",
+    "@skipToPreviousTrackButtonTooltip": {
+        "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
+    },
+    "skipToNextTrackButtonTooltip": "次の曲へスキップ",
+    "@skipToNextTrackButtonTooltip": {
+        "description": "Tooltip for the button that skips to the next track"
+    },
+    "togglePlaybackButtonTooltip": "再生／一時停止切替",
+    "@togglePlaybackButtonTooltip": {
+        "description": "Tooltip for the button that toggles playback"
+    },
+    "previousTracks": "前の曲",
+    "@previousTracks": {
+        "description": "Description in the queue panel for the list of tracks that come before the current track in the queue. The tracks might not actually have been played (e.g. if the user skipped ahead to a specific track)."
+    },
+    "clearNextUp": "「次に再生」をクリア",
+    "@clearNextUp": {
+        "description": "Label for the action that deletes all tracks added to Next Up"
+    },
+    "stopAndClearQueue": "再生停止とキューをクリア",
+    "@stopAndClearQueue": {
+        "description": "Label for a button that stops playback and removes all tracks from the queue."
+    },
+    "createPlaylistFromCurrentQueue": "キューをプレイリストに保存",
+    "@createPlaylistFromCurrentQueue": {
+        "description": "Label for a button that adds the current queue to an existing or new playlist."
+    },
+    "playingFrom": "再生元：",
+    "@playingFrom": {
+        "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
+    },
+    "addToNextUp": "次に再生に追加",
+    "@addToNextUp": {
+        "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
+    },
+    "shuffleNext": "次に再生をシャッフル",
+    "@shuffleNext": {
+        "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
+    },
+    "shuffleToNextUp": "次に再生の最後にシャッフル",
+    "@shuffleToNextUp": {
+        "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
+    },
+    "shuffleToQueue": "キューの最後にシャッフル",
+    "@shuffleToQueue": {
+        "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
+    },
+    "confirmPlayNext": "{type, select, track{曲} album{アルバム} artist{アーティスト} playlist{プレイリスト} genre{ジャンル} other{アイテム}} が次に再生されます",
+    "@confirmPlayNext": {
+        "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
+        "placeholders": {
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "confirmAddToNextUp": "{type, select, track{曲} album{アルバム} artist{アーティスト} playlist{プレイリスト} genre{ジャンル} disc{ディスク} other{アイテム}} を次に再生に追加しました",
+    "@confirmAddToNextUp": {
+        "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
+        "placeholders": {
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "confirmAddToQueue": "{type, select, track{曲} album{アルバム} artist{アーティスト} playlist{プレイリスト} genre{ジャンル} disc{ディスク} other{アイテム}} をキューに追加しました",
+    "@confirmAddToQueue": {
+        "description": "A confirmation message that is shown after successfully adding a track to the end of the regular queue",
+        "placeholders": {
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "confirmShuffleNext": "次にシャッフル再生されます",
+    "@confirmShuffleNext": {
+        "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
+    },
+    "confirmShuffleToNextUp": "次に再生の最後にシャッフルされました",
+    "@confirmShuffleToNextUp": {
+        "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
+    },
+    "confirmShuffleToQueue": "キューの最後にシャッフルされました",
+    "@confirmShuffleToQueue": {
+        "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
+    },
+    "placeholderSource": "不明なソース",
+    "@placeholderSource": {
+        "description": "Placeholder text used when the source of the current track/queue is unknown"
+    },
+    "shareOfflineListens": "オフライン再生データを共有",
+    "@shareOfflineListens": {
+        "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
+    },
+    "yourLikes": "あなたのお気に入り",
+    "@yourLikes": {
+        "description": "Title for the queue source when the user is playing their liked tracks"
+    },
+    "mix": "{mixSource} - ミックス",
+    "@mix": {
+        "description": "Suffix added to a queue source when playing a mix. Example: \"Never Gonna Give You Up - Mix\"",
+        "placeholders": {
+            "mixSource": {
+                "type": "String",
+                "example": "Never Gonna Give You Up"
+            }
+        }
+    },
+    "tracksFormerNextUp": "次に再生で追加された曲",
+    "@tracksFormerNextUp": {
+        "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
+    },
+    "savedQueue": "保存されたキュー",
+    "@savedQueue": {
+        "description": "Title for the queue source for tracks were previously in the queue before an app restart and have been reloaded"
+    },
+    "playingFromType": "{source, select, album{アルバムから再生} playlist{プレイリストから再生} trackMix{トラックミックスから再生} artistMix{アーティストミックスから再生} albumMix{アルバムミックスから再生} genreMix{ジャンルミックスから再生} favorites{お気に入りから再生} allTracks{全曲から再生} filteredList{トラックから再生} genre{ジャンルから再生} artist{アーティストから再生} track{曲から再生} nextUpAlbum{次に再生のアルバムから再生} nextUpPlaylist{次に再生のプレイリストから再生} nextUpArtist{次に再生のアーティストから再生} nextUpGenre{次に再生のジャンルから再生} remoteClient{リモートクライアントから再生} other{から再生}}",
+    "@playingFromType": {
+        "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
+        "placeholders": {
+            "source": {
+                "type": "String"
+            }
+        }
+    },
+    "shuffleAllQueueSource": "全曲シャッフル",
+    "@shuffleAllQueueSource": {
+        "description": "Title for the queue source when the user is shuffling all tracks. Should be capitalized (if applicable) to be more recognizable throughout the UI"
+    },
+    "playbackOrderLinearButtonLabel": "順番に再生",
+    "@playbackOrderLinearButtonLabel": {
+        "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+    },
+    "playbackOrderLinearButtonTooltip": "順番に再生中。タップでシャッフル。",
+    "@playbackOrderLinearButtonTooltip": {
+        "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in linear/in-order mode"
+    },
+    "playbackOrderShuffledButtonLabel": "曲をシャッフル再生中",
+    "@playbackOrderShuffledButtonLabel": {
+        "description": "Label for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+    },
+    "playbackOrderShuffledButtonTooltip": "曲をシャッフル再生中。タップで順番に再生。",
+    "@playbackOrderShuffledButtonTooltip": {
+        "description": "Tooltip for the button that toggles the playback order between linear/in-order and shuffle, while the queue is in shuffle mode"
+    },
+    "playbackSpeedButtonLabel": "{speed}倍速で再生",
+    "@playbackSpeedButtonLabel": {
+        "description": "Label for the button that toggles visibility. of the playback speed menu, {speed} is the current playback speed.",
+        "placeholders": {
+            "speed": {
+                "type": "double"
+            }
+        }
+    },
+    "playbackSpeedFeatureText": "{speed}倍速",
+    "@playbackSpeedFeatureText": {
+        "description": "Label for the feature chip that is shown if the playback speed is different from x1, {speed} is the current playback speed.",
+        "placeholders": {
+            "speed": {
+                "type": "double"
+            }
+        }
+    },
+    "currentVolumeFeatureText": "{volume}% 音量",
+    "@currentVolumeFeatureText": {
+        "description": "Label for the feature chip that is shown if the volume is not 100%",
+        "placeholders": {
+            "volume": {
+                "type": "int",
+                "description": "The current volume level, in percent"
+            }
+        }
+    },
+    "playbackSpeedDecreaseLabel": "再生速度を下げる",
+    "@playbackSpeedDecreaseLabel": {
+        "description": "Label for the button in the speed menu that decreases the playback speed."
+    },
+    "playbackSpeedIncreaseLabel": "再生速度を上げる",
+    "@playbackSpeedIncreaseLabel": {
+        "description": "Label for the button in the speed menu that increases the playback speed."
+    },
+    "loopModeNoneButtonLabel": "ループなし",
+    "@loopModeNoneButtonLabel": {
+        "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop off mode"
+    },
+    "loopModeOneButtonLabel": "この曲をループ",
+    "@loopModeOneButtonLabel": {
+        "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop one mode"
+    },
+    "loopModeAllButtonLabel": "全曲をループ",
+    "@loopModeAllButtonLabel": {
+        "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
+    },
+    "queueRestoreButtonLabel": "このキューを復元",
+    "@queueRestoreButtonLabel": {
+        "description": "Button to restore archived now playing queue, overwriting current queue"
+    },
+    "queueRestoreTitle": "{date} に保存",
+    "@queueRestoreTitle": {
+        "description": "Description of when a saved queue was saved",
+        "placeholders": {
+            "date": {
+                "type": "DateTime",
+                "format": "yyy-MM-dd hh:mm",
+                "isCustomDateFormat": "true"
+            }
+        }
+    },
+    "queueRestoreSubtitle1": "再生中：{track}",
+    "@queueRestoreSubtitle1": {
+        "description": "Description of playing track in a saved queue",
+        "placeholders": {
+            "track": {
+                "type": "String"
+            }
+        }
+    },
+    "queueRestoreSubtitle2": "{count,plural,=1{1 曲} other{{count} 曲}}、{remaining} 曲未再生",
+    "@queueRestoreSubtitle2": {
+        "description": "Description of length of a saved queue",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "remaining": {
+                "type": "int"
+            }
+        }
+    },
+    "queueLoadingMessage": "キューを復元中…",
+    "@queueLoadingMessage": {
+        "description": "Message displayed on now-playing bar when a saved queue is loading."
+    },
+    "queueRetryMessage": "キューの復元に失敗しました。再試行しますか？",
+    "@queueRetryMessage": {
+        "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
+    },
+    "autoloadLastQueueOnStartup": "前回のキューを自動復元",
+    "@autoloadLastQueueOnStartup": {
+        "description": "Setting to restore last queue on startup"
+    },
+    "autoloadLastQueueOnStartupSubtitle": "アプリ起動時に、前回再生していたキューを復元します。",
+    "@autoloadLastQueueOnStartupSubtitle": {
+        "description": "Description of the setting to restore last queue on startup"
+    },
+    "reportQueueToServer": "現在のキューをサーバーに送信しますか？",
+    "@reportQueueToServer": {
+        "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
+    },
+    "reportQueueToServerSubtitle": "有効にすると、「フィンアンプ」は現在のキューをサーバーに送信します。これにより、リモート操作が向上し、サーバー側でキューを復元できるようになります。「再生先」機能が有効な場合は常に有効になります。",
+    "@reportQueueToServerSubtitle": {
+        "description": "Description of the setting that toggles reporting of the current queue to the Jellyfin server"
+    },
+    "periodicPlaybackSessionUpdateFrequency": "再生セッション更新頻度",
+    "@periodicPlaybackSessionUpdateFrequency": {
+        "description": "Label for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+    },
+    "periodicPlaybackSessionUpdateFrequencySubtitle": "現在の再生状況をサーバーに送信する間隔（秒）。セッションタイムアウトを防ぐため、5分（300秒）未満に設定してください。",
+    "@periodicPlaybackSessionUpdateFrequencySubtitle": {
+        "description": "Description of the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+    },
+    "periodicPlaybackSessionUpdateFrequencyDetails": "Jellyfin サーバーは、クライアントからの更新が過去5分間なかった場合、再生が終了したと判断します。そのため、5分を超える曲では、実際には再生中でも再生が終了したと誤って報告される可能性があり、再生状況のデータ品質が低下します。",
+    "@periodicPlaybackSessionUpdateFrequencyDetails": {
+        "description": "Additional details for the setting that controls how frequently (in seconds) the current playback session is reported to the Jellyfin server"
+    },
+    "playOnStaleDelay": "遠端再生セッションのタイムアウト",
+    "@playOnStaleDelay": {
+        "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
+    },
+    "playOnStaleDelaySubtitle": "リモート「遠端再生」セッションは、コマンドを受信してからどのくらいの間アクティブと見なすかを設定します。アクティブと見なされている間は再生状況がより頻繁に報告されるため、帯域幅の使用量が増える可能性があります。",
+    "@playOnStaleDelaySubtitle": {
+        "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
+    },
+    "enablePlayonTitle": "「遠端再生」サポートを有効化",
+    "@enablePlayonTitle": {
+        "description": "Label for the setting to enable Jellyfin's 'Play On' feature (remote control)"
+    },
+    "enablePlayonSubtitle": "Jellyfin の「遠端再生」機能（他のクライアントから「フィンアンプ」をリモート操作）を有効にします。リバースプロキシやサーバーが WebSocket に対応していない場合は無効にしてください。",
+    "@enablePlayonSubtitle": {
+        "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
+    },
+    "playOnReconnectionDelay": "「遠端再生」セッション再接続の遅延",
+    "@playOnReconnectionDelay": {
+        "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+    },
+    "playOnReconnectionDelaySubtitle": "切断された遠端再生 WebSocket の再接続試行間隔（秒）を設定します。間隔を短くすると帯域幅の使用量が増えます。",
+    "@playOnReconnectionDelaySubtitle": {
+        "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
+    },
+    "topTracks": "人気曲",
+    "@topTracks": {},
+    "topAlbums": "人気アルバム",
+    "@topAlbums": {},
+    "topArtists": "人気アーティスト",
+    "@topArtists": {},
+    "recentlyAddedTracks": "最近追加した曲",
+    "@recentlyAddedTracks": {
+        "description": "Label for the artist section that shows tracks that were recently added to the library, sorted by the date they were added."
+    },
+    "recentlyAddedAlbums": "最近追加したアルバム",
+    "@recentlyAddedAlbums": {
+        "description": "Label for the genre section that shows albums that were recently added to the library, sorted by the date they were added."
+    },
+    "recentlyAddedArtists": "最近追加したアーティスト",
+    "@recentlyAddedArtists": {
+        "description": "Label for the genre section that shows artists that were recently added to the library, sorted by the date they were added."
+    },
+    "latestTracks": "最新の曲",
+    "@latestTracks": {},
+    "latestAlbums": "最新のアルバム",
+    "@latestAlbums": {},
+    "latestArtists": "最新のアーティスト",
+    "@latestArtists": {},
+    "recentlyPlayedTracks": "最近再生した曲",
+    "@recentlyPlayedTracks": {},
+    "recentlyPlayedAlbums": "最近再生したアルバム",
+    "@recentlyPlayedAlbums": {},
+    "recentlyPlayedArtists": "最近再生したアーティスト",
+    "@recentlyPlayedArtists": {},
+    "favoriteTracks": "お気に入りの曲",
+    "@favoriteTracks": {},
+    "favoriteAlbums": "お気に入りのアルバム",
+    "@favoriteAlbums": {},
+    "favoriteArtists": "お気に入りのアーティスト",
+    "@favoriteArtists": {},
+    "discordRPCIconLight": "フィンアンプ - ホワイト",
+    "@discordRPCIconLight": {
+        "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a White Background"
+    },
+    "discordRPCIconTransparent": "フィンアンプ - 透明",
+    "@discordRPCIconTransparent": {
+        "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Transparent Background"
+    },
+    "discordRPCIconWhiteTransparent": "ホワイトフィンアンプ - 透明",
+    "@discordRPCIconWhiteTransparent": {
+        "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the full white Finamp logo with a Transparent Background"
+    },
+    "discordRPCIconBlack": "フィンアンプ - ブラック",
+    "@discordRPCIconBlack": {
+        "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with a Black Background"
+    },
+    "discordRPCIconDark": "フィンアンプ - ダーク",
+    "@discordRPCIconDark": {
+        "description": "A REALLY short description of the icon in use. Its format is 'ICON, BACKGROUND'. This one is the Finamp logo with the Dark-Theme Background"
+    },
+    "autoReloadQueueSubtitle": "ソースが変更されたとき（例：オフラインモードを有効化／サーバーアドレスを切り替えたとき）に、キューを自動で再読み込みします。無効にすると、代わりにフィンアンプが確認を求めます。",
+    "@autoReloadQueueSubtitle": {
+        "description": "Subtitle for the setting that controls if the queue is automatically reloaded when the source changes"
+    },
+    "serverSharingMenuConfirmationDialogText": "オフラインモード中にもかかわらず、サーバー共有を有効にしてもよろしいですか？ 有効にすると、フィンアンプがローカルネットワーク経由でデータを送信します。",
+    "@serverSharingMenuConfirmationDialogText": {
+        "description": "Dialog text shown when enabling server sharing while offline mode is enabled"
+    },
+    "serverSharingMenuDetails": "これは、ローカルネットワーク上の他のクライアントからのサーバー探索リクエストを受信し、それに対して設定済みの Jellyfin サーバーのアドレスで応答することで動作します。\nローカルアドレスとパブリックアドレスの両方が設定されている場合、フィンアンプはリクエスト元のクライアントに両方を提供します。",
+    "@serverSharingMenuDetails": {
+        "description": "Description text shown in the server sharing menu, below the description"
     }
-  },
-  "apply": "適用",
-  "@apply": {
-    "description": "Used for a button in the playback speed menu"
-  },
-  "startupErrorCallToAction": "できるだけ早く修正できるよう、ログ（下のボタンを使用）とこのページのスクリーンショットを添えて、「github.com/jmshrv/finamp」に問題を作成してください。",
-  "@startupErrorCallToAction": {
-    "description": "The subtitle / call to action for what to do after encountering a startup error"
-  },
-  "defaultOrder": "デフォルトの順序",
-  "@defaultOrder": {
-    "description": "Default sorting order for playlists (server order)"
-  },
-  "automatic": "自動",
-  "@automatic": {
-    "description": "Used as an option in the playback speed visibility settings"
-  },
-  "libraryDownloads": "ダウンロードのライブラリ",
-  "@libraryDownloads": {
-    "description": "Title for the library downloads section on the downloads screen."
-  },
-  "favorite": "お気に入り",
-  "@favorite": {},
-  "onlineMode": "オンラインモード",
-  "@onlineMode": {},
-  "performingArtist": "出演アーティスト",
-  "@performingArtist": {},
-  "duration": "間隔",
-  "@duration": {},
-  "formattedRelativeTime": "{type, select, just_now{たった今} minutes{{value} 分前} hours{{value} 時間前} yesterday{昨日} days{{value, plural, =1{1 日前} other{{value} 日前}}} other{value}}",
-  "@formattedRelativeTime": {
-    "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
-    "placeholders": {
-      "type": {
-        "type": "String",
-        "description": "The category of time passed: one of 'just_now', 'minutes', 'hours', 'yesterday', or 'days'."
-      },
-      "value": {
-        "type": "int",
-        "example": "5"
-      }
-    }
-  },
-  "deleteDownloadsConfirmButtonText": "削除",
-  "@deleteDownloadsConfirmButtonText": {
-    "description": "Shown in the confirmation dialog for deleting downloaded media from the local device."
-  },
-  "notAvailable": "利用できません",
-  "@notAvailable": {},
-  "playbackSpeedControlSettingSubtitle": "プレーヤー画面のメニューに再生速度コントロールを表示しますか",
-  "@playbackSpeedControlSettingSubtitle": {
-    "description": "Subtitle for the playback speed visibility setting"
-  },
-  "hidden": "非表示",
-  "@hidden": {
-    "description": "Used as an option in the playback speed visibility settings"
-  },
-  "speed": "速さ",
-  "@speed": {
-    "description": "Used as a placeholder in the input of the playback speed menu"
-  },
-  "reset": "リセット",
-  "@reset": {
-    "description": "Used for buttons in the playback speed menu and the settings"
-  },
-  "appearsOnAlbums": "登場作品",
-  "@appearsOnAlbums": {},
-  "performingArtists": "出演アーティスト",
-  "@performingArtists": {},
-  "shown": "表示",
-  "@shown": {
-    "description": "Used as an option in the playback speed visibility settings"
-  },
-  "playbackReporting": "再生レポート",
-  "@playbackReporting": {},
-  "noItemsDownloaded": "ダウンロードされたアイテムはありません。",
-  "@noItemsDownloaded": {
-    "description": "Shown on the downloads screen for sections without any downloaded items."
-  },
-  "specialDownloads": "特別ダウンロード",
-  "@specialDownloads": {
-    "description": "Title for the special downloads section on the downloads screen."
-  },
-  "allLibraries": "すべてのライブラリ",
-  "@allLibraries": {
-    "description": "All Libraries"
-  },
-  "noGenres": "ジャンルなし",
-  "@noGenres": {
-    "description": "Gets shown when there are no genres available for an album or artist"
-  },
-  "favorites": "お気に入り",
-  "@favorites": {},
-  "exportLogs": "ログを保存",
-  "@exportLogs": {},
-  "startupErrorTitle": "アプリの起動中に問題が発生しました！",
-  "@startupErrorTitle": {
-    "description": "The title for the error screen that shows when startup fails."
-  },
-  "startupErrorWorkaround": "このエラーを回避するためにアプリデータを消去してアプリをリセットすることができます。この場合すべての設定とダウンロードが削除されることにご注意ください。",
-  "@startupErrorWorkaround": {
-    "description": "The subtitle for how to manually recover from a startup error"
-  },
-  "playbackSpeedControlSettingDescription": "自動:\nFinamp は、再生中のトラックがポッドキャストかオーディオブック（の一部）かを識別しようとします。トラックの長さが {trackDuration} 分を超える場合、トラックのアルバムの長さが {albumDuration} 時間を超える場合、またはトラックに以下のジャンル（{genreList}）の少なくとも 1 つが割り当てられている場合、ポッドキャストまたはオーディオブックとみなされます。\n再生速度コントロールは、プレーヤー画面のメニューに表示されます。\n\n表示:\n再生速度コントロールは、プレーヤー画面のメニューに常に表示されます。\n\n非表示:\nプレーヤー画面のメニューの再生速度コントロールは常に非表示です。",
-  "@playbackSpeedControlSettingDescription": {
-    "description": "Description for the dropdown that selects the replay gain mode, shown in a dialog that opens when the user presses the info icon next to the dropdown",
-    "placeholders": {
-      "trackDuration": {
-        "type": "int",
-        "example": "30"
-      },
-      "albumDuration": {
-        "type": "int",
-        "example": "3"
-      },
-      "genreList": {
-        "type": "String",
-        "example": "Podcast, Audiobook"
-      }
-    }
-  }
 }

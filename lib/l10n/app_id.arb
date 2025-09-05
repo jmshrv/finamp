@@ -1,0 +1,242 @@
+{
+    "finampTagline": "Pemutar musik Jellyfin bersifat open source",
+    "@finampTagline": {
+        "description": "Tagline / short description for the app"
+    },
+    "startupErrorTitle": "Terjadi kesalahan memulai aplikasi!",
+    "@startupErrorTitle": {
+        "description": "The title for the error screen that shows when startup fails."
+    },
+    "startupErrorCallToAction": "Silahkan buat \"issue\" di \"github.com/jmshrv/finamp\" dengan mencantumkan logs (tekan tombol di bawah) dan screenshot laman ini, agar kami dapat memperbaikinya secepat mungkin.",
+    "@startupErrorCallToAction": {
+        "description": "The subtitle / call to action for what to do after encountering a startup error"
+    },
+    "startupErrorWorkaround": "Sebagai solusi untuk mengatasi kesalahan ini, Anda dapat menghapus data aplikasi untuk mengatur ulang aplikasi. Perlu diingat bahwa dalam hal ini semua pengaturan dan unduhan Anda akan dihapus.",
+    "@startupErrorWorkaround": {
+        "description": "The subtitle for how to manually recover from a startup error"
+    },
+    "about": "Tentang Finamp",
+    "@about": {
+        "description": "Label for the about/info button on the settings screen"
+    },
+    "aboutContributionPrompt": "Dibuat oleh orang-orang yang luar biasa di waktu luang mereka.\nAnda bisa menjadi salah satu dari mereka!",
+    "@aboutContributionPrompt": {
+        "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
+    },
+    "aboutContributionLink": "Berkontribusi ke Finamp di GitHub:",
+    "@aboutContributionLink": {
+        "description": "Link to the Finamp GitHub repository, shown in the about screen."
+    },
+    "aboutReleaseNotes": "Baca catatan rilis terbaru:",
+    "@aboutReleaseNotes": {
+        "description": "Link to the release notes, shown in the about screen."
+    },
+    "aboutTranslations": "Membantu menerjemahkan Finamp ke dalam bahasa Anda:",
+    "@aboutTranslations": {
+        "description": "Link to the translation project, shown in the about screen."
+    },
+    "aboutThanks": "Terima kasih telah menggunakan Finamp!",
+    "@aboutThanks": {
+        "description": "Thank you message shown in the about screen."
+    },
+    "loginFlowWelcomeHeading": "Selamat datang di ­­{styledName}",
+    "@loginFlowWelcomeHeading": {
+        "description": "Greeting shown on the login screen.",
+        "placeholders": {
+            "styledName": {
+                "type": "String",
+                "example": "Finamp"
+            }
+        }
+    },
+    "loginFlowSlogan": "Musik Anda, seperti yang Anda inginkan.",
+    "@loginFlowSlogan": {
+        "description": "Slogan shown on the login screen."
+    },
+    "loginFlowGetStarted": "Mulai!",
+    "@loginFlowGetStarted": {
+        "description": "Button label for the login/splash screen."
+    },
+    "viewLogs": "Lihat catatan aktivitas",
+    "@viewLogs": {
+        "description": "Label for button shown during the login process that allows the user to view the app logs"
+    },
+    "changeLanguage": "Ganti bahasa",
+    "@changeLanguage": {
+        "description": "Label for button shown during the login process that allows the user to change the app language"
+    },
+    "loginFlowServerSelectionHeading": "Hubungkan Jellyfin",
+    "@loginFlowServerSelectionHeading": {
+        "description": "Heading for the server selection step during the login flow."
+    },
+    "back": "Kembali",
+    "@back": {
+        "description": "Label for the back button."
+    },
+    "serverUrl": "URL Server",
+    "@serverUrl": {},
+    "internalExternalIpExplanation": "Jika Anda ingin dapat mengakses server Jellyfin Anda dari jarak jauh, Anda perlu menggunakan IP eksternal.\n\nJika server Anda menggunakan port default HTTP (80 atau 443) atau port default Jellyfin (8096), Anda tidak perlu menentukan port.\n\nJika URL-nya benar, Anda akan melihat beberapa informasi tentang server Anda muncul di bawah kolom input.",
+    "@internalExternalIpExplanation": {
+        "description": "Extra info for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+    },
+    "serverUrlHint": "misalnya demo.jellyfin.org/stable",
+    "@serverUrlHint": {
+        "description": "Hint text for the server URL input field. Should be the address to an actual, public Jellyfin server."
+    },
+    "serverUrlInfoButtonTooltip": "Bantuan URL Server",
+    "@serverUrlInfoButtonTooltip": {
+        "description": "Tooltip for the button that shows the extra info dialog for which IP to use for remote access, and info on whether or not the user needs to specify a port."
+    },
+    "emptyServerUrl": "URL Server tidak boleh kosong",
+    "@emptyServerUrl": {
+        "description": "Error message that shows when the user submits a login without a server URL"
+    },
+    "connectingToServer": "Menghubungkan ke server…",
+    "@connectingToServer": {
+        "description": "Text shown while the connection to the specified server is attempted"
+    },
+    "loginFlowLocalNetworkServers": "Server yang berada di jaringan lokal:",
+    "@loginFlowLocalNetworkServers": {
+        "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
+    },
+    "loginFlowLocalNetworkServersScanningForServers": "Mendeteksi server…",
+    "@loginFlowLocalNetworkServersScanningForServers": {
+        "description": "Text shown while servers are being discovered via UDP broadcasts"
+    },
+    "loginFlowAccountSelectionHeading": "Pilih akun",
+    "@loginFlowAccountSelectionHeading": {
+        "description": "Heading for the account selection step during the login flow."
+    },
+    "backToServerSelection": "Kembali ke Pilih Server",
+    "@backToServerSelection": {
+        "description": "Label for the button that takes the user back to the server selection step during the login flow."
+    },
+    "loginFlowNamelessUser": "User Tanpa Nama",
+    "@loginFlowNamelessUser": {
+        "description": "Name for a user that doesn't have a name set on the server."
+    },
+    "loginFlowCustomUser": "Pengguna Kustom",
+    "@loginFlowCustomUser": {
+        "description": "Label for a button that allows the user to enter a custom username/password, for example if their user account is hidden."
+    },
+    "loginFlowAuthenticationHeading": "Masuk ke akun anda",
+    "@loginFlowAuthenticationHeading": {
+        "description": "Heading for the authentication step during the login flow."
+    },
+    "backToAccountSelection": "Kembali ke Pemilihan Akun",
+    "@backToAccountSelection": {
+        "description": "Label for the button that takes the user back to the account selection step during the login flow."
+    },
+    "loginFlowQuickConnectPrompt": "Gunakan kode Quick Connect",
+    "@loginFlowQuickConnectPrompt": {
+        "description": "Text shown above the quick connect code. The full message will be 'Use Quick Connect code {code}'. The code will be a 6-digit number. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+    },
+    "loginFlowQuickConnectInstructions": "Buka Aplikasi atau Situs Jellyfin, tekan pada ikon pengguna, lalu pilih Quick Connect.",
+    "@loginFlowQuickConnectInstructions": {
+        "description": "Instructions for how and where to enter the Quick Connect code. Ideally, 'Quick Connect' should be capitalized and translated exactly as it is in the Jellyfin web UI."
+    },
+    "loginFlowQuickConnectDisabled": "Quick Connect dimatikan pada server ini.",
+    "@loginFlowQuickConnectDisabled": {
+        "description": "Warning that is shown during authentication if Quick Connect is disabled on the server."
+    },
+    "orDivider": "Atau",
+    "@orDivider": {
+        "description": "Text that separates two different ways to log in. For example, after selecting a server during the login flow, the other can either use Quick Connect, *or* select an account from a list. The text is stylized by wrapping it in dashes: '- or -'."
+    },
+    "loginFlowSelectAUser": "Pilih pengguna",
+    "@loginFlowSelectAUser": {
+        "description": "Heading for the list of users that the user can select from during the login flow."
+    },
+    "username": "Nama Pengguna",
+    "@username": {},
+    "usernameHint": "Masukan nama pengguna",
+    "@usernameHint": {
+        "description": "Hint text for the username input field."
+    },
+    "usernameValidationMissingUsername": "Masukan nama pengguna",
+    "@usernameValidationMissingUsername": {
+        "description": "Error message that shows when the user submits a login without a username"
+    },
+    "password": "Kata sandi",
+    "@password": {},
+    "passwordHint": "Masukan kata sandi",
+    "@passwordHint": {
+        "description": "Hint text for the password input field."
+    },
+    "login": "Masuk",
+    "@login": {
+        "description": "Label for the login button."
+    },
+    "logs": "Catatan",
+    "@logs": {},
+    "next": "Selanjutnya",
+    "@next": {},
+    "selectMusicLibraries": "Pilih Pustaka Musik",
+    "@selectMusicLibraries": {
+        "description": "App bar title for library select screen"
+    },
+    "couldNotFindLibraries": "Tidak ditemukan pustaka apapun.",
+    "@couldNotFindLibraries": {
+        "description": "Error message when the user does not have any libraries"
+    },
+    "allLibraries": "Semua Pustaka",
+    "@allLibraries": {
+        "description": "All Libraries"
+    },
+    "unknownName": "Nama Tidak Diketahui",
+    "@unknownName": {},
+    "tracks": "Musik",
+    "@tracks": {},
+    "albums": "Album",
+    "@albums": {},
+    "appearsOnAlbums": "Ditampilkan di",
+    "@appearsOnAlbums": {},
+    "artists": "Artis",
+    "@artists": {},
+    "genres": "Genre",
+    "@genres": {},
+    "noGenres": "Tanpa genre",
+    "@noGenres": {
+        "description": "Gets shown when there are no genres available for an album or artist"
+    },
+    "playlists": "Daftar Putar",
+    "@playlists": {},
+    "startMix": "Mulai campur",
+    "@startMix": {},
+    "startMixNoTracksArtist": "Tekan tahan pada artis untuk menambahkan atau menghapusnya dari pembuat campuran sebelum memulai campur",
+    "@startMixNoTracksArtist": {
+        "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
+    },
+    "startMixNoTracksAlbum": "Tekan lama album untuk menambah atau menghapusnya dari pembangun campuran sebelum memulai campuran",
+    "@startMixNoTracksAlbum": {
+        "description": "Snackbar message that shows when the user presses the instant mix button with no albums selected"
+    },
+    "startMixNoTracksGenre": "­Tekan lama genre untuk menambah atau menghapusnya dari pembuat campuran sebelum memulai campuran",
+    "@startMixNoTracksGenre": {
+        "description": "Snackbar message that shows when the user presses the instant mix button with no genres selected"
+    },
+    "music": "Musik",
+    "@music": {},
+    "clear": "Clear",
+    "@clear": {},
+    "favorite": "Disukai",
+    "@favorite": {},
+    "favorites": "Disukai",
+    "@favorites": {},
+    "shuffleAll": "Acak semua",
+    "@shuffleAll": {},
+    "downloads": "Unduhan",
+    "@downloads": {},
+    "settings": "Pengaturan",
+    "@settings": {},
+    "offlineMode": "Mode luring",
+    "@offlineMode": {},
+    "onlineMode": "Mode Daring",
+    "@onlineMode": {},
+    "sortOrder": "Urut berdasarkan",
+    "@sortOrder": {},
+    "sortBy": "Urut berdasarkan",
+    "@sortBy": {},
+    "title": "Judul",
+    "@title": {}
+}
