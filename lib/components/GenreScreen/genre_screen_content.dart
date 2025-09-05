@@ -2,16 +2,16 @@ import 'dart:async';
 
 import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
-import 'package:finamp/components/curated_item_filter_row.dart';
-import 'package:finamp/components/global_snackbar.dart';
-import 'package:finamp/services/audio_service_helper.dart';
-import 'package:finamp/services/genre_screen_provider.dart';
-import 'package:finamp/components/curated_item_sections.dart';
 import 'package:finamp/components/GenreScreen/genre_count_column.dart';
+import 'package:finamp/components/curated_item_filter_row.dart';
+import 'package:finamp/components/curated_item_sections.dart';
 import 'package:finamp/components/favorite_button.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/screens/music_screen.dart';
+import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/genre_screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -303,7 +303,7 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                       GlobalSnackbar.error(e);
                     }
                   },
-                  minWidth: MediaQuery.of(context).size.width * 0.5,
+                  minWidth: MediaQuery.widthOf(context) * 0.5,
                 ),
               ),
             ),

@@ -83,8 +83,8 @@ class PlayerScreen extends ConsumerWidget {
     );
   }
 
-  Widget buildLoadingScreen(BuildContext context, Function()? retryCallback) {
-    double imageSize = min(MediaQuery.sizeOf(context).width, MediaQuery.sizeOf(context).height) / 2;
+  Widget buildLoadingScreen(BuildContext context, void Function()? retryCallback) {
+    double imageSize = min(MediaQuery.widthOf(context), MediaQuery.heightOf(context)) / 2;
 
     return SimpleGestureDetector(
       onTap: retryCallback,

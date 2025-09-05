@@ -1,7 +1,7 @@
 import 'package:balanced_text/balanced_text.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../models/finamp_models.dart';
@@ -23,7 +23,7 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
   Widget build(BuildContext context) {
     final currentTrackStream = _queueService.getCurrentTrackStream();
 
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.widthOf(context);
 
     return StreamBuilder<FinampQueueItem?>(
       stream: currentTrackStream,

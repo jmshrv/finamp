@@ -56,7 +56,7 @@ Future<void> showThemedBottomSheet({
     isScrollControlled: true,
     clipBehavior: Clip.hardEdge,
     constraints: BoxConstraints(
-      maxWidth: (Platform.isIOS || Platform.isAndroid) ? 500 : min(500, MediaQuery.sizeOf(context).width * 0.9),
+      maxWidth: (Platform.isIOS || Platform.isAndroid) ? 500 : min(500, MediaQuery.widthOf(context) * 0.9),
     ),
     isDismissible: true,
     enableDrag: true,

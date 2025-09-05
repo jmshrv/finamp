@@ -85,7 +85,7 @@ class NowPlayingBar extends StatelessWidget {
                 : Theme.of(context).cardColor,
             elevation: 8.0,
             child: Container(
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery.widthOf(context),
               height: albumImageSize,
               padding: EdgeInsets.zero,
               child: Container(
@@ -133,7 +133,7 @@ class NowPlayingBar extends StatelessWidget {
     PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => const PlayerScreen(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        if (MediaQuery.of(context).disableAnimations) {
+        if (MediaQuery.disableAnimationsOf(context)) {
           return child;
         }
         const begin = Offset(0.0, 1.0);
@@ -233,7 +233,7 @@ class NowPlayingBar extends StatelessWidget {
                         if (mediaState.mediaItem != null) {
                           //TODO move into separate component and share with queue list
                           return Container(
-                            width: MediaQuery.of(context).size.width,
+                            width: MediaQuery.widthOf(context),
                             height: albumImageSize,
                             padding: EdgeInsets.zero,
                             child: Container(

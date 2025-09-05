@@ -542,7 +542,7 @@ class _FinampState extends State<Finamp> with WindowListener {
           child: ValueListenableBuilder(
             valueListenable: LocaleHelper.localeListener,
             builder: (_, __, ___) {
-              final transitionBuilder = MediaQuery.of(context).disableAnimations
+              final transitionBuilder = MediaQuery.disableAnimationsOf(context)
                   ? PageTransitionsTheme(
                       // Disable page transitions on all platforms if [disableAnimations] is true, otherwise use default transitions
                       builders: TargetPlatform.values.fold(

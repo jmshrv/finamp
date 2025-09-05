@@ -59,7 +59,7 @@ class _LoginFlowState extends State<LoginFlow> {
           Route createRoute(Widget page) => PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) => page,
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              if (MediaQuery.of(context).disableAnimations) {
+              if (MediaQuery.disableAnimationsOf(context)) {
                 return child;
               }
               final pushingNext = secondaryAnimation.status == AnimationStatus.forward;

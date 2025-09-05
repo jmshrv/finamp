@@ -517,7 +517,7 @@ class _MusicScreenTabViewState extends ConsumerState<MusicScreenTabView>
                     gridTileSize: FinampSettingsHelper.finampSettings.fixedGridTileSize.toDouble(),
                   )
                 : SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: MediaQuery.sizeOf(context).width > MediaQuery.sizeOf(context).height
+                    crossAxisCount: MediaQuery.orientationOf(context) == Orientation.landscape
                         ? FinampSettingsHelper.finampSettings.contentGridViewCrossAxisCountLandscape
                         : FinampSettingsHelper.finampSettings.contentGridViewCrossAxisCountPortrait,
                   ),

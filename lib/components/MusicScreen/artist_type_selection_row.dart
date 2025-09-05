@@ -21,7 +21,7 @@ class ArtistTypeSelectionRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (tabType == TabContentType.artists) {
-      double screenWidth = MediaQuery.sizeOf(context).width;
+      double screenWidth = MediaQuery.widthOf(context);
       bool alignLeft = screenWidth > 600;
 
       return SafeArea(

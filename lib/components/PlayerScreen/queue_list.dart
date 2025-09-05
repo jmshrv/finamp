@@ -103,12 +103,12 @@ class _QueueListState extends State<QueueList> {
 
     widget.scrollController.addListener(() {
       if (widget.jumpToCurrentKey.currentContext == null) return;
-      final screenSize = MediaQuery.sizeOf(widget.jumpToCurrentKey.currentContext!);
+      final screenHeight = MediaQuery.heightOf(widget.jumpToCurrentKey.currentContext!);
       double offset = widget.scrollController.offset - _currentTrackScroll;
       int jumpDirection = 0;
-      if (offset > screenSize.height * 0.5) {
+      if (offset > screenHeight * 0.5) {
         jumpDirection = -1;
-      } else if (offset < -screenSize.height) {
+      } else if (offset < -screenHeight) {
         jumpDirection = 1;
       }
       widget.jumpToCurrentKey.currentState?.showJumpToTop = jumpDirection;

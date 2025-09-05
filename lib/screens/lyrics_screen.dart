@@ -175,7 +175,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
     WidgetsBinding.instance.addObserver(this);
     autoScrollController = AutoScrollController(
       suggestedRowHeight: 72,
-      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.paddingOf(context).bottom),
       axis: Axis.vertical,
     );
 
@@ -271,7 +271,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
         }
 
         currentLineIndex = closestLineIndex;
-        if (currentLineIndex! != previousLineIndex) {
+        if (currentLineIndex! != previousLineIndex && context.mounted) {
           setState(() {}); // Rebuild to update the current line
           if (autoScrollController.hasClients && isAutoScrollEnabled) {
             int clampedIndex = currentLineIndex ?? 0;
@@ -282,7 +282,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
               await autoScrollController.scrollToIndex(
                 -1,
                 preferPosition: AutoScrollPosition.middle,
-                duration: MediaQuery.of(context).disableAnimations
+                duration: MediaQuery.disableAnimationsOf(context)
                     ? const Duration(
                         milliseconds: 1,
                       ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
@@ -293,7 +293,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                 autoScrollController.scrollToIndex(
                   clampedIndex.clamp(0, lyricLines.length - 1),
                   preferPosition: AutoScrollPosition.middle,
-                  duration: MediaQuery.of(context).disableAnimations
+                  duration: MediaQuery.disableAnimationsOf(context)
                       ? const Duration(
                           milliseconds: 1,
                         ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
@@ -363,7 +363,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                                   autoScrollController.scrollToIndex(
                                     index,
                                     preferPosition: AutoScrollPosition.middle,
-                                    duration: MediaQuery.of(context).disableAnimations
+                                    duration: MediaQuery.disableAnimationsOf(context)
                                         ? const Duration(
                                             milliseconds: 1,
                                           ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
@@ -394,7 +394,7 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                             autoScrollController.scrollToIndex(
                               previousLineIndex!,
                               preferPosition: AutoScrollPosition.middle,
-                              duration: MediaQuery.of(context).disableAnimations
+                              duration: MediaQuery.disableAnimationsOf(context)
                                   ? const Duration(
                                       milliseconds: 1,
                                     ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling

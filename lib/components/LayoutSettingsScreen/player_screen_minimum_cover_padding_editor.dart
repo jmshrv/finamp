@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
@@ -21,7 +21,7 @@ class _PlayerScreenMinimumCoverPaddingEditorState extends State<PlayerScreenMini
       title: Text(AppLocalizations.of(context)!.playerScreenMinimumCoverPaddingEditorTitle),
       subtitle: Text(AppLocalizations.of(context)!.playerScreenMinimumCoverPaddingEditorSubtitle),
       trailing: SizedBox(
-        width: 50 * MediaQuery.of(context).textScaleFactor,
+        width: 50 * MediaQuery.textScaleFactorOf(context),
         child: TextField(
           controller: _controller,
           textAlign: TextAlign.center,

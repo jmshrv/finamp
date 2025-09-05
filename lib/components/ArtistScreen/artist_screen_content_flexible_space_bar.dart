@@ -121,14 +121,14 @@ class ArtistScreenContentFlexibleSpaceBar extends StatelessWidget {
                         icon: TablerIcons.player_play,
                         onPressed: () => allTracks.then((items) => playAllFromArtist(items ?? [])),
                         // set the minimum width as 25% of the screen width,
-                        minWidth: MediaQuery.of(context).size.width * 0.25,
+                        minWidth: MediaQuery.widthOf(context) * 0.25,
                       ),
                       CTAMedium(
                         text: AppLocalizations.of(context)!.shuffleButtonLabel,
                         icon: TablerIcons.arrows_shuffle,
                         onPressed: () => allTracks.then((items) => shuffleAllFromArtist(items ?? [])),
                         // set the minimum width as 25% of the screen width,
-                        minWidth: MediaQuery.of(context).size.width * 0.25,
+                        minWidth: MediaQuery.widthOf(context) * 0.25,
                       ),
                       OverflowMenuButton(
                         onPressed: () => showModalArtistMenu(context: context, baseItem: parentItem),

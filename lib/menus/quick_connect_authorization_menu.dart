@@ -41,7 +41,7 @@ Future<void> showQuickConnectAuthorizationMenu({required BuildContext context}) 
         ),
         SliverPadding(padding: EdgeInsets.only(bottom: 40.0)),
       ];
-      var stackHeight = MediaQuery.sizeOf(context).height * 0.65;
+      var stackHeight = MediaQuery.heightOf(context) * 0.65;
       return (stackHeight, menu);
     },
   );

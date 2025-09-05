@@ -4,7 +4,6 @@ import 'package:finamp/components/AlbumScreen/download_button.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
@@ -289,7 +288,7 @@ class _BufferSizeListTileState extends State<DownloadSizeWarningCutoffTile> {
       title: Text(AppLocalizations.of(context)!.downloadSizeWarningCutoff),
       subtitle: Text(AppLocalizations.of(context)!.downloadSizeWarningCutoffSubtitle),
       trailing: SizedBox(
-        width: 50 * MediaQuery.of(context).textScaleFactor,
+        width: 50 * MediaQuery.textScaleFactorOf(context),
         child: TextField(
           controller: _controller,
           textAlign: TextAlign.center,

@@ -121,14 +121,14 @@ class AlbumScreenContentFlexibleSpaceBar extends StatelessWidget {
                         icon: TablerIcons.player_play,
                         onPressed: () => playAlbum(),
                         // set the minimum width as 25% of the screen width,
-                        minWidth: MediaQuery.of(context).size.width * 0.25,
+                        minWidth: MediaQuery.widthOf(context) * 0.25,
                       ),
                       CTAMedium(
                         text: AppLocalizations.of(context)!.shuffleButtonLabel,
                         icon: TablerIcons.arrows_shuffle,
                         onPressed: () => shuffleAlbum(),
                         // set the minimum width as 25% of the screen width,
-                        minWidth: MediaQuery.of(context).size.width * 0.25,
+                        minWidth: MediaQuery.widthOf(context) * 0.25,
                       ),
                       OverflowMenuButton(
                         onPressed: () => isPlaylist

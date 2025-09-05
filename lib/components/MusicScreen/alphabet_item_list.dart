@@ -133,8 +133,8 @@ class _AlphabetListState extends ConsumerState<AlphabetList> {
                       });
                     },
                     child: Container(
-                      width: MediaQuery.sizeOf(context).width / 3,
-                      height: MediaQuery.sizeOf(context).width / 3,
+                      width: MediaQuery.widthOf(context) / 3,
+                      height: MediaQuery.widthOf(context) / 3,
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor.withOpacity(0.85),
                         borderRadius: BorderRadius.circular(20),

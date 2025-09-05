@@ -110,7 +110,7 @@ Future<void> showPlaylistActionsMenu({
         const SliverPadding(padding: EdgeInsets.only(bottom: 100.0)),
       ];
       // TODO better estimate, how to deal with lag getting playlists?
-      var stackHeight = MediaQuery.sizeOf(context).height * 0.9;
+      var stackHeight = MediaQuery.heightOf(context) * 0.9;
       return (stackHeight, menu);
     },
   );
