@@ -13,6 +13,9 @@ final currentTrackMetadataProvider = AutoDisposeProvider<AsyncValue<MetadataProv
     BaseItemDto? base = itemToPrecache.baseItem;
     if (base != null) {
       ref.listen(metadataProvider(base), (_, __) {});
+      ref.read(
+        metadataProvider(base),
+      ); // forces it even in background https://github.com/rrousselGit/riverpod/issues/2671
     }
   }
 

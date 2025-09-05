@@ -44,6 +44,7 @@ import 'package:finamp/services/ui_overlay_setter_observer.dart';
 import 'package:finamp/services/widget_bindings_observer_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -96,6 +97,8 @@ import 'services/theme_mode_helper.dart';
 import 'setup_logging.dart';
 
 final _mainLog = Logger("Main()");
+
+final providerScopeKey = GlobalKey();
 
 void main() async {
   // If the app has failed, this is set to true. If true, we don't attempt to run the main app since the error app has started.
@@ -300,6 +303,14 @@ Future<void> _setupProviders() async {
 
   DataSourceService.create();
   AutoOffline.startWatching();
+
+  unawaited(
+    Stream.periodic(Duration(seconds: 1)).forEach((_) {
+      if (!SchedulerBinding.instance.framesEnabled) {
+        (providerScopeKey.currentContext as InheritedElement?)?.build();
+      }
+    }),
+  );
 }
 
 Future<void> _setupOSIntegration() async {
@@ -525,6 +536,7 @@ class _FinampState extends State<Finamp> with WindowListener {
   @override
   Widget build(BuildContext context) {
     return UncontrolledProviderScope(
+      key: providerScopeKey,
       container: GetIt.instance<ProviderContainer>(),
       child: GestureDetector(
         onTap: () {
