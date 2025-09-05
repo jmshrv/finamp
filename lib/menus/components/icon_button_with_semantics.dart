@@ -29,7 +29,7 @@ class IconButtonWithSemantics extends ConsumerWidget {
           visualDensity: VisualDensity.compact,
           onPressed: () {
             if (onPressed != null) {
-              onPressed();
+              onPressed?.call();
               FeedbackHelper.feedback(FeedbackType.selection);
             }
           },
