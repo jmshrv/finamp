@@ -306,6 +306,7 @@ Future<dynamic> showQueueBottomSheet(BuildContext context, WidgetRef ref) {
     enableDrag: true,
     useSafeArea: true,
     routeSettings: const RouteSettings(name: QueueList.routeName),
+    constraints: BoxConstraints(maxWidth: (MediaQuery.widthOf(context) * 0.9).clamp(640, 900)),
     clipBehavior: Clip.antiAlias,
     // Anchor to bottom right sub screen, required for foldables
     // On book-style foldables, this will anchor to the right half of the screen.

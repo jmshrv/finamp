@@ -25,6 +25,7 @@ import '../../services/downloads_service.dart';
 import '../../services/finamp_settings_helper.dart';
 import '../../services/queue_service.dart';
 import '../../services/theme_provider.dart';
+import '../album_image.dart';
 import '../print_duration.dart';
 import 'downloaded_indicator.dart';
 
@@ -703,7 +704,7 @@ class TrackListItemTile extends ConsumerWidget {
               ),
             ),
           ),
-        //if (showCover) AlbumImage(item: baseItem, borderRadius: BorderRadius.circular(albumCoverCornerRadius)),
+        if (showCover) AlbumImage(item: baseItem, borderRadius: BorderRadius.circular(albumCoverCornerRadius)),
       ],
     );
     final tileTitle = ConstrainedBox(
@@ -885,7 +886,7 @@ class TrackListItemTile extends ConsumerWidget {
       ),
     );
     final listTile = OverflowBuilder(
-      hasOverflowed: (BoxConstraints constraints) => constraints.maxWidth > 800,
+      hasOverflowed: (BoxConstraints constraints) => constraints.maxWidth > 750,
       builder: (context, showOverflowMenu) {
         return ListTile(
           visualDensity: const VisualDensity(horizontal: 0.0, vertical: 0.5),
