@@ -198,6 +198,14 @@ class _QueueListState extends State<QueueList> {
         ),
         sliver: QueueTracksList(previousTracksHeaderKey: widget.previousTracksHeaderKey),
       ),
+      SliverToBoxAdapter(
+        child: Switch(
+            value: _queueService.getUseRadio(),
+            onChanged: (useRadio) => setState(() {
+              _queueService.setUseRadio(useRadio);
+            })
+        )
+      )
     ];
 
     return ScrollbarTheme(

@@ -66,6 +66,7 @@ class QueueService {
   FinampLoopMode _loopMode = FinampLoopMode.none;
   double _playbackSpeed = 1.0;
   double _playbackPitch = 1.0;
+  bool _useRadio = true;
 
   final _currentTrackStream = BehaviorSubject<FinampQueueItem?>.seeded(null);
   final _queueStream = BehaviorSubject<FinampQueueInfo?>.seeded(null);
@@ -135,7 +136,7 @@ class QueueService {
       } else {
         _saveUpdateCycleCount++;
       }
-      maybeAddRandomizedNext();
+      maybeAddRadioSong();
     });
 
     // register callbacks
@@ -146,11 +147,10 @@ class QueueService {
     // );
   }
 
-  Future<void> maybeAddRandomizedNext() async {
-    // TODO: Fix on Desktop (shuffled gets set to linear there)
+  Future<void> maybeAddRadioSong() async {
     // TODO: Have this work even if songs are less than 10 seconds and finish naturally
     // TODO: Don't pollute the linear queue.
-    if (_queueNextUp.length + _queue.length < 5 && _playbackOrder == FinampPlaybackOrder.shuffled && FinampSettingsHelper.finampSettings.useRandomize) {
+    if (_queueNextUp.length + _queue.length < 5 && _useRadio) {
       // Queue likely contains multiple of the same item. Deduplicate using a set for an equal chance of any item.
       Set<jellyfin_models.BaseItemDto> itemsSet = {};
       for (FinampQueueItem queueItem in getQueue().fullQueue) {
@@ -899,6 +899,14 @@ class QueueService {
 
   void refreshQueueStream() {
     _queueStream.add(getQueue());
+  }
+
+  bool getUseRadio() {
+    return _useRadio;
+  }
+
+  void setUseRadio(bool useRadio) {
+    _useRadio = useRadio;
   }
 
   /// Returns the entire queue (Next Up + regular queue)
