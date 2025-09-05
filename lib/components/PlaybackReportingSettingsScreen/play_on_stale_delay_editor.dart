@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:finamp/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 import '../../services/finamp_settings_helper.dart';
 
@@ -28,7 +28,7 @@ class _PlayOnStaleDelayEditorState extends State<PlayOnStaleDelayEditor> {
         ),
       ),
       trailing: SizedBox(
-        width: 50 * MediaQuery.of(context).textScaleFactor,
+        width: 50 * MediaQuery.textScaleFactorOf(context),
         child: TextField(
           controller: _controller,
           textAlign: TextAlign.center,

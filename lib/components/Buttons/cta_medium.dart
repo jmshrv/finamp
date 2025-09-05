@@ -62,7 +62,7 @@ class CTAMedium extends StatelessWidget {
   static double predictedHeight(BuildContext context) {
     final densityAdj = VisualDensity.adaptivePlatformDensity.baseSizeAdjustment.dy;
     return max(
-      MediaQuery.sizeOf(context).height * 0.03 + 24 + densityAdj + densityAdj,
+      MediaQuery.heightOf(context) * 0.03 + 24 + densityAdj + densityAdj,
       kMinInteractiveDimension + densityAdj,
     );
   }

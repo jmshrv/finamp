@@ -123,7 +123,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
         contentGridViewCrossAxisCountLandscape: fields[12] == null
             ? 3
             : (fields[12] as num).toInt(),
-        showTextOnGridView: fields[13] == null ? true : fields[13] as bool,
+        showTextOnGridView: fields[13] == null ? false : fields[13] as bool,
         downloadLocationsMap: fields[15] == null
             ? {}
             : (fields[15] as Map).cast<String, DownloadLocation>(),

@@ -235,7 +235,7 @@ class _MusicScreenTabViewState extends ConsumerState<MusicScreenTabView>
     });
     controller = AutoScrollController(
       suggestedRowHeight: 72,
-      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.paddingOf(context).bottom),
       axis: Axis.vertical,
     );
     _musicScreenRefreshStreamSubscription = musicScreenRefreshStream.stream.listen((_) {
@@ -320,7 +320,7 @@ class _MusicScreenTabViewState extends ConsumerState<MusicScreenTabView>
 
       _pagingController.notifyPageRequestListeners(_pagingController.nextPageKey!);
     }
-    if (MediaQuery.of(context).disableAnimations) {
+    if (MediaQuery.disableAnimationsOf(context)) {
       controller.jumpTo(controller.position.maxScrollExtent);
     } else {
       await controller.animateTo(
@@ -437,39 +437,43 @@ class _MusicScreenTabViewState extends ConsumerState<MusicScreenTabView>
                 // built-in icon padding
                 return Padding(
                   padding: EdgeInsets.only(right: max(0, MediaQuery.paddingOf(context).right - 20)),
-                  child: AutoScrollTag(
-                    key: ValueKey(index),
-                    controller: controller,
-                    index: index,
-                    child: widget.tabContentType == TabContentType.tracks
-                        ? TrackListTile(
-                            key: ValueKey(item.id),
-                            item: item,
-                            isTrack: true,
-                            index: index,
-                            isShownInSearchOrHistory: widget.searchTerm != null,
-                            // when the tabBar was filtered and we only have the tracks tab,
-                            // we can allow Dismiss gestures in the track list
-                            allowDismiss: widget.tabBarFiltered,
-                            genreFilter: widget.genreFilter,
-                            isOnGenreScreen: (widget.genreFilter != null) ? true : false,
-                            parentItem: widget.genreFilter,
-                            forceAlbumArtists: (sortBy == SortBy.albumArtist),
-                            adaptiveAdditionalInfoSortBy: sortBy,
-                            // since we can't re-create the current random sorting, we simply pass the pre-sorted tracks along
-                            // only done in offline mode since online mode doesn't support playing the tab contents in order anyway
-                            children: FinampSettingsHelper.finampSettings.isOffline && sortBy == SortBy.random
-                                ? _pagingController.itemList
-                                : null,
-                          )
-                        : ItemCollectionWrapper(
-                            key: ValueKey(item.id),
-                            item: item,
-                            isPlaylist: widget.tabContentType == TabContentType.playlists,
-                            genreFilter: widget.genreFilter,
-                            adaptiveAdditionalInfoSortBy: sortBy,
-                            showFavoriteIconOnlyWhenFilterDisabled: true,
-                          ),
+                  child: CachedBuilder(
+                    key: ValueKey(item.id),
+                    cacheKey: (item.id, index),
+                    builder: (context) {
+                      return AutoScrollTag(
+                        key: ValueKey(index),
+                        controller: controller,
+                        index: index,
+                        child: widget.tabContentType == TabContentType.tracks
+                            ? TrackListTile(
+                                item: item,
+                                isTrack: true,
+                                index: index,
+                                isShownInSearchOrHistory: widget.searchTerm != null,
+                                // when the tabBar was filtered and we only have the tracks tab,
+                                // we can allow Dismiss gestures in the track list
+                                allowDismiss: widget.tabBarFiltered,
+                                genreFilter: widget.genreFilter,
+                                isOnGenreScreen: (widget.genreFilter != null) ? true : false,
+                                parentItem: widget.genreFilter,
+                                forceAlbumArtists: (sortBy == SortBy.albumArtist),
+                                adaptiveAdditionalInfoSortBy: sortBy,
+                                // since we can't re-create the current random sorting, we simply pass the pre-sorted tracks along
+                                // only done in offline mode since online mode doesn't support playing the tab contents in order anyway
+                                children: FinampSettingsHelper.finampSettings.isOffline && sortBy == SortBy.random
+                                    ? _pagingController.itemList
+                                    : null,
+                              )
+                            : ItemCollectionWrapper(
+                                item: item,
+                                isPlaylist: widget.tabContentType == TabContentType.playlists,
+                                genreFilter: widget.genreFilter,
+                                adaptiveAdditionalInfoSortBy: sortBy,
+                                showFavoriteIconOnlyWhenFilterDisabled: true,
+                              ),
+                      );
+                    },
                   ),
                 );
               },
@@ -486,17 +490,22 @@ class _MusicScreenTabViewState extends ConsumerState<MusicScreenTabView>
             physics: _DeferredLoadingAlwaysScrollableScrollPhysics(tabState: this),
             builderDelegate: PagedChildBuilderDelegate<BaseItemDto>(
               itemBuilder: (context, item, index) {
-                return AutoScrollTag(
-                  key: ValueKey(index),
-                  controller: controller,
-                  index: index,
-                  child: ItemCollectionWrapper(
-                    key: ValueKey(item.id),
-                    item: item,
-                    isPlaylist: widget.tabContentType == TabContentType.playlists,
-                    isGrid: true,
-                    genreFilter: widget.genreFilter,
-                  ),
+                return CachedBuilder(
+                  key: ValueKey(item.id),
+                  cacheKey: (item.id, index),
+                  builder: (context) {
+                    return AutoScrollTag(
+                      key: ValueKey(index),
+                      controller: controller,
+                      index: index,
+                      child: ItemCollectionWrapper(
+                        item: item,
+                        isPlaylist: widget.tabContentType == TabContentType.playlists,
+                        isGrid: true,
+                        genreFilter: widget.genreFilter,
+                      ),
+                    );
+                  },
                 );
               },
               firstPageProgressIndicatorBuilder: (_) => const FirstPageProgressIndicator(),
@@ -508,7 +517,7 @@ class _MusicScreenTabViewState extends ConsumerState<MusicScreenTabView>
                     gridTileSize: FinampSettingsHelper.finampSettings.fixedGridTileSize.toDouble(),
                   )
                 : SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: MediaQuery.of(context).size.width > MediaQuery.of(context).size.height
+                    crossAxisCount: MediaQuery.orientationOf(context) == Orientation.landscape
                         ? FinampSettingsHelper.finampSettings.contentGridViewCrossAxisCountLandscape
                         : FinampSettingsHelper.finampSettings.contentGridViewCrossAxisCountPortrait,
                   ),
@@ -685,4 +694,32 @@ List<BaseItemDto> filterItemsByGenreName(List<BaseItemDto> items, BaseItemDto ge
 
     return assignedGenres.any((genre) => genre.name == genreFilter.name);
   }).toList();
+}
+
+class CachedBuilder<T> extends StatefulWidget {
+  const CachedBuilder({required this.builder, required this.cacheKey, super.key});
+
+  final Widget Function(BuildContext context) builder;
+  final T cacheKey;
+
+  @override
+  State<CachedBuilder<T>> createState() => _CachedBuilderState<T>();
+}
+
+class _CachedBuilderState<T> extends State<CachedBuilder<T>> {
+  Widget? child;
+
+  @override
+  void didUpdateWidget(covariant CachedBuilder<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.cacheKey != oldWidget.cacheKey) {
+      child = null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    child ??= widget.builder(context);
+    return child!;
+  }
 }

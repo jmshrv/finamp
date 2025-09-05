@@ -25,7 +25,7 @@ class ItemCollectionCard extends ConsumerWidget {
         child: Stack(
           children: [
             AlbumImage(item: item),
-            ref.watch(finampSettingsProvider.showTextOnGridView)
+            ref.watch(finampSettingsProvider.showTextOnGridView) || item.imageId == null
                 ? _ItemCollectionCardText(item: item, parentType: parentType)
                 : const SizedBox.shrink(),
             Positioned.fill(

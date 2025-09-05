@@ -376,7 +376,7 @@ class _ThemeTransitionCalculator {
   bool _skipAllTransitions = false;
 
   Duration getThemeTransitionDuration(BuildContext context, Duration? duration) {
-    if (_skipAllTransitions || MediaQuery.of(context).disableAnimations) {
+    if (_skipAllTransitions || MediaQuery.disableAnimationsOf(context)) {
       return Duration.zero;
     }
     return (context.mounted && (ModalRoute.isCurrentOf(context) ?? true))

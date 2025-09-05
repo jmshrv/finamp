@@ -74,7 +74,7 @@ void scrollToKey({required GlobalKey key, required Duration duration, required B
   }
   Scrollable.ensureVisible(
     key.currentContext!,
-    duration: MediaQuery.of(context).disableAnimations ? Duration.zero : duration,
+    duration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : duration,
     curve: Curves.easeInOutCubic,
   );
 }
@@ -102,12 +102,13 @@ class _QueueListState extends State<QueueList> {
     _contents = <Widget>[];
 
     widget.scrollController.addListener(() {
-      final screenSize = MediaQuery.of(context).size;
+      if (widget.jumpToCurrentKey.currentContext == null) return;
+      final screenHeight = MediaQuery.heightOf(widget.jumpToCurrentKey.currentContext!);
       double offset = widget.scrollController.offset - _currentTrackScroll;
       int jumpDirection = 0;
-      if (offset > screenSize.height * 0.5) {
+      if (offset > screenHeight * 0.5) {
         jumpDirection = -1;
-      } else if (offset < -screenSize.height) {
+      } else if (offset < -screenHeight) {
         jumpDirection = 1;
       }
       widget.jumpToCurrentKey.currentState?.showJumpToTop = jumpDirection;
@@ -230,6 +231,74 @@ Future<dynamic> showQueueBottomSheet(BuildContext context, WidgetRef ref) {
 
   FeedbackHelper.feedback(FeedbackType.heavy);
 
+  final menu = PlayerScreenTheme(
+    child: Consumer(
+      builder: (context, ref, child) {
+        final halfOpened = ref.watch(halfOpenFoldableProvider);
+        return DraggableScrollableSheet(
+          snap: false,
+          snapAnimationDuration: MediaQuery.disableAnimationsOf(context)
+              ? Duration.zero
+              : const Duration(milliseconds: 200),
+          // Cover the whole sub screen when in half opened mode
+          initialChildSize: halfOpened ? 1.0 : 0.92,
+          minChildSize: halfOpened ? 1.0 : 0.25,
+          expand: false,
+          builder: (context, scrollController) {
+            return Scaffold(
+              body: Stack(
+                children: [
+                  if (ref.watch(finampSettingsProvider.useCoverAsBackground))
+                    BlurredPlayerScreenBackground(
+                      opacityFactor: Theme.of(context).brightness == Brightness.dark ? 1.0 : 0.85,
+                    ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 10),
+                      Container(
+                        width: 40,
+                        height: 3.5,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).textTheme.bodySmall!.color!,
+                          borderRadius: BorderRadius.circular(3.5),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        AppLocalizations.of(context)!.queue,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge!.color!,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Expanded(
+                        child: QueueList(
+                          scrollController: scrollController,
+                          previousTracksHeaderKey: previousTracksHeaderKey,
+                          currentTrackKey: currentTrackKey,
+                          nextUpHeaderKey: nextUpHeaderKey,
+                          queueHeaderKey: queueHeaderKey,
+                          jumpToCurrentKey: jumpToCurrentKey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              floatingActionButton: JumpToCurrentButton(
+                key: jumpToCurrentKey,
+                previousTracksHeaderKey: previousTracksHeaderKey,
+              ),
+            );
+          },
+        );
+      },
+    ),
+  );
+
   return showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24.0))),
@@ -237,81 +306,13 @@ Future<dynamic> showQueueBottomSheet(BuildContext context, WidgetRef ref) {
     enableDrag: true,
     useSafeArea: true,
     routeSettings: const RouteSettings(name: QueueList.routeName),
+    constraints: BoxConstraints(maxWidth: (MediaQuery.widthOf(context) * 0.9).clamp(640, 900)),
     clipBehavior: Clip.antiAlias,
     // Anchor to bottom right sub screen, required for foldables
     // On book-style foldables, this will anchor to the right half of the screen.
     // On flip-style foldables, this will anchor to the bottom half of the screen.
     anchorPoint: Offset(double.maxFinite, double.maxFinite),
-    builder: (context) {
-      return PlayerScreenTheme(
-        child: Consumer(
-          builder: (context, ref, child) {
-            final halfOpened = ref.watch(halfOpenFoldableProvider);
-
-            return DraggableScrollableSheet(
-              snap: false,
-              snapAnimationDuration: MediaQuery.of(context).disableAnimations
-                  ? Duration.zero
-                  : const Duration(milliseconds: 200),
-              // Cover the whole sub screen when in half opened mode
-              initialChildSize: halfOpened ? 1.0 : 0.92,
-              minChildSize: halfOpened ? 1.0 : 0.25,
-              expand: false,
-              builder: (context, scrollController) {
-                return Scaffold(
-                  body: Stack(
-                    children: [
-                      if (ref.watch(finampSettingsProvider.useCoverAsBackground))
-                        BlurredPlayerScreenBackground(
-                          opacityFactor: Theme.of(context).brightness == Brightness.dark ? 1.0 : 0.85,
-                        ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const SizedBox(height: 10),
-                          Container(
-                            width: 40,
-                            height: 3.5,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).textTheme.bodySmall!.color!,
-                              borderRadius: BorderRadius.circular(3.5),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            AppLocalizations.of(context)!.queue,
-                            style: TextStyle(
-                              color: Theme.of(context).textTheme.bodyLarge!.color!,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          Expanded(
-                            child: QueueList(
-                              scrollController: scrollController,
-                              previousTracksHeaderKey: previousTracksHeaderKey,
-                              currentTrackKey: currentTrackKey,
-                              nextUpHeaderKey: nextUpHeaderKey,
-                              queueHeaderKey: queueHeaderKey,
-                              jumpToCurrentKey: jumpToCurrentKey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  floatingActionButton: JumpToCurrentButton(
-                    key: jumpToCurrentKey,
-                    previousTracksHeaderKey: previousTracksHeaderKey,
-                  ),
-                );
-              },
-            );
-          },
-        ),
-      );
-    },
+    builder: (context) => menu,
   );
 }
 

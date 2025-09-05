@@ -90,7 +90,7 @@ class _BufferSizeListTileState extends ConsumerState<BufferSizeListTile> {
       title: Text(AppLocalizations.of(context)!.bufferSizeTitle),
       subtitle: Text(AppLocalizations.of(context)!.bufferSizeSubtitle),
       trailing: SizedBox(
-        width: 50 * MediaQuery.of(context).textScaleFactor,
+        width: 50 * MediaQuery.textScaleFactorOf(context),
         child: TextField(
           controller: _controller,
           textAlign: TextAlign.center,
@@ -138,7 +138,7 @@ class _AudioFadeInDurationListTileState extends ConsumerState<AudioFadeInDuratio
       title: Text(AppLocalizations.of(context)!.audioFadeInDurationSettingTitle),
       subtitle: Text(AppLocalizations.of(context)!.audioFadeInDurationSettingSubtitle),
       trailing: SizedBox(
-        width: 50 * MediaQuery.of(context).textScaleFactor,
+        width: 50 * MediaQuery.textScaleFactorOf(context),
         child: TextField(
           controller: _controller,
           textAlign: TextAlign.center,
@@ -181,7 +181,7 @@ class _AudioFadeOutDurationListTileState extends ConsumerState<AudioFadeOutDurat
       title: Text(AppLocalizations.of(context)!.audioFadeOutDurationSettingTitle),
       subtitle: Text(AppLocalizations.of(context)!.audioFadeOutDurationSettingSubtitle),
       trailing: SizedBox(
-        width: 50 * MediaQuery.of(context).textScaleFactor,
+        width: 50 * MediaQuery.textScaleFactorOf(context),
         child: TextField(
           controller: _controller,
           textAlign: TextAlign.center,

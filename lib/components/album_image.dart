@@ -108,9 +108,9 @@ class _AlbumImageState extends ConsumerState<AlbumImage> {
                 // Logical pixels aren't the same as the physical pixels on the device, they're quite a bit bigger.
                 // If we use logical pixels for the image request, we'll get a smaller image than we want.
                 // Because of this, we convert the logical pixels to physical pixels by multiplying by the device's DPI.
-                final MediaQueryData mediaQuery = MediaQuery.of(context);
-                physicalWidth = (constraints.maxWidth * mediaQuery.devicePixelRatio).toInt();
-                physicalHeight = (constraints.maxHeight * mediaQuery.devicePixelRatio).toInt();
+                final pixelRatio = MediaQuery.devicePixelRatioOf(context);
+                physicalWidth = (constraints.maxWidth * pixelRatio).toInt();
+                physicalHeight = (constraints.maxHeight * pixelRatio).toInt();
                 // If using grid music screen view without fixed size tiles, and if the view is resizable due
                 // to being on desktop and using split screen, then clamp album size to reduce server requests when resizing.
                 if ((!(Platform.isIOS || Platform.isAndroid) || usingPlayerSplitScreen) &&
@@ -154,7 +154,7 @@ class _AlbumImageState extends ConsumerState<AlbumImage> {
                   PageRouteBuilder<_ZoomedImage>(
                     opaque: false,
                     barrierDismissible: true,
-                    transitionDuration: MediaQuery.of(context).disableAnimations
+                    transitionDuration: MediaQuery.disableAnimationsOf(context)
                         ? Duration.zero
                         : const Duration(milliseconds: 500),
                     pageBuilder: (BuildContext context, Animation<double> animation1, Animation<double> animation2) {
@@ -242,10 +242,10 @@ class BareAlbumImage extends ConsumerWidget {
       return OctoImage(
         image: image,
         filterQuality: FilterQuality.medium,
-        fadeOutDuration: MediaQuery.of(context).disableAnimations || onZoomRoute
+        fadeOutDuration: MediaQuery.disableAnimationsOf(context) || onZoomRoute
             ? Duration.zero
             : const Duration(milliseconds: 300),
-        fadeInDuration: MediaQuery.of(context).disableAnimations || onZoomRoute
+        fadeInDuration: MediaQuery.disableAnimationsOf(context) || onZoomRoute
             ? Duration.zero
             : const Duration(milliseconds: 300),
         fit: BoxFit.contain,

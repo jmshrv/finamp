@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:finamp/color_schemes.g.dart';
+import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
 import 'package:finamp/components/toggleable_list_tile.dart';
-import 'package:finamp/menus/playlist_actions_menu.dart';
-import 'package:finamp/components/Buttons/cta_medium.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/feedback_helper.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -14,7 +14,6 @@ import 'package:finamp/services/music_player_background_task.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -37,8 +36,6 @@ Future<void> showOutputMenu({required BuildContext context, bool usePlayerTheme 
     routeName: outputMenuRouteName,
     minDraggableHeight: 0.2,
     buildSlivers: (context) {
-      var themeColor = Theme.of(context).colorScheme.primary;
-
       final menuEntries = [
         // SongInfo.condensed(
         //   item: item,
@@ -96,7 +93,7 @@ Future<void> showOutputMenu({required BuildContext context, bool usePlayerTheme 
           ),
       ];
       // TODO better estimate, how to deal with lag getting playlists?
-      var stackHeight = MediaQuery.sizeOf(context).height * (Platform.isAndroid ? 0.65 : 0.4);
+      var stackHeight = MediaQuery.heightOf(context) * (Platform.isAndroid ? 0.65 : 0.4);
       return (stackHeight, menu);
     },
   );
@@ -133,7 +130,7 @@ class OutputMenuHeader extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: AnimatedSwitcher(
-                duration: MediaQuery.of(context).disableAnimations ? Duration.zero : const Duration(milliseconds: 1000),
+                duration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 1000),
                 switchOutCurve: const Threshold(0.0),
                 child: Consumer(
                   builder: (context, ref, child) {

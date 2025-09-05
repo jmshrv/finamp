@@ -1,8 +1,8 @@
 import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
-import 'package:finamp/services/network_manager.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/network_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -35,7 +35,7 @@ class _LocalNetworkAddressSelector extends ConsumerState<LocalNetworkAddressSele
       title: Text(AppLocalizations.of(context)!.preferLocalNetworkTargetAddressLocalSettingTitle),
       subtitle: Text(AppLocalizations.of(context)!.preferLocalNetworkTargetAddressLocalSettingDescription),
       trailing: SizedBox(
-        width: 200 * MediaQuery.of(context).textScaleFactor,
+        width: 200 * MediaQuery.textScaleFactorOf(context),
         child: TextField(
           enabled: featureEnabled,
           controller: _controller,

@@ -192,7 +192,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
   void scrollToExtent(DraggableScrollableController scrollController, double? percentage) {
     var currentSize = scrollController.size;
     if ((percentage != null && currentSize < percentage) || scrollController.size == inputStep) {
-      if (MediaQuery.of(context).disableAnimations) {
+      if (MediaQuery.disableAnimationsOf(context)) {
         scrollController.jumpTo(percentage ?? oldExtent);
       } else {
         scrollController.animateTo(
@@ -408,7 +408,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
                       );
                     },
                     transitionBuilder: (child, animation) {
-                      if (MediaQuery.of(context).disableAnimations) {
+                      if (MediaQuery.disableAnimationsOf(context)) {
                         return child;
                       }
                       // Determine if this is the incoming or outgoing child
