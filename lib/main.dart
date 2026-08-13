@@ -514,11 +514,15 @@ Future<void> _sideloadOtaCatchUp() async {
     final result = await service.catchUpIfNeeded();
     if (result == null) return;
     if (result.outcome == SideloadCheckOutcome.installed) {
+      final build = result.manifest?.build;
+      if (build != null) service.markNotifiedBuild(build);
       GlobalSnackbar.message(
         (context) => result.message ?? 'Finamp updated to ${result.manifest?.version}',
       );
     } else if (result.outcome == SideloadCheckOutcome.updateAvailable && Platform.isIOS) {
-      // Banner only — user opens Settings → Updates for SideStore/USB actions.
+      final build = result.manifest?.build ?? 0;
+      if (!service.shouldNotifyForBuild(build)) return;
+      service.markNotifiedBuild(build);
       GlobalSnackbar.message(
         (context) =>
             'Update available: ${result.manifest?.version ?? ''}. Open Settings → Updates.',

@@ -55,6 +55,17 @@ class _SideloadUpdatesSettingsScreenState
     if (Platform.isAndroid) {
       setup = await _service.androidSetupStatus();
       worker = await _service.nativeWorkerStatus();
+      if (setup['canRequestPackageInstalls'] != true) {
+        _service.lastResult ??= SideloadCheckResult(
+          outcome: SideloadCheckOutcome.needPermission,
+          message: 'Allow Install unknown apps for Finamp',
+        );
+      } else if (setup['isSelfInstallerOfRecord'] != true) {
+        _service.lastResult ??= SideloadCheckResult(
+          outcome: SideloadCheckOutcome.needUserConfirm,
+          message: 'Complete one-time Install to finish setup',
+        );
+      }
     }
     if (!mounted) return;
     setState(() {
@@ -238,6 +249,11 @@ class _SideloadUpdatesSettingsScreenState
               title: Text(l10n.sideloadAutoUpdateTime),
               subtitle: Text(_formatMinutes(autoMinutes)),
               onTap: _pickAutoTime,
+            ),
+          if (mode == SideloadUpdateMode.auto)
+            ListTile(
+              title: Text(l10n.sideloadNextScheduledRun),
+              subtitle: Text(_service.nextScheduledLocalRun().toLocal().toString()),
             ),
           SwitchListTile(
             title: Text(l10n.sideloadAllowCellular),

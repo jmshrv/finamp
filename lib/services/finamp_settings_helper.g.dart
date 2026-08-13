@@ -1346,6 +1346,14 @@ extension FinampSetters on FinampSettingsHelper {
     ).put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setSideloadLastNotifiedBuild(int newSideloadLastNotifiedBuild) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.sideloadLastNotifiedBuild = newSideloadLastNotifiedBuild;
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -1805,6 +1813,10 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
       .select((value) => value.requireValue.sideloadAllowCellular);
   ProviderListenable<String?> get sideloadManifestUrl => finampSettingsProvider
       .select((value) => value.requireValue.sideloadManifestUrl);
+  ProviderListenable<int> get sideloadLastNotifiedBuild =>
+      finampSettingsProvider.select(
+        (value) => value.requireValue.sideloadLastNotifiedBuild,
+      );
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider.select(
         (value) => value.requireValue.downloadTranscodingProfile,

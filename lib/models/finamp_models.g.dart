@@ -468,6 +468,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
             ? DefaultSettings.sideloadAllowCellular
             : fields[158] as bool,
         sideloadManifestUrl: fields[159] as String?,
+        sideloadLastNotifiedBuild: fields[160] == null
+            ? DefaultSettings.sideloadLastNotifiedBuild
+            : (fields[160] as num).toInt(),
       )
       ..sortBy = fields[7] as SortBy?
       ..sortOrder = fields[8] as SortOrder?
@@ -797,7 +800,9 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(158)
       ..write(obj.sideloadAllowCellular)
       ..writeByte(159)
-      ..write(obj.sideloadManifestUrl);
+      ..write(obj.sideloadManifestUrl)
+      ..writeByte(160)
+      ..write(obj.sideloadLastNotifiedBuild);
   }
 
   @override

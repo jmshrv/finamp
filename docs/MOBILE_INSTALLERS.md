@@ -116,4 +116,5 @@ and in-app **Settings → Updates**:
   `…finamp.profile`.
 
 Full checklist, versioning (`0.9.25-sideload.N+build`), Bitwarden keystore
-backup name, and private-repo notes: [SIDELOAD_OTA.md](SIDELOAD_OTA.md).
+backup name, and hosting notes (fork is public; private-repo caveats if that
+changes): [SIDELOAD_OTA.md](SIDELOAD_OTA.md).

@@ -285,6 +285,8 @@ class DefaultSettings {
   static const sideloadAllowCellular = false;
   /// Optional override for latest.json URL (null = baked default).
   static const String? sideloadManifestUrl = null;
+  /// Last remote build we already snackbar-notified (dedupe).
+  static const sideloadLastNotifiedBuild = 0;
   static const previousTracksPersistenceMode = PreviousTracksPersistenceMode.persistent;
   static final homeScreenConfiguration = FinampHomeScreenConfiguration(
     actions: [
@@ -473,6 +475,7 @@ class FinampSettings {
     this.sideloadAutoUpdateMinutes = DefaultSettings.sideloadAutoUpdateMinutes,
     this.sideloadAllowCellular = DefaultSettings.sideloadAllowCellular,
     this.sideloadManifestUrl = DefaultSettings.sideloadManifestUrl,
+    this.sideloadLastNotifiedBuild = DefaultSettings.sideloadLastNotifiedBuild,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -1000,6 +1003,10 @@ class FinampSettings {
 
   @HiveField(159)
   String? sideloadManifestUrl;
+
+  /// Dedupes in-app “update available” snackbars for the same remote build.
+  @HiveField(160, defaultValue: DefaultSettings.sideloadLastNotifiedBuild)
+  int sideloadLastNotifiedBuild = DefaultSettings.sideloadLastNotifiedBuild;
 
   /// Tolerant Hive upgrade: field 154 was bool (tsnet) or String? (music-finder).
   static bool hiveReadUseEmbeddedTailscale(Object? field154, Object? field155) {

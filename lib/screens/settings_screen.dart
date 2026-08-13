@@ -21,11 +21,13 @@ import 'package:finamp/screens/view_selector.dart';
 import 'package:finamp/screens/volume_normalization_settings_screen.dart';
 import 'package:finamp/services/client_certificate_installer.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
+import 'package:finamp/services/sideload_update_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:get_it/get_it.dart';
 import 'package:locale_names/locale_names.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -164,8 +166,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 Navigator.of(context).pushNamed(EmbeddedTailscaleSettingsScreen.routeName),
           ),
           ListTile(
-            leading: const Icon(Icons.system_update_alt),
+            leading: Badge(
+              isLabelVisible: GetIt.instance.isRegistered<SideloadUpdateService>() &&
+                  GetIt.instance<SideloadUpdateService>().needsAttention,
+              child: const Icon(Icons.system_update_alt),
+            ),
             title: Text(AppLocalizations.of(context)!.sideloadUpdatesSettingsTitle),
+            subtitle: GetIt.instance.isRegistered<SideloadUpdateService>() &&
+                    GetIt.instance<SideloadUpdateService>().needsAttention
+                ? Text(AppLocalizations.of(context)!.sideloadUpdatesNeedsAttention)
+                : null,
             onTap: () =>
                 Navigator.of(context).pushNamed(SideloadUpdatesSettingsScreen.routeName),
           ),

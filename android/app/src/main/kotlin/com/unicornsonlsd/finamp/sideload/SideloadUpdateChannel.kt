@@ -157,6 +157,10 @@ class SideloadUpdateChannel(
             "getLastWorkerStatus" -> {
                 result.success(SideloadPrefs.readStatus(context))
             }
+            "clearPendingNotify" -> {
+                SideloadPrefs.clearPendingNotify(context)
+                result.success(null)
+            }
             else -> result.notImplemented()
         }
     }

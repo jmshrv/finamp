@@ -195,14 +195,60 @@ class SideloadUpdateService {
     final status = await nativeWorkerStatus();
     final version = status?['pendingNotifyVersion'] as String?;
     if (version == null || version.isEmpty) return null;
-    // Clear via writing empty through a sync — prefs clear is on next success path.
-    // Best-effort: re-sync schedule which does not clear notify; leave for UI once.
+    try {
+      await _channel.invokeMethod<void>('clearPendingNotify');
+    } catch (_) {}
     return version;
+  }
+
+  /// True when Settings should badge Updates (setup incomplete or pending update).
+  bool get needsAttention {
+    final r = lastResult;
+    if (r == null) return false;
+    switch (r.outcome) {
+      case SideloadCheckOutcome.updateAvailable:
+      case SideloadCheckOutcome.needPermission:
+      case SideloadCheckOutcome.needUserConfirm:
+      case SideloadCheckOutcome.error:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  DateTime nextScheduledLocalRun() {
+    final minutes =
+        FinampSettingsHelper.finampSettings.sideloadAutoUpdateMinutes.clamp(0, 24 * 60 - 1);
+    final now = DateTime.now();
+    var next = DateTime(now.year, now.month, now.day).add(Duration(minutes: minutes));
+    if (!next.isAfter(now)) {
+      next = next.add(const Duration(days: 1));
+    }
+    return next;
+  }
+
+  bool shouldNotifyForBuild(int build) {
+    return build > FinampSettingsHelper.finampSettings.sideloadLastNotifiedBuild;
+  }
+
+  void markNotifiedBuild(int build) {
+    if (build > FinampSettingsHelper.finampSettings.sideloadLastNotifiedBuild) {
+      FinampSetters.setSideloadLastNotifiedBuild(build);
+    }
   }
 
   /// Launch / resume catch-up: if Auto and past today's window (or never checked
   /// after a missed alarm), run a check. Defers silent install while playing.
   Future<SideloadCheckResult?> catchUpIfNeeded() async {
+    // Surface success toast from a background worker install after relaunch.
+    final pendingVersion = await consumePendingNotifyVersion();
+    if (pendingVersion != null && pendingVersion.isNotEmpty) {
+      return SideloadCheckResult(
+        outcome: SideloadCheckOutcome.installed,
+        message: 'Finamp updated to $pendingVersion',
+      );
+    }
+
     final settings = FinampSettingsHelper.finampSettings;
     await syncNativeSchedule();
     if (settings.sideloadUpdateMode != SideloadUpdateMode.auto) {
@@ -219,6 +265,7 @@ class SideloadUpdateService {
         lastCheckAt!.day == now.day;
     if (!due && checkedToday) return null;
     if (!due) return null;
+    // iOS / Manual-style check: install only on Android.
     return checkForUpdate(installIfReady: Platform.isAndroid);
   }
 

@@ -94,11 +94,17 @@ Same check / notify UX. Auto does **not** install the IPA. Use:
 Weekly / 7-day personal cert refresh is still required; version OTA does not
 refresh code signing.
 
-## Private GitHub repos
+## Public fork + Release assets
 
-Phones cannot download private Release assets without auth. Prefer:
+`itdir/finamp` is a **public** fork of `finamp-app/finamp`. Phones can download
+Release assets over HTTPS without a GitHub token once you publish
+`sideload-latest`.
 
-- Public release assets, or a public sibling artifacts repo, **or**
+## Private GitHub repos (if you ever go private)
+
+Phones cannot download **private** Release assets without auth. Prefer:
+
+- Keep the fork (or a sibling artifacts repo) **public** for releases, **or**
 - Optional read-only token in secure storage (never commit secrets). Document
   any token-based download if you enable it later.
 
