@@ -7,10 +7,12 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/http_aggregate_logging_interceptor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
-import 'package:http/io_client.dart' as http;
+import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../models/jellyfin_models.dart';
+import 'finamp_http_client.dart';
 import 'finamp_user_helper.dart';
 import 'jellyfin_api_helper.dart';
 
@@ -577,13 +579,16 @@ abstract class JellyfinApi extends ChopperService {
   static JellyfinApi create({required bool inForeground}) {
     final chopperHttpLogLevel = Level.body; //TODO allow changing the log level in settings (and a debug config file?)
 
+    // Foreground: FinampHttpClient (tsnet when embedded Tailscale is Running).
+    // Background isolates: plain IOClient only — Hive + tsnet are main-isolate.
+    // JellyfinApiHelper.runInIsolate skips the worker when tsnet/MagicDNS is
+    // needed so getItems/etc. still use FinampHttpClient.
+    final http.Client httpClient = inForeground
+        ? FinampHttpClient()
+        : IOClient(HttpClient()..connectionTimeout = const Duration(seconds: 10));
+
     final client = ChopperClient(
-      client: http.IOClient(
-        HttpClient()
-          ..connectionTimeout = const Duration(
-            seconds: 10,
-          ), // if we don't get a response by then, it's probably not worth it to wait any longer. this prevents the server connection test from taking too long
-      ),
+      client: httpClient,
       // The first part of the URL is now here
       services: [
         // The generated implementation
