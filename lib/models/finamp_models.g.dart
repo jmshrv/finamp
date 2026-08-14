@@ -438,9 +438,10 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
             ? false
             : fields[143] as bool,
         verboseLogging: fields[153] == null ? false : fields[153] as bool,
-        useEmbeddedTailscale: fields[154] == null
-            ? false
-            : fields[154] as bool,
+        useEmbeddedTailscale: FinampSettings.hiveReadUseEmbeddedTailscale(
+          fields[154],
+          fields[155],
+        ),
         previousTracksPersistenceMode: fields[145] == null
             ? PreviousTracksPersistenceMode.persistent
             : fields[145] as PreviousTracksPersistenceMode,
@@ -453,6 +454,23 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
             : (fields[150] as num).toInt(),
         useAndroidGainEffect: fields[149] == null ? true : fields[149] as bool,
         deviceId: fields[152] == null ? 'unset' : fields[152] as String,
+        musicFinderServerUrl: FinampSettings.hiveReadMusicFinderServerUrl(
+          fields[154],
+          fields[155],
+        ),
+        sideloadUpdateMode: fields[156] == null
+            ? DefaultSettings.sideloadUpdateMode
+            : fields[156] as SideloadUpdateMode,
+        sideloadAutoUpdateMinutes: fields[157] == null
+            ? DefaultSettings.sideloadAutoUpdateMinutes
+            : (fields[157] as num).toInt(),
+        sideloadAllowCellular: fields[158] == null
+            ? DefaultSettings.sideloadAllowCellular
+            : fields[158] as bool,
+        sideloadManifestUrl: fields[159] as String?,
+        sideloadLastNotifiedBuild: fields[160] == null
+            ? DefaultSettings.sideloadLastNotifiedBuild
+            : (fields[160] as num).toInt(),
       )
       ..sortBy = fields[7] as SortBy?
       ..sortOrder = fields[8] as SortOrder?
@@ -476,7 +494,7 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
   @override
   void write(BinaryWriter writer, FinampSettings obj) {
     writer
-      ..writeByte(148)
+      ..writeByte(149)
       ..writeByte(0)
       ..write(obj.isOffline)
       ..writeByte(1)
@@ -772,7 +790,19 @@ class FinampSettingsAdapter extends TypeAdapter<FinampSettings> {
       ..writeByte(153)
       ..write(obj.verboseLogging)
       ..writeByte(154)
-      ..write(obj.useEmbeddedTailscale);
+      ..write(obj.useEmbeddedTailscale)
+      ..writeByte(155)
+      ..write(obj.musicFinderServerUrl)
+      ..writeByte(156)
+      ..write(obj.sideloadUpdateMode)
+      ..writeByte(157)
+      ..write(obj.sideloadAutoUpdateMinutes)
+      ..writeByte(158)
+      ..write(obj.sideloadAllowCellular)
+      ..writeByte(159)
+      ..write(obj.sideloadManifestUrl)
+      ..writeByte(160)
+      ..write(obj.sideloadLastNotifiedBuild);
   }
 
   @override
@@ -3556,6 +3586,43 @@ class PreviousTracksPersistenceModeAdapter
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is PreviousTracksPersistenceModeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class SideloadUpdateModeAdapter extends TypeAdapter<SideloadUpdateMode> {
+  @override
+  final typeId = 128;
+
+  @override
+  SideloadUpdateMode read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return SideloadUpdateMode.auto;
+      case 1:
+        return SideloadUpdateMode.manual;
+      default:
+        return SideloadUpdateMode.auto;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, SideloadUpdateMode obj) {
+    switch (obj) {
+      case SideloadUpdateMode.auto:
+        writer.writeByte(0);
+      case SideloadUpdateMode.manual:
+        writer.writeByte(1);
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SideloadUpdateModeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

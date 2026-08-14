@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.9.25+126
+version: 0.9.25-sideload.3+129
 
 environment:
   sdk: ^3.10.4
@@ -71,6 +71,7 @@ dependencies:
   rxdart: ^0.28.0
   simple_gesture_detector: ^0.2.1
   path_provider: ^2.0.14
+  crypto: ^3.0.3
   hive_ce: ^2.10.1
   hive_ce_flutter: ^2.2.0
   file_sizes: ^1.0.6
@@ -221,6 +222,7 @@ flutter:
     - images/finamp_cropped.png
     - images/finamp_cropped.svg
     - images/jellyfin-icon-transparent.png
+    - images/external_search_icon.png
     - assets/icon/icon_square_bg-black.png # preview image for Discord RPC Fallback Icon Setting
     - assets/icon/icon_combined.png # preview image for Discord RPC Fallback Icon Setting
     - assets/icon/icon_square_bg-white.png # preview image for Discord RPC Fallback Icon Setting

@@ -1306,6 +1306,54 @@ extension FinampSetters on FinampSettingsHelper {
     ).put("FinampSettings", finampSettingsTemp);
   }
 
+  static void setMusicFinderServerUrl(String? newMusicFinderServerUrl) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.musicFinderServerUrl = newMusicFinderServerUrl;
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setSideloadUpdateMode(SideloadUpdateMode newSideloadUpdateMode) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.sideloadUpdateMode = newSideloadUpdateMode;
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setSideloadAutoUpdateMinutes(int newSideloadAutoUpdateMinutes) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.sideloadAutoUpdateMinutes = newSideloadAutoUpdateMinutes;
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setSideloadAllowCellular(bool newSideloadAllowCellular) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.sideloadAllowCellular = newSideloadAllowCellular;
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setSideloadManifestUrl(String? newSideloadManifestUrl) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.sideloadManifestUrl = newSideloadManifestUrl;
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
+  static void setSideloadLastNotifiedBuild(int newSideloadLastNotifiedBuild) {
+    FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
+    finampSettingsTemp.sideloadLastNotifiedBuild = newSideloadLastNotifiedBuild;
+    Hive.box<FinampSettings>(
+      "FinampSettings",
+    ).put("FinampSettings", finampSettingsTemp);
+  }
+
   static void setBufferDuration(Duration newBufferDuration) {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     finampSettingsTemp.bufferDuration = newBufferDuration;
@@ -1749,9 +1797,25 @@ extension FinampSettingsProviderSelectors on StreamProvider<FinampSettings> {
   ProviderListenable<bool> get verboseLogging => finampSettingsProvider.select(
     (value) => value.requireValue.verboseLogging,
   );
-  ProviderListenable<bool> get useEmbeddedTailscale =>
+  ProviderListenable<bool> get useEmbeddedTailscale => finampSettingsProvider
+      .select((value) => value.requireValue.useEmbeddedTailscale);
+  ProviderListenable<String?> get musicFinderServerUrl => finampSettingsProvider
+      .select((value) => value.requireValue.musicFinderServerUrl);
+  ProviderListenable<SideloadUpdateMode> get sideloadUpdateMode =>
       finampSettingsProvider.select(
-        (value) => value.requireValue.useEmbeddedTailscale,
+        (value) => value.requireValue.sideloadUpdateMode,
+      );
+  ProviderListenable<int> get sideloadAutoUpdateMinutes =>
+      finampSettingsProvider.select(
+        (value) => value.requireValue.sideloadAutoUpdateMinutes,
+      );
+  ProviderListenable<bool> get sideloadAllowCellular => finampSettingsProvider
+      .select((value) => value.requireValue.sideloadAllowCellular);
+  ProviderListenable<String?> get sideloadManifestUrl => finampSettingsProvider
+      .select((value) => value.requireValue.sideloadManifestUrl);
+  ProviderListenable<int> get sideloadLastNotifiedBuild =>
+      finampSettingsProvider.select(
+        (value) => value.requireValue.sideloadLastNotifiedBuild,
       );
   ProviderListenable<DownloadProfile> get downloadTranscodingProfile =>
       finampSettingsProvider.select(

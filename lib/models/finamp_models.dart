@@ -276,6 +276,17 @@ class DefaultSettings {
   static const verboseLogging = false;
   /// Route Jellyfin HTTP through in-process Tailscale tsnet (coexists with ExpressVPN).
   static const useEmbeddedTailscale = false;
+  static const String? musicFinderServerUrl = null;
+  /// Sideload OTA: auto (scheduled) or manual (check on demand).
+  static const sideloadUpdateMode = SideloadUpdateMode.auto;
+  /// Minutes from local midnight for Auto OTA (default 3:33 AM → 213).
+  static const sideloadAutoUpdateMinutes = 3 * 60 + 33;
+  /// Allow Auto OTA downloads on cellular (default Wi‑Fi / unmetered only).
+  static const sideloadAllowCellular = false;
+  /// Optional override for latest.json URL (null = baked default).
+  static const String? sideloadManifestUrl = null;
+  /// Last remote build we already snackbar-notified (dedupe).
+  static const sideloadLastNotifiedBuild = 0;
   static const previousTracksPersistenceMode = PreviousTracksPersistenceMode.persistent;
   static final homeScreenConfiguration = FinampHomeScreenConfiguration(
     actions: [
@@ -459,6 +470,12 @@ class FinampSettings {
     required this.homeScreenImageSize,
     this.useAndroidGainEffect = DefaultSettings.useAndroidGainEffect,
     required this.deviceId,
+    this.musicFinderServerUrl,
+    this.sideloadUpdateMode = DefaultSettings.sideloadUpdateMode,
+    this.sideloadAutoUpdateMinutes = DefaultSettings.sideloadAutoUpdateMinutes,
+    this.sideloadAllowCellular = DefaultSettings.sideloadAllowCellular,
+    this.sideloadManifestUrl = DefaultSettings.sideloadManifestUrl,
+    this.sideloadLastNotifiedBuild = DefaultSettings.sideloadLastNotifiedBuild,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -956,8 +973,55 @@ class FinampSettings {
   /// (`package:tailscale`) instead of the default [HttpClient]. Opt-in so
   /// LAN users are unaffected; enables MagicDNS reachability alongside a
   /// system VPN such as ExpressVPN.
+  ///
+  /// Field **154** matches standalone `feat/embedded-tsnet` (bool). Keep it
+  /// here so devices that already ran tsnet do not crash on upgrade.
   @HiveField(154, defaultValue: DefaultSettings.useEmbeddedTailscale)
   bool useEmbeddedTailscale = DefaultSettings.useEmbeddedTailscale;
+
+  /// Base URL for the external Music Finder service (non-Jellyfin).
+  ///
+  /// **Legacy Hive field only** — new writes go to [FinampSecrets]
+  /// (Keychain/Keystore). Cleared after one-time migration at startup.
+  ///
+  /// Field **155** on the stacked `feat/music-finder` branch. Older
+  /// music-finder-only builds stored this at 154 as a [String]; see
+  /// [hiveReadMusicFinderServerUrl] for upgrade.
+  @HiveField(155)
+  String? musicFinderServerUrl;
+
+  /// Auto vs manual sideload OTA (fork-only).
+  @HiveField(156, defaultValue: DefaultSettings.sideloadUpdateMode)
+  SideloadUpdateMode sideloadUpdateMode = DefaultSettings.sideloadUpdateMode;
+
+  /// Local time-of-day for Auto OTA as minutes from midnight (default 3:33 → 213).
+  @HiveField(157, defaultValue: DefaultSettings.sideloadAutoUpdateMinutes)
+  int sideloadAutoUpdateMinutes = DefaultSettings.sideloadAutoUpdateMinutes;
+
+  @HiveField(158, defaultValue: DefaultSettings.sideloadAllowCellular)
+  bool sideloadAllowCellular = DefaultSettings.sideloadAllowCellular;
+
+  @HiveField(159)
+  String? sideloadManifestUrl;
+
+  /// Dedupes in-app “update available” snackbars for the same remote build.
+  @HiveField(160, defaultValue: DefaultSettings.sideloadLastNotifiedBuild)
+  int sideloadLastNotifiedBuild = DefaultSettings.sideloadLastNotifiedBuild;
+
+  /// Tolerant Hive upgrade: field 154 was bool (tsnet) or String? (music-finder).
+  static bool hiveReadUseEmbeddedTailscale(Object? field154, Object? field155) {
+    if (field154 is bool) return field154;
+    if (field155 is bool) return field155;
+    return DefaultSettings.useEmbeddedTailscale;
+  }
+
+  /// Tolerant Hive upgrade: Music Finder URL may still live at 154 from
+  /// pre-stack builds.
+  static String? hiveReadMusicFinderServerUrl(Object? field154, Object? field155) {
+    if (field155 is String) return field155;
+    if (field154 is String) return field154;
+    return null;
+  }
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -4028,6 +4092,16 @@ enum PreviousTracksPersistenceMode {
   /// Override state to be expanded on open
   @HiveField(2)
   initiallyExpanded,
+}
+
+/// Sideload OTA update mode (fork channel).
+@HiveType(typeId: 128)
+enum SideloadUpdateMode {
+  @HiveField(0)
+  auto,
+
+  @HiveField(1)
+  manual,
 }
 
 sealed class HomeScreenSectionBase {

@@ -26,7 +26,9 @@ import 'package:finamp/screens/interaction_settings_screen.dart';
 import 'package:finamp/screens/login_screen.dart';
 import 'package:finamp/screens/lyrics_settings_screen.dart';
 import 'package:finamp/screens/network_settings_screen.dart';
+import 'package:finamp/screens/sideload_updates_settings_screen.dart';
 import 'package:finamp/screens/playback_history_screen.dart';
+import 'package:finamp/screens/external_search_screen.dart';
 import 'package:finamp/screens/playback_reporting_settings_screen.dart';
 import 'package:finamp/screens/player_settings_screen.dart';
 import 'package:finamp/screens/playlist_edit_screen.dart';
@@ -43,6 +45,7 @@ import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/downloads_service_backend.dart';
 import 'package:finamp/services/embedded_tailscale_service.dart';
 import 'package:finamp/services/finamp_logs_helper.dart';
+import 'package:finamp/services/finamp_secrets.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/ios_helpers.dart';
@@ -55,6 +58,7 @@ import 'package:finamp/services/offline_listen_helper.dart';
 import 'package:finamp/services/playback_history_service.dart';
 import 'package:finamp/services/playon_service.dart';
 import 'package:finamp/services/queue_service.dart';
+import 'package:finamp/services/sideload_update_service.dart';
 import 'package:finamp/services/theme_provider.dart';
 import 'package:finamp/services/ui_overlay_setter_observer.dart';
 import 'package:finamp/services/widget_bindings_observer_provider.dart';
@@ -147,6 +151,7 @@ Future<void> main(List<String> args, {bool integrationTesting = false, bool logi
     _migrateFeatureChips();
     _migrateDeviceId();
     await _migrateThemeModeLocale();
+    await _migrateSecretsToSecureStorage();
     _mainLog.info("Completed applicable migrations");
     await _trustAndroidUserCerts();
     await ClientCertificateInstaller().installClientCertificate();
@@ -489,6 +494,7 @@ Future<void> _setupPlaybackServices() async {
   audioHandler.onQueueServiceAvailable(); // breaking circular dependency
   GetIt.instance.registerSingleton(PlaybackHistoryService());
   GetIt.instance.registerSingleton(AudioServiceHelper());
+  GetIt.instance.registerSingleton(SideloadUpdateService());
 
   if (Platform.isIOS) {
     GetIt.instance.registerSingleton<CarPlayHelper>(CarPlayHelper());
@@ -496,6 +502,38 @@ Future<void> _setupPlaybackServices() async {
 
   // Begin to restore queue
   unawaited(queueService.performInitialQueueLoad().catchError((dynamic x) => GlobalSnackbar.error(x)));
+
+  // Sideload OTA: sync Android WorkManager + catch up if Auto window was missed.
+  unawaited(_sideloadOtaCatchUp());
+}
+
+Future<void> _sideloadOtaCatchUp() async {
+  try {
+    final service = GetIt.instance<SideloadUpdateService>();
+    await service.syncNativeSchedule();
+    final result = await service.catchUpIfNeeded();
+    if (result == null) return;
+    if (result.outcome == SideloadCheckOutcome.installed) {
+      final build = result.manifest?.build;
+      if (build != null) service.markNotifiedBuild(build);
+      GlobalSnackbar.message(
+        (context) => result.message ?? 'Finamp updated to ${result.manifest?.version}',
+      );
+    } else if (result.outcome == SideloadCheckOutcome.updateAvailable && Platform.isIOS) {
+      final build = result.manifest?.build ?? 0;
+      if (!service.shouldNotifyForBuild(build)) return;
+      service.markNotifiedBuild(build);
+      GlobalSnackbar.message(
+        (context) =>
+            'Update available: ${result.manifest?.version ?? ''}. Open Settings → Updates.',
+      );
+    } else if (result.outcome == SideloadCheckOutcome.needPermission ||
+        result.outcome == SideloadCheckOutcome.needUserConfirm) {
+      GlobalSnackbar.message((context) => result.message ?? 'Finish Updates setup in Settings');
+    }
+  } catch (e, st) {
+    _mainLog.warning('Sideload OTA catch-up failed', e, st);
+  }
 }
 
 /// Migrates the old DownloadLocations list to a map
@@ -789,6 +827,23 @@ void _migrateDeviceId() {
   }
 }
 
+/// Move Tailscale auth key + Music Finder URL into Keychain/Keystore and
+/// clear plaintext Hive / SharedPreferences copies.
+Future<void> _migrateSecretsToSecureStorage() async {
+  await FinampSecrets.ensureInitialized();
+
+  final hiveUrl =
+      FinampSettingsHelper.finampSettings.musicFinderServerUrl?.trim();
+  if (hiveUrl != null && hiveUrl.isNotEmpty) {
+    if (!FinampSecrets.hasMusicFinderServer) {
+      await FinampSecrets.setMusicFinderServerUrl(hiveUrl);
+      _mainLog.info('Migrated Music Finder URL from Hive to secure storage');
+    }
+    // Wipe plaintext Hive field regardless (URL now lives only in Keychain).
+    FinampSetters.setMusicFinderServerUrl(null);
+  }
+}
+
 Future<void> _trustAndroidUserCerts() async {
   if (!Platform.isAndroid) return;
   // Extend the default security context to trust Android user certificates.
@@ -1017,7 +1072,10 @@ class FinampApp extends ConsumerWidget {
         NetworkSettingsScreen.routeName: (context) => const NetworkSettingsScreen(),
         EmbeddedTailscaleSettingsScreen.routeName: (context) =>
             const EmbeddedTailscaleSettingsScreen(),
+        SideloadUpdatesSettingsScreen.routeName: (context) =>
+            const SideloadUpdatesSettingsScreen(),
         AccessibilitySettingsScreen.routeName: (context) => const AccessibilitySettingsScreen(),
+        ExternalSearchScreen.routeName: (context) => const ExternalSearchScreen(),
         PlaylistEditScreen.routeName: (context) =>
             PlaylistEditScreen(playlist: ModalRoute.settingsOf(context)!.arguments as BaseItemDto),
         //ShowAllScreen.routeName: (context) => const ShowAllScreen(),

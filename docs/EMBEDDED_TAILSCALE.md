@@ -29,8 +29,8 @@ WireGuard-over-UDP from inside Finamp and leaves the OS routing table alone.
    `https://jellyfin.tailnet.ts.net:8096`
    (the login screen still normalizes the common `jellyfin@tailnet` typo)
 6. Jellyfin API calls (Chopper), library `getItems`, cover-art cache downloads,
-   Music Finder HTTP, and **Network → Test both connections** go through
-   `FinampHttpClient` / tsnet when embedded Tailscale is Running.
+   **Music Finder** health/search/add, and **Network → Test both connections**
+   go through `FinampHttpClient` / tsnet when embedded Tailscale is Running.
 
 Library browsing uses a background isolate with a plain `IOClient` when
 Tailscale is **off**. When Embedded Tailscale is on (or the active URL is
@@ -96,18 +96,19 @@ flutter run
 
 - Node WireGuard private key lives under application support
   (`…/embedded_tailscale/`). Do not back this directory up to iCloud.
-- **Auth keys** are stored with `flutter_secure_storage` (iOS/macOS Keychain,
-  Android EncryptedSharedPreferences / Keystore)—not plain SharedPreferences.
-  Older plaintext prefs copies are migrated once and deleted.
-  On the stacked `feat/music-finder` branch the Music Finder server URL uses
-  the same secure store.
+- **Auth keys** and the **Music Finder server URL** are stored with
+  `flutter_secure_storage` (iOS/macOS Keychain, Android EncryptedSharedPreferences /
+  Keystore)—not Hive or plain SharedPreferences. Older plaintext copies are
+  migrated once at startup and deleted.
 - Prefer short-lived or tagged auth keys from the Tailscale admin console.
 - Use **Log out / reset node** before handing a device away.
 
 ## Scope / non-goals
 
-- Music Finder / External Search is **not** on this branch (personal fork work
-  lives on `feat/music-finder`, which inherits this branch).
+- This stacked branch includes Music Finder + External Search. Hive
+  `useEmbeddedTailscale` is `@HiveField(154)`; legacy plaintext
+  `musicFinderServerUrl` was `@HiveField(155)` and is cleared after migration
+  into secure storage. Music Finder HTTP uses `FinampHttpClient` (tsnet).
 - Audio streaming (`just_audio`) may still use the platform HTTP stack; if
   streams fail over MagicDNS while API works, a follow-up must route media
   fetches through the same client.
