@@ -101,6 +101,26 @@ class _SideloadUpdatesSettingsScreenState
     }
   }
 
+  Future<void> _finishOneTimeSetup() async {
+    if (_checking) return;
+    setState(() {
+      _checking = true;
+      _statusMessage = 'Downloading… Android will ask you to tap Install next';
+    });
+    try {
+      final result = await _service.finishOneTimeAndroidSetup(
+        forceMetered: FinampSettingsHelper.finampSettings.sideloadAllowCellular,
+      );
+      if (!mounted) return;
+      setState(() {
+        _statusMessage = _describe(result);
+      });
+      await _reload();
+    } finally {
+      if (mounted) setState(() => _checking = false);
+    }
+  }
+
   String _describe(SideloadCheckResult result) {
     final m = result.manifest;
     final l10n = AppLocalizations.of(context)!;
@@ -348,7 +368,15 @@ class _SideloadUpdatesSettingsScreenState
                 leading: const Icon(Icons.touch_app),
                 title: Text(l10n.sideloadCompleteOneTimeSetup),
                 subtitle: Text(l10n.sideloadCompleteOneTimeSetupSubtitle),
-                onTap: () => _checkNow(install: true),
+                trailing: _checking
+                    ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : null,
+                enabled: !_checking,
+                onTap: _finishOneTimeSetup,
               ),
             if (_workerStatus != null)
               ListTile(

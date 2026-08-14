@@ -3912,7 +3912,7 @@
   "sideloadSetupStatus": "Update readiness",
   "sideloadAllowUnknownApps": "Allow Finamp to install updates",
   "sideloadCompleteOneTimeSetup": "Finish setup (one time)",
-  "sideloadCompleteOneTimeSetupSubtitle": "Tap here, then tap Install when Android asks. After that, overnight updates can happen without bothering you.",
+  "sideloadCompleteOneTimeSetupSubtitle": "Downloads briefly, then Android asks you to tap Install. After that, overnight updates can happen without bothering you.",
   "sideloadLastWorkerRun": "Last automatic check",
   "sideloadIosInstallPaths": "How to install on iPhone",
   "sideloadIosNoSilentInstall": "This personal build can’t install updates by itself. Use SideStore, or plug into a Mac and run the install script.",

@@ -76,8 +76,10 @@ immediately.
 ### One-time Android setup
 
 1. Turn on **Allow Finamp to install updates** if asked.
-2. Tap **Finish setup (one time)**, then tap **Install** when Android asks.
-   (Needed once so Finamp can update itself later without interrupting you.)
+2. Tap **Finish setup (one time)**. The app downloads the published APK even if
+   you are already on that version, then Android asks you to tap **Install**.
+   (USB/`adb` installs do not make Finamp the installer of record — this step
+   does. Needed once so later overnight updates can install quietly.)
 3. After that, overnight automatic updates can run quietly.
 
 Emergency: `adb install -r dist/finamp-android-profile.apk` may require

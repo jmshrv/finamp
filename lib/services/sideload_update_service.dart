@@ -523,11 +523,122 @@ class SideloadUpdateService {
     String path, {
     required bool requireUserAction,
   }) async {
-    final raw = await _channel.invokeMethod<Map<dynamic, dynamic>>('installApk', {
-      'path': path,
-      'requireUserAction': requireUserAction,
-    });
-    return raw?.map((k, v) => MapEntry(k.toString(), v)) ?? {'ok': false};
+    try {
+      final raw = await _channel.invokeMethod<Map<dynamic, dynamic>>('installApk', {
+        'path': path,
+        'requireUserAction': requireUserAction,
+      });
+      return raw?.map((k, v) => MapEntry(k.toString(), v)) ?? {'ok': false};
+    } on PlatformException catch (e) {
+      return {
+        'ok': false,
+        'status': e.code,
+        'message': e.message ?? e.code,
+      };
+    }
+  }
+
+  /// One-time bootstrap: reinstall the published APK (even if already current)
+  /// with a forced Install confirmation so Finamp becomes installer-of-record.
+  Future<SideloadCheckResult> finishOneTimeAndroidSetup({
+    bool forceMetered = false,
+  }) async {
+    if (!Platform.isAndroid) {
+      return SideloadCheckResult(
+        outcome: SideloadCheckOutcome.unsupportedPlatform,
+        message: 'Finish setup is only needed on Android',
+      );
+    }
+    if (_busy) {
+      return SideloadCheckResult(
+        outcome: SideloadCheckOutcome.error,
+        message: 'Update check already running',
+      );
+    }
+    _busy = true;
+    lastError = null;
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      final localBuild = int.tryParse(packageInfo.buildNumber) ?? 0;
+
+      if (!forceMetered && !await _networkAllowed()) {
+        final r = SideloadCheckResult(
+          outcome: SideloadCheckOutcome.skippedMetered,
+          localBuild: localBuild,
+          message:
+              'Need Wi‑Fi to download the installer (or turn on “Use mobile data for updates”)',
+        );
+        lastResult = r;
+        lastCheckAt = DateTime.now();
+        return r;
+      }
+
+      final setup = await androidSetupStatus();
+      if (setup['canRequestPackageInstalls'] != true) {
+        final r = SideloadCheckResult(
+          outcome: SideloadCheckOutcome.needPermission,
+          localBuild: localBuild,
+          message: 'Allow Finamp to install updates first',
+        );
+        lastResult = r;
+        lastCheckAt = DateTime.now();
+        return r;
+      }
+
+      final manifest = await fetchManifest();
+      lastManifest = manifest;
+      // Same build is intentional — USB/adb installs don't make Finamp the
+      // installer of record; PackageInstaller must run once with user confirm.
+      final path = await _downloadAndroidApk(manifest);
+      final install = await installAndroidApk(path, requireUserAction: true);
+      lastCheckAt = DateTime.now();
+      if (install['ok'] == true) {
+        final r = SideloadCheckResult(
+          outcome: SideloadCheckOutcome.installed,
+          manifest: manifest,
+          localBuild: localBuild,
+          apkPath: path,
+          message: 'Setup finished — overnight updates can install quietly',
+        );
+        lastResult = r;
+        return r;
+      }
+      if (install['status'] == 'pendingUserAction') {
+        final r = SideloadCheckResult(
+          outcome: SideloadCheckOutcome.needUserConfirm,
+          manifest: manifest,
+          localBuild: localBuild,
+          apkPath: path,
+          message:
+              'Tap Install when Android asks — just this once. After that, updates can install quietly.',
+        );
+        lastResult = r;
+        return r;
+      }
+      final r = SideloadCheckResult(
+        outcome: SideloadCheckOutcome.error,
+        manifest: manifest,
+        localBuild: localBuild,
+        apkPath: path,
+        message: install['message']?.toString() ?? 'Couldn’t start the Install prompt',
+      );
+      lastResult = r;
+      lastError = r.message;
+      return r;
+    } catch (e, st) {
+      _log.severe('finishOneTimeAndroidSetup failed', e, st);
+      lastError = e.toString();
+      final r = SideloadCheckResult(
+        outcome: SideloadCheckOutcome.error,
+        message: e.toString(),
+      );
+      lastResult = r;
+      lastCheckAt = DateTime.now();
+      return r;
+    } finally {
+      _busy = false;
+      unawaited(syncNativeSchedule(playing: _isPlaying()));
+    }
   }
 
   /// Install a previously downloaded APK after playback ends.
