@@ -235,6 +235,28 @@ write_manifests() {
   notes_json="${notes_json//\\/\\\\}"
   notes_json="${notes_json//\"/\\\"}"
 
+  local ios_block
+  if [[ "$ipa_size" -gt 0 && -n "$ipa_sha" ]]; then
+    ios_block=$(cat <<EOF
+  "ios": {
+    "ipaUrl": "${base_url}/finamp-ios-profile.ipa",
+    "sha256": "${ipa_sha}",
+    "sizeBytes": ${ipa_size},
+    "sideStoreSourceUrl": "${base_url}/sideload-source.json"
+  }
+EOF
+)
+  else
+    ios_block=$(cat <<EOF
+  "ios": {
+    "ipaUrl": "",
+    "sha256": "",
+    "sizeBytes": 0
+  }
+EOF
+)
+  fi
+
   cat >"$DIST_DIR/latest.json" <<EOF
 {
   "version": "${VERSION_NAME}",
@@ -247,16 +269,12 @@ write_manifests() {
     "sha256": "${apk_sha}",
     "sizeBytes": ${apk_size}
   },
-  "ios": {
-    "ipaUrl": "${base_url}/finamp-ios-profile.ipa",
-    "sha256": "${ipa_sha}",
-    "sizeBytes": ${ipa_size},
-    "sideStoreSourceUrl": "${base_url}/sideload-source.json"
-  }
+${ios_block}
 }
 EOF
 
-  cat >"$DIST_DIR/sideload-source.json" <<EOF
+  if [[ "$ipa_size" -gt 0 && -n "$ipa_sha" ]]; then
+    cat >"$DIST_DIR/sideload-source.json" <<EOF
 {
   "name": "Finamp Sideload",
   "identifier": "com.anonymous.finamp.sideload",
@@ -280,6 +298,17 @@ EOF
   ]
 }
 EOF
+  else
+    cat >"$DIST_DIR/sideload-source.json" <<EOF
+{
+  "name": "Finamp Sideload",
+  "identifier": "com.anonymous.finamp.sideload",
+  "sourceURL": "${base_url}/sideload-source.json",
+  "apps": []
+}
+EOF
+    echo "⚠ No IPA in dist — SideStore source left empty; app will show USB-only instructions"
+  fi
   echo "✓ Wrote $DIST_DIR/latest.json and sideload-source.json"
 }
 

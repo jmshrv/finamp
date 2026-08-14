@@ -7,6 +7,7 @@ import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/sideload_update_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -186,15 +187,27 @@ class _SideloadUpdatesSettingsScreenState
     return '$when\n$resultLabel';
   }
 
+  static const _usbInstallCommand = './scripts/install-ios-profile.sh';
+
+  Future<void> _copyUsbInstallCommand() async {
+    await Clipboard.setData(const ClipboardData(text: _usbInstallCommand));
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(l10n.sideloadUsbInstallCommandCopied)),
+    );
+  }
+
   Future<void> _showIosUpdateSheet(SideloadManifest manifest) async {
     if (!mounted) return;
     await showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
+      isScrollControlled: true,
       builder: (context) {
         final l10n = AppLocalizations.of(context)!;
         return SafeArea(
-          child: Padding(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -208,23 +221,39 @@ class _SideloadUpdatesSettingsScreenState
                 Text(
                   '${manifest.version} (build ${manifest.build})\n${manifest.notes}',
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
                 Text(
                   l10n.sideloadIosNoSilentInstall,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  l10n.sideloadIosHowToSteps,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 const SizedBox(height: 16),
-                if (manifest.sideStoreSourceUrl != null)
-                  FilledButton(
+                FilledButton(
+                  onPressed: _copyUsbInstallCommand,
+                  child: Text(l10n.sideloadCopyUsbInstallCommand),
+                ),
+                if (manifest.hasUsableSideStoreSource) ...[
+                  const SizedBox(height: 16),
+                  Text(
+                    l10n.sideloadSideStoreOptionalHint,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 8),
+                  OutlinedButton(
                     onPressed: () => launchUrl(
                       Uri.parse(manifest.sideStoreSourceUrl!),
                       mode: LaunchMode.externalApplication,
                     ),
                     child: Text(l10n.sideloadOpenSideStoreSource),
                   ),
-                if (manifest.iosIpaUrl != null) ...[
+                ],
+                if (manifest.hasUsableIosIpa) ...[
                   const SizedBox(height: 8),
-                  OutlinedButton(
+                  TextButton(
                     onPressed: () => launchUrl(
                       Uri.parse(manifest.iosIpaUrl!),
                       mode: LaunchMode.externalApplication,
@@ -232,11 +261,6 @@ class _SideloadUpdatesSettingsScreenState
                     child: Text(l10n.sideloadDownloadIpa),
                   ),
                 ],
-                const SizedBox(height: 8),
-                Text(
-                  l10n.sideloadUsbInstallHint,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
               ],
             ),
           ),
@@ -388,7 +412,16 @@ class _SideloadUpdatesSettingsScreenState
             const Divider(),
             ListTile(
               title: Text(l10n.sideloadIosInstallPaths),
-              subtitle: Text(l10n.sideloadIosNoSilentInstall),
+              subtitle: Text(
+                '${l10n.sideloadIosNoSilentInstall}\n\n${l10n.sideloadIosHowToSteps}',
+              ),
+              isThreeLine: true,
+            ),
+            ListTile(
+              leading: const Icon(Icons.copy),
+              title: Text(l10n.sideloadCopyUsbInstallCommand),
+              subtitle: const Text('./scripts/install-ios-profile.sh'),
+              onTap: _copyUsbInstallCommand,
             ),
           ],
           const Divider(),

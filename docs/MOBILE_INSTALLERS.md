@@ -111,7 +111,8 @@ and in-app **Settings → Updates**:
 
 - Android Auto mode can silent-install after one-time “Install unknown apps” +
   installer-of-record setup.
-- iOS personal team: notify + SideStore / USB only (no silent install).
+- iOS personal team: notify + **USB install script** (primary). SideStore only
+  when a real IPA is published; the app does not set SideStore up for you.
 - Do **not** publish the `*.debug` APK into `sideload-latest` — OTA targets
   `…finamp.profile`.
 

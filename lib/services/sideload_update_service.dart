@@ -65,6 +65,21 @@ class SideloadManifest {
       sideStoreSourceUrl: ios?['sideStoreSourceUrl'] as String?,
     );
   }
+
+  /// True when the feed points at a real IPA (not a placeholder URL with size 0).
+  bool get hasUsableIosIpa {
+    final url = iosIpaUrl?.trim() ?? '';
+    if (url.isEmpty) return false;
+    final size = iosSizeBytes ?? 0;
+    final sha = iosSha256?.trim() ?? '';
+    return size > 0 || sha.isNotEmpty;
+  }
+
+  /// SideStore only when a usable IPA is published with a source URL.
+  bool get hasUsableSideStoreSource {
+    final url = sideStoreSourceUrl?.trim() ?? '';
+    return url.isNotEmpty && hasUsableIosIpa;
+  }
 }
 
 enum SideloadCheckOutcome {

@@ -87,10 +87,30 @@ finishing setup again (step 2).
 
 ## iOS (personal team)
 
-Same check / notify UX. Auto does **not** install the IPA. Use:
+Same check / notify UX. Auto does **not** install the IPA.
 
-- SideStore source URL from `latest.json` / Settings sheet
-- Or USB: `./scripts/install-ios-profile.sh`
+### Recommended: USB from a Mac
+
+1. Plug the iPhone into the Mac.
+2. From the Finamp repo:
+
+```bash
+./scripts/install-ios-profile.sh
+```
+
+That builds Profile (unless `SKIP_BUILD=1`) and upgrades **in place** so Trust
+usually stays. Do **not** use `flutter install` (it uninstalls first and can
+drop the personal-team Trust profile).
+
+In **Settings → Updates** the phone shows these steps and a button to copy the
+script command.
+
+### Optional: SideStore
+
+Only if you already use SideStore. Publish must include a real
+`finamp-ios-profile.ipa` so `latest.json` has non-empty `ios.sha256` /
+`sizeBytes` and `sideload-source.json` lists the app. The in-app SideStore
+button appears only then — it is not a setup guide for SideStore itself.
 
 Weekly / 7-day personal cert refresh is still required; version OTA does not
 refresh code signing.
