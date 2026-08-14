@@ -58,12 +58,12 @@ class _SideloadUpdatesSettingsScreenState
       if (setup['canRequestPackageInstalls'] != true) {
         _service.lastResult ??= SideloadCheckResult(
           outcome: SideloadCheckOutcome.needPermission,
-          message: 'Allow Install unknown apps for Finamp',
+          message: 'Allow Finamp to install updates',
         );
       } else if (setup['isSelfInstallerOfRecord'] != true) {
         _service.lastResult ??= SideloadCheckResult(
           outcome: SideloadCheckOutcome.needUserConfirm,
-          message: 'Complete one-time Install to finish setup',
+          message: 'Finish setup once so Finamp can update itself',
         );
       }
     }
@@ -103,28 +103,67 @@ class _SideloadUpdatesSettingsScreenState
 
   String _describe(SideloadCheckResult result) {
     final m = result.manifest;
+    final l10n = AppLocalizations.of(context)!;
     switch (result.outcome) {
       case SideloadCheckOutcome.upToDate:
-        return 'Up to date${m != null ? ' (${m.version})' : ''}';
+        return l10n.sideloadWorkerUpToDate +
+            (m != null ? ' (${m.version})' : '');
       case SideloadCheckOutcome.updateAvailable:
-        return 'Update available: ${m?.version} (build ${m?.build})';
+        return '${l10n.sideloadUpdateAvailableTitle}: ${m?.version ?? ''}';
       case SideloadCheckOutcome.downloaded:
-        return 'Downloaded ${m?.version}';
+        return 'Downloaded ${m?.version ?? ''}';
       case SideloadCheckOutcome.installed:
-        return result.message ?? 'Installed ${m?.version}';
+        return result.message ?? 'Updated to ${m?.version ?? ''}';
       case SideloadCheckOutcome.deferredPlaying:
-        return result.message ?? 'Waiting until playback is idle';
+        return result.message ?? l10n.sideloadWorkerDeferredPlaying;
       case SideloadCheckOutcome.skippedMetered:
-        return result.message ?? 'Waiting for Wi‑Fi';
+        return result.message ?? l10n.sideloadWorkerSkippedMetered;
       case SideloadCheckOutcome.needPermission:
-        return result.message ?? 'Allow Install unknown apps';
+        return result.message ?? l10n.sideloadWorkerNeedPermission;
       case SideloadCheckOutcome.needUserConfirm:
-        return result.message ?? 'Complete one-time Install';
+        return result.message ?? l10n.sideloadWorkerPendingUserAction;
       case SideloadCheckOutcome.unsupportedPlatform:
-        return 'Updates not supported on this platform';
+        return 'Updates aren’t available on this device';
       case SideloadCheckOutcome.error:
-        return result.message ?? 'Error';
+        return result.message ?? l10n.sideloadWorkerError;
     }
+  }
+
+  String _androidSetupSubtitle(AppLocalizations l10n) {
+    final can = _androidSetup?['canRequestPackageInstalls'] == true;
+    final self = _androidSetup?['isSelfInstallerOfRecord'] == true;
+    final parts = <String>[
+      can ? l10n.sideloadUnknownAppsAllowed : l10n.sideloadUnknownAppsBlocked,
+      self ? l10n.sideloadInstallerOfRecordOk : l10n.sideloadInstallerOfRecordPending,
+    ];
+    return parts.join('\n');
+  }
+
+  String _workerStatusText() {
+    final l10n = AppLocalizations.of(context)!;
+    final w = _workerStatus;
+    if (w == null) return '';
+    final lastRun = w['lastRunAt'];
+    final when = lastRun is int && lastRun > 0
+        ? _formatNextRun(DateTime.fromMillisecondsSinceEpoch(lastRun))
+        : l10n.sideloadWorkerNever;
+    final raw = w['lastResult']?.toString() ?? '';
+    final resultLabel = switch (raw) {
+      'skipped_metered' => l10n.sideloadWorkerSkippedMetered,
+      'up_to_date' => l10n.sideloadWorkerUpToDate,
+      'need_install_permission' => l10n.sideloadWorkerNeedPermission,
+      'pending_user_action' => l10n.sideloadWorkerPendingUserAction,
+      'installed' || 'install_success' => l10n.sideloadWorkerInstalled,
+      'deferred_playing' => l10n.sideloadWorkerDeferredPlaying,
+      'error' || 'install_failed' || 'sha_mismatch' => l10n.sideloadWorkerError,
+      '' => '—',
+      _ => raw,
+    };
+    final err = w['lastError']?.toString();
+    if (err != null && err.isNotEmpty && raw.contains('error')) {
+      return '$when\n$resultLabel\n$err';
+    }
+    return '$when\n$resultLabel';
   }
 
   Future<void> _showIosUpdateSheet(SideloadManifest manifest) async {
@@ -203,6 +242,14 @@ class _SideloadUpdatesSettingsScreenState
     return MaterialLocalizations.of(context).formatTimeOfDay(t);
   }
 
+  String _formatNextRun(DateTime when) {
+    final local = when.toLocal();
+    final mat = MaterialLocalizations.of(context);
+    final date = mat.formatMediumDate(local);
+    final time = mat.formatTimeOfDay(TimeOfDay.fromDateTime(local));
+    return '$date · $time';
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -253,7 +300,7 @@ class _SideloadUpdatesSettingsScreenState
           if (mode == SideloadUpdateMode.auto)
             ListTile(
               title: Text(l10n.sideloadNextScheduledRun),
-              subtitle: Text(_service.nextScheduledLocalRun().toLocal().toString()),
+              subtitle: Text(_formatNextRun(_service.nextScheduledLocalRun())),
             ),
           SwitchListTile(
             title: Text(l10n.sideloadAllowCellular),
@@ -342,28 +389,5 @@ class _SideloadUpdatesSettingsScreenState
         ],
       ),
     );
-  }
-
-  String _androidSetupSubtitle(AppLocalizations l10n) {
-    final can = _androidSetup?['canRequestPackageInstalls'] == true;
-    final self = _androidSetup?['isSelfInstallerOfRecord'] == true;
-    final installer = _androidSetup?['installerPackageName']?.toString() ?? 'unknown';
-    final parts = <String>[
-      can ? l10n.sideloadUnknownAppsAllowed : l10n.sideloadUnknownAppsBlocked,
-      self
-          ? l10n.sideloadInstallerOfRecordOk
-          : l10n.sideloadInstallerOfRecordOther(installer),
-    ];
-    return parts.join('\n');
-  }
-
-  String _workerStatusText() {
-    final w = _workerStatus;
-    if (w == null) return '';
-    final lastRun = w['lastRunAt'];
-    final when = lastRun is int && lastRun > 0
-        ? DateTime.fromMillisecondsSinceEpoch(lastRun).toLocal().toString()
-        : 'never';
-    return 'Last: $when\nResult: ${w['lastResult'] ?? '—'}\n${w['lastError'] ?? ''}';
   }
 }

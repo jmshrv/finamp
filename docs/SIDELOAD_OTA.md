@@ -75,14 +75,13 @@ immediately.
 
 ### One-time Android setup
 
-1. Allow **Install unknown apps** for Finamp.
-2. If this build was installed with `adb`, the installer-of-record is shell —
-   complete **one** confirmed Install from in-app so Finamp owns later silent
-   Auto updates.
-3. After that, Auto at 3:33 should not show a confirmation sheet.
+1. Turn on **Allow Finamp to install updates** if asked.
+2. Tap **Finish setup (one time)**, then tap **Install** when Android asks.
+   (Needed once so Finamp can update itself later without interrupting you.)
+3. After that, overnight automatic updates can run quietly.
 
-Emergency: `adb install -r dist/finamp-android-profile.apk` (may reset
-installer-of-record to shell — redo step 2).
+Emergency: `adb install -r dist/finamp-android-profile.apk` may require
+finishing setup again (step 2).
 
 ## iOS (personal team)
 

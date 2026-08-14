@@ -96,6 +96,16 @@ class SideloadCheckResult {
   final String? apkPath;
 }
 
+class SideloadManifestException implements Exception {
+  SideloadManifestException(this.message, {this.statusCode});
+
+  final String message;
+  final int? statusCode;
+
+  @override
+  String toString() => message;
+}
+
 /// Fork-only sideload OTA: fetch [latest.json], compare integer build, download
 /// + verify, Android silent PackageInstaller; iOS notify / SideStore / USB only.
 class SideloadUpdateService {
@@ -289,7 +299,7 @@ class SideloadUpdateService {
         final r = SideloadCheckResult(
           outcome: SideloadCheckOutcome.skippedMetered,
           localBuild: localBuild,
-          message: 'Waiting for Wi‑Fi (or enable cellular downloads)',
+          message: 'Waiting for Wi‑Fi (turn on “Use mobile data for updates” to allow cellular)',
         );
         lastResult = r;
         lastCheckAt = DateTime.now();
@@ -370,7 +380,7 @@ class SideloadUpdateService {
           outcome: SideloadCheckOutcome.needPermission,
           manifest: manifest,
           localBuild: localBuild,
-          message: 'Allow Install unknown apps for Finamp',
+          message: 'Allow Finamp to install updates',
         );
         lastResult = r;
         lastCheckAt = DateTime.now();
@@ -398,7 +408,7 @@ class SideloadUpdateService {
           localBuild: localBuild,
           apkPath: path,
           message:
-              'Tap Install once to finish setup (installer of record). Later Auto updates can be silent.',
+              'Tap Install when Android asks — just this once. After that, updates can install quietly.',
         );
         lastResult = r;
         return r;
@@ -432,8 +442,17 @@ class SideloadUpdateService {
   Future<SideloadManifest> fetchManifest() async {
     final url = manifestUrl;
     final response = await http.get(Uri.parse(url)).timeout(const Duration(seconds: 30));
+    if (response.statusCode == 404) {
+      throw SideloadManifestException(
+        'No update feed found yet. An update hasn’t been published, or the link is wrong.',
+        statusCode: 404,
+      );
+    }
     if (response.statusCode != 200) {
-      throw StateError('Manifest HTTP ${response.statusCode} from $url');
+      throw SideloadManifestException(
+        'Couldn’t reach the update server (error ${response.statusCode}). Try again on Wi‑Fi.',
+        statusCode: response.statusCode,
+      );
     }
     final json = jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
     return SideloadManifest.fromJson(json);

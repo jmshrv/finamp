@@ -27,7 +27,7 @@ class SideloadInstallReceiver : BroadcastReceiver() {
                 SideloadPrefs.writeResult(
                     context,
                     "pending_user_action",
-                    "Complete one-time system Install to become installer of record",
+                    "Tap Install when Android asks — just once",
                 )
                 val confirm = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
                     intent.getParcelableExtra(Intent.EXTRA_INTENT, Intent::class.java)
