@@ -1,5 +1,5 @@
 {
-    "finampTagline": "Pemutar musik Jellyfin sumber terbuka",
+    "finampTagline": "Pemutar musik sumber terbuka untuk Jellyfin",
     "@finampTagline": {
         "description": "Tagline / short description for the app"
     },
@@ -23,7 +23,7 @@
     "@aboutContributionPrompt": {
         "description": "Text shown in the about screen, explaining that the app is made by volunteers and that the user could be one of them."
     },
-    "aboutContributionLink": "Berkontribusi ke Finamp di GitHub:",
+    "aboutContributionLink": "Berkontribusi ke Finamp melalui GitHub:",
     "@aboutContributionLink": {
         "description": "Link to the Finamp GitHub repository, shown in the about screen."
     },
@@ -94,7 +94,7 @@
     "@connectingToServer": {
         "description": "Text shown while the connection to the specified server is attempted"
     },
-    "loginFlowLocalNetworkServers": "Server di jaringan lokal Anda:",
+    "loginFlowLocalNetworkServers": "Server dalam jaringan lokal Anda:",
     "@loginFlowLocalNetworkServers": {
         "description": "Heading for the list of servers on the local network, shown during the login flow. Should ideally have a colon at the end."
     },
@@ -146,12 +146,12 @@
     "@loginFlowSelectAUser": {
         "description": "Heading for the list of users that the user can select from during the login flow."
     },
-    "username": "Nama pengguna",
-    "usernameHint": "Masukkan nama pengguna Anda",
+    "username": "Username",
+    "usernameHint": "Masukkan username Anda",
     "@usernameHint": {
         "description": "Hint text for the username input field."
     },
-    "usernameValidationMissingUsername": "Silakan masukkan nama pengguna",
+    "usernameValidationMissingUsername": "Silakan masukkan username",
     "@usernameValidationMissingUsername": {
         "description": "Error message that shows when the user submits a login without a username"
     },
