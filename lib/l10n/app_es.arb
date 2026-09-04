@@ -158,7 +158,7 @@
     "selectDirectory": "Seleccionar directorio",
     "unknownError": "Error desconocido",
     "enterLowPriorityStateOnPause": "Entrar en estado de baja prioridad al pausar",
-    "pathReturnSlashErrorMessage": "No se pueden usar rutas que devuelvan \"/\"",
+    "pathReturnSlashErrorMessage": "No se pueden usar rutas que devuelvan «/»",
     "grid": "Cuadrícula",
     "viewType": "Tipo de vista para la pantalla de música",
     "viewTypeSubtitle": "Controla el modo de cuadrícula o lista para todas las pestañas de música, excepto la pantalla de inicio.",
@@ -187,7 +187,7 @@
     "premiereDate": "Fecha de lanzamiento",
     "revenue": "Ingresos",
     "errorScreenError": "¡Se ha producido un error al obtener la lista de errores! Llegados a este punto, probablemente deberías crear una incidencia en GitHub y eliminar los datos de la aplicación",
-    "customLocationsBuggy": "Las ubicaciones personalizadas pueden ser extremadamente problemáticas, y no son recomendadas para la mayoría de usos. Ubicaciones dentro de la carpeta del sistema \"Música\" podría impedir que las imágenes de los álbumes se guarden debido a limitaciones del sistema operativo.",
+    "customLocationsBuggy": "Las ubicaciones personalizadas pueden ser extremadamente problemáticas, y no son recomendadas para la mayoría de usos. Ubicaciones dentro de la carpeta del sistema «Música» podría impedir que las imágenes de los álbumes se guarden debido a limitaciones del sistema operativo.",
     "shuffleAllTrackCount": "Cantidad de canciones al reproducir aleatoriamente",
     "shuffleAllTrackCountSubtitle": "Cantidad de canciones a cargar cuando se use el botón de mezclar todo en la pestaña de canciones o en la pantalla de géneros.",
     "showTextOnGridViewSubtitle": "Muestra el texto (título, artista, etc) en la pantalla de música al usar la vista de cuadrícula. El texto siempre se muestra en la pantalla inicial, ignorando este ajuste.",
@@ -227,7 +227,7 @@
         "description": "Title for message that shows on the views screen when no music libraries could be found."
     },
     "refresh": "Refrescar",
-    "noMusicLibrariesBody": "Finamp no ha podido encontrar ninguna biblioteca de música. Asegúrate de que tu servidor Jellyfin contiene al menos una biblioteca con el tipo de \"Música\".",
+    "noMusicLibrariesBody": "Finamp no ha podido encontrar ninguna biblioteca de música. Asegúrate de que tu servidor Jellyfin contiene al menos una biblioteca con el tipo de «Música».",
     "showFastScroller": "Mostrar desplazamiento rápido",
     "interactions": "Interacciones",
     "about": "Acerca de Finamp",
@@ -470,7 +470,7 @@
     "@volumeNormalizationSwitchTitle": {
         "description": "Title for the switch that toggles replay gain"
     },
-    "volumeNormalizationSwitchSubtitle": "Usar la información de la ganancia para normalizar el volumen de las canciones (\"Ganancia de Reproducción\")",
+    "volumeNormalizationSwitchSubtitle": "Usar la información de la ganancia para normalizar el volumen de las canciones («Ganancia de Reproducción»)",
     "@volumeNormalizationSwitchSubtitle": {
         "description": "Subtitle for the switch that toggles replay gain"
     },
@@ -577,7 +577,7 @@
     "@shuffleAlbums": {
         "description": "Label for action that shuffles all albums of an artist or genre"
     },
-    "shuffleAlbumsNext": "Mezclar Álbumes en \"A Continuación\"",
+    "shuffleAlbumsNext": "Mezclar Álbumes en «A Continuación»",
     "@shuffleAlbumsNext": {
         "description": "Label for action that shuffles all albums of an artist or genre and adds them at the start of Next Up"
     },
@@ -1216,11 +1216,11 @@
     "@nextUp": {
         "description": "Description in the queue panel for the list of tracks were manually added to be played after the current track. This should be capitalized (if applicable) to be more recognizable throughout the UI"
     },
-    "clearNextUp": "Limpiar \"A continuación\"",
+    "clearNextUp": "Limpiar «A continuación»",
     "@clearNextUp": {
         "description": "Label for the action that deletes all tracks added to Next Up"
     },
-    "addToNextUp": "Añadir a \"A continuación\"",
+    "addToNextUp": "Añadir a «A continuación»",
     "@addToNextUp": {
         "description": "Used for adding a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
     },
@@ -1337,7 +1337,7 @@
     "@showLyricsScreenAlbumPreludeTitle": {
         "description": "Title for the setting that controls if the album cover is shown before the lyrics in the lyrics view"
     },
-    "yourLikes": "Tus me gusta (desde \"{trackName}\")",
+    "yourLikes": "Tus me gusta (desde «{trackName}»)",
     "@yourLikes": {
         "description": "Title for the queue source when the user is playing their liked tracks"
     },
@@ -1413,7 +1413,7 @@
     "@queuesScreen": {
         "description": "Title for the screen where older now playing queues can be restored"
     },
-    "tracksFormerNextUp": "Canciones añadidas a través de \"A continuación\"",
+    "tracksFormerNextUp": "Canciones añadidas a través de «A continuación»",
     "@tracksFormerNextUp": {
         "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
     },
@@ -1433,7 +1433,7 @@
     "@preferQuickSyncSwitchSubtitle": {
         "description": "Description of setting that skips completed albums while syncing."
     },
-    "confirmAddToNextUp": "Se ha añadido {type, select, track{la pista} album{el álbum} artist{el artista} playlist{la lista de reproducción} genre{el género} disc{el disco} other{el elemento}} a \"A continuación\"",
+    "confirmAddToNextUp": "Se ha añadido {type, select, track{la pista} album{el álbum} artist{el artista} playlist{la lista de reproducción} genre{el género} disc{el disco} other{el elemento}} a «A continuación»",
     "@confirmAddToNextUp": {
         "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
         "placeholders": {
@@ -1507,7 +1507,7 @@
             }
         }
     },
-    "confirmShuffleToNextUp": "Mezclado en \"A continuación\"",
+    "confirmShuffleToNextUp": "Mezclado en «A continuación»",
     "@confirmShuffleToNextUp": {
         "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue"
     },
@@ -1563,15 +1563,15 @@
     "@showStopButtonOnMediaNotificationSubtitle": {
         "description": "Subtitle for the setting that controls if the media notification has a stop button in addition to the pause button."
     },
-    "shuffleNext": "Mezclar en \"A continuación\"",
+    "shuffleNext": "Mezclar en «A continuación»",
     "@shuffleNext": {
         "description": "Used for shuffling a list (album, playlist, etc.) to the \"Next Up\" queue at the first position, to play right after the current track finishes playing"
     },
-    "confirmShuffleNext": "Se mezclará en \"A continuación\"",
+    "confirmShuffleNext": "Se mezclará en «A continuación»",
     "@confirmShuffleNext": {
         "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the front of the \"Next Up\" queue"
     },
-    "shuffleToNextUp": "Mezclar al final de \"A continuación\"",
+    "shuffleToNextUp": "Mezclar al final de «A continuación»",
     "@shuffleToNextUp": {
         "description": "Used for shuffling a list (album, playlist, etc.) to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
     },
@@ -1579,7 +1579,7 @@
     "@shuffleAlbumsToQueue": {
         "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
     },
-    "playingFromType": "Reproduciendo desde {source, select, album{álbum} playlist{lista de reproducción} trackMix{mezcla de pistas} artistMix{mezcla de artista} albumMix{mezcla de álbum} genreMix{mezcla de género} favorites{favoritos} allTracks{todas las pistas} filteredList{canciones} genre{género} artist{artista} track{pista} nextUpAlbum{álbum en \"A continuación\"} nextUpPlaylist{lista de Reproducción en \"A continuación\"} nextUpArtist{artista en \"A continuación\"} nextUpGenre{género en \"A continuación\"} remoteClient{un cliente remoto} radio{radio} homeScreenSection{} collection{la colección} collectionMix{mezcla de la colección} other{}}",
+    "playingFromType": "Reproduciendo desde {source, select, album{álbum} playlist{lista de reproducción} trackMix{mezcla de pistas} artistMix{mezcla de artista} albumMix{mezcla de álbum} genreMix{mezcla de género} favorites{favoritos} allTracks{todas las pistas} filteredList{canciones} genre{género} artist{artista} track{pista} nextUpAlbum{álbum en «A continuación»} nextUpPlaylist{lista de Reproducción en «A continuación»} nextUpArtist{artista en «A continuación»} nextUpGenre{género en «A continuación»} remoteClient{un cliente remoto} radio{radio} homeScreenSection{} collection{la colección} collectionMix{mezcla de la colección} other{}}",
     "@playingFromType": {
         "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
         "placeholders": {
@@ -1588,7 +1588,7 @@
             }
         }
     },
-    "couldNotLoad": "No fue posible cargar {source, select, album{el álbum} playlist{la lista de reproducción} trackMix{la mezcla de pista} artistMix{la mezcla de artista} albumMix{la mezcla de álbum} genreMix{la mezcla de género} favorites{los favoritos} allTracks{todas las pistas} filteredList{las pistas} genre{el género} artist{el artista} track{la pista} nextUpAlbum{el álbum en \"A continuación\"} nextUpPlaylist{la lista de reproducción en \"A continuación\"} nextUpArtist{el artista en \"A continuación\"} nextUpGenre{el género en \"A continuación\"} other{}}",
+    "couldNotLoad": "No fue posible cargar {source, select, album{el álbum} playlist{la lista de reproducción} trackMix{la mezcla de pista} artistMix{la mezcla de artista} albumMix{la mezcla de álbum} genreMix{la mezcla de género} favorites{los favoritos} allTracks{todas las pistas} filteredList{las pistas} genre{el género} artist{el artista} track{la pista} nextUpAlbum{el álbum en «A continuación»} nextUpPlaylist{la lista de reproducción en «A continuación»} nextUpArtist{el artista en «A continuación»} nextUpGenre{el género en «A continuación»} other{}}",
     "@couldNotLoad": {
         "placeholders": {
             "source": {
@@ -1650,7 +1650,7 @@
             }
         }
     },
-    "playOnStaleDelay": "Tiempo de espera de sesión para \"Reproducir en\"",
+    "playOnStaleDelay": "Tiempo de espera de sesión para «Reproducir en»",
     "@playOnStaleDelay": {
         "description": "Label for the setting that controls how long a PlayOn remote session is considered active"
     },
@@ -1660,7 +1660,7 @@
     },
     "removeFavorite": "Eliminar de favoritos",
     "addFavorite": "Añadir a favoritos",
-    "playOnReconnectionDelaySubtitle": "Controla el retraso (en segundos) entre intentos de reconexión al websocket de \"Reproducir en\" cuando ocurre una desconexión. Un tiempo menor aumenta el consumo de ancho de banda.",
+    "playOnReconnectionDelaySubtitle": "Controla el retraso (en segundos) entre intentos de reconexión al websocket de «Reproducir en» cuando ocurre una desconexión. Un tiempo menor aumenta el consumo de ancho de banda.",
     "@playOnReconnectionDelaySubtitle": {
         "description": "Description of the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
     },
@@ -1677,7 +1677,7 @@
     "@genreFilterPlaylistScreens": {
         "description": "Label for the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
     },
-    "playOnReconnectionDelay": "Retraso de reconexión de \"Reproducir en\"",
+    "playOnReconnectionDelay": "Retraso de reconexión de «Reproducir en»",
     "@playOnReconnectionDelay": {
         "description": "Label for the setting that controls the reconnection attempts frequency of a disconnected PlayOn session"
     },
@@ -1702,7 +1702,7 @@
     "@genreFilterPlaylistScreensSubtitle": {
         "description": "Description of the setting that controls if a genreFilter should get applied to PlaylistScreens when accessing the PlaylistScreens through a Genre."
     },
-    "startupErrorCallToAction": "Por favor crea una incidencia en \"github.com/finamp-app/finamp\" con los registros (utiliza el botón de abajo) y una captura de pantalla de esta página para que podamos resolverlo lo más rápido posible.",
+    "startupErrorCallToAction": "Por favor crea una incidencia en «github.com/finamp-app/finamp» con los registros (utiliza el botón de abajo) y una captura de pantalla de esta página para que podamos resolverlo lo más rápido posible.",
     "@startupErrorCallToAction": {
         "description": "The subtitle / call to action for what to do after encountering a startup error"
     },
@@ -1717,7 +1717,7 @@
         "description": "Description of the setting that controls the order of item sections on the screens."
     },
     "recentlyPlayedAlbums": "Álbumes reproducidos recientemente",
-    "enablePlayonSubtitle": "Activa la característica \"Reproducir en\" de Jellyfin (controlar remotamente Finamp desde otro cliente). Desactiva esto si tu proxy inverso o servidor no soporta websockets.",
+    "enablePlayonSubtitle": "Activa la característica «Reproducir en» de Jellyfin (controlar remotamente Finamp desde otro cliente). Desactiva esto si tu proxy inverso o servidor no soporta websockets.",
     "@enablePlayonSubtitle": {
         "description": "Description of the setting to enable Jellyfin's 'Play On' feature (remote control)"
     },
@@ -1752,7 +1752,7 @@
     "@defaultOrder": {
         "description": "Default sorting order for playlists (server order)"
     },
-    "playOnStaleDelaySubtitle": "Cuanto tiempo se considera activa una sesión de \"Reproducir en\" después de recibir un comando. Cuando se considera activa, el estado de reproducción se informa con más frecuencia, lo que puede llevar a más consumo de banda ancha.",
+    "playOnStaleDelaySubtitle": "Cuanto tiempo se considera activa una sesión de «Reproducir en» después de recibir un comando. Cuando se considera activa, el estado de reproducción se informa con más frecuencia, lo que puede llevar a más consumo de banda ancha.",
     "@playOnStaleDelaySubtitle": {
         "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
     },
@@ -1914,7 +1914,7 @@
     "@audioFadeOutDurationSettingTitle": {
         "description": "Title for the audio fade-out duration setting."
     },
-    "genreListsInheritSortingSubtitle": "Cuando esté activado, las listas de \"Ver todos\" heredará las opciones de ordenado y filtrado de la pantalla de género. Si se desactiva, se utilizarán los ajustes de la pestaña de biblioteca correspondiente. Pulsar en los contadores que hay en la parte de arriba de la pantalla de género o el botón de \"Explorar listas de reproducción\" siempre abrirá una lista con los ajustes de ordenado de la pestaña de biblioteca.",
+    "genreListsInheritSortingSubtitle": "Cuando esté activado, las listas de «Ver todos» heredará las opciones de ordenado y filtrado de la pantalla de género. Si se desactiva, se utilizarán los ajustes de la pestaña de biblioteca correspondiente. Pulsar en los contadores que hay en la parte de arriba de la pantalla de género o el botón de «Explorar listas de reproducción» siempre abrirá una lista con los ajustes de ordenado de la pestaña de biblioteca.",
     "@genreListsInheritSortingSubtitle": {
         "description": "Description of the setting that controls if a See All Genre Lists should inherit the Genre Sorting and Filtering."
     },
@@ -2101,7 +2101,7 @@
     "@createPlaylistFromCurrentQueue": {
         "description": "Label for a button that creates a new playlist from the current queue."
     },
-    "additionalBaseItemInfoSubtitle": "Controla qué tipo de información adicional se muestra en las listas de elementos para cada tipo de elemento. Cuando se establece en \"Adpatativo\", la información es escogida automáticamente según la clasificación o el contexto actual.",
+    "additionalBaseItemInfoSubtitle": "Controla qué tipo de información adicional se muestra en las listas de elementos para cada tipo de elemento. Cuando se establece en «Adaptativo», la información es escogida automáticamente según la clasificación o el contexto actual.",
     "@additionalBaseItemInfoSubtitle": {
         "description": "Subtitle for the setting that controls the displayed additional item info."
     },
@@ -2213,7 +2213,7 @@
     "@useHighContrastColorsSubtitle": {
         "description": "Subtitle for the setting that controls if high contrast colors are used throughout the app"
     },
-    "discordRPCSettingTitle": "Discord RPC",
+    "discordRPCSettingTitle": "RPC de Discord",
     "@discordRPCSettingTitle": {
         "description": "Title for the setting that controls if the Discord RPC (Rich Presence) feature is enabled"
     },
@@ -2352,7 +2352,7 @@
         "description": "Toggles the dark color scheme between dark gray and pure black."
     },
     "amoledThemeSubtitle": "Reemplaza la paleta de colores oscuros por un tema de negro puro.",
-    "shuffleSomeToNextUp": "Mezcla algunos al final de \"A Continuación\"",
+    "shuffleSomeToNextUp": "Mezcla algunos al final de «A Continuación»",
     "@shuffleSomeToNextUp": {
         "description": "Used for shuffling some tracks to the end of the \"Next Up\" queue, to play after all prior tracks from Next Up have played"
     },
@@ -2360,7 +2360,7 @@
     "@shuffleSomeToQueue": {
         "description": "Used for shuffling some tracks to the end of the regular queue, to play after all prior tracks from the queue have played"
     },
-    "moveAddToNextUp": "Mover a \"A Continuación\"",
+    "moveAddToNextUp": "Mover a «A Continuación»",
     "@moveAddToNextUp": {
         "description": "Used for moving a track to the \"Next Up\" queue at the end, to play after all prior tracks from Next Up have played"
     },
@@ -2496,15 +2496,15 @@
     "@preferAddingToFavoritesOverPlaylistsTitle": {
         "description": "Title for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
     },
-    "preferAddingToFavoritesOverPlaylistsSubtitle": "Al habilitar un toque corto añadirá a favoritos mientras que un toque largo abrirá el menú de \"Añadir a lista de reproducción\". El comportamiento por defecto es el inverso.",
+    "preferAddingToFavoritesOverPlaylistsSubtitle": "Al habilitar un toque corto añadirá a favoritos mientras que un toque largo abrirá el menú de «Añadir a lista de reproducción». El comportamiento por defecto es el inverso.",
     "@preferAddingToFavoritesOverPlaylistsSubtitle": {
         "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
     },
-    "preferNextUpPrependingTitle": "Preferir anteponer a \"A continuación\"",
+    "preferNextUpPrependingTitle": "Preferir anteponer a «A continuación»",
     "@preferNextUpPrependingTitle": {
         "description": "Title for the setting to prefer prepending to Next Up over appending"
     },
-    "preferNextUpPrependingSubtitle": "Cuando está activado los botones de \"Reproducir siguiente\" se mostraran cuando \"A continuación\" este vacio. En caso contrario \"Añadir a \"A continuación\"\" sera la acción por defecto.",
+    "preferNextUpPrependingSubtitle": "Cuando está activado los botones de «Reproducir siguiente» se mostraran cuando «A continuación» este vacío. En caso contrario «Añadir a \"A continuación\"» sera la acción por defecto.",
     "@preferNextUpPrependingSubtitle": {
         "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
     },
@@ -2646,7 +2646,7 @@
     "@nameRequired": {
         "description": "Descriptor for the required name field when adding download locations."
     },
-    "exteranlStorageTip": "Si la ruta no contiene \"emulated\" es probablemente almacenamiento externo.",
+    "exteranlStorageTip": "Si la ruta no contiene «emulated» es probablemente almacenamiento externo.",
     "@exteranlStorageTip": {
         "description": "Helper text in Appdirectory download location config form"
     },
@@ -3409,7 +3409,7 @@
     "@unnamedCollection": {
         "description": "Placeholder for unnamed collection in home screen section editor"
     },
-    "noTracksFound": "No se encontraron pistas para empezar una mezcla de \"Sorprendeme\".",
+    "noTracksFound": "No se encontraron pistas para empezar una mezcla de «Sorpréndeme».",
     "@noTracksFound": {
         "description": "Message if SurpriseMeMix creation fails"
     },
@@ -3635,7 +3635,7 @@
     "@addSpecialDownloads": {
         "description": "Button on downloads screen which allows adding special downloads, such as all playlists or all favorites."
     },
-    "allTracks": "Todas las pistas (desde \"{trackName}\")",
+    "allTracks": "Todas las pistas (desde «{trackName}»)",
     "@allTracks": {
         "description": "Queue source when playing from tracks screen.",
         "placeholders": {
@@ -3692,7 +3692,7 @@
         },
         "description": "Descriptions of different pieces of advanced track info."
     },
-    "carPlaySiriHint": "Di \"Oye Siri, reproduce [track/artist/album] en Finamp\"",
+    "carPlaySiriHint": "Di «Oye Siri, reproduce [track/artist/album] en Finamp»",
     "@carPlaySiriHint": {
         "description": "Hint text for how to use Siri to search in CarPlay."
     },
