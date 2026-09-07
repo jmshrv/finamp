@@ -2277,7 +2277,7 @@
     "preferLocalNetworkEnableSwitchDescription": "Gunakan alamat berbeda saat berada di jaringan lokal server Jellyfin",
     "preferLocalNetworkPublicAddressSettingTitle": "Public Address",
     "preferLocalNetworkPublicAddressSettingDescription": "Alamat utama yang digunakan untuk terhubung ke server Jellyfin Anda",
-    "networkSettingsTitle": "Network",
+    "networkSettingsTitle": "Jaringan",
     "@networkSettingsTitle": {
         "description": "Title for the network settings screen"
     },
