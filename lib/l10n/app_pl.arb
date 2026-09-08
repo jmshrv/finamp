@@ -180,12 +180,12 @@
     "shuffleAllTrackCountSubtitle": "Ilość utworów do załadowania, kiedy użyto przycisku \"Losowo\" na zakładce utwory lub gatunki.",
     "stackTrace": "Stos błędu",
     "enterLowPriorityStateOnPauseSubtitle": "Pozwala usunąć powiadomienie podczas pauzy. Pozwala również systemowi Android na zabicie usługi podczas pauzy.",
-    "viewTypeSubtitle": "Układ elementów",
+    "viewTypeSubtitle": "Steruje trybem widoku siatki lub listy dla wszystkich kart ekranu muzyki, z wyjątkiem ekranu głównego.",
     "shuffleAllTrackCount": "Maksymalna ilość losowych utworów",
     "useCoverAsBackgroundSubtitle": "Określa czy używać rozmytego obrazu na ekranie odtwarzacza.",
     "sleepTimerTooltip": "Wyłącznik czasowy",
     "showTextOnGridViewSubtitle": "Określa czy wyświetlać tekst (tytuł, wykonawca itp.) na siatce elementów. Tekst na ekranie głównym jest zawsze wyświetlany, niezależnie od tego ustawienia.",
-    "viewType": "Widok",
+    "viewType": "Rodzaj widoku ekranu odtwarzania",
     "responseError401": "{error} Kod {statusCode}. To najprawdopodobniej oznacza, że użyłeś/aś nieprawidłowej nazwy użytkownika lub hasła.",
     "@responseError401": {
         "placeholders": {
@@ -458,7 +458,7 @@
     "@playingFrom": {
         "description": "Prefix shown before the name of the main queue source, like the album or playlist that was used to start playback. Example: \"Playing from {My Nice Playlist}\""
     },
-    "shuffleToQueue": "Losuj kolejkę odtwarzania",
+    "shuffleToQueue": "Losuj do kolejki odtwarzania",
     "@shuffleToQueue": {
         "description": "Used for shuffling a list (album, playlist, etc.) to the end of the regular queue, to play after all prior tracks from the queue have played"
     },
@@ -824,7 +824,7 @@
     "@downloadsWorkersSetting": {
         "description": "Title of setting controlling download worker count."
     },
-    "preferQuickSyncSwitchSubtitle": "Podczas synchronizacji niektóre typowo statyczne elementy (takie jak utwory i albumy) nie zostaną zaktualizowane. Funkcja Naprawa pobierania zawsze przeprowadza pełną synchronizację.",
+    "preferQuickSyncSwitchSubtitle": "Podczas synchronizacji niektóre typowo statyczne pozycje (takie jak utwory i albumy) nie zostaną zaktualizowane. Funkcja Naprawa pobierania zawsze przeprowadza pełną synchronizację.",
     "@preferQuickSyncSwitchSubtitle": {
         "description": "Description of setting that skips completed albums while syncing."
     },
@@ -1373,7 +1373,7 @@
             }
         }
     },
-    "syncDownloads": "Synchronizuj i pobierz brakujące elementy.",
+    "syncDownloads": "Synchronizuj i pobierz brakujące pozycje.",
     "@syncDownloads": {
         "description": "Tooltip for downloads sync button."
     },
@@ -2034,7 +2034,7 @@
     "@loopingUnavailableWhileRadioActiveWarning": {
         "description": "Warning message when trying to change the loop mode while radio is active."
     },
-    "autoReloadPrompt": "Odśwież kolejkę aby potwierdzić nowe {type, select, network{ustawienia sieciowe} transcoding{ustawienia transcodingu} other{ustawienia}}",
+    "autoReloadPrompt": "Odśwież kolejkę aby potwierdzić nowe {type, select, network{ustawienia sieciowe} transcoding{ustawienia transkodowania} other{ustawienia}}",
     "@autoReloadPrompt": {
         "description": "Prompt shown when the queue needs to be reloaded after changing network settings",
         "placeholders": {
@@ -2545,7 +2545,7 @@
         },
         "description": "Label for sleep timer track count slider"
     },
-    "quickActionsSubtitle": "Wybierz i uporządkuj szybkie opcje wyświetlane na ekranie start.",
+    "quickActionsSubtitle": "Wybierz i uporządkuj szybkie opcje wyświetlane na ekranie głównym.",
     "@quickActionsSubtitle": {
         "description": "Subtitle for quick actions edit menu"
     },
@@ -2601,7 +2601,7 @@
     "@customSectionTitleRequired": {
         "description": "Message when a custom section title is needed in home screen section editor"
     },
-    "editHomeScreenSection": "Edytuj Sekcję Ekranu Startowego",
+    "editHomeScreenSection": "Edytuj Sekcję Ekranu Głównego",
     "@editHomeScreenSection": {
         "description": "Title for home screen section editor menu"
     },
@@ -2646,11 +2646,11 @@
         },
         "description": "Slider label in grid tile image size setting"
     },
-    "homeScreenImageSizeTitle": "Rozmiar płytek na ekranie startowym",
+    "homeScreenImageSizeTitle": "Rozmiar płytek na ekranie głównym",
     "@homeScreenImageSizeTitle": {
         "description": "Title of home screen tile image size setting"
     },
-    "homeScreenImageSizeSubtitle": "Wybierz rozmiar elementów na ekranie startowym",
+    "homeScreenImageSizeSubtitle": "Wybierz rozmiar elementów na ekranie głównym",
     "@homeScreenImageSizeSubtitle": {
         "description": "Subtitle of home screen tile image size setting"
     },
@@ -2941,7 +2941,7 @@
     "@nothingFoundToPlay": {
         "description": "Message if play random item fails"
     },
-    "errorLoadingHomeSection": "Błąd ładowania ekranu startowego",
+    "errorLoadingHomeSection": "Błąd ładowania ekranu głównego",
     "@errorLoadingHomeSection": {
         "description": "Message if a home screen section cannot be loaded due to a missing item"
     },
@@ -3001,7 +3001,7 @@
             }
         }
     },
-    "customizeHomeScreen": "Dostosuj ekran startowy",
+    "customizeHomeScreen": "Dostosuj ekran główny",
     "@customizeHomeScreen": {
         "description": "Label for home screen customize button"
     },
@@ -3017,7 +3017,7 @@
     "@useAndroidGainEffectTitle": {
         "description": "Title for Android gain effect setting.  This setting is used to work around player errors on some devices."
     },
-    "losslessNoBitrate": "Nie dotyczy transcoderów FLAC",
+    "losslessNoBitrate": "Nie dotyczy transkoderów FLAC",
     "@losslessNoBitrate": {
         "description": "Settings text informing the user that transcoding bitrate does not apply to lossless transcodes."
     },
@@ -3209,7 +3209,7 @@
     "quickSettingsScreen": "Szybkie Ustawienia",
     "quickSettingsScreenDescription": "Dostosuj Finamp do swoich preferencji z tymi podstawowymi ustawieniami. Wróć tutaj w każdym momencie poprzez Ustawienia.",
     "quickSettingsTabsLink": "Uporządkuj i schowaj karty",
-    "quickSettingsTranscodeLink": "Wszystkie ustawienia transcodowania",
+    "quickSettingsTranscodeLink": "Wszystkie ustawienia transkodowania",
     "quickSettingsLayoutLink": "Wszystkie ustawienia układu i motywu",
     "quickSettingsAllSettingsLink": "Wszystkie Ustawienia",
     "quickSettingsNetworkLink": "Skonfiguruj lokalny adres serwera",
@@ -3371,12 +3371,12 @@
         },
         "description": "Localized names of special downloadable collection representing cached images for a certain library."
     },
-    "transcodingStreamingFormatTitle": "Wybierz format transcodowania",
+    "transcodingStreamingFormatTitle": "Wybierz format transkodowania",
     "@transcodingStreamingFormatTitle": {
         "description": "Title for the dropdown that selects the format for transcoded streams"
     },
-    "transcodingStreamingFormatSubtitle": "Wybierz format, który ma być używany podczas strumieniowania transcodowanego dźwięku. Obecnie zakolejkowane utwory nie zostaną zmienione.",
-    "downloadTranscodeEnableTitle": "Włącz transcodowane pobieranie",
+    "transcodingStreamingFormatSubtitle": "Wybierz format, który ma być używany podczas strumieniowania transkodowanego dźwięku. Obecnie zakolejkowane utwory nie zostaną zmienione.",
+    "downloadTranscodeEnableTitle": "Włącz transkodowane pobieranie",
     "@downloadTranscodeEnableTitle": {
         "description": "Title for Enable Transcoded Downloads dropdown"
     },
@@ -3401,11 +3401,11 @@
     "@downloadBitrateSubtitle": {
         "description": "subtitle for Download Bitrate settings slider"
     },
-    "multichannelHandlingTitle": "Wielokanałowy transcode handling",
+    "multichannelHandlingTitle": "Wielokanałowy handling transkodowania",
     "@multichannelHandlingTitle": {
         "description": "Title for multi-channel handling dropdown"
     },
-    "multichannelHandlingSubtitle": "Jak zachować się podczas transcodowania wielokanałowych (>2 kanały) utworów. Dotyczy zarówno strumieniowania jak i pobranych.",
+    "multichannelHandlingSubtitle": "Jak zachować się podczas transkodowania wielokanałowych (>2 kanały) utworów. Dotyczy zarówno strumieniowania jak i pobranych.",
     "@multichannelHandlingSubtitle": {
         "description": "Subtitle for multi-channel handling dropdown"
     },
@@ -3418,7 +3418,7 @@
         },
         "description": "Options in multi-channel handling dropdown"
     },
-    "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transcodowano}}{location, select, null{} other{ ({location})}}",
+    "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} Transkodowano}}{location, select, null{} other{ ({location})}}",
     "@downloadInfo": {
         "placeholders": {
             "bitrate": {
@@ -3462,7 +3462,7 @@
         },
         "description": "Collection info line in downloads screen lists"
     },
-    "redownloadcomplete": "Ponowne pobieranie transcodowane zakolejkowane.",
+    "redownloadcomplete": "Ponowne pobieranie transkodowanych treści zakolejkowane.",
     "@redownloadcomplete": {
         "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
     },
@@ -3685,5 +3685,41 @@
     "moreActionsOnAlbumDisc": "Więcej akcji dla płyty",
     "@moreActionsOnAlbumDisc": {
         "description": "Label for the disc header menu button."
+    },
+    "syncFailedWarningLong": "Niektóre pobrane pliki nie zostały zsynchronizowane z serwerem. Pasująca pozycja na serwerze prawdopodobnie została usunięta. Nieudane pobranie należy usunąć, aby wyczyścić nieaktualne pliki.",
+    "@syncFailedWarningLong": {
+        "description": "Expanded warning message for when download sync fails due to items being deleted from the server."
+    },
+    "syncingFailed": "Synchronizacja nie powiodła się. Ta pobrana pozycja prawdopodobnie została usunięta z serwera i należy ją usunąć.",
+    "@syncingFailed": {
+        "description": "Message shown for downloads with the sync failed status, which is generally caused by the server-side item being removed."
+    },
+    "autoplayRestoredQueueTitle": "Automatycznie odtwarzaj przywrócone kolejki",
+    "@autoplayRestoredQueueTitle": {
+        "description": "Title for the setting that controls if restored queues automatically play."
+    },
+    "autoplayRestoredQueueSubtitle": "Kolejki przywrócone automatycznie podczas uruchamiania lub z poziomu ekranu przywracania kolejki rozpoczną odtwarzanie automatycznie. Kolejki, w których nie uda się przywrócić wszystkich utworów, nigdy nie uruchomią automatycznego odtwarzania, niezależnie od tego ustawienia.",
+    "@autoplayRestoredQueueSubtitle": {
+        "description": "Subtitle for the setting that controls if restored queues automatically play."
+    },
+    "missingBlurhashWarning": "Ostrzeżenie: Serwer Jellyfin wydaje się być błędnie skonfigurowany i nie oblicza kodów blurhash. Uniemożliwia to aplikacji Finamp usuwanie duplikatów pobieranych obrazów. Należy poprawić konfigurację serwera i uruchomić naprawę pobranych plików.",
+    "@missingBlurhashWarning": {
+        "description": "A warning message displayed on the downloads screen if the jellyfin server is missing blurhashes."
+    },
+    "forceAudioOffloadingOnAndroidTitle": "Wymuś odciążanie przetwarzania dźwięku",
+    "@forceAudioOffloadingOnAndroidTitle": {
+        "description": "Title for the setting that controls audio offloading on Android."
+    },
+    "forceAudioOffloadingOnAndroidSubtitle": "Odciąża przetwarzanie dźwięku poprzez przekazanie go do sprzętu, jeśli jest to obsługiwane przez urządzenie.",
+    "@forceAudioOffloadingOnAndroidSubtitle": {
+        "description": "Subtitle for the setting that controls audio offloading on Android."
+    },
+    "useAndroidGainEffectSubtitle": "Używa natywnego efektu wzmocnienia (gain) do kontroli głośności. Jest to bardziej elastyczne rozwiązanie, ale na niektórych urządzeniach może powodować błędy odtwarzacza. Zmiana tego ustawienia nie powinna być konieczna. Wymaga ponownego uruchomienia aplikacji.",
+    "@useAndroidGainEffectSubtitle": {
+        "description": "Subtitle for Android gain effect setting.  This setting is used to work around player errors on some devices."
+    },
+    "androidGainDisabled": "Przełączanie na tryb awaryjny efektu wzmocnienia z powodu błędu inicjalizacji.",
+    "@androidGainDisabled": {
+        "description": "Message presented when the android gain effect fallback is enabled after an error occurs."
     }
 }
