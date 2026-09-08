@@ -5,6 +5,9 @@ Self-hosted updates for personal Profile builds via GitHub Releases on
 (personal team) can only notify and point at SideStore / USB — never silent
 install without a paid Apple program.
 
+Android OTA works on stock Android and common custom systems (GrapheneOS,
+LineageOS, etc.). Background on those OSes: [ANDROID_CUSTOM_OS.md](ANDROID_CUSTOM_OS.md).
+
 ## Versioning
 
 `pubspec.yaml` uses upstream base + channel suffix:

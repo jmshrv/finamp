@@ -39,6 +39,11 @@ IOS_BUNDLE_ID=com.anonymous.finamp IOS_TEAM_ID=F3E25E64U6 ./scripts/build-mobile
 
 ## Install Android (Pixel / any device)
 
+Works on stock Android, [GrapheneOS](https://grapheneos.org/),
+[LineageOS](https://lineageos.org/), and most other Android-compatible systems
+that allow sideloaded APKs. For a broad overview and SWOT comparison of
+GrapheneOS vs LineageOS, see [ANDROID_CUSTOM_OS.md](ANDROID_CUSTOM_OS.md).
+
 ```bash
 # Dev MacBook — USB debugging enabled on the phone
 adb install -r dist/finamp-android-debug.apk
