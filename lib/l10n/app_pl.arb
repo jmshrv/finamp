@@ -128,7 +128,7 @@
             }
         }
     },
-    "downloadsQueued": "Pobiranie plików",
+    "downloadsQueued": "Pobieranie plików",
     "addDownloads": "Wszystkie pobrania",
     "layoutAndTheme": "Układ i motyw",
     "enableTranscodingSubtitle": "Transkoduje strumienie muzyczne po stronie serwera.",
