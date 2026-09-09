@@ -2582,7 +2582,7 @@
     "@previousTracksPersistenceModeSelectorTitle": {
         "description": "Title for setting that allows to override state of previous tracks header in queue list"
     },
-    "previousTracksPersistenceModeSelectorSubtitle": "Si abres el panel de cola, la selección de pistas anteriores debería ser...",
+    "previousTracksPersistenceModeSelectorSubtitle": "Si abres el panel de cola, la selección de pistas anteriores debería ser…",
     "@previousTracksPersistenceModeSelectorSubtitle": {
         "description": "Subtitle for setting that allows to override state of previous tracks header in queue list"
     },
@@ -2797,7 +2797,7 @@
     "@currentLibrary": {
         "description": "Title for dynamic current library option in home screen section editor library selector dropdown"
     },
-    "loading": "Cargando...",
+    "loading": "Cargando…",
     "@loading": {
         "description": "Message when items or libraries are loading in home screen section editor"
     },
@@ -3050,7 +3050,7 @@
         "description": "Subtitle explaining the verbose logging toggle"
     },
     "downloadAllPlaylistsSettingWarning": "Nota: esto descargará todos los elementos en todas las listas de reproducción, independientemente de la biblioteca de la que procedan.",
-    "lyricsEmptyStateLoading": "Cargando la letra...",
+    "lyricsEmptyStateLoading": "Cargando la letra…",
     "@lyricsEmptyStateLoading": {
         "description": "Message shown while lyrics are being loaded"
     },
