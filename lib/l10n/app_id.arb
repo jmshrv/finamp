@@ -1815,7 +1815,7 @@
     "@showSeekControlsOnMediaNotificationSubtitle": {
         "description": "Subtitle for the setting that controls if the media notification has a seekable progress bar."
     },
-    "lyricsEmptyStateLoading": "Memuat lirik...",
+    "lyricsEmptyStateLoading": "Memuat lirik…",
     "@lyricsEmptyStateLoading": {
         "description": "Message shown while lyrics are being loaded"
     },
@@ -2858,7 +2858,7 @@
     "@previousTracksPersistenceModeSelectorTitle": {
         "description": "Title for setting that allows to override state of previous tracks header in queue list"
     },
-    "previousTracksPersistenceModeSelectorSubtitle": "Jika Anda membuka panel antrean, bagian trek sebelumnya harus...",
+    "previousTracksPersistenceModeSelectorSubtitle": "Jika Anda membuka panel antrean, bagian trek sebelumnya harus…",
     "@previousTracksPersistenceModeSelectorSubtitle": {
         "description": "Subtitle for setting that allows to override state of previous tracks header in queue list"
     },
@@ -3089,7 +3089,7 @@
     "@currentLibrary": {
         "description": "Title for dynamic current library option in home screen section editor library selector dropdown"
     },
-    "loading": "Memuat...",
+    "loading": "Memuat…",
     "@loading": {
         "description": "Message when items or libraries are loading in home screen section editor"
     },
