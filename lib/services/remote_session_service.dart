@@ -23,6 +23,19 @@ class RemotePlaybackState {
   const RemotePlaybackState({required this.position, required this.duration, required this.playing});
 }
 
+/// Outcome of [RemoteSessionService.adoptQueueFrom].
+enum QueueAdoptionResult {
+  /// The remote's full queue was resolved and adopted.
+  queue,
+
+  /// The remote reports no queue, so only its currently playing track (and
+  /// position) was adopted.
+  currentTrackOnly,
+
+  /// Nothing was adopted.
+  nothing,
+}
+
 /// Drives playback on another Jellyfin session ("Play On" / Connect controller
 /// side). While connected:
 ///
@@ -737,31 +750,52 @@ class RemoteSessionService {
     }
   }
 
+  /// Position [session] reports its current track at, if any.
+  static Duration? _positionOf(SessionInfo session) {
+    final positionTicks = session.playState?.positionTicks;
+    return positionTicks != null ? Duration(microseconds: positionTicks ~/ 10) : null;
+  }
+
   /// Pulls [session]'s current queue onto this device and plays it locally,
   /// starting from the track the remote is playing, without connecting to or
   /// controlling the remote session. Lets a user grab a queue from another
   /// device (e.g. a receive-only TV) without a connect + migrate-back round
   /// trip.
-  Future<void> adoptQueueFrom(SessionInfo session) async {
+  Future<QueueAdoptionResult> adoptQueueFrom(SessionInfo session) async {
     if (isRemote) {
       _log.warning("Refusing to adopt a queue while controlling a remote session");
-      return;
+      return QueueAdoptionResult.nothing;
     }
     _log.info("Adopting queue from session ${session.id} without connecting");
     final resolved = await _resolveRemoteQueue(session);
-    if (resolved == null) {
-      _log.warning("Nothing to adopt from session ${session.id}");
-      return;
+    if (resolved != null) {
+      final (items, startIndex) = resolved;
+      await _queueService.replaceQueueFromRemote(
+        items: items,
+        startIndex: startIndex,
+        startPosition: _positionOf(session),
+        beginPlaying: true,
+      );
+      return QueueAdoptionResult.queue;
     }
-    final (items, startIndex) = resolved;
-    final positionTicks = session.playState?.positionTicks;
-    final position = positionTicks != null ? Duration(microseconds: positionTicks ~/ 10) : null;
+    // The session doesn't report a queue -- some clients never populate
+    // NowPlayingQueue (e.g. Jellyfin's DLNA plugin keeps the pushed playlist
+    // internally, a NextTrack walks it, but the session only ever exposes
+    // NowPlayingItem). The one thing such a session does report is what it's
+    // currently playing, so fall back to adopting just that track rather than
+    // silently adopting nothing.
+    final current = session.nowPlayingItem;
+    if (current == null) {
+      _log.warning("Nothing to adopt from session ${session.id}");
+      return QueueAdoptionResult.nothing;
+    }
     await _queueService.replaceQueueFromRemote(
-      items: items,
-      startIndex: startIndex,
-      startPosition: position,
+      items: [current],
+      startIndex: 0,
+      startPosition: _positionOf(session),
       beginPlaying: true,
     );
+    return QueueAdoptionResult.currentTrackOnly;
   }
 
   /// Skips the local (paused) player to the remote's current track. Searches

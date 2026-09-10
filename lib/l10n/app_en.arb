@@ -3757,6 +3757,26 @@
             }
         }
     },
+    "playOnTrackAdopted": "{deviceName} doesn't report a queue, playing its current track here",
+    "@playOnTrackAdopted": {
+        "description": "Snackbar message shown after pulling a remote device's current track (but not its queue, which the device doesn't report) onto this device.",
+        "placeholders": {
+            "deviceName": {
+                "type": "String",
+                "example": "Living Room"
+            }
+        }
+    },
+    "playOnNothingToAdopt": "Nothing to play from {deviceName}",
+    "@playOnNothingToAdopt": {
+        "description": "Snackbar message shown when trying to pull a remote device's queue onto this device fails because the device isn't playing anything, or the action isn't available (e.g. this device is itself remote-controlling another session).",
+        "placeholders": {
+            "deviceName": {
+                "type": "String",
+                "example": "Living Room"
+            }
+        }
+    },
     "playOnDeviceListError": "Error: {error}",
     "@playOnDeviceListError": {
         "description": "Error message shown in the device sheet when the list of remote devices could not be loaded.",

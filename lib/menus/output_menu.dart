@@ -496,10 +496,16 @@ class _OutputTargetListState extends State<OutputTargetList> {
       _adoptingSessionId = session.id;
     });
     try {
-      await _remoteSessionService.adoptQueueFrom(session);
-      GlobalSnackbar.message(
-        (context) => AppLocalizations.of(context)!.playOnQueueAdopted(_sessionDisplayName(session)),
-      );
+      final result = await _remoteSessionService.adoptQueueFrom(session);
+      final deviceName = _sessionDisplayName(session);
+      switch (result) {
+        case QueueAdoptionResult.queue:
+          GlobalSnackbar.message((context) => AppLocalizations.of(context)!.playOnQueueAdopted(deviceName));
+        case QueueAdoptionResult.currentTrackOnly:
+          GlobalSnackbar.message((context) => AppLocalizations.of(context)!.playOnTrackAdopted(deviceName));
+        case QueueAdoptionResult.nothing:
+          GlobalSnackbar.message((context) => AppLocalizations.of(context)!.playOnNothingToAdopt(deviceName));
+      }
     } catch (e) {
       GlobalSnackbar.error(e);
     } finally {
