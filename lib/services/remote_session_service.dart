@@ -576,6 +576,12 @@ class RemoteSessionService {
   }
 
   void _syncLoopModeFromRemote(SessionInfo session) {
+    // Some clients (e.g. Jellyfin's DLNA plugin) don't implement
+    // SetRepeatMode: the command we send is silently ignored, and the
+    // session keeps reporting RepeatNone. Syncing from a session that can't
+    // actually honor the setting would just clobber the user's choice back
+    // to off; the local setting is the only truth there is on those clients.
+    if (session.supportedCommands?.contains("SetRepeatMode") != true) return;
     final remoteRepeat = session.playState?.repeatMode;
     if (remoteRepeat == null) return;
     final mode = switch (remoteRepeat) {
