@@ -62,14 +62,21 @@ Future<void> showOutputMenu({required BuildContext context, bool usePlayerTheme 
               stream: GetIt.instance<RemoteSessionService>().getRemoteStateStream(),
               builder: (context, snapshot) {
                 final remoteSession = GetIt.instance<RemoteSessionService>();
-                final volumeControlDisabled = airPlayActive;
+                // Some remote sessions never report a volume (e.g. Jellyfin's
+                // DLNA plugin, when it fails to read the device's volume on
+                // connect). Guessing 100% there is a real hazard on an
+                // amplifier driving passive speakers, so treat an unknown
+                // remote volume the same as AirPlay: disable the slider
+                // instead of rendering -- and sending -- a fabricated level.
+                final remoteVolumeUnknown = remoteSession.isRemote && remoteSession.remoteVolume == null;
+                final volumeControlDisabled = airPlayActive || remoteVolumeUnknown;
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     VolumeSlider(
                       initialValue: volumeControlDisabled
                           ? 1.0
-                          : (remoteSession.isRemote ? (remoteSession.remoteVolume ?? 1.0) : localVolume),
+                          : (remoteSession.isRemote ? remoteSession.remoteVolume! : localVolume),
                       enabled: !volumeControlDisabled,
                       onChange: (double currentValue) async {
                         final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
