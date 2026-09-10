@@ -19,6 +19,8 @@ import '../components/HomeScreen/quick_action_editor.dart';
 import '../extensions/localizations.dart';
 import '../services/music_providers.dart';
 
+const minWidthForInlineLayout = 700.0;
+
 class HomeScreenSettingsScreen extends StatefulWidget {
   const HomeScreenSettingsScreen({super.key});
   static const routeName = "/settings/home-screen";
@@ -37,18 +39,34 @@ class _HomeScreenSettingsScreenState extends State<HomeScreenSettingsScreen> {
           FinampSettingsHelper.makeSettingsResetButtonWithDialog(context, FinampSettingsHelper.resetHomeScreenSettings),
         ],
       ),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.only(bottom: 150.0),
-          children: [const QuickActionsSelector(), const HomeScreenSectionsSelector()],
-        ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 150.0),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: minWidthForInlineLayout),
+                  child: Column(
+                    children: [
+                      QuickActionsSelector(useInlineLayout: constraints.maxWidth > minWidthForInlineLayout),
+                      HomeScreenSectionsSelector(useInlineLayout: constraints.maxWidth > minWidthForInlineLayout),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 }
 
 class QuickActionsSelector extends ConsumerWidget {
-  const QuickActionsSelector({super.key});
+  const QuickActionsSelector({super.key, required this.useInlineLayout});
+
+  final bool useInlineLayout;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -59,52 +77,62 @@ class QuickActionsSelector extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         children: [
-          ListTile(title: Text(context.l10n.quickActions), subtitle: Text(context.l10n.quickActionsSubtitle)),
+          ListTile(
+            title: Text(context.l10n.quickActions),
+            subtitle: Text(context.l10n.quickActionsSubtitle),
+            contentPadding: EdgeInsets.zero,
+          ),
           ReorderableListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             buildDefaultDragHandles: false,
+            onReorderStart: (_) => FeedbackHelper.feedback(FeedbackType.light),
             proxyDecorator: (child, _, _) => Material(type: MaterialType.transparency, child: child),
             itemBuilder: (context, index) {
               final action = quickActions[index];
               return Padding(
                 key: ValueKey("quick-action-$action-$index"),
-                padding: const EdgeInsets.only(bottom: 8.0, left: 12.0, right: 12.0),
-                child: ListTile(
-                  tileColor: Color.alphaBlend(
-                    ColorScheme.of(context).primary.withOpacity(0.05),
-                    ColorScheme.of(context).surface,
-                  ),
-                  title: Padding(padding: const EdgeInsets.only(left: 4.0), child: Text(action.getTitle(context.l10n))),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-                  visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-                  contentPadding: EdgeInsets.only(left: 6.0),
-                  leading: ReorderableDragStartListener(
-                    index: index,
-                    key: ValueKey("drag-handle-quick-action-$action-$index"),
-                    child: const Icon(Icons.drag_handle),
-                  ),
-                  subtitle: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      SimpleButton.small(
-                        text: action.action.editable ? context.l10n.editAction : context.l10n.swapAction,
-                        icon: action.action.editable ? TablerIcons.edit : TablerIcons.selector,
-                        onPressed: () => editQuickAction(context, index),
-                      ),
-                      SimpleButton.small(
-                        text: context.l10n.removeAction,
-                        icon: TablerIcons.trash,
-                        onPressed: () {
-                          final newHomeScreenConfig = FinampSettingsHelper.finampSettings.homeScreenConfiguration
-                              .copyWith(
-                                actions: [...quickActions.sublist(0, index), ...quickActions.sublist(index + 1)],
-                              );
-                          FinampSetters.setHomeScreenConfiguration(newHomeScreenConfig);
-                        },
-                      ),
-                    ],
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: ListTile(
+                    tileColor: Color.alphaBlend(
+                      ColorScheme.of(context).primary.withOpacity(0.05),
+                      ColorScheme.of(context).surface,
+                    ),
+                    title: _ResponsiveListTile(
+                      index: index,
+                      title: action.getTitle(context.l10n),
+                      subtitleWidgets: action.itemTypes
+                          ?.map(
+                            (itemType) =>
+                                Text(itemType.toLocalisedString(context.l10n), style: TextTheme.of(context).labelSmall),
+                          )
+                          .toList(),
+                      key: ValueKey("quick-action-$action"),
+                      useInlineLayout: useInlineLayout,
+                      actions: [
+                        SimpleButton.small(
+                          text: action.action.editable ? context.l10n.editAction : context.l10n.swapAction,
+                          icon: action.action.editable ? TablerIcons.edit : TablerIcons.selector,
+                          onPressed: () => editQuickAction(context, index),
+                        ),
+                        SimpleButton.small(
+                          text: context.l10n.removeAction,
+                          icon: TablerIcons.trash,
+                          onPressed: () {
+                            final newHomeScreenConfig = FinampSettingsHelper.finampSettings.homeScreenConfiguration
+                                .copyWith(
+                                  actions: [...quickActions.sublist(0, index), ...quickActions.sublist(index + 1)],
+                                );
+                            FinampSetters.setHomeScreenConfiguration(newHomeScreenConfig);
+                          },
+                        ),
+                      ],
+                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                    visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+                    contentPadding: EdgeInsets.only(left: 6.0),
                   ),
                 ),
               );
@@ -125,7 +153,7 @@ class QuickActionsSelector extends ConsumerWidget {
             },
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 4.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(top: 4.0),
             child: CTAMedium(
               text: context.l10n.addNewAction,
               icon: TablerIcons.plus,
@@ -148,7 +176,9 @@ class QuickActionsSelector extends ConsumerWidget {
 }
 
 class HomeScreenSectionsSelector extends ConsumerWidget {
-  const HomeScreenSectionsSelector({super.key});
+  const HomeScreenSectionsSelector({super.key, required this.useInlineLayout});
+
+  final bool useInlineLayout;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -159,7 +189,11 @@ class HomeScreenSectionsSelector extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          ListTile(title: Text(context.l10n.sectionsMenu), subtitle: Text(context.l10n.sectionMenuSubtitle)),
+          ListTile(
+            title: Text(context.l10n.sectionsMenu),
+            subtitle: Text(context.l10n.sectionMenuSubtitle),
+            contentPadding: EdgeInsets.zero,
+          ),
           ReorderableListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
@@ -182,64 +216,60 @@ class HomeScreenSectionsSelector extends ConsumerWidget {
               final section = sections[index];
               return Padding(
                 key: ValueKey("section-$section-$index"),
-                padding: const EdgeInsets.only(bottom: 8.0, left: 12.0, right: 12.0),
-                child: ListTile(
-                  tileColor: Color.alphaBlend(
-                    ColorScheme.of(context).primary.withOpacity(0.05),
-                    ColorScheme.of(context).surface,
-                  ),
-                  title: Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
-                    child: Text(section.getTitle(context.l10n)),
-                  ),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-                  visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-                  contentPadding: EdgeInsets.only(left: 6.0),
-                  leading: ReorderableDragStartListener(
-                    index: index,
-                    key: ValueKey("drag-handle-section-$section-$index"),
-                    child: const Icon(Icons.drag_handle),
-                  ),
-                  subtitle: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      SimpleButton.small(
-                        text: context.l10n.editSection,
-                        icon: TablerIcons.edit,
-                        onPressed: () => editHomeScreenSection(context, index),
-                      ),
-                      SimpleButton.small(
-                        text: context.l10n.removeSection,
-                        icon: TablerIcons.trash,
-                        onPressed: () {
-                          FeedbackHelper.feedback(FeedbackType.warning);
-                          final newHomeScreenConfig = FinampSettingsHelper.finampSettings.homeScreenConfiguration
-                              .copyWith(sections: [...sections.sublist(0, index), ...sections.sublist(index + 1)]);
-                          FinampSetters.setHomeScreenConfiguration(newHomeScreenConfig);
-                        },
-                      ),
-                    ],
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: ListTile(
+                    tileColor: Color.alphaBlend(
+                      ColorScheme.of(context).primary.withOpacity(0.05),
+                      ColorScheme.of(context).surface,
+                    ),
+                    title: _ResponsiveListTile(
+                      index: index,
+                      title: section.getTitle(context.l10n),
+                      key: ValueKey("section-$section"),
+                      useInlineLayout: useInlineLayout,
+                      actions: [
+                        SimpleButton.small(
+                          text: context.l10n.editSection,
+                          icon: TablerIcons.edit,
+                          onPressed: () => editHomeScreenSection(context, index),
+                        ),
+                        SimpleButton.small(
+                          text: context.l10n.removeSection,
+                          icon: TablerIcons.trash,
+                          onPressed: () {
+                            FeedbackHelper.feedback(FeedbackType.warning);
+                            final newHomeScreenConfig = FinampSettingsHelper.finampSettings.homeScreenConfiguration
+                                .copyWith(sections: [...sections.sublist(0, index), ...sections.sublist(index + 1)]);
+                            FinampSetters.setHomeScreenConfiguration(newHomeScreenConfig);
+                          },
+                        ),
+                      ],
+                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                    visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+                    contentPadding: EdgeInsets.only(left: 6.0),
                   ),
                 ),
               );
             },
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 4.0, left: 16.0, right: 16.0),
+            padding: const EdgeInsets.only(top: 4.0),
             child: CTAMedium(
               text: context.l10n.addNewSection,
               icon: TablerIcons.plus,
               onPressed: () async {
-                //TODO dismissing the bottom sheet will be handles like selecting custom section
-                final selectedPreset = await showSectionPresetPickerMenu(context);
-                if (selectedPreset != null) {
+                final returnedPreset = await showSectionPresetPickerMenu(context);
+                if (returnedPreset case (final selectedPreset?,)) {
                   final newSectionInfo = HomeScreenSectionConfiguration.fromPreset(selectedPreset);
                   final newHomeScreenConfig = FinampSettingsHelper.finampSettings.homeScreenConfiguration.copyWith(
                     sections: [...sections, newSectionInfo],
                   );
                   FinampSetters.setHomeScreenConfiguration(newHomeScreenConfig);
-                } else if (context.mounted) {
+                } else if (returnedPreset != null && context.mounted) {
+                  // If returnedPreset is (null,) create a custom sheet.  If it is null, return without doing anything.
                   final sections = List.of(FinampSettingsHelper.finampSettings.homeScreenConfiguration.sections);
                   final defaultSection = HomeScreenSectionConfiguration(
                     base: TabsHomeSection(libraryId: currentLibraryPlaceholder, contentType: ContentType.tracks),
@@ -506,6 +536,159 @@ class _GlobalSearchBoxState extends ConsumerState<GlobalSearchBox> {
         ),
       ),
       child: child,
+    );
+  }
+}
+
+class _ResponsiveListTile extends StatelessWidget {
+  const _ResponsiveListTile({
+    super.key,
+    required this.index,
+    required this.title,
+    required this.actions,
+    this.subtitleWidgets = const [],
+    this.useInlineLayout = false,
+  });
+
+  final int index;
+  final String title;
+  final List<Widget>? subtitleWidgets;
+  final List<SimpleButton> actions;
+  final bool useInlineLayout;
+
+  @override
+  Widget build(BuildContext context) {
+    final tileKey = "drag-handle-${key.toString()}-$index";
+
+    if (useInlineLayout) {
+      return Row(
+        children: [
+          ReorderableDragStartListener(index: index, key: ValueKey(tileKey), child: const Icon(Icons.drag_handle)),
+          const SizedBox(width: 8.0),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(title),
+                if (subtitleWidgets?.isNotEmpty ?? false)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2.0),
+                    child: DefaultTextStyle(
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodySmall!.copyWith(color: ColorScheme.of(context).onSurface.withOpacity(0.6)),
+                      child: Wrap(spacing: 12.0, runSpacing: 4.0, children: subtitleWidgets ?? []),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 28.0),
+          Row(mainAxisSize: MainAxisSize.min, spacing: 12.0, children: actions),
+          const SizedBox(width: 16.0),
+        ],
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ReorderableDragStartListener(index: index, key: ValueKey(tileKey), child: const Icon(Icons.drag_handle)),
+            const SizedBox(width: 8.0),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(title),
+                  if (subtitleWidgets?.isNotEmpty ?? false)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2.0),
+                      child: DefaultTextStyle(
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodySmall!.copyWith(color: ColorScheme.of(context).onSurface.withOpacity(0.6)),
+                        child: Wrap(spacing: 12.0, runSpacing: 4.0, children: subtitleWidgets ?? []),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8.0),
+        Wrap(alignment: WrapAlignment.spaceEvenly, spacing: 12.0, runSpacing: 8.0, children: actions),
+      ],
+    );
+  }
+}
+
+class TargetItemTypesSelector extends ConsumerStatefulWidget {
+  const TargetItemTypesSelector({super.key, required this.notifier, required this.initialValue});
+
+  final ValueNotifier<Set<ContentType>> notifier;
+  final Set<ContentType> initialValue;
+
+  @override
+  ConsumerState<TargetItemTypesSelector> createState() => _TargetItemTypesSelectorState();
+}
+
+class _TargetItemTypesSelectorState extends ConsumerState<TargetItemTypesSelector> {
+  late Set<ContentType> selected;
+
+  @override
+  void initState() {
+    selected = Set.of(widget.initialValue);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final itemTypes = ContentType.values.where((type) => type.isPlayableJellyfinType).toList();
+    return Wrap(
+      spacing: 6.0,
+      runSpacing: 6.0,
+      children: itemTypes.map((itemType) {
+        final isSelected = selected.contains(itemType);
+        return Theme(
+          data: Theme.of(context).copyWith(
+            splashColor: ColorScheme.of(context).primary.withOpacity(0.15),
+            highlightColor: ColorScheme.of(context).primary.withOpacity(0.05),
+          ),
+          child: FilterChip(
+            label: Text(itemType.toLocalisedString(context.l10n)),
+            selected: isSelected,
+            //selectedColor: Color.alphaBlend(ColorScheme.of(context).primary.withOpacity(0.15), Colors.transparent),
+            backgroundColor: Colors.transparent,
+            side: BorderSide(
+              color: isSelected
+                  ? ColorScheme.of(context).primary.withOpacity(0.5)
+                  : ColorScheme.of(context).outline.withOpacity(0.3),
+              width: 1.25,
+            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+            showCheckmark: false,
+            onSelected: (selected) {
+              setState(() {
+                if (selected) {
+                  this.selected.add(itemType);
+                } else {
+                  this.selected.remove(itemType);
+                }
+                widget.notifier.value = Set.of(this.selected);
+              });
+            },
+            labelPadding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+            padding: EdgeInsets.zero,
+            visualDensity: VisualDensity(horizontal: -4.0, vertical: -4.0),
+          ),
+        );
+      }).toList(),
     );
   }
 }

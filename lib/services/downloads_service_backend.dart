@@ -643,7 +643,7 @@ class DownloadsDeleteService {
         await item.file!.delete();
         _deleteLogger.finer("Deleted file for ${item.name}");
       } on PathNotFoundException {
-        _deleteLogger.finer("File ${item.file!.path} for ${item.name} missing during delete.");
+        _deleteLogger.info("File ${item.file!.path} for ${item.name} missing during delete.");
       }
     }
 
@@ -655,7 +655,7 @@ class DownloadsDeleteService {
           await trackDirectory.delete();
         }
       } on PathNotFoundException {
-        _deleteLogger.finer("Directory ${trackDirectory.path} missing during delete.");
+        _deleteLogger.info("Directory ${trackDirectory.path} missing during delete.");
       }
     }
 
@@ -805,7 +805,7 @@ class DownloadsSyncService {
                     rethrow;
                   }
                 } else {
-                  _syncLogger.finest("Sync of ${item.name} failed with error $e, retrying", e);
+                  _syncLogger.fine("Sync of ${item.name} failed with error $e, retrying", e);
                   _requireCompleted.remove(sync.stubIsarId);
                   _infoCompleted.remove(sync.stubIsarId);
                   if (e is SocketException) {
@@ -926,7 +926,7 @@ class DownloadsSyncService {
       if (!FinampSettingsHelper.finampSettings.preferQuickSyncs ||
           _downloadsService.forceFullSync ||
           _needsMetadataUpdate(parent)) {
-        newBaseItem = (await _getCollectionInfo(parent.baseItem!.id, parent.type, true))?.baseItem;
+        newBaseItem = (await _getBaseItemInfo(parent.baseItem!.id, parent.type, true))?.baseItem;
         expectNewItem = true;
       } else if (_metadataCache.containsKey(parent.baseItem!.id)) {
         // Opportunistically check for item updates if we've already fetched from the server
@@ -997,7 +997,7 @@ class DownloadsSyncService {
           try {
             var collectionChildren = await Future.wait(
               (item.albumArtists?.map((e) => e.id) ?? []).map(
-                (e) => _getCollectionInfo(e, DownloadItemType.collection, false),
+                (e) => _getBaseItemInfo(e, DownloadItemType.collection, false),
               ),
             );
             infoChildren.addAll(collectionChildren.nonNulls);
@@ -1028,7 +1028,7 @@ class DownloadsSyncService {
           }
           try {
             var collectionChildren = await Future.wait(
-              collectionIds.map((e) => _getCollectionInfo(e, DownloadItemType.collection, false)),
+              collectionIds.map((e) => _getBaseItemInfo(e, DownloadItemType.collection, false)),
             );
             infoChildren.addAll(collectionChildren.nonNulls);
           } catch (e) {
@@ -1226,10 +1226,10 @@ class DownloadsSyncService {
     return (childrenToPutAndLink.map((e) => e.isarId).toSet(), childIdsToLink.toSet(), childIdsToUnlink);
   }
 
-  /// Get BaseItemDto from the given collection ID.  Tries local cache, then
+  /// Get BaseItemDto from the given baseItemDto ID.  Tries local cache, then
   /// Isar, then requests data from jellyfin in a batch with other calls
   /// to this method.  Used within [_syncDownload].
-  Future<DownloadStub?> _getCollectionInfo(BaseItemId id, DownloadItemType type, bool forceServer) async {
+  Future<DownloadStub?> _getBaseItemInfo(BaseItemId id, DownloadItemType type, bool forceServer) async {
     if (_metadataCache.containsKey(id)) {
       return _metadataCache[id];
     }
@@ -1244,7 +1244,7 @@ class DownloadsSyncService {
       }
       _metadataCache[id] = itemFetch.future;
       item = await _jellyfinApiData
-          .getItemByIdBatched(id, "${_jellyfinApiData.defaultFields},sortName,MediaSources")
+          .getItemByIdBatched(id, "${_jellyfinApiData.defaultFields},sortName,MediaSources,People")
           .then((value) => value == null ? null : DownloadStub.fromItem(item: value, type: type));
       _downloadsService.resetConnectionErrors();
       itemFetch.complete(item);
@@ -1275,7 +1275,7 @@ class DownloadsSyncService {
       case BaseItemDtoType.playlist || BaseItemDtoType.album:
         childType = DownloadItemType.track;
         childFilter = BaseItemDtoType.track;
-        fields = "${_jellyfinApiData.defaultFields},MediaSources,SortName";
+        fields = "${_jellyfinApiData.defaultFields},MediaSources,SortName,People";
         sortOrder = "ParentIndexNumber,IndexNumber,SortName";
       case BaseItemDtoType.artist || BaseItemDtoType.genre || BaseItemDtoType.library:
         childType = DownloadItemType.collection;
@@ -1317,7 +1317,7 @@ class DownloadsSyncService {
               parentItem: item,
               includeItemTypes: BaseItemDtoType.track.jellyfinName,
               recursive: false,
-              fields: "${_jellyfinApiData.defaultFields},MediaSources,SortName",
+              fields: "${_jellyfinApiData.defaultFields},MediaSources,SortName,People",
             ) ??
             [];
         childItems.addAll(trackChildItems);
@@ -1336,7 +1336,7 @@ class DownloadsSyncService {
               includeItemTypes: BaseItemDtoType.track.jellyfinName,
               filters: "Artist=${parent.name}",
               artistType: ArtistType.artist,
-              fields: "${_jellyfinApiData.defaultFields},MediaSources,SortName",
+              fields: "${_jellyfinApiData.defaultFields},MediaSources,SortName,People",
             ) ??
             [];
         var artistTrackChildStubs = artistTrackChildItems.map(
@@ -1368,7 +1368,7 @@ class DownloadsSyncService {
   Future<List<DownloadStub>> _getFinampCollectionChildren(DownloadStub parent) async {
     assert(parent.type == DownloadItemType.finampCollection);
     FinampCollection collection = parent.finampCollection!;
-    final String fields = "${_jellyfinApiData.defaultFields},MediaSources,SortName";
+    final String fields = "${_jellyfinApiData.defaultFields},MediaSources,SortName,People";
     try {
       List<BaseItemDto> outputItems;
       DownloadItemType? typeOverride;
@@ -1499,7 +1499,7 @@ class DownloadsSyncService {
         .info((q) => q.isarIdEqualTo(parent.isarId))
         .findAllSync();
     final serverParents = await Future.wait(
-      localParents.where((x) => x.type.requiresItem).map((x) => _getCollectionInfo(x.baseItem!.id, x.type, true)),
+      localParents.where((x) => x.type.requiresItem).map((x) => _getBaseItemInfo(x.baseItem!.id, x.type, true)),
     );
     final validParent = serverParents.firstWhereOrNull(
       (x) => (x?.baseItem?.blurHash ?? x?.baseItem?.imageId) == parent.id,

@@ -43,10 +43,13 @@ class TrackNameContent extends ConsumerWidget {
             child: Consumer(
               builder: (context, ref, _) {
                 final text = currentTrack.item.title;
-                final isTwoLineMode = controller.shouldShow(PlayerHideable.twoLineTitle);
+                // TODO properly scale in player screen controller?
+                final isTwoLineMode =
+                    controller.shouldShow(PlayerHideable.twoLineTitle) &&
+                    !(MediaQuery.textScalerOf(context).scale(18) > 18 * 1.11);
 
                 final textStyle = TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                   height: 1.2,
                   fontWeight: Theme.brightnessOf(context) == Brightness.light ? FontWeight.w500 : FontWeight.w500,
                 );
@@ -80,7 +83,7 @@ class TrackNameContent extends ConsumerWidget {
                     );
                   } else {
                     return SizedBox(
-                      height: 48.0,
+                      height: 46.0,
                       child: Center(
                         child: Text(
                           text,

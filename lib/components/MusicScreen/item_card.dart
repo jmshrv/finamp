@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:finamp/components/album_image.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/menus/queue_restore_menu.dart';
@@ -104,6 +106,7 @@ class _ItemCollectionCardText extends ConsumerWidget {
       height: calculateTextHeight(
         style: TextTheme.of(context).bodySmall!,
         lines: calculateItemCollectionTextLines(BaseItemDtoType.fromItem(item)),
+        scaling: MediaQuery.textScalerOf(context),
       ),
       child: Align(
         alignment: onImage ? Alignment.center : Alignment.topLeft,
@@ -249,7 +252,8 @@ double calculateItemCollectionCardHeight({
   final BaseItemDtoType resolvedItemType;
   switch (sectionInfo?.base) {
     case QueuesHomeSection():
-      return queuesHomeSectionHeight;
+      // This overscales due to multiplying by whole height instead of just text, so never scale down to avoid clipping
+      return queuesHomeSectionHeight * max(1.0, MediaQuery.textScalerOf(ref.context).scale(16.0) / 16.0);
     case null:
       resolvedItemType = itemType!;
     case TabsHomeSection base:
@@ -264,10 +268,11 @@ double calculateItemCollectionCardHeight({
                 calculateTextHeight(
                   style: TextTheme.of(ref.context).bodySmall!,
                   lines: calculateItemCollectionTextLines(resolvedItemType),
+                  scaling: MediaQuery.textScalerOf(ref.context),
                 )
           : 0);
 }
 
-double calculateTextHeight({required TextStyle style, required int lines}) {
-  return (style.height ?? 1.0) * (style.fontSize ?? 16) * lines;
+double calculateTextHeight({required TextStyle style, required int lines, required TextScaler scaling}) {
+  return (style.height ?? 1.0) * scaling.scale(style.fontSize ?? 16) * lines;
 }

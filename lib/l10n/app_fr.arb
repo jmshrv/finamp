@@ -51,7 +51,7 @@
     "dateAdded": "Date d'ajout",
     "datePlayed": "Date de la dernière lecture",
     "playCount": "Nombre de lectures",
-    "premiereDate": "Date de lancement",
+    "premiereDate": "Date de sortie",
     "productionYear": "Date de production",
     "name": "Nom",
     "random": "Aléatoire",
@@ -146,10 +146,10 @@
     "pathReturnSlashErrorMessage": "Les chemins qui retournent \"/\" ne peuvent pas être utilisés",
     "customLocationsBuggy": "Les emplacements personnalisés peuvent être extrêmement problématiques et ne sont pas recommandés dans la plupart des cas. Les emplacements situés dans le dossier système \"Musique\" empêchent l'enregistrement des pochettes d'album en raison des limitations de l'OS.",
     "enterLowPriorityStateOnPauseSubtitle": "Permet de supprimer la notification lorsque la lecture est en pause. Permet également à Android de fermer le service lorsqu'il est en pause.",
-    "shuffleAllTrackCount": "Lecture aléatoire de tous les titres",
+    "shuffleAllTrackCount": "Nombre de pistes aléatoires",
     "shuffleAllTrackCountSubtitle": "Nombre de titres à charger lorsque vous utilisez le bouton « Lecture aléatoire » dans l'onglet Titres ou l'écran Genre.",
-    "viewType": "Disposition de l'affichage",
-    "viewTypeSubtitle": "Type d'affichage pour l'écran Musique",
+    "viewType": "Type d'affichage de l'écran musical",
+    "viewTypeSubtitle": "Permet de choisir entre le mode grille et le mode liste pour tous les onglets de l'écran Musique, à l'exception de l'écran d'accueil.",
     "list": "Liste",
     "landscape": "Paysage",
     "showTextOnGridView": "Afficher le texte dans la vue mosaïque",
@@ -160,7 +160,7 @@
     "disableGestureSubtitle": "Désactiver ou non les gestes.",
     "showFastScroller": "Afficher le défileur rapide",
     "theme": "Thème",
-    "system": "Système",
+    "system": "Suivre le système",
     "light": "Clair",
     "dark": "Sombre",
     "tabs": "Onglets",
@@ -588,7 +588,7 @@
     "@queueRestoreButtonLabel": {
         "description": "Button to restore archived now playing queue, overwriting current queue"
     },
-    "confirmAddToNextUp": "Ajout de {type, select, track{Track} album{album} artist{artiste} playlist{playlist} genre{genre} disc{disque} other{élément}} à Suivant",
+    "confirmAddToNextUp": "Ajout de {type, select, track{Track} album{album} artist{artiste} playlist{playlist} genre{genre} disc{disque} other{élément}} à \"Next Up\"",
     "@confirmAddToNextUp": {
         "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
         "placeholders": {
@@ -615,7 +615,7 @@
             }
         }
     },
-    "yourLikes": "Vos Favoris",
+    "yourLikes": "Vos Favoris (issus de « {trackName} »)",
     "@yourLikes": {
         "description": "Title for the queue source when the user is playing their liked tracks"
     },
@@ -785,7 +785,7 @@
     "@loopModeAllButtonLabel": {
         "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
     },
-    "queuesScreen": "Sessions d'écoute précédentes",
+    "queuesScreen": "Files d'attente précédentes",
     "@queuesScreen": {
         "description": "Title for the screen where older now playing queues can be restored"
     },
@@ -814,7 +814,7 @@
     "@tracksFormerNextUp": {
         "description": "Title for the queue source for tracks that were once added to the queue via the \"Next Up\" feature, but have since been played"
     },
-    "queueRestoreSubtitle1": "Lecture: {track}",
+    "queueRestoreSubtitle1": "Lecture : {track}",
     "@queueRestoreSubtitle1": {
         "description": "Description of playing track in a saved queue",
         "placeholders": {
@@ -862,7 +862,7 @@
     "@queueRetryMessage": {
         "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
     },
-    "shuffleAlbumsToNextUp": "Lecture aléatoire des albums jusqu'au suivant",
+    "shuffleAlbumsToNextUp": "Lecture aléatoire des albums",
     "@shuffleAlbumsToNextUp": {
         "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of Next Up"
     },
@@ -1042,7 +1042,7 @@
     "@reportQueueToServer": {
         "description": "Label for the setting that toggles reporting of the current queue to the Jellyfin server"
     },
-    "startInstantMixForIndividualTracksSwitchSubtitle": "Lorsque cette option est activée, appuyer sur un titre dans l’onglet Titres lancera un mix instantané de celui-ci au lieu d’une unique lecture.",
+    "startInstantMixForIndividualTracksSwitchSubtitle": "Lorsque cette option est activée, le fait d'appuyer sur un titre dans l'onglet « Titres » lance un mix instantané de ce morceau au lieu de lire les morceaux dans l'ordre.",
     "repairDownloads": "Réparation des problèmes avec les fichiers téléchargés ou leurs métadonnées.",
     "@repairDownloads": {
         "description": "Tooltip for downloads repair button."
@@ -1079,7 +1079,7 @@
     "@confirmShuffleToQueue": {
         "description": "A confirmation message that is shown after successfully shuffling a list (album, playlist, etc.) to the end of the regular queue"
     },
-    "shuffleAlbumsToQueue": "Lecture aléatoire des albums dans la file d'attente",
+    "shuffleAlbumsToQueue": "Ajouter des albums à la file d'attente",
     "@shuffleAlbumsToQueue": {
         "description": "Label for action that shuffles all albums of an artist or genre and adds them at the end of the regular queue"
     },
@@ -1107,7 +1107,7 @@
     "@redownloadcomplete": {
         "description": "Mesage when Automatically Redownload Transcodes transcode setting completes operations."
     },
-    "queueRestoreError": "Avertissement: {count,plural, =1{{count} track} other{{count} tracks}} n'a pas pu être ajouté à la queue.",
+    "queueRestoreError": "Avertissement: {count,plural, =1{{count} track} other{{count} tracks}} n'a pas pu être ajouté à la file d'attente.",
     "@queueRestoreError": {
         "description": "Message that shows when some, but not all, tracks in the Now-Playing queue from the previous session cannot be restored due to server issues or being offline.",
         "placeholders": {
@@ -1219,7 +1219,7 @@
         "description": "Subtitle for the setting that controls if timestamps are shown for lyrics"
     },
     "swipeLeftToRightActionSubtitle": "Action déclenchée lors du glissement d'un titre de gauche à droite dans la liste.",
-    "swipeLeftToRightAction": "Balayage à droite",
+    "swipeLeftToRightAction": "Action de balayage vers la droite",
     "appearsOnAlbums": "Apparaît dans",
     "albumArtists": "Artistes d'album",
     "performingArtists": "Artistes interprètes",
@@ -2152,7 +2152,7 @@
     "@quickConnectAuthorizationMenuStateSubtitleIdle": {
         "description": "Subtitle for the quick connect authorization menu state info (above the input field) while the code hasn't been submitted yet"
     },
-    "quickConnectAuthorizationMenuStateTitleProcessing": "Tentative d'autorisation de la demande",
+    "quickConnectAuthorizationMenuStateTitleProcessing": "Demande d'autorisation",
     "@quickConnectAuthorizationMenuStateTitleProcessing": {
         "description": "Title for the quick connect authorization menu state info (above the input field) while a request is being processed"
     },
@@ -2503,7 +2503,7 @@
     "@snackbarOptionsMenuViewLogsButton": {
         "description": "Button title for opening the logs screen from the snackbar options menu"
     },
-    "systemAccentColor": "Utiliser l'accentuation système",
+    "systemAccentColor": "Utiliser la couleur d'accentuation du système",
     "@systemAccentColor": {
         "description": "Title of the System Accent Color setting."
     },
@@ -3026,14 +3026,6 @@
     "@inPlaylist": {
         "description": "Name of 'In Playlist' content type"
     },
-    "randomAlbumAction": "Album Aléatoire",
-    "@randomAlbumAction": {
-        "description": "Name of a home screen quick action"
-    },
-    "randomTrackAction": "Piste aléatoire",
-    "@randomTrackAction": {
-        "description": "Name of a home screen quick action"
-    },
     "surpriseMeAction": "Surprenez-moi",
     "@surpriseMeAction": {
         "description": "Name of a home screen quick action"
@@ -3297,27 +3289,19 @@
     "@browsePlaybackHistoryActionDescription": {
         "description": "Description of a home screen quick action"
     },
-    "playRandomAlbumActionDescription": "Commencer à lire un album aléatoire",
-    "@playRandomAlbumActionDescription": {
-        "description": "Description of a home screen quick action"
-    },
     "surpriseMeActionDescription": "Démarre la radio 'Continuous' à partir d’une piste aléatoire",
     "@surpriseMeActionDescription": {
-        "description": "Description of a home screen quick action"
-    },
-    "playRandomTrackActionDescription": "Lance la lecture d'un morceau choisi au hasard",
-    "@playRandomTrackActionDescription": {
         "description": "Description of a home screen quick action"
     },
     "playRandomFavoriteItemActionDescription": "Commence à lire à partir d'un article favori aléatoire",
     "@playRandomFavoriteItemActionDescription": {
         "description": "Description of a home screen quick action"
     },
-    "removeAction": "Retirer l’Action",
+    "removeAction": "Retirer l’action",
     "@removeAction": {
         "description": "Button to remove a quick action"
     },
-    "addNewAction": "Ajouter Nouvelle Action",
+    "addNewAction": "Ajouter une nouvelle action",
     "@addNewAction": {
         "description": "Button to add a new quick action"
     },
@@ -3361,7 +3345,7 @@
     "@playPreviousQueueActionDescription": {
         "description": "Description of a home screen quick action"
     },
-    "playSpecificItemActionDescription": "Lance un élément spécifique configuré",
+    "playSpecificItemActionDescription": "Lit un article spécifique que vous avez choisi",
     "@playSpecificItemActionDescription": {
         "description": "Description of a home screen quick action"
     },
@@ -3369,7 +3353,7 @@
     "@shuffleTracksAction": {
         "description": "Name of a home screen quick action"
     },
-    "randomFavoriteAction": "Favoris aléatoire",
+    "randomFavoriteAction": "Coup de cœur aléatoire {itemType, select, albums{Album} tracks{Titre} playlists{Playlist} performingArtists{Artiste de scène} albumArtists{Artiste de l'album} none{de <Type>} other{}}",
     "@randomFavoriteAction": {
         "description": "Name of a home screen quick action"
     },
@@ -3478,5 +3462,241 @@
                 "example": "syncingLocal"
             }
         }
+    },
+    "clientCertificate": "Certificat client (mTLS)",
+    "@clientCertificate": {
+        "description": "Title for the setting that allows managing SSL client certificates used for authentication"
+    },
+    "clientCertificateUnavailable": "Aucun certificat n'est configuré, l'authentification client supplémentaire est désactivée",
+    "@clientCertificateUnavailable": {
+        "description": "Message shown when the user has no SSL client certificate available to use."
+    },
+    "clientCertificateInstalled": "Certificat installé",
+    "@clientCertificateInstalled": {
+        "description": "Message shown when the user has successfully installed an SSL client certificate."
+    },
+    "clientCertificateDescription": "Un certificat client TLS (.p12 ou .pfx) sert à authentifier ce périphérique auprès de votre serveur Jellyfin. Il n'est requis que si votre serveur est configuré pour le protocole TLS réciproque.",
+    "@clientCertificateDescription": {
+        "description": "Explanatory text in the client certificate settings menu describing what a client certificate is used for"
+    },
+    "importClientCertificate": "Certificat d'importation",
+    "@importClientCertificate": {
+        "description": "Label for the button to import a new SSL client certificate."
+    },
+    "removeClientCertificate": "Supprimer le certificat",
+    "@removeClientCertificate": {
+        "description": "Label for the button to remove the currently installed SSL client certificate."
+    },
+    "clientCertificatePasswordTitle": "Mot de passe du certificat",
+    "@clientCertificatePasswordTitle": {
+        "description": "Title of the dialog prompting the user to enter the password for the client certificate being imported."
+    },
+    "clientCertificatePasswordHint": "Mot de passe",
+    "@clientCertificatePasswordHint": {
+        "description": "Hint text for the password input field when importing a client certificate."
+    },
+    "clientCertificateDeleteConfirm": "Supprimer le certificat installé ? L'authentification du client sera désactivée.",
+    "@clientCertificateDeleteConfirm": {
+        "description": "Confirmation prompt shown before removing the installed client certificate."
+    },
+    "clientCertificateImportSuccess": "Le certificat a été importé avec succès",
+    "@clientCertificateImportSuccess": {
+        "description": "Message shown after successfully importing a client certificate."
+    },
+    "clientCertificateImportError": "Échec de l'importation du certificat",
+    "@clientCertificateImportError": {
+        "description": "Error message shown when importing a client certificate fails."
+    },
+    "clientCertificateRequired": "Certificat client requis",
+    "@clientCertificateRequired": {
+        "description": "Message shown on the server selection screen when the server requires a client certificate to be provided."
+    },
+    "activeLibraries": "Bibliothèques actives",
+    "@activeLibraries": {
+        "description": "Active Libraries"
+    },
+    "volumeControlDisabledCastingHint": "Le son est diffusé sur un appareil qui ne prend pas en charge le réglage du volume depuis l'application.",
+    "@volumeControlDisabledCastingHint": {
+        "description": "Hint text displayed below the volume bar when the in-app volume slider is disabled because audio is being cast to a device that bypasses the in-app volume handling and handles its own volume, such as when using Airplay."
+    },
+    "selectItemTypes": "Sélectionner les types d'articles",
+    "@selectItemTypes": {
+        "description": "Title for 'play random item' quick action edit menu"
+    },
+    "randomAlbums": "Albums aléatoires",
+    "@randomAlbums": {
+        "description": "Name of a home screen section preset"
+    },
+    "randomAlbumArtists": "Artistes d'albums aléatoires",
+    "@randomAlbumArtists": {
+        "description": "Name of a home screen section preset"
+    },
+    "recentlyAddedPlaylists": "Playlists récemment créées",
+    "@recentlyAddedPlaylists": {
+        "description": "Name of a home screen section preset"
+    },
+    "randomAlbumsDescription": "Albums dans un ordre aléatoire",
+    "@randomAlbumsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "randomArtistsDescription": "Artistes dans un ordre aléatoire",
+    "@randomArtistsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "recentlyAddedPlaylistsDescription": "Playlists classées par date de création, en commençant par la plus récente",
+    "@recentlyAddedPlaylistsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "playRandomItemActionDescription": "Lance la lecture d'un élément choisi au hasard",
+    "@playRandomItemActionDescription": {
+        "description": "Description of a home screen quick action"
+    },
+    "randomItemAction": "Aléatoire {itemType, select, albums{Album} tracks{Titre} playlists{Playlist} performingArtists{Artiste de scène} albumArtists{Artiste de l'album} none{Élément de <Type>} other{Élément}}",
+    "@randomItemAction": {
+        "placeholders": {
+            "itemType": {
+                "type": "String",
+                "description": "Localized name of item type to be selected, or placeholder 'multiple'"
+            }
+        },
+        "description": "Name of a home screen quick action"
+    },
+    "randomPlaylistAction": "Playlist aléatoire",
+    "@randomPlaylistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteArtistAction": "Artiste préféré choisi au hasard",
+    "@randomFavoriteArtistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteGenreAction": "Genre préféré au hasard",
+    "@randomFavoriteGenreAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "cancelChanges": "Annuler les modifications",
+    "@cancelChanges": {
+        "description": "Button on sort and filter menu that clears any pending changes."
+    },
+    "applyChangesOnClose": "Les modifications seront prises en compte une fois le menu fermé",
+    "@applyChangesOnClose": {
+        "description": "Notification on sort and filter menu that currently pending changes will be automatically applied on close."
+    },
+    "removeFromQueue": "Retirer de la file d'attente",
+    "featureChipName": "{chipName, select, explicit{Explicite} playCount{Nombre de lectures} additionalPeople{Autres personnes} playbackMode{Mode de lecture} codec{Codec} bitRate{Débit binaire} bitDepth{Nombre de bits} sampleRate{Fréquence d'échantillonnage} size{Taille} normalizationGain{Gain de normalisation} other{{chipName}}}",
+    "@featureChipName": {
+        "placeholders": {
+            "chipName": {
+                "type": "String",
+                "example": "playCount"
+            }
+        },
+        "description": "Titles for settings controlling which pieces of advanced track info are displayed."
+    },
+    "featureChipDescription": "{chipName, select, explicit{Signale les titres contenant du contenu explicite} additionalPeople{Personnes non artistes associées au morceau, le cas échéant (compositeurs, paroliers, etc.)} playbackMode{Informations sur l'état de la diffusion en continu et du transcodage} bitDepth{Nombre de bits par échantillon audio. Ne s'applique qu'aux codecs sans perte ; la valeur est généralement de 16 bits.} sampleRate{Échantillons audio par seconde. Généralement 44,1 kHz.} normalizationGain{Niveau ReplayGain actuellement actif} size{La taille d'origine du fichier du titre} other{null}}",
+    "@featureChipDescription": {
+        "placeholders": {
+            "chipName": {
+                "type": "String",
+                "example": "playCount"
+            }
+        },
+        "description": "Descriptions of different pieces of advanced track info."
+    },
+    "maximizePlayer": "Optimiser le lecteur",
+    "collapsePlayer": "Réduire le lecteur dans la barre latérale",
+    "addSpecialDownloads": "Ajouter un téléchargement spécial",
+    "@addSpecialDownloads": {
+        "description": "Button on downloads screen which allows adding special downloads, such as all playlists or all favorites."
+    },
+    "allTracks": "Tous les titres (de « {trackName} »)",
+    "@allTracks": {
+        "description": "Queue source when playing from tracks screen.",
+        "placeholders": {
+            "trackName": {
+                "type": "String",
+                "example": "Never Gonna Give You Up"
+            }
+        }
+    },
+    "randomArtistAction": "Artiste au hasard",
+    "@randomArtistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomGenreAction": "Genre aléatoire",
+    "@randomGenreAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteAlbumAction": "Album préféré choisi au hasard",
+    "@randomFavoriteAlbumAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteTrackAction": "Titre préféré choisi au hasard",
+    "@randomFavoriteTrackAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoritePlaylistAction": "Playlist aléatoire de mes titres préférés",
+    "@randomFavoritePlaylistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "artistFilter": "Artiste : {name}",
+    "@artistFilter": {
+        "description": "Name of artistFilter",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "verboseLogging": "Journalisation détaillée",
+    "@verboseLogging": {
+        "description": "Title for the toggle that enables detailed logging on the logs screen"
+    },
+    "verboseLoggingSubtitle": "Conservez des journaux détaillés pour les rapports de bogues. Désactivez cette option pour améliorer les performances de lecture.",
+    "@verboseLoggingSubtitle": {
+        "description": "Subtitle explaining the verbose logging toggle"
+    },
+    "perTabGridMode": "Choisissez par onglet",
+    "showFastScrollerSubtitle": "Afficher ou masquer la liste alphabétique située à droite des tablatures, qui permet d'accéder directement à une lettre.",
+    "quickActionBanner": "Découvrez quelques paramètres que l'on modifie souvent !",
+    "@quickActionBanner": {
+        "description": "Banner directing new users to the quick settings, where they can adjust the most commonly used settings"
+    },
+    "themeSettingTitle": "Thème de couleur de l'application (foncé/clair)",
+    "@themeSettingTitle": {
+        "description": "Title for the setting that allows you to override the system theme and force dark or light mode"
+    },
+    "perTabGridModeScreen": "Définir les types d'affichage par onglet",
+    "perTabAlbumGrid": "Albums affichés uniquement sous forme de grille",
+    "quickSettingsScreen": "Réglages rapides",
+    "quickSettingsScreenDescription": "Personnalisez Finamp selon vos préférences grâce à ces options principales. Vous pouvez revenir ici à tout moment via le menu « Paramètres ».",
+    "quickSettingsTabsLink": "Réorganiser et masquer les onglets",
+    "quickSettingsTranscodeLink": "Tous les paramètres de transcodage",
+    "quickSettingsLayoutLink": "Tous les paramètres de mise en page et de thème",
+    "quickSettingsAllSettingsLink": "Tous les paramètres",
+    "quickSettingsNetworkLink": "Configurez l'adresse locale de votre serveur",
+    "inAlbumOrPlaylist": "Ordre des albums/playlists",
+    "@inAlbumOrPlaylist": {
+        "description": "Sorting order for tracks in an album or playlist (by disc, then index, then name"
+    },
+    "discUnknown": "Disque inconnu",
+    "@discUnknown": {
+        "description": "Shown when the disc number is unknown or not set for a group of tracks on the album screen"
+    },
+    "discUnknownOfAlbum": "[Disque inconnu] {albumName}",
+    "@discUnknownOfAlbum": {
+        "description": "Used when a single disc of album is opened, but the disc number is unknown, then album name is replaced with this string",
+        "placeholders": {
+            "albumName": {
+                "type": "String"
+            }
+        }
+    },
+    "advanced": "Avancé",
+    "@advanced": {
+        "description": "Label for the button on the login screen that opens the advanced options screen, and the title of that screen."
+    },
+    "clientCertificatesUnsupported": "Les certificats client ne sont pas pris en charge sur cette plateforme.",
+    "@clientCertificatesUnsupported": {
+        "description": "Message shown when client certificates are not supported on the user's current platform."
     }
 }

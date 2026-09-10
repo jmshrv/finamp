@@ -220,10 +220,14 @@ class AlbumInfo extends ConsumerWidget {
     switch (item) {
       case AlbumDisc():
         baseItem = item.item;
-        title = AppLocalizations.of(context)!.discOfAlbum(
-          item.tracks.first.parentIndexNumber!,
-          baseItem.name ?? AppLocalizations.of(context)!.unknownName,
-        );
+        title = item.tracks.first.parentIndexNumber != null
+            ? AppLocalizations.of(context)!.discOfAlbum(
+                item.tracks.first.parentIndexNumber!,
+                baseItem.name ?? AppLocalizations.of(context)!.unknownName,
+              )
+            : AppLocalizations.of(
+                context,
+              )!.discUnknownOfAlbum(baseItem.name ?? AppLocalizations.of(context)!.unknownName);
       case Album():
         baseItem = item.item;
         title = baseItem.name ?? AppLocalizations.of(context)!.unknownName;
@@ -509,10 +513,22 @@ class HomeSectionInfo extends ConsumerWidget {
             iconData: config.sortConfig.sortOrder.getIcon(),
             textSpan: TextSpan(text: config.sortConfig.sortBy.toLocalisedString(context.l10n)),
           ),
-          ...config.sortConfig.filters.map(
-            (filter) => IconAndText(
-              iconData: TablerIcons.filter,
-              textSpan: TextSpan(text: filter.getName(context.l10n)),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 10.0,
+              children: config.sortConfig.filters
+                  .map(
+                    (filter) => ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 150.0),
+                      child: IconAndText(
+                        iconData: TablerIcons.filter,
+                        textSpan: TextSpan(text: filter.getName(context.l10n)),
+                      ),
+                    ),
+                  )
+                  .toList(),
             ),
           ),
         ],

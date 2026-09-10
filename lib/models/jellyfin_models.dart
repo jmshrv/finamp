@@ -9,6 +9,7 @@
 library;
 
 import 'package:collection/collection.dart';
+import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
@@ -52,6 +53,12 @@ extension type LibraryId._(String raw) {
   const LibraryId(this.raw);
 
   BaseItemId? resolve(Ref ref) => switch (this) {
+    currentLibraryPlaceholder => ref.watch(FinampUserHelper.finampCurrentUserProvider)?.currentViewId,
+    allLibraryPlaceholder => null,
+    _ => this as BaseItemId,
+  };
+
+  BaseItemId? resolve2(WidgetRef ref) => switch (this) {
     currentLibraryPlaceholder => ref.watch(FinampUserHelper.finampCurrentUserProvider)?.currentViewId,
     allLibraryPlaceholder => null,
     _ => this as BaseItemId,
@@ -1503,6 +1510,7 @@ class BaseItemDto with RunTimeTickDuration {
     this.audio,
     this.normalizationGain,
     this.hasLyrics,
+    this.albumNormalizationGain,
   });
 
   /// Gets or sets the name.
@@ -2105,6 +2113,9 @@ class BaseItemDto with RunTimeTickDuration {
   @HiveField(152)
   bool? hasLyrics;
 
+  @HiveField(153)
+  double? albumNormalizationGain;
+
   /// Custom helper field to determine if the BaseItemDto was created in offline mode
   bool? finampOffline;
 
@@ -2153,7 +2164,10 @@ class BaseItemDto with RunTimeTickDuration {
     }
 
     if (type == "Audio") {
-      return name!.toLowerCase();
+      // The sortName has track numbers and whatnot, so we need to use the regular name
+      // This means the server sort we need to match in the tracks tab for jump to letter to work
+      // is a naive sort which does not strip diacritics or force lower case.
+      return name!;
     }
 
     // https://github.com/jellyfin/jellyfin/blob/054f42332d8e0c45fb899eeaef982aa0fd549397/MediaBrowser.Model/Configuration/ServerConfiguration.cs#L129
@@ -2198,7 +2212,9 @@ class BaseItemDto with RunTimeTickDuration {
         other.blurHash == blurHash &&
         other.mediaSources?.length == mediaSources?.length &&
         other.mediaStreams?.length == mediaStreams?.length &&
+        other.people?.length == people?.length &&
         other.normalizationGain == normalizationGain &&
+        other.albumNormalizationGain == albumNormalizationGain &&
         other.playlistItemId == playlistItemId;
   }
 
@@ -2446,7 +2462,7 @@ class MediaSourceInfo with RunTimeTickDuration {
   /// an issue as they are not counted in the size. Attachments are also not
   /// counted, as [mediaStreams] doesn't seem to note their size.
   int transcodedSize(int Function(int channels) bitrateChannels) {
-    final channels = mediaStreams.firstWhere((element) => element.type == "Audio").channels ?? 2;
+    final channels = mediaStreams.firstWhereOrNull((element) => element.type == "Audio")?.channels ?? 2;
     final bitrate = bitrateChannels(channels);
 
     // Divide by 8 to get bytes/sec
@@ -3267,7 +3283,9 @@ enum SortBy {
   @HiveField(14)
   runtime,
   @HiveField(15)
-  defaultOrder;
+  defaultOrder,
+  @HiveField(16)
+  inAlbumOrPlaylist;
 
   bool get onlineOnly => switch (this) {
     SortBy.datePlayed => true,
@@ -3333,42 +3351,10 @@ enum SortBy {
   /// function, the same input would return "Album".
   @override
   @Deprecated("Use toLocalisedString when possible")
-  String toString() => _humanReadableName(this);
+  String toString() => toLocalisedString(GlobalSnackbar.requireL10n);
 
-  String toLocalisedString(AppLocalizations l10n) => _humanReadableLocalisedName(this, l10n);
-
-  /// Name used by Jellyfin in API requests.
-  String jellyfinName(ContentType? contentType) {
-    return switch (contentType) {
-      ContentType.albums => _jellyfinNameMusicAlbums(this),
-      ContentType.tracks => _jellyfinNameTracks(this),
-      _ => _jellyfinName(this),
-    };
-  }
-
-  String _humanReadableName(SortBy sortBy) {
-    return switch (sortBy) {
-      SortBy.album => "Album",
-      SortBy.albumArtist => "Album Artist",
-      SortBy.artist => "Performing Artist",
-      SortBy.budget => "Budget",
-      SortBy.communityRating => "Community Rating",
-      SortBy.criticRating => "Critic Rating",
-      SortBy.dateCreated => "Date Added",
-      SortBy.datePlayed => "Date Played",
-      SortBy.playCount => "Play Count",
-      SortBy.premiereDate => "Release Date",
-      SortBy.productionYear => "Production Year",
-      SortBy.sortName => "Name",
-      SortBy.random => "Random",
-      SortBy.revenue => "Revenue",
-      SortBy.runtime => "Runtime",
-      SortBy.defaultOrder => "Server Order",
-    };
-  }
-
-  String _humanReadableLocalisedName(SortBy sortBy, AppLocalizations l10n) {
-    return switch (sortBy) {
+  String toLocalisedString(AppLocalizations l10n) {
+    return switch (this) {
       SortBy.album => l10n.album,
       SortBy.albumArtist => l10n.albumArtist,
       SortBy.artist => l10n.performingArtist,
@@ -3385,6 +3371,16 @@ enum SortBy {
       SortBy.revenue => l10n.revenue,
       SortBy.runtime => l10n.duration,
       SortBy.defaultOrder => l10n.defaultOrder,
+      SortBy.inAlbumOrPlaylist => l10n.inAlbumOrPlaylist,
+    };
+  }
+
+  /// Name used by Jellyfin in API requests.
+  String jellyfinName(ContentType? contentType) {
+    return switch (contentType) {
+      ContentType.albums => _jellyfinNameMusicAlbums(this),
+      ContentType.tracks => _jellyfinNameTracks(this),
+      _ => _jellyfinName(this),
     };
   }
 
@@ -3406,6 +3402,7 @@ enum SortBy {
       SortBy.revenue => "Revenue",
       SortBy.runtime => "Runtime",
       SortBy.defaultOrder => "",
+      SortBy.inAlbumOrPlaylist => "ParentIndexNumber,IndexNumber,SortName",
     };
   }
 
@@ -3427,6 +3424,7 @@ enum SortBy {
       SortBy.revenue => "Revenue",
       SortBy.runtime => "Runtime",
       SortBy.defaultOrder => "",
+      SortBy.inAlbumOrPlaylist => "ParentIndexNumber,IndexNumber,SortName",
     };
   }
 
@@ -3448,6 +3446,7 @@ enum SortBy {
       SortBy.revenue => "Revenue",
       SortBy.runtime => "Runtime,AlbumArtist,Album,SortName",
       SortBy.defaultOrder => "",
+      SortBy.inAlbumOrPlaylist => "ParentIndexNumber,IndexNumber,SortName",
     };
   }
 
@@ -3466,6 +3465,7 @@ enum SortBy {
       SortBy.runtime => TablerIcons.stopwatch,
       SortBy.defaultOrder => TablerIcons.server,
       SortBy.budget => TablerIcons.moneybag,
+      SortBy.inAlbumOrPlaylist => TablerIcons.disc,
     };
   }
 }

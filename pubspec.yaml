@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.9.24+124
+version: 1.0.1+201
 
 environment:
   sdk: ^3.9.0
@@ -89,7 +89,6 @@ dependencies:
       url: https://github.com/jfly/flutter_user_certificates_android.git
       ref: db81e4ff3222a7db1308ed03c4bc3142c0d271d5
   device_info_plus: ^12.1.0
-  app_set_id: ^1.2.1
   package_info_plus: ^9.0.0
   octo_image: ^2.0.0
   # Main split view package does not seem actively maintained.  Use fork with ability to specify
@@ -126,7 +125,7 @@ dependencies:
   balanced_text:
     git:
       url: https://github.com/Komodo5197/flutter-balanced-text.git
-      ref: 8f3603a639be6a7d5b0008ec54b0e90df7cd8323
+      ref: a6e93dad04f650734eaa6fa4d332800c7523b2a7
   flutter_to_airplay: ^2.0.5
   flutter_blurhash: ^0.9.1
   scroll_to_index: ^3.0.1
@@ -158,6 +157,7 @@ dependencies:
       url: https://github.com/oguzhnatly/flutter_carplay.git
       ref: 017ce2e
   diacritic: ^0.1.6
+  mini_music_visualizer: ^1.1.4
 
 dev_dependencies:
   flutter_test:
@@ -260,9 +260,9 @@ flutter_launcher_icons:
 
 msix_config:
   display_name: Finamp
-  publisher_display_name: jmshrv
+  publisher_display_name: Finamp
   identity_name: com.unicornsonlsd.finamp
-  msix_version: 0.9.24.0
+  msix_version: 1.0.1.0
   logo_path: ./images/finamp_cropped.png
   trim_logo: false # don't force logo to be square, it will be stretched
   # backgroundMediaPlayback prevents apps from getting muted or killed when being in the background (won't build if included at the moment)

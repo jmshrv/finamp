@@ -33,7 +33,7 @@ class PlaybackHistoryService {
   final List<FinampHistoryItem> _history = []; // contains **all** items that have been played, including "next up"
   FinampHistoryItem? _currentTrack; // the currently playing track
 
-  PlaybackState? _previousPlaybackState;
+  ({PlaybackState state, FinampQueueItem? item})? _previousPlayback;
   DateTime _lastPositionUpdate = DateTime.now();
 
   FinampQueueItem?
@@ -83,7 +83,8 @@ class PlaybackHistoryService {
     });
 
     _audioService.playbackState.listen((event) {
-      final prevState = _previousPlaybackState;
+      final prevPlayback = _previousPlayback;
+      final prevState = prevPlayback?.state;
       final prevItem = _currentTrack?.item;
       final currentState = event;
       final currentIndex = currentState.queueIndex;
@@ -144,20 +145,30 @@ class PlaybackHistoryService {
         // handle seeking (changes updateTime (= last abnormal position change))
         else if (currentState.playing &&
             prevState != null &&
+            // the previous event's item, not the current one: a jump across a track boundary is not a seek
+            prevPlayback?.item?.id == currentItem.id &&
             // comparing the updateTime timestamps directly is unreliable, as they might just have different microsecond values
             // instead, compare the difference in milliseconds, with a small margin of error
             (currentState.position.inMilliseconds - prevState.position.inMilliseconds).abs() > 1500) {
           bool isSeekEvent = true;
 
+          const nearTrackStart = Duration(seconds: 10);
+          const nearTrackEnd = Duration(seconds: 10);
+
           // detect rewinding & looping a single track
-          if (
-          // same track
-          prevItem?.id == currentItem.id &&
-              // current position is close to the beginning of the track
-              currentState.position.inMilliseconds <= 1000 * 10) {
-            if (prevState.position.inMilliseconds >= (prevItem?.item.duration?.inMilliseconds ?? 0) - 1000 * 10) {
+          if (currentState.position.inMilliseconds <= nearTrackStart.inMilliseconds) {
+            final duration = currentItem.item.duration;
+            // a track cannot have looped before it has played through
+            // elapsed time is required as well as position, which is unreliable across a track change
+            // scale by speed so that faster playback still reaches the end of the track
+            final playedFor = _currentTrack == null
+                ? null
+                : DateTime.now().difference(_currentTrack!.startTime) * currentState.speed;
+            if (duration != null &&
+                playedFor != null &&
+                playedFor >= duration - _playedThroughSlack(duration) &&
+                prevState.position >= duration - nearTrackEnd) {
               // looping a single track
-              // last position was close to the end of the track
               updateCurrentTrack(currentItem, forceNewTrack: true); // add to playback history
               //TODO handle reporting track changes based on history changes, as that is more reliable
               onTrackChanged(currentItem, currentState, prevItem, prevState);
@@ -189,7 +200,8 @@ class PlaybackHistoryService {
         // maybe handle toggling shuffle when sending the queue? would result in duplicate entries in the activity log, so maybe it's not desirable
         // same for updating the queue / next up
       } finally {
-        _previousPlaybackState = currentState;
+        // on iOS the reported queue index advances before the position, so this state describes prevItem
+        _previousPlayback = (state: currentState, item: prevItem);
       }
     });
 
@@ -310,6 +322,13 @@ class PlaybackHistoryService {
     return groupedHistory;
   }
 
+  /// How far short of the end a track can stop and still count as having played through.
+  static Duration _playedThroughSlack(Duration duration) {
+    const minimumSlack = Duration(seconds: 30);
+    final proportionalSlack = duration * 0.1;
+    return proportionalSlack > minimumSlack ? proportionalSlack : minimumSlack;
+  }
+
   void updateCurrentTrack(FinampQueueItem? currentTrack, {bool forceNewTrack = false}) {
     if (currentTrack == null ||
         !forceNewTrack &&
@@ -385,15 +404,21 @@ class PlaybackHistoryService {
       return;
     }
 
-    final newTrackplaybackData = generatePlaybackProgressInfoFromState(currentItem, currentState);
+    final newTrackplaybackData = generatePlaybackProgressInfoFromState(
+      currentItem,
+      currentState,
+      atTrackStart: previousItem != null,
+    );
 
     //!!! always submit a "start" **AFTER** a "stop" to that Jellyfin knows there's still something playing
     if (previousTrackPlaybackData != null) {
-      _playbackHistoryServiceLogger.info("Stopping playback progress for ${previousItem?.item.title}");
+      _playbackHistoryServiceLogger.info(
+        "Stopping playback progress for ${previousItem?.item.title} at ${(previousTrackPlaybackData.positionTicks ?? 0) ~/ 10000} ms",
+      );
       final playbackStopTime = DateTime.now();
       try {
         _resetPeriodicUpdates(); // delay next periodic update to avoid race conditions with old data
-        //!!! allow reporting the same track here to skipping after looping a single track is reported correctly
+        //!!! allow reporting the same track here so that skipping after looping a single track is reported correctly
         _lastReportedTrackStopped = previousItem;
         await _jellyfinApiHelper.stopPlaybackProgress(previousTrackPlaybackData);
         //TODO also mark the track as played in the user data: https://api.jellyfin.org/openapi/api.html#tag/Playstate/operation/MarkPlayedItem
@@ -405,7 +430,9 @@ class PlaybackHistoryService {
       }
     }
     if (newTrackplaybackData != null) {
-      _playbackHistoryServiceLogger.info("Starting playback progress for ${currentItem.item.title}");
+      _playbackHistoryServiceLogger.info(
+        "Starting playback progress for ${currentItem.item.title} at ${(newTrackplaybackData.positionTicks ?? 0) ~/ 10000} ms",
+      );
       try {
         _resetPeriodicUpdates(); // delay next periodic update to avoid race conditions with old data
         //!!! allow reporting the same track here to ensure loop one reports correctly
@@ -455,16 +482,20 @@ class PlaybackHistoryService {
   /// Generates PlaybackProgressInfo for the supplied item and playback state.
   jellyfin_models.PlaybackProgressInfo? generatePlaybackProgressInfoFromState(
     FinampQueueItem item,
-    PlaybackState state,
-  ) {
+    PlaybackState state, {
+    bool atTrackStart = false,
+  }) {
     final duration = item.item.duration;
     return generatePlaybackProgressInfo(
       item,
       isPaused: !state.playing,
       // always consider as unmuted
       isMuted: false,
-      // ensure the (extrapolated) position doesn't exceed the duration
-      playerPosition: duration != null && state.position > duration ? duration : state.position,
+      // a track that has just become current starts at zero, whatever position the state carries
+      // otherwise ensure the (extrapolated) position doesn't exceed the duration
+      playerPosition: atTrackStart
+          ? Duration.zero
+          : (duration != null && state.position > duration ? duration : state.position),
       includeNowPlayingQueue:
           FinampSettingsHelper.finampSettings.enablePlayon || FinampSettingsHelper.finampSettings.reportQueueToServer,
     );

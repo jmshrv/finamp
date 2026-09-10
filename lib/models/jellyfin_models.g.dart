@@ -1387,13 +1387,14 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       audio: fields[150] as String?,
       normalizationGain: (fields[151] as num?)?.toDouble(),
       hasLyrics: fields[152] as bool?,
+      albumNormalizationGain: (fields[153] as num?)?.toDouble(),
     );
   }
 
   @override
   void write(BinaryWriter writer, BaseItemDto obj) {
     writer
-      ..writeByte(152)
+      ..writeByte(153)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -1697,7 +1698,9 @@ class BaseItemDtoAdapter extends TypeAdapter<BaseItemDto> {
       ..writeByte(151)
       ..write(obj.normalizationGain)
       ..writeByte(152)
-      ..write(obj.hasLyrics);
+      ..write(obj.hasLyrics)
+      ..writeByte(153)
+      ..write(obj.albumNormalizationGain);
   }
 
   @override
@@ -2897,6 +2900,8 @@ class SortByAdapter extends TypeAdapter<SortBy> {
         return SortBy.runtime;
       case 15:
         return SortBy.defaultOrder;
+      case 16:
+        return SortBy.inAlbumOrPlaylist;
       default:
         return SortBy.album;
     }
@@ -2937,6 +2942,8 @@ class SortByAdapter extends TypeAdapter<SortBy> {
         writer.writeByte(14);
       case SortBy.defaultOrder:
         writer.writeByte(15);
+      case SortBy.inAlbumOrPlaylist:
+        writer.writeByte(16);
     }
   }
 
@@ -3923,6 +3930,7 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
   audio: json['Audio'] as String?,
   normalizationGain: (json['NormalizationGain'] as num?)?.toDouble(),
   hasLyrics: json['HasLyrics'] as bool?,
+  albumNormalizationGain: (json['AlbumNormalizationGain'] as num?)?.toDouble(),
 )..finampOffline = json['FinampOffline'] as bool?;
 
 Map<String, dynamic> _$BaseItemDtoToJson(
@@ -4126,6 +4134,8 @@ Map<String, dynamic> _$BaseItemDtoToJson(
   if (instance.audio case final value?) 'Audio': value,
   if (instance.normalizationGain case final value?) 'NormalizationGain': value,
   if (instance.hasLyrics case final value?) 'HasLyrics': value,
+  if (instance.albumNormalizationGain case final value?)
+    'AlbumNormalizationGain': value,
   if (instance.finampOffline case final value?) 'FinampOffline': value,
 };
 

@@ -155,7 +155,7 @@ class _HomeScreenSectionConfigurationMenuState extends ConsumerState<HomeScreenS
           switch (BaseItemDtoType.fromItem(searchListener.value!)) {
             case BaseItemDtoType.playlist:
             case BaseItemDtoType.album:
-              collectionContent = ContentType.inPlaylist;
+              collectionContent = ContentType.inPlaylistOrAlbum;
               // This shouldn't be used, but just in case there's no reason to filter
               collectionLibrary = allLibraryPlaceholder;
             case BaseItemDtoType.artist:
@@ -176,7 +176,7 @@ class _HomeScreenSectionConfigurationMenuState extends ConsumerState<HomeScreenS
             collectionLibrary = section.libraryId;
           } else {
             collectionSortController.updateConfiguration(
-              collectionContent == ContentType.inPlaylist
+              collectionContent == ContentType.inPlaylistOrAlbum
                   ? SortAndFilterConfiguration.defaultInAlbumSort
                   : SortAndFilterConfiguration.defaultSort,
             );
@@ -512,36 +512,38 @@ class _HomeScreenSectionConfigurationMenuState extends ConsumerState<HomeScreenS
           ],
         ),
       ],
-      SizedBox(height: 20.0),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        spacing: 4.0,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 4.0),
-            child: Text(context.l10n.sectionTitle, style: Theme.of(context).textTheme.bodyMedium),
-          ),
-          TextField(
-            controller: TextEditingController(text: tabTitle)
-              ..selection = TextSelection.fromPosition(TextPosition(offset: tabTitle.length)),
-            decoration: InputDecoration(
-              hintText: context.l10n.egFavoriteTracks,
-              filled: true,
-              fillColor: Color.alphaBlend(
-                ColorScheme.of(context).onSurface.withOpacity(0.1),
-                ColorScheme.of(context).surface,
-              ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-              border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+      if (selectedSectionType == _SectionType.tab) ...[
+        SizedBox(height: 20.0),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          spacing: 4.0,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 4.0),
+              child: Text(context.l10n.sectionTitle, style: Theme.of(context).textTheme.bodyMedium),
             ),
-            onChanged: (newValue) {
-              tabTitle = newValue;
-            },
-          ),
-        ],
-      ),
+            TextField(
+              controller: TextEditingController(text: tabTitle)
+                ..selection = TextSelection.fromPosition(TextPosition(offset: tabTitle.length)),
+              decoration: InputDecoration(
+                hintText: context.l10n.egFavoriteTracks,
+                filled: true,
+                fillColor: Color.alphaBlend(
+                  ColorScheme.of(context).onSurface.withOpacity(0.1),
+                  ColorScheme.of(context).surface,
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+                border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+              ),
+              onChanged: (newValue) {
+                tabTitle = newValue;
+              },
+            ),
+          ],
+        ),
+      ],
       SizedBox(height: 24.0),
       if (tabTitle == "" && selectedSectionType == _SectionType.tab)
         Text(
@@ -586,11 +588,12 @@ class _HomeScreenSectionConfigurationMenuState extends ConsumerState<HomeScreenS
 
 const sectionPresetPickerMenuRouteName = "/section-preset-picker-menu";
 
-Future<HomeScreenSectionPresetType?> showSectionPresetPickerMenu(
+Future<(HomeScreenSectionPresetType?,)?> showSectionPresetPickerMenu(
   BuildContext context, {
   int? editingSectionIndex,
 }) async {
   final List<Widget> menuItems = HomeScreenSectionPresetType.values
+      .where((x) => x.isEnabled)
       .map<Widget>((presetType) {
         return Consumer(
           builder: (context, ref, child) {
@@ -606,7 +609,7 @@ Future<HomeScreenSectionPresetType?> showSectionPresetPickerMenu(
                 // if (preset == RadioMode.similar && radioModeOptionAvailabilityStatus.isAvailable)
                 //   Icon(TablerIcons.star, size: 14.0),
               ],
-              enabled: true,
+              enabled: currentSections.where((section) => section.presetType == presetType).isEmpty,
               icon: TablerIcons.settings_star,
               isInactive: false,
               isSelected: editingSectionIndex != null && currentSections[editingSectionIndex].presetType == presetType,
@@ -617,7 +620,7 @@ Future<HomeScreenSectionPresetType?> showSectionPresetPickerMenu(
                 // Navigator.of(context).pop(preset);
                 if (context.mounted) {
                   FeedbackHelper.feedback(FeedbackType.selection);
-                  Navigator.of(context).pop(presetType);
+                  Navigator.of(context).pop((presetType,));
                 }
               },
             );
@@ -644,7 +647,7 @@ Future<HomeScreenSectionPresetType?> showSectionPresetPickerMenu(
                 // }
                 if (context.mounted) {
                   FeedbackHelper.feedback(FeedbackType.selection);
-                  Navigator.of(context).pop(null);
+                  Navigator.of(context).pop((null,));
                 }
               },
             );
@@ -653,7 +656,7 @@ Future<HomeScreenSectionPresetType?> showSectionPresetPickerMenu(
       ])
       .toList();
 
-  return await showThemedBottomSheet<HomeScreenSectionPresetType?>(
+  return await showThemedBottomSheet<(HomeScreenSectionPresetType?,)?>(
     context: context,
     routeName: sectionPresetPickerMenuRouteName,
     minDraggableHeight: 0.25,

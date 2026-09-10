@@ -159,7 +159,7 @@
     "selectDirectory": "Selecteer map",
     "unknownError": "Onbekende Fout",
     "enterLowPriorityStateOnPause": "Ga naar Lage-Prioriteit Staat tijdens Pauzeren",
-    "viewType": "Type bekijken",
+    "viewType": "Muziek Scherm Type Weergave",
     "viewTypeSubtitle": "Type voor het muziekscherm bekijken",
     "shuffleAllTrackCount": "Aantal nummers in de shuffle",
     "list": "Lijst",
@@ -1694,5 +1694,30 @@
             }
         },
         "description": "Localized names of special downloadable collection representing cached images for a certain library."
+    },
+    "maxConcurrentDownloadsSubtitle": "Meer parallele downloads zorgen mogelijk voor versneld downloaden op de achtergrond, maar leiden soms ook tot mislukte downloads bij hele grote bestanden, of in sommige gevallen tot wat vertraging van de app.",
+    "@maxConcurrentDownloadsSubtitle": {
+        "description": "Description of setting controlling max concurrent downloads."
+    },
+    "maxConcurrentDownloadsLabel": "{count} Parallele Downloads",
+    "@maxConcurrentDownloadsLabel": {
+        "description": "Label of values on max concurrent downloads slider",
+        "placeholders": {
+            "count": {
+                "type": "String"
+            }
+        }
+    },
+    "activeLibraries": "Actieve Bibliotheken",
+    "@activeLibraries": {
+        "description": "Active Libraries"
+    },
+    "inAlbumOrPlaylist": "Album/Playlist Volgorde",
+    "@inAlbumOrPlaylist": {
+        "description": "Sorting order for tracks in an album or playlist (by disc, then index, then name"
+    },
+    "discUnknown": "Onbekende Disc",
+    "@discUnknown": {
+        "description": "Shown when the disc number is unknown or not set for a group of tracks on the album screen"
     }
 }

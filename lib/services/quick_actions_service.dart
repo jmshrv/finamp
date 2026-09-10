@@ -37,13 +37,11 @@ class QuickActionsService {
       case FinampQuickActions.browsePlaybackHistory:
         await Navigator.pushNamed(context, PlaybackHistoryScreen.routeName);
         break;
-      case FinampQuickActions.playRandomAlbum:
-        await audioServiceHelper.playRandomItem(limitItemTypes: [BaseItemDtoType.album]);
+      case FinampQuickActions.playRandomItem:
+        await audioServiceHelper.playRandomItem(limitContentTypes: action.itemTypes);
         break;
-      case FinampQuickActions.playRandomTrack:
-        await audioServiceHelper.playRandomItem(limitItemTypes: [BaseItemDtoType.track]);
       case FinampQuickActions.playRandomFavoriteItem:
-        await audioServiceHelper.playRandomItem(favoritesOnly: true);
+        await audioServiceHelper.playRandomItem(favoritesOnly: true, limitContentTypes: action.itemTypes);
         break;
       case FinampQuickActions.playPreviousQueue:
         {
@@ -89,6 +87,10 @@ class QuickActionsService {
         break;
       case FinampQuickActions.surpriseMe:
         await audioServiceHelper.startSurpriseMeMix();
+        break;
+      case FinampQuickActions.playRandomAlbum:
+      case FinampQuickActions.playRandomTrack:
+        // deprecated, nop
         break;
     }
   }

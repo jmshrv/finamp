@@ -30,7 +30,7 @@ Future<(List<BaseItemDto>, List<BaseItemDto>)> getAlbumOrPlaylistTracks(Ref ref,
     allTracks =
         await jellyfinApiHelper.getItems(
           parentItem: parent,
-          sortBy: "ParentIndexNumber,IndexNumber,SortName",
+          sortBy: SortBy.inAlbumOrPlaylist.jellyfinName(ContentType.tracks),
           includeItemTypes: "Audio",
         ) ??
         [];
@@ -40,7 +40,7 @@ Future<(List<BaseItemDto>, List<BaseItemDto>)> getAlbumOrPlaylistTracks(Ref ref,
   return (allTracks, playableTracks);
 }
 
-SortAndFilterController _defaultPlaylistSort = SortAndFilterController.trackSettings(ContentType.inPlaylist);
+SortAndFilterController _defaultPlaylistSort = SortAndFilterController.trackSettings(ContentType.inPlaylistOrAlbum);
 
 @riverpod
 Future<(List<BaseItemDto>, List<BaseItemDto>)> getDefaultSortedPlaylistTracks(Ref ref, BaseItemDto parent) {

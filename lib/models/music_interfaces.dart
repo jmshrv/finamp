@@ -110,7 +110,7 @@ sealed class _SortableItem<ChildType extends FinampPlayableDto> extends FinampPl
   _SortableItem(super.item, {required super.source, required this.sortConfig})
     : assert(() {
         ContentType type = [BaseItemDtoType.album, BaseItemDtoType.playlist].contains(BaseItemDtoType.fromItem(item))
-            ? ContentType.inPlaylist
+            ? ContentType.inPlaylistOrAlbum
             : ContentType.tracks;
         final controller = SortAndFilterController(startingConfig: sortConfig, contentType: type);
         final resolvedConfig = GetIt.instance<ProviderContainer>().read(resolveSortProvider(controller));
@@ -134,7 +134,7 @@ sealed class _SortablePagedItem<ChildType extends FinampPlayableDto> extends Fin
   _SortablePagedItem(super.item, {required super.source, required this.sortConfig})
     : assert(() {
         ContentType type = [BaseItemDtoType.album, BaseItemDtoType.playlist].contains(BaseItemDtoType.fromItem(item))
-            ? ContentType.inPlaylist
+            ? ContentType.inPlaylistOrAlbum
             : ContentType.tracks;
         final controller = SortAndFilterController(startingConfig: sortConfig, contentType: type);
         final resolvedConfig = GetIt.instance<ProviderContainer>().read(resolveSortProvider(controller));

@@ -108,13 +108,13 @@
     },
     "required": "Pakollinen",
     "layoutAndTheme": "Asettelu ja teema",
-    "viewType": "Näkymän Tyyppi",
+    "viewType": "Musiikkinäkymän esitystapa",
     "list": "Lista",
     "grid": "Ruudukko",
     "landscape": "Vaaka",
     "showTextOnGridView": "Näytä teksti ruudukkonäkymässä",
     "theme": "Teema",
-    "system": "Järjestelmä",
+    "system": "Seuraa järjestelmän asetusta",
     "light": "Vaalea",
     "tabs": "Välilehdet",
     "cancelSleepTimer": "Peruuta uniajastin?",
@@ -229,7 +229,7 @@
     "@startMixNoTracksArtist": {
         "description": "Snackbar message that shows when the user presses the instant mix button with no artists selected"
     },
-    "viewTypeSubtitle": "Musiikkinäytön näkymätyyppi",
+    "viewTypeSubtitle": "Määrittää ruudukko- tai luettelonäkymän kaikille musiikkinäytön välilehdille kotinäkymää lukuun ottamatta.",
     "loginFlowAccountSelectionHeading": "Valitse tilisi",
     "@loginFlowAccountSelectionHeading": {
         "description": "Heading for the account selection step during the login flow."
@@ -417,7 +417,7 @@
     "@playlistActionsMenuButtonTooltip": {
         "description": "Tooltip for the (currently heart) button that opens the playlist actions menu / playlist picker by default and can toggle the favorite status on long press"
     },
-    "playbackModeDirectPlaying": "suoratoistaa",
+    "playbackModeDirectPlaying": "Suoratoistaa",
     "@playbackModeDirectPlaying": {
         "description": "Feature chip that is shown when tracks are being played directly from the server, without transcoding"
     },
@@ -476,7 +476,7 @@
     "@placeholderSource": {
         "description": "Placeholder text used when the source of the current track/queue is unknown"
     },
-    "yourLikes": "Tykkäyksesi",
+    "yourLikes": "Tykkäyksesi (kohteesta \"{trackName}\")",
     "@yourLikes": {
         "description": "Title for the queue source when the user is playing their liked tracks"
     },
@@ -572,7 +572,7 @@
     "@startInstantMixForIndividualTracksSwitchTitle": {
         "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
     },
-    "startInstantMixForIndividualTracksSwitchSubtitle": "Kun käytössä, kappaleen napautus kappaleiden välilehdellä aloittaa välittömän sekoituksen yksittäisen kappaleen toiston sijaan.",
+    "startInstantMixForIndividualTracksSwitchSubtitle": "Kun käytössä, kappaleen napautus kappaleiden välilehdellä aloittaa välittömän sekoituksen normaalin toistojärjestyksen sijaan.",
     "downloadItem": "Lataa",
     "@downloadItem": {
         "description": "Option to download item in long-press menu."
@@ -1049,7 +1049,7 @@
     "@skipToPreviousTrackButtonTooltip": {
         "description": "Tooltip for the button that skips to the beginning of the current track or to the previous track"
     },
-    "confirmAddToNextUp": "Lisättiin {type, select, track{kappale} album{albumi} artist{artisti} playlist{soittolista} genre{tyylilaji} disc{levy} other{kohde}} seuraavaksi- jonoon",
+    "confirmAddToNextUp": "Lisättiin {type, select, track{kappale} album{albumi} artist{artisti} playlist{soittolista} genre{tyylilaji} disc{levy} other{kohde}} seuraavaksi-jonoon",
     "@confirmAddToNextUp": {
         "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
         "placeholders": {
@@ -1221,7 +1221,7 @@
     "@deleteFromTargetDialogText": {
         "description": "(Important: Note the space in front of some cases) A Confirm Prompt used whenever an item is about to be deleted from the device or server. The Server case should explain that this cannot be reverted, this information is not needed for the device since the user can just download the track again. The delete Type adapts the server text even more in can the user can or cant delete the item."
     },
-    "confirmPlayNext": "{type, select, track{Kappale} album{Albumi} artist{Artisti} playlist{Soittolista} genre{Tyylilaji} other{Kohde}} seuraavaksi",
+    "confirmPlayNext": "{type, select, track{Kappale} album{Albumi} artist{Artisti} playlist{Soittolista} genre{Tyylilaji} disc{Levy} other{Kohde}} seuraavaksi",
     "@confirmPlayNext": {
         "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
         "placeholders": {
@@ -2184,7 +2184,7 @@
     "@quickConnectAuthorizationMenuStateSubtitleIdle": {
         "description": "Subtitle for the quick connect authorization menu state info (above the input field) while the code hasn't been submitted yet"
     },
-    "quickConnectAuthorizationMenuStateTitleProcessing": "Yritetään vahvistaa pyyntöä",
+    "quickConnectAuthorizationMenuStateTitleProcessing": "Valtuutetaan pyyntöä",
     "@quickConnectAuthorizationMenuStateTitleProcessing": {
         "description": "Title for the quick connect authorization menu state info (above the input field) while a request is being processed"
     },
@@ -2374,7 +2374,7 @@
     "@preferNextUpPrependingTitle": {
         "description": "Title for the setting to prefer prepending to Next Up over appending"
     },
-    "preferNextUpPrependingSubtitle": "Kun kytketty päälle, 'toista seuraavana'-napit näytetään, kun Seuraavana-jono on tyhjä. Muulloin 'Lisää Seuraavana-jonoon' näytetään oletuksena.",
+    "preferNextUpPrependingSubtitle": "Kun kytketty päälle, 'Toista seuraavaksi'-napit näytetään, kun Seuraavaksi-jono on tyhjä. Muulloin 'Lisää Seur.-jonoon' näytetään oletuksena.",
     "@preferNextUpPrependingSubtitle": {
         "description": "Subtitle for the setting that swaps the default behavior of short- vs. long-press on the heart/favorite icon"
     },
@@ -3244,16 +3244,8 @@
     "@browsePlaybackHistoryActionDescription": {
         "description": "Description of a home screen quick action"
     },
-    "playRandomAlbumActionDescription": "Aloittaa toiston satunnaisesta albumista",
-    "@playRandomAlbumActionDescription": {
-        "description": "Description of a home screen quick action"
-    },
     "surpriseMeActionDescription": "Aloittaa 'jatkuvan' radion satunnaisesta kappaleesta",
     "@surpriseMeActionDescription": {
-        "description": "Description of a home screen quick action"
-    },
-    "playRandomTrackActionDescription": "Aloittaa toiston satunnaisesta kappaleesta",
-    "@playRandomTrackActionDescription": {
         "description": "Description of a home screen quick action"
     },
     "playRandomFavoriteItemActionDescription": "Aloittaa toiston satunnaisesta suosikkikohteesta",
@@ -3276,15 +3268,7 @@
     "@shuffleTracksAction": {
         "description": "Name of a home screen quick action"
     },
-    "randomAlbumAction": "Satunnainen albumi",
-    "@randomAlbumAction": {
-        "description": "Name of a home screen quick action"
-    },
-    "randomTrackAction": "Satunnainen kappale",
-    "@randomTrackAction": {
-        "description": "Name of a home screen quick action"
-    },
-    "randomFavoriteAction": "Satunnainen suosikki",
+    "randomFavoriteAction": "Satunnainen suosikki{itemType, select, albums{albumi} tracks{kappale} playlists{soittolista} performingArtists{esiintyvä artisti} albumArtists{albumin artisti} none{ tyypistä <Type>} other{}}",
     "@randomFavoriteAction": {
         "description": "Name of a home screen quick action"
     },
@@ -3423,7 +3407,7 @@
             }
         }
     },
-    "homeAllPlaylistsWarning": "Haluatko varmasti ladata kaikki soittolistat?   Tämä lataa kaikki soittolistat, ei pelkästään tässä osiossa näkyvät.",
+    "homeAllPlaylistsWarning": "Haluatko varmasti ladata kaikki soittolistat? Tämä lataa kaikki soittolistat, ei pelkästään tässä osiossa näkyvät.",
     "@homeAllPlaylistsWarning": {
         "description": "Warning presented when pressing the download button on playlist home sections with a filter applied.  This is shown because the download will not apply the filter."
     },
@@ -3470,5 +3454,216 @@
                 "example": "syncingLocal"
             }
         }
-    }
+    },
+    "clientCertificate": "mTLS-asiakasvarmenne (SSL)",
+    "@clientCertificate": {
+        "description": "Title for the setting that allows managing SSL client certificates used for authentication"
+    },
+    "clientCertificateUnavailable": "Varmennetta ei ole asetettu, asiakkaan todennus on otettu pois käytöstä",
+    "@clientCertificateUnavailable": {
+        "description": "Message shown when the user has no SSL client certificate available to use."
+    },
+    "clientCertificateInstalled": "Varmenne asennettu",
+    "@clientCertificateInstalled": {
+        "description": "Message shown when the user has successfully installed an SSL client certificate."
+    },
+    "clientCertificateDescription": "TLS-asiakasvarmennetta (.p12 tai .pfx) käytetään tämän laitteen todennukseen Jellyfin-palvelimellasi. Vaaditaan vain, jos palvelimesi on määritetty käyttämään molemminpuolista TLS-tunnistusta (mTLS).",
+    "@clientCertificateDescription": {
+        "description": "Explanatory text in the client certificate settings menu describing what a client certificate is used for"
+    },
+    "importClientCertificate": "Tuo varmenne",
+    "@importClientCertificate": {
+        "description": "Label for the button to import a new SSL client certificate."
+    },
+    "removeClientCertificate": "Poista varmenne",
+    "@removeClientCertificate": {
+        "description": "Label for the button to remove the currently installed SSL client certificate."
+    },
+    "clientCertificatePasswordTitle": "Varmenteen salasana",
+    "@clientCertificatePasswordTitle": {
+        "description": "Title of the dialog prompting the user to enter the password for the client certificate being imported."
+    },
+    "clientCertificatePasswordHint": "Salasana",
+    "@clientCertificatePasswordHint": {
+        "description": "Hint text for the password input field when importing a client certificate."
+    },
+    "clientCertificateDeleteConfirm": "Poistetaanko asennettu varmenne? Asiakkaan todennus otetaan pois käytöstä.",
+    "@clientCertificateDeleteConfirm": {
+        "description": "Confirmation prompt shown before removing the installed client certificate."
+    },
+    "clientCertificateImportSuccess": "Varmenne tuotu onnistuneesti",
+    "@clientCertificateImportSuccess": {
+        "description": "Message shown after successfully importing a client certificate."
+    },
+    "clientCertificateImportError": "Varmenteen tuonti epäonnistui",
+    "@clientCertificateImportError": {
+        "description": "Error message shown when importing a client certificate fails."
+    },
+    "clientCertificateRequired": "Asiakasvarmenne vaaditaan",
+    "@clientCertificateRequired": {
+        "description": "Message shown on the server selection screen when the server requires a client certificate to be provided."
+    },
+    "activeLibraries": "Aktiiviset kirjastot",
+    "@activeLibraries": {
+        "description": "Active Libraries"
+    },
+    "selectItemTypes": "Valitse sisältötyypit",
+    "@selectItemTypes": {
+        "description": "Title for 'play random item' quick action edit menu"
+    },
+    "randomAlbums": "Satunnaiset albumit",
+    "@randomAlbums": {
+        "description": "Name of a home screen section preset"
+    },
+    "randomAlbumArtists": "Satunnaiset albumin artistit",
+    "@randomAlbumArtists": {
+        "description": "Name of a home screen section preset"
+    },
+    "recentlyAddedPlaylists": "Äskettäin luodut soittolistat",
+    "@recentlyAddedPlaylists": {
+        "description": "Name of a home screen section preset"
+    },
+    "randomAlbumsDescription": "Albumit satunnaisessa järjestyksessä",
+    "@randomAlbumsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "randomArtistsDescription": "Artistit satunnaisessa järjestyksessä",
+    "@randomArtistsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "recentlyAddedPlaylistsDescription": "Soittolistat luomispäivän mukaan, uusimmasta alkaen",
+    "@recentlyAddedPlaylistsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "playRandomItemActionDescription": "Aloittaa toiston satunnaisesta kohteesta",
+    "@playRandomItemActionDescription": {
+        "description": "Description of a home screen quick action"
+    },
+    "randomItemAction": "Satunnainen {itemType, select, albums{albumi} tracks{kappale} playlists{soittolista} performingArtists{esiintyjä} albumArtists{albumiartisti} none{tyypin <Type> kohde} other{kohde}}",
+    "@randomItemAction": {
+        "placeholders": {
+            "itemType": {
+                "type": "String",
+                "description": "Localized name of item type to be selected, or placeholder 'multiple'"
+            }
+        },
+        "description": "Name of a home screen quick action"
+    },
+    "randomPlaylistAction": "Satunnainen soittolista",
+    "@randomPlaylistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomArtistAction": "Satunnainen artisti",
+    "@randomArtistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomGenreAction": "Satunnainen tyylilaji",
+    "@randomGenreAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteAlbumAction": "Satunnainen suosikkialbumi",
+    "@randomFavoriteAlbumAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteTrackAction": "Satunnainen suosikkikappale",
+    "@randomFavoriteTrackAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoritePlaylistAction": "Satunnainen suosikkisoittolista",
+    "@randomFavoritePlaylistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteArtistAction": "Satunnainen suosikkiartisti",
+    "@randomFavoriteArtistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteGenreAction": "Satunnainen suosikkityylilaji",
+    "@randomFavoriteGenreAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "cancelChanges": "Peru muutokset",
+    "@cancelChanges": {
+        "description": "Button on sort and filter menu that clears any pending changes."
+    },
+    "applyChangesOnClose": "Muutokset tulevat voimaan kun valikko suljetaan",
+    "@applyChangesOnClose": {
+        "description": "Notification on sort and filter menu that currently pending changes will be automatically applied on close."
+    },
+    "removeFromQueue": "Poista jonosta",
+    "featureChipName": "{chipName, select, explicit{Explisiittinen} playCount{Toistokerrat} additionalPeople{Muut tekijät} playbackMode{Toistotila} codec{Koodekki} bitRate{Bittinopeus} bitDepth{Bittisyvyys} sampleRate{Näytteenottotaajuus} size{Koko} normalizationGain{Normalisointivahvistus} other{{chipName}}}",
+    "@featureChipName": {
+        "placeholders": {
+            "chipName": {
+                "type": "String",
+                "example": "playCount"
+            }
+        },
+        "description": "Titles for settings controlling which pieces of advanced track info are displayed."
+    },
+    "featureChipDescription": "{chipName, select, explicit{Merkitsee kappaleet, joissa on sopimatonta sisältöä} additionalPeople{Muut kappaleeseen liitetyt henkilöt kuin esiintyjät, jos saatavilla (säveltäjät, sanoittajat jne.)} playbackMode{Suoratoisto- ja uudelleenkoodaustilan tiedot} bitDepth{Bittiä ääninäytettä kohden. Koskee vain häviöttömiä koodekkeja, yleensä 16 bittiä.} sampleRate{Ääninäytettä sekunnissa. Yleensä 44,1 kHz.} normalizationGain{Tällä hetkellä aktiivinen ReplayGain-taso} size{Alkuperäistiedoston koko} other{null}}",
+    "@featureChipDescription": {
+        "placeholders": {
+            "chipName": {
+                "type": "String",
+                "example": "playCount"
+            }
+        },
+        "description": "Descriptions of different pieces of advanced track info."
+    },
+    "maximizePlayer": "Laajenna soitin",
+    "collapsePlayer": "Pienennä soitin sivupalkkiin",
+    "addSpecialDownloads": "Lisää erikoislatauksia",
+    "@addSpecialDownloads": {
+        "description": "Button on downloads screen which allows adding special downloads, such as all playlists or all favorites."
+    },
+    "allTracks": "Kaikki kappaleet (kohteesta ”{trackName}”)",
+    "@allTracks": {
+        "description": "Queue source when playing from tracks screen.",
+        "placeholders": {
+            "trackName": {
+                "type": "String",
+                "example": "Never Gonna Give You Up"
+            }
+        }
+    },
+    "volumeControlDisabledCastingHint": "Ääntä suoratoistetaan laitteessa, joka ei tue sovelluksen sisäistä äänenvoimakkuuden säätöä.",
+    "@volumeControlDisabledCastingHint": {
+        "description": "Hint text displayed below the volume bar when the in-app volume slider is disabled because audio is being cast to a device that bypasses the in-app volume handling and handles its own volume, such as when using Airplay."
+    },
+    "artistFilter": "Artisti: {name}",
+    "@artistFilter": {
+        "description": "Name of artistFilter",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "verboseLogging": "Yksityiskohtaiset lokit",
+    "@verboseLogging": {
+        "description": "Title for the toggle that enables detailed logging on the logs screen"
+    },
+    "verboseLoggingSubtitle": "Säilytä yksityiskohtaiset lokit vikaraportointia varten. Jätä tämä pois päältä paremman suorituskyvyn takaamiseksi.",
+    "@verboseLoggingSubtitle": {
+        "description": "Subtitle explaining the verbose logging toggle"
+    },
+    "perTabGridMode": "Valitse välilehtikohtaisesti",
+    "showFastScrollerSubtitle": "Näytä tai piilota musiikkivälilehtien oikeassa laidassa oleva aakkosluettelo, jolla voit siirtyä suoraan kirjaimiin.",
+    "quickActionBanner": "Tutustu yleisesti muutettuihin asetuksiin!",
+    "@quickActionBanner": {
+        "description": "Banner directing new users to the quick settings, where they can adjust the most commonly used settings"
+    },
+    "themeSettingTitle": "Sovelluksen väriteema (tumma/vaalea)",
+    "@themeSettingTitle": {
+        "description": "Title for the setting that allows you to override the system theme and force dark or light mode"
+    },
+    "perTabGridModeScreen": "Aseta näkymätyyppi välilehtikohtaisesti",
+    "perTabAlbumGrid": "Albumit vain ruudukossa",
+    "quickSettingsScreen": "Pika-asetukset",
+    "quickSettingsScreenDescription": "Räätälöi Finamp mieleiseksesi näillä perusasetuksilla. Voit palata tänne milloin vain Asetukset-valikon kautta.",
+    "quickSettingsTabsLink": "Järjestä ja piilota välilehtiä",
+    "quickSettingsTranscodeLink": "Kaikki uudelleenkoodausasetukset",
+    "quickSettingsLayoutLink": "Kaikki asettelu- ja teema-asetukset",
+    "quickSettingsAllSettingsLink": "Kaikki asetukset",
+    "quickSettingsNetworkLink": "Määritä palvelimen paikallinen osoite"
 }

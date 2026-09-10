@@ -125,7 +125,7 @@
     "favorite": "מועדף",
     "downloads": "הורדות",
     "settings": "הגדרות",
-    "sortOrder": "סדר מיון",
+    "sortOrder": "סדר",
     "sortBy": "מיון לפי",
     "album": "אלבום",
     "albumArtist": "אמן אלבום",
@@ -637,7 +637,7 @@
     },
     "landscape": "אופקי",
     "showTextOnGridView": "הצגת טקסט בתצוגת רשת",
-    "showTextOnGridViewSubtitle": "האם להראות את הטקסט (שם, אמן וכו') בתצוגת רשת במסך המוסיקה.",
+    "showTextOnGridViewSubtitle": "האם להראות את הטקסט (שם, אמן וכו') בתצוגת רשת במסך המוסיקה. הטקסט תמיד מופיע במסך הבית, ללא קשר להגדרה זו.",
     "showArtistsTracksSectionSubtitle": "האם להציג קטע עם עד חמש רצועות שמע. כאשר מופעל, ניתן לבחור בין הכי מושמעים, מועדפים, אקראי, יצאו לאחרונה, נוספו לאחרונה ונוגנו לאחרונה.",
     "showArtistsTracksSection": "הצגת סקציית רצועות שמע",
     "disableGesture": "ביטול מחוות",
@@ -1099,7 +1099,7 @@
             }
         }
     },
-    "confirmPlayNext": "{type, select, track{רצעות שמע} album{אלבום} artist{Artist} playlist {פלייליסט} genre{ג'אנר} other{פריט}} ינוגן הבא",
+    "confirmPlayNext": "תתבצע נגינה של {type, select, track{רצועת השמע} album{האלבום} artist{האמן} playlist{הפלייליסט} genre{הג׳אנר} disc{הדיסק} other{הפריט}} לאחר מכן",
     "@confirmPlayNext": {
         "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
         "placeholders": {
@@ -1111,7 +1111,7 @@
     "stackTrace": "מעקב המדד (Stack Trace)",
     "autoSwitchItemCurationTypeSubtitle": "כאשר מופעל, סקציות פריטים במסכי האמנים והג'אנרים יוחלפו לסוג בחירה שונה אם אין פריטים מתאימים (למשל, אין מועדפים לאמן ספציפי).",
     "autoSwitchItemCurationTypeTitle": "שינוי אוטומטי של מצב בחירת פריט",
-    "confirmAddToNextUp": "נוסף {type, select, track{רצועת שמע} album{אלבום} artist{אמן} playlist{פלייליסט} genre{ג'אנר} disc{דיסק} other{פריט}} לבא בתור",
+    "confirmAddToNextUp": "בוצעה הוספה של {type, select, track{רצועת השמע} album{האלבום} artist{האמן} playlist{הפלייליסט} genre{הג'אנר} disc{הדיסק} other{הפריט}} לבא בתור",
     "@confirmAddToNextUp": {
         "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
         "placeholders": {
@@ -1145,7 +1145,7 @@
     "@shareOfflineListens": {
         "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
     },
-    "yourLikes": "מה שאהבת",
+    "yourLikes": "מה שאהבת (מתוך ״{trackName}״)",
     "@yourLikes": {
         "description": "Title for the queue source when the user is playing their liked tracks"
     },
@@ -1399,7 +1399,7 @@
     "@defaultDownloadLocationButton": {
         "description": "Tooltip for button that sets a download location as the default."
     },
-    "fixedGridTileSizeEnum": "{size, select, small{קטן} medium{בינוני} large{גדול} veryLarge{גדול מאוד} other{???}}",
+    "fixedGridTileSizeEnum": "{size, select, tiny{זעיר} verySmall{קטן מאוד} small{קטן} medium{בינוני} large{גדול} veryLarge{גדול מאוד} huge{ענק} giant{עצום} other{???}}",
     "@fixedGridTileSizeEnum": {
         "placeholders": {
             "size": {
@@ -1499,7 +1499,7 @@
     "@applyFilterOnGenreChipTapSubtitle": {
         "description": "Subtitle for the setting that controls if taps on genres should apply a genre filter to the current screen or should redirect to the GenreScreen."
     },
-    "playingFromType": "מנגן מתוך {source, select, album{אלבום} playlist{פלייליסט} trackMix{מיקס רצועת שמע} artistMix{מיקס אמן} albumMix{מיקס אלבום} genreMix{מיקס ג'אנר} favorites{מועדפים} allTracks{כל רצועות השמע} filteredList{רצועות שמע} genre{ג'אנר} artist{אמן} track{רצועת שמע} nextUpAlbum{אלבום בבא בתור} nextUpPlaylist{פלייליסט בבא בתור} nextUpArtist{אמן בבא בתור} nextUpGenre{ג'אנר בבא בתור} remoteClient{לקוח מרוחק} radio{רדיו} other{}}",
+    "playingFromType": "מנגן מתוך {source, select, album{אלבום} playlist{פלייליסט} trackMix{מיקס רצועת שמע} artistMix{מיקס אמן} albumMix{מיקס אלבום} genreMix{מיקס ג'אנר} favorites{מועדפים} allTracks{כל רצועות השמע} filteredList{רצועות שמע} genre{ג'אנר} artist{אמן} track{רצועת שמע} nextUpAlbum{אלבום בבא בתור} nextUpPlaylist{פלייליסט בבא בתור} nextUpArtist{אמן בבא בתור} nextUpGenre{ג'אנר בבא בתור} remoteClient{לקוח מרוחק} radio{רדיו} homeScreenSection{}collection{אוסף} collectionMix{מיקס אוסף} other{}}",
     "@playingFromType": {
         "description": "Prefix shown before the type of the main queue source at the top of the player screen. Example: \"Playing From Album\"",
         "placeholders": {
@@ -2611,7 +2611,7 @@
     "@quickConnectAuthorizationMenuStateSubtitleIdle": {
         "description": "Subtitle for the quick connect authorization menu state info (above the input field) while the code hasn't been submitted yet"
     },
-    "quickConnectAuthorizationMenuStateTitleProcessing": "מנסה לאשר בקשה",
+    "quickConnectAuthorizationMenuStateTitleProcessing": "מאשר בקשה",
     "@quickConnectAuthorizationMenuStateTitleProcessing": {
         "description": "Title for the quick connect authorization menu state info (above the input field) while a request is being processed"
     },
@@ -2942,5 +2942,762 @@
     "cannotDeleteLocation": "לא ניתן למחוק מיקום",
     "@cannotDeleteLocation": {
         "description": "Message that a download location cannot currently be deleted."
+    },
+    "activeLibraries": "ספריות פעילות",
+    "@activeLibraries": {
+        "description": "Active Libraries"
+    },
+    "isFavoriteFilter": "מועדפים",
+    "@isFavoriteFilter": {
+        "description": "Name of favorite filter"
+    },
+    "isUnplayedFilter": "לא נוגן",
+    "@isUnplayedFilter": {
+        "description": "Name of unplayed items filter"
+    },
+    "isFullyDownloadedFilter": "הורדו במלואם",
+    "@isFullyDownloadedFilter": {
+        "description": "Name of fully downloaded items filter"
+    },
+    "genreFilter": "ג׳אנר: {name}",
+    "@genreFilter": {
+        "description": "Name of genrefilter",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "startsWithFilter": "מתחיל עם האות: {letter}",
+    "@startsWithFilter": {
+        "description": "Name of starts with letter filter",
+        "placeholders": {
+            "letter": {
+                "type": "String"
+            }
+        }
+    },
+    "searchTermFilter": "חיפוש: {searchTerm}",
+    "@searchTermFilter": {
+        "description": "Name of search term filter",
+        "placeholders": {
+            "searchTerm": {
+                "type": "String"
+            }
+        }
+    },
+    "customizeHomeScreen": "עיצוב מסך בית",
+    "@customizeHomeScreen": {
+        "description": "Label for home screen customize button"
+    },
+    "connectedTo": "מחובר אל",
+    "@connectedTo": {
+        "description": "Server info in music screen menu"
+    },
+    "performingArtistFilter": "אלבומים (מופיע ב...)",
+    "albumArtistFilter": "אלבומים (אמן האלבום של)",
+    "allTypes": "כל הסוגים",
+    "allTracks": "כל רצועות השמע (מתוך \"{trackName}\")",
+    "@allTracks": {
+        "description": "Queue source when playing from tracks screen.",
+        "placeholders": {
+            "trackName": {
+                "type": "String",
+                "example": "Never Gonna Give You Up"
+            }
+        }
+    },
+    "homeScreenSectionPresetFavoriteTracksDescription": "רצועות שמע אהובות בסדר אקראי",
+    "@homeScreenSectionPresetFavoriteTracksDescription": {
+        "description": "Description for the favorite tracks preset section, which can be added to the home screen"
+    },
+    "homeScreenSectionPresetForgottenFavoriteTracksDescription": "רצועות שמע אהובות שנוגנו הכי פחות לאחרונה",
+    "@homeScreenSectionPresetForgottenFavoriteTracksDescription": {
+        "description": "Description for the forgotten favorite tracks preset section, which can be added to the home screen"
+    },
+    "nameRequired": "שם (חובה)",
+    "@nameRequired": {
+        "description": "Descriptor for the required name field when adding download locations."
+    },
+    "cannotDeleteLocationEplanation": "המיקום הנוכחי כולל הורדות ולא ניתן למחוק אותו.  נא למחוק את ההורדו האלו קודם:",
+    "@cannotDeleteLocationEplanation": {
+        "description": "Explanation that the download location cannot be deleted due to not being empty."
+    },
+    "search": "חיפוש",
+    "@search": {
+        "description": "Tooltip for music screen search button"
+    },
+    "globalMenu": "תפריט",
+    "@globalMenu": {
+        "description": "Tooltip for menu open button on music screen"
+    },
+    "lookingForSomethingElse": "מחפשים משהו אחר?",
+    "@lookingForSomethingElse": {
+        "description": "Header for home screen customization button"
+    },
+    "builtWithByTheFinampContributors": "נבנה עם ♥ על ידי התורמים של Finamp.",
+    "@builtWithByTheFinampContributors": {
+        "description": "Message in home screen footer"
+    },
+    "showAll": "הצג הכל",
+    "@showAll": {
+        "description": "Tooltip for show all button on home screen sections"
+    },
+    "errorLoadingItems": "שגיאה בטעינת פריטים.",
+    "@errorLoadingItems": {
+        "description": "Message when an error occurs while loading home screen section contents"
+    },
+    "noItemsAvailable": "אין פריטים זמינים.",
+    "@noItemsAvailable": {
+        "description": "Message when a home screen section has no items while online"
+    },
+    "filters": "סינונים",
+    "@filters": {
+        "description": "Label for filters in Sort & Filter menu"
+    },
+    "removeFilter": "הסרת סינון זה",
+    "@removeFilter": {
+        "description": "Tooltip for removable filter chips in Sort & Filter row"
+    },
+    "removeFilters": "הסרת סינונים",
+    "@removeFilters": {
+        "description": "Title for remove filters only variant of sort and filter menu"
+    },
+    "sortFilter": "סדר וסינון",
+    "@sortFilter": {
+        "description": "title for Sort & Filter menu"
+    },
+    "connected": "מחובר",
+    "@connected": {
+        "description": "Fallback for 'Connected to <server name>' message while server info is loaded"
+    },
+    "timerMinutes": "{minutes} דקות",
+    "@timerMinutes": {
+        "placeholders": {
+            "minutes": {
+                "type": "int"
+            }
+        },
+        "description": "Label for sleep timer duration slider"
+    },
+    "timerTracks": "{tracks} רצועות שמע",
+    "@timerTracks": {
+        "placeholders": {
+            "tracks": {
+                "type": "int"
+            }
+        },
+        "description": "Label for sleep timer track count slider"
+    },
+    "quickActionsSubtitle": "בחירה וסידור מחדש של הפעולות המהירות שמופיעות במסך הבית.",
+    "@quickActionsSubtitle": {
+        "description": "Subtitle for quick actions edit menu"
+    },
+    "selectAnItem": "בחירת פריט",
+    "@selectAnItem": {
+        "description": "Title for 'play specific item' quick action edit menu"
+    },
+    "selectItemTypes": "בחירת סוגי פריטים",
+    "@selectItemTypes": {
+        "description": "Title for 'play random item' quick action edit menu"
+    },
+    "library": "ספריה",
+    "@library": {
+        "description": "Title for home screen section editor library selector dropdown, or a general view of the entire active music library (e.g. in CarPlay)"
+    },
+    "currentLibrary": "ספריה נוכחית",
+    "@currentLibrary": {
+        "description": "Title for dynamic current library option in home screen section editor library selector dropdown"
+    },
+    "loading": "טוען...",
+    "@loading": {
+        "description": "Message when items or libraries are loading in home screen section editor"
+    },
+    "egFavoriteTracks": "לדוגמא: רצועות שמע מועדפות",
+    "@egFavoriteTracks": {
+        "description": "Placeholder text in custom section title editor in home screen section editor"
+    },
+    "searchNotAvailibleWhileOffline": "החיפוש לא אפשרי במצב לא מקוון!",
+    "@searchNotAvailibleWhileOffline": {
+        "description": "Message in home screen section editor search widget when offline"
+    },
+    "noSearchResults": "לא נמצאו תוצאות חיפוש.",
+    "@noSearchResults": {
+        "description": "Message in home screen section editor search widget when no results are returned"
+    },
+    "collectionDropdownHint": "בחירת אוסף",
+    "@collectionDropdownHint": {
+        "description": "Hint for selector dropdown in home screen editor search widget"
+    },
+    "noFilterActive": "אין סינון פעיל",
+    "@noFilterActive": {
+        "description": "Message in sort & filter row when no filters are active"
+    },
+    "inPlaylist": "בפלייליסט",
+    "@inPlaylist": {
+        "description": "Name of 'In Playlist' content type"
+    },
+    "inCollection": "באוסף",
+    "@inCollection": {
+        "description": "Name of jellyfin 'Collection' content type"
+    },
+    "collection": "אוסף",
+    "@collection": {
+        "description": "Name of home screen section type which uses the contents of a supplied playable item"
+    },
+    "queues": "תורים",
+    "@queues": {
+        "description": "Name of home screen section type which shows the latest played queues"
+    },
+    "favoritePlaylists": "פלייליסטים מועדפים",
+    "@favoritePlaylists": {
+        "description": "Name of a home screen section preset"
+    },
+    "favoriteGenres": "ג׳אנרים מועדפים",
+    "@favoriteGenres": {
+        "description": "Name of a home screen section preset"
+    },
+    "newlyAddedAlbums": "אלבומים חדשים שנוספו",
+    "@newlyAddedAlbums": {
+        "description": "Name of a home screen section preset"
+    },
+    "newlyAddedTracks": "רצועות שמע חדשות שנוספו",
+    "@newlyAddedTracks": {
+        "description": "Name of a home screen section preset"
+    },
+    "frequentlyPlayedAlbums": "אלבומים שמנוגנים לעיתים קרובות",
+    "@frequentlyPlayedAlbums": {
+        "description": "Name of a home screen section preset"
+    },
+    "frequentlyPlayedTracks": "רצועות שמע שמנוגנות לעיתים קרובות",
+    "@frequentlyPlayedTracks": {
+        "description": "Name of a home screen section preset"
+    },
+    "frequentlyPlayedArtists": "אמנים שמנוגנים לעיתים קרובות",
+    "@frequentlyPlayedArtists": {
+        "description": "Name of a home screen section preset"
+    },
+    "unplayedAlbums": "אלבומים שלא נוגנו",
+    "@unplayedAlbums": {
+        "description": "Name of a home screen section preset"
+    },
+    "recentQueues": "תורים אחרונים",
+    "@recentQueues": {
+        "description": "Name of a home screen section preset"
+    },
+    "randomAlbums": "אלבומים אקראים",
+    "@randomAlbums": {
+        "description": "Name of a home screen section preset"
+    },
+    "randomAlbumArtists": "אמני אלבום אקראים",
+    "@randomAlbumArtists": {
+        "description": "Name of a home screen section preset"
+    },
+    "recentlyAddedPlaylists": "פלייליסטים שנוצרו לאחרונה",
+    "@recentlyAddedPlaylists": {
+        "description": "Name of a home screen section preset"
+    },
+    "favoriteAlbumsDescription": "אלבומים אהובים בסדר אקראי",
+    "@favoriteAlbumsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "favoriteArtistsDescription": "אמנים אהובים בסדר אקראי",
+    "@favoriteArtistsDescription": {
+        "description": "Description  of a home screen section preset"
+    },
+    "favoritePlaylistsDescription": "פלייליסטים אהובים בסדר אקראי",
+    "@favoritePlaylistsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "favoriteGenresDescription": "ג׳אנרים אהובים בסדר אקראי",
+    "@favoriteGenresDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "recentlyAddedAlbumsDescription": "אלבומים שנוספו לאחרונה לספריה שלך, מתחיל מהחדש ביותר",
+    "@recentlyAddedAlbumsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "recentlyAddedTracksDescription": "רצועות שמע שנוספו לאחרונה לספריה שלך, מתחיל מהחדש ביותר",
+    "@recentlyAddedTracksDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "frequentlyPlayedAlbumsDescription": "אלבומים שהקשבת להם הרבה, מתחיל מההכי מוקשבים",
+    "@frequentlyPlayedAlbumsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "frequentlyPlayedTracksDescription": "רצועות שמע שהקשבת להם הרבה, מתחיל מההכי מוקשבות",
+    "@frequentlyPlayedTracksDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "frequentlyPlayedArtistsDescription": "אמנים שהקשבת להם הרבה, מתחיל מההכי מוקשבים",
+    "@frequentlyPlayedArtistsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "neverPlayedAlbumsDescription": "אלבומים שלא הקשבת להם עדיין, בסדר אקראי",
+    "@neverPlayedAlbumsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "recentQueuesDescription": "תורים שיצרת לאחרונה, מתחיל מההכי חדש",
+    "@recentQueuesDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "randomAlbumsDescription": "אלבומים בסדר אקראי",
+    "@randomAlbumsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "randomArtistsDescription": "אמנים בסדר אקראי",
+    "@randomArtistsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "recentlyAddedPlaylistsDescription": "פלייליסטים לפי תאריך יצירה, מתחיל מההכי חדש",
+    "@recentlyAddedPlaylistsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "shuffleTracksActionDescription": "עירבוב רצועות שמע אקראיות מהספריה שלך",
+    "@shuffleTracksActionDescription": {
+        "description": "Description of a home screen quick action"
+    },
+    "browseRecentQueuesActionDescription": "בחירה מהתורים שלך שנוגנו לאחרונה",
+    "@browseRecentQueuesActionDescription": {
+        "description": "Description of a home screen quick action"
+    },
+    "browsePlaybackHistoryActionDescription": "דיפדוף בהיסטוריית הנגינה שלך",
+    "@browsePlaybackHistoryActionDescription": {
+        "description": "Description of a home screen quick action"
+    },
+    "surpriseMeActionDescription": "התחלת רדיו ׳מתמשך׳ מרצועת שמע אקראית",
+    "@surpriseMeActionDescription": {
+        "description": "Description of a home screen quick action"
+    },
+    "playRandomItemActionDescription": "התחלת נגינה של פריט אקראי",
+    "@playRandomItemActionDescription": {
+        "description": "Description of a home screen quick action"
+    },
+    "playRandomFavoriteItemActionDescription": "התחלת נגינה מפריט מועדף אקראי",
+    "@playRandomFavoriteItemActionDescription": {
+        "description": "Description of a home screen quick action"
+    },
+    "playPreviousQueueActionDescription": "שיחזור ונגינה של התור השמור האחרון שלך",
+    "@playPreviousQueueActionDescription": {
+        "description": "Description of a home screen quick action"
+    },
+    "configureOutputActionDescription": "פתיחת הגדרות מכשיר פלט שמע",
+    "@configureOutputActionDescription": {
+        "description": "Description of a home screen quick action"
+    },
+    "playSpecificItemActionDescription": "ניגון פריט ספציפי מוגדר",
+    "@playSpecificItemActionDescription": {
+        "description": "Description of a home screen quick action"
+    },
+    "shuffleTracksAction": "עירבוב רצועות שמע",
+    "@shuffleTracksAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomItemAction": "בחירת {itemType, select, albums{אלבום} tracks{רצועת שמע} playlists{פלייליסט} performingArtists{אמן מבצע} albumArtists{אמן אלבום} none{פריט מתוך <סוג>} other{פריט}} באקראי",
+    "@randomItemAction": {
+        "placeholders": {
+            "itemType": {
+                "type": "String",
+                "description": "Localized name of item type to be selected, or placeholder 'multiple'"
+            }
+        },
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteAction": "בחירת {itemType, select, albums{אלבום} tracks{רצועת שמע} playlists{פלייליסט} performingArtists{אמן מבצע} albumArtists{אמן אלבום} none{מתוך <סוג>} other{}} מתוך מועדפים באקראי",
+    "@randomFavoriteAction": {
+        "placeholders": {
+            "itemType": {
+                "type": "String",
+                "description": "Localized name of item type to be selected, or placeholder 'multiple'"
+            }
+        },
+        "description": "Name of a home screen quick action"
+    },
+    "previousQueueAction": "תורים קודמים",
+    "@previousQueueAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "configureOutputAction": "הגדרות פלט",
+    "@configureOutputAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "playSpecificItemAction": "נגינת {itemName, select, finamp_placeholder{<פריט>} other{{itemName}}}",
+    "@playSpecificItemAction": {
+        "placeholders": {
+            "itemName": {
+                "type": "String"
+            }
+        },
+        "description": "Name of a home screen quick action"
+    },
+    "surpriseMeAction": "תפתיעו אותי",
+    "@surpriseMeAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomPlaylistAction": "פלייליסט אקראי",
+    "@randomPlaylistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomArtistAction": "אמן אקראי",
+    "@randomArtistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomGenreAction": "ג׳אנר אקראי",
+    "@randomGenreAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteAlbumAction": "אלבום מועדף אקראי",
+    "@randomFavoriteAlbumAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteTrackAction": "רצועת שמע מועדפת אקראית",
+    "@randomFavoriteTrackAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoritePlaylistAction": "פלייליסט מועדף אקראי",
+    "@randomFavoritePlaylistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteArtistAction": "אמן מועדף אקראי",
+    "@randomFavoriteArtistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteGenreAction": "ג׳אנר מועדף אקראי",
+    "@randomFavoriteGenreAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "editAction": "עריכת פעולה",
+    "@editAction": {
+        "description": "Button to edit a quick action"
+    },
+    "swapAction": "החלפת פעולה",
+    "@swapAction": {
+        "description": "Button to swap the selected quick action"
+    },
+    "removeAction": "הסרת פעולה",
+    "@removeAction": {
+        "description": "Button to remove a quick action"
+    },
+    "addNewAction": "הוספת פעולה חדשה",
+    "@addNewAction": {
+        "description": "Button to add a new quick action"
+    },
+    "preview": "תצוגה מקדימה",
+    "unnamedCollection": "אוסף ללא שם",
+    "@unnamedCollection": {
+        "description": "Placeholder for unnamed collection in home screen section editor"
+    },
+    "noTracksFound": "לא נמצאו רצועות שמע כדי להתחיל מיקס ׳תפתיעו אותי׳.",
+    "@noTracksFound": {
+        "description": "Message if SurpriseMeMix creation fails"
+    },
+    "nothingFoundToPlay": "לא נמצא כלום לנגינה.",
+    "@nothingFoundToPlay": {
+        "description": "Message if play random item fails"
+    },
+    "noPreviousQueueFoundToPlay": "לא נמצאו תורים קודמים לנגינה.",
+    "@noPreviousQueueFoundToPlay": {
+        "description": "Message if play previous queue quick action fails"
+    },
+    "unknownVersion": "גרסא לא ידועה",
+    "@unknownVersion": {
+        "description": "Reported server version if request fails"
+    },
+    "itemTypeFilterHeader": "סוג ילדים",
+    "recentlyPlayedTracksDescription": "רצועות שמע שהקשבת להן לאחרונה, מתחיל ממה שנוגן לאחרונה",
+    "@recentlyPlayedTracksDescription": {
+        "description": "Description for a home screen section preset"
+    },
+    "libraryQualifierActive": "פעיל",
+    "@libraryQualifierActive": {
+        "description": "Label shown next to the currently selected library in the Finamp menu/drawer"
+    },
+    "voiceSearch": "חיפוש קולי",
+    "@voiceSearch": {
+        "description": "Heading for the page that prompts the user to perform a voice search."
+    },
+    "carPlayLoginPrompt": "יש לפתוח את אפליקציית Finamp בטלפון שלך כדי להתחבר לשרת Jellyfin שלך.",
+    "@carPlayLoginPrompt": {
+        "description": "Label shown when the user is trying to use CarPlay without being logged in."
+    },
+    "retry": "ניסיון מחדש",
+    "itemType": "{itemType, select, album{אלבום} playlist{פלייליסט} artist{אמן} genre{Genre} track{רצועת שמע} library{ספריה} collection{אוסף} unknown{פריט} other{{itemType}}}",
+    "@itemType": {
+        "placeholders": {
+            "itemType": {
+                "type": "String",
+                "example": "album"
+            }
+        },
+        "description": "Item type name."
+    },
+    "clientCertificateInstalled": "תעודה הותקנה",
+    "@clientCertificateInstalled": {
+        "description": "Message shown when the user has successfully installed an SSL client certificate."
+    },
+    "importClientCertificate": "יבוא תעודה",
+    "@importClientCertificate": {
+        "description": "Label for the button to import a new SSL client certificate."
+    },
+    "removeClientCertificate": "הסרת תעודה",
+    "@removeClientCertificate": {
+        "description": "Label for the button to remove the currently installed SSL client certificate."
+    },
+    "clientCertificatePasswordTitle": "סיסמת תעודה",
+    "@clientCertificatePasswordTitle": {
+        "description": "Title of the dialog prompting the user to enter the password for the client certificate being imported."
+    },
+    "clientCertificatePasswordHint": "סיסמה",
+    "@clientCertificatePasswordHint": {
+        "description": "Hint text for the password input field when importing a client certificate."
+    },
+    "clientCertificateImportSuccess": "התעודה יובא בהצלחה",
+    "@clientCertificateImportSuccess": {
+        "description": "Message shown after successfully importing a client certificate."
+    },
+    "clientCertificateImportError": "כישלון ביבוא תעודה",
+    "@clientCertificateImportError": {
+        "description": "Error message shown when importing a client certificate fails."
+    },
+    "clientCertificateRequired": "נדרשת תעודת לקוח",
+    "@clientCertificateRequired": {
+        "description": "Message shown on the server selection screen when the server requires a client certificate to be provided."
+    },
+    "cancelChanges": "ביטול שינויים",
+    "@cancelChanges": {
+        "description": "Button on sort and filter menu that clears any pending changes."
+    },
+    "applyChangesOnClose": "השינויים יחלו כאשר התפריט נסגר",
+    "@applyChangesOnClose": {
+        "description": "Notification on sort and filter menu that currently pending changes will be automatically applied on close."
+    },
+    "removeFromQueue": "הסרה מתור",
+    "maximizePlayer": "הגדלת נגן",
+    "addSpecialDownloads": "הוספת הורדה מיוחדת",
+    "@addSpecialDownloads": {
+        "description": "Button on downloads screen which allows adding special downloads, such as all playlists or all favorites."
+    },
+    "volumeControlDisabledCastingHint": "שמע משודר למכשיר שלא תומך בשליטת עוצמה בתוך האפליקציה.",
+    "@volumeControlDisabledCastingHint": {
+        "description": "Hint text displayed below the volume bar when the in-app volume slider is disabled because audio is being cast to a device that bypasses the in-app volume handling and handles its own volume, such as when using Airplay."
+    },
+    "homeScreenSectionCustomSectionTitle": "סקצייה מותאמת אישית",
+    "@homeScreenSectionCustomSectionTitle": {
+        "description": "Title for the custom section type, which can be added to the home screen"
+    },
+    "homeScreenSectionCustomSectionDescription": "הגדרת סקצייה משלך",
+    "@homeScreenSectionCustomSectionDescription": {
+        "description": "Description for the custom section type, which can be added to the home screen"
+    },
+    "homeScreenImageSizeSubtitle": "בחירת גודל הפריטים במסך הבית",
+    "@homeScreenImageSizeSubtitle": {
+        "description": "Subtitle of home screen tile image size setting"
+    },
+    "activeFilterCount": "{filterCount, plural, =0{אין סינון} =1{סינון אחד} other{{filterCount} סינונים}} בפעולה",
+    "@activeFilterCount": {
+        "placeholders": {
+            "filterCount": {
+                "type": "int"
+            }
+        },
+        "description": "Message in sort & filter row"
+    },
+    "tabView": "תצוגת תווית",
+    "@tabView": {
+        "description": "Name of home screen section type which uses the contents of a music screen tab"
+    },
+    "removeSection": "הסרת סקצייה",
+    "@removeSection": {
+        "description": "Button to remove a home screen section"
+    },
+    "addNewSection": "הוספת סקצייה חדשה",
+    "@addNewSection": {
+        "description": "Button to add a new home screen section"
+    },
+    "errorLoadingHomeSection": "תקלה בטעינת סקציית בית",
+    "@errorLoadingHomeSection": {
+        "description": "Message if a home screen section cannot be loaded due to a missing item"
+    },
+    "homeFavoritesDownloadWarning": "האם להוריד את המועדפים?  זה יוריד את המועדפים מכל הסוגים, לא רק {sectionType}.",
+    "@homeFavoritesDownloadWarning": {
+        "description": "Warning presented when pressing the download button on certain home screen sections.  This is shown because home sections show a specific item type, like Albums, but the download covers all.",
+        "placeholders": {
+            "sectionType": {
+                "type": "String",
+                "example": "Albums"
+            }
+        }
+    },
+    "homeRecentAlbumsDownloadWarning": "זה יוריד את 5 האלבומים האחרונים בשרת.  זה יעודכן וההורדות העודפות יוסרו ככל שאלבומים חדשים נוספים לשרת בעתיד.",
+    "@homeRecentAlbumsDownloadWarning": {
+        "description": "Warning presented when pressing the download button on certain home screen sections.  This is shown because the behavior of the 5 latest albums download is not a 100% match to the home sections."
+    },
+    "alreadyRandomized": "הסקצייה הזאת כבר מוצגת בסדר אקראי",
+    "@alreadyRandomized": {
+        "description": "Tooltip for shuffle button on home screen sections using a random sort order, where it is disabled due to being unneeded"
+    },
+    "carPlaySiriHint": "יש להגיד ״היי Siri, אני רוצה לשמוע את [רצועת שמע/אמן/אלבום] בFinamp״",
+    "@carPlaySiriHint": {
+        "description": "Hint text for how to use Siri to search in CarPlay."
+    },
+    "retryPageLoad": "נכשל בטעינת פריטים מהשרת.  לחצו כדי לנסות שוב.",
+    "connectionStateInfoString": "{state, select, syncing{מסתנכרן עם השרת} downloading{מוריד מהשרת} deleting{מוחק הורדות ישנות} connectedLocal{מחובר דרך רשת מקומית} syncingLocal{מסתנכרן דרך רשת מקומית} downloadingLocal{מוריד דרך רשת מקומית} other{}}",
+    "@connectionStateInfoString": {
+        "description": "String describing the current connection state to the server, shown in the music screen drawer/menu.",
+        "placeholders": {
+            "state": {
+                "type": "String",
+                "example": "syncingLocal"
+            }
+        }
+    },
+    "clientCertificate": "תעודת לקוח mTLS (SSL)",
+    "@clientCertificate": {
+        "description": "Title for the setting that allows managing SSL client certificates used for authentication"
+    },
+    "clientCertificateUnavailable": "לא הוגרה תעודה, אימות לקוח בוטל",
+    "@clientCertificateUnavailable": {
+        "description": "Message shown when the user has no SSL client certificate available to use."
+    },
+    "clientCertificateDescription": "יש שימוש בתעודת TLS (p12. או pfx.) כדי לאמת את המכשיר הזה עם השרת Jellyfin שלך. נדרש רק אם השרת מוגדר לTLS הדדי.",
+    "@clientCertificateDescription": {
+        "description": "Explanatory text in the client certificate settings menu describing what a client certificate is used for"
+    },
+    "clientCertificateDeleteConfirm": "האם למחוק את התעודה המותקנת? אימות הלקוח יבוטל.",
+    "@clientCertificateDeleteConfirm": {
+        "description": "Confirmation prompt shown before removing the installed client certificate."
+    },
+    "failedToLoadSection": "נכשל בטעינת סקציה.",
+    "@failedToLoadSection": {
+        "description": "Message when an error is thrown while resolving home screen section"
+    },
+    "sectionContentsNotDownloaded": "תכני סקציה לא הורדו.",
+    "@sectionContentsNotDownloaded": {
+        "description": "Message when a home screen section has no items while offline"
+    },
+    "failedToLoadSectionMissingItem": "נכשל בטעינת סקציה - פריט חסר.",
+    "@failedToLoadSectionMissingItem": {
+        "description": "Message when the parent item of a home screen section is missing from the server"
+    },
+    "editSection": "עריכת סקציה",
+    "@editSection": {
+        "description": "Label for edit home section menu entry"
+    },
+    "sectionsMenu": "סקציות",
+    "@sectionsMenu": {
+        "description": "Title for home screen sections edit menu"
+    },
+    "sectionMenuSubtitle": "בחירה וסידור מחדש של הסקציות המוצגות במסך הבית.",
+    "@sectionMenuSubtitle": {
+        "description": "Subtitle for home screen sections edit menu"
+    },
+    "sectionType": "סוג סקציה",
+    "@sectionType": {
+        "description": "Title for home screen section editor section type dropdown (tab view, collection, ect...)"
+    },
+    "tabType": "סוג תווית",
+    "@tabType": {
+        "description": "Title for home screen section editor tab type dropdown (albums, artists, ect...)"
+    },
+    "sectionTitle": "כותרת סקציה",
+    "@sectionTitle": {
+        "description": "Title for custom section title editor in home screen section editor"
+    },
+    "customSectionTitleRequired": "נא לתת לסקציה המותאמת אישית כותרת",
+    "@customSectionTitleRequired": {
+        "description": "Message when a custom section title is needed in home screen section editor"
+    },
+    "editHomeScreenSection": "עריכת סקצית מסך בית",
+    "@editHomeScreenSection": {
+        "description": "Title for home screen section editor menu"
+    },
+    "homeScreenImageSizeTitle": "גודל אריח מסך בית",
+    "@homeScreenImageSizeTitle": {
+        "description": "Title of home screen tile image size setting"
+    },
+    "losslessNoBitrate": "לא חל על קידודי FLAC",
+    "@losslessNoBitrate": {
+        "description": "Settings text informing the user that transcoding bitrate does not apply to lossless transcodes."
+    },
+    "homeAllPlaylistsWarning": "האם להוריד את כל הפלייליסטים?  זה יוריד את כל פלייליסט, לא רק את אלו שבסקציה הזאת.",
+    "@homeAllPlaylistsWarning": {
+        "description": "Warning presented when pressing the download button on playlist home sections with a filter applied.  This is shown because the download will not apply the filter."
+    },
+    "offlineSortFallback": "מיון לפי {onlineSort} אפשרי רק במצב מקוון.  כרגע חוזר למיון לפי סידור ברירת מחדל",
+    "@offlineSortFallback": {
+        "description": "Warning presented in sort and filter menu when an online-only sort is chosen.",
+        "placeholders": {
+            "onlineSort": {
+                "type": "String",
+                "example": "Play Count"
+            }
+        }
+    },
+    "collapsePlayer": "צימצום נגן לסרגל צד",
+    "homeScreenSectionPresetPickerMenuTitle": "בחירת הגדרה",
+    "@homeScreenSectionPresetPickerMenuTitle": {
+        "description": "Title for the preset picker menu, which allows users to pick a preset section to add to the home screen"
+    },
+    "featuredCollection": "אוסף מודגש",
+    "@featuredCollection": {
+        "description": "Title for home screen section editor collection selector"
+    },
+    "sectionConfigInvalid": "ההגדרה הנוכחית לא תקינה.",
+    "@sectionConfigInvalid": {
+        "description": "Message in home screen section edit menu preview window when a valid preview cannot be generated"
+    },
+    "gridImageSizeTitle": "גודל אריח רשת",
+    "@gridImageSizeTitle": {
+        "description": "Title of grid tile image size setting"
+    },
+    "gridImageSizeSubtitle": "בחירת הגודל של פריטים בתצגות רשת",
+    "@gridImageSizeSubtitle": {
+        "description": "Subtitle of grid tile image size setting"
+    },
+    "gridImageSizeLabel": "{colCountExact, plural, =0{~} =1{} other{}}{colCount, plural, =1{עמודה אחת ({sizeDescriptor})} other{{colCount} עמודות ({sizeDescriptor})}}",
+    "@gridImageSizeLabel": {
+        "placeholders": {
+            "sizeDescriptor": {
+                "type": "String",
+                "example": "Very Small"
+            },
+            "colCount": {
+                "type": "int"
+            },
+            "colCountExact": {
+                "type": "int",
+                "description": "0 = not exact, add e.g. tilde character (~), 1 = exact, just show the number"
+            }
+        },
+        "description": "Slider label in grid tile image size setting"
+    },
+    "artistFilter": "אמן: {name}",
+    "@artistFilter": {
+        "description": "Name of artistFilter",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "featureChipName": "{chipName, select, explicit{תוכן בוטה} playCount{כמות נגינות} additionalPeople{אנשים נוספים} playbackMode{מצב נגינה} codec{Codec} bitRate{Bitrate} bitDepth{Bit Depth} sampleRate{Sample Rate} size{גודל} normalizationGain{Normalization Gain} other{{chipName}}}",
+    "@featureChipName": {
+        "placeholders": {
+            "chipName": {
+                "type": "String",
+                "example": "playCount"
+            }
+        },
+        "description": "Titles for settings controlling which pieces of advanced track info are displayed."
+    },
+    "featureChipDescription": "{chipName, select, explicit{מסמן רצועות שמע שכוללות תוכן בוטה} additionalPeople{Non-artist people linked to the track, if available (writers, lyricists, etc.)} playbackMode{Streaming and transcoding status information} bitDepth{Bits per audio sample.  Only applicable to lossless codecs, generally 16 bits.} sampleRate{Audio samples per second.  Generally 44.1 kHz.} normalizationGain{Currently active ReplayGain level} size{הגודל קובץ המקורי של רצועת השמע} other{null}}",
+    "@featureChipDescription": {
+        "placeholders": {
+            "chipName": {
+                "type": "String",
+                "example": "playCount"
+            }
+        },
+        "description": "Descriptions of different pieces of advanced track info."
     }
 }

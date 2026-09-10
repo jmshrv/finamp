@@ -160,7 +160,7 @@
     "enterLowPriorityStateOnPause": "Entrar en estado de baja prioridad al pausar",
     "pathReturnSlashErrorMessage": "No se pueden usar rutas que devuelvan \"/\"",
     "grid": "Cuadrícula",
-    "viewType": "Tipo de vista",
+    "viewType": "Tipo de vista para la pantalla de música",
     "viewTypeSubtitle": "Tipo de vista para la pantalla de música",
     "useCoverAsBackground": "Mostrar la carátula con desenfoque como fondo del reproductor",
     "tabs": "Pestañas",
@@ -2417,5 +2417,9 @@
     "multichannelHandlingSubtitle": "Cómo gestionar pistas multicanal (más de 2 canales) al realizar la transcodificación. Se aplica tanto al streaming como a las descargas.",
     "@multichannelHandlingSubtitle": {
         "description": "Subtitle for multi-channel handling dropdown"
+    },
+    "activeLibraries": "Bibliotecas activas",
+    "@activeLibraries": {
+        "description": "Active Libraries"
     }
 }

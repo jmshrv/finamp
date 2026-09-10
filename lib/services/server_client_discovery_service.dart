@@ -47,7 +47,7 @@ class JellyfinServerClientDiscovery {
               final response = ClientDiscoveryResponse.fromJson(
                 jsonDecode(utf8.decode(datagram.data)) as Map<String, dynamic>,
               );
-              _clientDiscoveryLogger.fine(
+              _clientDiscoveryLogger.info(
                 "Received discovery response from ${datagram.address}:${datagram.port}: ${jsonEncode(response)}",
               );
               onServerFound(response);
@@ -88,7 +88,7 @@ class JellyfinServerClientDiscovery {
       _advertisingSocket.broadcastEnabled = true; // important to allow sending to broadcast address
       _advertisingSocket.multicastHops = 5; // to account for weird network setups
 
-      _clientDiscoveryLogger.fine("Advertising server on port $discoveryPort");
+      _clientDiscoveryLogger.info("Advertising server on port $discoveryPort");
 
       _advertisingSocket.listen((event) {
         if (event == RawSocketEvent.read) {
@@ -106,7 +106,7 @@ class JellyfinServerClientDiscovery {
                 name: "Shared by Finamp",
               );
               final responseMessageActiveOrPublicAddress = jsonEncode(responseActiveOrPublicAddress);
-              _clientDiscoveryLogger.finest("Sending discovery response: $responseMessageActiveOrPublicAddress");
+              _clientDiscoveryLogger.info("Sending discovery response: $responseMessageActiveOrPublicAddress");
               _advertisingSocket.send(
                 utf8.encode(responseMessageActiveOrPublicAddress),
                 datagram.address,

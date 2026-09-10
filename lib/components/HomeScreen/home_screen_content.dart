@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:balanced_text/balanced_text.dart';
 import 'package:finamp/components/AlbumScreen/download_button.dart';
 import 'package:finamp/components/Buttons/cta_small.dart';
+import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/HomeScreen/home_screen_quick_action_button.dart';
 import 'package:finamp/components/HomeScreen/quick_action_editor.dart';
 import 'package:finamp/components/HomeScreen/show_all_button.dart';
@@ -134,7 +135,7 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent>
               );
             },
           ),
-          const SliverPadding(padding: EdgeInsets.only(top: 4)),
+          const SliverPadding(padding: EdgeInsets.only(top: 4.0)),
           SliverMainAxisGroup(
             slivers: ref
                 .watch(finampSettingsProvider.homeScreenConfiguration)
@@ -205,11 +206,13 @@ class HomeScreenSection extends ConsumerWidget {
 
     final viewPadding = MediaQuery.paddingOf(context);
     return SliverPadding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: const EdgeInsets.only(bottom: 20.0),
       sliver: FinampSectionHeader(
         sticky: false,
         key: Key(sectionInfo.toString()),
         title: sectionInfo.getTitle(context.l10n),
+        label: context.l10n.showAll,
+        titleTrailingIcon: TablerIcons.chevron_right,
         headerPadding: EdgeInsets.only(left: viewPadding.left + 14.0, right: viewPadding.right + 20.0),
         contentPadding: EdgeInsets.zero,
         actions: [
@@ -226,19 +229,15 @@ class HomeScreenSection extends ConsumerWidget {
               icon: TablerIcons.player_play,
             ),
             IconButtonWithSemantics(
-              onPressed: sectionInfo.sortConfig.sortBy == SortBy.random
-                  ? null
-                  : () async {
-                      final queueService = GetIt.instance<QueueService>();
-                      final playable = sectionDisplayable as FinampPlayable;
-                      // TODO better shuffling?  need to think about shuffle all versus shuffle first
-                      await queueService.startSlicePlayback(
-                        (await ref.read(getPlayableSliceProvider(item: playable, startingOffset: 0).future)).shuffle(),
-                      );
-                    },
-              label: sectionInfo.sortConfig.sortBy == SortBy.random
-                  ? context.l10n.alreadyRandomized
-                  : context.l10n.shuffleButtonLabel,
+              onPressed: () async {
+                final queueService = GetIt.instance<QueueService>();
+                final playable = sectionDisplayable as FinampPlayable;
+                // TODO better shuffling?  need to think about shuffle all versus shuffle first
+                await queueService.startSlicePlayback(
+                  (await ref.read(getPlayableSliceProvider(item: playable, startingOffset: 0).future)).shuffle(),
+                );
+              },
+              label: context.l10n.shuffleButtonLabel,
               icon: TablerIcons.arrows_shuffle,
             ),
           ],
@@ -250,14 +249,6 @@ class HomeScreenSection extends ConsumerWidget {
               warningMessage: downloadInfo.warning,
               downloadOnly: true,
             ),
-          ShowAllButton(
-            label: context.l10n.showAll,
-            onPressed: () {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute<MusicScreen>(builder: (context) => MusicScreen(singleTabConfig: sectionInfo)));
-            },
-          ),
         ],
         onTap: () {
           Navigator.of(
@@ -368,7 +359,7 @@ class HomeScreenSectionContent extends ConsumerWidget {
             itemCount: items.length + 2,
             itemBuilder: (context, rawIndex) {
               if (rawIndex == 0) {
-                return SizedBox(width: 4.0); // initial padding, + separator
+                return SizedBox(width: 6.0); // initial padding, + separator
               } else if (rawIndex == items.length + 1) {
                 // Add extra right padding if we have hit the end of list and there are no more items available
                 if (items.length < homeScreenSectionItemLimit) {
@@ -405,7 +396,8 @@ class HomeScreenSectionContent extends ConsumerWidget {
   }
 
   Widget _buildHorizontalSkeletonLoader(WidgetRef ref) {
-    final skeletonCount = 10;
+    final skeletonCount = homeScreenSectionItemLimit;
+
     final skeletonBaseColor = Theme.brightnessOf(ref.context) == Brightness.light
         ? Colors.grey.shade300
         : Colors.grey.shade800;
@@ -480,7 +472,15 @@ class HomeScreenSectionContent extends ConsumerWidget {
                   padding: const EdgeInsets.symmetric(vertical: 2.0),
                   child: Container(
                     width: cardWidth * Random().nextDouble().clamp(0.2, 0.9),
-                    height: max(calculateTextHeight(style: TextTheme.of(context).bodySmall!, lines: 1) - 4, 0),
+                    height: max(
+                      calculateTextHeight(
+                            style: TextTheme.of(context).bodySmall!,
+                            lines: 1,
+                            scaling: MediaQuery.textScalerOf(context),
+                          ) -
+                          4,
+                      0,
+                    ),
                     decoration: BoxDecoration(color: skeletonBaseColor, borderRadius: BorderRadius.circular(8)),
                   ),
                 ),
@@ -489,7 +489,15 @@ class HomeScreenSectionContent extends ConsumerWidget {
                   padding: const EdgeInsets.symmetric(vertical: 2.0),
                   child: Container(
                     width: cardWidth * Random().nextDouble().clamp(0.2, 0.9),
-                    height: max(calculateTextHeight(style: TextTheme.of(context).bodySmall!, lines: 1) - 4, 0),
+                    height: max(
+                      calculateTextHeight(
+                            style: TextTheme.of(context).bodySmall!,
+                            lines: 1,
+                            scaling: MediaQuery.textScalerOf(context),
+                          ) -
+                          4,
+                      0,
+                    ),
                     decoration: BoxDecoration(color: skeletonBaseColor, borderRadius: BorderRadius.circular(8)),
                   ),
                 ),

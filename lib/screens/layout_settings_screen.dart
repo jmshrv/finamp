@@ -18,7 +18,6 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import '../components/LayoutSettingsScreen/accent_color_selector.dart';
 import '../components/LayoutSettingsScreen/amoled_theme.dart';
-import '../components/LayoutSettingsScreen/content_view_type_dropdown_list_tile.dart';
 import '../components/LayoutSettingsScreen/show_artist_chip_image_toggle.dart';
 import '../components/LayoutSettingsScreen/show_text_on_grid_view_selector.dart';
 import '../components/LayoutSettingsScreen/theme_selector.dart';
@@ -26,6 +25,7 @@ import '../components/LayoutSettingsScreen/use_cover_as_background_toggle.dart';
 import '../components/finamp_app_bar_back_button.dart';
 import '../extensions/localizations.dart';
 import '../services/finamp_settings_helper.dart';
+import 'content_view_type_settings_screen.dart';
 import 'tabs_settings_screen.dart';
 
 class LayoutSettingsScreen extends ConsumerStatefulWidget {
@@ -92,7 +92,14 @@ class _LayoutSettingsScreenState extends ConsumerState<LayoutSettingsScreen> {
           const AutomaticAccentColorSelector(),
           const Divider(),
           const ContentViewTypeDropdownListTile(),
-          if (ref.watch(finampSettingsProvider.contentViewType) == ContentViewType.grid) const GridImageSizeSelector(),
+          if (watchDropdownContentViewType(ref) == DropdownContentViewType.custom)
+            ListTile(
+              leading: const Icon(TablerIcons.layout),
+              title: Text(AppLocalizations.of(context)!.perTabGridModeScreen),
+              onTap: () => Navigator.of(context).pushNamed(ContentViewTypeSettingsScreen.routeName),
+              contentPadding: EdgeInsets.only(left: 50),
+            ),
+          if (watchDropdownContentViewType(ref) != DropdownContentViewType.list) const GridImageSizeSelector(),
           const HomeScreenImageSizeSelector(),
           const ShowTextOnGridViewSelector(),
           const UseCoverAsBackgroundToggle(),

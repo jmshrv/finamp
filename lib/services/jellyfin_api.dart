@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io' show HttpClient, Platform;
 
-import 'package:app_set_id/app_set_id.dart';
 import 'package:chopper/chopper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:finamp/models/finamp_models.dart';
@@ -17,7 +16,7 @@ import 'jellyfin_api_helper.dart';
 
 part 'jellyfin_api.chopper.dart';
 
-const String defaultFields = "ChildCount,DateCreated,DateLastMediaAdded,Etag,Genres,ParentId,ProviderIds,Tags";
+const String defaultFields = "ChildCount,DateCreated,DateLastMediaAdded,Etag,Genres,ParentId,ProviderIds,Tags,SortName";
 
 @ChopperApi()
 abstract class JellyfinApi extends ChopperService {
@@ -34,7 +33,7 @@ abstract class JellyfinApi extends ChopperService {
   Future<dynamic> getQuickConnectState();
 
   @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
-  @Get(path: "/QuickConnect/Initiate")
+  @Post(path: "/QuickConnect/Initiate")
   Future<dynamic> initiateQuickConnect();
 
   @FactoryConverter(request: JsonConverter.requestFactory, response: JsonConverter.responseFactory)
@@ -604,8 +603,13 @@ abstract class JellyfinApi extends ChopperService {
   @Get(path: "/System/Endpoint", optionalBody: true)
   Future<Response<dynamic>> pingServer();
 
-  static JellyfinApi create(bool inForeground) {
-    final chopperHttpLogLevel = Level.body; //TODO allow changing the log level in settings (and a debug config file?)
+  static JellyfinApi create({required bool inForeground, required bool verboseLogging}) {
+    // Body logging can be very excessive, so we do not perform it by default.  If in debug mode or configured for verbose
+    // logging, body log foreground requests but keep disabled for verbose getItems calls in background.  If using verbose
+    // logs in debug mode, body log every request.
+    final chopperHttpLogLevel = (kDebugMode && verboseLogging) || ((kDebugMode || verboseLogging) && inForeground)
+        ? Level.body
+        : Level.headers;
 
     final client = ChopperClient(
       client: http.IOClient(
@@ -692,8 +696,8 @@ class JellyfinSpecificInterceptor implements Interceptor {
   }
 }
 
-/// Creates the X-Emby-Authorization header
-Future<String> getAuthHeader() async {
+/// Creates the Authorization header
+Future<String> getAuthHeader({required String deviceId}) async {
   final notAsciiRegex = RegExp(r'[^\x00-\x7F]+');
 
   final finampUserHelper = GetIt.instance<FinampUserHelper>();
@@ -710,7 +714,7 @@ Future<String> getAuthHeader() async {
 
   authHeader = '${authHeader}Client="Finamp", ';
 
-  final deviceInfo = await getDeviceInfo();
+  final deviceInfo = await getDeviceInfo(deviceId: deviceId);
   authHeader = '${authHeader}Device="${deviceInfo.name}",DeviceId="${deviceInfo.id}", ';
 
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -723,7 +727,7 @@ Future<String> getAuthHeader() async {
 
 // return type for deviceInfo
 
-Future<DeviceInfo> getDeviceInfo() async {
+Future<DeviceInfo> getDeviceInfo({required String deviceId}) async {
   DeviceInfo info;
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   String idExtension = kDebugMode
@@ -733,12 +737,10 @@ Future<DeviceInfo> getDeviceInfo() async {
       : "";
   if (Platform.isAndroid) {
     AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
-    final appSetId = await AppSetId().getIdentifier();
-    info = DeviceInfo(name: androidDeviceInfo.name, id: "$appSetId-$idExtension");
+    info = DeviceInfo(name: androidDeviceInfo.name, id: "$deviceId-$idExtension");
   } else if (Platform.isIOS) {
     IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
-    final appSetId = await AppSetId().getIdentifier();
-    info = DeviceInfo(name: iosDeviceInfo.name, id: "$appSetId-$idExtension");
+    info = DeviceInfo(name: iosDeviceInfo.name, id: "$deviceId-$idExtension");
   } else if (Platform.isWindows) {
     WindowsDeviceInfo windowsDeviceInfo = await deviceInfo.windowsInfo;
     final windowsId = windowsDeviceInfo.deviceId;

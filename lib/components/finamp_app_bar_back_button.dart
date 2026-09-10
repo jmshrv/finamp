@@ -25,13 +25,15 @@ class FinampAppBarBackButton extends StatelessWidget {
       }
     }
 
-    return IconButtonWithSemantics(
-      // padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-      label: MaterialLocalizations.of(context).backButtonTooltip,
-      onPressed: onPressed ?? () => Navigator.of(context).pop(),
-      icon: getIcon(),
-      strokeWidth: 1.5,
-      visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-    );
+    return Navigator.of(context).canPop()
+        ? IconButtonWithSemantics(
+            // padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+            label: MaterialLocalizations.of(context).backButtonTooltip,
+            onPressed: onPressed ?? () => Navigator.of(context).maybePop(),
+            icon: getIcon(),
+            strokeWidth: 1.5,
+            visualDensity: VisualDensity(horizontal: 0, vertical: -2),
+          )
+        : SizedBox.shrink();
   }
 }

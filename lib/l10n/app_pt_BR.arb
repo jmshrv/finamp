@@ -85,7 +85,7 @@
             }
         }
     },
-    "downloadsQueued": "Transferindo arquivos...",
+    "downloadsQueued": "Baixando arquivos",
     "logsCopied": "Relatórios/logs copiados.",
     "audioService": "Serviço de áudio",
     "shareLogs": "Compartilhar relatórios/logs",
@@ -130,7 +130,7 @@
     "light": "Claro",
     "tabs": "Abas",
     "unknownArtist": "Artista desconhecido",
-    "showTextOnGridViewSubtitle": "Exibir ou não o texto (título, artista, etc) na grade da tela de música.",
+    "showTextOnGridViewSubtitle": "Exibir ou não o texto (título, artista, etc) na grade da tela de música. O texto sempre é mostrado na tela inicial, ignorando esta configuração.",
     "system": "Sistema",
     "dark": "Escuro",
     "noButtonLabel": "Não",
@@ -511,7 +511,7 @@
     "@shareOfflineListens": {
         "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
     },
-    "yourLikes": "Seus likes",
+    "yourLikes": "Seus likes (de \"{trackName}\")",
     "@yourLikes": {
         "description": "Title for the queue source when the user is playing their liked tracks"
     },
@@ -894,7 +894,7 @@
     "@autoloadLastQueueOnStartup": {
         "description": "Setting to restore last queue on startup"
     },
-    "volumeNormalizationIOSBaseGainEditorSubtitle": "Atualmente, a normalização de volume no iOS requer que o volume de reprodução seja alterado de forma a emular a alteração de ganho. Já que não é possível incrementar o volume acima de 100%, há a necessidade de reduzir o volume por padrão, de forma que seja possível aumentá-lo durante a reprodução de faixas mais suaves. O valor está em decibel (dB), onde -10 dB representa em torno de 30% do volume, -4.5 dB em torno de 60% do volume e -2 dB em torno de 80% do volume.",
+    "volumeNormalizationIOSBaseGainEditorSubtitle": "Escolha o ganho de normalização de volume (em dB)",
     "@volumeNormalizationIOSBaseGainEditorSubtitle": {
         "description": "Subtitle for the input that sets the replay gain base gain on iOS and other non-Android platforms"
     },
@@ -1052,7 +1052,7 @@
         },
         "description": "Options in Select Download Codec dropdown"
     },
-    "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} transcodificado}}",
+    "downloadInfo": "{size} {codec}{bitrate, select, null{} other{ @ {bitrate} transcodificado}}{location, select, null{} other{ ({location})}}",
     "@downloadInfo": {
         "placeholders": {
             "bitrate": {
@@ -1070,7 +1070,7 @@
         },
         "description": "Track info line in downloads screen lists"
     },
-    "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ como {codec} @ {bitrate}}}",
+    "collectionDownloadInfo": "{size}{codec, select, ORIGINAL{} other{ como {codec} @ {bitrate}}}{location, select, null{} other{ ({location})}}",
     "@collectionDownloadInfo": {
         "placeholders": {
             "bitrate": {
@@ -1597,7 +1597,7 @@
     "@startupErrorWorkaround": {
         "description": "The subtitle for how to manually recover from a startup error"
     },
-    "startupErrorTitle": "Algo deu errado na inicialização!",
+    "startupErrorTitle": "Algo deu errado na inicialização do aplicativo!",
     "@startupErrorTitle": {
         "description": "The title for the error screen that shows when startup fails."
     },
@@ -1636,7 +1636,7 @@
     "exportLogs": "Salvar logs",
     "notAvailable": "Não disponível",
     "none": "Nenhum",
-    "formattedRelativeTime": "Retorna uma string de tempo relativo com base em quanto tempo se passou desde que algo aconteceu. Usado para diversos valores de DateTime, como Data da Última Reprodução e Data de Adição.",
+    "formattedRelativeTime": "{type, select, just_now{agora mesmo} minutes{{value} mins atrás} hours{{value} horas atrás} yesterday{ontem} days{{value, plural, =1{1 dia atrás} other{{value} dias atrás}}} other{value}}",
     "@formattedRelativeTime": {
         "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
         "placeholders": {
@@ -1682,13 +1682,13 @@
     "@savingChanges": {
         "description": "Text shown while the changes to a playlist are being saved"
     },
-    "logoutButtonSubtitle": "Fazer login em outro servidor excluirá os downloads existentes.",
+    "logoutButtonSubtitle": "Fazer login em outro servidor excluirá os downloads existentes",
     "showArtistsTracksSection": "Mostrar Sessão de Músicas",
     "useMonochromeIcon": "Usar Logo Monocromática",
     "@useMonochromeIcon": {
         "description": "Toggles the Finamp icon between classic and it being monochromic. This does not change the outside-app-icon"
     },
-    "useMonochromeIconSubtitle": "Isso só afeta o ícone dentro do aplicativo e não o ícone do Launcher",
+    "useMonochromeIconSubtitle": "Isso só afeta o ícone dentro do aplicativo e não o ícone do Launcher.",
     "@useMonochromeIconSubtitle": {
         "description": "Subtitle for the toggle that switches the Finamp icon between classic and it being monochromic."
     },
@@ -1701,5 +1701,19 @@
     "@colorCodeHint": {
         "description": "Hint text for the color code input field. Don't translate 'coffee', unless the translation is also a valid hex color code."
     },
-    "save": "Salvar"
+    "save": "Salvar",
+    "activeLibraries": "Bibliotecas Ativas",
+    "@activeLibraries": {
+        "description": "Active Libraries"
+    },
+    "shuffleSome": "Misturar algumas músicas",
+    "editItemTitle": "Editar {itemType, select, playlist{Playlist} other{}}",
+    "@editItemTitle": {
+        "placeholders": {
+            "itemType": {
+                "type": "String"
+            }
+        }
+    },
+    "autoSwitchItemCurationTypeTitle": "Automaticamente trocar tipo de cura de item"
 }

@@ -126,12 +126,12 @@
     "customLocationsBuggy": "Vlastní umístění mohou být extrémně chybové a ve většině případů nejsou doporučeny. Umístění v systémové složce „Music“ zabraňují ukládání obalů alb z důvodu omezení systému.",
     "enterLowPriorityStateOnPause": "Po pozastavení vstoupit do stavu nízké priority",
     "shuffleAllTrackCount": "Počet skladeb pro náhodné přehrávání všeho",
-    "viewType": "Typ zobrazení",
-    "viewTypeSubtitle": "Typ zobrazení pro hudební obrazovku",
+    "viewType": "Typ zobrazení hudební obrazovky",
+    "viewTypeSubtitle": "Ovládá režim mřížky nebo seznamu pro všechny karty obrazovky s hudbou, kromě domovské obrazovky.",
     "list": "Seznam",
     "useCoverAsBackground": "Zobrazit rozmazaný obal jako pozadí přehrávače",
     "useCoverAsBackgroundSubtitle": "Zda použít rozmazaný obal alba jako pozadí na obrazovce přehrávače.",
-    "system": "Systémový",
+    "system": "Podle systému",
     "light": "Světlý",
     "theme": "Motiv",
     "dark": "Tmavý",
@@ -402,7 +402,7 @@
             }
         }
     },
-    "confirmPlayNext": "{type, select, track{Skladba bude přehrána} album{Album bude přehráno} artist{Umělec bude přehrán} playlist{Seznam skladeb bude přehrán} genre{Žánr bude přehrán} other{Item}} jako další",
+    "confirmPlayNext": "{type, select, track{Skladba bude přehrána} album{Album bude přehráno} artist{Umělec bude přehrán} playlist{Seznam skladeb bude přehrán} genre{Žánr bude přehrán} disc{Disk bude přehrán} other{Položka bude přehrána}} jako další",
     "@confirmPlayNext": {
         "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
         "placeholders": {
@@ -411,7 +411,7 @@
             }
         }
     },
-    "yourLikes": "Vaše oblíbené",
+    "yourLikes": "Vaše oblíbené (z „{trackName}“)",
     "@yourLikes": {
         "description": "Title for the queue source when the user is playing their liked tracks"
     },
@@ -563,7 +563,7 @@
     "@loopModeAllButtonLabel": {
         "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
     },
-    "queuesScreen": "Obnovit právě hrající",
+    "queuesScreen": "Minulé fronty",
     "@queuesScreen": {
         "description": "Title for the screen where older now playing queues can be restored"
     },
@@ -1192,7 +1192,7 @@
     "@volumeNormalizationSwitchSubtitle": {
         "description": "Subtitle for the switch that toggles replay gain"
     },
-    "startInstantMixForIndividualTracksSwitchSubtitle": "Pokud je povoleno, klepnutím na skladbu na kartě skladeb spustíte okamžitý mix této skladby, namísto přehrání pouze té, na kterou jste klepli.",
+    "startInstantMixForIndividualTracksSwitchSubtitle": "Pokud je povoleno, klepnutím na skladbu na kartě skladeb spustíte okamžitý mix této skladby, namísto přehrávání skladeb v pořadí.",
     "syncComplete": "Všechny stažené byly znovu synchronizovány.",
     "@syncComplete": {
         "description": "Message displayed after download sync completes."
@@ -2174,7 +2174,7 @@
     "@quickConnectAuthorizationMenuStateSubtitleIdle": {
         "description": "Subtitle for the quick connect authorization menu state info (above the input field) while the code hasn't been submitted yet"
     },
-    "quickConnectAuthorizationMenuStateTitleProcessing": "Pokouším se autorizovat žádost",
+    "quickConnectAuthorizationMenuStateTitleProcessing": "Autorizace žádosti",
     "@quickConnectAuthorizationMenuStateTitleProcessing": {
         "description": "Title for the quick connect authorization menu state info (above the input field) while a request is being processed"
     },
@@ -3238,16 +3238,8 @@
     "@browsePlaybackHistoryActionDescription": {
         "description": "Description of a home screen quick action"
     },
-    "playRandomAlbumActionDescription": "Spustí přehrávání náhodného alba",
-    "@playRandomAlbumActionDescription": {
-        "description": "Description of a home screen quick action"
-    },
     "surpriseMeActionDescription": "Spustí „Průběžné“ rádio z náhodné skladby",
     "@surpriseMeActionDescription": {
-        "description": "Description of a home screen quick action"
-    },
-    "playRandomTrackActionDescription": "Spustí přehrávání náhodné skladby",
-    "@playRandomTrackActionDescription": {
         "description": "Description of a home screen quick action"
     },
     "playRandomFavoriteItemActionDescription": "Spustí přehrávání náhodné oblíbené položky",
@@ -3270,15 +3262,7 @@
     "@shuffleTracksAction": {
         "description": "Name of a home screen quick action"
     },
-    "randomAlbumAction": "Náhodné album",
-    "@randomAlbumAction": {
-        "description": "Name of a home screen quick action"
-    },
-    "randomTrackAction": "Náhodná skladba",
-    "@randomTrackAction": {
-        "description": "Name of a home screen quick action"
-    },
-    "randomFavoriteAction": "Náhodné oblíbené",
+    "randomFavoriteAction": "{itemType, select, albums{Náhodné oblíbené album} tracks{Náhodná oblíbená skladba} playlists{Náhodný oblíbený seznam skladeb} performingArtists{Náhodný oblíbený umělec} albumArtists{Náhodný oblíbený umělec alba} none{Náhodný oblíbený <Type>} other{}}",
     "@randomFavoriteAction": {
         "description": "Name of a home screen quick action"
     },
@@ -3417,7 +3401,7 @@
             }
         }
     },
-    "homeAllPlaylistsWarning": "Opravdu chcete stáhnout všechny seznamy skladeb?  Toto stáhne každý seznam skladeb, ne jen ty v této sekci.",
+    "homeAllPlaylistsWarning": "Opravdu chcete stáhnout všechny seznamy skladeb? Toto stáhne každý seznam skladeb, ne jen ty v této sekci.",
     "@homeAllPlaylistsWarning": {
         "description": "Warning presented when pressing the download button on playlist home sections with a filter applied.  This is shown because the download will not apply the filter."
     },
@@ -3464,5 +3448,241 @@
                 "example": "syncingLocal"
             }
         }
+    },
+    "clientCertificate": "Klientský certifikát (mTLS)",
+    "@clientCertificate": {
+        "description": "Title for the setting that allows managing SSL client certificates used for authentication"
+    },
+    "clientCertificateUnavailable": "Není nastaven žádný certifikát, dodatečná autentifikace klienta zakázána",
+    "@clientCertificateUnavailable": {
+        "description": "Message shown when the user has no SSL client certificate available to use."
+    },
+    "clientCertificateInstalled": "Certifikát nainstalován",
+    "@clientCertificateInstalled": {
+        "description": "Message shown when the user has successfully installed an SSL client certificate."
+    },
+    "clientCertificateDescription": "Klientský certifikát TLS (.p12 nebo .pfx) je využíván pro dodatečnou autentifikaci tohoto zařízení s vaším serverem Jellyfin. Vyžadováno pouze, pokud je váš server nastaven pro vzájemné TLS.",
+    "@clientCertificateDescription": {
+        "description": "Explanatory text in the client certificate settings menu describing what a client certificate is used for"
+    },
+    "importClientCertificate": "Importovat certifikát",
+    "@importClientCertificate": {
+        "description": "Label for the button to import a new SSL client certificate."
+    },
+    "removeClientCertificate": "Odstranit certifikát",
+    "@removeClientCertificate": {
+        "description": "Label for the button to remove the currently installed SSL client certificate."
+    },
+    "clientCertificatePasswordTitle": "Heslo certifikátu",
+    "@clientCertificatePasswordTitle": {
+        "description": "Title of the dialog prompting the user to enter the password for the client certificate being imported."
+    },
+    "clientCertificatePasswordHint": "Heslo",
+    "@clientCertificatePasswordHint": {
+        "description": "Hint text for the password input field when importing a client certificate."
+    },
+    "clientCertificateDeleteConfirm": "Odstranit nainstalovaný certifikát? Autentifikace klienta bude zakázána.",
+    "@clientCertificateDeleteConfirm": {
+        "description": "Confirmation prompt shown before removing the installed client certificate."
+    },
+    "clientCertificateImportSuccess": "Certifikát úspěšně importován",
+    "@clientCertificateImportSuccess": {
+        "description": "Message shown after successfully importing a client certificate."
+    },
+    "clientCertificateImportError": "Nepodařilo se importovat certifikát",
+    "@clientCertificateImportError": {
+        "description": "Error message shown when importing a client certificate fails."
+    },
+    "clientCertificateRequired": "Je vyžadován klientský certifikát",
+    "@clientCertificateRequired": {
+        "description": "Message shown on the server selection screen when the server requires a client certificate to be provided."
+    },
+    "activeLibraries": "Aktivní knihovny",
+    "@activeLibraries": {
+        "description": "Active Libraries"
+    },
+    "volumeControlDisabledCastingHint": "Zvuk je streamován do zařízení, které nepodporuje ovládání hlasitosti v aplikaci.",
+    "@volumeControlDisabledCastingHint": {
+        "description": "Hint text displayed below the volume bar when the in-app volume slider is disabled because audio is being cast to a device that bypasses the in-app volume handling and handles its own volume, such as when using Airplay."
+    },
+    "selectItemTypes": "Vybrat typy položek",
+    "@selectItemTypes": {
+        "description": "Title for 'play random item' quick action edit menu"
+    },
+    "randomAlbums": "Náhodná alba",
+    "@randomAlbums": {
+        "description": "Name of a home screen section preset"
+    },
+    "randomAlbumArtists": "Náhodní umělci alb",
+    "@randomAlbumArtists": {
+        "description": "Name of a home screen section preset"
+    },
+    "recentlyAddedPlaylists": "Nedávno vytvořené seznamy skladeb",
+    "@recentlyAddedPlaylists": {
+        "description": "Name of a home screen section preset"
+    },
+    "randomAlbumsDescription": "Alba v náhodném pořadí",
+    "@randomAlbumsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "randomArtistsDescription": "Umělci v náhodném pořadí",
+    "@randomArtistsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "recentlyAddedPlaylistsDescription": "Seznamy skladeb dle data vytvoření, počínaje nejnovějším",
+    "@recentlyAddedPlaylistsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "playRandomItemActionDescription": "Spustí přehrávání náhodné položky",
+    "@playRandomItemActionDescription": {
+        "description": "Description of a home screen quick action"
+    },
+    "randomItemAction": "Náhodné {itemType, select, albums{album} tracks{skladba} playlists{seznam skladeb} performingArtists{umělci} albumArtists{umělec alba} none{položka typu <Type>} other{položka}}",
+    "@randomItemAction": {
+        "placeholders": {
+            "itemType": {
+                "type": "String",
+                "description": "Localized name of item type to be selected, or placeholder 'multiple'"
+            }
+        },
+        "description": "Name of a home screen quick action"
+    },
+    "randomPlaylistAction": "Náhodný seznam skladeb",
+    "@randomPlaylistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomArtistAction": "Náhodný umělec",
+    "@randomArtistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomGenreAction": "Náhodný žánr",
+    "@randomGenreAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteAlbumAction": "Náhodné oblíbené album",
+    "@randomFavoriteAlbumAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteTrackAction": "Náhodná oblíbená skladba",
+    "@randomFavoriteTrackAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoritePlaylistAction": "Náhodný oblíbený seznam skladeb",
+    "@randomFavoritePlaylistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteArtistAction": "Náhodný oblíbený umělec",
+    "@randomFavoriteArtistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteGenreAction": "Náhodný oblíbený žánr",
+    "@randomFavoriteGenreAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "cancelChanges": "Zrušit změny",
+    "@cancelChanges": {
+        "description": "Button on sort and filter menu that clears any pending changes."
+    },
+    "applyChangesOnClose": "Změny se použijí po zavření nabídky",
+    "@applyChangesOnClose": {
+        "description": "Notification on sort and filter menu that currently pending changes will be automatically applied on close."
+    },
+    "removeFromQueue": "Odstranit z fronty",
+    "featureChipName": "{chipName, select, explicit{Explicitní} playCount{Počet přehrání} additionalPeople{Další lidé} playbackMode{Režim přehrávání} codec{Kodek} bitRate{Datový tok} bitDepth{Datová hloubka} sampleRate{Vzorkovací frekvence} size{Velikost} normalizationGain{Zisk normalizace} other{{chipName}}}",
+    "@featureChipName": {
+        "placeholders": {
+            "chipName": {
+                "type": "String",
+                "example": "playCount"
+            }
+        },
+        "description": "Titles for settings controlling which pieces of advanced track info are displayed."
+    },
+    "featureChipDescription": "{chipName, select, explicit{Označí skladby obsahující explicitní obsah} additionalPeople{Lidé propojení se skladbou, kteří nejsou umělci, pokud existují (spisovatelé, textaři atd.)} playbackMode{Informace o stavu streamování a překódování} bitDepth{Počet bitů na vzorek zvuku. Použitelné pouze u bezztrátových kodeků, obvykle 16 bitů.} sampleRate{Počet vzorků zvuku za sekundu. Obvykle 44.1 kHz.} normalizationGain{Aktuální aktivní úroveň ReplayGain} size{Velikost původního souboru skladby} other{null}}",
+    "@featureChipDescription": {
+        "placeholders": {
+            "chipName": {
+                "type": "String",
+                "example": "playCount"
+            }
+        },
+        "description": "Descriptions of different pieces of advanced track info."
+    },
+    "maximizePlayer": "Maximalizovat přehrávač",
+    "collapsePlayer": "Sbalit přehrávač na postranní lištu",
+    "addSpecialDownloads": "Přidat zvláštní stahování",
+    "@addSpecialDownloads": {
+        "description": "Button on downloads screen which allows adding special downloads, such as all playlists or all favorites."
+    },
+    "allTracks": "Všechny skladby (z „{trackName}“)",
+    "@allTracks": {
+        "description": "Queue source when playing from tracks screen.",
+        "placeholders": {
+            "trackName": {
+                "type": "String",
+                "example": "Never Gonna Give You Up"
+            }
+        }
+    },
+    "artistFilter": "Umělec: {name}",
+    "@artistFilter": {
+        "description": "Name of artistFilter",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "verboseLogging": "Podrobné protokolování",
+    "@verboseLogging": {
+        "description": "Title for the toggle that enables detailed logging on the logs screen"
+    },
+    "verboseLoggingSubtitle": "Ponechávat podrobné protokoly pro nahlašování chyb. Ponechte vypnuté pro lepší výkon při přehrávání.",
+    "@verboseLoggingSubtitle": {
+        "description": "Subtitle explaining the verbose logging toggle"
+    },
+    "perTabGridMode": "Vybrat dle karty",
+    "showFastScrollerSubtitle": "Zobrazit nebo skrýt abecední seznam v pravé části karet s hudbou, který umožňuje rychle přejít na písmena.",
+    "quickActionBanner": "Podívejte se na některá z často měněných nastavení!",
+    "@quickActionBanner": {
+        "description": "Banner directing new users to the quick settings, where they can adjust the most commonly used settings"
+    },
+    "themeSettingTitle": "Barevný motiv aplikace (tmavý/světlý)",
+    "@themeSettingTitle": {
+        "description": "Title for the setting that allows you to override the system theme and force dark or light mode"
+    },
+    "perTabGridModeScreen": "Nastavit typy zobrazení dle karty",
+    "perTabAlbumGrid": "Alba pouze v mřížce",
+    "quickSettingsScreen": "Rychlá nastavení",
+    "quickSettingsScreenDescription": "Přizpůsobte si Finamp pomocí těchto základních možností. Kdykoli se sem můžete vrátit skrze nastavení.",
+    "quickSettingsTabsLink": "Přesunout a skrýt karty",
+    "quickSettingsTranscodeLink": "Všechna nastavení překódování",
+    "quickSettingsLayoutLink": "Všechna nastavení rozložení a motivu",
+    "quickSettingsAllSettingsLink": "Všechna nastavení",
+    "quickSettingsNetworkLink": "Nastavte si lokální adresu vašeho serveru",
+    "inAlbumOrPlaylist": "Pořadí alba / seznamu skladeb",
+    "@inAlbumOrPlaylist": {
+        "description": "Sorting order for tracks in an album or playlist (by disc, then index, then name"
+    },
+    "discUnknown": "Neznámý disk",
+    "@discUnknown": {
+        "description": "Shown when the disc number is unknown or not set for a group of tracks on the album screen"
+    },
+    "discUnknownOfAlbum": "[Neznámý disk] {albumName}",
+    "@discUnknownOfAlbum": {
+        "description": "Used when a single disc of album is opened, but the disc number is unknown, then album name is replaced with this string",
+        "placeholders": {
+            "albumName": {
+                "type": "String"
+            }
+        }
+    },
+    "advanced": "Pokročilé",
+    "@advanced": {
+        "description": "Label for the button on the login screen that opens the advanced options screen, and the title of that screen."
+    },
+    "clientCertificatesUnsupported": "Klientské certifikáty nejsou na této platformě podporovány",
+    "@clientCertificatesUnsupported": {
+        "description": "Message shown when client certificates are not supported on the user's current platform."
     }
 }

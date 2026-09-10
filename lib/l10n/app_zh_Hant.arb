@@ -148,8 +148,8 @@
     "enterLowPriorityStateOnPauseSubtitle": "允許暫停後可滑掉通知，並讓 Android 關閉播放服務。",
     "shuffleAllTrackCount": "隨機播放所有歌曲次數",
     "shuffleAllTrackCountSubtitle": "使用全部隨機播放按鈕時，要載入的歌曲數量。",
-    "viewType": "瀏覽方式",
-    "viewTypeSubtitle": "調整音樂列表的瀏覽方式",
+    "viewType": "音樂列表顯示方式",
+    "viewTypeSubtitle": "調整所有音樂列表分頁以網格或清單模式顯示，主畫面除外。",
     "list": "列表",
     "grid": "網格",
     "landscape": "橫向",
@@ -157,7 +157,7 @@
     "useCoverAsBackground": "使用模糊的專輯封面作為播放介面的背景",
     "useCoverAsBackgroundSubtitle": "在播放介面中是否顯示模糊的專輯封面作為背景。",
     "theme": "主題",
-    "system": "系統",
+    "system": "跟隨系統設定",
     "light": "淺色",
     "dark": "深色",
     "tabs": "分頁",
@@ -705,7 +705,7 @@
     "@playbackHistory": {
         "description": "Title for the playback history screen, where the user can see a list of recently played tracks, sorted by "
     },
-    "yourLikes": "你喜歡的",
+    "yourLikes": "我的收藏 (從\"{trackName}\"開始)",
     "@yourLikes": {
         "description": "Title for the queue source when the user is playing their liked tracks"
     },
@@ -745,7 +745,7 @@
             }
         }
     },
-    "confirmPlayNext": "{type, select, track{歌曲} album{專輯} artist{藝人} playlist{播放清單} genre{類型} other{內容}}將會在下一首播放",
+    "confirmPlayNext": "{type, select, track{歌曲} album{專輯} artist{藝人} playlist{播放清單} genre{類型} disc{光碟} other{內容}}將會在下一首播放",
     "@confirmPlayNext": {
         "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
         "placeholders": {
@@ -1633,7 +1633,7 @@
     },
     "appearsOnAlbums": "收錄於",
     "albumArtists": "專輯藝人",
-    "performingArtists": "歌曲藝人",
+    "performingArtists": "演出藝人",
     "currentVolumeFeatureText": "{volume}% 音量",
     "@currentVolumeFeatureText": {
         "description": "Label for the feature chip that is shown if the volume is not 100%",
@@ -1736,7 +1736,7 @@
     },
     "notAvailable": "無法使用",
     "autoSwitchItemCurationTypeSubtitle": "若無可用內容，將自動切換為其他類型以持續顯示推薦內容。",
-    "performingArtist": "歌曲藝人",
+    "performingArtist": "演出藝人",
     "formattedRelativeTime": "{type, select, just_now{剛剛} minutes{{value} 分鐘前} hours{{value} 小時前} yesterday{昨天} days{{value, plural, =1{1 天前} other{{value} 天前}}} other{{value}}}",
     "@formattedRelativeTime": {
         "description": "Returns a relative time string based on how long ago something happened. Used for various DateTime values such as Date Last Played and Date Added.",
@@ -3177,7 +3177,7 @@
     "@playRandomFavoriteItemActionDescription": {
         "description": "Description of a home screen quick action"
     },
-    "randomFavoriteAction": "隨機播放收藏",
+    "randomFavoriteAction": "隨機播放收藏的{itemType, select, albums{專輯} tracks{歌曲} playlists{清單內容} performingArtists{演出藝人} albumArtists{專輯藝人} none{<自訂>類型} other{內容}}",
     "@randomFavoriteAction": {
         "description": "Name of a home screen quick action"
     },
@@ -3263,16 +3263,8 @@
     "@browsePlaybackHistoryActionDescription": {
         "description": "Description of a home screen quick action"
     },
-    "playRandomAlbumActionDescription": "隨機播放任一專輯",
-    "@playRandomAlbumActionDescription": {
-        "description": "Description of a home screen quick action"
-    },
     "surpriseMeActionDescription": "隨機選擇一首歌曲，並以電台模式開始連續播放",
     "@surpriseMeActionDescription": {
-        "description": "Description of a home screen quick action"
-    },
-    "playRandomTrackActionDescription": "隨機播放任一歌曲",
-    "@playRandomTrackActionDescription": {
         "description": "Description of a home screen quick action"
     },
     "playPreviousQueueActionDescription": "恢復播放你最近封存的播放佇列",
@@ -3289,14 +3281,6 @@
     },
     "shuffleTracksAction": "隨機播放歌曲",
     "@shuffleTracksAction": {
-        "description": "Name of a home screen quick action"
-    },
-    "randomAlbumAction": "隨機播放專輯",
-    "@randomAlbumAction": {
-        "description": "Name of a home screen quick action"
-    },
-    "randomTrackAction": "隨機播放歌曲",
-    "@randomTrackAction": {
         "description": "Name of a home screen quick action"
     },
     "previousQueueAction": "上次的播放佇列",
@@ -3467,5 +3451,199 @@
                 "example": "syncingLocal"
             }
         }
-    }
+    },
+    "clientCertificate": "mTLS(SSL) 用戶端憑證",
+    "@clientCertificate": {
+        "description": "Title for the setting that allows managing SSL client certificates used for authentication"
+    },
+    "clientCertificateUnavailable": "尚未設定憑證，用戶端驗證已停用",
+    "@clientCertificateUnavailable": {
+        "description": "Message shown when the user has no SSL client certificate available to use."
+    },
+    "clientCertificateInstalled": "已安裝憑證",
+    "@clientCertificateInstalled": {
+        "description": "Message shown when the user has successfully installed an SSL client certificate."
+    },
+    "clientCertificateDescription": "TLS用戶端憑證（.p12 或 .pfx）可用來讓Jellyfin伺服器驗證此裝置。僅在伺服器已設定雙向TLS時才需要。",
+    "@clientCertificateDescription": {
+        "description": "Explanatory text in the client certificate settings menu describing what a client certificate is used for"
+    },
+    "importClientCertificate": "匯入憑證",
+    "@importClientCertificate": {
+        "description": "Label for the button to import a new SSL client certificate."
+    },
+    "removeClientCertificate": "移除憑證",
+    "@removeClientCertificate": {
+        "description": "Label for the button to remove the currently installed SSL client certificate."
+    },
+    "clientCertificatePasswordTitle": "憑證密碼",
+    "@clientCertificatePasswordTitle": {
+        "description": "Title of the dialog prompting the user to enter the password for the client certificate being imported."
+    },
+    "clientCertificatePasswordHint": "密碼",
+    "@clientCertificatePasswordHint": {
+        "description": "Hint text for the password input field when importing a client certificate."
+    },
+    "clientCertificateDeleteConfirm": "確定要移除已安裝的憑證嗎？移除後將停用用戶端驗證。",
+    "@clientCertificateDeleteConfirm": {
+        "description": "Confirmation prompt shown before removing the installed client certificate."
+    },
+    "clientCertificateImportSuccess": "已成功匯入憑證",
+    "@clientCertificateImportSuccess": {
+        "description": "Message shown after successfully importing a client certificate."
+    },
+    "clientCertificateImportError": "匯入憑證失敗",
+    "@clientCertificateImportError": {
+        "description": "Error message shown when importing a client certificate fails."
+    },
+    "clientCertificateRequired": "需要用戶端憑證",
+    "@clientCertificateRequired": {
+        "description": "Message shown on the server selection screen when the server requires a client certificate to be provided."
+    },
+    "activeLibraries": "使用中的音樂庫",
+    "@activeLibraries": {
+        "description": "Active Libraries"
+    },
+    "volumeControlDisabledCastingHint": "目前投放音訊的裝置不支援在應用程式內調整音量。",
+    "@volumeControlDisabledCastingHint": {
+        "description": "Hint text displayed below the volume bar when the in-app volume slider is disabled because audio is being cast to a device that bypasses the in-app volume handling and handles its own volume, such as when using Airplay."
+    },
+    "selectItemTypes": "選擇內容的類型",
+    "@selectItemTypes": {
+        "description": "Title for 'play random item' quick action edit menu"
+    },
+    "randomAlbums": "隨機專輯",
+    "@randomAlbums": {
+        "description": "Name of a home screen section preset"
+    },
+    "randomAlbumArtists": "隨機專輯藝人",
+    "@randomAlbumArtists": {
+        "description": "Name of a home screen section preset"
+    },
+    "recentlyAddedPlaylists": "最近建立的播放清單",
+    "@recentlyAddedPlaylists": {
+        "description": "Name of a home screen section preset"
+    },
+    "randomAlbumsDescription": "隨機排列專輯",
+    "@randomAlbumsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "randomArtistsDescription": "隨機排列藝人",
+    "@randomArtistsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "recentlyAddedPlaylistsDescription": "依建立日期排列播放清單，從最新的開始排序",
+    "@recentlyAddedPlaylistsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "playRandomItemActionDescription": "開始播放隨機內容",
+    "@playRandomItemActionDescription": {
+        "description": "Description of a home screen quick action"
+    },
+    "randomItemAction": "隨機播放{itemType, select, albums{專輯} tracks{歌曲} playlists{清單內容} performingArtists{演出藝人} albumArtists{專輯藝人} none{<自訂>類型} other{內容}}",
+    "@randomItemAction": {
+        "placeholders": {
+            "itemType": {
+                "type": "String",
+                "description": "Localized name of item type to be selected, or placeholder 'multiple'"
+            }
+        },
+        "description": "Name of a home screen quick action"
+    },
+    "randomPlaylistAction": "隨機播放播放清單",
+    "@randomPlaylistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomArtistAction": "隨機播放藝人",
+    "@randomArtistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomGenreAction": "隨機播放類型",
+    "@randomGenreAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteAlbumAction": "隨機播放收藏的專輯",
+    "@randomFavoriteAlbumAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteTrackAction": "隨機播放收藏的歌曲",
+    "@randomFavoriteTrackAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoritePlaylistAction": "隨機播放收藏的播放清單",
+    "@randomFavoritePlaylistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteArtistAction": "隨機播放收藏的藝人",
+    "@randomFavoriteArtistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteGenreAction": "隨機播放收藏的類型",
+    "@randomFavoriteGenreAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "artistFilter": "藝人：{name}",
+    "@artistFilter": {
+        "description": "Name of artistFilter",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "cancelChanges": "取消變更",
+    "@cancelChanges": {
+        "description": "Button on sort and filter menu that clears any pending changes."
+    },
+    "applyChangesOnClose": "關閉選單時將套用變更",
+    "@applyChangesOnClose": {
+        "description": "Notification on sort and filter menu that currently pending changes will be automatically applied on close."
+    },
+    "removeFromQueue": "從播放佇列中移除",
+    "featureChipName": "{chipName, select, explicit{限制級內容} playCount{播放次數} additionalPeople{其他參與人員} playbackMode{播放模式} codec{編碼格式} bitRate{位元率} bitDepth{位元深度} sampleRate{取樣率} size{檔案大小} normalizationGain{音量標準化} other{{chipName}}}",
+    "@featureChipName": {
+        "placeholders": {
+            "chipName": {
+                "type": "String",
+                "example": "playCount"
+            }
+        },
+        "description": "Titles for settings controlling which pieces of advanced track info are displayed."
+    },
+    "featureChipDescription": "{chipName, select, explicit{標示含有兒童不宜內容的歌曲} additionalPeople{與歌曲相關的其他人員（如作曲者、作詞者等）} playbackMode{串流與轉碼狀態資訊} bitDepth{每個音訊取樣的位元數。僅適用於無損編碼格式，通常為 16 位元。} sampleRate{每秒的音訊取樣次數，通常為 44.1 kHz。} normalizationGain{目前套用的重播增益值} size{歌曲原始檔案的大小} other{null}}",
+    "@featureChipDescription": {
+        "placeholders": {
+            "chipName": {
+                "type": "String",
+                "example": "playCount"
+            }
+        },
+        "description": "Descriptions of different pieces of advanced track info."
+    },
+    "maximizePlayer": "展開播放介面",
+    "collapsePlayer": "將播放介面縮至右側",
+    "addSpecialDownloads": "新增自訂下載",
+    "@addSpecialDownloads": {
+        "description": "Button on downloads screen which allows adding special downloads, such as all playlists or all favorites."
+    },
+    "allTracks": "所有歌曲 (從\"{trackName}\"開始)",
+    "@allTracks": {
+        "description": "Queue source when playing from tracks screen.",
+        "placeholders": {
+            "trackName": {
+                "type": "String",
+                "example": "Never Gonna Give You Up"
+            }
+        }
+    },
+    "verboseLogging": "詳細記錄",
+    "@verboseLogging": {
+        "description": "Title for the toggle that enables detailed logging on the logs screen"
+    },
+    "verboseLoggingSubtitle": "保留詳細日誌以供錯誤回報使用。若要獲得較佳的播放效能，請關閉此功能。",
+    "@verboseLoggingSubtitle": {
+        "description": "Subtitle explaining the verbose logging toggle"
+    },
+    "perTabGridMode": "依分頁個別選擇",
+    "showFastScrollerSubtitle": "顯示或隱藏音樂分頁右側的字母索引，可快速跳至指定字母。"
 }

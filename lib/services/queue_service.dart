@@ -273,7 +273,7 @@ class QueueService {
     }
 
     if (allTracks.isEmpty) {
-      _queueServiceLogger.fine("Queue is empty");
+      _queueServiceLogger.info("Queue is empty");
       _currentTrack = null;
       _audioHandler.playbackState.add(
         PlaybackState(
@@ -471,7 +471,7 @@ class QueueService {
     if (_savedQueueState == SavedQueueState.loading) {
       return Future.error("A saved queue is currently loading");
     }
-    _queueServiceLogger.finest("Loading stored queue: $info");
+    _queueServiceLogger.info("Loading stored queue: $info");
 
     SavedQueueState finalState = SavedQueueState.failed;
     try {
@@ -797,7 +797,7 @@ class QueueService {
         );
       }
 
-      _queueServiceLogger.finest("Replacing whole queue with ${itemList.length} items.");
+      _queueServiceLogger.info("Replacing whole queue with ${itemList.length} items.");
 
       if (!isRestoredQueue) {
         archiveSavedQueue();
@@ -1142,7 +1142,7 @@ class QueueService {
         false,
         "PreCachedPlayableSlice should always have enough tracks to begin playback.  Was the queue manually cleared?",
       );
-      _queueServiceLogger.fine("Queue was already empty when inserting followup items");
+      _queueServiceLogger.info("Queue was already empty when inserting followup items");
       return;
     }
     List<FinampQueueItem> queueItems = [];
@@ -1165,7 +1165,7 @@ class QueueService {
       // than playing back unshuffled.
       queueItems.shuffle();
 
-      _queueServiceLogger.fine(
+      _queueServiceLogger.info(
         "Added ${items.length} followup items to shuffled queue from '${source.name}' (${source.type})",
       );
 
@@ -1176,7 +1176,7 @@ class QueueService {
       int earliestQueueOffset = adjustedQueueIndex + _queueNextUp.length + min(_audioHandler.audioSources.length, 1);
       offset = offset.clamp(earliestQueueOffset, _audioHandler.audioSources.length);
 
-      _queueServiceLogger.fine(
+      _queueServiceLogger.info(
         "Inserted ${items.length} followup items into queue at index $offset from '${source.name}' (${source.type})",
       );
 
@@ -1469,6 +1469,7 @@ class QueueService {
     await _audioHandler.setShuffleMode(mode);
     //await _audioHandler.playbackState.where((event) => event.shuffleMode == mode).first;
     _buildQueueFromNativePlayerQueue();
+    await _audioHandler.refreshPlaybackStateAndMediaNotification();
   }
 
   FinampPlaybackOrder get playbackOrder => _playbackOrder;

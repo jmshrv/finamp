@@ -14,6 +14,7 @@ import 'package:finamp/screens/language_selection_screen.dart';
 import 'package:finamp/screens/layout_settings_screen.dart';
 import 'package:finamp/screens/network_settings_screen.dart';
 import 'package:finamp/screens/playback_reporting_settings_screen.dart';
+import 'package:finamp/screens/quick_settings_screen.dart';
 import 'package:finamp/screens/transcoding_settings_screen.dart';
 import 'package:finamp/screens/view_selector.dart';
 import 'package:finamp/screens/volume_normalization_settings_screen.dart';
@@ -38,8 +39,8 @@ class SettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
-  static const repoLink = "https://github.com/jmshrv/finamp";
-  static const releaseNotesLink = "https://github.com/jmshrv/finamp/releases";
+  static const repoLink = "https://github.com/finamp-app/finamp";
+  static const releaseNotesLink = "https://github.com/finamp-app/finamp/releases";
   static const translationsLink = "https://hosted.weblate.org/projects/finamp";
 
   @override
@@ -64,6 +65,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 final localizations = AppLocalizations.of(context)!;
                 final applicationLegalese = AppLocalizations.of(context)!.applicationLegalese(repoLink);
                 PackageInfo packageInfo = await PackageInfo.fromPlatform();
+                if (!context.mounted) return;
 
                 ThemeData theme = Theme.of(context);
                 const linkStyle = TextStyle(color: Colors.blue, decoration: TextDecoration.underline);
@@ -135,6 +137,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       body: ListView(
         padding: const EdgeInsets.only(bottom: 200.0),
         children: [
+          ListTile(
+            leading: const Icon(TablerIcons.sparkles),
+            title: Text(AppLocalizations.of(context)!.quickSettingsScreen),
+            onTap: () => Navigator.of(
+              context,
+            ).pushNamed(QuickSettingsScreen.routeName, arguments: QuickSettingsScreen.fromSettingsScreen),
+          ),
           ListTile(
             leading: const Icon(TablerIcons.home),
             title: Text(AppLocalizations.of(context)!.homeScreenSettingsTitle),
@@ -213,17 +222,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             title: Text(AppLocalizations.of(context)!.quickConnectAuthorizationMenuButtonTitle),
             onTap: () => showQuickConnectAuthorizationMenu(context: context),
           ),
-          if (ClientCertificateInstaller.isSupported)
-            ListTile(
-              leading: Icon(TablerIcons.certificate),
-              title: Text(AppLocalizations.of(context)!.clientCertificate),
-              subtitle: Text(
-                ref.watch(finampSettingsProvider.clientCertificate) != null
-                    ? AppLocalizations.of(context)!.clientCertificateInstalled
-                    : AppLocalizations.of(context)!.clientCertificateUnavailable,
-              ),
-              onTap: () => showClientCertificateMenu(context: context),
+          ListTile(
+            leading: Icon(TablerIcons.certificate),
+            title: Text(AppLocalizations.of(context)!.clientCertificate),
+            subtitle: Text(
+              !ClientCertificateInstaller.isSupported
+                  ? AppLocalizations.of(context)!.clientCertificatesUnsupported
+                  : ref.watch(finampSettingsProvider.clientCertificate) != null
+                  ? AppLocalizations.of(context)!.clientCertificateInstalled
+                  : AppLocalizations.of(context)!.clientCertificateUnavailable,
             ),
+            enabled: ClientCertificateInstaller.isSupported,
+            onTap: () => showClientCertificateMenu(context: context),
+          ),
           const LogoutListTile(),
         ],
       ),

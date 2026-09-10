@@ -58,7 +58,63 @@
   </screenshots>
   <launchable type="desktop-id">com.unicornsonlsd.finamp.desktop</launchable>
   <releases>
-  <!-- TODO mention Finamp now officially supporting Linux mobile -->
+    <release version="1.0.1-beta" date="2026-09-02">
+      <url
+        type="details"
+      >https://github.com/jmshrv/finamp/releases/tag/1.0.1-beta</url>
+      <description>
+        <p>This release was updated to 1.0.1-beta early on due to some issues with 1.0.0-beta. 1.0.0-beta was never published on Flathub.</p>
+        <p>
+          New Features
+        </p>
+        <ul>
+          <li>Quick Settings</li>
+          <li>Choose between list and grid mode for each tab</li>
+        </ul>
+        <p>
+          Bug Fixes
+        </p>
+        <ul>
+          <li>Fixed slow load times on Jellyfin 12 when browsing tracks and playlists</li>
+          <li>Fixed filters applying to albums and playlists instead of only to tabs</li>
+          <li>Fixed adding long queues or playlists to another playlist</li>
+          <li>Reduced repetition when using "random..." quick actions</li>
+        </ul>
+        <p>
+          <em>Thank you for using Finamp!</em>
+        </p>
+      </description>
+    </release>
+    <release version="0.9.25-beta" date="2026-08-01">
+      <url
+        type="details"
+      >https://github.com/jmshrv/finamp/releases/tag/0.9.25-beta</url>
+      <description>
+        <p>
+          New Features
+        </p>
+        <ul>
+          <li>Full Jellyfin 12.0 compatibility</li>
+          <li>Customize extra info on player screen</li>
+          <li>Better Quick Actions</li>
+          <li>mTLS support</li>
+          <li>Improved artist screen sections</li>
+        </ul>
+        <p>
+          Bug Fixes
+        </p>
+        <ul>
+          <li>Fixed genres tab being empty (on Jellyfin 10.11) or excluding favotes (on Jellyfin 10.10 and 12.0)</li>
+          <li>Several bug fixes for CarPlay</li>
+          <li>Improve text clipping issues</li>
+          <li>Use fixed-width numbers when showing progressing durations</li>
+          <li>Removed some unsupported home screen section presets</li>
+        </ul>
+        <p>
+          <em>Thank you for using Finamp!</em>
+        </p>
+      </description>
+    </release>
     <release version="0.9.24-beta" date="2026-06-15">
       <url
         type="details"

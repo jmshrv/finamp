@@ -477,7 +477,6 @@ class _PreviousTracksListState extends State<PreviousTracksList> with TickerProv
                   onRemoveFromList: () {
                     unawaited(_queueService.removeAtOffset(indexOffset));
                   },
-                  isCurrentTrack: false,
                 );
               },
             );
@@ -564,7 +563,6 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                       await _queueService.skipByOffset(indexOffset);
                       scrollToKey(key: widget.previousTracksHeaderKey, duration: const Duration(milliseconds: 500));
                     },
-                    isCurrentTrack: false,
                   );
                 },
               ),
@@ -655,7 +653,6 @@ class _QueueTracksListState extends ConsumerState<QueueTracksList> {
                     await _queueService.skipByOffset(indexOffset);
                     scrollToKey(key: widget.previousTracksHeaderKey, duration: const Duration(milliseconds: 500));
                   },
-                  isCurrentTrack: false,
                 );
               },
             );
@@ -701,7 +698,11 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
         (a, b) => QueueListStreamState(a, b),
       ),
       initialData: QueueListStreamState(
-        MediaState(audioHandler.mediaItem.value, audioHandler.playbackState.value, audioHandler.fadeState.value),
+        MediaState(
+          audioHandler.mediaItem.value,
+          audioHandler.playbackState.value,
+          audioHandler.fadeState.value.fadeDirection,
+        ),
         _queueService.getQueue(),
       ),
       builder: (context, snapshot) {
@@ -772,8 +773,16 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                               _audioHandler.togglePlayback();
                             },
                             icon: mediaState!.playbackState.playing
-                                ? const Icon(TablerIcons.player_pause, size: 32)
-                                : const Icon(TablerIcons.player_play, size: 32),
+                                ? const Icon(
+                                    TablerIcons.player_pause,
+                                    size: 32,
+                                    shadows: <Shadow>[Shadow(color: Colors.black, blurRadius: 10.0)],
+                                  )
+                                : const Icon(
+                                    TablerIcons.player_play,
+                                    size: 32,
+                                    shadows: <Shadow>[Shadow(color: Colors.black, blurRadius: 10.0)],
+                                  ),
                             color: Colors.white,
                           ),
                         ),
@@ -826,19 +835,16 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      SizedBox(
-                                        height: 20,
-                                        child: OneLineMarqueeHelper(
-                                          key: ValueKey(currentTrack?.item.id),
-                                          text: currentTrack?.item.title ?? AppLocalizations.of(context)!.unknownName,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            height: 26 / 20,
-                                            color: primaryTextColor,
-                                            fontWeight: Theme.brightnessOf(context) == Brightness.light
-                                                ? FontWeight.w500
-                                                : FontWeight.w600,
-                                          ),
+                                      OneLineMarqueeHelper(
+                                        key: ValueKey(currentTrack?.item.id),
+                                        text: currentTrack?.item.title ?? AppLocalizations.of(context)!.unknownName,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          height: 26 / 20,
+                                          color: primaryTextColor,
+                                          fontWeight: Theme.brightnessOf(context) == Brightness.light
+                                              ? FontWeight.w500
+                                              : FontWeight.w600,
                                         ),
                                       ),
                                       const SizedBox(height: 4),
@@ -866,6 +872,10 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                                                     color: primaryTextColor,
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.w400,
+                                                    fontFeatures: const [
+                                                      // fixed-width digits
+                                                      FontFeature.tabularFigures(),
+                                                    ],
                                                   );
                                                   if (snapshot.hasData) {
                                                     playbackPosition = snapshot.data;
@@ -900,6 +910,10 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                                                   color: primaryTextColor,
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w400,
+                                                  fontFeatures: const [
+                                                    // fixed-width digits
+                                                    FontFeature.tabularFigures(),
+                                                  ],
                                                 ),
                                               ),
                                             ],

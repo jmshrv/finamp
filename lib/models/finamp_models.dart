@@ -25,6 +25,7 @@ import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:window_manager/window_manager.dart';
 
 import '../builders/annotations.dart';
 import '../components/MusicScreen/sort_and_filter_row.dart';
@@ -126,7 +127,14 @@ class DefaultSettings {
   // Ideally the maximum gain in each library should be fetched from the server, and this volume should be adjusted accordingly to be the exact inverse, so that the quietest track in the library plays at 100% volume, and only louder tracks get their volume reduced
   static const volumeNormalizationIOSBaseGain = 6.0;
   static const volumeNormalizationMode = VolumeNormalizationMode.hybrid;
-  static const contentViewType = ContentViewType.list;
+  static const perTabContentViewType = {
+    ContentType.albums: ContentViewType.grid,
+    ContentType.genericArtists: ContentViewType.list,
+    ContentType.albumArtists: ContentViewType.list,
+    ContentType.performingArtists: ContentViewType.list,
+    ContentType.playlists: ContentViewType.list,
+    ContentType.genres: ContentViewType.list,
+  };
   static const playbackSpeedVisibility = PlaybackSpeedVisibility.automatic;
   static const showTextOnGridView = true;
   static const sleepTimerDurationSeconds = 60 * 30;
@@ -202,16 +210,14 @@ class DefaultSettings {
     enabled: true,
     features: [
       FinampFeatureChipType.explicit,
-      FinampFeatureChipType.playCount,
       FinampFeatureChipType.additionalPeople,
+      FinampFeatureChipType.playCount,
       FinampFeatureChipType.playbackMode,
       FinampFeatureChipType.codec,
       FinampFeatureChipType.bitRate,
-      FinampFeatureChipType.bitDepth,
-      FinampFeatureChipType.sampleRate,
-      FinampFeatureChipType.size,
       FinampFeatureChipType.normalizationGain,
     ],
+    migrated: true,
   );
   static const showCoversOnAlbumScreen = false;
   static const allowSplitScreen = true;
@@ -274,19 +280,31 @@ class DefaultSettings {
   static const radioEnabled = false;
   static const duckOnAudioInterruption = true;
   static const forceAudioOffloadingOnAndroid = false;
+  static const verboseLogging = false;
   static const previousTracksPersistenceMode = PreviousTracksPersistenceMode.persistent;
   static final homeScreenConfiguration = FinampHomeScreenConfiguration(
     actions: [
       QuickActionConfig(action: FinampQuickActions.shuffleTracks),
-      QuickActionConfig(action: FinampQuickActions.playRandomFavoriteItem),
+      QuickActionConfig(
+        action: FinampQuickActions.playRandomFavoriteItem,
+        itemTypes: {
+          ContentType.tracks,
+          ContentType.albums,
+          ContentType.performingArtists,
+          ContentType.albumArtists,
+          ContentType.playlists,
+          ContentType.genres,
+        },
+      ),
       QuickActionConfig(action: FinampQuickActions.playPreviousQueue),
       QuickActionConfig(action: FinampQuickActions.surpriseMe),
     ],
     sections: [
       HomeScreenSectionConfiguration.fromPreset(HomeScreenSectionPresetType.recentlyAddedAlbums),
       HomeScreenSectionConfiguration.fromPreset(HomeScreenSectionPresetType.favoriteTracks),
-      HomeScreenSectionConfiguration.fromPreset(HomeScreenSectionPresetType.frequentlyPlayedAlbums),
-      HomeScreenSectionConfiguration.fromPreset(HomeScreenSectionPresetType.favoritePlaylists),
+      HomeScreenSectionConfiguration.fromPreset(HomeScreenSectionPresetType.favoriteAlbums),
+      HomeScreenSectionConfiguration.fromPreset(HomeScreenSectionPresetType.randomAlbumArtists),
+      HomeScreenSectionConfiguration.fromPreset(HomeScreenSectionPresetType.recentlyAddedPlaylists),
       HomeScreenSectionConfiguration.fromPreset(HomeScreenSectionPresetType.forgottenFavoriteTracks),
       HomeScreenSectionConfiguration.fromPreset(HomeScreenSectionPresetType.recentQueues),
     ],
@@ -299,6 +317,7 @@ class DefaultSettings {
   static int get gridImageSize => isDesktop ? gridImageSizeDesktop : gridImageSizeMobile;
   static const useAndroidGainEffect = true;
   static const ClientCertificate? clientCertificate = null;
+  static const showQuickActionsBanner = true;
 }
 
 @HiveType(typeId: 28)
@@ -318,7 +337,6 @@ class FinampSettings {
     this.volumeNormalizationActive = DefaultSettings.volumeNormalizationActive,
     this.volumeNormalizationIOSBaseGain = DefaultSettings.volumeNormalizationIOSBaseGain,
     this.volumeNormalizationMode = DefaultSettings.volumeNormalizationMode,
-    this.contentViewType = DefaultSettings.contentViewType,
     this.playbackSpeedVisibility = DefaultSettings.playbackSpeedVisibility,
     this.contentGridViewCrossAxisCountPortrait,
     this.contentGridViewCrossAxisCountLandscape,
@@ -438,11 +456,16 @@ class FinampSettings {
     this.useMonochromeIcon = DefaultSettings.useMonochromeIcon,
     this.duckOnAudioInterruption = DefaultSettings.duckOnAudioInterruption,
     this.forceAudioOffloadingOnAndroid = DefaultSettings.forceAudioOffloadingOnAndroid,
+    this.verboseLogging = DefaultSettings.verboseLogging,
     this.previousTracksPersistenceMode = DefaultSettings.previousTracksPersistenceMode,
     required this.homeScreenConfiguration,
     required this.gridImageSize,
     required this.homeScreenImageSize,
     this.useAndroidGainEffect = DefaultSettings.useAndroidGainEffect,
+    required this.deviceId,
+    this.clientCertificate = DefaultSettings.clientCertificate,
+    this.showQuickActionsBanner = DefaultSettings.showQuickActionsBanner,
+    this.perTabContentViewType = DefaultSettings.perTabContentViewType,
   });
 
   @HiveField(0, defaultValue: DefaultSettings.isOffline)
@@ -483,8 +506,9 @@ class FinampSettings {
   int trackShuffleItemCount;
 
   /// The content view type used by the music screen.
-  @HiveField(10, defaultValue: DefaultSettings.contentViewType)
-  ContentViewType contentViewType;
+  @HiveField(10)
+  @Deprecated("Use perTabContentViewType")
+  ContentViewType? contentViewType;
 
   /// Amount of grid tiles to use per-row when portrait.
   @HiveField(11)
@@ -922,7 +946,29 @@ class FinampSettings {
   int homeScreenImageSize;
 
   @HiveField(151, defaultValue: DefaultSettings.clientCertificate)
-  ClientCertificate? clientCertificate = DefaultSettings.clientCertificate;
+  ClientCertificate? clientCertificate;
+
+  /// Unique ID that stays the same for an install but may change across reinstalls
+  /// Used to identify client activity within Jellyfin
+  /// Ideally this ID would be identical across all clients on the same device,
+  /// but that's unrealistic, so a random string should be fine
+  @HiveField(152, defaultValue: "unset") // pre-generation default
+  String deviceId;
+
+  //!!! Hive IDs 153, 154, 156, and 157 are burned by changes from https://github.com/finamp-app/finamp/pull/1504/ that were at some point released but reverted before the version was tagged.
+  // Don't ever use them
+
+  /// Keeps verbose FINE/FINER/FINEST records for bug reports. Off by default;
+  /// release builds otherwise cap at INFO.
+  @HiveField(158, defaultValue: DefaultSettings.verboseLogging)
+  bool verboseLogging = DefaultSettings.verboseLogging;
+
+  @HiveField(159, defaultValue: DefaultSettings.showQuickActionsBanner)
+  bool showQuickActionsBanner;
+
+  @HiveField(160, defaultValue: DefaultSettings.perTabContentViewType)
+  @SettingsHelperMap("tabContentType")
+  Map<ContentType, ContentViewType> perTabContentViewType;
 
   static Future<FinampSettings> create() async {
     final downloadLocation = await DownloadLocation.create(
@@ -938,6 +984,7 @@ class FinampSettings {
       homeScreenConfiguration: DefaultSettings.homeScreenConfiguration,
       gridImageSize: DefaultSettings.gridImageSize,
       homeScreenImageSize: DefaultSettings.homeScreenImageSize,
+      deviceId: const Uuid().v4(),
     );
   }
 
@@ -1114,7 +1161,7 @@ enum ContentType {
   @HiveField(7)
   albumArtists(BaseItemDtoType.artist),
   @HiveField(8)
-  inPlaylist(BaseItemDtoType.track),
+  inPlaylistOrAlbum(BaseItemDtoType.track),
   @HiveField(9)
   mixed(null),
   @HiveField(10)
@@ -1151,7 +1198,7 @@ enum ContentType {
         return l10n.performingArtists;
       case ContentType.albumArtists:
         return l10n.albumArtists;
-      case ContentType.inPlaylist:
+      case ContentType.inPlaylistOrAlbum:
         return l10n.inPlaylist;
       case ContentType.mixed:
         return l10n.inCollection;
@@ -1193,12 +1240,28 @@ enum ContentType {
     ContentType.home => true,
     ContentType.performingArtists => true,
     ContentType.albumArtists => true,
-    ContentType.inPlaylist => false,
+    ContentType.inPlaylistOrAlbum => false,
     ContentType.mixed => false,
     ContentType.inPerformingArtistAlbums => false,
     ContentType.inAlbumArtistAlbums => false,
   };
 
+  bool get isPlayableJellyfinType => switch (this) {
+    ContentType.albums => true,
+    ContentType.genericArtists => false,
+    ContentType.playlists => true,
+    ContentType.genres => true,
+    ContentType.tracks => true,
+    ContentType.home => false,
+    ContentType.performingArtists => true,
+    ContentType.albumArtists => true,
+    ContentType.inPlaylistOrAlbum => false,
+    ContentType.mixed => false,
+    ContentType.inPerformingArtistAlbums => false,
+    ContentType.inAlbumArtistAlbums => false,
+  };
+
+  // This is basically whether we expect music_screen_tab_view to be able to display this type.
   bool get directlyDisplayable => switch (this) {
     ContentType.albums => true,
     ContentType.genericArtists => false,
@@ -1208,7 +1271,7 @@ enum ContentType {
     ContentType.home => false,
     ContentType.performingArtists => true,
     ContentType.albumArtists => true,
-    ContentType.inPlaylist => false,
+    ContentType.inPlaylistOrAlbum => false,
     ContentType.mixed => false,
     ContentType.inPerformingArtistAlbums => false,
     ContentType.inAlbumArtistAlbums => false,
@@ -1663,6 +1726,7 @@ class DownloadItem extends DownloadStub {
         // Not all BaseItemDto are requested with mediaSources, mediaStreams or childCount.  Do not
         // overwrite with null if the new item does not have them.
         item.mediaSources ??= baseItem?.mediaSources;
+        item.people ??= baseItem?.people;
         item.sortName ??= baseItem?.sortName;
       }
       assert(
@@ -1675,7 +1739,7 @@ class DownloadItem extends DownloadStub {
         if (viewId == null || viewId == this.viewId) {
           if (item == null || baseItem!.mostlyEqual(item)) {
             var equal = const DeepCollectionEquality().equals;
-            if (equal(newOrderedChildren, orderedChildren)) {
+            if (newOrderedChildren == null || equal(newOrderedChildren, orderedChildren)) {
               return null;
             }
           }
@@ -2068,6 +2132,7 @@ class QueueItemSource {
     required this.id,
     this.item,
     this.contextNormalizationGain,
+    this.library,
   });
 
   /*factory QueueItemSource.fromPlayableItem(
@@ -2098,6 +2163,7 @@ class QueueItemSource {
     BaseItemDto baseItem, {
     QueueItemSourceType? type,
     QueueItemSourceNameType? nameType,
+    BaseItemId? library,
   }) {
     final defaultType = switch (BaseItemDtoType.fromItem(baseItem)) {
       BaseItemDtoType.album => QueueItemSourceType.album,
@@ -2114,6 +2180,14 @@ class QueueItemSource {
       _ => baseItem.normalizationGain,
     };
 
+    switch (BaseItemDtoType.fromItem(baseItem)) {
+      case BaseItemDtoType.artist:
+      case BaseItemDtoType.genre:
+        library ??= GetIt.instance<FinampUserHelper>().currentUser?.currentViewId;
+      case _:
+        break;
+    }
+
     return QueueItemSource(
       type: type ?? defaultType,
       name: nameType != null
@@ -2125,6 +2199,7 @@ class QueueItemSource {
       id: baseItem.id,
       item: baseItem,
       contextNormalizationGain: gain,
+      library: library,
     );
   }
 
@@ -2136,6 +2211,7 @@ class QueueItemSource {
       id: id,
       item: item,
       contextNormalizationGain: contextNormalizationGain,
+      library: library,
     );
   }
 
@@ -2145,6 +2221,7 @@ class QueueItemSource {
     required BaseItemId id,
     this.item,
     this.contextNormalizationGain,
+    this.library,
   }) : id = id.raw;
 
   @HiveField(0)
@@ -2161,6 +2238,9 @@ class QueueItemSource {
 
   @HiveField(4)
   final double? contextNormalizationGain;
+
+  @HiveField(5)
+  final BaseItemId? library;
 
   bool get wantsItem => item == null && RegExp(r'^[0-9a-f]{32}$').matchAsPrefix(id) != null;
 
@@ -2206,6 +2286,8 @@ enum QueueItemSourceNameType {
   radio,
   @HiveField(11)
   homeScreenSection,
+  @HiveField(12)
+  musicScreenTracks,
 }
 
 @HiveType(typeId: 56)
@@ -2228,7 +2310,7 @@ class QueueItemSourceName {
       case QueueItemSourceNameType.preTranslated:
         return pretranslatedName ?? "";
       case QueueItemSourceNameType.yourLikes:
-        return localizations.yourLikes;
+        return localizations.yourLikes(localizationParameter ?? "");
       case QueueItemSourceNameType.shuffleAll:
         return localizations.shuffleAllQueueSource;
       case QueueItemSourceNameType.mix:
@@ -2258,6 +2340,8 @@ class QueueItemSourceName {
                 presetType: HomeScreenSectionPresetType.values.byName(localizationParameter!),
               )
             : pretranslatedName ?? "";
+      case QueueItemSourceNameType.musicScreenTracks:
+        return localizations.allTracks(localizationParameter ?? "");
     }
   }
 
@@ -2343,7 +2427,7 @@ class FinampQueueOrder {
   BaseItemDto? sourceLibrary;
 }
 
-@HiveType(typeId: 59)
+//@HiveType(typeId: 59)
 class FinampQueueInfo {
   FinampQueueInfo({
     required this.id,
@@ -2356,28 +2440,20 @@ class FinampQueueInfo {
     required this.sourceLibrary,
   });
 
-  @HiveField(0)
   List<FinampQueueItem> previousTracks;
 
-  @HiveField(1)
   FinampQueueItem? currentTrack;
 
-  @HiveField(2)
   List<FinampQueueItem> nextUp;
 
-  @HiveField(3)
   List<FinampQueueItem> queue;
 
-  @HiveField(4)
   QueueItemSource source;
 
-  @HiveField(5)
   SavedQueueState saveState;
 
-  @HiveField(6)
   String id;
 
-  @HiveField(7)
   BaseItemDto? sourceLibrary;
 
   int get currentTrackIndex => previousTracks.length + (currentTrack == null ? 0 : 1);
@@ -2910,26 +2986,27 @@ enum FinampTranscodingStreamingFormat {
 
 @HiveType(typeId: 74)
 enum FinampFeatureChipType {
+  // Feature chips on the player screen will be displayed in the same order as this enum.
   @HiveField(0)
-  playCount,
+  explicit,
   @HiveField(1)
-  additionalPeople,
+  playCount,
   @HiveField(2)
-  playbackMode,
+  additionalPeople,
   @HiveField(3)
-  codec,
+  playbackMode,
   @HiveField(4)
-  bitRate,
+  codec,
   @HiveField(5)
-  bitDepth,
+  bitRate,
   @HiveField(6)
-  size,
+  bitDepth,
   @HiveField(7)
-  normalizationGain,
-  @HiveField(8)
   sampleRate,
+  @HiveField(8)
+  size,
   @HiveField(9)
-  explicit;
+  normalizationGain;
 
   /// Human-readable version of the [FinampFeatureChipType]
   @override
@@ -2965,13 +3042,17 @@ enum FinampFeatureChipType {
 @JsonSerializable()
 @HiveType(typeId: 75)
 class FinampFeatureChipsConfiguration {
-  const FinampFeatureChipsConfiguration({required this.enabled, required this.features});
+  const FinampFeatureChipsConfiguration({required this.enabled, required this.features, required this.migrated});
 
   @HiveField(0)
   final bool enabled;
 
   @HiveField(1)
   final List<FinampFeatureChipType> features;
+
+  /// Flag for initial migration to user-configurable features
+  @HiveField(2, defaultValue: false)
+  final bool migrated;
 
   factory FinampFeatureChipsConfiguration.fromJson(Map<String, dynamic> json) =>
       _$FinampFeatureChipsConfigurationFromJson(json);
@@ -2985,7 +3066,11 @@ class FinampFeatureChipsConfiguration {
 
   // implement copyWith
   FinampFeatureChipsConfiguration copyWith({bool? enabled, List<FinampFeatureChipType>? features}) {
-    return FinampFeatureChipsConfiguration(enabled: enabled ?? this.enabled, features: features ?? this.features);
+    return FinampFeatureChipsConfiguration(
+      enabled: enabled ?? this.enabled,
+      features: features ?? this.features,
+      migrated: migrated,
+    );
   }
 }
 
@@ -3176,15 +3261,30 @@ class FinampOutputRoute {
 class ScreenSize {
   ScreenSize(this.sizeX, this.sizeY, this.locationX, this.locationY);
 
-  ScreenSize.from(Size size, Offset location)
-    : sizeX = size.width,
-      sizeY = size.height,
-      locationX = location.dx,
-      locationY = location.dy;
+  factory ScreenSize.from(Rect bounds) {
+    final double scaling;
+    // If the main and target monitor have different scaling, the position will be scaled up by the target when saving
+    // but down by the main when applying, leading to an offset.  We undo the scaling and save physical pixel values to
+    // prevent this.  Window size does not need this for some reason, only location.
+    if (Platform.isWindows) {
+      scaling = WindowManager.instance.getDevicePixelRatio();
+    } else {
+      scaling = 1.0;
+    }
+    return ScreenSize(bounds.size.width, bounds.size.height, bounds.topLeft.dx * scaling, bounds.topLeft.dy * scaling);
+  }
 
   Size get size => Size(sizeX, sizeY);
 
-  Offset get location => Offset(locationX, locationY);
+  Offset get location {
+    final double scaling;
+    if (Platform.isWindows) {
+      scaling = WindowManager.instance.getDevicePixelRatio();
+    } else {
+      scaling = 1.0;
+    }
+    return Offset(locationX / scaling, locationY / scaling);
+  }
 
   @HiveField(1)
   double sizeX;
@@ -3395,6 +3495,9 @@ class SleepTimer {
 
   final sleepTimerLogger = Logger("SleepTimer");
 
+  /// Identifier of the last track that was counted towards the timer, to diagnose unexpected counter jumps
+  String? _lastCountedTrackId;
+
   SleepTimer(this.secondsLength, this.tracksLength);
 
   Future<void> start(Function callback) async {
@@ -3403,6 +3506,10 @@ class SleepTimer {
     _callback = callback;
 
     remainingNotifier.value = secondsLength + tracksLength;
+    sleepTimerLogger.info(
+      "Sleep timer started for ${Duration(seconds: secondsLength)}, $tracksLength tracks "
+      "(deadline: ${_startTime!.add(totalDuration)}, now: $_startTime)",
+    );
 
     if (secondsLength > 0) {
       _timer = Timer.periodic(const Duration(seconds: 1), (t) async {
@@ -3414,7 +3521,7 @@ class SleepTimer {
           t.cancel();
           _timer = null;
           if (tracksLength > 0) {
-            sleepTimerLogger.info("Sleep timer switching to track count");
+            sleepTimerLogger.info("Sleep timer duration finished, switching to track count ($tracksLength)");
             _tracksRemaining = tracksLength;
           } else {
             sleepTimerLogger.info("Sleep timer duration finished");
@@ -3423,17 +3530,42 @@ class SleepTimer {
         }
       });
     } else {
+      sleepTimerLogger.info("Sleep timer has no duration phase, starting directly with track count ($tracksLength)");
       _tracksRemaining = tracksLength;
     }
-
-    sleepTimerLogger.info("Sleep timer started for ${Duration(seconds: secondsLength)}, $tracksLength tracks");
   }
 
-  void onTrackCompleted() {
-    if (_tracksRemaining == null) return;
+  void onTrackCompleted({required bool trackEndedNormally, MediaItem? track}) {
+    if (_tracksRemaining == null) {
+      sleepTimerLogger.fine(
+        "Ignoring track completion"
+        "(${trackEndedNormally ? "end" : "skip"})"
+        "${track?.id != null ? ", id: $track?.id" : ""}"
+        "${track?.title != null ? ", name: \"${track?.title}\"" : ""}"
+        ": no track-count phase active",
+      );
+      return;
+    }
     assert(_startTime != null && _callback != null);
-    _tracksRemaining = _tracksRemaining! - 1;
+
+    final previousTracks = _tracksRemaining!;
+    _tracksRemaining = previousTracks - 1;
     remainingNotifier.value = _tracksRemaining!;
+
+    // Warn about repeated decrements for the same track
+    final sameTrackAsLastTime = _lastCountedTrackId != null && _lastCountedTrackId == track?.id;
+    _lastCountedTrackId = track?.id;
+
+    sleepTimerLogger.info(
+      "Sleep timer counted completed track"
+      "(${trackEndedNormally ? "end" : "skip"})"
+      "${track?.id != null ? ", id: $track?.id" : ""}"
+      "${track?.title != null ? ", name: \"${track?.title}\"" : ""}"
+      ": $previousTracks -> $_tracksRemaining remaining",
+    );
+    if (sameTrackAsLastTime) {
+      sleepTimerLogger.warning("Sleep timer counted the same track twice in a row");
+    }
     if (_tracksRemaining! <= 0) {
       _tracksRemaining = null;
       sleepTimerLogger.info("Sleep timer tracks finished");
@@ -3442,12 +3574,18 @@ class SleepTimer {
   }
 
   void cancel() {
+    final hadDurationPhase = _timer != null;
+    final hadRemainingTracks = _tracksRemaining;
     _startTime = null;
     _timer?.cancel();
     _timer = null;
     _tracksRemaining = null;
     remainingNotifier.value = 0;
-    sleepTimerLogger.info("Sleep timer cancelled");
+    sleepTimerLogger.info(
+      "Sleep timer cancelled"
+      "${hadDurationPhase ? " during duration phase" : ""}"
+      "${hadRemainingTracks != null ? " with $hadRemainingTracks tracks remaining" : ""}",
+    );
   }
 
   Duration get totalDuration => Duration(seconds: secondsLength);
@@ -4088,7 +4226,7 @@ class HomeScreenSectionConfiguration {
       presetType: presetType,
     ),
     HomeScreenSectionPresetType.recentlyAddedAlbums => HomeScreenSectionConfiguration(
-      base: TabsHomeSection(libraryId: allLibraryPlaceholder, contentType: ContentType.albums),
+      base: TabsHomeSection(libraryId: currentLibraryPlaceholder, contentType: ContentType.albums),
       sortConfig: SortAndFilterConfiguration(sortBy: SortBy.dateCreated, sortOrder: SortOrder.descending, filters: {}),
       customSectionTitle: null,
       presetType: presetType,
@@ -4099,18 +4237,6 @@ class HomeScreenSectionConfiguration {
       customSectionTitle: null,
       presetType: presetType,
     ),
-    // HomeScreenSectionPresetType.recentlyPlayedPlaylists => HomeScreenSectionConfiguration(
-    //   type: HomeScreenSectionType.tabView,
-    //   itemId: null,
-    //   contentType: TabContentType.playlists,
-    //   sortAndFilterConfiguration: SortAndFilterConfiguration(
-    //     sortBy: SortBy.datePlayed,
-    //     sortOrder: SortOrder.descending,
-    //     filters: {},
-    //   ),
-    //   customSectionTitle: null,
-    //   presetType: presetType,
-    // ),
     HomeScreenSectionPresetType.frequentlyPlayedAlbums => HomeScreenSectionConfiguration(
       base: TabsHomeSection(libraryId: currentLibraryPlaceholder, contentType: ContentType.albums),
       sortConfig: SortAndFilterConfiguration(sortBy: SortBy.playCount, sortOrder: SortOrder.descending, filters: {}),
@@ -4161,6 +4287,24 @@ class HomeScreenSectionConfiguration {
       customSectionTitle: null,
       presetType: presetType,
     ),
+    HomeScreenSectionPresetType.randomAlbums => HomeScreenSectionConfiguration(
+      base: TabsHomeSection(libraryId: currentLibraryPlaceholder, contentType: ContentType.albums),
+      sortConfig: SortAndFilterConfiguration(sortBy: SortBy.random, sortOrder: SortOrder.ascending, filters: {}),
+      customSectionTitle: null,
+      presetType: presetType,
+    ),
+    HomeScreenSectionPresetType.randomAlbumArtists => HomeScreenSectionConfiguration(
+      base: TabsHomeSection(libraryId: currentLibraryPlaceholder, contentType: ContentType.albumArtists),
+      sortConfig: SortAndFilterConfiguration(sortBy: SortBy.random, sortOrder: SortOrder.ascending, filters: {}),
+      customSectionTitle: null,
+      presetType: presetType,
+    ),
+    HomeScreenSectionPresetType.recentlyAddedPlaylists => HomeScreenSectionConfiguration(
+      base: TabsHomeSection(libraryId: currentLibraryPlaceholder, contentType: ContentType.playlists),
+      sortConfig: SortAndFilterConfiguration(sortBy: SortBy.dateCreated, sortOrder: SortOrder.descending, filters: {}),
+      customSectionTitle: null,
+      presetType: presetType,
+    ),
   };
 
   String getTitle(AppLocalizations l10n) =>
@@ -4175,7 +4319,6 @@ class HomeScreenSectionConfiguration {
         HomeScreenSectionPresetType.favoriteGenres => l10n.favoriteGenres,
         HomeScreenSectionPresetType.recentlyAddedAlbums => l10n.newlyAddedAlbums,
         HomeScreenSectionPresetType.recentlyAddedTracks => l10n.newlyAddedTracks,
-        // HomeScreenSectionPresetType.recentlyPlayedPlaylists => "Recent Playlists*",
         HomeScreenSectionPresetType.frequentlyPlayedAlbums => l10n.frequentlyPlayedAlbums,
         HomeScreenSectionPresetType.frequentlyPlayedTracks => l10n.frequentlyPlayedTracks,
         HomeScreenSectionPresetType.frequentlyPlayedArtists => l10n.frequentlyPlayedArtists,
@@ -4183,6 +4326,9 @@ class HomeScreenSectionConfiguration {
         HomeScreenSectionPresetType.forgottenFavoriteTracks => l10n.homeScreenSectionPresetForgottenFavoriteTracksTitle,
         HomeScreenSectionPresetType.recentQueues => l10n.recentQueues,
         HomeScreenSectionPresetType.recentlyPlayedTracks => l10n.recentlyPlayedTracks,
+        HomeScreenSectionPresetType.randomAlbums => l10n.randomAlbums,
+        HomeScreenSectionPresetType.randomAlbumArtists => l10n.randomAlbumArtists,
+        HomeScreenSectionPresetType.recentlyAddedPlaylists => l10n.recentlyAddedPlaylists,
       };
 
   String getDescription(AppLocalizations l10n) =>
@@ -4198,8 +4344,6 @@ class HomeScreenSectionConfiguration {
     HomeScreenSectionPresetType.favoriteGenres => l10n.favoriteGenresDescription,
     HomeScreenSectionPresetType.recentlyAddedAlbums => l10n.recentlyAddedAlbumsDescription,
     HomeScreenSectionPresetType.recentlyAddedTracks => l10n.recentlyAddedTracksDescription,
-    // HomeScreenSectionPresetType.recentlyPlayedPlaylists =>
-    //   "Playlists you listened to recently, starting with last played*",
     HomeScreenSectionPresetType.frequentlyPlayedAlbums => l10n.frequentlyPlayedAlbumsDescription,
     HomeScreenSectionPresetType.frequentlyPlayedTracks => l10n.frequentlyPlayedTracksDescription,
     HomeScreenSectionPresetType.frequentlyPlayedArtists => l10n.frequentlyPlayedArtistsDescription,
@@ -4208,6 +4352,9 @@ class HomeScreenSectionConfiguration {
       l10n.homeScreenSectionPresetForgottenFavoriteTracksDescription,
     HomeScreenSectionPresetType.recentQueues => l10n.recentQueuesDescription,
     HomeScreenSectionPresetType.recentlyPlayedTracks => l10n.recentlyPlayedTracksDescription,
+    HomeScreenSectionPresetType.randomAlbums => l10n.randomAlbumsDescription,
+    HomeScreenSectionPresetType.randomAlbumArtists => l10n.randomArtistsDescription,
+    HomeScreenSectionPresetType.recentlyAddedPlaylists => l10n.recentlyAddedPlaylistsDescription,
   };
 
   Map<String, dynamic> toJson() => _$HomeScreenSectionConfigurationToJson(this);
@@ -4260,12 +4407,15 @@ enum HomeScreenSectionPresetType {
   @HiveField(6)
   recentlyAddedTracks,
   @HiveField(7)
+  @Deprecated("Not actually tracked by Jellyfin, so we don't have any data for this section")
   frequentlyPlayedAlbums,
   @HiveField(8)
   frequentlyPlayedTracks,
   @HiveField(9)
+  @Deprecated("Not actually tracked by Jellyfin, so we don't have any data for this section")
   frequentlyPlayedArtists,
   @HiveField(10)
+  @Deprecated("Not actually tracked by Jellyfin, so we don't have any data for this section")
   neverPlayedAlbums,
   @HiveField(11)
   forgottenFavoriteTracks,
@@ -4273,38 +4423,61 @@ enum HomeScreenSectionPresetType {
   recentQueues,
   @HiveField(13)
   recentlyPlayedTracks,
-  //TODO once we can track playlists plays, add this back in
-  // @HiveField(7)
-  // recentlyPlayedPlaylists,
+  @HiveField(14)
+  randomAlbums,
+  @HiveField(15)
+  randomAlbumArtists,
+  @HiveField(16)
+  recentlyAddedPlaylists;
+
   //TODO add section with generated mixes, e.g. via AudioMuse
   //TODO add more
+
+  // deprecated/unavailable presets that shouldn't be shown to people
+  bool get isEnabled => switch (this) {
+    HomeScreenSectionPresetType.frequentlyPlayedAlbums => false,
+    HomeScreenSectionPresetType.frequentlyPlayedArtists => false,
+    HomeScreenSectionPresetType.neverPlayedAlbums => false,
+    _ => true,
+  };
 }
 
 @HiveType(typeId: 121)
 enum FinampQuickActions {
   @HiveField(0)
-  shuffleTracks,
+  shuffleTracks(true),
   @HiveField(1)
-  browseRecentQueues,
+  browseRecentQueues(true),
   @HiveField(2)
-  browsePlaybackHistory,
+  browsePlaybackHistory(true),
   @HiveField(3)
-  playRandomAlbum,
+  @Deprecated("Use playRandomItem instead")
+  playRandomAlbum(false),
   @HiveField(4)
-  playRandomTrack,
+  @Deprecated("Use playRandomItem instead")
+  playRandomTrack(false),
+  @HiveField(10)
+  playRandomItem(true),
   @HiveField(5)
-  playRandomFavoriteItem,
+  playRandomFavoriteItem(true),
   @HiveField(6)
-  playPreviousQueue,
+  playPreviousQueue(true),
   @HiveField(7)
-  configureOutput,
+  configureOutput(true),
   @HiveField(8)
-  surpriseMe,
+  surpriseMe(true),
   @HiveField(9)
-  playSpecificItem;
+  playSpecificItem(true);
+  // ID 10 moved upwards for more sensible user-facing ordering
   //TODO support album/artist shuffle (requires queue support)
 
+  final bool showToUser;
+
+  const FinampQuickActions(this.showToUser);
+
   bool get editable => switch (this) {
+    FinampQuickActions.playRandomItem => true,
+    FinampQuickActions.playRandomFavoriteItem => true,
     FinampQuickActions.playSpecificItem => true,
     _ => false,
   };
@@ -4323,9 +4496,12 @@ enum FinampQuickActions {
       case FinampQuickActions.browsePlaybackHistory:
         return AppLocalizations.of(context)!.browsePlaybackHistoryActionDescription;
       case FinampQuickActions.playRandomAlbum:
-        return AppLocalizations.of(context)!.playRandomAlbumActionDescription;
+        return "deprecated";
       case FinampQuickActions.playRandomTrack:
-        return AppLocalizations.of(context)!.playRandomTrackActionDescription;
+        return "deprecated";
+      case FinampQuickActions.playRandomItem:
+        //TODO how to reflect the selected item types here?
+        return AppLocalizations.of(context)!.playRandomItemActionDescription;
       case FinampQuickActions.playRandomFavoriteItem:
         return AppLocalizations.of(context)!.playRandomFavoriteItemActionDescription;
       case FinampQuickActions.playPreviousQueue:
@@ -4346,6 +4522,7 @@ enum FinampQuickActions {
       FinampQuickActions.browsePlaybackHistory => TablerIcons.clock,
       FinampQuickActions.playRandomAlbum => TablerIcons.album,
       FinampQuickActions.playRandomTrack => TablerIcons.music,
+      FinampQuickActions.playRandomItem => TablerIcons.help_hexagon,
       FinampQuickActions.playRandomFavoriteItem => TablerIcons.heart_question,
       FinampQuickActions.playPreviousQueue => TablerIcons.restore,
       FinampQuickActions.configureOutput => TablerIcons.device_speaker,
@@ -4395,22 +4572,20 @@ enum ItemFilterType {
   @HiveField(4)
   searchTerm(String),
   @HiveField(5)
-  isUnplayed(Null);
+  isUnplayed(Null),
+  @HiveField(6)
+  artistFilter(BaseItemDto);
 
   const ItemFilterType(this.extraType);
 
   final Type extraType;
-
-  bool get isArtistGenre => switch (this) {
-    genreFilter => true,
-    _ => false,
-  };
 
   IconData get icon => switch (this) {
     isFavorite => TablerIcons.heart,
     isFullyDownloaded => TablerIcons.download,
     startsWithCharacter => TablerIcons.abc,
     genreFilter => TablerIcons.tag,
+    artistFilter => TablerIcons.user,
     searchTerm => TablerIcons.list_search,
     isUnplayed => TablerIcons.headphones_off,
   };
@@ -4451,6 +4626,8 @@ class ItemFilter {
         return l10n.isUnplayedFilter;
       case ItemFilterType.genreFilter:
         return l10n.genreFilter(extraBaseItem.name ?? "");
+      case ItemFilterType.artistFilter:
+        return l10n.artistFilter(extraBaseItem.name ?? "");
       case ItemFilterType.startsWithCharacter:
         return l10n.startsWithFilter(extraString.toUpperCase());
       case ItemFilterType.searchTerm:
@@ -4498,13 +4675,20 @@ class SortAndFilterConfiguration {
 
   BaseItemDto? get genreFilter => filters.firstWhereOrNull((x) => x.type == ItemFilterType.genreFilter)?.extraBaseItem;
 
+  BaseItemDto? get artistFilter =>
+      filters.firstWhereOrNull((x) => x.type == ItemFilterType.artistFilter)?.extraBaseItem;
+
   bool get favoritesFilter => filters.firstWhereOrNull((x) => x.type == ItemFilterType.isFavorite) != null;
+
+  bool get onlyShowFullyDownloadedFilter =>
+      filters.firstWhereOrNull((x) => x.type == ItemFilterType.isFullyDownloaded) != null;
 
   SortAndFilterConfiguration copyWith({
     SortBy? sortBy,
     SortOrder? sortOrder,
     Set<ItemFilter>? filters,
     BaseItemDto? genreFilter,
+    BaseItemDto? artistFilter,
     bool? favoriteFilter,
     bool? onlyShowFullyDownloadedFilter,
     String? searchQuery,
@@ -4513,6 +4697,10 @@ class SortAndFilterConfiguration {
     if (genreFilter != null) {
       processedFilters.removeWhere((x) => x.type == ItemFilterType.genreFilter);
       processedFilters.add(ItemFilter(type: ItemFilterType.genreFilter, extras: genreFilter));
+    }
+    if (artistFilter != null) {
+      processedFilters.removeWhere((x) => x.type == ItemFilterType.artistFilter);
+      processedFilters.add(ItemFilter(type: ItemFilterType.artistFilter, extras: artistFilter));
     }
     if (favoriteFilter != null) {
       processedFilters.removeWhere((x) => x.type == ItemFilterType.isFavorite);
@@ -4540,6 +4728,10 @@ class SortAndFilterConfiguration {
   static const defaultSort = ResolvedSortConfig.defaultSort;
 
   static const defaultInAlbumSort = ResolvedSortConfig.defaultInAlbumSort;
+
+  static const defaultArtistAlbumSort = ResolvedSortConfig.defaultArtistAlbumSort;
+
+  static const randomSort = ResolvedSortConfig.randomSort;
 
   static ResolvedSortConfig defaultForItem(BaseItemDto item) {
     if ([BaseItemDtoType.album, BaseItemDtoType.playlist].contains(BaseItemDtoType.fromItem(item))) {
@@ -4592,8 +4784,10 @@ class QuickActionConfig {
   final BaseItemId? itemId;
   @HiveField(2)
   final String? itemName;
+  @HiveField(3)
+  final Set<ContentType>? itemTypes;
 
-  const QuickActionConfig({required this.action, this.itemId, this.itemName});
+  const QuickActionConfig({required this.action, this.itemId, this.itemName, this.itemTypes});
 
   String getTitle(AppLocalizations l10n) {
     switch (action) {
@@ -4604,11 +4798,21 @@ class QuickActionConfig {
       case FinampQuickActions.browsePlaybackHistory:
         return l10n.playbackHistory;
       case FinampQuickActions.playRandomAlbum:
-        return l10n.randomAlbumAction;
+        return "deprecated";
       case FinampQuickActions.playRandomTrack:
-        return l10n.randomTrackAction;
+        return "deprecated";
+      case FinampQuickActions.playRandomItem:
+        return l10n.randomItemAction(switch (itemTypes?.toList()) {
+          null => "none",
+          [var type] => type.name,
+          _ => "multiple",
+        });
       case FinampQuickActions.playRandomFavoriteItem:
-        return l10n.randomFavoriteAction;
+        return l10n.randomFavoriteAction(switch (itemTypes?.toList()) {
+          null => "none",
+          [var type] => type.name,
+          _ => "multiple",
+        });
       case FinampQuickActions.playPreviousQueue:
         return l10n.previousQueueAction;
       case FinampQuickActions.configureOutput:

@@ -1641,5 +1641,39 @@
     "playOnStaleDelaySubtitle": "مدت زمانی که یک نشست «پخش روی» از راه دور پس از دریافت فرمان فعال در نظر گرفته می‌شود. هنگام فعال بودن، وضعیت پخش با دفعات بیشتری گزارش می‌شود که می‌تواند باعث افزایش مصرف پهنای‌باند شود.",
     "@playOnStaleDelaySubtitle": {
         "description": "Description of the setting that controls how long a PlayOn remote session is considered active"
-    }
+    },
+    "activeLibraries": "کتابخانه های فعال",
+    "@activeLibraries": {
+        "description": "Active Libraries"
+    },
+    "playbackActionPageMoveWithinQueue": "جابجایی درون لیست‌پخش",
+    "@playbackActionPageMoveWithinQueue": {
+        "description": "Label for the playback action page that contains all actions related to moving tracks within the queue"
+    },
+    "savingChanges": "درحال ذخیره تغییرات…",
+    "@savingChanges": {
+        "description": "Text shown while the changes to a playlist are being saved"
+    },
+    "shuffleSome": "بُر زدن بعضی",
+    "defaultWord": "پیشفرض",
+    "save": "ذخیره",
+    "amoledTheme": "استفاده از تم AMOLED",
+    "@amoledTheme": {
+        "description": "Toggles the dark color scheme between dark gray and pure black."
+    },
+    "useMonochromeIcon": "استفاده از لوگو سیاه و سفید",
+    "@useMonochromeIcon": {
+        "description": "Toggles the Finamp icon between classic and it being monochromic. This does not change the outside-app-icon"
+    },
+    "amoledThemeSubtitle": "پالت رنگی تاریک را با سیاه مطلق جایگزین میکند.",
+    "useMonochromeIconSubtitle": "فقط بر لوگو درون برنامه اثر میگزارد، نه ایکون برنامه.",
+    "@useMonochromeIconSubtitle": {
+        "description": "Subtitle for the toggle that switches the Finamp icon between classic and it being monochromic."
+    },
+    "radio": "رادیو",
+    "@radio": {
+        "description": "Title for the queue source when the user is playing a track added via radio"
+    },
+    "topAlbums": "آلبوم‌های برتر",
+    "topArtists": "هنرمندان برتر"
 }

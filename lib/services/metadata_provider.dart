@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:finamp/models/finamp_models.dart';
+import 'package:finamp/services/item_by_id_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
@@ -24,7 +25,8 @@ class MetadataProvider {
   LyricDto? lyrics;
   bool isDownloaded;
   bool qualifiesForPlaybackSpeedControl;
-  double? parentNormalizationGain;
+  double? albumNormalizationGain;
+  List<BaseItemPerson>? people;
 
   MetadataProvider({
     required this.item,
@@ -32,7 +34,8 @@ class MetadataProvider {
     this.lyrics,
     this.isDownloaded = false,
     this.qualifiesForPlaybackSpeedControl = false,
-    this.parentNormalizationGain,
+    this.albumNormalizationGain,
+    this.people,
   });
 
   MediaSourceInfo get mediaSourceInfo => playbackInfo.mediaSources!.first;
@@ -44,7 +47,7 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, BaseItemDto> metadataPr
     .family<MetadataProvider?, BaseItemDto>((ref, item) async {
       Future<BaseItemDto?>? parentFuture;
       if (item.parentId != null) {
-        parentFuture = ref.watch(albumProvider(item.parentId!).future);
+        parentFuture = ref.watch(itemByIdProvider(item.parentId!).future);
       }
 
       final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
@@ -186,8 +189,21 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, BaseItemDto> metadataPr
         item: item,
         playbackInfo: playbackInfo,
         isDownloaded: localPlaybackInfo != null,
-        parentNormalizationGain: parent?.normalizationGain,
+        albumNormalizationGain: parent?.normalizationGain,
+        people: item.people,
       );
+
+      final chipConfig = ref.watch(finampSettingsProvider.featureChipsConfiguration);
+      if (!ref.watch(finampSettingsProvider.isOffline) &&
+          chipConfig.enabled &&
+          chipConfig.features.contains(FinampFeatureChipType.additionalPeople)) {
+        try {
+          final withPeople = await jellyfinApiHelper.getItems(itemIds: [item.id], fields: "People");
+          metadata.people = withPeople?.firstOrNull?.people;
+        } catch (e) {
+          metadataProviderLogger.warning("Failed to fetch people for '${item.name}' (${item.id})", e);
+        }
+      }
 
       for (final genre in item.genres ?? []) {
         if (MetadataProvider.speedControlGenres.contains(genre.toLowerCase())) {
@@ -240,28 +256,4 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, BaseItemDto> metadataPr
       );
 
       return metadata;
-    });
-
-final AutoDisposeFutureProviderFamily<BaseItemDto?, BaseItemId> albumProvider = FutureProvider.autoDispose
-    .family<BaseItemDto?, BaseItemId>((ref, parentId) async {
-      final jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
-      final downloadsService = GetIt.instance<DownloadsService>();
-
-      if (ref.watch(finampSettingsProvider.isOffline)) {
-        final parentInfo = await downloadsService.getCollectionInfo(id: parentId);
-        if (parentInfo == null) {
-          metadataProviderLogger.warning("Couldn't find parent collection '$parentId' in offline mode");
-        } else if (parentInfo.baseItem == null) {
-          metadataProviderLogger.warning("Offline metadata for '$parentId' does not include jellyfin BaseItemDto");
-        } else {
-          return parentInfo.baseItem;
-        }
-      } else {
-        try {
-          return await jellyfinApiHelper.getItemById(parentId);
-        } catch (e) {
-          metadataProviderLogger.warning("Failed to get parent item '$parentId'", e);
-        }
-      }
-      return null;
     });

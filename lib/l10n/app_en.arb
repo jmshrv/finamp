@@ -169,6 +169,14 @@
         "description": "Label for the login button."
     },
     "logs": "Logs",
+    "verboseLogging": "Verbose Logging",
+    "@verboseLogging": {
+        "description": "Title for the toggle that enables detailed logging on the logs screen"
+    },
+    "verboseLoggingSubtitle": "Keep detailed logs for bug reports. Leave this off for better playback performance.",
+    "@verboseLoggingSubtitle": {
+        "description": "Subtitle explaining the verbose logging toggle"
+    },
     "next": "Next",
     "selectMusicLibraries": "Select Music Libraries",
     "@selectMusicLibraries": {
@@ -177,6 +185,10 @@
     "allLibraries": "All Libraries",
     "@allLibraries": {
         "description": "All Libraries"
+    },
+    "activeLibraries": "Active Libraries",
+    "@activeLibraries": {
+        "description": "Active Libraries"
     },
     "unknownName": "Unknown Name",
     "tracks": "Tracks",
@@ -234,6 +246,10 @@
     "defaultOrder": "Default Order",
     "@defaultOrder": {
         "description": "Default sorting order for playlists (server order)"
+    },
+    "inAlbumOrPlaylist": "Album/Playlist Order",
+    "@inAlbumOrPlaylist": {
+        "description": "Sorting order for tracks in an album or playlist (by disc, then index, then name"
     },
     "adaptive": "Adaptive",
     "formattedRelativeTime": "{type, select, just_now{just now} minutes{{value} min ago} hours{{value} h ago} yesterday{yesterday} days{{value, plural, =1{1 day ago} other{{value} days ago}}} other{value}}",
@@ -332,6 +348,10 @@
                 "type": "int"
             }
         }
+    },
+    "discUnknown": "Disc Unknown",
+    "@discUnknown": {
+        "description": "Shown when the disc number is unknown or not set for a group of tracks on the album screen"
     },
     "playButtonLabel": "Play",
     "shuffleButtonLabel": "Shuffle",
@@ -451,10 +471,11 @@
     "enterLowPriorityStateOnPauseSubtitle": "Lets the notification be swiped away when paused. Also allows Android to kill the service when paused.",
     "shuffleAllTrackCount": "Shuffle All Track Count",
     "shuffleAllTrackCountSubtitle": "Amount of tracks to load when using the shuffle all button on the tracks tab or genre screen.",
-    "viewType": "View Type",
-    "viewTypeSubtitle": "View type for the music screen",
+    "viewType": "Music Screen Display Type",
+    "viewTypeSubtitle": "Controls grid or list mode for all music screen tabs, excepting the home screen.",
     "list": "List",
     "grid": "Grid",
+    "perTabGridMode": "Choose per tab",
     "none": "None",
     "customizationSettingsTitle": "Customization",
     "@customizationSettingsTitle": {
@@ -530,8 +551,9 @@
     "disableGesture": "Disable gestures",
     "disableGestureSubtitle": "Whether to disables gestures.",
     "showFastScroller": "Show fast scroller",
+    "showFastScrollerSubtitle": "Show or hide the alphabet list on the right of music tabs which allows jumping to letters.",
     "theme": "Theme",
-    "system": "System",
+    "system": "Follow system",
     "light": "Light",
     "dark": "Dark",
     "accentColor": "Accent Color",
@@ -542,7 +564,7 @@
     "@accentColorTitle": {
         "description": "Title for the accent color picker sheet"
     },
-    "systemAccentColor": "Use System Accent",
+    "systemAccentColor": "Use System Accent Color",
     "@systemAccentColor": {
         "description": "Title of the System Accent Color setting."
     },
@@ -810,7 +832,7 @@
     "@moveAddToQueue": {
         "description": "Used for moving a track to the end of the queue, to play after all prior tracks from the queue have played"
     },
-    "confirmPlayNext": "{type, select, track{Track} album{Album} artist{Artist} playlist{Playlist} genre{Genre} other{Item}} will play next",
+    "confirmPlayNext": "{type, select, track{Track} album{Album} artist{Artist} playlist{Playlist} genre{Genre} disc{Disc} other{Item}} will play next",
     "@confirmPlayNext": {
         "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
         "placeholders": {
@@ -819,7 +841,7 @@
             }
         }
     },
-    "confirmAddToNextUp": "Added {type, select, track{Track} album{album} artist{artist} playlist{playlist} genre{genre} disc{disc} other{item}} to Next Up",
+    "confirmAddToNextUp": "Added {type, select, track{track} album{album} artist{artist} playlist{playlist} genre{genre} disc{disc} other{item}} to Next Up",
     "@confirmAddToNextUp": {
         "description": "A confirmation message that is shown after successfully adding a track to the end of the \"Next Up\" queue",
         "placeholders": {
@@ -860,10 +882,6 @@
     "shareOfflineListens": "Share offline listens",
     "@shareOfflineListens": {
         "description": "Button for exporting the JSON file containing any playback events that couldn't be submitted to the server, either because offline mode was enabled or the connection failed"
-    },
-    "yourLikes": "Your Likes",
-    "@yourLikes": {
-        "description": "Title for the queue source when the user is playing their liked tracks"
     },
     "mix": "{mixSource} - Mix",
     "@mix": {
@@ -974,7 +992,7 @@
     "@loopModeAllButtonLabel": {
         "description": "Label for the button that toggles the loop mode between off, loop one, and loop all, while the queue is in loop all mode"
     },
-    "queuesScreen": "Restore Now Playing",
+    "queuesScreen": "Past Queues",
     "@queuesScreen": {
         "description": "Title for the screen where older now playing queues can be restored"
     },
@@ -1240,7 +1258,7 @@
             }
         }
     },
-    "couldNotLoad": "Couldn''t load {source, select, album{album} playlist{playlist} trackMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allTracks{all tracks} filteredList{tracks} genre{genre} artist{artist} track{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} nextUpGenre{genre in next up} other{}}",
+    "couldNotLoad": "Couldn't load {source, select, album{album} playlist{playlist} trackMix{track mix} artistMix{artist mix} albumMix{album mix} genreMix{genre mix} favorites{favorites} allTracks{all tracks} filteredList{tracks} genre{genre} artist{artist} track{track} nextUpAlbum{album in next up} nextUpPlaylist{playlist in next up} nextUpArtist{artist in next up} nextUpGenre{genre in next up} other{}}",
     "@couldNotLoad": {
         "placeholders": {
             "source": {
@@ -1331,9 +1349,9 @@
     "swipeRightToLeftActionSubtitle": "Action triggered when swiping a track in the list from right to left.",
     "startInstantMixForIndividualTracksSwitchTitle": "Start Instant Mixes for Individual Tracks",
     "@startInstantMixForIndividualTracksSwitchTitle": {
-        "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track."
+        "description": "Title for the switch that toggles if tapping a track on the tracks tab will start an instant mix of that track instead of playing tracks in order."
     },
-    "startInstantMixForIndividualTracksSwitchSubtitle": "When enabled, tapping a track on the tracks tab will start an instant mix of that track instead of just playing a single track.",
+    "startInstantMixForIndividualTracksSwitchSubtitle": "When enabled, tapping a track on the tracks tab will start an instant mix of that track instead of playing tracks in order.",
     "downloadItem": "Download",
     "@downloadItem": {
         "description": "Option to download item in long-press menu."
@@ -2616,7 +2634,7 @@
     "@quickConnectAuthorizationMenuStateSubtitleIdle": {
         "description": "Subtitle for the quick connect authorization menu state info (above the input field) while the code hasn't been submitted yet"
     },
-    "quickConnectAuthorizationMenuStateTitleProcessing": "Attempting to Authorize Request",
+    "quickConnectAuthorizationMenuStateTitleProcessing": "Authorizing Request",
     "@quickConnectAuthorizationMenuStateTitleProcessing": {
         "description": "Title for the quick connect authorization menu state info (above the input field) while a request is being processed"
     },
@@ -2728,6 +2746,15 @@
                 "type": "int",
                 "example": "1"
             },
+            "albumName": {
+                "type": "String"
+            }
+        }
+    },
+    "discUnknownOfAlbum": "[Disc Unknown] {albumName}",
+    "@discUnknownOfAlbum": {
+        "description": "Used when a single disc of album is opened, but the disc number is unknown, then album name is replaced with this string",
+        "placeholders": {
             "albumName": {
                 "type": "String"
             }
@@ -2850,6 +2877,10 @@
                 "example": "Ctrl + ↑/↓"
             }
         }
+    },
+    "volumeControlDisabledCastingHint": "Audio is being cast to a device that doesn't support the in-app volume control.",
+    "@volumeControlDisabledCastingHint": {
+        "description": "Hint text displayed below the volume bar when the in-app volume slider is disabled because audio is being cast to a device that bypasses the in-app volume handling and handles its own volume, such as when using Airplay."
     },
     "seekControlHint": "{shortcut} to skip -5s/+30s",
     "@seekControlHint": {
@@ -3052,6 +3083,10 @@
     "@selectAnItem": {
         "description": "Title for 'play specific item' quick action edit menu"
     },
+    "selectItemTypes": "Select item types",
+    "@selectItemTypes": {
+        "description": "Title for 'play random item' quick action edit menu"
+    },
     "sectionsMenu": "Sections",
     "@sectionsMenu": {
         "description": "Title for home screen sections edit menu"
@@ -3218,6 +3253,18 @@
     "@recentQueues": {
         "description": "Name of a home screen section preset"
     },
+    "randomAlbums": "Random Albums",
+    "@randomAlbums": {
+        "description": "Name of a home screen section preset"
+    },
+    "randomAlbumArtists": "Random Album Artists",
+    "@randomAlbumArtists": {
+        "description": "Name of a home screen section preset"
+    },
+    "recentlyAddedPlaylists": "Recently Created Playlists",
+    "@recentlyAddedPlaylists": {
+        "description": "Name of a home screen section preset"
+    },
     "favoriteAlbumsDescription": "Liked Albums in random order",
     "@favoriteAlbumsDescription": {
         "description": "Description of a home screen section preset"
@@ -3262,6 +3309,18 @@
     "@recentQueuesDescription": {
         "description": "Description of a home screen section preset"
     },
+    "randomAlbumsDescription": "Albums in random order",
+    "@randomAlbumsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "randomArtistsDescription": "Artists in random order",
+    "@randomArtistsDescription": {
+        "description": "Description of a home screen section preset"
+    },
+    "recentlyAddedPlaylistsDescription": "Playlists by creation date, starting with newest",
+    "@recentlyAddedPlaylistsDescription": {
+        "description": "Description of a home screen section preset"
+    },
     "shuffleTracksActionDescription": "Shuffles random tracks from your library",
     "@shuffleTracksActionDescription": {
         "description": "Description of a home screen quick action"
@@ -3274,16 +3333,12 @@
     "@browsePlaybackHistoryActionDescription": {
         "description": "Description of a home screen quick action"
     },
-    "playRandomAlbumActionDescription": "Starts playback of a random album",
-    "@playRandomAlbumActionDescription": {
-        "description": "Description of a home screen quick action"
-    },
     "surpriseMeActionDescription": "Starts 'Continuous' radio from a random track",
     "@surpriseMeActionDescription": {
         "description": "Description of a home screen quick action"
     },
-    "playRandomTrackActionDescription": "Starts playback of a random track",
-    "@playRandomTrackActionDescription": {
+    "playRandomItemActionDescription": "Starts playback of a random item",
+    "@playRandomItemActionDescription": {
         "description": "Description of a home screen quick action"
     },
     "playRandomFavoriteItemActionDescription": "Starts playback from a random favorite item",
@@ -3306,16 +3361,24 @@
     "@shuffleTracksAction": {
         "description": "Name of a home screen quick action"
     },
-    "randomAlbumAction": "Random Album",
-    "@randomAlbumAction": {
+    "randomItemAction": "Random {itemType, select, albums{Album} tracks{Track} playlists{Playlist} performingArtists{Performing Artist} albumArtists{Album Artist} none{Item of <Type>} other{Item}}",
+    "@randomItemAction": {
+        "placeholders": {
+            "itemType": {
+                "type": "String",
+                "description": "Localized name of item type to be selected, or placeholder 'multiple'"
+            }
+        },
         "description": "Name of a home screen quick action"
     },
-    "randomTrackAction": "Random Track",
-    "@randomTrackAction": {
-        "description": "Name of a home screen quick action"
-    },
-    "randomFavoriteAction": "Random Favorite",
+    "randomFavoriteAction": "Random Favorite {itemType, select, albums{Album} tracks{Track} playlists{Playlist} performingArtists{Performing Artist} albumArtists{Album Artist} none{of <Type>} other{}}",
     "@randomFavoriteAction": {
+        "placeholders": {
+            "itemType": {
+                "type": "String",
+                "description": "Localized name of item type to be selected, or placeholder 'multiple'"
+            }
+        },
         "description": "Name of a home screen quick action"
     },
     "previousQueueAction": "Previous Queue",
@@ -3337,6 +3400,38 @@
     },
     "surpriseMeAction": "Surprise Me",
     "@surpriseMeAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomPlaylistAction": "Random Playlist",
+    "@randomPlaylistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomArtistAction": "Random Artist",
+    "@randomArtistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomGenreAction": "Random Genre",
+    "@randomGenreAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteAlbumAction": "Random Favorite Album",
+    "@randomFavoriteAlbumAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteTrackAction": "Random Favorite Track",
+    "@randomFavoriteTrackAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoritePlaylistAction": "Random Favorite Playlist",
+    "@randomFavoritePlaylistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteArtistAction": "Random Favorite Artist",
+    "@randomFavoriteArtistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteGenreAction": "Random Favorite Genre",
+    "@randomFavoriteGenreAction": {
         "description": "Name of a home screen quick action"
     },
     "editAction": "Edit Action",
@@ -3402,7 +3497,16 @@
     },
     "genreFilter": "Genre: {name}",
     "@genreFilter": {
-        "description": "Name of genrefilter",
+        "description": "Name of genreFilter",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "artistFilter": "Artist: {name}",
+    "@artistFilter": {
+        "description": "Name of artistFilter",
         "placeholders": {
             "name": {
                 "type": "String"
@@ -3469,7 +3573,7 @@
             }
         }
     },
-    "homeAllPlaylistsWarning": "Are you sure you want to all playlists?  This will download every playlist, not just the ones in this section.",
+    "homeAllPlaylistsWarning": "Are you sure you want to download all playlists? This will download every playlist, not just the ones in this section.",
     "@homeAllPlaylistsWarning": {
         "description": "Warning presented when pressing the download button on playlist home sections with a filter applied.  This is shown because the download will not apply the filter."
     },
@@ -3529,11 +3633,15 @@
             }
         }
     },
-    "clientCertificate": "mTLS (SSL) Client Certificate",
+    "advanced": "Advanced",
+    "@advanced": {
+        "description": "Label for the button on the login screen that opens the advanced options screen, and the title of that screen."
+    },
+    "clientCertificate": "Client Certificate (mTLS)",
     "@clientCertificate": {
         "description": "Title for the setting that allows managing SSL client certificates used for authentication"
     },
-    "clientCertificateUnavailable": "No certificate set up, client authentication disabled",
+    "clientCertificateUnavailable": "No certificate set up, additional client authentication disabled",
     "@clientCertificateUnavailable": {
         "description": "Message shown when the user has no SSL client certificate available to use."
     },
@@ -3541,7 +3649,11 @@
     "@clientCertificateInstalled": {
         "description": "Message shown when the user has successfully installed an SSL client certificate."
     },
-    "clientCertificateDescription": "A TLS client certificate (.p12 or .pfx) is used to authenticate this device with your Jellyfin server. Only required if your server is configured for mutual TLS.",
+    "clientCertificatesUnsupported": "Client certificates are not supported on this platform",
+    "@clientCertificatesUnsupported": {
+        "description": "Message shown when client certificates are not supported on the user's current platform."
+    },
+    "clientCertificateDescription": "A TLS client certificate (.p12 or .pfx) is used to additionally authenticate this device with your Jellyfin server. Only required if your server is configured for mutual TLS.",
     "@clientCertificateDescription": {
         "description": "Explanatory text in the client certificate settings menu describing what a client certificate is used for"
     },
@@ -3697,5 +3809,77 @@
     "playOnMigrateAction": "Play my queue",
     "@playOnMigrateAction": {
         "description": "Dialog action that connects to the remote device and replaces its queue with this device's queue."
-    }
+    },
+    "cancelChanges": "Cancel changes",
+    "@cancelChanges": {
+        "description": "Button on sort and filter menu that clears any pending changes."
+    },
+    "applyChangesOnClose": "Changes will apply when menu is closed",
+    "@applyChangesOnClose": {
+        "description": "Notification on sort and filter menu that currently pending changes will be automatically applied on close."
+    },
+    "removeFromQueue": "Remove From Queue",
+    "featureChipName": "{chipName, select, explicit{Explicit} playCount{Play Count} additionalPeople{Additional People} playbackMode{Playback Mode} codec{Codec} bitRate{Bitrate} bitDepth{Bit Depth} sampleRate{Sample Rate} size{Size} normalizationGain{Normalization Gain} other{{chipName}}}",
+    "@featureChipName": {
+        "placeholders": {
+            "chipName": {
+                "type": "String",
+                "example": "playCount"
+            }
+        },
+        "description": "Titles for settings controlling which pieces of advanced track info are displayed."
+    },
+    "featureChipDescription": "{chipName, select, explicit{Marks tracks containing explicit content} additionalPeople{Non-artist people linked to the track, if available (writers, lyricists, etc.)} playbackMode{Streaming and transcoding status information} bitDepth{Bits per audio sample.  Only applicable to lossless codecs, generally 16 bits.} sampleRate{Audio samples per second.  Generally 44.1 kHz.} normalizationGain{Currently active ReplayGain level} size{The original file size of the track} other{null}}",
+    "@featureChipDescription": {
+        "placeholders": {
+            "chipName": {
+                "type": "String",
+                "example": "playCount"
+            }
+        },
+        "description": "Descriptions of different pieces of advanced track info."
+    },
+    "maximizePlayer": "Maximize player",
+    "collapsePlayer": "Collapse player to sidebar",
+    "addSpecialDownloads": "Add special download",
+    "@addSpecialDownloads": {
+        "description": "Button on downloads screen which allows adding special downloads, such as all playlists or all favorites."
+    },
+    "allTracks": "All Tracks (from \"{trackName}\")",
+    "@allTracks": {
+        "description": "Queue source when playing from tracks screen.",
+        "placeholders": {
+            "trackName": {
+                "type": "String",
+                "example": "Never Gonna Give You Up"
+            }
+        }
+    },
+    "yourLikes": "Your Likes (from \"{trackName}\")",
+    "@yourLikes": {
+        "description": "Queue source when playing from tracks screen with favorite filter active.",
+        "placeholders": {
+            "trackName": {
+                "type": "String",
+                "example": "Never Gonna Give You Up"
+            }
+        }
+    },
+    "quickActionBanner": "Check out some commonly changed settings!",
+    "@quickActionBanner": {
+        "description": "Banner directing new users to the quick settings, where they can adjust the most commonly used settings"
+    },
+    "themeSettingTitle": "App color theme (dark/light)",
+    "@themeSettingTitle": {
+        "description": "Title for the setting that allows you to override the system theme and force dark or light mode"
+    },
+    "perTabGridModeScreen": "Set per-tab view types",
+    "perTabAlbumGrid": "Albums only in grid",
+    "quickSettingsScreen": "Quick Settings",
+    "quickSettingsScreenDescription": "Customize Finamp to your preferences with these core options. Come back here any time via Settings.",
+    "quickSettingsTabsLink": "Rearrange and hide tabs",
+    "quickSettingsTranscodeLink": "All transcoding settings",
+    "quickSettingsLayoutLink": "All layout & theme settings",
+    "quickSettingsAllSettingsLink": "All Settings",
+    "quickSettingsNetworkLink": "Configure the local address for your server"
 }

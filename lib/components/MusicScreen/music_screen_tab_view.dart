@@ -105,7 +105,8 @@ class _MusicScreenTabViewState extends ConsumerState<MusicScreenTabView>
     if (letter.isEmpty) return;
 
     letterToSearch = letter;
-    var codePointToScrollTo = letter.toLowerCase().codeUnitAt(0);
+    var codePointToScrollTo = (widget.contentType == ContentType.tracks ? letter.toUpperCase() : letter.toLowerCase())
+        .codeUnitAt(0);
 
     if (letter == '#') {
       codePointToScrollTo = 0;
@@ -126,8 +127,11 @@ class _MusicScreenTabViewState extends ConsumerState<MusicScreenTabView>
                   baseItem.albumArtists?.sortedBy((e) => e.name ?? '').map((e) => e.name ?? '').join(", ") ??
                   baseItem.albumArtist ??
                   "";
+              // TODO how does jellyfin sort handle this?  Do we match?
+              sortName = removeDiacritics(sortName).toLowerCase();
               break;
             default:
+              // Any modification throws us off from server sorting.  Assume sortName is already stripped and lowercase.
               sortName = baseItem.nameForSorting ?? "";
               break;
           }
@@ -287,10 +291,10 @@ class _MusicScreenTabViewState extends ConsumerState<MusicScreenTabView>
       );
     }
     final itemPadding = calculateItemCollectionCardWidth(ref).$2;
-    var tabContent =
-        ref.watch(finampSettingsProvider.contentViewType) == ContentViewType.list ||
-            widget.contentType == ContentType.tracks ||
-            widget.contentType == null
+    final useListMode = widget.contentType == null || widget.contentType == ContentType.tracks
+        ? true
+        : ref.watch(finampSettingsProvider.perTabContentViewType(widget.contentType!)) != ContentViewType.grid;
+    var tabContent = useListMode
         ? SafeArea(
             top: false,
             bottom: false,
@@ -317,23 +321,33 @@ class _MusicScreenTabViewState extends ConsumerState<MusicScreenTabView>
                           controller: controller,
                           index: index,
                           child: switch (item) {
-                            Track() => TrackListTile(
-                              key: ValueKey(item.item.id),
-                              item: item.item,
-                              index: index,
-                              // when the tabBar was filtered and we only have the tracks tab,
-                              // we can allow Dismiss gestures in the track list
-                              allowDismiss: widget.allowTrackGestures,
-                              parentItem: widget.sortConfig.genreFilter != null
-                                  ? ref.watch(itemByIdProvider(widget.sortConfig.genreFilter!.id)).value
-                                  : null,
-                              forceAlbumArtists: (widget.sortConfig.sortBy == SortBy.albumArtist),
-                              adaptiveAdditionalInfoSortBy: widget.sortConfig.sortBy,
-                              parentPlayable: ref.watch(finampSettingsProvider.startInstantMixForIndividualTracks)
-                                  ? InstantMix(item.item)
-                                  : widget.displayable is FinampPlayable
-                                  ? (widget.displayable as FinampPlayable)
-                                  : item,
+                            Track() => Consumer(
+                              builder: (context, ref, _) {
+                                return TrackListTile(
+                                  key: ValueKey(item.item.id),
+                                  item: item.item,
+                                  index: index,
+                                  // when the tabBar was filtered and we only have the tracks tab,
+                                  // we can allow Dismiss gestures in the track list
+                                  allowDismiss: widget.allowTrackGestures,
+                                  parentItem: switch (true) {
+                                    _ when widget.sortConfig.genreFilter != null =>
+                                      ref.watch(itemByIdProvider(widget.sortConfig.genreFilter!.id)).value,
+                                    _ when widget.sortConfig.artistFilter != null =>
+                                      ref.watch(itemByIdProvider(widget.sortConfig.artistFilter!.id)).value,
+                                    _ => null,
+                                  },
+                                  forceAlbumArtists: (widget.sortConfig.sortBy == SortBy.albumArtist),
+                                  adaptiveAdditionalInfoSortBy: widget.sortConfig.sortBy,
+                                  parentPlayable:
+                                      ref.watch(finampSettingsProvider.startInstantMixForIndividualTracks) &&
+                                          !ref.watch(finampSettingsProvider.isOffline)
+                                      ? InstantMix(item.item)
+                                      : widget.displayable is FinampPlayable
+                                      ? (widget.displayable as FinampPlayable)
+                                      : item,
+                                );
+                              },
                             ),
                             FinampPlayableDto() => ItemWrapper(
                               key: ValueKey(item.item.id),
@@ -428,6 +442,7 @@ class _MusicScreenTabViewState extends ConsumerState<MusicScreenTabView>
               callback: scrollToLetter,
               scrollController: controller,
               sortOrder: widget.sortConfig.sortOrder,
+              inGridMode: !useListMode,
               child: tabContent,
             )
           : tabContent,

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'package:http/http.dart' show ClientException;
 import 'package:logging/logging.dart';
 
 import 'finamp_settings_helper.dart';
@@ -13,6 +14,66 @@ class ClientCertificateInstaller {
 
   static final _logger = Logger('ClientCertificateInstaller');
   static const _channel = MethodChannel('com.unicornsonlsd.finamp/client_certificate');
+
+  static const _certificateRequiredAlert = "TLSV1_ALERT_CERTIFICATE_REQUIRED";
+
+  /// OsError codes for EPIPE and ECONNRESET on Linux and macOS, and WSAECONNABORTED and WSAECONNRESET on Windows
+  static const _writeFailureCodes = {32, 54, 104, 10053, 10054};
+
+  /// Checks whether [error], thrown while connecting to [serverUrl],
+  /// indicates that the server requires an mTLS client certificate.
+  ///
+  /// In the best case, the server's CERTIFICATE_REQUIRED alert shows up in the error message.
+  ///
+  /// However, with TLS 1.3, the client may already have started writing the HTTP request,
+  /// which may fail first and mask the certificate error by a broken pipe.
+  /// Older TLS 1.2 servers don't report a dedicated alert and just abort the handshake instead.
+  ///
+  /// In those unspecific cases, we probe the server for certificate errors without writing any data,
+  /// in which case the issue should be reported cleanly.
+  static Future<bool> isCertificateRequiredError(Object error, Uri serverUrl) async {
+    if (error is ClientException && error.message.contains(_certificateRequiredAlert)) {
+      return true;
+    }
+    if (error is TlsException && (error.osError?.message ?? error.message).contains(_certificateRequiredAlert)) {
+      return true;
+    }
+    // Actual SocketExceptions only occur before a (HTTP) request is in flight (connection refused, DNS failures, ...),
+    // so we can filter by errno here and skip probing servers that are simply unreachable.
+    if (error is SocketException) {
+      return _writeFailureCodes.contains(error.osError?.errorCode) && await _probeCertificateRequired(serverUrl);
+    }
+    if (error is TlsException || error is ClientException || error is HttpException) {
+      return _probeCertificateRequired(serverUrl);
+    }
+    return false;
+  }
+
+  /// Connects to [url] and checks for the server's TLS alert without sending a request,
+  /// so the "certificate required" alert can't be masked by a failed write.
+  static Future<bool> _probeCertificateRequired(Uri url) async {
+    if (url.scheme != "https") {
+      return false;
+    }
+    Socket? socket;
+    try {
+      socket = await SecureSocket.connect(
+        url.host,
+        url.port,
+        // Accepting any server certificate is fine here, no data is sent over the connection
+        onBadCertificate: (_) => true,
+        timeout: const Duration(seconds: 3),
+      );
+      await socket.drain<void>().timeout(const Duration(seconds: 3));
+    } on TlsException catch (e) {
+      return (e.osError?.message ?? e.message).contains(_certificateRequiredAlert);
+    } catch (_) {
+      return false;
+    } finally {
+      socket?.destroy();
+    }
+    return false;
+  }
 
   /// Installs the configured [ClientCertificate] in the whole app, if supported and available:
   /// - into the [SecurityContext.defaultContext] used by Dart's HttpClient

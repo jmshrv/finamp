@@ -589,7 +589,7 @@ class _GetAlbumShuffledPlayerSliceProviderElement
       (origin as GetAlbumShuffledPlayerSliceProvider).item;
 }
 
-String _$getChildTracksHash() => r'549f7a09f30ea42698768bf2b1243312485b70b6';
+String _$getChildTracksHash() => r'c94b4121e0f39fa565716273b35e6ef8f6ebbbe2';
 
 /// See also [getChildTracks].
 @ProviderFor(getChildTracks)

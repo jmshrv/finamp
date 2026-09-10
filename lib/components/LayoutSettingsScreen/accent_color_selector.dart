@@ -154,29 +154,32 @@ class _AccentColorPopupState extends ConsumerState<AccentColorPopup> {
                     ColorPickerType.accent: false,
                   },
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        FinampSetters.setAccentColor(null);
-                        Navigator.pop(context);
-                      },
-                      child: Text(AppLocalizations.of(context)!.useDefaultButton),
-                    ),
-                    FilledButton(
-                      onPressed: previewColor == null
-                          ? null
-                          : () {
-                              final color = controller.text.toColorOrNull();
-                              if (color != null) {
-                                FinampSetters.setAccentColor(color);
-                                Navigator.pop(context);
-                              }
-                            },
-                      child: Text(AppLocalizations.of(context)!.save),
-                    ),
-                  ],
+                SizedBox(
+                  width: double.infinity,
+                  child: Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          FinampSetters.setAccentColor(null);
+                          Navigator.pop(context);
+                        },
+                        child: Text(AppLocalizations.of(context)!.useDefaultButton),
+                      ),
+                      FilledButton(
+                        onPressed: previewColor == null
+                            ? null
+                            : () {
+                                final color = controller.text.toColorOrNull();
+                                if (color != null) {
+                                  FinampSetters.setAccentColor(color);
+                                  Navigator.pop(context);
+                                }
+                              },
+                        child: Text(AppLocalizations.of(context)!.save),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

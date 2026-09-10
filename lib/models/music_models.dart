@@ -90,7 +90,7 @@ class MusicScreenPlayable<ChildType extends FinampPlayableDto> extends _Sortable
         assert(ChildType == Track);
       case ContentType.home:
       case ContentType.genericArtists:
-      case ContentType.inPlaylist:
+      case ContentType.inPlaylistOrAlbum:
       case ContentType.mixed:
       case ContentType.inPerformingArtistAlbums:
       case ContentType.inAlbumArtistAlbums:
@@ -126,7 +126,7 @@ class MusicScreenPlayable<ChildType extends FinampPlayableDto> extends _Sortable
       case ContentType.tracks:
         return MusicScreenPlayable<Track>._(tab: tab, library: library, source: source, sortConfig: sortConfig)
             as MusicScreenPlayable<ChildType>;
-      case ContentType.inPlaylist:
+      case ContentType.inPlaylistOrAlbum:
       case ContentType.genericArtists:
       case ContentType.home:
       case ContentType.mixed:
@@ -146,7 +146,7 @@ class MusicScreenPlayable<ChildType extends FinampPlayableDto> extends _Sortable
     ContentType.albumArtists => 3,
     ContentType.home ||
     ContentType.genericArtists ||
-    ContentType.inPlaylist ||
+    ContentType.inPlaylistOrAlbum ||
     ContentType.inAlbumArtistAlbums ||
     ContentType.inPerformingArtistAlbums ||
     ContentType.mixed => throw UnsupportedError("Invalid music screen content type $tab"),

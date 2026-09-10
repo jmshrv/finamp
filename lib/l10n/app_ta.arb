@@ -3233,16 +3233,8 @@
     "@browsePlaybackHistoryActionDescription": {
         "description": "Description of a home screen quick action"
     },
-    "playRandomAlbumActionDescription": "சீரற்ற ஆல்பத்தின் பிளேபேக்கைத் தொடங்குகிறது",
-    "@playRandomAlbumActionDescription": {
-        "description": "Description of a home screen quick action"
-    },
     "surpriseMeActionDescription": "சீரற்ற பாதையில் இருந்து 'தொடர்ச்சியான' வானொலியைத் தொடங்குகிறது",
     "@surpriseMeActionDescription": {
-        "description": "Description of a home screen quick action"
-    },
-    "playRandomTrackActionDescription": "ரேண்டம் டிராக்கின் பிளேபேக்கைத் தொடங்குகிறது",
-    "@playRandomTrackActionDescription": {
         "description": "Description of a home screen quick action"
     },
     "playRandomFavoriteItemActionDescription": "சீரற்ற விருப்பமான உருப்படியிலிருந்து பிளேபேக்கைத் தொடங்குகிறது",
@@ -3263,14 +3255,6 @@
     },
     "shuffleTracksAction": "தடங்களை கலக்கவும்",
     "@shuffleTracksAction": {
-        "description": "Name of a home screen quick action"
-    },
-    "randomAlbumAction": "சீரற்ற ஆல்பம்",
-    "@randomAlbumAction": {
-        "description": "Name of a home screen quick action"
-    },
-    "randomTrackAction": "ரேண்டம் டிராக்",
-    "@randomTrackAction": {
         "description": "Name of a home screen quick action"
     },
     "randomFavoriteAction": "ரேண்டம் பிடித்தது",

@@ -1,9 +1,11 @@
 import 'package:finamp/components/SettingsScreen/finamp_settings_dropdown.dart';
+import 'package:finamp/l10n/app_localizations.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+
+import '../../extensions/localizations.dart';
 
 extension LocalisedName on ThemeMode {
   String toLocalisedString(BuildContext context) => _humanReadableLocalisedName(this, context);
@@ -21,13 +23,15 @@ extension LocalisedName on ThemeMode {
 }
 
 class ThemeSelector extends ConsumerWidget {
-  const ThemeSelector({super.key});
+  const ThemeSelector({super.key, this.verbose = false});
+
+  final bool verbose;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(finampSettingsProvider.themeMode);
     return ListTile(
-      title: Text(AppLocalizations.of(context)!.theme),
+      title: Text(verbose ? context.l10n.themeSettingTitle : context.l10n.theme),
       subtitle: FinampSettingsDropdown<ThemeMode>(
         dropdownItems: ThemeMode.values
             .map(

@@ -82,7 +82,7 @@ class AutoOffline extends _$AutoOffline {
 }
 
 Future<void> _onConnectivityChange(List<ConnectivityResult>? connections) async {
-  _networkAutomationLogger.finest(
+  _networkAutomationLogger.info(
     "Network Change: ${connections?.map((element) => element.toString()).join(", ") ?? "None (likely a manual function call)"}",
   );
   connections ??= await Connectivity().checkConnectivity();

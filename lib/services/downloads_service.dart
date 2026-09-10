@@ -1601,6 +1601,27 @@ class DownloadsService {
     return _getFavoriteIds()?.contains(stubId);
   }
 
+  /// Returns the amount of favorites known offline, optionally filtered by
+  /// [baseItemType].
+  /// Returns null if the favorites metadata has never been synced, e.g. because
+  /// trackOfflineFavorites is disabled, there are no downloads yet, or the
+  /// setting was turned off after previously being enabled.
+  /// A return value of 0 means the metadata exists and there are simply no favorites.
+  int? getFavoritesCount({BaseItemDtoType? baseItemType}) {
+    var stub = DownloadStub.fromFinampCollection(FinampCollection(type: FinampCollectionType.favorites));
+    var favoriteIds = _isar.downloadItems.getSync(stub.isarId)?.orderedChildren;
+    if (favoriteIds == null) return null;
+    if (baseItemType == null) {
+      return favoriteIds.length;
+    }
+    return _isar.downloadItems
+        .where()
+        .anyOf(favoriteIds, (q, id) => q.isarIdEqualTo(id))
+        .filter()
+        .baseItemTypeEqualTo(baseItemType)
+        .countSync();
+  }
+
   List<int>? _getFavoriteIds() {
     var stub = DownloadStub.fromFinampCollection(FinampCollection(type: FinampCollectionType.favorites));
     return _isar.downloadItems.getSync(stub.isarId)?.orderedChildren ?? [];

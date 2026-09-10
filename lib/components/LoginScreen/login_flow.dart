@@ -9,7 +9,6 @@ import 'package:finamp/services/server_client_discovery_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
-import 'package:http/http.dart';
 import 'package:logging/logging.dart';
 
 import 'login_authentication_page.dart';
@@ -263,14 +262,12 @@ class ServerState {
       try {
         publicServerInfo = await jellyfinApiHelper.loadServerPublicInfo();
       } catch (error) {
-        if (ClientCertificateInstaller.isSupported &&
-            error is ClientException &&
-            error.message.contains("TLSV1_ALERT_CERTIFICATE_REQUIRED")) {
+        if (await ClientCertificateInstaller.isCertificateRequiredError(error, Uri.parse(baseUrlToTest))) {
           clientCertificateRequired = true;
           // Found server requiring mTLS certificate, no need to try other protocols/ports.
           return;
         } else {
-          serverStateLogger.severe("Error loading server info: $error");
+          serverStateLogger.severe("Couldn't reach server at $baseUrlToTest (HTTPS): $error");
         }
       }
       if (this.baseUrlToTest != baseUrl) {
@@ -285,7 +282,7 @@ class ServerState {
         try {
           publicServerInfo = await jellyfinApiHelper.loadServerPublicInfo();
         } catch (error) {
-          serverStateLogger.severe("Error loading server info: $error");
+          serverStateLogger.severe("Couldn't reach server at $baseUrlToTest (HTTP): $error");
         }
       }
       if (this.baseUrlToTest != baseUrl) {
@@ -300,7 +297,7 @@ class ServerState {
         try {
           publicServerInfo = await jellyfinApiHelper.loadServerPublicInfo();
         } catch (error) {
-          serverStateLogger.severe("Error loading server info: $error");
+          serverStateLogger.severe("Couldn't reach server at $baseUrlToTest (default port): $error");
         }
       }
       if (this.baseUrlToTest != baseUrl) {

@@ -67,7 +67,7 @@ class AlbumScreenContentFlexibleSpaceBar extends ConsumerWidget {
                 ),
                 if (BaseItemDtoType.fromItem(parentItem) == BaseItemDtoType.playlist) ...[
                   SizedBox(height: 10),
-                  SortAndFilterRow(tabType: ContentType.inPlaylist, controller: controller),
+                  SortAndFilterRow(contentType: ContentType.inPlaylistOrAlbum, controller: controller),
                 ],
               ],
             ),

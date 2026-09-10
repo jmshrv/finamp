@@ -1376,7 +1376,7 @@
             }
         }
     },
-    "confirmPlayNext": "{type, select, track{歌曲} album{专辑} artist{艺术家} playlist{播放列表} genre{流派} other{项目}}已添加到接下来播放队列首位",
+    "confirmPlayNext": "{type, select, track{歌曲} album{专辑} artist{艺术家} playlist{播放列表} genre{流派} disc{唱片} other{项目}}已添加到接下来播放队列首位",
     "@confirmPlayNext": {
         "description": "A confirmation message that is shown after successfully adding a track to the front of the \"Next Up\" queue",
         "placeholders": {
@@ -3210,16 +3210,8 @@
     "@browsePlaybackHistoryActionDescription": {
         "description": "Description of a home screen quick action"
     },
-    "playRandomAlbumActionDescription": "随机播放一张专辑",
-    "@playRandomAlbumActionDescription": {
-        "description": "Description of a home screen quick action"
-    },
     "surpriseMeActionDescription": "随机选择一首歌曲，并以连续播放模式开始电台",
     "@surpriseMeActionDescription": {
-        "description": "Description of a home screen quick action"
-    },
-    "playRandomTrackActionDescription": "随机播放任一歌曲",
-    "@playRandomTrackActionDescription": {
         "description": "Description of a home screen quick action"
     },
     "playRandomFavoriteItemActionDescription": "从收藏中随机播放任一内容",
@@ -3240,14 +3232,6 @@
     },
     "shuffleTracksAction": "随机播放歌曲",
     "@shuffleTracksAction": {
-        "description": "Name of a home screen quick action"
-    },
-    "randomAlbumAction": "随机播放一张专辑",
-    "@randomAlbumAction": {
-        "description": "Name of a home screen quick action"
-    },
-    "randomTrackAction": "随机播放一首歌曲",
-    "@randomTrackAction": {
         "description": "Name of a home screen quick action"
     },
     "randomFavoriteAction": "随机播放收藏",
@@ -3464,5 +3448,70 @@
                 "example": "syncingLocal"
             }
         }
-    }
+    },
+    "clientCertificate": "mTLS (SSL) 客户端证书",
+    "@clientCertificate": {
+        "description": "Title for the setting that allows managing SSL client certificates used for authentication"
+    },
+    "clientCertificateUnavailable": "未设置证书，客户端身份验证已禁用",
+    "@clientCertificateUnavailable": {
+        "description": "Message shown when the user has no SSL client certificate available to use."
+    },
+    "clientCertificateInstalled": "证书已安装",
+    "@clientCertificateInstalled": {
+        "description": "Message shown when the user has successfully installed an SSL client certificate."
+    },
+    "clientCertificateDescription": "TLS 客户端证书（.p12 或 .pfx）用于向您的 Jellyfin 服务器验证此设备的身份。仅当您的服务器配置了双向 TLS 时才需要此证书。",
+    "@clientCertificateDescription": {
+        "description": "Explanatory text in the client certificate settings menu describing what a client certificate is used for"
+    },
+    "importClientCertificate": "导入证书",
+    "@importClientCertificate": {
+        "description": "Label for the button to import a new SSL client certificate."
+    },
+    "removeClientCertificate": "移除证书",
+    "@removeClientCertificate": {
+        "description": "Label for the button to remove the currently installed SSL client certificate."
+    },
+    "clientCertificatePasswordTitle": "证书密码",
+    "@clientCertificatePasswordTitle": {
+        "description": "Title of the dialog prompting the user to enter the password for the client certificate being imported."
+    },
+    "clientCertificatePasswordHint": "密码",
+    "@clientCertificatePasswordHint": {
+        "description": "Hint text for the password input field when importing a client certificate."
+    },
+    "clientCertificateDeleteConfirm": "移除已安装的证书？客户端身份验证将被禁用。",
+    "@clientCertificateDeleteConfirm": {
+        "description": "Confirmation prompt shown before removing the installed client certificate."
+    },
+    "clientCertificateImportSuccess": "证书导入成功",
+    "@clientCertificateImportSuccess": {
+        "description": "Message shown after successfully importing a client certificate."
+    },
+    "clientCertificateImportError": "证书导入失败",
+    "@clientCertificateImportError": {
+        "description": "Error message shown when importing a client certificate fails."
+    },
+    "clientCertificateRequired": "需要客户端证书",
+    "@clientCertificateRequired": {
+        "description": "Message shown on the server selection screen when the server requires a client certificate to be provided."
+    },
+    "activeLibraries": "使用中的音乐库",
+    "@activeLibraries": {
+        "description": "Active Libraries"
+    },
+    "randomGenreAction": "随机流派",
+    "@randomGenreAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "cancelChanges": "取消更改",
+    "@cancelChanges": {
+        "description": "Button on sort and filter menu that clears any pending changes."
+    },
+    "applyChangesOnClose": "更改会在菜单关闭时应用",
+    "@applyChangesOnClose": {
+        "description": "Notification on sort and filter menu that currently pending changes will be automatically applied on close."
+    },
+    "removeFromQueue": "从队列中移除"
 }

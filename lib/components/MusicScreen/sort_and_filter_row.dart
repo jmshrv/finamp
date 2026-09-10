@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:finamp/components/Buttons/cta_medium.dart';
 import 'package:finamp/components/Buttons/simple_button.dart';
 import 'package:finamp/components/SettingsScreen/finamp_settings_dropdown.dart';
 import 'package:finamp/components/themed_bottom_sheet.dart';
@@ -63,7 +62,7 @@ abstract class SortAndFilterController {
   static ResolvedSortConfig resolveOffline(Ref ref, ContentType type, SortAndFilterConfiguration config) {
     final output = resolveOfflineWithoutFallback(ref, type, config);
     if (output != null) return output;
-    if (type == ContentType.inPlaylist) {
+    if (type == ContentType.inPlaylistOrAlbum) {
       return ResolvedSortConfig._(config.copyWith(sortBy: SortBy.defaultOrder));
     } else {
       return ResolvedSortConfig._(config.copyWith(sortBy: SortBy.sortName));
@@ -100,6 +99,14 @@ extension type const ResolvedSortConfig._(SortAndFilterConfiguration config) imp
   static const defaultInAlbumSort = ResolvedSortConfig._(
     SortAndFilterConfiguration(sortBy: SortBy.defaultOrder, sortOrder: SortOrder.ascending, filters: {}),
   );
+
+  static const randomSort = ResolvedSortConfig._(
+    SortAndFilterConfiguration(sortBy: SortBy.random, sortOrder: SortOrder.ascending, filters: {}),
+  );
+
+  static const defaultArtistAlbumSort = ResolvedSortConfig._(
+    SortAndFilterConfiguration(sortBy: SortBy.premiereDate, sortOrder: SortOrder.ascending, filters: {}),
+  );
 }
 
 class _SortControllerState {
@@ -131,9 +138,12 @@ class StaticSortAndFilterController extends SortAndFilterController {
 class TrackingSortAndFilterController extends SortAndFilterController {
   TrackingSortAndFilterController({required super.contentType})
     : super._(
-        startingConfig: contentType == ContentType.inPlaylist
-            ? ResolvedSortConfig.defaultInAlbumSort
-            : ResolvedSortConfig.defaultSort,
+        startingConfig: switch (contentType) {
+          ContentType.inPlaylistOrAlbum => ResolvedSortConfig.defaultInAlbumSort,
+          ContentType.inPerformingArtistAlbums => ResolvedSortConfig.defaultArtistAlbumSort,
+          ContentType.inAlbumArtistAlbums => ResolvedSortConfig.defaultArtistAlbumSort,
+          _ => ResolvedSortConfig.defaultSort,
+        },
       );
 
   @override
@@ -146,16 +156,19 @@ class TrackingSortAndFilterController extends SortAndFilterController {
       FinampSetters.setTabSortOrder(_type, newConfig.sortOrder);
     }
 
-    if (newConfig.filters.contains(ItemFilter(type: ItemFilterType.isFavorite)) !=
-        FinampSettingsHelper.finampSettings.onlyShowFavorites) {
-      FinampSetters.setOnlyShowFavorites(newConfig.filters.contains(ItemFilter(type: ItemFilterType.isFavorite)));
-    }
+    // prevent propagating configuration changes to the globally tracked settings for track lists in albums or playlists until we are able to store the filter per tab/context
+    if (_type != ContentType.inPlaylistOrAlbum) {
+      if (newConfig.filters.contains(ItemFilter(type: ItemFilterType.isFavorite)) !=
+          FinampSettingsHelper.finampSettings.onlyShowFavorites) {
+        FinampSetters.setOnlyShowFavorites(newConfig.filters.contains(ItemFilter(type: ItemFilterType.isFavorite)));
+      }
 
-    if (newConfig.filters.contains(ItemFilter(type: ItemFilterType.isFullyDownloaded)) !=
-        FinampSettingsHelper.finampSettings.onlyShowFullyDownloaded) {
-      FinampSetters.setOnlyShowFullyDownloaded(
-        newConfig.filters.contains(ItemFilter(type: ItemFilterType.isFullyDownloaded)),
-      );
+      if (newConfig.filters.contains(ItemFilter(type: ItemFilterType.isFullyDownloaded)) !=
+          FinampSettingsHelper.finampSettings.onlyShowFullyDownloaded) {
+        FinampSetters.setOnlyShowFullyDownloaded(
+          newConfig.filters.contains(ItemFilter(type: ItemFilterType.isFullyDownloaded)),
+        );
+      }
     }
   }
 
@@ -166,8 +179,12 @@ class TrackingSortAndFilterController extends SortAndFilterController {
     return _config.copyWith(
       sortBy: ref.watch(finampSettingsProvider.tabSortBy(_type)),
       sortOrder: ref.watch(finampSettingsProvider.tabSortOrder(_type)),
-      favoriteFilter: ref.watch(finampSettingsProvider.onlyShowFavorites),
-      onlyShowFullyDownloadedFilter: ref.watch(finampSettingsProvider.onlyShowFullyDownloaded),
+      favoriteFilter: _type == ContentType.inPlaylistOrAlbum
+          ? _config.favoritesFilter
+          : ref.watch(finampSettingsProvider.onlyShowFavorites),
+      onlyShowFullyDownloadedFilter: _type == ContentType.inPlaylistOrAlbum
+          ? _config.onlyShowFullyDownloadedFilter
+          : ref.watch(finampSettingsProvider.onlyShowFullyDownloaded),
     );
   }
 }
@@ -184,7 +201,7 @@ final _unresolvedSortProvider = Provider.family((Ref ref, SortAndFilterControlle
 });
 
 class SortAndFilterRow extends ConsumerWidget {
-  final ContentType tabType;
+  final ContentType contentType;
   final SortAndFilterController controller;
 
   final bool removeOnly;
@@ -195,7 +212,7 @@ class SortAndFilterRow extends ConsumerWidget {
 
   const SortAndFilterRow({
     super.key,
-    required this.tabType,
+    required this.contentType,
     required this.controller,
     this.hideLeadingIcon = false,
     this.allowFilters,
@@ -206,7 +223,7 @@ class SortAndFilterRow extends ConsumerWidget {
     required this.controller,
     this.hideLeadingIcon = false,
     this.allowFilters,
-  }) : tabType = ContentType.tracks,
+  }) : contentType = ContentType.tracks,
        removeOnly = true;
 
   @override
@@ -220,7 +237,7 @@ class SortAndFilterRow extends ConsumerWidget {
 
     Future<void> showMenu() => showSortAndFilterMenu(
       context,
-      tabType: tabType,
+      tabType: contentType,
       controller: controller,
       removeOnly: removeOnly,
       allowFilters: allowFilters,
@@ -241,10 +258,10 @@ class SortAndFilterRow extends ConsumerWidget {
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    final filerButtonWidth = 52.0;
+                    final filterButtonWidth = 52.0;
                     final minimumMaxChipWidth = 125.0;
                     final chipSpacing = 2.0;
-                    final maxChips = ((constraints.maxWidth - filerButtonWidth) / (minimumMaxChipWidth + chipSpacing))
+                    final maxChips = ((constraints.maxWidth - filterButtonWidth) / (minimumMaxChipWidth + chipSpacing))
                         .floor();
                     final showChips = hideLeadingIcon || (maxChips >= activeFilterCount && activeFilterCount > 0);
                     return Row(
@@ -271,7 +288,7 @@ class SortAndFilterRow extends ConsumerWidget {
                               constraints: BoxConstraints(
                                 // Cap chip width to prevent unusually long ones from causing overflow.
                                 // If showChips, this is guaranteed to be at least minimumMaxChipWidth
-                                maxWidth: (constraints.maxWidth - filerButtonWidth) / activeFilterCount,
+                                maxWidth: (constraints.maxWidth - filterButtonWidth) / activeFilterCount,
                               ),
                               child: ActiveFilterChip(
                                 filter: filter,
@@ -295,14 +312,13 @@ class SortAndFilterRow extends ConsumerWidget {
                   icon: currentConfig.sortOrder.getIcon(),
                   text: currentConfig.sortBy.toLocalisedString(context.l10n),
                   onPressed: showMenu,
-                  onIconPressed: () => controller._updateConfiguration(
+                  onPressedSecondary: () => controller._updateConfiguration(
                     currentConfig.copyWith(
                       sortOrder: currentConfig.sortOrder == SortOrder.ascending
                           ? SortOrder.descending
                           : SortOrder.ascending,
                     ),
                   ),
-                  onPressedSecondary: showMenu,
                 ),
             ],
           ),
@@ -432,7 +448,7 @@ mixin _SortAndFilterMenuEntriesMixin<T extends ConsumerStatefulWidget> on Consum
   List<Widget> _getMenuEntries(BuildContext context) {
     final rawSortOptions = SortBy.defaultsFor(
       type: tabType.itemType,
-      includeDefaultOrder: tabType == ContentType.inPlaylist,
+      includeDefaultOrder: tabType == ContentType.inPlaylistOrAlbum,
     );
     final sortOptions = ref.watch(finampSettingsProvider.isOffline)
         ? [...rawSortOptions.whereNot((s) => s.onlineOnly), ...rawSortOptions.where((s) => s.onlineOnly)]
@@ -515,7 +531,7 @@ mixin _SortAndFilterMenuEntriesMixin<T extends ConsumerStatefulWidget> on Consum
           ),
           ...ItemFilterType.values
               .where((x) => toggalableFilterTypes.contains(x))
-              .map((option) => _makeFilterTile(option)),
+              .map((option) => _makeFilterTile(option, tabType)),
           ...excessFilters.map((filter) => _makeExcessFilterTile(filter)),
         ],
       ),
@@ -540,15 +556,11 @@ mixin _SortAndFilterMenuEntriesMixin<T extends ConsumerStatefulWidget> on Consum
     ];
   }
 
-  Widget _makeFilterTile(ItemFilterType option) {
+  Widget _makeFilterTile(ItemFilterType option, ContentType contentType) {
     return ToggleableListTile(
       title: ItemFilter(type: option).getName(context.l10n),
       leading: Padding(padding: const EdgeInsets.only(left: 16.0), child: Icon(option.icon)),
       trailing: SizedBox.shrink(),
-      enabled: switch (option) {
-        ItemFilterType.isFullyDownloaded => ref.watch(finampSettingsProvider.isOffline),
-        _ => true,
-      },
       state: switch (option) {
         ItemFilterType.isFavorite => currentConfig.filters.contains(ItemFilter(type: ItemFilterType.isFavorite)),
         ItemFilterType.isFullyDownloaded => currentConfig.filters.contains(
@@ -557,6 +569,7 @@ mixin _SortAndFilterMenuEntriesMixin<T extends ConsumerStatefulWidget> on Consum
         ItemFilterType.isUnplayed => currentConfig.filters.contains(ItemFilter(type: ItemFilterType.isUnplayed)),
         ItemFilterType.startsWithCharacter ||
         ItemFilterType.genreFilter ||
+        ItemFilterType.artistFilter ||
         ItemFilterType.searchTerm => throw UnsupportedError("Filter type $option should not be toggleable"),
       },
       onToggle: (currentState) async {
@@ -573,6 +586,7 @@ mixin _SortAndFilterMenuEntriesMixin<T extends ConsumerStatefulWidget> on Consum
               newFilters.add(ItemFilter(type: ItemFilterType.isUnplayed));
             case ItemFilterType.startsWithCharacter:
             case ItemFilterType.genreFilter:
+            case ItemFilterType.artistFilter:
             case ItemFilterType.searchTerm:
               throw UnsupportedError("Filter type $option should not be toggleable");
           }
@@ -608,6 +622,7 @@ mixin _SortAndFilterMenuEntriesMixin<T extends ConsumerStatefulWidget> on Consum
 
 class _SortAndFilterMenuState extends ConsumerState<SortAndFilterMenu>
     with _SortAndFilterMenuEntriesMixin<SortAndFilterMenu> {
+  @override
   late SortAndFilterConfiguration currentConfig;
 
   @override
@@ -636,21 +651,45 @@ class _SortAndFilterMenuState extends ConsumerState<SortAndFilterMenu>
   Widget build(BuildContext context) {
     final List<Widget> menuEntries = [
       ...(widget.removeOnly ? _getRemoveOnlyMenuEntries(context) : _getMenuEntries(context)),
-      SizedBox(height: 32.0),
-      CTAMedium(
-        text: context.l10n.apply,
-        icon: TablerIcons.check,
+      SizedBox(
+        height: 40.0,
+        child: currentConfig != controller._config
+            ? Align(
+                alignment: AlignmentGeometry.directional(0.0, 0.7),
+                child: Text(
+                  context.l10n.applyChangesOnClose,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontStyle: FontStyle.italic,
+                    color: TextTheme.of(context).bodyMedium?.color?.withOpacity(0.7),
+                  ),
+                ),
+              )
+            : null,
+      ),
+      SizedBox(height: 8.0),
+      SimpleButton(
+        disabled: currentConfig == controller._config,
+        text: context.l10n.cancelChanges,
+        icon: TablerIcons.x,
         onPressed: () {
-          controller._updateConfiguration(currentConfig);
-          Navigator.of(context).pop();
+          setState(() {
+            currentConfig = controller._config;
+          });
+          //Navigator.of(context).pop(false);
         },
       ),
     ];
 
-    // Actual height was 490, bump to 520 for extra bottom padding and wiggle room on element sizes
-    final stackHeight = 520.0 + 56.0 * excessFilters.length + (showOfflineSortWarning ? 60.0 : 0.0);
+    // TODO make this properly calculated somehow?
+    // Actual height was 508, bump to 540 for extra bottom padding and wiggle room on element sizes
+    final stackHeight = 540.0 + 56.0 * excessFilters.length + (showOfflineSortWarning ? 60.0 : 0.0);
 
-    return widget.childBuilder(stackHeight, menu(context, menuEntries));
+    return PopScope(
+      onPopInvokedWithResult: (_, _) {
+        controller._updateConfiguration(currentConfig);
+      },
+      child: widget.childBuilder(stackHeight, menu(context, menuEntries)),
+    );
   }
 
   // All track menu slivers, including headers
@@ -702,6 +741,7 @@ class SortAndFilterEmbeddedMenu extends ConsumerStatefulWidget {
 
 class _SortAndFilterEmbeddedMenuState extends ConsumerState<SortAndFilterEmbeddedMenu>
     with _SortAndFilterMenuEntriesMixin<SortAndFilterEmbeddedMenu> {
+  @override
   late SortAndFilterConfiguration currentConfig;
 
   @override

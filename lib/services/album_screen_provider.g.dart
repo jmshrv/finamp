@@ -12,7 +12,7 @@ part of 'album_screen_provider.dart';
 // **************************************************************************
 
 String _$getAlbumOrPlaylistTracksHash() =>
-    r'682b95290e0c4a38835f7e441dca88174b73d695';
+    r'5ae61c7e578f82d573fbc56877575353d479f524';
 
 /// Copied from Dart SDK
 class _SystemHash {

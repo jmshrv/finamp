@@ -17,6 +17,7 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/jellyfin_api.dart' as jellyfin_api;
 import 'package:finamp/services/jellyfin_api_helper.dart';
 import 'package:finamp/services/music_player_background_task.dart';
+import 'package:finamp/services/output_route_provider.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/remote_session_service.dart';
 import 'package:finamp/services/theme_provider.dart';
@@ -48,6 +49,11 @@ Future<void> showOutputMenu({required BuildContext context, bool usePlayerTheme 
         // ),
         Consumer(
           builder: (context, ref, child) {
+            // While AirPlay is the active output route, audio is rendered by the
+            // receiver and the per-app volume has no audible effect, so pin the
+            // slider to 100% and disable it. Other platforms and output modes
+            // (e.g. Bluetooth) keep the normal per-app volume control.
+            final airPlayActive = ref.watch(airPlayActiveProvider).valueOrNull ?? false;
             final localVolume = (ref.watch(finampSettingsProvider.currentVolume) * 100).floor() / 100.0;
             // While connected to a remote session, the slider reflects and
             // controls the remote client's volume (if it reports one);
@@ -56,29 +62,53 @@ Future<void> showOutputMenu({required BuildContext context, bool usePlayerTheme 
               stream: GetIt.instance<RemoteSessionService>().getRemoteStateStream(),
               builder: (context, snapshot) {
                 final remoteSession = GetIt.instance<RemoteSessionService>();
-                return VolumeSlider(
-                  initialValue: remoteSession.isRemote ? (remoteSession.remoteVolume ?? 1.0) : localVolume,
-                  onChange: (double currentValue) async {
-                    final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
-                    audioHandler.setVolume(currentValue);
-                  },
-                  forceLoading: true,
+                final volumeControlDisabled = airPlayActive;
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    VolumeSlider(
+                      initialValue: volumeControlDisabled
+                          ? 1.0
+                          : (remoteSession.isRemote ? (remoteSession.remoteVolume ?? 1.0) : localVolume),
+                      enabled: !volumeControlDisabled,
+                      onChange: (double currentValue) async {
+                        final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
+                        audioHandler.setVolume(currentValue);
+                      },
+                      forceLoading: true,
+                    ),
+                    if (volumeControlDisabled)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                        child: Text(
+                          AppLocalizations.of(context)!.volumeControlDisabledCastingHint,
+                          style: Theme.of(context).textTheme.bodySmall,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                  ],
                 );
               },
             );
           },
         ),
-        if (isDesktop)
-          Center(
-            child: Text(
-              AppLocalizations.of(context)!.volumeControlHint(
-                "${GlobalShortcuts.getDisplay(VolumeUpIntent)} / "
-                "${GlobalShortcuts.getDisplay(VolumeDownIntent)}",
-              ),
-              style: Theme.of(context).textTheme.bodySmall,
-              textAlign: TextAlign.center,
-            ),
-          ),
+        Consumer(
+          builder: (context, ref, child) {
+            final volumeControlDisabled = ref.watch(airPlayActiveProvider).valueOrNull ?? false;
+            return isDesktop && !volumeControlDisabled
+                ? Center(
+                    child: Text(
+                      AppLocalizations.of(context)!.volumeControlHint(
+                        "${GlobalShortcuts.getDisplay(VolumeUpIntent)} / "
+                        "${GlobalShortcuts.getDisplay(VolumeDownIntent)}",
+                      ),
+                      style: Theme.of(context).textTheme.bodySmall,
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                : SizedBox.shrink();
+          },
+        ),
         const SizedBox(height: 10),
       ];
 
@@ -273,7 +303,8 @@ class _OutputTargetListState extends State<OutputTargetList> {
   /// an empty list.
   Future<List<SessionInfo>> _loadSessions() async {
     try {
-      final myDeviceId = (await jellyfin_api.getDeviceInfo()).id;
+      final myDeviceId =
+          (await jellyfin_api.getDeviceInfo(deviceId: FinampSettingsHelper.finampSettings.deviceId)).id;
       return (await GetIt.instance<JellyfinApiHelper>().getSessions())
           .where((s) => s.supportsRemoteControl && s.deviceId != myDeviceId)
           .toList();
@@ -645,12 +676,14 @@ class VolumeSlider extends ConsumerStatefulWidget {
     required this.onChange,
     this.forceLoading = false,
     this.feedback = true,
+    this.enabled = true,
   });
 
   final double initialValue;
   final bool forceLoading;
   final Future<void> Function(double currentValue) onChange;
   final bool feedback;
+  final bool enabled;
 
   @override
   ConsumerState<VolumeSlider> createState() => _VolumeSliderState();
@@ -680,76 +713,83 @@ class _VolumeSliderState extends ConsumerState<VolumeSlider> {
     double sliderHeight = 56.0;
     return Padding(
       padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0, bottom: 4.0),
-      child: Container(
-        decoration: ShapeDecoration(
-          color: themeColor.withOpacity(0.3),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-        clipBehavior: Clip.antiAlias,
-        padding: EdgeInsets.zero,
-        child: Stack(
-          children: [
-            SizedBox(
-              height: sliderHeight,
-              width: double.infinity,
-              child: SliderTheme(
-                data: SliderThemeData(
-                  trackHeight: sliderHeight,
-                  // Same as container height
-                  padding: EdgeInsets.zero,
+      child: Opacity(
+        opacity: widget.enabled ? 1.0 : 0.6,
+        child: Container(
+          decoration: ShapeDecoration(
+            color: themeColor.withOpacity(0.3),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+          clipBehavior: Clip.antiAlias,
+          padding: EdgeInsets.zero,
+          child: Stack(
+            children: [
+              SizedBox(
+                height: sliderHeight,
+                width: double.infinity,
+                child: SliderTheme(
+                  data: SliderThemeData(
+                    trackHeight: sliderHeight,
+                    // Same as container height
+                    padding: EdgeInsets.zero,
 
-                  trackShape: RoundedRectangleTrackShape(),
-                  thumbShape: VerticalSliderThumbShape(
-                    thumbWidth: 2.0,
-                    thumbHeight: 24.0,
-                    borderRadius: 8.0,
-                    offsetLeft: -9.0,
+                    trackShape: RoundedRectangleTrackShape(),
+                    thumbShape: VerticalSliderThumbShape(
+                      thumbWidth: 2.0,
+                      thumbHeight: 24.0,
+                      borderRadius: 8.0,
+                      offsetLeft: -9.0,
+                    ),
+                    thumbColor: Colors.white,
+                    activeTrackColor: themeColor,
+                    inactiveTrackColor: themeColor.withOpacity(0.3),
+                    overlayShape: SliderComponentShape.noOverlay,
                   ),
-                  thumbColor: Colors.white,
-                  activeTrackColor: themeColor,
-                  inactiveTrackColor: themeColor.withOpacity(0.3),
-                  overlayShape: SliderComponentShape.noOverlay,
-                ),
-                child: Slider(
-                  value: currentValue,
-                  onChanged: (value) {
-                    setState(() {
-                      currentValue = value;
-                    });
-                    if (debounce?.isActive ?? false) debounce!.cancel();
-                    debounce = Timer(const Duration(milliseconds: 100), () {
-                      widget.onChange(value);
-                    });
-                  },
-                  onChangeEnd: (value) async {
-                    unawaited(widget.onChange(value));
-                    if (widget.feedback) {
-                      FeedbackHelper.feedback(FeedbackType.selection);
-                    }
-                    setState(() {
-                      currentValue = value;
-                    });
-                  },
-                  autofocus: false,
-                  focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Text(
-                  "${(currentValue * 100).floor()}%",
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600, color: Colors.white),
+                  child: Slider(
+                    value: currentValue,
+                    // A null callback disables the slider; used while AirPlay is
+                    // active so the per-app volume stays pinned at 100%.
+                    onChanged: !widget.enabled
+                        ? null
+                        : (value) {
+                            setState(() {
+                              currentValue = value;
+                            });
+                            if (debounce?.isActive ?? false) debounce!.cancel();
+                            debounce = Timer(const Duration(milliseconds: 100), () {
+                              widget.onChange(value);
+                            });
+                          },
+                    onChangeEnd: (value) async {
+                      unawaited(widget.onChange(value));
+                      if (widget.feedback) {
+                        FeedbackHelper.feedback(FeedbackType.selection);
+                      }
+                      setState(() {
+                        currentValue = value;
+                      });
+                    },
+                    autofocus: false,
+                    focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
+                  ),
                 ),
               ),
-            ),
-          ],
+              Positioned(
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: Text(
+                    "${(currentValue * 100).floor()}%",
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

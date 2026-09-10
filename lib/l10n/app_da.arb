@@ -778,7 +778,7 @@
     "@queueLoadingMessage": {
         "description": "Message displayed on now-playing bar when a saved queue is loading."
     },
-    "queueRetryMessage": "Fejlede med at gendanne kø. Prøv igen?",
+    "queueRetryMessage": "Fejlede at gendanne kø. Prøv igen?",
     "@queueRetryMessage": {
         "description": "Message displayed on now-playing bar when all items in a saved queue fail to load."
     },
@@ -890,12 +890,12 @@
     "allPlaylistsInfoSetting": "Download Afspilningsliste Metadata",
     "allPlaylistsInfoSettingSubtitle": "Synkroniser metadata for alle afspilningslister for at forbedre dine afspilningsliste oplevelse",
     "downloadFavoritesSetting": "Download alle favoritter",
-    "downloadAllPlaylistsSetting": "Download alle afspilningslister",
+    "downloadAllPlaylistsSetting": "Overfør alle afspilningslister",
     "downloadAllPlaylistsSettingWarning": "Note: Dette vil downloade alle sange i alle playlister, lige meget hvilket bibliotek de er fra.",
     "fiveLatestAlbumsSetting": "Download de sidste 5 albummer",
     "fiveLatestAlbumsSettingSubtitle": "Downloads vil blive fjernet som de bliver forældet.  Lås downloaden for at forebygge et album bliver fjernet.",
     "cacheLibraryImagesSettings": "Cache nuværende bibliotek billeder",
-    "cacheLibraryImagesSettingsSubtitle": "Alle album, kunstnere, genre og afspilningsliste covers i det nuværende aktive bibliotek vil blive downloadede.",
+    "cacheLibraryImagesSettingsSubtitle": "Alle album, kunstnere, genre og afspilningsliste covers i det nuværende aktive bibliotek vil blive overført.",
     "lyricsScreenButtonTitle": "Sangtekst",
     "@lyricsScreenButtonTitle": {
         "description": "Label for the button for opening the lyrics screen"
@@ -1836,5 +1836,79 @@
             }
         },
         "description": "Tooltip for downloadbutton on incidental downloads, which show a lock icon. It says one of the requiring downloads."
+    },
+    "verboseLogging": "Omfattende Loging",
+    "@verboseLogging": {
+        "description": "Title for the toggle that enables detailed logging on the logs screen"
+    },
+    "verboseLoggingSubtitle": "Behold detaljerede logs af fejl rapport. Efterlad denne fra for bedre afspilnings udnøttelse.",
+    "@verboseLoggingSubtitle": {
+        "description": "Subtitle explaining the verbose logging toggle"
+    },
+    "activeLibraries": "Aktive Biblioteker",
+    "@activeLibraries": {
+        "description": "Active Libraries"
+    },
+    "autoSwitchItemCurationTypeTitle": "Auto-Skift genstand Konfigurations Type",
+    "newlyAddedAlbums": "Albummer Tilføjet for nyligt",
+    "@newlyAddedAlbums": {
+        "description": "Name of a home screen section preset"
+    },
+    "homeScreenSectionPresetFavoriteTracksTitle": "Favorit Spor",
+    "@homeScreenSectionPresetFavoriteTracksTitle": {
+        "description": "Title for the favorite tracks preset section, which can be added to the home screen"
+    },
+    "randomAlbumArtists": "Tilfældig Album Kunstner",
+    "@randomAlbumArtists": {
+        "description": "Name of a home screen section preset"
+    },
+    "homeScreenSectionPresetForgottenFavoriteTracksTitle": "Glemte Favorit Spor",
+    "@homeScreenSectionPresetForgottenFavoriteTracksTitle": {
+        "description": "Title for the forgotten favorite tracks preset section, which can be added to the home screen"
+    },
+    "retryPageLoad": "Fejlede at indlæse genstande fra serveren.  Klik for at prøve igen.",
+    "noFilterActive": "Ingen Filter Aktiv",
+    "@noFilterActive": {
+        "description": "Message in sort & filter row when no filters are active"
+    },
+    "autoOfflineOptionDisconnected": "Frakoblet",
+    "@autoOfflineOptionDisconnected": {
+        "description": "This is shown when the autoOffline feature is set to Disconnected, this means offline mode will be automatically enabled when either wifi, ethernet or cellular is active"
+    },
+    "connectedTo": "Forbundet til",
+    "@connectedTo": {
+        "description": "Server info in music screen menu"
+    },
+    "homeScreenSettingsTitle": "Hjemmeskærm",
+    "@homeScreenSettingsTitle": {
+        "description": "Title for the home screen settings"
+    },
+    "surpriseMeAction": "Overrask Mig",
+    "@surpriseMeAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteAlbumAction": "Tilfældig Favorit Album",
+    "@randomFavoriteAlbumAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteTrackAction": "Tilfældig Favorit Spor",
+    "@randomFavoriteTrackAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoritePlaylistAction": "Tilfældig Favorit Spilleliste",
+    "@randomFavoritePlaylistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteArtistAction": "Tilfældig Favorit Kunstner",
+    "@randomFavoriteArtistAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "randomFavoriteGenreAction": "Tilfældig Favorit Genre",
+    "@randomFavoriteGenreAction": {
+        "description": "Name of a home screen quick action"
+    },
+    "serverSharingMenuDescription": "Deling af din server addresse kan være brugbart til at sætte nye klienter op på samme lokale netværk som din Jellyfin server,",
+    "@serverSharingMenuDescription": {
+        "description": "Description text shown in the server sharing menu, right below the controls"
     }
 }

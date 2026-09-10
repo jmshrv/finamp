@@ -129,7 +129,7 @@ class FinampSettingsHelper {
     FinampSetters.setAccentColor(DefaultSettings.accentColor);
     FinampSetters.setSystemAccentColor(DefaultSettings.accentColor);
     FinampSetters.setUseSystemAccentColor(DefaultSettings.useSystemAccentColor);
-    FinampSetters.setContentViewType(DefaultSettings.contentViewType);
+    finampSettingsTemp.perTabContentViewType = DefaultSettings.perTabContentViewType;
     finampSettingsTemp.gridImageSize = DefaultSettings.gridImageSize;
     finampSettingsTemp.homeScreenImageSize = DefaultSettings.homeScreenImageSize;
     finampSettingsTemp.showTextOnGridView = DefaultSettings.showTextOnGridView;
