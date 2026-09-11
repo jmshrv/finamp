@@ -32,7 +32,6 @@ Map<PlaybackActionRowPage, Widget> getPlaybackActionPages({
   if (itemType == BaseItemDtoType.track) {
     return {
       if (queueItem != null)
-        // Move within queue
         PlaybackActionRowPage.moveWithinQueue: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -44,7 +43,6 @@ Map<PlaybackActionRowPage, Widget> getPlaybackActionPages({
             MoveAddToQueuePlaybackAction(item: queueItem, popContext: popContext, compactLayout: compactLayout),
           ],
         ),
-      // Regular Options
       PlaybackActionRowPage.regularTrackOptions: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,7 +56,6 @@ Map<PlaybackActionRowPage, Widget> getPlaybackActionPages({
     };
   } else {
     return {
-      // New Queue
       PlaybackActionRowPage.newQueue: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -82,7 +79,6 @@ Map<PlaybackActionRowPage, Widget> getPlaybackActionPages({
             ),
         ],
       ),
-      // Next
       if (nextUpNotEmpty || preferPrependingToNextUp)
         PlaybackActionRowPage.playNext: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -107,7 +103,6 @@ Map<PlaybackActionRowPage, Widget> getPlaybackActionPages({
               ),
           ],
         ),
-      // Append to Next Up
       if (nextUpNotEmpty || !preferPrependingToNextUp)
         PlaybackActionRowPage.appendNext: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -132,7 +127,6 @@ Map<PlaybackActionRowPage, Widget> getPlaybackActionPages({
               ),
           ],
         ),
-      // Append to Queue
       PlaybackActionRowPage.playLast: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -598,7 +592,7 @@ class ShuffleAlbumsPlaybackAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
-    assert(item is Genre || item is Artist || item is FinampSortable<Album>);
+    assert(item is Genre || item is Artist || (item is FinampSortable<Album> && item is FinampPlayable));
 
     return PlaybackAction(
       icon: TablerIcons.arrows_shuffle,
@@ -639,7 +633,7 @@ class ShuffleAlbumsNextPlaybackAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
-    assert(item is Genre || item is Artist || item is FinampSortable<Album>);
+    assert(item is Genre || item is Artist || (item is FinampSortable<Album> && item is FinampPlayable));
 
     return PlaybackAction(
       icon: TablerIcons.corner_right_down,
@@ -683,7 +677,7 @@ class ShuffleAlbumsToNextUpPlaybackAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
-    assert(item is Genre || item is Artist || item is FinampSortable<Album>);
+    assert(item is Genre || item is Artist || (item is FinampSortable<Album> && item is FinampPlayable));
 
     return PlaybackAction(
       icon: TablerIcons.corner_right_down_double,
@@ -730,7 +724,7 @@ class ShuffleAlbumsToQueuePlaybackAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final queueService = GetIt.instance<QueueService>();
-    assert(item is Genre || item is Artist || item is FinampSortable<Album>);
+    assert(item is Genre || item is Artist || (item is FinampSortable<Album> && item is FinampPlayable));
 
     return PlaybackAction(
       icon: TablerIcons.playlist,
