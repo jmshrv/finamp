@@ -432,9 +432,8 @@ class _PreviousTracksListState extends State<PreviousTracksList> with TickerProv
               proxyDecorator: (widget, _, _) => Material(type: MaterialType.transparency, child: widget),
               autoScrollerVelocityScalar: 20.0,
               onReorderItem: (oldIndex, newIndex) {
-                final serviceNewIndex = oldIndex < newIndex ? newIndex + 1 : newIndex;
                 int draggingOffset = -(_previousTracks!.length - oldIndex);
-                int newPositionOffset = -(_previousTracks!.length - serviceNewIndex);
+                int newPositionOffset = -(_previousTracks!.length - newIndex);
                 if (mounted) {
                   FeedbackHelper.feedback(FeedbackType.heavy);
                   setState(() {
@@ -520,9 +519,8 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                 proxyDecorator: (widget, _, _) => Material(type: MaterialType.transparency, child: widget),
                 autoScrollerVelocityScalar: 20.0,
                 onReorderItem: (oldIndex, newIndex) {
-                  final serviceNewIndex = oldIndex < newIndex ? newIndex + 1 : newIndex;
                   int draggingOffset = oldIndex + 1;
-                  int newPositionOffset = serviceNewIndex + 1;
+                  int newPositionOffset = newIndex + 1;
                   if (mounted) {
                     FeedbackHelper.feedback(FeedbackType.heavy);
                     setState(() {
@@ -610,9 +608,8 @@ class _QueueTracksListState extends ConsumerState<QueueTracksList> {
               proxyDecorator: (widget, _, _) => Material(type: MaterialType.transparency, child: widget),
               autoScrollerVelocityScalar: 20.0,
               onReorderItem: (oldIndex, newIndex) {
-                final serviceNewIndex = oldIndex < newIndex ? newIndex + 1 : newIndex;
                 int draggingOffset = oldIndex + (_nextUp?.length ?? 0) + 1;
-                int newPositionOffset = serviceNewIndex + (_nextUp?.length ?? 0) + 1;
+                int newPositionOffset = newIndex + (_nextUp?.length ?? 0) + 1;
                 if (mounted) {
                   // update external queue to commit changes, but don't await it
                   _queueService.reorderByOffset(draggingOffset, newPositionOffset);
