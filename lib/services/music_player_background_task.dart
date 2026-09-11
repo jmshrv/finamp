@@ -924,12 +924,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler with SeekHandler, Queue
 
   @override
   Future<void> setShuffleMode(AudioServiceShuffleMode shuffleMode) async {
-    if (shuffleMode != AudioServiceShuffleMode.all && shuffleMode != AudioServiceShuffleMode.none) {
-      return Future.error(
-        "Unsupported AudioServiceRepeatMode! Received ${shuffleMode.toString()}, requires all or none.",
-      );
-    }
-
     try {
       switch (shuffleMode) {
         case AudioServiceShuffleMode.all:
@@ -939,7 +933,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler with SeekHandler, Queue
           await _player.setShuffleModeEnabled(false);
           break;
         default:
-          break;
+          return Future.error(
+            "Unsupported AudioServiceShuffleMode! Received ${shuffleMode.toString()}, requires all or none.",
+          );
       }
       _audioServiceBackgroundTaskLogger.info("Set shuffle mode to $shuffleMode");
     } catch (e) {
@@ -950,14 +946,6 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler with SeekHandler, Queue
 
   @override
   Future<void> setRepeatMode(AudioServiceRepeatMode repeatMode) async {
-    if (repeatMode != AudioServiceRepeatMode.all &&
-        repeatMode != AudioServiceRepeatMode.none &&
-        repeatMode != AudioServiceRepeatMode.one) {
-      return Future.error(
-        "Unsupported AudioServiceRepeatMode! Received ${repeatMode.toString()}, requires all, none, or one.",
-      );
-    }
-
     try {
       switch (repeatMode) {
         case AudioServiceRepeatMode.all:
@@ -970,7 +958,9 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler with SeekHandler, Queue
           await _player.setLoopMode(LoopMode.one);
           break;
         default:
-          break;
+          return Future.error(
+            "Unsupported AudioServiceRepeatMode! Received ${repeatMode.toString()}, requires all, none, or one.",
+          );
       }
       _audioServiceBackgroundTaskLogger.info("Set repeat mode to $repeatMode");
     } catch (e) {
@@ -1108,35 +1098,30 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler with SeekHandler, Queue
 
   @override
   Future<dynamic> customAction(String name, [Map<String, dynamic>? extras]) async {
-    Future<dynamic>? actionFuture;
-
+    late final CustomPlaybackActions action;
     try {
-      final action = CustomPlaybackActions.values.firstWhere((element) => element.name == name);
-      switch (action) {
-        case CustomPlaybackActions.shuffle:
-          final queueService = GetIt.instance<QueueService>();
-          actionFuture = queueService.togglePlaybackOrder();
-        case CustomPlaybackActions.radio:
-          radio_service_helper.toggleRadio();
-        case CustomPlaybackActions.toggleFavorite:
-          actionFuture = toggleFavoriteStatusOfCurrentTrack();
-        case CustomPlaybackActions.dbusVolume:
-          final volume = extras?["value"] as double?;
-          if (volume != null) {
-            _audioServiceBackgroundTaskLogger.info("Setting volume to $volume from dbus.");
-            await _volume.setInternalVolume(volume);
-          }
-      }
+      action = CustomPlaybackActions.values.firstWhere((element) => element.name == name);
     } catch (e) {
       _audioServiceBackgroundTaskLogger.severe("Custom action '$name' not found.", e);
+      return super.customAction(name, extras);
     }
 
-    if (actionFuture != null) {
-      return actionFuture;
+    switch (action) {
+      case CustomPlaybackActions.shuffle:
+        final queueService = GetIt.instance<QueueService>();
+        return queueService.togglePlaybackOrder();
+      case CustomPlaybackActions.radio:
+        return radio_service_helper.toggleRadio();
+      case CustomPlaybackActions.toggleFavorite:
+        return toggleFavoriteStatusOfCurrentTrack();
+      case CustomPlaybackActions.dbusVolume:
+        final volume = extras?["value"] as double?;
+        if (volume != null) {
+          _audioServiceBackgroundTaskLogger.info("Setting volume to $volume from dbus.");
+          await _volume.setInternalVolume(volume);
+        }
+        return;
     }
-
-    // only called if no custom action was found
-    return await super.customAction(name, extras);
   }
 
   Future<void> toggleFavoriteStatusOfCurrentTrack() async {
