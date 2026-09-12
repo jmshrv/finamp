@@ -522,8 +522,12 @@ class RemoteSessionService {
     final itemId = session.nowPlayingItem?.id.raw;
     // Nothing playing: nothing to follow, and nothing to adopt (a stopped
     // remote may still report its old queue; adopting it would resurrect a
-    // queue that was just cleared).
-    if (itemId == null) return;
+    // queue that was just cleared) -- but repeat may need to be driven
+    // locally (see [_handleRemoteQueueEnded]).
+    if (itemId == null) {
+      await _handleRemoteQueueEnded(session);
+      return;
+    }
 
     final queueInfo = _queueService.getQueue();
     if (!_localQueueContains(queueInfo, itemId)) {
@@ -586,6 +590,31 @@ class RemoteSessionService {
       if (remoteIds[i] != _lastPushedQueueIds[i]) return false;
     }
     return true;
+  }
+
+  /// Some clients (e.g. Jellyfin's DLNA plugin) can't repeat themselves: they
+  /// don't implement SetRepeatMode (see [_syncLoopModeFromRemote]) and simply
+  /// stop once they reach the end of the queue we handed off. Drive repeat
+  /// locally instead, the same way shuffle order is already driven locally
+  /// for these clients: re-push the whole queue from the start for
+  /// repeat-all, or just re-send the track that ended for repeat-one (which
+  /// will loop again the next time it ends).
+  Future<void> _handleRemoteQueueEnded(SessionInfo session) async {
+    if (session.supportedCommands?.contains("SetRepeatMode") ?? false) return;
+    // A stop we just sent (e.g. stopRemote()) also reports nowPlayingItem as
+    // null while it propagates; don't resurrect a queue the user just
+    // stopped.
+    if (DateTime.now().isBefore(_suppressAdoptUntil)) return;
+    final loopMode = _queueService.loopMode;
+    if (loopMode == FinampLoopMode.none) return;
+    final queueInfo = _queueService.getQueue();
+    if (queueInfo.fullQueue.isEmpty) return;
+    final currentIndex = queueInfo.previousTracks.length;
+    // A null item elsewhere (not at the last track) is an unrelated hiccup,
+    // not a repeat case -- ignore it rather than restarting playback.
+    if (currentIndex < queueInfo.fullQueue.length - 1) return;
+    _log.info("Remote reached end of queue without repeating (loopMode=$loopMode); re-pushing locally");
+    await _playQueueFromIndex(loopMode == FinampLoopMode.all ? 0 : currentIndex);
   }
 
   void _syncLoopModeFromRemote(SessionInfo session) {
