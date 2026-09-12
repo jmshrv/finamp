@@ -445,12 +445,19 @@ class _OutputTargetListState extends State<OutputTargetList> {
       _connectingToSessionId = session.id;
     });
     try {
-      await _remoteSessionService.connect(session, migrateQueue: migrateQueue);
-      GlobalSnackbar.message(
-        (context) => migrateQueue
-            ? AppLocalizations.of(context)!.playOnPlayingOnDevice(_sessionDisplayName(session))
-            : AppLocalizations.of(context)!.playOnConnectedTo(_sessionDisplayName(session)),
-      );
+      final adoptionResult = await _remoteSessionService.connect(session, migrateQueue: migrateQueue);
+      final deviceName = _sessionDisplayName(session);
+      if (migrateQueue) {
+        GlobalSnackbar.message((context) => AppLocalizations.of(context)!.playOnPlayingOnDevice(deviceName));
+      } else if (adoptionResult == QueueAdoptionResult.currentTrackOnly) {
+        // The device doesn't report a queue at all (e.g. Jellyfin's DLNA
+        // plugin): say so, the same way the explicit adopt action does,
+        // rather than leaving the impression the (unrelated) local queue on
+        // screen is what's actually playing.
+        GlobalSnackbar.message((context) => AppLocalizations.of(context)!.playOnTrackAdopted(deviceName));
+      } else {
+        GlobalSnackbar.message((context) => AppLocalizations.of(context)!.playOnConnectedTo(deviceName));
+      }
     } catch (e) {
       GlobalSnackbar.message((context) => AppLocalizations.of(context)!.playOnConnectFailed(e.toString()));
     } finally {

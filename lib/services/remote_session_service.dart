@@ -201,11 +201,16 @@ class RemoteSessionService {
   /// local queue is handed off to the remote (overriding whatever it was
   /// playing); otherwise we attach to the remote's existing playback and adopt
   /// its queue locally.
-  Future<void> connect(SessionInfo session, {required bool migrateQueue}) async {
+  ///
+  /// Returns the outcome of adopting the remote's queue when attaching (null
+  /// when [migrateQueue] is true, since nothing is adopted then), so the
+  /// caller can tell the user when the remote doesn't report a queue at all
+  /// (see [QueueAdoptionResult]).
+  Future<QueueAdoptionResult?> connect(SessionInfo session, {required bool migrateQueue}) async {
     final sessionId = session.id;
     if (sessionId == null) {
       _log.warning("Cannot connect to session without id");
-      return;
+      return null;
     }
     _log.info("Connecting to remote session $sessionId (migrateQueue: $migrateQueue)");
 
@@ -247,6 +252,7 @@ class RemoteSessionService {
     // would otherwise replay the old SessionInfo.
     _sessionStream.add(null);
 
+    QueueAdoptionResult? adoptionResult;
     try {
       if (migrateQueue) {
         // The PlayTo API has no way to hand a queue off without starting
@@ -254,8 +260,11 @@ class RemoteSessionService {
         await pushQueueToRemote(startPosition: localPosition);
       } else {
         // Attach to existing playback: adopt whatever the remote is playing.
+        // Fall back to just its current track when it doesn't report a queue
+        // at all, rather than silently leaving the stale local queue on
+        // screen with nothing to do with what's actually playing.
         _sessionStream.add(session);
-        await _adoptRemoteQueue();
+        adoptionResult = await _adoptRemoteQueue(allowCurrentTrackFallback: true);
       }
     } catch (e) {
       _log.severe("Connecting to remote session failed", e);
@@ -265,6 +274,7 @@ class RemoteSessionService {
 
     _startMonitoring();
     unawaited(_audioHandler.refreshPlaybackStateAndMediaNotification());
+    return adoptionResult;
   }
 
   /// Stops controlling the remote session and returns control to local
@@ -737,13 +747,26 @@ class RemoteSessionService {
   /// NowPlayingQueue, using the remoteClient queue source (we can't know the
   /// real source of a remote queue). Goes through the regular queue replacement
   /// path so the queue is persisted and restorable after an app restart.
-  Future<void> _adoptRemoteQueue() async {
+  ///
+  /// Some clients never populate NowPlayingQueue (e.g. Jellyfin's DLNA plugin,
+  /// which keeps the pushed playlist internally and only ever exposes
+  /// NowPlayingItem on the session). By default that means nothing to adopt;
+  /// pass [allowCurrentTrackFallback] (from an explicit [connect] attach,
+  /// where leaving the local queue mirror on a stale/unrelated queue would be
+  /// actively misleading) to fall back to adopting just the current track, as
+  /// [adoptQueueFrom] already does for its own explicit-adopt action.
+  Future<QueueAdoptionResult> _adoptRemoteQueue({bool allowCurrentTrackFallback = false}) async {
     final session = _sessionStream.valueOrNull;
-    if (session == null || session.nowPlayingQueue == null || session.nowPlayingQueue!.isEmpty) {
-      _log.fine("No remote queue to adopt");
-      return;
+    if (session == null) {
+      _log.fine("No remote session to adopt from");
+      return QueueAdoptionResult.nothing;
     }
-    if (_adoptInProgress) return;
+    final hasReportedQueue = session.nowPlayingQueue != null && session.nowPlayingQueue!.isNotEmpty;
+    if (!hasReportedQueue && !allowCurrentTrackFallback) {
+      _log.fine("No remote queue to adopt");
+      return QueueAdoptionResult.nothing;
+    }
+    if (_adoptInProgress) return QueueAdoptionResult.nothing;
     _adoptInProgress = true;
     try {
       // The adoption was scheduled on a stale update; re-check ownership
@@ -753,18 +776,29 @@ class RemoteSessionService {
       final nowPlayingId = session.nowPlayingItem?.id.raw;
       if (nowPlayingId != null && _localQueueContains(_queueService.getQueue(), nowPlayingId)) {
         _log.fine("Remote is playing our content; skipping adoption");
-        return;
+        return QueueAdoptionResult.nothing;
       }
       if (DateTime.now().isBefore(_suppressAdoptUntil)) {
         _log.fine("Own stop still propagating; skipping adoption");
-        return;
+        return QueueAdoptionResult.nothing;
       }
-      final resolved = await _resolveRemoteQueue(session);
-      if (resolved == null) return;
+      final resolved = hasReportedQueue ? await _resolveRemoteQueue(session) : null;
+      final currentTrack = session.nowPlayingItem;
+      if (resolved == null && !(allowCurrentTrackFallback && currentTrack != null)) return QueueAdoptionResult.nothing;
       // The session may have been disconnected (e.g. playback stopped) while
       // the missing items were being fetched; don't resurrect its queue.
-      if (!isRemote) return;
-      final (items, startIndex) = resolved;
+      if (!isRemote) return QueueAdoptionResult.nothing;
+      final List<BaseItemDto> items;
+      final int startIndex;
+      final QueueAdoptionResult result;
+      if (resolved != null) {
+        (items, startIndex) = resolved;
+        result = QueueAdoptionResult.queue;
+      } else {
+        items = [currentTrack!];
+        startIndex = 0;
+        result = QueueAdoptionResult.currentTrackOnly;
+      }
       final position = remotePlaybackState?.position;
       _applyingRemoteUpdate = true;
       try {
@@ -772,8 +806,10 @@ class RemoteSessionService {
       } finally {
         _applyingRemoteUpdate = false;
       }
+      return result;
     } catch (e, stack) {
       _log.severe("Failed to adopt remote queue", e, stack);
+      return QueueAdoptionResult.nothing;
     } finally {
       _adoptInProgress = false;
     }
