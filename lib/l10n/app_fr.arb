@@ -2725,7 +2725,7 @@
     "@lyricsEmptyStateFailed": {
         "description": "Message shown when lyrics failed to load"
     },
-    "lyricsEmptyStateLoading": "Chargement des paroles...",
+    "lyricsEmptyStateLoading": "Chargement des paroles…",
     "@lyricsEmptyStateLoading": {
         "description": "Message shown while lyrics are being loaded"
     },
@@ -2806,7 +2806,7 @@
     "@previousTracksPersistenceModeSelectorTitle": {
         "description": "Title for setting that allows to override state of previous tracks header in queue list"
     },
-    "previousTracksPersistenceModeSelectorSubtitle": "Si vous ouvrez le panneau de la file d'attente, la section des titres précédents devrait...",
+    "previousTracksPersistenceModeSelectorSubtitle": "Si vous ouvrez le panneau de la file d'attente, la section des titres précédents devrait…",
     "@previousTracksPersistenceModeSelectorSubtitle": {
         "description": "Subtitle for setting that allows to override state of previous tracks header in queue list"
     },
