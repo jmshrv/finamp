@@ -82,7 +82,9 @@ Future<void> showOutputMenu({required BuildContext context, bool usePlayerTheme 
                       // empty instead.
                       initialValue: remoteVolumeUnknown
                           ? 0.0
-                          : (airPlayActive ? 1.0 : (remoteSession.isRemote ? remoteSession.remoteVolume! : localVolume)),
+                          : (airPlayActive
+                                ? 1.0
+                                : (remoteSession.isRemote ? remoteSession.remoteVolume! : localVolume)),
                       enabled: !volumeControlDisabled,
                       onChange: (double currentValue) async {
                         final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
