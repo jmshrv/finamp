@@ -74,9 +74,15 @@ Future<void> showOutputMenu({required BuildContext context, bool usePlayerTheme 
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     VolumeSlider(
-                      initialValue: volumeControlDisabled
-                          ? 1.0
-                          : (remoteSession.isRemote ? remoteSession.remoteVolume! : localVolume),
+                      // AirPlay pins to 100% because full scale is meaningful
+                      // there (the receiver renders audio, so "100%" isn't a
+                      // guess). An unknown remote volume isn't -- rendering it
+                      // full reads as "this device is at maximum volume",
+                      // which is actively misleading on an amplifier, so show
+                      // empty instead.
+                      initialValue: remoteVolumeUnknown
+                          ? 0.0
+                          : (airPlayActive ? 1.0 : (remoteSession.isRemote ? remoteSession.remoteVolume! : localVolume)),
                       enabled: !volumeControlDisabled,
                       onChange: (double currentValue) async {
                         final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
